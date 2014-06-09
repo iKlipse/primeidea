@@ -20,6 +20,7 @@ public class RewardsBean  implements Serializable{
 	private Date rwCrtdDt;
 	private String rwFileName;
 	private String rwFileType;
+	private Double rwPrice;
 
 	public Long getRwId() {
 		return rwId;
@@ -139,6 +140,14 @@ public class RewardsBean  implements Serializable{
 
 	public void setRwFileType(String rwFileType) {
 		this.rwFileType = rwFileType;
+	}
+
+	public Double getRwPrice() {
+		return rwPrice;
+	}
+
+	public void setRwPrice(Double rwPrice) {
+		this.rwPrice = rwPrice;
 	}
 
 }

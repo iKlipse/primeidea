@@ -8,10 +8,10 @@
 			<column name="rw_id" />
 			<generator class="assigned" />
 		</id>
-		<many-to-one name="ipRewardsCat" class="za.co.idea.ip.orm.bean.IpRewardsCat"  fetch="select" lazy="proxy">
+		<many-to-one name="ipRewardsCat" class="za.co.idea.ip.orm.bean.IpRewardsCat" fetch="select" lazy="proxy">
 			<column name="rw_cat" not-null="true" />
 		</many-to-one>
-		<many-to-one name="ipRewardsStatus" class="za.co.idea.ip.orm.bean.IpRewardsStatus"  fetch="select" lazy="proxy">
+		<many-to-one name="ipRewardsStatus" class="za.co.idea.ip.orm.bean.IpRewardsStatus" fetch="select" lazy="proxy">
 			<column name="rw_status" not-null="true" />
 		</many-to-one>
 		<property name="rwTitle" type="java.lang.String">
@@ -40,6 +40,9 @@
 		</property>
 		<property name="rwCrtdDt" type="java.sql.Timestamp">
 			<column name="rw_crtd_dt" length="19" not-null="true" />
+		</property>
+		<property name="rwPrice" type="java.lang.Double">
+			<column name="rw_price" />
 		</property>
 		<set name="ipRewardsGroups" inverse="true">
 			<key>

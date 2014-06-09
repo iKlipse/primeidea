@@ -18,6 +18,7 @@ public class RewardsMessage {
 	private Date rwExpiryDt;
 	private String rwTag;
 	private Date rwCrtdDt;
+	private Double rwPrice;
 
 	public Long getRwId() {
 		return rwId;
@@ -113,6 +114,14 @@ public class RewardsMessage {
 
 	public void setRwCrtdDt(Date rwCrtdDt) {
 		this.rwCrtdDt = rwCrtdDt;
+	}
+
+	public Double getRwPrice() {
+		return rwPrice;
+	}
+
+	public void setRwPrice(Double rwPrice) {
+		this.rwPrice = rwPrice;
 	}
 
 }

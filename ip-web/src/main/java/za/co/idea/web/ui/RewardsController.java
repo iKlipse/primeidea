@@ -177,6 +177,7 @@ public class RewardsController implements Serializable {
 			message.setRwStockCodeNum(rewardsBean.getRwStockCodeNum());
 			message.setRwLaunchDt(rewardsBean.getRwLaunchDt());
 			message.setRwExpiryDt(rewardsBean.getRwExpiryDt());
+			message.setRwPrice(rewardsBean.getRwPrice());
 			ResponseMessage response = addRewardsClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			addRewardsClient.close();
 			if (response.getStatusCode() == 0) {
@@ -231,6 +232,7 @@ public class RewardsController implements Serializable {
 			message.setRwStockCodeNum(rewardsBean.getRwStockCodeNum());
 			message.setRwLaunchDt(rewardsBean.getRwLaunchDt());
 			message.setRwExpiryDt(rewardsBean.getRwExpiryDt());
+			message.setRwPrice(rewardsBean.getRwPrice());
 			ResponseMessage response = updateRewardsClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			updateRewardsClient.close();
 			if (response.getStatusCode() == 0) {
@@ -361,6 +363,7 @@ public class RewardsController implements Serializable {
 			bean.setRwTag(message.getRwTag());
 			bean.setRwTitle(message.getRwTitle());
 			bean.setRwValue(message.getRwValue());
+			bean.setRwPrice(message.getRwPrice());
 			ret.add(bean);
 		}
 		return ret;
@@ -371,7 +374,6 @@ public class RewardsController implements Serializable {
 		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
 		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
 		viewRewardsClient.close();
-		// DocumentService service = new DocumentService();
 		for (RewardsMessage message : rewards) {
 			RewardsBean bean = new RewardsBean();
 			bean.setrCatId(message.getrCatId());
@@ -386,26 +388,7 @@ public class RewardsController implements Serializable {
 			bean.setRwTag(message.getRwTag());
 			bean.setRwTitle(message.getRwTitle());
 			bean.setRwValue(message.getRwValue());
-			// try {
-			// DownloadDocumentRq rq = new DownloadDocumentRq();
-			// rq.setEntityId(message.getRwId().toString());
-			// rq.setEntityTableName("ip_rewards");
-			// DownloadDocumentRs rs = service.getDocumentSOAP(new
-			// MTOMFeature()).downloadDocument(rq);
-			// if (Integer.parseInt(rs.getResponse().getRespCode()) == 0) {
-			// bean.setRwFileName(rs.getFileName());
-			// bean.setRwFileType(rs.getContentType());
-			// bean.setRwBlob(new String(rs.getFileContent()));
-			// }
-			// } catch (Exception e) {
-			// e.printStackTrace();
-			// FacesMessage exceptionMessage = new
-			// FacesMessage(FacesMessage.SEVERITY_ERROR,
-			// "Cannot Fetch Image For Id :: " + message.getRwId(),
-			// e.getMessage());
-			// FacesContext.getCurrentInstance().addMessage(null,
-			// exceptionMessage);
-			// }
+			bean.setRwPrice(message.getRwPrice());
 			ret.add(bean);
 		}
 		return ret;

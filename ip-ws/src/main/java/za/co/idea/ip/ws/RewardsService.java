@@ -57,6 +57,7 @@ public class RewardsService {
 			ipRewards.setRwTag(rewards.getRwTag());
 			ipRewards.setRwTitle(rewards.getRwTitle());
 			ipRewards.setRwValue(rewards.getRwValue());
+			ipRewards.setRwPrice(rewards.getRwPrice());
 			ipRewardsDAO.save(ipRewards);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
@@ -90,6 +91,7 @@ public class RewardsService {
 			ipRewards.setRwTag(rewards.getRwTag());
 			ipRewards.setRwTitle(rewards.getRwTitle());
 			ipRewards.setRwValue(rewards.getRwValue());
+			ipRewards.setRwPrice(rewards.getRwPrice());
 			ipRewardsDAO.merge(ipRewards);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
@@ -126,6 +128,7 @@ public class RewardsService {
 				rewards.setRwTag(ipRewards.getRwTag());
 				rewards.setRwTitle(ipRewards.getRwTitle());
 				rewards.setRwValue(ipRewards.getRwValue());
+				rewards.setRwPrice(ipRewards.getRwPrice());
 				ret.add((T) rewards);
 			}
 		} catch (Exception e) {
@@ -153,6 +156,7 @@ public class RewardsService {
 			rewards.setRwTag(ipRewards.getRwTag());
 			rewards.setRwTitle(ipRewards.getRwTitle());
 			rewards.setRwValue(ipRewards.getRwValue());
+			rewards.setRwPrice(ipRewards.getRwPrice());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -181,6 +185,7 @@ public class RewardsService {
 				rewards.setRwTag(ipRewards.getRwTag());
 				rewards.setRwTitle(ipRewards.getRwTitle());
 				rewards.setRwValue(ipRewards.getRwValue());
+				rewards.setRwPrice(ipRewards.getRwPrice());
 				ret.add((T) rewards);
 			}
 		} catch (Exception e) {
@@ -211,6 +216,7 @@ public class RewardsService {
 				rewards.setRwTag(ipRewards.getRwTag());
 				rewards.setRwTitle(ipRewards.getRwTitle());
 				rewards.setRwValue(ipRewards.getRwValue());
+				rewards.setRwPrice(ipRewards.getRwPrice());
 				ret.add((T) rewards);
 			}
 		} catch (Exception e) {
