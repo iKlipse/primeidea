@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://za.co.idea/document/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="document" targetNamespace="http://za.co.idea/document/">
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://za.co.idea/document/">
+			<xsd:simpleType name="entityId">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="contentType">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="fileName">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="fileContent">
+				<xsd:restriction base="xsd:base64Binary"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="entityTableName">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType name="document">
+				<xsd:sequence>
+					<xsd:element name="entityId" type="tns:entityId"></xsd:element>
+					<xsd:element name="entityTableName" type="tns:entityTableName"></xsd:element>
+					<xsd:element name="fileName" type="tns:fileName" minOccurs="0" maxOccurs="1"></xsd:element>
+					<xsd:element name="contentType" type="tns:contentType" minOccurs="0" maxOccurs="1"></xsd:element>
+					<xsd:element name="fileContent" type="tns:fileContent"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:simpleType name="respCode">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="respDesc">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType name="response">
+				<xsd:sequence>
+					<xsd:element name="respCode" type="tns:respCode"></xsd:element>
+					<xsd:element name="respDesc" type="tns:respDesc"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="documents">
+				<xsd:sequence>
+					<xsd:element name="document" type="tns:document" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="uploadDocumentRq">
+				<xsd:sequence>
+					<xsd:element name="document" type="tns:document"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="uploadDocumentRs">
+				<xsd:sequence>
+					<xsd:element name="response" type="tns:response"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="downloadDocumentRq">
+				<xsd:sequence>
+					<xsd:element name="entityId" type="tns:entityId"></xsd:element>
+					<xsd:element name="entityTableName" type="tns:entityTableName"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="downloadDocumentRs">
+				<xsd:sequence>
+					<xsd:element name="fileName" type="tns:fileName"></xsd:element>
+					<xsd:element name="contentType" type="tns:contentType"></xsd:element>
+					<xsd:element name="fileContent" type="tns:fileContent"></xsd:element>
+					<xsd:element name="response" type="tns:response"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="listDocumentRq">
+				<xsd:sequence>
+					<xsd:element name="entityTableName" type="tns:entityTableName"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="listDocumentRs">
+				<xsd:sequence>
+					<xsd:element name="documents" type="tns:documents"></xsd:element>
+					<xsd:element name="response" type="tns:response"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="downloadDocumentRqMsg" type="tns:downloadDocumentRq"></xsd:element>
+			<xsd:element name="downloadDocumentRsMsg" type="tns:downloadDocumentRs"></xsd:element>
+			<xsd:element name="uploadDocumentRqMsg" type="tns:uploadDocumentRq"></xsd:element>
+			<xsd:element name="uploadDocumentRsMsg" type="tns:uploadDocumentRs"></xsd:element>
+			<xsd:element name="listDocumentRqMsg" type="tns:listDocumentRq"></xsd:element>
+			<xsd:element name="listDocumentRsMsg" type="tns:listDocumentRs"></xsd:element>
+
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="uploadDocumentRq">
+		<wsdl:part name="param" element="tns:uploadDocumentRqMsg"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="uploadDocumentRs">
+		<wsdl:part name="param" element="tns:uploadDocumentRsMsg"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="downloadDocumentRq">
+		<wsdl:part name="param" element="tns:downloadDocumentRqMsg"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="downloadDocumentRs">
+		<wsdl:part name="param" element="tns:downloadDocumentRsMsg"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="listDocumentRq">
+		<wsdl:part name="param" element="tns:listDocumentRqMsg"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="listDocumentRs">
+		<wsdl:part name="param" element="tns:listDocumentRsMsg"></wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="documentPort">
+		<wsdl:operation name="uploadDocument">
+			<wsdl:input message="tns:uploadDocumentRq"></wsdl:input>
+			<wsdl:output message="tns:uploadDocumentRs"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="downloadDocument">
+			<wsdl:input message="tns:downloadDocumentRq"></wsdl:input>
+			<wsdl:output message="tns:downloadDocumentRs"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="listDocument">
+			<wsdl:input message="tns:listDocumentRq"></wsdl:input>
+			<wsdl:output message="tns:listDocumentRs"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="documentSOAP" type="tns:documentPort">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="uploadDocument">
+			<soap:operation soapAction="http://za.co.idea/document/uploadDocument" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="downloadDocument">
+			<soap:operation soapAction="http://za.co.idea/document/downloadDocument" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="listDocument">
+			<soap:operation soapAction="http://za.co.idea/document/listDocument" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="documentService">
+		<wsdl:port binding="tns:documentSOAP" name="documentSOAP">
+			<soap:address location="http://za.co.idea/document/" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

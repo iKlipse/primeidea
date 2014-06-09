@@ -1,0 +1,53 @@
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">View Users</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrVwUser">
+			<f:facet name="header">
+					View Users
+				</f:facet>
+			<p:dataTable id="dtViewUsers" value="#{adminBean.viewUsers}" var="user" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Users Found">
+				<p:column filterBy="#{user.uId}" filterMatchMode="contains">
+					<f:facet name="header">User Id</f:facet>
+					<p:outputLabel id="txtUserId" value="#{user.uId}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">First Name</f:facet>
+					<p:outputLabel id="txtFName" value="#{user.fName}" />
+				</p:column>
+				<p:column filterBy="#{user.lName}" filterMatchMode="contains">
+					<f:facet name="header">Last Name</f:facet>
+					<p:outputLabel id="txtLName" value="#{user.lName}" />
+				</p:column>
+				<p:column filterBy="#{user.idNum}" filterMatchMode="contains">
+					<f:facet name="header">Id Num</f:facet>
+					<p:outputLabel id="txtIdNum" value="#{user.idNum}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">EMail</f:facet>
+					<p:outputLabel id="txtEMail" value="#{user.eMail}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Social</f:facet>
+					<p:commandLink id="lnkFBHanlde" target="new" value="#{user.fbHandle}">
+						<p:graphicImage id="giFBHandle" name="fb.jpg" library="images" height="25px" width="25px" />
+					</p:commandLink>
+					<p:commandLink id="lnkTWHanlde" target="new" value="#{user.twHandle}">
+						<p:graphicImage id="giTWHandle" name="twitter.jpg" library="images" height="25px" width="25px" />
+					</p:commandLink>
+				</p:column>
+				<p:column>
+					<f:facet name="header">Active</f:facet>
+					<p:selectBooleanButton id="sbbActive" value="#{user.isActive}" disabled="true" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
+				</p:column>
+				<p:column>
+					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminBean.showEditUser}">
+						<f:setPropertyActionListener value="#{user}" target="#{adminBean.userBean}" />
+					</p:commandButton>
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{adminBean.redirectHome}" />
+				</f:facet>
+			</p:dataTable>
+		</p:panel>
+	</ui:define>
+</ui:composition>

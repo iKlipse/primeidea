@@ -1,0 +1,77 @@
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Edit Solution</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrEditSolution">
+			<f:facet name="header">
+					Edit Solution
+				</f:facet>
+			<p:panelGrid columns="2" id="pnlEditSolution">
+				<p:column>
+					<p:outputLabel id="lblSChal" value="Challenges : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somSChal" value="#{challengeBean.solutionBean.chalId}" disabled="true">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{challengeBean.viewChallenges}" var="schal" itemLabel="#{schal.title}" itemValue="#{schal.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblSTitle" value="Title : " />
+				</p:column>
+				<p:column>
+					<p:inputText autocomplete="false" id="txtSTitle" value="#{challengeBean.solutionBean.title}" disabled="true" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblSCat" value="Category : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somSCat" value="#{challengeBean.solutionBean.catId}">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{challengeBean.solutionCats}" var="scat" itemLabel="#{scat.desc}" itemValue="#{scat.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblSStatus" value="Status : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somSStatus" value="#{challengeBean.solutionBean.statusId}">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{challengeBean.solutionStatuses}" var="scat" itemLabel="#{scat.desc}" itemValue="#{scat.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblSDesc" value="Description : " />
+				</p:column>
+				<p:column>
+					<p:editor id="txtSDesc" value="#{challengeBean.solutionBean.desc}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblSTag" value="Tags : " />
+				</p:column>
+				<p:column>
+					<p:inputText autocomplete="false" id="txtSTag" value="#{challengeBean.solutionBean.tags}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblIDownload" value="Download File : " />
+				</p:column>
+				<p:column>
+					<p:commandButton id="btnDownload" value="Download" ajax="false" disabled="#{challengeBean.solFileAvail}">
+						<p:fileDownload value="#{challengeBean.solFileContent}" />
+					</p:commandButton>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblSUpload" value="Upload File : " />
+				</p:column>
+				<p:column>
+					<p:fileUpload auto="true" id="fuSUpload" fileUploadListener="#{challengeBean.solFileUploadHandle}" multiple="false" />
+				</p:column>
+				<p:row>
+					<p:column colspan="2">
+						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{challengeBean.updateSolution}" />
+						<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{challengeBean.showViewSolution}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</p:panel>
+	</ui:define>
+</ui:composition>

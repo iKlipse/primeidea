@@ -1,0 +1,58 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+	<p:dialog id="dlgProfileImgUpload" widgetVar="dlgProfileImgUpload" resizable="false" dynamic="true" showEffect="explode" hideEffect="explode" appendToBody="@(body)" header="Update Profile Image">
+		<p:panelGrid columns="1">
+			<p:column>
+				<p:fileUpload auto="true" id="fuProfileImg" update="imgAvatar" widgetVar="fuImg" fileUploadListener="#{adminBean.fileImageUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+			</p:column>
+			<p:column>
+				<p:commandButton id="btnProfileImgUpload" value="Update" action="#{adminBean.updateImage}" ajax="false" />
+			</p:column>
+		</p:panelGrid>
+	</p:dialog>
+	<p:dialog id="dlgProfileSecUpdate" widgetVar="dlgProfileSecUpdate" resizable="false" dynamic="true" showEffect="explode" hideEffect="explode" appendToBody="@(body)" header="Update Security Question">
+		<p:panelGrid columns="2">
+			<p:column>
+				<p:outputLabel id="lblProfileSecQ" value="Security Question : " />
+			</p:column>
+			<p:column>
+				<p:inputText autocomplete="false" id="txtProfileSecQ" value="#{adminBean.secQ}" />
+			</p:column>
+			<p:column>
+				<p:outputLabel id="lblProfileSecA" value="Security Answer : " />
+			</p:column>
+			<p:column>
+				<p:inputText autocomplete="false" id="txtProfileSecA" value="#{adminBean.secA}" />
+			</p:column>
+			<p:row>
+				<p:column colspan="2">
+					<p:commandButton id="btnProfileSave" value="Save" ajax="false" action="#{adminBean.resetSecurity}" />
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+	</p:dialog>
+	<p:panel id="ctrProfile">
+		<f:facet name="header">
+			<p:outputLabel id="lblLoggedScrNm" value="#{adminBean.loggedScrName}" />'s Profile
+			</f:facet>
+		<p:panelGrid id="pnlProfImg" columns="1">
+			<p:column>
+				<p:graphicImage style="float: right !important;" id="imgAvatar" value="#{adminBean.image}" alt="Upload Image" height="100px" width="100px" rendered="#{adminBean.show}" ondblclick="PF('dlgProfileImgUpload').show()" />
+				<p:graphicImage style="float: right !important;" id="imgAvatarDefault" name="profile.jpg" library="images" height="100px" width="100px" rendered="#{adminBean.showDef}" ondblclick="PF('dlgProfileImgUpload').show()" />
+			</p:column>
+			<p:column>
+				<p:outputLabel style="float: Left !important;" id="lblLastLoginText" value="Last Login :" />
+				<p:outputLabel style="float: right !important;" id="lblLastLogin" value="#{user.lastLoginDt}">
+					<f:convertDateTime pattern="dd.MM.yyyy HH:mm" />
+				</p:outputLabel>
+			</p:column>
+			<p:column>
+				<p:menu style="float:right !important;">
+					<p:menuitem style="float: right !important;" id="lnkHome" value="Home" action="${adminBean.redirectHome}" immediate="true" ajax="false" />
+					<p:menuitem style="float: right !important;" id="lnkEditProfile" value="Edit Profile" action="${adminBean.showEditProfile}" immediate="true" ajax="false" />
+					<p:menuitem style="float: right !important;" id="lnkLogout" value="Logout" action="${adminBean.logout}" immediate="true" ajax="false" />
+					<p:menuitem style="float: right !important;" id="lnkResetSec" value="Change Security" onclick="PF('dlgProfileSecUpdate').show()" />
+				</p:menu>
+			</p:column>
+		</p:panelGrid>
+	</p:panel>
+</ui:composition>

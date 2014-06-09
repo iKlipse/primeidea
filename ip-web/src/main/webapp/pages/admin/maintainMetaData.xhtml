@@ -1,0 +1,84 @@
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Maintain Metadata</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrMetaData">
+			<f:facet name="header">
+					Maintain Meta-Data
+				</f:facet>
+			<p:dataTable id="dtMetaData" widgetVar="dtMetaData" value="#{metaDataBean.beans}" var="bean" rows="5" paginator="true" paginatorPosition="bottom" emptyMessage="No MetaData Found">
+				<f:facet name="header">
+					<p:selectOneMenu id="somSelectMeta" value="#{metaDataBean.table}">
+						<p:ajax listener="#{metaDataBean.changeMetaData}" update="dtMetaData,:ideaFrm:pnlModMetaData,:ideaFrm:pnlAddMetaData" />
+						<f:selectItem itemLabel="Please Select" itemValue="" />
+						<f:selectItems value="#{metaDataBean.metaList}" />
+					</p:selectOneMenu>
+				</f:facet>
+				<p:column>
+					<f:facet name="header">Id</f:facet>
+					<p:outputLabel id="lblId" value="#{bean.id}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Description</f:facet>
+					<p:outputLabel id="lblDesc" value="#{bean.desc}" />
+				</p:column>
+				<p:column>
+					<p:commandButton id="viewButton" value="View" icon="ui-icon-search" ajax="false" immediate="true" action="#{metaDataBean.showMetaData}">
+						<f:setPropertyActionListener value="#{bean}" target="#{metaDataBean.bean}" />
+					</p:commandButton>
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton id="addButton" value="Add" ajax="false" immediate="true" action="#{metaDataBean.showMetaDataAdd}" rendered="#{metaDataBean.showAddBtn}" />
+					<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{adminBean.redirectHome}" />
+				</f:facet>
+			</p:dataTable>
+			<br />
+			<p:panelGrid id="pnlModMetaData" rendered="#{metaDataBean.showModPanel}" columns="2">
+				<p:row>
+					<p:column>
+						<p:outputLabel id="lblModId" value="Id : " />
+					</p:column>
+					<p:column>
+						<p:inputText autocomplete="false" id="txtModId" value="#{metaDataBean.selId}" disabled="true" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel id="lblModDesc" value="Description : " />
+					</p:column>
+					<p:column>
+						<p:inputText autocomplete="false" id="txtModDesc" value="#{metaDataBean.selVal}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:commandButton id="modSaveButton" value="Update" ajax="false" action="#{metaDataBean.updateMetaData}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<br />
+			<p:panelGrid id="pnlAddMetaData" rendered="#{metaDataBean.showAddPanel}" columns="2">
+				<p:row>
+					<p:column>
+						<p:outputLabel id="lblAddId" value="Id : " />
+					</p:column>
+					<p:column>
+						<p:inputText autocomplete="false" id="txtAddId" value="#{metaDataBean.selId}" disabled="true" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel id="lblAddDesc" value="Description : " />
+					</p:column>
+					<p:column>
+						<p:inputText autocomplete="false" id="txtAddDesc" value="#{metaDataBean.selVal}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:commandButton id="addSaveButton" value="Save" ajax="false" action="#{metaDataBean.addMetaData}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</p:panel>
+	</ui:define>
+</ui:composition>

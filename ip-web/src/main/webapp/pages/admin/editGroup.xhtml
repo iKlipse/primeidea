@@ -1,0 +1,62 @@
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Edit Group</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrEditGroup">
+			<f:facet name="header">
+					Edit Group
+				</f:facet>
+			<p:panelGrid columns="2" id="pnlEdittGroup">
+				<p:column>
+					<p:outputLabel id="lblGName" value="Group Name : " />
+				</p:column>
+				<p:column>
+					<p:inputText autocomplete="false" id="txtGName" value="#{adminBean.groupBean.gName}" disabled="true" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblEMail" value="EMail : " />
+				</p:column>
+				<p:column>
+					<p:inputText autocomplete="false" id="txtEMail" value="#{adminBean.groupBean.geMail}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblParentGId" value="Parent : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somPGrpId" value="#{adminBean.groupBean.selPGrp}">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{adminBean.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblAdmUser" value="Admin User : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somAdmUser" value="#{adminBean.groupBean.selAdmUser}">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{adminBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblFuncUsers" value="Group Users" />
+				</p:column>
+				<p:column>
+					<p:selectManyMenu id="smmFuncUserss" value="#{adminBean.groupBean.userIdList}">
+						<f:selectItems value="#{adminBean.admUsers}" var="user" itemLabel="#{user.scName}" itemValue="#{user.uId}" />
+					</p:selectManyMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblActive" value="Active : " />
+				</p:column>
+				<p:column>
+					<p:selectBooleanButton id="sbbActive" value="#{adminBean.groupBean.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
+				</p:column>
+				<p:row>
+					<p:column colspan="2">
+						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{adminBean.updateGroup}" />
+						<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{adminBean.showViewGroups}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</p:panel>
+	</ui:define>
+</ui:composition>

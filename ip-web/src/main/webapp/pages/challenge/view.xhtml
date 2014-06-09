@@ -1,0 +1,49 @@
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">View Challenges</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrViewChallenges" style="width: 100% !important">
+			<f:facet name="header">
+					View Challenges
+				</f:facet>
+			<p:dataTable id="dtViewChallenges" value="#{challengeBean.viewChallenges}" var="challenge" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Challenges Found" style="width: 100% !important">
+				<p:column filterBy="#{challenge.title}" filterMatchMode="contains">
+					<f:facet name="header">Title</f:facet>
+					<p:outputLabel id="txtChallengeTitle" value="#{challenge.title}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Category</f:facet>
+					<p:selectOneMenu id="somICat" value="#{challenge.catId}" disabled="true">
+						<f:selectItems value="#{challengeBean.challengeCats}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<f:facet name="header">Status</f:facet>
+					<p:selectOneMenu id="somIStatus" value="#{challenge.statusId}" disabled="true">
+						<f:selectItems value="#{challengeBean.challengeStatuses}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<f:facet name="header">Launch Date</f:facet>
+					<p:calendar mode="popup" showOn="button" id="calLaunchDT" value="#{challenge.launchDt}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Expiry Date</f:facet>
+					<p:calendar mode="popup" showOn="button" id="calExprDT" value="#{challenge.exprDt}" />
+				</p:column>
+				<p:column>
+					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{challengeBean.showEditChallenge}">
+						<f:setPropertyActionListener value="#{challenge}" target="#{challengeBean.challengeBean}" />
+					</p:commandButton>
+				</p:column>
+				<p:column>
+					<p:commandButton id="summaryButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{challengeBean.showSummaryChallenge}">
+						<f:setPropertyActionListener value="#{challenge}" target="#{challengeBean.challengeBean}" />
+					</p:commandButton>
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{adminBean.redirectHome}" />
+				</f:facet>
+			</p:dataTable>
+		</p:panel>
+	</ui:define>
+</ui:composition>

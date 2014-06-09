@@ -1,0 +1,40 @@
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">View Claims</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrViewClaim" style="width: 100% !important">
+			<f:facet name="header">
+					View Claim
+				</f:facet>
+			<p:dataTable id="dtViewClaims" value="#{claimBean.viewClaimBeans}" var="claim" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Claims Found" style="width: 100% !important">
+				<p:column filterBy="#{claim.claimDesc}" filterMatchMode="contains">
+					<f:facet name="header">Claim Desc</f:facet>
+					<p:outputLabel id="txtClaimId" value="#{claim.claimDesc}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Status</f:facet>
+					<p:selectOneMenu id="somIStatus" value="#{claim.cStatusId}" disabled="true">
+						<f:selectItems value="#{claimBean.claimStatus}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<f:facet name="header">Created Date</f:facet>
+					<p:calendar mode="popup" showOn="button" id="calLaunchDT" value="#{claim.claimCrtdDt}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Created By</f:facet>
+					<p:selectOneMenu id="somACrtdBy" value="#{claim.userId}" disabled="true">
+						<f:selectItems value="#{claimBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{claimBean.showEditClaim}">
+						<f:setPropertyActionListener value="#{claim}" target="#{claimBean.claimBean}" />
+					</p:commandButton>
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{adminBean.redirectHome}" />
+				</f:facet>
+			</p:dataTable>
+		</p:panel>
+	</ui:define>
+</ui:composition>

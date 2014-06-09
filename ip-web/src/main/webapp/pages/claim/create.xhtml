@@ -1,0 +1,33 @@
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Create Claim</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrCrtClaim">
+			<f:facet name="header">
+					Create Claim
+				</f:facet>
+			<p:panelGrid columns="2" id="pnlCrtClaim">
+				<p:column>
+					<p:outputLabel id="lblCRw" value="Reward : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somCRw" value="#{claimBean.claimBean.rewardsId}">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{claimBean.viewRewardsBeans}" var="ccat" itemLabel="#{ccat.rwTitle}" itemValue="#{ccat.rwId}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblCDesc" value="Description : " />
+				</p:column>
+				<p:column>
+					<p:inputText autocomplete="false" id="txtCDesc" value="#{claimBean.claimBean.claimDesc}" />
+				</p:column>
+				<p:row>
+					<p:column colspan="2">
+						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{claimBean.saveClaim}" />
+						<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{adminBean.redirectHome}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</p:panel>
+	</ui:define>
+</ui:composition>

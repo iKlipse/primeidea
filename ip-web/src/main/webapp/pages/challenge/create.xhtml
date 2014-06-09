@@ -1,0 +1,71 @@
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Create Challenge</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrCrtChallenges">
+			<f:facet name="header">
+					Create Challenge
+				</f:facet>
+			<p:panelGrid columns="2" id="pnlCrtChallenge">
+				<p:column>
+					<p:outputLabel id="lblCTitle" value="Title : " />
+				</p:column>
+				<p:column>
+					<p:inputText autocomplete="false" id="txtCTitle" value="#{challengeBean.challengeBean.title}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblCCat" value="Category : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somCCat" value="#{challengeBean.challengeBean.catId}">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{challengeBean.challengeCats}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblCDesc" value="Description : " />
+				</p:column>
+				<p:column>
+					<p:editor id="txtCDesc" value="#{challengeBean.challengeBean.desc}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblCHoverText" value="Hover Text : " />
+				</p:column>
+				<p:column>
+					<p:inputText autocomplete="false" id="txtCHoverText" value="#{challengeBean.challengeBean.hoverText}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblCLaunchDt" value="Launch Date : " />
+				</p:column>
+				<p:column>
+					<p:calendar mode="popup" showOn="button" id="txtCLaunchDt" value="#{challengeBean.challengeBean.launchDt}" pattern="MM/dd/yyyy HH:mm">
+						<p:ajax event="blur" update="txtCExpiryDt" />
+					</p:calendar>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblCExpiryDt" value="Expiry Date : " />
+				</p:column>
+				<p:column>
+					<p:calendar mode="popup" showOn="button" id="txtCExpiryDt" value="#{challengeBean.challengeBean.exprDt}" pattern="MM/dd/yyyy HH:mm" mindate="#{challengeBean.challengeBean.launchDt}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblCTag" value="Tags : " />
+				</p:column>
+				<p:column>
+					<p:inputText autocomplete="false" id="txtCTag" value="#{challengeBean.challengeBean.tag}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblCUpload" value="Upload File : " />
+				</p:column>
+				<p:column>
+					<p:fileUpload auto="true" id="fuCUpload" fileUploadListener="#{challengeBean.chalFileUploadHandle}" multiple="false" />
+				</p:column>
+				<p:row>
+					<p:column colspan="2">
+						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{challengeBean.saveChallenge}" />
+						<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{adminBean.redirectHome}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</p:panel>
+	</ui:define>
+</ui:composition>

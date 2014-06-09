@@ -1,0 +1,816 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ERDiagram version="1.1">
+  <Connection session="IPDB" database="ipdb" />
+  <Drawing gridVisible="false" snapOn="false" fastRouting="false" labelsVisible="true" />
+  <Tables>
+    <Table name="ip_allocation">
+      <Drawing expanded="true" location="1054,932" dimensions="209,91" />
+      <Columns>
+        <Column name="alloc_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="alloc_desc" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="VARCHAR" size="45" />
+        </Column>
+        <Column name="alloc_val" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="INT" size="10" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_challenge_cat">
+      <Drawing expanded="true" location="751,942" dimensions="199,71" />
+      <Columns>
+        <Column name="cc_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="cc_desc" primary_key="false" foreign_key="false" required="true" unique="true">
+          <Data type="VARCHAR" size="45" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_challenge_group">
+      <Drawing expanded="true" location="898,70" dimensions="202,91" />
+      <Columns>
+        <Column name="cg_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="cg_chal_id" primary_key="false" foreign_key="true" required="false" unique="false">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="cg_group_id" primary_key="false" foreign_key="true" required="false" unique="false">
+          <Data type="BIGINT" size="19" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_challenge_status">
+      <Drawing expanded="true" location="452,942" dimensions="199,71" />
+      <Columns>
+        <Column name="cs_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="cs_desc" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="45" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_challenge">
+      <Drawing expanded="true" location="591,391" dimensions="331,271" />
+      <Columns>
+        <Column name="chal_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="chal_title" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="100" />
+        </Column>
+        <Column name="chal_desc" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="1000" />
+        </Column>
+        <Column name="chal_hover_txt" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="VARCHAR" size="500" />
+        </Column>
+        <Column name="chal_status" primary_key="false" foreign_key="true" required="true" unique="false">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="chal_cat" primary_key="false" foreign_key="true" required="true" unique="false">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="chal_launch_dt" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="TIMESTAMP" size="19" />
+        </Column>
+        <Column name="chal_expiry_dt" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="TIMESTAMP" size="19" />
+        </Column>
+        <Column name="chal_tags" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="VARCHAR" size="500" />
+        </Column>
+        <Column name="chal_blob" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="LONGBLOB" size="2147483647" />
+        </Column>
+        <Column name="chal_crtd_dt" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="TIMESTAMP" size="19" />
+        </Column>
+        <Column name="chal_crtd_by" primary_key="false" foreign_key="true" required="true" unique="false">
+          <Data type="BIGINT" size="19" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_claim_status">
+      <Drawing expanded="true" location="3693,491" dimensions="192,71" />
+      <Columns>
+        <Column name="cs_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="cs_desc" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="VARCHAR" size="45" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_claim">
+      <Drawing expanded="true" location="3366,40" dimensions="243,151" />
+      <Columns>
+        <Column name="claim_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="user_id" primary_key="false" foreign_key="true" required="false" unique="false">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="reward_id" primary_key="false" foreign_key="true" required="false" unique="false">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="claim_status" primary_key="false" foreign_key="true" required="false" unique="false">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="claim_desc" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="VARCHAR" size="500" />
+        </Column>
+        <Column name="claim_crtd_dt" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="TIMESTAMP" size="19" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_config">
+      <Drawing expanded="true" location="-21,602" dimensions="254,151" />
+      <Columns>
+        <Column name="config_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="config_key" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="450" />
+        </Column>
+        <Column name="config_value" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="450" />
+        </Column>
+        <Column name="config_env" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="45" />
+        </Column>
+        <Column name="created_date" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="TIMESTAMP" size="19" />
+        </Column>
+        <Column name="created_by" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="450" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_function">
+      <Drawing expanded="true" location="1457,60" dimensions="224,111" />
+      <Columns>
+        <Column name="func_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="func_name" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="45" />
+        </Column>
+        <Column name="user_id" primary_key="false" foreign_key="true" required="false" unique="false">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="group_id" primary_key="false" foreign_key="true" required="false" unique="false">
+          <Data type="BIGINT" size="19" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_group">
+      <Drawing expanded="true" location="1549,451" dimensions="254,151" />
+      <Columns>
+        <Column name="group_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="group_name" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="450" />
+        </Column>
+        <Column name="group_status" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="VARCHAR" size="45" />
+        </Column>
+        <Column name="group_parent_id" primary_key="false" foreign_key="true" required="false" unique="false">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="group_email" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="VARCHAR" size="450" />
+        </Column>
+        <Column name="group_admin_id" primary_key="false" foreign_key="true" required="false" unique="false">
+          <Data type="BIGINT" size="19" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_idea_cat">
+      <Drawing expanded="true" location="2278,942" dimensions="196,71" />
+      <Columns>
+        <Column name="ic_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="ic_desc" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="45" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_idea_status">
+      <Drawing expanded="true" location="1989,942" dimensions="189,71" />
+      <Columns>
+        <Column name="is_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="is_desc" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="VARCHAR" size="45" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_idea">
+      <Drawing expanded="true" location="1979,391" dimensions="316,271" />
+      <Columns>
+        <Column name="idea_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="idea_title" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="100" />
+        </Column>
+        <Column name="idea_desc" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="1000" />
+        </Column>
+        <Column name="idea_cat" primary_key="false" foreign_key="true" required="true" unique="false">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="idea_ba" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="1000" />
+        </Column>
+        <Column name="idea_status" primary_key="false" foreign_key="true" required="true" unique="false">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="idea_date" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="TIMESTAMP" size="19" />
+        </Column>
+        <Column name="idea_tag" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="500" />
+        </Column>
+        <Column name="idea_blob" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="LONGBLOB" size="2147483647" />
+        </Column>
+        <Column name="idea_user_id" primary_key="false" foreign_key="true" required="true" unique="false">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="idea_file_type" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="VARCHAR" size="150" />
+        </Column>
+        <Column name="idea_file_name" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="VARCHAR" size="450" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_points">
+      <Drawing expanded="true" location="1112,481" dimensions="186,91" />
+      <Columns>
+        <Column name="point_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="user_id" primary_key="false" foreign_key="true" required="false" unique="false">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="alloc_id" primary_key="false" foreign_key="true" required="false" unique="false">
+          <Data type="INT" size="10" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_rewards_cat">
+      <Drawing expanded="true" location="3443,942" dimensions="198,71" />
+      <Columns>
+        <Column name="rc_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="rc_desc" primary_key="false" foreign_key="false" required="true" unique="true">
+          <Data type="VARCHAR" size="45" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_rewards_group">
+      <Drawing expanded="true" location="1781,70" dimensions="215,91" />
+      <Columns>
+        <Column name="rg_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="rg_rewards_id" primary_key="false" foreign_key="true" required="false" unique="false">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="rg_group_id" primary_key="false" foreign_key="true" required="false" unique="false">
+          <Data type="BIGINT" size="19" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_rewards_status">
+      <Drawing expanded="true" location="3153,942" dimensions="190,71" />
+      <Columns>
+        <Column name="rs_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="rs_desc" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="VARCHAR" size="45" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_rewards">
+      <Drawing expanded="true" location="3226,381" dimensions="367,291" />
+      <Columns>
+        <Column name="rw_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="rw_title" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="100" />
+        </Column>
+        <Column name="rw_desc" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="500" />
+        </Column>
+        <Column name="rw_value" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="rw_status" primary_key="false" foreign_key="true" required="true" unique="false">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="rw_cat" primary_key="false" foreign_key="true" required="true" unique="false">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="rw_stock_code_num" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="rw_hover_text" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="VARCHAR" size="500" />
+        </Column>
+        <Column name="rw_launch_dt" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="TIMESTAMP" size="19" />
+        </Column>
+        <Column name="rw_expiry_dt" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="TIMESTAMP" size="19" />
+        </Column>
+        <Column name="rw_tag" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="VARCHAR" size="500" />
+        </Column>
+        <Column name="rw_blob" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="LONGBLOB" size="2147483647" />
+        </Column>
+        <Column name="rw_crtd_dt" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="TIMESTAMP" size="19" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_solution_cat">
+      <Drawing expanded="true" location="0,491" dimensions="199,71" />
+      <Columns>
+        <Column name="sc_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="sc_desc" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="45" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_solution_status">
+      <Drawing expanded="true" location="299,491" dimensions="192,71" />
+      <Columns>
+        <Column name="ss_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="ss_desc" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="VARCHAR" size="45" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_solution">
+      <Drawing expanded="true" location="391,0" dimensions="303,231" />
+      <Columns>
+        <Column name="sol_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="sol_chal_id" primary_key="false" foreign_key="true" required="true" unique="false">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="sol_title" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="100" />
+        </Column>
+        <Column name="sol_desc" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="1000" />
+        </Column>
+        <Column name="sol_status" primary_key="false" foreign_key="true" required="true" unique="false">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="sol_cat" primary_key="false" foreign_key="true" required="false" unique="false">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="sol_tags" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="VARCHAR" size="500" />
+        </Column>
+        <Column name="sol_blob" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="LONGBLOB" size="2147483647" />
+        </Column>
+        <Column name="sol_crtd_dt" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="TIMESTAMP" size="19" />
+        </Column>
+        <Column name="sol_crtd_by" primary_key="false" foreign_key="true" required="true" unique="false">
+          <Data type="BIGINT" size="19" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_tag_entity_type">
+      <Drawing expanded="true" location="2574,942" dimensions="191,71" />
+      <Columns>
+        <Column name="te_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="te_desc" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="VARCHAR" size="45" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_tag_type">
+      <Drawing expanded="true" location="2865,942" dimensions="188,71" />
+      <Columns>
+        <Column name="tt_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="tt_desc" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="VARCHAR" size="45" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_tag">
+      <Drawing expanded="true" location="2588,451" dimensions="280,151" />
+      <Columns>
+        <Column name="tag_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="tag_type" primary_key="false" foreign_key="true" required="true" unique="false">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="tag_entity_id" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="tag_entity_table" primary_key="false" foreign_key="true" required="true" unique="false">
+          <Data type="INT" size="10" />
+        </Column>
+        <Column name="tag_text" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="VARCHAR" size="1000" />
+        </Column>
+        <Column name="tag_user_id" primary_key="false" foreign_key="true" required="false" unique="false">
+          <Data type="BIGINT" size="19" />
+        </Column>
+      </Columns>
+    </Table>
+    <Table name="ip_user">
+      <Drawing expanded="true" location="1410,822" dimensions="358,311" />
+      <Columns>
+        <Column name="user_id" primary_key="true" foreign_key="false" required="true" unique="true">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="user_f_name" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="75" />
+        </Column>
+        <Column name="user_l_name" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="75" />
+        </Column>
+        <Column name="user_m_name" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="VARCHAR" size="45" />
+        </Column>
+        <Column name="user_id_num" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="BIGINT" size="19" />
+        </Column>
+        <Column name="user_screen_name" primary_key="false" foreign_key="false" required="true" unique="true">
+          <Data type="VARCHAR" size="50" />
+        </Column>
+        <Column name="user_email" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="450" />
+        </Column>
+        <Column name="user_contact" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="VARCHAR" size="20" />
+        </Column>
+        <Column name="user_skills" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="1000" />
+        </Column>
+        <Column name="user_bio" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="1000" />
+        </Column>
+        <Column name="user_fb_handle" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="500" />
+        </Column>
+        <Column name="user_tw_handle" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="VARCHAR" size="500" />
+        </Column>
+        <Column name="user_avatar" primary_key="false" foreign_key="false" required="false" unique="false">
+          <Data type="LONGBLOB" size="2147483647" />
+        </Column>
+        <Column name="user_status" primary_key="false" foreign_key="false" required="true" unique="false">
+          <Data type="CHAR" size="1" />
+        </Column>
+      </Columns>
+    </Table>
+  </Tables>
+  <Relationships>
+    <Relationship name="cg_chal_id_fk">
+      <Details primary_table="ip_challenge" foreign_table="ip_challenge_group">
+        <PrimaryKeys>
+          <ColumnName name="chal_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="cg_chal_id" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="cg_group_id_fk">
+      <Details primary_table="ip_group" foreign_table="ip_challenge_group">
+        <PrimaryKeys>
+          <ColumnName name="group_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="cg_group_id" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="chal_status_id_fk">
+      <Details primary_table="ip_challenge_status" foreign_table="ip_challenge">
+        <PrimaryKeys>
+          <ColumnName name="cs_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="chal_status" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="chal_cat_id_fk">
+      <Details primary_table="ip_challenge_cat" foreign_table="ip_challenge">
+        <PrimaryKeys>
+          <ColumnName name="cc_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="chal_cat" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="chal_crtd_user_fk">
+      <Details primary_table="ip_user" foreign_table="ip_challenge">
+        <PrimaryKeys>
+          <ColumnName name="user_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="chal_crtd_by" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="claim_rewards_id_fk">
+      <Details primary_table="ip_rewards" foreign_table="ip_claim">
+        <PrimaryKeys>
+          <ColumnName name="rw_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="reward_id" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="claim_status_id_fk">
+      <Details primary_table="ip_claim_status" foreign_table="ip_claim">
+        <PrimaryKeys>
+          <ColumnName name="cs_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="claim_status" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="claim_user_id_fk">
+      <Details primary_table="ip_user" foreign_table="ip_claim">
+        <PrimaryKeys>
+          <ColumnName name="user_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="user_id" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="func_user_id_fk">
+      <Details primary_table="ip_user" foreign_table="ip_function">
+        <PrimaryKeys>
+          <ColumnName name="user_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="user_id" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="func_grp_id_fk">
+      <Details primary_table="ip_group" foreign_table="ip_function">
+        <PrimaryKeys>
+          <ColumnName name="group_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="group_id" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="grp_par_id_fk">
+      <Details primary_table="ip_group" foreign_table="ip_group">
+        <PrimaryKeys>
+          <ColumnName name="group_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="group_parent_id" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="grp_admin_id_fk">
+      <Details primary_table="ip_user" foreign_table="ip_group">
+        <PrimaryKeys>
+          <ColumnName name="user_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="group_admin_id" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="idea_status_id_fk">
+      <Details primary_table="ip_idea_status" foreign_table="ip_idea">
+        <PrimaryKeys>
+          <ColumnName name="is_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="idea_status" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="idea_user_id_fk">
+      <Details primary_table="ip_user" foreign_table="ip_idea">
+        <PrimaryKeys>
+          <ColumnName name="user_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="idea_user_id" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="idea_cat_id_fk">
+      <Details primary_table="ip_idea_cat" foreign_table="ip_idea">
+        <PrimaryKeys>
+          <ColumnName name="ic_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="idea_cat" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="points_alloc_id_fk">
+      <Details primary_table="ip_allocation" foreign_table="ip_points">
+        <PrimaryKeys>
+          <ColumnName name="alloc_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="alloc_id" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="points_user_id">
+      <Details primary_table="ip_user" foreign_table="ip_points">
+        <PrimaryKeys>
+          <ColumnName name="user_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="user_id" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="rg_rewards_id_fk">
+      <Details primary_table="ip_rewards" foreign_table="ip_rewards_group">
+        <PrimaryKeys>
+          <ColumnName name="rw_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="rg_rewards_id" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="1">
+        <Bendpoints>
+          <Point location="3271,116" />
+        </Bendpoints>
+      </Drawing>
+    </Relationship>
+    <Relationship name="rg_group_id_fk">
+      <Details primary_table="ip_group" foreign_table="ip_rewards_group">
+        <PrimaryKeys>
+          <ColumnName name="group_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="rg_group_id" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="rw_cat_id_fk">
+      <Details primary_table="ip_rewards_cat" foreign_table="ip_rewards">
+        <PrimaryKeys>
+          <ColumnName name="rc_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="rw_cat" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="rw_status_id_fk">
+      <Details primary_table="ip_rewards_status" foreign_table="ip_rewards">
+        <PrimaryKeys>
+          <ColumnName name="rs_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="rw_status" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="sol_chal_id_fk">
+      <Details primary_table="ip_challenge" foreign_table="ip_solution">
+        <PrimaryKeys>
+          <ColumnName name="chal_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="sol_chal_id" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="sol_crtd_by_fk">
+      <Details primary_table="ip_user" foreign_table="ip_solution">
+        <PrimaryKeys>
+          <ColumnName name="user_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="sol_crtd_by" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="sol_cat_id_fk">
+      <Details primary_table="ip_solution_cat" foreign_table="ip_solution">
+        <PrimaryKeys>
+          <ColumnName name="sc_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="sol_cat" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="sol_status_id_fk">
+      <Details primary_table="ip_solution_status" foreign_table="ip_solution">
+        <PrimaryKeys>
+          <ColumnName name="ss_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="sol_status" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="tag_tt_id_fk">
+      <Details primary_table="ip_tag_type" foreign_table="ip_tag">
+        <PrimaryKeys>
+          <ColumnName name="tt_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="tag_type" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="tag_te_id_fk">
+      <Details primary_table="ip_tag_entity_type" foreign_table="ip_tag">
+        <PrimaryKeys>
+          <ColumnName name="te_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="tag_entity_table" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+    <Relationship name="tag_user_id_fk">
+      <Details primary_table="ip_user" foreign_table="ip_tag">
+        <PrimaryKeys>
+          <ColumnName name="user_id" />
+        </PrimaryKeys>
+        <ForeignKeys>
+          <ColumnName name="tag_user_id" />
+        </ForeignKeys>
+      </Details>
+      <Drawing routingType="0" />
+    </Relationship>
+  </Relationships>
+</ERDiagram>
+
