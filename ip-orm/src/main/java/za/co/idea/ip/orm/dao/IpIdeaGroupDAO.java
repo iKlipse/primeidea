@@ -10,27 +10,27 @@ import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import za.co.idea.ip.orm.bean.IpChallengeGroup;
+import za.co.idea.ip.orm.bean.IpIdeaGroup;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * IpChallengeGroup entities. Transaction control of the save(), update() and
+ * IpIdeaGroup entities. Transaction control of the save(), update() and
  * delete() operations can directly support Spring container-managed
  * transactions or they can be augmented to handle user-managed Spring
  * transactions. Each of these methods provides additional information for how
  * to configure it for the desired type of transaction control.
  * 
- * @see za.co.idea.ip.orm.bean.IpChallengeGroup
+ * @see za.co.idea.ip.orm.bean.IpIdeaGroup
  * @author MyEclipse Persistence Tools
  */
 @SuppressWarnings("rawtypes")
-public class IpChallengeGroupDAO extends BaseHibernateDAO {
-	private static final Logger log = LoggerFactory.getLogger(IpChallengeGroupDAO.class);
+public class IpIdeaGroupDAO extends BaseHibernateDAO {
+	private static final Logger log = LoggerFactory.getLogger(IpIdeaGroupDAO.class);
 
 	// property constants
 
-	public void save(IpChallengeGroup transientInstance) {
-		log.debug("saving IpChallengeGroup instance");
+	public void save(IpIdeaGroup transientInstance) {
+		log.debug("saving IpIdeaGroup instance");
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -46,8 +46,8 @@ public class IpChallengeGroupDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public void delete(IpChallengeGroup persistentInstance) {
-		log.debug("deleting IpChallengeGroup instance");
+	public void delete(IpIdeaGroup persistentInstance) {
+		log.debug("deleting IpIdeaGroup instance");
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -63,12 +63,12 @@ public class IpChallengeGroupDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public IpChallengeGroup findById(java.lang.Long id) {
-		log.debug("getting IpChallengeGroup instance with id: " + id);
+	public IpIdeaGroup findById(java.lang.Long id) {
+		log.debug("getting IpIdeaGroup instance with id: " + id);
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			IpChallengeGroup instance = (IpChallengeGroup) session.get("za.co.idea.ip.orm.bean.IpChallengeGroup", id);
+			IpIdeaGroup instance = (IpIdeaGroup) session.get("za.co.idea.ip.orm.bean.IpIdeaGroup", id);
 			transaction.commit();
 			session.close();
 			return instance;
@@ -80,12 +80,12 @@ public class IpChallengeGroupDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public List findByExample(IpChallengeGroup instance) {
-		log.debug("finding IpChallengeGroup instance by example");
+	public List findByExample(IpIdeaGroup instance) {
+		log.debug("finding IpIdeaGroup instance by example");
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpChallengeGroup").add(Example.create(instance)).list();
+			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpIdeaGroup").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			transaction.commit();
 			session.close();
@@ -99,11 +99,11 @@ public class IpChallengeGroupDAO extends BaseHibernateDAO {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding IpChallengeGroup instance with property: " + propertyName + ", value: " + value);
+		log.debug("finding IpIdeaGroup instance with property: " + propertyName + ", value: " + value);
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			String queryString = "from IpChallengeGroup as model where model." + propertyName + "= ?";
+			String queryString = "from IpIdeaGroup as model where model." + propertyName + "= ?";
 			Query queryObject = session.createQuery(queryString);
 			queryObject.setParameter(0, value);
 			List results = queryObject.list();
@@ -120,11 +120,11 @@ public class IpChallengeGroupDAO extends BaseHibernateDAO {
 	}
 
 	public List findAll() {
-		log.debug("finding all IpChallengeGroup instances");
+		log.debug("finding all IpIdeaGroup instances");
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			String queryString = "from IpChallengeGroup";
+			String queryString = "from IpIdeaGroup";
 			Query queryObject = session.createQuery(queryString);
 			List results = queryObject.list();
 			transaction.commit();
@@ -139,12 +139,12 @@ public class IpChallengeGroupDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public IpChallengeGroup merge(IpChallengeGroup detachedInstance) {
-		log.debug("merging IpChallengeGroup instance");
+	public IpIdeaGroup merge(IpIdeaGroup detachedInstance) {
+		log.debug("merging IpIdeaGroup instance");
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			IpChallengeGroup result = (IpChallengeGroup) session.merge(detachedInstance);
+			IpIdeaGroup result = (IpIdeaGroup) session.merge(detachedInstance);
 			log.debug("merge successful");
 			transaction.commit();
 			session.close();
@@ -157,8 +157,8 @@ public class IpChallengeGroupDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public void attachDirty(IpChallengeGroup instance) {
-		log.debug("attaching dirty IpChallengeGroup instance");
+	public void attachDirty(IpIdeaGroup instance) {
+		log.debug("attaching dirty IpIdeaGroup instance");
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -174,12 +174,12 @@ public class IpChallengeGroupDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public void deleteByChallengeId(Long id) {
-		log.debug("Deleting Challenge Groups By Id : " + id);
+	public void deleteByIdeaId(Long id) {
+		log.debug("Deleting Idea Groups By Id : " + id);
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			Query query = session.getNamedQuery("deleteCGByChalId");
+			Query query = session.getNamedQuery("deleteIGByIdeaId");
 			query.setLong("id", id);
 			query.executeUpdate();
 			transaction.commit();
@@ -191,18 +191,18 @@ public class IpChallengeGroupDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public List fetchByChallengeId(Long id) {
+	public List fetchByIdeaId(Long id) {
 		log.debug("Fetching Group Users By Id : " + id);
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			Query query = session.getNamedQuery("fetchCGByChalId");
+			Query query = session.getNamedQuery("fetchIGByIdeaId");
 			query.setLong("id", id);
 			List ret = query.list();
 			for (Object object : ret) {
-				IpChallengeGroup fg = (IpChallengeGroup) object;
+				IpIdeaGroup fg = (IpIdeaGroup) object;
 				Hibernate.initialize(fg.getIpGroup());
-				Hibernate.initialize(fg.getIpChallenge());
+				Hibernate.initialize(fg.getIpIdea());
 			}
 			transaction.commit();
 			session.close();
@@ -219,13 +219,13 @@ public class IpChallengeGroupDAO extends BaseHibernateDAO {
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			Query query = session.getNamedQuery("fetchCGByGroupId");
+			Query query = session.getNamedQuery("fetchIGByGroupId");
 			query.setLong("id", id);
 			List ret = query.list();
 			for (Object object : ret) {
-				IpChallengeGroup fg = (IpChallengeGroup) object;
+				IpIdeaGroup fg = (IpIdeaGroup) object;
 				Hibernate.initialize(fg.getIpGroup());
-				Hibernate.initialize(fg.getIpChallenge());
+				Hibernate.initialize(fg.getIpIdea());
 			}
 			transaction.commit();
 			session.close();

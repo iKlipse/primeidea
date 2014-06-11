@@ -17,6 +17,7 @@ public class ChallengeMessage {
 	private String tag;
 	private Date crtdDt;
 	private Long crtdById;
+	private Long[] groupIdList;
 
 	public Long getId() {
 		return id;
@@ -104,6 +105,14 @@ public class ChallengeMessage {
 
 	public void setCrtdById(Long crtdById) {
 		this.crtdById = crtdById;
+	}
+
+	public Long[] getGroupIdList() {
+		return groupIdList;
+	}
+
+	public void setGroupIdList(Long[] groupIdList) {
+		this.groupIdList = groupIdList;
 	}
 
 }

@@ -13,10 +13,14 @@ import javax.ws.rs.Produces;
 
 import za.co.idea.ip.orm.bean.IpChallenge;
 import za.co.idea.ip.orm.bean.IpChallengeCat;
+import za.co.idea.ip.orm.bean.IpChallengeGroup;
 import za.co.idea.ip.orm.bean.IpChallengeStatus;
 import za.co.idea.ip.orm.dao.IpChallengeCatDAO;
 import za.co.idea.ip.orm.dao.IpChallengeDAO;
+import za.co.idea.ip.orm.dao.IpChallengeGroupDAO;
 import za.co.idea.ip.orm.dao.IpChallengeStatusDAO;
+import za.co.idea.ip.orm.dao.IpGroupDAO;
+import za.co.idea.ip.orm.dao.IpNativeSQLDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
 import za.co.idea.ip.ws.bean.ChallengeMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
@@ -29,6 +33,9 @@ public class ChallengeService {
 	private IpChallengeCatDAO ipChallengeCatDAO;
 	private IpChallengeStatusDAO ipChallengeStatusDAO;
 	private IpUserDAO ipUserDAO;
+	private IpGroupDAO ipGroupDAO;
+	private IpNativeSQLDAO ipNativeSQLDAO;
+	private IpChallengeGroupDAO ipChallengeGroupDAO;
 
 	@POST
 	@Path("/challenge/add")
@@ -49,6 +56,13 @@ public class ChallengeService {
 			ipChallenge.setIpChallengeStatus(ipChallengeStatusDAO.findById(challenge.getStatusId()));
 			ipChallenge.setIpUser(ipUserDAO.findById(challenge.getCrtdById()));
 			ipChallengeDAO.save(ipChallenge);
+			for (Long gId : challenge.getGroupIdList()) {
+				IpChallengeGroup ipChallengeGroup = new IpChallengeGroup();
+				ipChallengeGroup.setCgId(ipNativeSQLDAO.getNextId(IpChallengeGroup.class));
+				ipChallengeGroup.setIpChallenge(ipChallenge);
+				ipChallengeGroup.setIpGroup(ipGroupDAO.findById(gId));
+				ipChallengeGroupDAO.save(ipChallengeGroup);
+			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
@@ -81,6 +95,14 @@ public class ChallengeService {
 			ipChallenge.setIpChallengeStatus(ipChallengeStatusDAO.findById(challenge.getStatusId()));
 			ipChallenge.setIpUser(ipUserDAO.findById(challenge.getCrtdById()));
 			ipChallengeDAO.merge(ipChallenge);
+			ipChallengeGroupDAO.deleteByChallengeId(challenge.getId());
+			for (Long gId : challenge.getGroupIdList()) {
+				IpChallengeGroup ipChallengeGroup = new IpChallengeGroup();
+				ipChallengeGroup.setCgId(ipNativeSQLDAO.getNextId(IpChallengeGroup.class));
+				ipChallengeGroup.setIpChallenge(ipChallenge);
+				ipChallengeGroup.setIpGroup(ipGroupDAO.findById(gId));
+				ipChallengeGroupDAO.save(ipChallengeGroup);
+			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
@@ -325,5 +347,29 @@ public class ChallengeService {
 
 	public void setIpUserDAO(IpUserDAO ipUserDAO) {
 		this.ipUserDAO = ipUserDAO;
+	}
+
+	public IpGroupDAO getIpGroupDAO() {
+		return ipGroupDAO;
+	}
+
+	public IpNativeSQLDAO getIpNativeSQLDAO() {
+		return ipNativeSQLDAO;
+	}
+
+	public void setIpGroupDAO(IpGroupDAO ipGroupDAO) {
+		this.ipGroupDAO = ipGroupDAO;
+	}
+
+	public void setIpNativeSQLDAO(IpNativeSQLDAO ipNativeSQLDAO) {
+		this.ipNativeSQLDAO = ipNativeSQLDAO;
+	}
+
+	public IpChallengeGroupDAO getIpChallengeGroupDAO() {
+		return ipChallengeGroupDAO;
+	}
+
+	public void setIpChallengeGroupDAO(IpChallengeGroupDAO ipChallengeGroupDAO) {
+		this.ipChallengeGroupDAO = ipChallengeGroupDAO;
 	}
 }

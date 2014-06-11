@@ -13,10 +13,14 @@ import javax.ws.rs.Produces;
 
 import za.co.idea.ip.orm.bean.IpIdea;
 import za.co.idea.ip.orm.bean.IpIdeaCat;
+import za.co.idea.ip.orm.bean.IpIdeaGroup;
 import za.co.idea.ip.orm.bean.IpIdeaStatus;
+import za.co.idea.ip.orm.dao.IpGroupDAO;
 import za.co.idea.ip.orm.dao.IpIdeaCatDAO;
 import za.co.idea.ip.orm.dao.IpIdeaDAO;
+import za.co.idea.ip.orm.dao.IpIdeaGroupDAO;
 import za.co.idea.ip.orm.dao.IpIdeaStatusDAO;
+import za.co.idea.ip.orm.dao.IpNativeSQLDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
 import za.co.idea.ip.ws.bean.IdeaMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
@@ -29,6 +33,9 @@ public class IdeaService {
 	private IpIdeaCatDAO ipIdeaCatDAO;
 	private IpIdeaStatusDAO ipIdeaStatusDAO;
 	private IpUserDAO ipUserDAO;
+	private IpIdeaGroupDAO ipIdeaGroupDAO;
+	private IpNativeSQLDAO ipNativeSQLDAO;
+	private IpGroupDAO ipGroupDAO;
 
 	@GET
 	@Path("/idea/cat/list")
@@ -143,6 +150,13 @@ public class IdeaService {
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
+			for (Long gId : idea.getGroupIdList()) {
+				IpIdeaGroup ipIdeaGroup = new IpIdeaGroup();
+				ipIdeaGroup.setIgId(ipNativeSQLDAO.getNextId(IpIdeaGroup.class));
+				ipIdeaGroup.setIpIdea(ipIdea);
+				ipIdeaGroup.setIpGroup(ipGroupDAO.findById(gId));
+				ipIdeaGroupDAO.save(ipIdeaGroup);
+			}
 			return message;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -176,6 +190,14 @@ public class IdeaService {
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
+			ipIdeaGroupDAO.deleteByIdeaId(idea.getIdeaId());
+			for (Long gId : idea.getGroupIdList()) {
+				IpIdeaGroup ipIdeaGroup = new IpIdeaGroup();
+				ipIdeaGroup.setIgId(ipNativeSQLDAO.getNextId(IpIdeaGroup.class));
+				ipIdeaGroup.setIpIdea(ipIdea);
+				ipIdeaGroup.setIpGroup(ipGroupDAO.findById(gId));
+				ipIdeaGroupDAO.save(ipIdeaGroup);
+			}
 			return message;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -302,5 +324,29 @@ public class IdeaService {
 
 	public void setIpUserDAO(IpUserDAO ipUserDAO) {
 		this.ipUserDAO = ipUserDAO;
+	}
+
+	public IpIdeaGroupDAO getIpIdeaGroupDAO() {
+		return ipIdeaGroupDAO;
+	}
+
+	public void setIpIdeaGroupDAO(IpIdeaGroupDAO ipIdeaGroupDAO) {
+		this.ipIdeaGroupDAO = ipIdeaGroupDAO;
+	}
+
+	public IpNativeSQLDAO getIpNativeSQLDAO() {
+		return ipNativeSQLDAO;
+	}
+
+	public void setIpNativeSQLDAO(IpNativeSQLDAO ipNativeSQLDAO) {
+		this.ipNativeSQLDAO = ipNativeSQLDAO;
+	}
+
+	public IpGroupDAO getIpGroupDAO() {
+		return ipGroupDAO;
+	}
+
+	public void setIpGroupDAO(IpGroupDAO ipGroupDAO) {
+		this.ipGroupDAO = ipGroupDAO;
 	}
 }

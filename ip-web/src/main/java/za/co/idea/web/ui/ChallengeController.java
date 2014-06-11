@@ -19,6 +19,7 @@ import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.DualListModel;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 import org.primefaces.model.tagcloud.DefaultTagCloudItem;
@@ -27,6 +28,7 @@ import org.primefaces.model.tagcloud.TagCloudModel;
 
 import za.co.idea.ip.ws.bean.AttachmentMessage;
 import za.co.idea.ip.ws.bean.ChallengeMessage;
+import za.co.idea.ip.ws.bean.GroupMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.SolutionMessage;
@@ -34,6 +36,7 @@ import za.co.idea.ip.ws.bean.TagMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
 import za.co.idea.web.ui.bean.ChallengeBean;
+import za.co.idea.web.ui.bean.GroupBean;
 import za.co.idea.web.ui.bean.ListSelectorBean;
 import za.co.idea.web.ui.bean.SolutionBean;
 import za.co.idea.web.ui.bean.TagBean;
@@ -52,6 +55,8 @@ public class ChallengeController implements Serializable {
 	private List<ListSelectorBean> challengeStatuses;
 	private List<ListSelectorBean> solutionCats;
 	private List<ListSelectorBean> solutionStatuses;
+	private List<GroupBean> pGrps;
+	private DualListModel<GroupBean> groupTwinSelect;
 	private TagCloudModel chalLikes;
 	private List<TagBean> chalComments;
 	private TagCloudModel solLikes;
@@ -93,6 +98,8 @@ public class ChallengeController implements Serializable {
 			admUsers = fetchAllUsers();
 			challengeCats = fetchAllChallengeCat();
 			challengeStatuses = fetchAllChallengeStatuses();
+			pGrps = fetchAllGroups();
+			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 			challengeBean = new ChallengeBean();
 			return "chalcc";
 		} catch (Exception e) {
@@ -138,6 +145,8 @@ public class ChallengeController implements Serializable {
 			challengeCats = fetchAllChallengeCat();
 			admUsers = fetchAllUsers();
 			challengeStatuses = fetchNextChallengeStatuses();
+			pGrps = fetchAllGroups();
+			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
 				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
 				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
@@ -243,6 +252,7 @@ public class ChallengeController implements Serializable {
 			message.setStatusId(1);
 			message.setTag(challengeBean.getTag());
 			message.setTitle(challengeBean.getTitle());
+			message.setGroupIdList(getSelGroupIds());
 			ResponseMessage response = addChallengeClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			addChallengeClient.close();
 			if (response.getStatusCode() == 0) {
@@ -307,6 +317,7 @@ public class ChallengeController implements Serializable {
 			message.setStatusId(challengeBean.getStatusId());
 			message.setTag(challengeBean.getTag());
 			message.setTitle(challengeBean.getTitle());
+			message.setGroupIdList(getSelGroupIds());
 			ResponseMessage response = updateChallengeClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			updateChallengeClient.close();
 			if (response.getStatusCode() == 0) {
@@ -1175,7 +1186,67 @@ public class ChallengeController implements Serializable {
 		} else {
 			return false;
 		}
+	}
 
+	private List<GroupBean> fetchAllGroups() {
+		List<GroupBean> ret = new ArrayList<GroupBean>();
+		WebClient viewGroupsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/list");
+		Collection<? extends GroupMessage> groups = new ArrayList<GroupMessage>(viewGroupsClient.accept(MediaType.APPLICATION_JSON).getCollection(GroupMessage.class));
+		viewGroupsClient.close();
+		for (GroupMessage groupMessage : groups) {
+			GroupBean bean = new GroupBean();
+			bean.setgId(groupMessage.getgId());
+			bean.setGeMail(groupMessage.getGeMail());
+			bean.setgName(groupMessage.getgName());
+			bean.setIsActive(groupMessage.getIsActive());
+			bean.setSelAdmUser(groupMessage.getAdmUserId());
+			bean.setSelPGrp(groupMessage.getpGrpId());
+			bean.getUserIdList().clear();
+			for (Long id : groupMessage.getUserIdList())
+				if (id != null)
+					bean.getUserIdList().add(id);
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	private DualListModel<GroupBean> initializeSelectedGroups(List<GroupBean> grps) {
+		List<Long> selGrps = challengeBean.getGroupIdList();
+		DualListModel<GroupBean> ret = new DualListModel<GroupBean>(new ArrayList<GroupBean>(), new ArrayList<GroupBean>());
+		if (selGrps != null)
+			for (Long grpId : selGrps)
+				ret.getTarget().add(getGroupById(grpId));
+		if (grps != null)
+			for (GroupBean bean : grps)
+				if (selGrps != null && selGrps.contains(bean.getgId()))
+					continue;
+				else
+					ret.getSource().add(bean);
+		return ret;
+	}
+
+	private GroupBean getGroupById(Long pGrpId) {
+		GroupBean bean = new GroupBean();
+		WebClient groupByIdClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/get/" + pGrpId);
+		GroupMessage groupMessage = groupByIdClient.accept(MediaType.APPLICATION_JSON).get(GroupMessage.class);
+		groupByIdClient.close();
+		bean.setgId(groupMessage.getgId());
+		bean.setGeMail(groupMessage.getGeMail());
+		bean.setgName(groupMessage.getgName());
+		bean.setIsActive(groupMessage.getIsActive());
+		bean.setSelAdmUser(groupMessage.getAdmUserId());
+		bean.setSelPGrp(groupMessage.getpGrpId());
+		return bean;
+	}
+
+	private Long[] getSelGroupIds() {
+		Long[] ret = new Long[groupTwinSelect.getTarget().size()];
+		int i = 0;
+		for (GroupBean bean : groupTwinSelect.getTarget()) {
+			ret[i] = bean.getgId();
+			i++;
+		}
+		return ret;
 	}
 
 	public ChallengeBean getChallengeBean() {
@@ -1470,6 +1541,22 @@ public class ChallengeController implements Serializable {
 
 	public void setBuildOnCnt(String buildOnCnt) {
 		this.buildOnCnt = buildOnCnt;
+	}
+
+	public List<GroupBean> getpGrps() {
+		return pGrps;
+	}
+
+	public DualListModel<GroupBean> getGroupTwinSelect() {
+		return groupTwinSelect;
+	}
+
+	public void setpGrps(List<GroupBean> pGrps) {
+		this.pGrps = pGrps;
+	}
+
+	public void setGroupTwinSelect(DualListModel<GroupBean> groupTwinSelect) {
+		this.groupTwinSelect = groupTwinSelect;
 	}
 
 }

@@ -2,6 +2,7 @@ package za.co.idea.web.ui.bean;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class IdeaBean implements Serializable {
 
@@ -19,6 +20,7 @@ public class IdeaBean implements Serializable {
 	private String fileName;
 	private Long crtdById;
 	private Date crtdDate;
+	private List<Long> groupIdList;
 
 	public Long getIdeaId() {
 		return ideaId;
@@ -114,5 +116,13 @@ public class IdeaBean implements Serializable {
 
 	public void setCrtdDate(Date crtdDate) {
 		this.crtdDate = crtdDate;
+	}
+
+	public List<Long> getGroupIdList() {
+		return groupIdList;
+	}
+
+	public void setGroupIdList(List<Long> groupIdList) {
+		this.groupIdList = groupIdList;
 	}
 }

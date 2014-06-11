@@ -19,6 +19,7 @@ import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.DualListModel;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 import org.primefaces.model.tagcloud.DefaultTagCloudItem;
@@ -26,12 +27,14 @@ import org.primefaces.model.tagcloud.DefaultTagCloudModel;
 import org.primefaces.model.tagcloud.TagCloudModel;
 
 import za.co.idea.ip.ws.bean.AttachmentMessage;
+import za.co.idea.ip.ws.bean.GroupMessage;
 import za.co.idea.ip.ws.bean.IdeaMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.TagMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
+import za.co.idea.web.ui.bean.GroupBean;
 import za.co.idea.web.ui.bean.IdeaBean;
 import za.co.idea.web.ui.bean.ListSelectorBean;
 import za.co.idea.web.ui.bean.TagBean;
@@ -51,6 +54,8 @@ public class IdeaController implements Serializable {
 	private List<TagBean> buildOns;
 	private StreamedContent fileContent;
 	private StreamedContent uploadContent;
+	private List<GroupBean> pGrps;
+	private DualListModel<GroupBean> groupTwinSelect;
 	private String commentText;
 	private String buildOnText;
 	private boolean fileAvail;
@@ -107,6 +112,8 @@ public class IdeaController implements Serializable {
 			ideaCats = fetchAllIdeaCat();
 			admUsers = fetchAllUsers();
 			ideaStatuses = fetchNextIdeaStatuses();
+			pGrps = fetchAllGroups();
+			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
 				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
 				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
@@ -281,6 +288,8 @@ public class IdeaController implements Serializable {
 			admUsers = fetchAllUsers();
 			ideaStatuses = fetchAllIdeaStatuses();
 			ideaBean = new IdeaBean();
+			pGrps = fetchAllGroups();
+			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 			return "ideaci";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -344,6 +353,7 @@ public class IdeaController implements Serializable {
 			ideaMessage.setIdeaId(COUNTER.getNextId("IpIdea"));
 			ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
+			ideaMessage.setGroupIdList(getSelGroupIds());
 			ideaMessage.setSetStatusId(1l);
 			ResponseMessage response = addIdeaClient.accept(MediaType.APPLICATION_JSON).post(ideaMessage, ResponseMessage.class);
 			addIdeaClient.close();
@@ -642,6 +652,67 @@ public class IdeaController implements Serializable {
 		return ret;
 	}
 
+	private List<GroupBean> fetchAllGroups() {
+		List<GroupBean> ret = new ArrayList<GroupBean>();
+		WebClient viewGroupsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/list");
+		Collection<? extends GroupMessage> groups = new ArrayList<GroupMessage>(viewGroupsClient.accept(MediaType.APPLICATION_JSON).getCollection(GroupMessage.class));
+		viewGroupsClient.close();
+		for (GroupMessage groupMessage : groups) {
+			GroupBean bean = new GroupBean();
+			bean.setgId(groupMessage.getgId());
+			bean.setGeMail(groupMessage.getGeMail());
+			bean.setgName(groupMessage.getgName());
+			bean.setIsActive(groupMessage.getIsActive());
+			bean.setSelAdmUser(groupMessage.getAdmUserId());
+			bean.setSelPGrp(groupMessage.getpGrpId());
+			bean.getUserIdList().clear();
+			for (Long id : groupMessage.getUserIdList())
+				if (id != null)
+					bean.getUserIdList().add(id);
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	private DualListModel<GroupBean> initializeSelectedGroups(List<GroupBean> grps) {
+		List<Long> selGrps = ideaBean.getGroupIdList();
+		DualListModel<GroupBean> ret = new DualListModel<GroupBean>(new ArrayList<GroupBean>(), new ArrayList<GroupBean>());
+		if (selGrps != null)
+			for (Long grpId : selGrps)
+				ret.getTarget().add(getGroupById(grpId));
+		if (grps != null)
+			for (GroupBean bean : grps)
+				if (selGrps != null && selGrps.contains(bean.getgId()))
+					continue;
+				else
+					ret.getSource().add(bean);
+		return ret;
+	}
+
+	private GroupBean getGroupById(Long pGrpId) {
+		GroupBean bean = new GroupBean();
+		WebClient groupByIdClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/get/" + pGrpId);
+		GroupMessage groupMessage = groupByIdClient.accept(MediaType.APPLICATION_JSON).get(GroupMessage.class);
+		groupByIdClient.close();
+		bean.setgId(groupMessage.getgId());
+		bean.setGeMail(groupMessage.getGeMail());
+		bean.setgName(groupMessage.getgName());
+		bean.setIsActive(groupMessage.getIsActive());
+		bean.setSelAdmUser(groupMessage.getAdmUserId());
+		bean.setSelPGrp(groupMessage.getpGrpId());
+		return bean;
+	}
+
+	private Long[] getSelGroupIds() {
+		Long[] ret = new Long[groupTwinSelect.getTarget().size()];
+		int i = 0;
+		for (GroupBean bean : groupTwinSelect.getTarget()) {
+			ret[i] = bean.getgId();
+			i++;
+		}
+		return ret;
+	}
+
 	public IdeaBean getIdeaBean() {
 		if (ideaBean == null)
 			ideaBean = new IdeaBean();
@@ -806,5 +877,21 @@ public class IdeaController implements Serializable {
 
 	public void setUploadContent(StreamedContent uploadContent) {
 		this.uploadContent = uploadContent;
+	}
+
+	public DualListModel<GroupBean> getGroupTwinSelect() {
+		return groupTwinSelect;
+	}
+
+	public void setGroupTwinSelect(DualListModel<GroupBean> groupTwinSelect) {
+		this.groupTwinSelect = groupTwinSelect;
+	}
+
+	public List<GroupBean> getpGrps() {
+		return pGrps;
+	}
+
+	public void setpGrps(List<GroupBean> pGrps) {
+		this.pGrps = pGrps;
 	}
 }

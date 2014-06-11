@@ -76,6 +76,12 @@
 				<p:column>
 					<p:fileUpload style="width: 100%" id="fuCUpload" fileUploadListener="#{challengeBean.chalFileUploadHandle}" multiple="false" />
 				</p:column>
+				<p:column>
+					<p:outputLabel id="lblFuncGrps" value="Challenge Groups" />
+				</p:column>
+				<p:column>
+					<p:pickList style="width: 100%" id="plGroupPick" converter="groupConverter" value="#{challengeBean.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" />
+				</p:column>
 				<p:row>
 					<p:column colspan="2">
 						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{challengeBean.updateChallenge}" />

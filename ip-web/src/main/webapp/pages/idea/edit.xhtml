@@ -63,6 +63,12 @@
 					<p:fileUpload style="width: 100%" id="fuIUpload" fileUploadListener="#{ideaBean.fileUploadHandle}" multiple="false" />
 				</p:column>
 				<p:column>
+					<p:outputLabel id="lblFuncGrps" value="Idea Groups" />
+				</p:column>
+				<p:column>
+					<p:pickList style="width: 100%" id="plGroupPick" converter="groupConverter" value="#{ideaBean.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" />
+				</p:column>
+				<p:column>
 					<p:outputLabel id="lblCrtdBy" value="Created By : " />
 				</p:column>
 				<p:column>

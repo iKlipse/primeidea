@@ -2,6 +2,7 @@ package za.co.idea.web.ui.bean;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class ChallengeBean implements Serializable {
 
@@ -20,6 +21,7 @@ public class ChallengeBean implements Serializable {
 	private Long crtdById;
 	private String contentType;
 	private String fileName;
+	private List<Long> groupIdList;
 
 	public Long getId() {
 		return id;
@@ -131,6 +133,14 @@ public class ChallengeBean implements Serializable {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public List<Long> getGroupIdList() {
+		return groupIdList;
+	}
+
+	public void setGroupIdList(List<Long> groupIdList) {
+		this.groupIdList = groupIdList;
 	}
 
 }

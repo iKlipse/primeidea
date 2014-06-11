@@ -10,13 +10,13 @@
 					<p:outputLabel id="lblITitle" value="Title : " />
 				</p:column>
 				<p:column>
-					<p:inputText  style="width: 100%" autocomplete="false" id="txtITitle" value="#{ideaBean.ideaBean.ideaTitle}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="txtITitle" value="#{ideaBean.ideaBean.ideaTitle}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblICat" value="Category : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu  style="width: 100%" id="somICat" value="#{ideaBean.ideaBean.selCatId}">
+					<p:selectOneMenu style="width: 100%" id="somICat" value="#{ideaBean.ideaBean.selCatId}">
 						<f:selectItem itemLabel="Select One" itemValue="" />
 						<f:selectItems value="#{ideaBean.ideaCats}" var="ic" itemLabel="#{ic.desc}" itemValue="#{ic.id}" />
 					</p:selectOneMenu>
@@ -25,25 +25,31 @@
 					<p:outputLabel id="lblIDesc" value="Description : " />
 				</p:column>
 				<p:column>
-					<p:editor  style="width: 100%" id="txtIDesc" value="#{ideaBean.ideaBean.ideaDesc}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+					<p:editor style="width: 100%" id="txtIDesc" value="#{ideaBean.ideaBean.ideaDesc}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblIBa" value="Business Areas : " />
 				</p:column>
 				<p:column>
-					<p:editor  style="width: 100%" id="txtIBa" value="#{ideaBean.ideaBean.ideaBa}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+					<p:editor style="width: 100%" id="txtIBa" value="#{ideaBean.ideaBean.ideaBa}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblITag" value="Tags : " />
 				</p:column>
 				<p:column>
-					<p:inputText  style="width: 100%" autocomplete="false" id="txtITag" value="#{ideaBean.ideaBean.ideaTag}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="txtITag" value="#{ideaBean.ideaBean.ideaTag}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblIUpload" value="Upload File : " />
 				</p:column>
 				<p:column>
-					<p:fileUpload  style="width: 100%" id="fuIUpload" fileUploadListener="#{ideaBean.fileUploadHandle}" multiple="false" />
+					<p:fileUpload style="width: 100%" id="fuIUpload" fileUploadListener="#{ideaBean.fileUploadHandle}" multiple="false" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblFuncGrps" value="Idea Groups" />
+				</p:column>
+				<p:column>
+					<p:pickList style="width: 100%" id="plGroupPick" converter="groupConverter" value="#{ideaBean.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" />
 				</p:column>
 				<p:row>
 					<p:column colspan="2">

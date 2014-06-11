@@ -34,6 +34,7 @@
 				<value>za/co/idea/ip/orm/hbm/IpGroup.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpIdea.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpIdeaCat.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpIdeaGroup.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpIdeaStatus.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpLogin.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpPoints.hbm.xml</value>
@@ -145,17 +146,17 @@
 	</bean>
 	<bean id="IpFuncGroupDAO" class="za.co.idea.ip.orm.dao.IpFuncGroupDAO">
 		<property name="factory">
-			<ref bean="sessionFactory" />
+			<ref bean="factory" />
 		</property>
 	</bean>
 	<bean id="IpGroupUserDAO" class="za.co.idea.ip.orm.dao.IpGroupUserDAO">
 		<property name="factory">
-			<ref bean="sessionFactory" />
+			<ref bean="factory" />
 		</property>
 	</bean>
 	<bean id="IpIdeaDAO" class="za.co.idea.ip.orm.dao.IpIdeaDAO">
 		<property name="factory">
-			<ref bean="sessionFactory" />
+			<ref bean="factory" />
 		</property>
 	</bean>
 	<bean id="IpAllocationDAO" class="za.co.idea.ip.orm.dao.IpAllocationDAO">
@@ -175,12 +176,12 @@
 	</bean>
 	<bean id="IpTagEntityTypeDAO" class="za.co.idea.ip.orm.dao.IpTagEntityTypeDAO">
 		<property name="factory">
-			<ref bean="sessionFactory" />
+			<ref bean="factory" />
 		</property>
 	</bean>
 	<bean id="IpChallengeDAO" class="za.co.idea.ip.orm.dao.IpChallengeDAO">
 		<property name="factory">
-			<ref bean="sessionFactory" />
+			<ref bean="factory" />
 		</property>
 	</bean>
 	<bean id="IpChallengeCatDAO" class="za.co.idea.ip.orm.dao.IpChallengeCatDAO">
@@ -199,6 +200,11 @@
 		</property>
 	</bean>
 	<bean id="IpChallengeGroupDAO" class="za.co.idea.ip.orm.dao.IpChallengeGroupDAO">
+		<property name="factory">
+			<ref bean="factory" />
+		</property>
+	</bean>
+	<bean id="IpIdeaGroupDAO" class="za.co.idea.ip.orm.dao.IpIdeaGroupDAO">
 		<property name="factory">
 			<ref bean="factory" />
 		</property>
