@@ -7,7 +7,7 @@
 			</f:facet>
 			<p:dataTable id="dtViewFunctions" value="#{adminBean.functions}" var="func" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Functions Found">
 				<p:column filterBy="#{func.funcId}" filterMatchMode="contains">
-					<f:facet name="header">Function Id</f:facet>
+					<f:facet name="header">Function ID</f:facet>
 					<p:outputLabel id="txtFuncId" value="#{func.funcId}" />
 				</p:column>
 				<p:column filterBy="#{func.funcName}" filterMatchMode="contains">

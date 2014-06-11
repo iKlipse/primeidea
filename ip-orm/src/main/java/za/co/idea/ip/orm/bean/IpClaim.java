@@ -19,6 +19,7 @@ public class IpClaim implements java.io.Serializable {
 	private IpClaimStatus ipClaimStatus;
 	private IpRewards ipRewards;
 	private String claimDesc;
+	private String claimComment;
 	private Date claimCrtdDt;
 
 	// Constructors
@@ -33,12 +34,13 @@ public class IpClaim implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpClaim(Long claimId, IpUser ipUser, IpClaimStatus ipClaimStatus, IpRewards ipRewards, String claimDesc, Date claimCrtdDt) {
+	public IpClaim(Long claimId, IpUser ipUser, IpClaimStatus ipClaimStatus, IpRewards ipRewards, String claimDesc, String claimComment, Date claimCrtdDt) {
 		this.claimId = claimId;
 		this.ipUser = ipUser;
 		this.ipClaimStatus = ipClaimStatus;
 		this.ipRewards = ipRewards;
 		this.claimDesc = claimDesc;
+		this.claimComment = claimComment;
 		this.claimCrtdDt = claimCrtdDt;
 	}
 
@@ -90,6 +92,14 @@ public class IpClaim implements java.io.Serializable {
 
 	public void setClaimCrtdDt(Date claimCrtdDt) {
 		this.claimCrtdDt = claimCrtdDt;
+	}
+
+	public String getClaimComment() {
+		return claimComment;
+	}
+
+	public void setClaimComment(String claimComment) {
+		this.claimComment = claimComment;
 	}
 
 }

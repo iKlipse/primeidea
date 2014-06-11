@@ -15,16 +15,16 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * <pre>
  * &lt;complexType name="downloadDocumentRs">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="fileName" type="{http://za.co.idea/document/}fileName"/>
- *         &lt;element name="contentType" type="{http://za.co.idea/document/}contentType"/>
- *         &lt;element name="fileContent" type="{http://za.co.idea/document/}fileContent"/>
- *         &lt;element name="response" type="{http://za.co.idea/document/}response"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
+ *  &lt;complexContent>
+ *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *    &lt;sequence>
+ *     &lt;element name="fileName" type="{http://za.co.idea/document/}fileName"/>
+ *     &lt;element name="contentType" type="{http://za.co.idea/document/}contentType"/>
+ *     &lt;element name="fileContent" type="{http://za.co.idea/document/}fileContent"/>
+ *     &lt;element name="response" type="{http://za.co.idea/document/}response"/>
+ *    &lt;/sequence>
+ *   &lt;/restriction>
+ *  &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
  * 

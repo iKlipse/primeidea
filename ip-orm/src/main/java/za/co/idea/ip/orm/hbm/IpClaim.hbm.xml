@@ -8,13 +8,13 @@
 			<column name="claim_id" />
 			<generator class="assigned" />
 		</id>
-		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser"  fetch="select" lazy="proxy">
+		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser" fetch="select" lazy="proxy">
 			<column name="user_id" />
 		</many-to-one>
-		<many-to-one name="ipClaimStatus" class="za.co.idea.ip.orm.bean.IpClaimStatus"  fetch="select" lazy="proxy">
+		<many-to-one name="ipClaimStatus" class="za.co.idea.ip.orm.bean.IpClaimStatus" fetch="select" lazy="proxy">
 			<column name="claim_status" />
 		</many-to-one>
-		<many-to-one name="ipRewards" class="za.co.idea.ip.orm.bean.IpRewards"  fetch="select" lazy="proxy">
+		<many-to-one name="ipRewards" class="za.co.idea.ip.orm.bean.IpRewards" fetch="select" lazy="proxy">
 			<column name="reward_id" />
 		</many-to-one>
 		<property name="claimDesc" type="java.lang.String">
@@ -22,6 +22,9 @@
 		</property>
 		<property name="claimCrtdDt" type="java.sql.Timestamp">
 			<column name="claim_crtd_dt" length="19" />
+		</property>
+		<property name="claimComment" type="java.lang.String">
+			<column name="claim_comment" length="450" />
 		</property>
 	</class>
 	<sql-query name="getClaimByUser">

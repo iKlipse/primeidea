@@ -21,10 +21,11 @@ public class UserBean implements Serializable {
 	private String pwd;
 	private String cPw;
 	private String avatar;
-	private String secQ;
+	private Integer secQ;
 	private String secA;
 	private Boolean isActive;
 	private Date lastLoginDt;
+	private String employeeId;
 
 	public Long getuId() {
 		return uId;
@@ -162,11 +163,11 @@ public class UserBean implements Serializable {
 		this.lastLoginDt = lastLoginDt;
 	}
 
-	public String getSecQ() {
+	public Integer getSecQ() {
 		return secQ;
 	}
 
-	public void setSecQ(String secQ) {
+	public void setSecQ(Integer secQ) {
 		this.secQ = secQ;
 	}
 
@@ -176,6 +177,14 @@ public class UserBean implements Serializable {
 
 	public void setSecA(String secA) {
 		this.secA = secA;
+	}
+
+	public String getEmployeeId() {
+		return employeeId;
+	}
+
+	public void setEmployeeId(String employeeId) {
+		this.employeeId = employeeId;
 	}
 
 }

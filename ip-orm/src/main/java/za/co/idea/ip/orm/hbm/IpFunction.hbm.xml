@@ -8,7 +8,7 @@
 			<column name="func_id" />
 			<generator class="assigned" />
 		</id>
-		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser"  fetch="select" lazy="proxy">
+		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser" fetch="select" lazy="proxy">
 			<column name="func_crtd_by" />
 		</many-to-one>
 		<property name="funcName" type="java.lang.String">

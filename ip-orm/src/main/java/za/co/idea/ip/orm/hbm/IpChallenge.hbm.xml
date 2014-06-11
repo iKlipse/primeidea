@@ -8,13 +8,13 @@
 			<column name="chal_id" />
 			<generator class="assigned" />
 		</id>
-		<many-to-one name="ipChallengeStatus" class="za.co.idea.ip.orm.bean.IpChallengeStatus"  fetch="select" lazy="proxy">
+		<many-to-one name="ipChallengeStatus" class="za.co.idea.ip.orm.bean.IpChallengeStatus" fetch="select" lazy="proxy">
 			<column name="chal_status" not-null="true" />
 		</many-to-one>
-		<many-to-one name="ipChallengeCat" class="za.co.idea.ip.orm.bean.IpChallengeCat"  fetch="select" lazy="proxy">
+		<many-to-one name="ipChallengeCat" class="za.co.idea.ip.orm.bean.IpChallengeCat" fetch="select" lazy="proxy">
 			<column name="chal_cat" not-null="true" />
 		</many-to-one>
-		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser"  fetch="select" lazy="proxy">
+		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser" fetch="select" lazy="proxy">
 			<column name="chal_crtd_by" not-null="true" />
 		</many-to-one>
 		<property name="chalTitle" type="java.lang.String">

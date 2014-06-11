@@ -14,6 +14,7 @@ import javax.ws.rs.Produces;
 import za.co.idea.ip.orm.bean.IpChallengeCat;
 import za.co.idea.ip.orm.bean.IpIdeaCat;
 import za.co.idea.ip.orm.bean.IpRewardsCat;
+import za.co.idea.ip.orm.bean.IpSecqList;
 import za.co.idea.ip.orm.bean.IpSolutionCat;
 import za.co.idea.ip.orm.dao.IpChallengeCatDAO;
 import za.co.idea.ip.orm.dao.IpChallengeStatusDAO;
@@ -22,6 +23,7 @@ import za.co.idea.ip.orm.dao.IpIdeaCatDAO;
 import za.co.idea.ip.orm.dao.IpIdeaStatusDAO;
 import za.co.idea.ip.orm.dao.IpRewardsCatDAO;
 import za.co.idea.ip.orm.dao.IpRewardsStatusDAO;
+import za.co.idea.ip.orm.dao.IpSecqListDAO;
 import za.co.idea.ip.orm.dao.IpSolutionCatDAO;
 import za.co.idea.ip.orm.dao.IpSolutionStatusDAO;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
@@ -39,6 +41,7 @@ public class MetaDataService {
 	private IpRewardsStatusDAO ipRewardsStatusDAO;
 	private IpSolutionCatDAO ipSolutionCatDAO;
 	private IpSolutionStatusDAO ipSolutionStatusDAO;
+	private IpSecqListDAO ipSecqListDAO;
 
 	@POST
 	@Path("/add")
@@ -89,6 +92,18 @@ public class MetaDataService {
 			cat.setScId(mData.getId());
 			try {
 				ipSolutionCatDAO.save(cat);
+				success = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				success = false;
+				msg = e.getMessage();
+			}
+		} else if (mData.getTable().equalsIgnoreCase("IpSecqList")) {
+			IpSecqList cat = new IpSecqList();
+			cat.setIslDesc(mData.getDesc());
+			cat.setIslId(mData.getId());
+			try {
+				ipSecqListDAO.save(cat);
 				success = true;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -164,6 +179,18 @@ public class MetaDataService {
 				success = false;
 				msg = e.getMessage();
 			}
+		} else if (mData.getTable().equalsIgnoreCase("IpSecqList")) {
+			IpSecqList cat = new IpSecqList();
+			cat.setIslDesc(mData.getDesc());
+			cat.setIslId(mData.getId());
+			try {
+				ipSecqListDAO.merge(cat);
+				success = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				success = false;
+				msg = e.getMessage();
+			}
 		}
 		if (success) {
 			ResponseMessage message = new ResponseMessage();
@@ -223,6 +250,16 @@ public class MetaDataService {
 					message.setDesc(cat.getScDesc());
 					message.setId(cat.getScId());
 					message.setTable("ip_solution_cat");
+					ret.add((T) message);
+				}
+			} else if (table.equalsIgnoreCase("IpSecqList")) {
+				List vals = ipSecqListDAO.findAll();
+				for (Object object : vals) {
+					MetaDataMessage message = new MetaDataMessage();
+					IpSecqList cat = (IpSecqList) object;
+					message.setDesc(cat.getIslDesc());
+					message.setId(cat.getIslId());
+					message.setTable("ip_secq_list");
 					ret.add((T) message);
 				}
 			}
@@ -302,5 +339,13 @@ public class MetaDataService {
 
 	public void setIpSolutionStatusDAO(IpSolutionStatusDAO ipSolutionStatusDAO) {
 		this.ipSolutionStatusDAO = ipSolutionStatusDAO;
+	}
+
+	public IpSecqListDAO getIpSecqListDAO() {
+		return ipSecqListDAO;
+	}
+
+	public void setIpSecqListDAO(IpSecqListDAO ipSecqListDAO) {
+		this.ipSecqListDAO = ipSecqListDAO;
 	}
 }

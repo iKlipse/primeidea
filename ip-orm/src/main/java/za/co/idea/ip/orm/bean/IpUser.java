@@ -29,6 +29,7 @@ public class IpUser implements java.io.Serializable {
 	private String userFbHandle;
 	private String userTwHandle;
 	private String userStatus;
+	private String userEmployeeId;
 	private Set ipGroups = new HashSet(0);
 	private Set ipGroupUsers = new HashSet(0);
 	private Set ipTags = new HashSet(0);
@@ -47,7 +48,7 @@ public class IpUser implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpUser(Long userId, String userFName, String userLName, Long userIdNum, String userScreenName, String userEmail, String userSkills, String userBio, String userFbHandle, String userTwHandle, String userStatus) {
+	public IpUser(Long userId, String userFName, String userLName, Long userIdNum, String userScreenName, String userEmail, String userSkills, String userBio, String userFbHandle, String userTwHandle, String userStatus, String userEmployeeId) {
 		this.userId = userId;
 		this.userFName = userFName;
 		this.userLName = userLName;
@@ -59,10 +60,11 @@ public class IpUser implements java.io.Serializable {
 		this.userFbHandle = userFbHandle;
 		this.userTwHandle = userTwHandle;
 		this.userStatus = userStatus;
+		this.userEmployeeId = userEmployeeId;
 	}
 
 	/** full constructor */
-	public IpUser(Long userId, String userFName, String userLName, String userMName, Long userIdNum, String userScreenName, String userEmail, String userContact, String userSkills, String userBio, String userFbHandle, String userTwHandle, String userStatus, Set ipGroups, Set ipGroupUsers, Set ipTags, Set ipFunctions, Set ipClaims, Set ipPointses, Set ipChallenges, Set ipIdeas, Set ipLogins, Set ipSolutions) {
+	public IpUser(Long userId, String userFName, String userLName, String userMName, Long userIdNum, String userScreenName, String userEmail, String userContact, String userSkills, String userBio, String userFbHandle, String userTwHandle, String userStatus, String userEmployeeId, Set ipGroups, Set ipGroupUsers, Set ipTags, Set ipFunctions, Set ipClaims, Set ipPointses, Set ipChallenges, Set ipIdeas, Set ipLogins, Set ipSolutions) {
 		this.userId = userId;
 		this.userFName = userFName;
 		this.userLName = userLName;
@@ -76,6 +78,7 @@ public class IpUser implements java.io.Serializable {
 		this.userFbHandle = userFbHandle;
 		this.userTwHandle = userTwHandle;
 		this.userStatus = userStatus;
+		this.userEmployeeId = userEmployeeId;
 		this.ipGroups = ipGroups;
 		this.ipGroupUsers = ipGroupUsers;
 		this.ipTags = ipTags;
@@ -192,6 +195,14 @@ public class IpUser implements java.io.Serializable {
 
 	public void setUserStatus(String userStatus) {
 		this.userStatus = userStatus;
+	}
+
+	public String getuserEmployeeId() {
+		return userEmployeeId;
+	}
+
+	public void setuserEmployeeId(String userEmployeeId) {
+		this.userEmployeeId = userEmployeeId;
 	}
 
 	public Set getIpGroups() {

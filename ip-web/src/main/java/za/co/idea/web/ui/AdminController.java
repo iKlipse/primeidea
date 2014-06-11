@@ -27,17 +27,20 @@ import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.DualListModel;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 import za.co.idea.ip.ws.bean.AttachmentMessage;
 import za.co.idea.ip.ws.bean.FunctionMessage;
 import za.co.idea.ip.ws.bean.GroupMessage;
+import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
 import za.co.idea.web.ui.bean.FunctionBean;
 import za.co.idea.web.ui.bean.GroupBean;
+import za.co.idea.web.ui.bean.MetaDataBean;
 import za.co.idea.web.ui.bean.UserBean;
 import za.co.idea.web.util.IdNumberGen;
 
@@ -60,6 +63,9 @@ public class AdminController implements Serializable {
 	private List<UserBean> admUsers;
 	private List<UserBean> viewUsers;
 	private List<GroupBean> viewGroups;
+	private List<MetaDataBean> secqList;
+	private DualListModel<UserBean> userTwinSelect;
+	private DualListModel<GroupBean> groupTwinSelect;
 	private boolean available;
 	private String secA;
 	private String secQ;
@@ -84,6 +90,14 @@ public class AdminController implements Serializable {
 	}
 
 	public String login() {
+		ArrayList<String> errors = validateLogin();
+		if (errors != null && errors.size() > 0) {
+			for (String error : errors) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			}
+			return "";
+		}
 		WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/login/" + userBean.getScName() + "/" + Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())));
 		UserMessage userMessage = loginClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 		loginClient.close();
@@ -110,6 +124,7 @@ public class AdminController implements Serializable {
 			bean.setuId(userMessage.getuId());
 			bean.setLastLoginDt(userMessage.getLastLoginDt());
 			loggedScrName = userMessage.getScName();
+			secqList = fetchAllSecQ();
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", bean);
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userId", bean.getuId());
 			try {
@@ -143,7 +158,7 @@ public class AdminController implements Serializable {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Load Profile image", e.getMessage());
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Load Profile image", "System error occurred, cannot perform Create request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				show = false;
 				showDef = true;
@@ -152,23 +167,30 @@ public class AdminController implements Serializable {
 		}
 	}
 
-	public String verifyLogin() {
+	public void verifyLogin() {
 		WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/verify/" + userBean.getScName());
 		UserMessage userMessage = loginClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 		loginClient.close();
 		if (userMessage == null) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid User Name Password", "Invalid User Name Password");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
 		} else {
 			userBean.setScName(userMessage.getScName());
 			userBean.setSecQ(userMessage.getSecQ());
+			secQ = userMessage.getSecQ().toString();
 			userBean.setSecA(userMessage.getSecA());
-			return "";
 		}
 	}
 
 	public String resetPassword() {
+		ArrayList<String> errors = validateRPwd();
+		if (errors != null && errors.size() > 0) {
+			for (String error : errors) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			}
+			return "";
+		}
 		if (Base64.encodeBase64URLSafeString(DigestUtils.md5(secA.getBytes())).equalsIgnoreCase(userBean.getSecA())) {
 			WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/rpw/");
 			ResponseMessage response = loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())) }, ResponseMessage.class);
@@ -204,10 +226,10 @@ public class AdminController implements Serializable {
 			return "";
 		}
 		WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/rsec");
-		ResponseMessage response = loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), secQ, secA }, ResponseMessage.class);
+		ResponseMessage response = loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), secQ.toString(), secA }, ResponseMessage.class);
 		loginClient.close();
 		this.userBean.setSecA(secA);
-		this.userBean.setSecQ(secQ);
+		this.userBean.setSecQ(Integer.valueOf(secQ));
 		if (response.getStatusCode() != 0) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusCode() + " :: " + response.getStatusDesc(), response.getStatusCode() + " :: " + response.getStatusDesc());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -228,13 +250,14 @@ public class AdminController implements Serializable {
 			return "admvu";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform Users View request", "System error occurred, cannot perform Users View request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
 	}
 
 	public String showRPw() {
+		secqList = fetchAllSecQ();
 		return "rpw";
 	}
 
@@ -245,10 +268,11 @@ public class AdminController implements Serializable {
 	public String showEditUser() {
 		try {
 			userBean.setcPw(userBean.getPwd());
+			secqList = fetchAllSecQ();
 			return "admeu";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated user view request", "System error occurred, cannot perform updated user view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -261,7 +285,7 @@ public class AdminController implements Serializable {
 			return "admeu";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated user profile view request", "System error occurred, cannot perform updated user profile view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -270,10 +294,11 @@ public class AdminController implements Serializable {
 	public String showCreateUser() {
 		try {
 			userBean = new UserBean();
+			secqList = fetchAllSecQ();
 			return "admcu";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform created user view request", "System error occurred, cannot perform created user view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -286,20 +311,7 @@ public class AdminController implements Serializable {
 			return "admvg";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
-		}
-	}
-
-	public String showEditGroup() {
-		try {
-			viewGroups = pGrps = fetchAllGroups();
-			admUsers = fetchAllUsers();
-			return "admeg";
-		} catch (Exception e) {
-			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot view groups request", "System error occurred, cannot view groups request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -310,10 +322,25 @@ public class AdminController implements Serializable {
 			groupBean = new GroupBean();
 			viewGroups = pGrps = fetchAllGroups();
 			admUsers = fetchAllUsers();
+			userTwinSelect = new DualListModel<UserBean>(fetchAllUsers(), new ArrayList<UserBean>());
 			return "admcg";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform created groups view request", "System error occurred, cannot perform created groups view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showEditGroup() {
+		try {
+			viewGroups = pGrps = fetchAllGroups();
+			admUsers = fetchAllUsers();
+			userTwinSelect = initializeSelectedUsers(admUsers);
+			return "admeg";
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated groups view request", "System error occurred, cannot perform updated groups view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -322,10 +349,11 @@ public class AdminController implements Serializable {
 	public String showCreateFunction() {
 		try {
 			pGrps = fetchAllGroups();
+			groupTwinSelect = new DualListModel<GroupBean>(fetchAllGroups(), new ArrayList<GroupBean>());
 			return "admcf";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -339,7 +367,7 @@ public class AdminController implements Serializable {
 			return "admvf";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -348,17 +376,18 @@ public class AdminController implements Serializable {
 	public String showEditFunction() {
 		try {
 			pGrps = fetchAllGroups();
+			groupTwinSelect = initializeSelectedGroups(pGrps);
 			return "admef";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
 	}
 
 	public void checkAvailability() {
-		if (userBean.getScName() == null || userBean.getuId() == null || userBean.getScName() == null || userBean.getScName().length() == 0) {
+		if (userBean.getScName() == null || userBean.getScName().length() == 0) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter Screen Name to Check Availability", "Enter Screen Name to Check Availability");
 			FacesContext.getCurrentInstance().addMessage("txtSCName", exceptionMessage);
 		}
@@ -408,8 +437,9 @@ public class AdminController implements Serializable {
 			bean.setIsActive(true);
 			bean.setuId(COUNTER.getNextId("IpUser"));
 			bean.setLastLoginDt(new Date());
-			bean.setSecQ(userBean.getSecQ());
+			bean.setSecQ(Integer.valueOf(secQ));
 			bean.setSecA(userBean.getSecA());
+			bean.setEmployeeId(userBean.getEmployeeId());
 			ResponseMessage response = addUserClient.accept(MediaType.APPLICATION_JSON).post(bean, ResponseMessage.class);
 			addUserClient.close();
 			if (response.getStatusCode() == 0) {
@@ -440,7 +470,7 @@ public class AdminController implements Serializable {
 					createBlobClient.close();
 				} catch (Exception e) {
 					e.printStackTrace();
-					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", e.getMessage());
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", "Unable to upload attachment. Please update later");
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
 				return showViewUsers();
@@ -451,7 +481,7 @@ public class AdminController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -481,6 +511,47 @@ public class AdminController implements Serializable {
 				ret.add("Invalid Facebook Handle");
 		}
 
+		return ret;
+	}
+
+	private List<String> validateFunction() {
+		ArrayList<String> ret = new ArrayList<String>();
+		if (functionBean.getFuncName() == null || functionBean.getFuncName().length() == 0) {
+			ret.add("Function Name is Mandatory");
+		}
+		return ret;
+	}
+
+	private List<String> validateGroup() {
+		ArrayList<String> ret = new ArrayList<String>();
+		if (groupBean.getgName() == null || groupBean.getgName().length() == 0) {
+			ret.add("Group Name is Mandatory");
+		}
+		return ret;
+	}
+
+	private ArrayList<String> validateLogin() {
+		ArrayList<String> ret = new ArrayList<>();
+		if (userBean.getScName() == null || userBean.getScName().length() == 0) {
+			ret.add("User Name is Mandatory");
+		}
+		if (userBean.getPwd() == null || userBean.getPwd().length() == 0) {
+			ret.add("Password is Mandatory");
+		}
+		return ret;
+	}
+
+	private ArrayList<String> validateRPwd() {
+		ArrayList<String> ret = new ArrayList<>();
+		if (userBean.getScName() == null || userBean.getScName().length() == 0) {
+			ret.add("User Name is Mandatory");
+		}
+		if (userBean.getPwd() == null || userBean.getPwd().length() == 0) {
+			ret.add("Password is Mandatory");
+		}
+		if (userBean.getcPw() == null || userBean.getcPw().length() == 0) {
+			ret.add("Confirm Password is Mandatory");
+		}
 		return ret;
 	}
 
@@ -516,6 +587,7 @@ public class AdminController implements Serializable {
 			bean.setIsActive(userBean.getIsActive());
 			bean.setuId(userBean.getuId());
 			bean.setLastLoginDt(userBean.getLastLoginDt());
+			bean.setEmployeeId(userBean.getEmployeeId());
 			ResponseMessage response = updateUserClient.accept(MediaType.APPLICATION_JSON).put(bean, ResponseMessage.class);
 			updateUserClient.close();
 			if (response.getStatusCode() == 0)
@@ -527,7 +599,7 @@ public class AdminController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -535,6 +607,14 @@ public class AdminController implements Serializable {
 
 	public String saveGroup() {
 		try {
+			List<String> errors = validateGroup();
+			if (errors.size() > 0) {
+				for (String error : errors) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
+				return "";
+			}
 			if (verifyGroup(groupBean.getgName())) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Create Duplicate Group entries", "Cannot Create Duplicate Group entries");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -546,7 +626,7 @@ public class AdminController implements Serializable {
 			groupMessage.setGeMail(groupBean.getGeMail());
 			groupMessage.setgId(COUNTER.getNextId("IpGroup"));
 			groupMessage.setgName(groupBean.getgName());
-			groupMessage.setUserIdList(toIdArray(groupBean.getUserIdList()));
+			groupMessage.setUserIdList(getSelUserIds());
 			groupMessage.setIsActive(true);
 			groupMessage.setpGrpId(groupBean.getSelPGrp());
 			ResponseMessage response = addGroupClient.accept(MediaType.APPLICATION_JSON).post(groupMessage, ResponseMessage.class);
@@ -560,7 +640,7 @@ public class AdminController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -568,6 +648,14 @@ public class AdminController implements Serializable {
 
 	public String saveFunction() {
 		try {
+			List<String> errors = validateFunction();
+			if (errors.size() > 0) {
+				for (String error : errors) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
+				return "";
+			}
 			if (verifyFunction(functionBean.getFuncName())) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Create Duplicate Function entries", "Cannot Create Duplicate Function entries");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -577,7 +665,7 @@ public class AdminController implements Serializable {
 			FunctionMessage functionMessage = new FunctionMessage();
 			functionMessage.setFuncId(COUNTER.getNextId("IpFunction"));
 			functionMessage.setFuncName(functionBean.getFuncName());
-			functionMessage.setGroupIdList(toIdArray(functionBean.getGroupIdList()));
+			functionMessage.setGroupIdList(getSelGroupIds());
 			functionMessage.setCrtdBy((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 			ResponseMessage response = addFunctionClient.accept(MediaType.APPLICATION_JSON).post(functionMessage, ResponseMessage.class);
 			addFunctionClient.close();
@@ -590,7 +678,7 @@ public class AdminController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -598,13 +686,21 @@ public class AdminController implements Serializable {
 
 	public String updateGroup() {
 		try {
+			List<String> errors = validateGroup();
+			if (errors.size() > 0) {
+				for (String error : errors) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
+				return "";
+			}
 			WebClient updateGroupClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/modify");
 			GroupMessage groupMessage = new GroupMessage();
 			groupMessage.setAdmUserId(groupBean.getSelAdmUser());
 			groupMessage.setGeMail(groupBean.getGeMail());
 			groupMessage.setgId(groupBean.getgId());
 			groupMessage.setgName(groupBean.getgName());
-			groupMessage.setUserIdList(toIdArray(groupBean.getUserIdList()));
+			groupMessage.setUserIdList(getSelUserIds());
 			groupMessage.setIsActive(groupBean.getIsActive());
 			groupMessage.setpGrpId(groupBean.getSelPGrp());
 			ResponseMessage response = updateGroupClient.accept(MediaType.APPLICATION_JSON).put(groupMessage, ResponseMessage.class);
@@ -618,7 +714,7 @@ public class AdminController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -626,12 +722,20 @@ public class AdminController implements Serializable {
 
 	public String updateFunction() {
 		try {
+			List<String> errors = validateFunction();
+			if (errors.size() > 0) {
+				for (String error : errors) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
+				return "";
+			}
 			WebClient updateFunctionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/func/modify");
 			FunctionMessage functionMessage = new FunctionMessage();
 			functionMessage.setFuncId(functionBean.getFuncId());
 			functionMessage.setFuncName(functionBean.getFuncName());
 			functionMessage.setCrtdBy((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
-			functionMessage.setGroupIdList(toIdArray(functionBean.getGroupIdList()));
+			functionMessage.setGroupIdList(getSelGroupIds());
 			ResponseMessage response = updateFunctionClient.accept(MediaType.APPLICATION_JSON).put(functionMessage, ResponseMessage.class);
 			updateFunctionClient.close();
 			if (response.getStatusCode() == 0)
@@ -643,7 +747,7 @@ public class AdminController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -727,17 +831,28 @@ public class AdminController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", "Unable to upload attachment. Please update later");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
 	}
 
-	private Long[] toIdArray(List<Long> ids) {
-		Long[] ret = new Long[ids.size()];
-		for (int i = 0; i < ids.size(); i++) {
-			Object obj = ids.get(i);
-			ret[i] = new Long(obj.toString());
+	private Long[] getSelUserIds() {
+		Long[] ret = new Long[userTwinSelect.getTarget().size()];
+		int i = 0;
+		for (UserBean bean : userTwinSelect.getTarget()) {
+			ret[i] = bean.getuId();
+			i++;
+		}
+		return ret;
+	}
+
+	private Long[] getSelGroupIds() {
+		Long[] ret = new Long[groupTwinSelect.getTarget().size()];
+		int i = 0;
+		for (GroupBean bean : groupTwinSelect.getTarget()) {
+			ret[i] = bean.getgId();
+			i++;
 		}
 		return ret;
 	}
@@ -764,8 +879,35 @@ public class AdminController implements Serializable {
 			bean.setTwHandle(userMessage.getTwHandle());
 			bean.setIsActive(userMessage.getIsActive());
 			bean.setuId(userMessage.getuId());
+			bean.setEmployeeId(userMessage.getEmployeeId());
 			ret.add(bean);
 		}
+		return ret;
+	}
+
+	private DualListModel<GroupBean> initializeSelectedGroups(List<GroupBean> grps) {
+		List<Long> selGrps = functionBean.getGroupIdList();
+		DualListModel<GroupBean> ret = new DualListModel<GroupBean>(new ArrayList<GroupBean>(), new ArrayList<GroupBean>());
+		for (Long grpId : selGrps)
+			ret.getTarget().add(getGroupById(grpId));
+		for (GroupBean bean : grps)
+			if (selGrps.contains(bean.getgId()))
+				continue;
+			else
+				ret.getSource().add(bean);
+		return ret;
+	}
+
+	private DualListModel<UserBean> initializeSelectedUsers(List<UserBean> users) {
+		List<Long> selUsrs = groupBean.getUserIdList();
+		DualListModel<UserBean> ret = new DualListModel<UserBean>(new ArrayList<UserBean>(), new ArrayList<UserBean>());
+		for (Long usrId : selUsrs)
+			ret.getTarget().add(getUserById(usrId));
+		for (UserBean bean : users)
+			if (selUsrs.contains(bean.getuId()))
+				continue;
+			else
+				ret.getSource().add(bean);
 		return ret;
 	}
 
@@ -809,7 +951,22 @@ public class AdminController implements Serializable {
 		return ret;
 	}
 
-	public GroupBean getParentGroup(Long pGrpId) {
+	private List<MetaDataBean> fetchAllSecQ() {
+		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
+		WebClient metaDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/IpSecqList");
+		Collection<? extends MetaDataMessage> metaDatas = new ArrayList<MetaDataMessage>(metaDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		metaDataClient.close();
+		for (MetaDataMessage metaDataMessage : metaDatas) {
+			MetaDataBean bean = new MetaDataBean();
+			bean.setDesc(metaDataMessage.getDesc());
+			bean.setId(metaDataMessage.getId());
+			bean.setTable(metaDataMessage.getTable());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	private GroupBean getGroupById(Long pGrpId) {
 		GroupBean bean = new GroupBean();
 		WebClient groupByIdClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/get/" + pGrpId);
 		GroupMessage groupMessage = groupByIdClient.accept(MediaType.APPLICATION_JSON).get(GroupMessage.class);
@@ -823,7 +980,7 @@ public class AdminController implements Serializable {
 		return bean;
 	}
 
-	public UserBean getUserById(Long id) {
+	private UserBean getUserById(Long id) {
 		UserBean bean = new UserBean();
 		WebClient userByIdClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/get/" + id);
 		UserMessage userMessage = userByIdClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
@@ -1080,6 +1237,30 @@ public class AdminController implements Serializable {
 
 	public void setUploadContentType(String uploadContentType) {
 		this.uploadContentType = uploadContentType;
+	}
+
+	public List<MetaDataBean> getSecqList() {
+		return secqList;
+	}
+
+	public void setSecqList(List<MetaDataBean> secqList) {
+		this.secqList = secqList;
+	}
+
+	public DualListModel<UserBean> getUserTwinSelect() {
+		return userTwinSelect;
+	}
+
+	public DualListModel<GroupBean> getGroupTwinSelect() {
+		return groupTwinSelect;
+	}
+
+	public void setUserTwinSelect(DualListModel<UserBean> userTwinSelect) {
+		this.userTwinSelect = userTwinSelect;
+	}
+
+	public void setGroupTwinSelect(DualListModel<GroupBean> groupTwinSelect) {
+		this.groupTwinSelect = groupTwinSelect;
 	}
 
 }

@@ -10,7 +10,7 @@
 					<p:outputLabel id="lblSChal" value="Challenges : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu id="somSChal" value="#{challengeBean.solutionBean.chalId}" disabled="true">
+					<p:selectOneMenu style="width: 100%" id="somSChal" value="#{challengeBean.solutionBean.chalId}" disabled="true">
 						<f:selectItem itemLabel="Select One" itemValue="" />
 						<f:selectItems value="#{challengeBean.viewChallenges}" var="schal" itemLabel="#{schal.title}" itemValue="#{schal.id}" />
 					</p:selectOneMenu>
@@ -19,13 +19,13 @@
 					<p:outputLabel id="lblSTitle" value="Title : " />
 				</p:column>
 				<p:column>
-					<p:inputText autocomplete="false" id="txtSTitle" value="#{challengeBean.solutionBean.title}" disabled="true" />
+					<p:inputText style="width: 100%" autocomplete="false" id="txtSTitle" value="#{challengeBean.solutionBean.title}" disabled="true" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblSCat" value="Category : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu id="somSCat" value="#{challengeBean.solutionBean.catId}">
+					<p:selectOneMenu style="width: 100%" id="somSCat" value="#{challengeBean.solutionBean.catId}">
 						<f:selectItem itemLabel="Select One" itemValue="" />
 						<f:selectItems value="#{challengeBean.solutionCats}" var="scat" itemLabel="#{scat.desc}" itemValue="#{scat.id}" />
 					</p:selectOneMenu>
@@ -34,7 +34,7 @@
 					<p:outputLabel id="lblSStatus" value="Status : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu id="somSStatus" value="#{challengeBean.solutionBean.statusId}">
+					<p:selectOneMenu style="width: 100%" id="somSStatus" value="#{challengeBean.solutionBean.statusId}">
 						<f:selectItem itemLabel="Select One" itemValue="" />
 						<f:selectItems value="#{challengeBean.solutionStatuses}" var="scat" itemLabel="#{scat.desc}" itemValue="#{scat.id}" />
 					</p:selectOneMenu>
@@ -43,13 +43,13 @@
 					<p:outputLabel id="lblSDesc" value="Description : " />
 				</p:column>
 				<p:column>
-					<p:editor id="txtSDesc" value="#{challengeBean.solutionBean.desc}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+					<p:editor style="width: 100%" id="txtSDesc" value="#{challengeBean.solutionBean.desc}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblSTag" value="Tags : " />
 				</p:column>
 				<p:column>
-					<p:inputText autocomplete="false" id="txtSTag" value="#{challengeBean.solutionBean.tags}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="txtSTag" value="#{challengeBean.solutionBean.tags}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblIDownload" value="Download File : " />
@@ -63,7 +63,7 @@
 					<p:outputLabel id="lblSUpload" value="Upload File : " />
 				</p:column>
 				<p:column>
-					<p:fileUpload auto="true" id="fuSUpload" fileUploadListener="#{challengeBean.solFileUploadHandle}" multiple="false" />
+					<p:fileUpload style="width: 100%" id="fuSUpload" fileUploadListener="#{challengeBean.solFileUploadHandle}" multiple="false" />
 				</p:column>
 				<p:row>
 					<p:column colspan="2">

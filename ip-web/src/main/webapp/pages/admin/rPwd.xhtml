@@ -10,45 +10,48 @@
 	</h:head>
 	<h:body onload="wvDlgRPwd.show()">
 		<h:form id="rPwdFrm" enctype="multipart/form-data">
-			<p:growl showDetail="true" showSummary="true" />
+			<p:growl id="grlMsg" showDetail="true" showSummary="true" />
 			<p:dialog id="dlgRPwd" appendToBody="@(body)" resizable="false" closable="false" modal="false" widgetVar="wvDlgRPwd" showHeader="true" header="Reset Password">
 				<p:panelGrid id="pnRPwd" columns="2">
 					<p:column>
 						<p:outputLabel value="Enter Login ID: " />
 					</p:column>
 					<p:column>
-						<p:inputText autocomplete="false" id="txtScName" value="#{adminBean.userBean.scName}" required="true" requiredMessage="User Name is Mandatory" />
-						<p:commandLink id="clCheckAvail" action="#{adminBean.verifyLogin}" ajax="false">
-							<p:graphicImage id="giCheckAvail" name="big-availability-icon.gif" library="images" height="25px" width="25px" />
-						</p:commandLink>
+						<p:inputText style="width: 100%" autocomplete="false" id="txtScName" value="#{adminBean.userBean.scName}">
+							<p:ajax listener="#{adminBean.verifyLogin}" event="blur" update="grlMsg,:rPwdFrm:somRSecQId" />
+						</p:inputText>
 					</p:column>
 					<p:column>
 						<p:outputLabel value="Security Question: " />
 					</p:column>
 					<p:column>
-						<p:inputText autocomplete="false" id="txtSecQ" value="#{adminBean.userBean.secQ}" disabled="true" />
+						<p:selectOneMenu style="width: 100%" id="somRSecQId" value="#{adminBean.secQ}">
+							<f:selectItem itemLabel="Select One" itemValue="" />
+							<f:selectItems value="#{adminBean.secqList}" var="p" itemLabel="#{p.desc}" itemValue="#{p.id}" />
+						</p:selectOneMenu>
 					</p:column>
 					<p:column>
 						<p:outputLabel value="Security Answer: " />
 					</p:column>
 					<p:column>
-						<p:inputText autocomplete="false" id="txtSecA" value="#{adminBean.secA}" />
+						<p:inputText style="width: 100%" autocomplete="false" id="txtSecA" value="#{adminBean.secA}" />
 					</p:column>
 					<p:column>
 						<p:outputLabel value="New Password: " />
 					</p:column>
 					<p:column>
-						<p:password autocomplete="false" id="txtPw" value="#{adminBean.userBean.pwd}" match="txtCPw" feedback="true" required="false" requiredMessage="Password is Mandatory" />
+						<p:password style="width: 100%" autocomplete="false" id="txtPw" value="#{adminBean.userBean.pwd}" match="txtCPw" feedback="true" />
 					</p:column>
 					<p:column>
 						<p:outputLabel value="Confirm New Password: " />
 					</p:column>
 					<p:column>
-						<p:password autocomplete="false" id="txtCPw" value="#{adminBean.userBean.cPw}" required="false" requiredMessage="Confirm Password is Mandatory" />
+						<p:password style="width: 100%" autocomplete="false" id="txtCPw" value="#{adminBean.userBean.cPw}" />
 					</p:column>
 					<p:row>
 						<p:column colspan="2" style="align: center !importat;">
 							<p:commandButton id="btnSave" action="#{adminBean.resetPassword}" value="Reset" ajax="false" />
+							<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{adminBean.logout}" />
 						</p:column>
 					</p:row>
 				</p:panelGrid>

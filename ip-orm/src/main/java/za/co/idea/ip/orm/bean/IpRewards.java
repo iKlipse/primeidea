@@ -30,6 +30,7 @@ public class IpRewards implements java.io.Serializable {
 	private String rwTag;
 	private Date rwCrtdDt;
 	private Double rwPrice;
+	private Long rwQuantity;
 	private Set ipRewardsGroups = new HashSet(0);
 	private Set ipClaims = new HashSet(0);
 
@@ -40,7 +41,7 @@ public class IpRewards implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpRewards(Long rwId, IpRewardsCat ipRewardsCat, IpRewardsStatus ipRewardsStatus, String rwTitle, String rwDesc, Integer rwValue, Integer rwStockCodeNum, Date rwLaunchDt, Date rwExpiryDt, Date rwCrtdDt, Double rwPrice) {
+	public IpRewards(Long rwId, IpRewardsCat ipRewardsCat, IpRewardsStatus ipRewardsStatus, String rwTitle, String rwDesc, Integer rwValue, Integer rwStockCodeNum, Date rwLaunchDt, Date rwExpiryDt, Date rwCrtdDt, Double rwPrice, Long rwQuantity) {
 		this.rwId = rwId;
 		this.ipRewardsCat = ipRewardsCat;
 		this.ipRewardsStatus = ipRewardsStatus;
@@ -52,10 +53,11 @@ public class IpRewards implements java.io.Serializable {
 		this.rwExpiryDt = rwExpiryDt;
 		this.rwCrtdDt = rwCrtdDt;
 		this.rwPrice = rwPrice;
+		this.rwQuantity = rwQuantity;
 	}
 
 	/** full constructor */
-	public IpRewards(Long rwId, IpRewardsCat ipRewardsCat, IpRewardsStatus ipRewardsStatus, String rwTitle, String rwDesc, Integer rwValue, Integer rwStockCodeNum, String rwHoverText, Date rwLaunchDt, Date rwExpiryDt, String rwTag, Date rwCrtdDt, Double rwPrice, Set ipRewardsGroups, Set ipClaims) {
+	public IpRewards(Long rwId, IpRewardsCat ipRewardsCat, IpRewardsStatus ipRewardsStatus, String rwTitle, String rwDesc, Integer rwValue, Integer rwStockCodeNum, String rwHoverText, Date rwLaunchDt, Date rwExpiryDt, String rwTag, Date rwCrtdDt, Double rwPrice, Long rwQuantity, Set ipRewardsGroups, Set ipClaims) {
 		this.rwId = rwId;
 		this.ipRewardsCat = ipRewardsCat;
 		this.ipRewardsStatus = ipRewardsStatus;
@@ -69,6 +71,7 @@ public class IpRewards implements java.io.Serializable {
 		this.rwTag = rwTag;
 		this.rwCrtdDt = rwCrtdDt;
 		this.rwPrice = rwPrice;
+		this.rwQuantity = rwQuantity;
 		this.ipRewardsGroups = ipRewardsGroups;
 		this.ipClaims = ipClaims;
 	}
@@ -193,6 +196,14 @@ public class IpRewards implements java.io.Serializable {
 
 	public void setRwPrice(Double rwPrice) {
 		this.rwPrice = rwPrice;
+	}
+
+	public Long getRwQuantity() {
+		return rwQuantity;
+	}
+
+	public void setRwQuantity(Long rwQuantity) {
+		this.rwQuantity = rwQuantity;
 	}
 
 }

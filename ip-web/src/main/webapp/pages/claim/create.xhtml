@@ -10,7 +10,7 @@
 					<p:outputLabel id="lblCRw" value="Reward : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu id="somCRw" value="#{claimBean.claimBean.rewardsId}">
+					<p:selectOneMenu  style="width: 100%" id="somCRw" value="#{claimBean.claimBean.rewardsId}">
 						<f:selectItem itemLabel="Select One" itemValue="" />
 						<f:selectItems value="#{claimBean.viewRewardsBeans}" var="ccat" itemLabel="#{ccat.rwTitle}" itemValue="#{ccat.rwId}" />
 					</p:selectOneMenu>
@@ -19,7 +19,7 @@
 					<p:outputLabel id="lblCDesc" value="Description : " />
 				</p:column>
 				<p:column>
-					<p:inputText autocomplete="false" id="txtCDesc" value="#{claimBean.claimBean.claimDesc}" />
+					<p:inputText  style="width: 100%" autocomplete="false" id="txtCDesc" value="#{claimBean.claimBean.claimDesc}" />
 				</p:column>
 				<p:row>
 					<p:column colspan="2">

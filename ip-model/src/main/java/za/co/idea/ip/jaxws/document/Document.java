@@ -17,17 +17,17 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * 
  * <pre>
  * &lt;complexType name="document">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="entityId" type="{http://za.co.idea/document/}entityId"/>
- *         &lt;element name="entityTableName" type="{http://za.co.idea/document/}entityTableName"/>
- *         &lt;element name="fileName" type="{http://za.co.idea/document/}fileName" minOccurs="0"/>
- *         &lt;element name="contentType" type="{http://za.co.idea/document/}contentType" minOccurs="0"/>
- *         &lt;element name="fileContent" type="{http://za.co.idea/document/}fileContent"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
+ *  &lt;complexContent>
+ *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *    &lt;sequence>
+ *     &lt;element name="entityId" type="{http://za.co.idea/document/}entityId"/>
+ *     &lt;element name="entityTableName" type="{http://za.co.idea/document/}entityTableName"/>
+ *     &lt;element name="fileName" type="{http://za.co.idea/document/}fileName" minOccurs="0"/>
+ *     &lt;element name="contentType" type="{http://za.co.idea/document/}contentType" minOccurs="0"/>
+ *     &lt;element name="fileContent" type="{http://za.co.idea/document/}fileContent"/>
+ *    &lt;/sequence>
+ *   &lt;/restriction>
+ *  &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
  * 

@@ -19,10 +19,11 @@ public class UserMessage {
 	private String twHandle;
 	private String scName;
 	private String pwd;
-	private String secQ;
+	private Integer secQ;
 	private String secA;
 	private Boolean isActive;
 	private Date lastLoginDt;
+	private String employeeId;
 
 	public Long getuId() {
 		return uId;
@@ -144,11 +145,11 @@ public class UserMessage {
 		this.lastLoginDt = lastLoginDt;
 	}
 
-	public String getSecQ() {
+	public Integer getSecQ() {
 		return secQ;
 	}
 
-	public void setSecQ(String secQ) {
+	public void setSecQ(Integer secQ) {
 		this.secQ = secQ;
 	}
 
@@ -158,6 +159,14 @@ public class UserMessage {
 
 	public void setSecA(String secA) {
 		this.secA = secA;
+	}
+
+	public String getEmployeeId() {
+		return employeeId;
+	}
+
+	public void setEmployeeId(String employeeId) {
+		this.employeeId = employeeId;
 	}
 
 }

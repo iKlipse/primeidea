@@ -3,13 +3,14 @@ package za.co.idea.web.ui.bean;
 import java.io.Serializable;
 import java.util.Date;
 
-public class ClaimBean implements Serializable{
+public class ClaimBean implements Serializable {
 	private static final long serialVersionUID = -8426814269096496976L;
 	private Long claimId;
 	private Long userId;
 	private Integer cStatusId;
 	private Long rewardsId;
 	private String claimDesc;
+	private String claimComment;
 	private Date claimCrtdDt;
 
 	public Long getClaimId() {
@@ -58,6 +59,14 @@ public class ClaimBean implements Serializable{
 
 	public void setClaimCrtdDt(Date claimCrtdDt) {
 		this.claimCrtdDt = claimCrtdDt;
+	}
+
+	public String getClaimComment() {
+		return claimComment;
+	}
+
+	public void setClaimComment(String claimComment) {
+		this.claimComment = claimComment;
 	}
 
 }

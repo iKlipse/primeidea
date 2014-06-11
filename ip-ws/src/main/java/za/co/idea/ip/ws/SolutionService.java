@@ -174,6 +174,33 @@ public class SolutionService {
 	}
 
 	@GET
+	@Path("/solution/list/chal/{id}")
+	@Produces("application/json")
+	public <T extends SolutionMessage> List<T> listSolutionByChal(@PathParam("id") Long id) {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List solutions = ipSolutionDAO.findByChalId(id);
+			for (Object object : solutions) {
+				IpSolution ipSolution = (IpSolution) object;
+				SolutionMessage solution = new SolutionMessage();
+				solution.setChalId(ipSolution.getIpChallenge().getChalId());
+				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
+				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
+				solution.setCrtdById(ipSolution.getIpUser().getUserId());
+				solution.setCrtdDt(ipSolution.getSolCrtdDt());
+				solution.setDesc(ipSolution.getSolDesc());
+				solution.setId(ipSolution.getSolId());
+				solution.setTags(ipSolution.getSolTags());
+				solution.setTitle(ipSolution.getSolTitle());
+				ret.add((T) solution);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@GET
 	@Path("/solution/cat/list")
 	@Produces("application/json")
 	public <T extends MetaDataMessage> List<T> listSolutionCat() {

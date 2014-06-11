@@ -2,7 +2,7 @@
 	<p:dialog id="dlgProfileImgUpload" widgetVar="dlgProfileImgUpload" resizable="false" dynamic="true" showEffect="explode" hideEffect="explode" appendToBody="@(body)" header="Update Profile Image">
 		<p:panelGrid columns="1">
 			<p:column>
-				<p:fileUpload auto="true" id="fuProfileImg" update="imgAvatar" widgetVar="fuImg" fileUploadListener="#{adminBean.fileImageUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+				<p:fileUpload id="fuProfileImg" update="imgAvatar" widgetVar="fuImg" fileUploadListener="#{adminBean.fileImageUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 			</p:column>
 			<p:column>
 				<p:commandButton id="btnProfileImgUpload" value="Update" action="#{adminBean.updateImage}" ajax="false" />
@@ -15,7 +15,10 @@
 				<p:outputLabel id="lblProfileSecQ" value="Security Question : " />
 			</p:column>
 			<p:column>
-				<p:inputText autocomplete="false" id="txtProfileSecQ" value="#{adminBean.secQ}" />
+				<p:selectOneMenu id="somRSecQId" value="#{adminBean.secQ}">
+					<f:selectItem itemLabel="Select One" itemValue="" />
+					<f:selectItems value="#{adminBean.secqList}" var="p" itemLabel="#{p.desc}" itemValue="#{p.id}" />
+				</p:selectOneMenu>
 			</p:column>
 			<p:column>
 				<p:outputLabel id="lblProfileSecA" value="Security Answer : " />

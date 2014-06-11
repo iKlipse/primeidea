@@ -81,7 +81,7 @@ public class IdeaController implements Serializable {
 			return "ideavi";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -96,7 +96,7 @@ public class IdeaController implements Serializable {
 			return "ideaui";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -133,7 +133,7 @@ public class IdeaController implements Serializable {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				fileAvail = true;
 				fileContent = null;
@@ -141,7 +141,7 @@ public class IdeaController implements Serializable {
 			return "ideaei";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			fileAvail = true;
 			fileContent = null;
@@ -159,6 +159,37 @@ public class IdeaController implements Serializable {
 		showIdeaComments = false;
 		showIdeaLikes = false;
 		showIdeaBuildOns = false;
+		try {
+			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
+			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+			getBlobClient.close();
+			if (blobId != -999l) {
+				WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+				getBlobNameClient.close();
+				WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				client.header("Content-Type", "application/json");
+				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+				if (attachment != null) {
+					fileAvail = false;
+					ideaBean.setFileName(attachment.getContentDisposition().toString().replace("attachment; filename=", ""));
+					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), null, blobName);
+				} else {
+					fileAvail = true;
+					fileContent = null;
+				}
+			} else {
+				fileAvail = true;
+				fileContent = null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform summary request", "System error occurred, cannot perform summary request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			fileAvail = true;
+			fileContent = null;
+		}
 		return "ideasi";
 	}
 
@@ -253,14 +284,56 @@ public class IdeaController implements Serializable {
 			return "ideaci";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
 	}
 
+	// This method is used to validate Idea create and update form-Sharanya
+	private List<String> validateIdea() {
+		ArrayList<String> ret = new ArrayList<String>();
+		if (ideaBean.getIdeaTitle() == null || ideaBean.getIdeaTitle().length() == 0) {
+			ret.add("Title is Mandatory");
+		} else if (!lengthValidation(ideaBean.getIdeaTitle(), 1, 100)) {
+			ret.add("Title sholud not exceed 100 characters");
+		}
+		if (ideaBean.getSelCatId() == null || ideaBean.getSelCatId().toString().length() == 0) {
+			ret.add("Category is Mandatory");
+		}
+		if (ideaBean.getIdeaDesc() == null || ideaBean.getIdeaDesc().length() == 0) {
+			ret.add("Description is Mandatory");
+		}
+		if (ideaBean.getIdeaBa() == null || ideaBean.getIdeaBa().length() == 0) {
+			ret.add("Business Areas is Mandatory");
+		}
+		if (ideaBean.getIdeaTag() == null || ideaBean.getIdeaTag().length() == 0) {
+			ret.add("Tags is Mandatory");
+		}
+		return ret;
+	}
+
+	// This method is used to check length validation-Sharanya
+	public boolean lengthValidation(String str, int minLimit, int maxLimit) {
+		int intLength = str.length();
+		if (intLength >= minLimit && intLength <= maxLimit) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
 	public String saveIdea() {
 		try {
+			List<String> errors = validateIdea();
+			if (errors.size() > 0) {
+				for (String error : errors) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
+				return "";
+			}
 			WebClient addIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/add");
 			IdeaMessage ideaMessage = new IdeaMessage();
 			ideaMessage.setCrtdById((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
@@ -304,7 +377,7 @@ public class IdeaController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create Idea request", "System error occurred, cannot perform create Idea request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -312,6 +385,14 @@ public class IdeaController implements Serializable {
 
 	public String updateIdea() {
 		try {
+			List<String> errors = validateIdea();
+			if (errors.size() > 0) {
+				for (String error : errors) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
+				return "";
+			}
 			WebClient updateIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/modify");
 			IdeaMessage ideaMessage = new IdeaMessage();
 			ideaMessage.setCrtdById(ideaBean.getCrtdById());
@@ -385,7 +466,7 @@ public class IdeaController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update Idea request", "System error occurred, cannot perform update Idea request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -523,7 +604,7 @@ public class IdeaController implements Serializable {
 			this.ideaBean.setFileName(file.getFileName());
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform upload request", "System error occurred, cannot perform upload request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
 	}

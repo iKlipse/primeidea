@@ -229,4 +229,26 @@ public class IpSolutionDAO extends BaseHibernateDAO {
 			throw re;
 		}
 	}
+
+	public List findByChalId(Long id) {
+		log.debug("Fetching Challenge by Query :: getSolutionByStatus");
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("getSolutionByChallenge");
+			query.setLong("id", id);
+			List ret = query.list();
+			for (Object object : ret) {
+				IpSolution sol = (IpSolution) object;
+				Hibernate.initialize(sol.getIpChallenge());
+				Hibernate.initialize(sol.getIpSolutionCat());
+				Hibernate.initialize(sol.getIpSolutionStatus());
+				Hibernate.initialize(sol.getIpUser());
+			}
+			session.close();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
 }

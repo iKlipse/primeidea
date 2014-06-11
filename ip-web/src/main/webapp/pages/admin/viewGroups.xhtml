@@ -7,7 +7,7 @@
 				</f:facet>
 			<p:dataTable id="dtViewGroups" value="#{adminBean.viewGroups}" var="grp" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Groups Found">
 				<p:column filterBy="#{grp.gId}" filterMatchMode="contains">
-					<f:facet name="header">Group Id</f:facet>
+					<f:facet name="header">Group ID</f:facet>
 					<p:outputLabel id="txtGrpId" value="#{grp.gId}" />
 				</p:column>
 				<p:column filterBy="#{grp.gId}" filterMatchMode="contains">

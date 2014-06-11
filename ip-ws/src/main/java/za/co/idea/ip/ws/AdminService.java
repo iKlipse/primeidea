@@ -158,19 +158,23 @@ public class AdminService {
 	public <T extends FunctionMessage> List<T> listFunction() {
 		List<T> ret = new ArrayList<T>();
 		try {
-			List functions = ipFunctionDAO.getFunctionByQuery();
+			List functions = ipFunctionDAO.findAll();
 			for (Object object : functions) {
 				IpFunction ipFunction = (IpFunction) object;
 				FunctionMessage function = new FunctionMessage();
 				function.setFuncId(ipFunction.getFuncId());
 				function.setFuncName(ipFunction.getFuncName());
-				Long[] gList = new Long[ipFunction.getIpFuncGroups().size()];
-				int i = 0;
-				for (Object obj : ipFunction.getIpFuncGroups()) {
-					IpFuncGroup fg = (IpFuncGroup) obj;
-					gList[i] = fg.getIpGroup().getGroupId();
+				List fgs = ipFuncGroupDAO.fetchByFuncId(ipFunction.getFuncId());
+				if (fgs != null) {
+					Long[] gList = new Long[fgs.size()];
+					int i = 0;
+					for (Object obj : fgs) {
+						IpFuncGroup fg = (IpFuncGroup) obj;
+						gList[i] = fg.getIpGroup().getGroupId();
+						i++;
+					}
+					function.setGroupIdList(gList);
 				}
-				function.setGroupIdList(gList);
 				ret.add((T) function);
 			}
 		} catch (Exception e) {
@@ -185,16 +189,20 @@ public class AdminService {
 	public FunctionMessage getFunctionById(@PathParam("id") Long id) {
 		FunctionMessage function = new FunctionMessage();
 		try {
-			IpFunction ipFunction = ipFunctionDAO.getFunctionById(id);
+			IpFunction ipFunction = ipFunctionDAO.findById(id);
 			function.setFuncId(ipFunction.getFuncId());
 			function.setFuncName(ipFunction.getFuncName());
-			Long[] gList = new Long[ipFunction.getIpFuncGroups().size()];
-			int i = 0;
-			for (Object obj : ipFunction.getIpFuncGroups()) {
-				IpFuncGroup fg = (IpFuncGroup) obj;
-				gList[i] = fg.getIpGroup().getGroupId();
+			List fgs = ipFuncGroupDAO.fetchByFuncId(ipFunction.getFuncId());
+			if (fgs != null) {
+				Long[] gList = new Long[fgs.size()];
+				int i = 0;
+				for (Object obj : fgs) {
+					IpFuncGroup fg = (IpFuncGroup) obj;
+					gList[i] = fg.getIpGroup().getGroupId();
+					i++;
+				}
+				function.setGroupIdList(gList);
 			}
-			function.setGroupIdList(gList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -246,6 +254,7 @@ public class AdminService {
 			ipUser.setUserLName(user.getlName());
 			ipUser.setUserScreenName(user.getScName());
 			ipUser.setUserSkills(user.getSkills());
+			ipUser.setuserEmployeeId(user.getEmployeeId());
 			ipUser.setUserStatus(((user.getIsActive() != null && user.getIsActive()) ? "y" : "n"));
 			if (user.getFbHandle() != null && user.getFbHandle().length() > 0)
 				ipUser.setUserFbHandle(user.getFbHandle());
@@ -366,6 +375,7 @@ public class AdminService {
 			ipUser.setUserLName(user.getlName());
 			ipUser.setUserScreenName(user.getScName());
 			ipUser.setUserSkills(user.getSkills());
+			ipUser.setuserEmployeeId(user.getEmployeeId());
 			ipUser.setUserStatus(((user.getIsActive() != null && user.getIsActive()) ? "y" : "n"));
 			if (user.getFbHandle() != null && user.getFbHandle().length() > 0)
 				ipUser.setUserFbHandle(user.getFbHandle());
@@ -408,6 +418,7 @@ public class AdminService {
 				user.setScName(ipUser.getUserScreenName());
 				user.setSkills(ipUser.getUserSkills());
 				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
+				user.setEmployeeId(ipUser.getuserEmployeeId());
 				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
 					user.setFbHandle(ipUser.getUserFbHandle());
 				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
@@ -439,6 +450,7 @@ public class AdminService {
 			user.setlName(ipUser.getUserLName());
 			user.setScName(ipUser.getUserScreenName());
 			user.setSkills(ipUser.getUserSkills());
+			user.setEmployeeId(ipUser.getuserEmployeeId());
 			user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
 			if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
 				user.setFbHandle(ipUser.getUserFbHandle());
@@ -486,7 +498,7 @@ public class AdminService {
 	public ResponseMessage resetSecurity(String[] param) {
 		try {
 			try {
-				ipLoginDAO.updateSecurity(param[0], param[1], Base64.encodeBase64URLSafeString(DigestUtils.md5(param[2].getBytes())));
+				ipLoginDAO.updateSecurity(param[0], Integer.valueOf(param[1]), Base64.encodeBase64URLSafeString(DigestUtils.md5(param[2].getBytes())));
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new RuntimeException("Cannot merge login :: " + e.getMessage());

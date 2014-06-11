@@ -10,15 +10,13 @@
 					<p:outputLabel id="lblFuncName" value="Function Name" />
 				</p:column>
 				<p:column>
-					<p:inputText autocomplete="false" id="txtFuncName" value="#{adminBean.functionBean.funcName}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="txtFuncName" value="#{adminBean.functionBean.funcName}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblFuncGrps" value="Function Groups" />
 				</p:column>
 				<p:column>
-					<p:selectManyMenu id="smmFuncGrps" value="#{adminBean.functionBean.groupIdList}">
-						<f:selectItems value="#{adminBean.pGrps}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" />
-					</p:selectManyMenu>
+					<p:pickList style="width: 100%" id="plGroupPick" converter="groupConverter" value="#{adminBean.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" />
 				</p:column>
 				<p:row>
 					<p:column colspan="2">

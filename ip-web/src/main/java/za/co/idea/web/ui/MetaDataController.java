@@ -159,6 +159,7 @@ public class MetaDataController {
 			metaList.put("Idea Category", "IpIdeaCat");
 			metaList.put("Rewards Category", "IpRewardsCat");
 			metaList.put("Solution Category", "IpSolutionCat");
+			metaList.put("Security Questions", "IpSecqList");
 		}
 		return metaList;
 	}

@@ -177,19 +177,24 @@ public class IpFuncGroupDAO extends BaseHibernateDAO {
 	public void deleteByFunctionId(Long id) {
 		log.debug("Deleting Function Groups By Id : " + id);
 		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
 			Query query = session.getNamedQuery("deleteFGByFuncId");
 			query.setLong("id", id);
 			query.executeUpdate();
+			transaction.commit();
+			session.close();
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
-	public List fetchByGroupId(Long id) {
+	public List fetchByFuncId(Long id) {
 		log.debug("Fetching Group Users By Id : " + id);
 		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
 			Query query = session.getNamedQuery("fetchFGByFuncId");
 			query.setLong("id", id);
@@ -199,16 +204,20 @@ public class IpFuncGroupDAO extends BaseHibernateDAO {
 				Hibernate.initialize(fg.getIpGroup());
 				Hibernate.initialize(fg.getIpFunction());
 			}
+			transaction.commit();
+			session.close();
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
-	public List fetchByUserId(Long id) {
+	public List fetchByGroupId(Long id) {
 		log.debug("Fetching Group Users By Id : " + id);
 		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
 			Query query = session.getNamedQuery("fetchFGByGroupId");
 			query.setLong("id", id);
@@ -218,9 +227,12 @@ public class IpFuncGroupDAO extends BaseHibernateDAO {
 				Hibernate.initialize(fg.getIpGroup());
 				Hibernate.initialize(fg.getIpFunction());
 			}
+			transaction.commit();
+			session.close();
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}

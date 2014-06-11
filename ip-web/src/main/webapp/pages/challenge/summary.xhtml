@@ -19,6 +19,14 @@
 					<p:outputLabel id="txtIDesc" value="#{challengeBean.challengeBean.desc}" escape="false" />
 				</p:column>
 				<p:column>
+					<p:outputLabel id="lblIDownload" value="Download File : " />
+				</p:column>
+				<p:column>
+					<p:commandButton id="btnDownload" value="Download" ajax="false" disabled="#{challengeBean.chalFileAvail}">
+						<p:fileDownload value="#{challengeBean.chalFileContent}" />
+					</p:commandButton>
+				</p:column>
+				<p:column>
 					<p:outputLabel id="lblITag" value="Tags : " />
 				</p:column>
 				<p:column>
@@ -75,6 +83,33 @@
 					<p:tagCloud id="tgLikes" model="#{challengeBean.showViewSolution}" />
 				</p:panelGrid>
 			</p:overlayPanel>
+			<p:dataGrid id="dgSolForChal" value="#{challengeBean.viewSolutions}" var="sol" columns="1">
+				<p:scrollPanel style="border: 0px !important;">
+					<p:panel style="border: 0px !important;">
+						<f:facet name="header">Solutions</f:facet>
+						<p:panelGrid columns="2" id="pnlSolForChal">
+							<p:column>
+								<p:outputLabel id="lblITitle" value="Title : " />
+							</p:column>
+							<p:column>
+								<p:outputLabel id="txtITitle" value="#{sol.title}" />
+							</p:column>
+							<p:column>
+								<p:outputLabel id="lblIDesc" value="Description : " />
+							</p:column>
+							<p:column>
+								<p:outputLabel id="txtIDesc" value="#{sol.desc}" escape="false" />
+							</p:column>
+							<p:column>
+								<p:outputLabel id="lblITag" value="Tags : " />
+							</p:column>
+							<p:column>
+								<p:outputLabel id="txtITag" value="#{sol.tags}" escape="false" />
+							</p:column>
+						</p:panelGrid>
+					</p:panel>
+				</p:scrollPanel>
+			</p:dataGrid>
 		</p:panel>
 	</ui:define>
 </ui:composition>

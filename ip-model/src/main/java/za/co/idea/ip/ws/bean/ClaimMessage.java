@@ -11,6 +11,7 @@ public class ClaimMessage {
 	private Integer cStatusId;
 	private Long rewardsId;
 	private String claimDesc;
+	private String claimComment;
 	private Date claimCrtdDt;
 
 	public Long getClaimId() {
@@ -59,6 +60,14 @@ public class ClaimMessage {
 
 	public void setClaimCrtdDt(Date claimCrtdDt) {
 		this.claimCrtdDt = claimCrtdDt;
+	}
+
+	public String getClaimComment() {
+		return claimComment;
+	}
+
+	public void setClaimComment(String claimComment) {
+		this.claimComment = claimComment;
 	}
 
 }

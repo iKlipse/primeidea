@@ -10,7 +10,7 @@
 					<p:outputLabel id="lblCRw" value="Reward : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu id="somCRw" value="#{claimBean.claimBean.rewardsId}">
+					<p:selectOneMenu style="width: 100%" id="somCRw" value="#{claimBean.claimBean.rewardsId}">
 						<f:selectItem itemLabel="Select One" itemValue="" />
 						<f:selectItems value="#{claimBean.viewRewardsBeans}" var="ccat" itemLabel="#{ccat.rwTitle}" itemValue="#{ccat.rwId}" />
 					</p:selectOneMenu>
@@ -19,13 +19,19 @@
 					<p:outputLabel id="lblCDesc" value="Description : " />
 				</p:column>
 				<p:column>
-					<p:inputText autocomplete="false" id="txtCTitle" value="#{claimBean.claimBean.claimDesc}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="txtCTitle" value="#{claimBean.claimBean.claimDesc}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblCComment" value="Comment : " />
+				</p:column>
+				<p:column>
+					<p:inputText style="width: 100%" autocomplete="false" id="txtCComment" value="#{claimBean.claimBean.claimComment}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblCStatus" value="Status : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu id="somCStatus" value="#{claimBean.claimBean.cStatusId}">
+					<p:selectOneMenu style="width: 100%" id="somCStatus" value="#{claimBean.claimBean.cStatusId}">
 						<f:selectItem itemLabel="Select One" itemValue="" />
 						<f:selectItems value="#{claimBean.claimStatus}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
 					</p:selectOneMenu>

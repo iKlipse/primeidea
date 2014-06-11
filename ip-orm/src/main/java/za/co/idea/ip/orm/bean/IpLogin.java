@@ -15,7 +15,7 @@ public class IpLogin implements java.io.Serializable {
 	private String loginName;
 	private String loginPwd;
 	private Timestamp loginLastDt;
-	private String loginSecQ;
+	private Integer loginSecQ;
 	private String loginSecA;
 
 	// Constructors
@@ -25,7 +25,7 @@ public class IpLogin implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpLogin(Long loginId, IpUser ipUser, String loginName, String loginPwd, String loginSecQ, String loginSecA) {
+	public IpLogin(Long loginId, IpUser ipUser, String loginName, String loginPwd, Integer loginSecQ, String loginSecA) {
 		this.loginId = loginId;
 		this.ipUser = ipUser;
 		this.loginName = loginName;
@@ -35,7 +35,7 @@ public class IpLogin implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpLogin(Long loginId, IpUser ipUser, String loginName, String loginPwd, Timestamp loginLastDt, String loginSecQ, String loginSecA) {
+	public IpLogin(Long loginId, IpUser ipUser, String loginName, String loginPwd, Timestamp loginLastDt, Integer loginSecQ, String loginSecA) {
 		this.loginId = loginId;
 		this.ipUser = ipUser;
 		this.loginName = loginName;
@@ -87,11 +87,11 @@ public class IpLogin implements java.io.Serializable {
 		this.loginLastDt = loginLastDt;
 	}
 
-	public String getLoginSecQ() {
+	public Integer getLoginSecQ() {
 		return this.loginSecQ;
 	}
 
-	public void setLoginSecQ(String loginSecQ) {
+	public void setLoginSecQ(Integer loginSecQ) {
 		this.loginSecQ = loginSecQ;
 	}
 

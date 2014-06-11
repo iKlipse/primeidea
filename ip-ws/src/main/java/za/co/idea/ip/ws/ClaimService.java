@@ -69,6 +69,7 @@ public class ClaimService {
 			ipClaim.setIpClaimStatus(ipClaimStatusDAO.findById(claim.getcStatusId()));
 			ipClaim.setIpRewards(ipRewardsDAO.findById(claim.getRewardsId()));
 			ipClaim.setIpUser(ipUserDAO.findById(claim.getUserId()));
+			ipClaim.setClaimComment(claim.getClaimComment());
 			ipClaimDAO.merge(ipClaim);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);

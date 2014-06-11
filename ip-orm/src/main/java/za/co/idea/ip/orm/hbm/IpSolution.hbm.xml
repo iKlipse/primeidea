@@ -8,16 +8,16 @@
 			<column name="sol_id" />
 			<generator class="assigned" />
 		</id>
-		<many-to-one name="ipSolutionStatus" class="za.co.idea.ip.orm.bean.IpSolutionStatus"  fetch="select" lazy="proxy">
+		<many-to-one name="ipSolutionStatus" class="za.co.idea.ip.orm.bean.IpSolutionStatus" fetch="select" lazy="proxy">
 			<column name="sol_status" not-null="true" />
 		</many-to-one>
-		<many-to-one name="ipSolutionCat" class="za.co.idea.ip.orm.bean.IpSolutionCat"  fetch="select" lazy="proxy">
+		<many-to-one name="ipSolutionCat" class="za.co.idea.ip.orm.bean.IpSolutionCat" fetch="select" lazy="proxy">
 			<column name="sol_cat" />
 		</many-to-one>
-		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser"  fetch="select" lazy="proxy">
+		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser" fetch="select" lazy="proxy">
 			<column name="sol_crtd_by" not-null="true" />
 		</many-to-one>
-		<many-to-one name="ipChallenge" class="za.co.idea.ip.orm.bean.IpChallenge"  fetch="select" lazy="proxy">
+		<many-to-one name="ipChallenge" class="za.co.idea.ip.orm.bean.IpChallenge" fetch="select" lazy="proxy">
 			<column name="sol_chal_id" not-null="true" />
 		</many-to-one>
 		<property name="solTitle" type="java.lang.String">
@@ -35,10 +35,14 @@
 	</class>
 	<sql-query name="getSolutionByUser">
 		select sol.* from ip_solution sol where sol.sol_crtd_by=:id
-		<return alias="clm" class="za.co.idea.ip.orm.bean.IpSolution" />
+		<return alias="sol" class="za.co.idea.ip.orm.bean.IpSolution" />
+	</sql-query>
+	<sql-query name="getSolutionByChallenge">
+		select sol.* from ip_solution sol where sol.sol_chal_id=:id
+		<return alias="sol" class="za.co.idea.ip.orm.bean.IpSolution" />
 	</sql-query>
 	<sql-query name="getSolutionByStatus">
 		select sol.* from ip_solution sol where rw.sol_status=:id
-		<return alias="chal" class="za.co.idea.ip.orm.bean.IpSolution" />
+		<return alias="sol" class="za.co.idea.ip.orm.bean.IpSolution" />
 	</sql-query>
 </hibernate-mapping>

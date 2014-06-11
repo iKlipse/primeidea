@@ -44,6 +44,9 @@
 		<property name="userStatus" type="java.lang.String">
 			<column name="user_status" length="1" not-null="true" />
 		</property>
+		<property name="userEmployeeId" type="java.lang.String">
+			<column name="user_employeeId"  length="20"/>
+		</property>
 		<set name="ipGroups" inverse="true">
 			<key>
 				<column name="group_admin_id" />

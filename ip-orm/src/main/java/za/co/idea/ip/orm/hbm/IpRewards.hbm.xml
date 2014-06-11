@@ -44,6 +44,9 @@
 		<property name="rwPrice" type="java.lang.Double">
 			<column name="rw_price" />
 		</property>
+		<property name="rwQuantity" type="java.lang.Long">
+			<column name="rw_quantity" />
+		</property>
 		<set name="ipRewardsGroups" inverse="true">
 			<key>
 				<column name="rg_rewards_id" />

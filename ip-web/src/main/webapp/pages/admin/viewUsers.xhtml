@@ -7,7 +7,7 @@
 				</f:facet>
 			<p:dataTable id="dtViewUsers" value="#{adminBean.viewUsers}" var="user" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Users Found">
 				<p:column filterBy="#{user.uId}" filterMatchMode="contains">
-					<f:facet name="header">User Id</f:facet>
+					<f:facet name="header">User ID</f:facet>
 					<p:outputLabel id="txtUserId" value="#{user.uId}" />
 				</p:column>
 				<p:column>
@@ -19,12 +19,16 @@
 					<p:outputLabel id="txtLName" value="#{user.lName}" />
 				</p:column>
 				<p:column filterBy="#{user.idNum}" filterMatchMode="contains">
-					<f:facet name="header">Id Num</f:facet>
+					<f:facet name="header">ID Number</f:facet>
 					<p:outputLabel id="txtIdNum" value="#{user.idNum}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">EMail</f:facet>
 					<p:outputLabel id="txtEMail" value="#{user.eMail}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Employee ID</f:facet>
+					<p:outputLabel id="txtEMPId" value="#{user.employeeId}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">Social</f:facet>

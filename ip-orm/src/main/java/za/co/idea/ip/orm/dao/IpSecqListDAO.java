@@ -9,29 +9,27 @@ import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import za.co.idea.ip.orm.bean.IpGroup;
+import za.co.idea.ip.orm.bean.IpSecqList;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * IpGroup entities. Transaction control of the save(), update() and delete()
+ * IpSecqList entities. Transaction control of the save(), update() and delete()
  * operations can directly support Spring container-managed transactions or they
  * can be augmented to handle user-managed Spring transactions. Each of these
  * methods provides additional information for how to configure it for the
  * desired type of transaction control.
  * 
- * @see za.co.idea.ip.orm.bean.IpGroup
+ * @see za.co.idea.ip.orm.bean.IpSecqList
  * @author MyEclipse Persistence Tools
  */
 @SuppressWarnings("rawtypes")
-public class IpGroupDAO extends BaseHibernateDAO {
-	private static final Logger log = LoggerFactory.getLogger(IpGroupDAO.class);
+public class IpSecqListDAO extends BaseHibernateDAO {
+	private static final Logger log = LoggerFactory.getLogger(IpSecqListDAO.class);
 	// property constants
-	public static final String GROUP_NAME = "groupName";
-	public static final String GROUP_STATUS = "groupStatus";
-	public static final String GROUP_EMAIL = "groupEmail";
+	public static final String ISL_DESC = "islDesc";
 
-	public void save(IpGroup transientInstance) {
-		log.debug("saving IpGroup instance");
+	public void save(IpSecqList transientInstance) {
+		log.debug("saving IpSecqList instance");
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -47,8 +45,8 @@ public class IpGroupDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public void delete(IpGroup persistentInstance) {
-		log.debug("deleting IpGroup instance");
+	public void delete(IpSecqList persistentInstance) {
+		log.debug("deleting IpSecqList instance");
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -64,12 +62,12 @@ public class IpGroupDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public IpGroup findById(java.lang.Long id) {
-		log.debug("getting IpGroup instance with id: " + id);
+	public IpSecqList findById(java.lang.Integer id) {
+		log.debug("getting IpSecqList instance with id: " + id);
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			IpGroup instance = (IpGroup) session.get("za.co.idea.ip.orm.bean.IpGroup", id);
+			IpSecqList instance = (IpSecqList) session.get("za.co.idea.ip.orm.bean.IpSecqList", id);
 			transaction.commit();
 			session.close();
 			return instance;
@@ -81,12 +79,12 @@ public class IpGroupDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public List findByExample(IpGroup instance) {
-		log.debug("finding IpGroup instance by example");
+	public List findByExample(IpSecqList instance) {
+		log.debug("finding IpSecqList instance by example");
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpGroup").add(Example.create(instance)).list();
+			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpSecqList").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			transaction.commit();
 			session.close();
@@ -100,18 +98,17 @@ public class IpGroupDAO extends BaseHibernateDAO {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding IpGroup instance with property: " + propertyName + ", value: " + value);
+		log.debug("finding IpSecqList instance with property: " + propertyName + ", value: " + value);
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			String queryString = "from IpGroup as model where model." + propertyName + "= ?";
+			String queryString = "from IpSecqList as model where model." + propertyName + "= ?";
 			Query queryObject = session.createQuery(queryString);
 			queryObject.setParameter(0, value);
 			List results = queryObject.list();
 			transaction.commit();
 			session.close();
 			return results;
-
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			transaction.rollback();
@@ -120,24 +117,16 @@ public class IpGroupDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public List findByGroupName(Object groupName) {
-		return findByProperty(GROUP_NAME, groupName);
-	}
-
-	public List findByGroupStatus(Object groupStatus) {
-		return findByProperty(GROUP_STATUS, groupStatus);
-	}
-
-	public List findByGroupEmail(Object groupEmail) {
-		return findByProperty(GROUP_EMAIL, groupEmail);
+	public List findByIslDesc(Object islDesc) {
+		return findByProperty(ISL_DESC, islDesc);
 	}
 
 	public List findAll() {
-		log.debug("finding all IpGroup instances");
+		log.debug("finding all IpSecqList instances");
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			String queryString = "from IpGroup";
+			String queryString = "from IpSecqList";
 			Query queryObject = session.createQuery(queryString);
 			List results = queryObject.list();
 			transaction.commit();
@@ -151,15 +140,15 @@ public class IpGroupDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public IpGroup merge(IpGroup detachedInstance) {
-		log.debug("merging IpGroup instance");
+	public IpSecqList merge(IpSecqList detachedInstance) {
+		log.debug("merging IpSecqList instance");
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			IpGroup result = (IpGroup) session.merge(detachedInstance);
-			log.debug("merge successful");
+			IpSecqList result = (IpSecqList) session.merge(detachedInstance);
 			transaction.commit();
 			session.close();
+			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
@@ -169,8 +158,8 @@ public class IpGroupDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public void attachDirty(IpGroup instance) {
-		log.debug("attaching dirty IpGroup instance");
+	public void attachDirty(IpSecqList instance) {
+		log.debug("attaching dirty IpSecqList instance");
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {

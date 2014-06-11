@@ -10,13 +10,13 @@
 					<p:outputLabel id="lblITitle" value="Title : " />
 				</p:column>
 				<p:column>
-					<p:inputText autocomplete="false" id="txtITitle" value="#{ideaBean.ideaBean.ideaTitle}" disabled="true" />
+					<p:inputText style="width: 100%" autocomplete="false" id="txtITitle" value="#{ideaBean.ideaBean.ideaTitle}" disabled="true" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblICat" value="Category : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu id="somICat" value="#{ideaBean.ideaBean.selCatId}">
+					<p:selectOneMenu style="width: 100%" id="somICat" value="#{ideaBean.ideaBean.selCatId}">
 						<f:selectItem itemLabel="Select One" itemValue="" />
 						<f:selectItems value="#{ideaBean.ideaCats}" var="ic" itemLabel="#{ic.desc}" itemValue="#{ic.id}" />
 					</p:selectOneMenu>
@@ -25,7 +25,7 @@
 					<p:outputLabel id="lblIStatus" value="Status : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu id="somIStatus" value="#{ideaBean.ideaBean.setStatusId}">
+					<p:selectOneMenu style="width: 100%" id="somIStatus" value="#{ideaBean.ideaBean.setStatusId}">
 						<f:selectItem itemLabel="Select One" itemValue="" />
 						<f:selectItems value="#{ideaBean.ideaStatuses}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
 					</p:selectOneMenu>
@@ -34,39 +34,39 @@
 					<p:outputLabel id="lblIDesc" value="Description : " />
 				</p:column>
 				<p:column>
-					<p:editor id="txtIDesc" value="#{ideaBean.ideaBean.ideaDesc}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+					<p:editor style="width: 100%" id="txtIDesc" value="#{ideaBean.ideaBean.ideaDesc}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblIBa" value="Business Areas : " />
 				</p:column>
 				<p:column>
-					<p:editor id="txtIBa" value="#{ideaBean.ideaBean.ideaBa}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+					<p:editor style="width: 100%" id="txtIBa" value="#{ideaBean.ideaBean.ideaBa}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblITag" value="Tags : " />
 				</p:column>
 				<p:column>
-					<p:inputText autocomplete="false" id="txtITag" value="#{ideaBean.ideaBean.ideaTag}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="txtITag" value="#{ideaBean.ideaBean.ideaTag}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblIDownload" value="Download File : " />
 				</p:column>
 				<p:column>
-					<p:commandButton id="btnDownload" value="Download" ajax="false" disabled="#{ideaBean.fileAvail}">
-						<p:fileDownload value="#{ideaBean.fileContent}"/>
+					<p:commandButton style="width: 100%" id="btnDownload" value="Download" ajax="false" disabled="#{ideaBean.fileAvail}">
+						<p:fileDownload value="#{ideaBean.fileContent}" />
 					</p:commandButton>
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblIUpload" value="Upload File : " />
 				</p:column>
 				<p:column>
-					<p:fileUpload auto="true" id="fuIUpload" fileUploadListener="#{ideaBean.fileUploadHandle}" multiple="false" />
+					<p:fileUpload style="width: 100%" id="fuIUpload" fileUploadListener="#{ideaBean.fileUploadHandle}" multiple="false" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblCrtdBy" value="Created By : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu id="somACrtdBy" value="#{ideaBean.ideaBean.crtdById}" disabled="true">
+					<p:selectOneMenu style="width: 100%" id="somACrtdBy" value="#{ideaBean.ideaBean.crtdById}" disabled="true">
 						<f:selectItem itemLabel="Select One" itemValue="" />
 						<f:selectItems value="#{ideaBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
 					</p:selectOneMenu>

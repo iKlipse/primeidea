@@ -19,6 +19,7 @@ public class RewardsMessage {
 	private String rwTag;
 	private Date rwCrtdDt;
 	private Double rwPrice;
+	private Long rwQuantity;
 
 	public Long getRwId() {
 		return rwId;
@@ -122,6 +123,14 @@ public class RewardsMessage {
 
 	public void setRwPrice(Double rwPrice) {
 		this.rwPrice = rwPrice;
+	}
+
+	public Long getRwQuantity() {
+		return rwQuantity;
+	}
+
+	public void setRwQuantity(Long rwQuantity) {
+		this.rwQuantity = rwQuantity;
 	}
 
 }

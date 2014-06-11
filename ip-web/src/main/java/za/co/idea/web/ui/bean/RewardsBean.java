@@ -3,7 +3,7 @@ package za.co.idea.web.ui.bean;
 import java.io.Serializable;
 import java.util.Date;
 
-public class RewardsBean  implements Serializable{
+public class RewardsBean implements Serializable {
 	private static final long serialVersionUID = -2381598448445463625L;
 	private Long rwId;
 	private Integer rCatId;
@@ -21,6 +21,7 @@ public class RewardsBean  implements Serializable{
 	private String rwFileName;
 	private String rwFileType;
 	private Double rwPrice;
+	private Long rwQuantity;
 
 	public Long getRwId() {
 		return rwId;
@@ -150,4 +151,11 @@ public class RewardsBean  implements Serializable{
 		this.rwPrice = rwPrice;
 	}
 
+	public Long getRwQuantity() {
+		return rwQuantity;
+	}
+
+	public void setRwQuantity(Long rwQuantity) {
+		this.rwQuantity = rwQuantity;
+	}
 }

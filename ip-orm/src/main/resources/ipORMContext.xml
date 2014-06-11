@@ -49,6 +49,7 @@
 				<value>za/co/idea/ip/orm/hbm/IpTagType.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpUser.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpBlob.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpSecqList.hbm.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -208,6 +209,11 @@
 		</property>
 	</bean>
 	<bean id="IpKeysDAO" class="za.co.idea.ip.orm.dao.IpKeysDAO">
+		<property name="factory">
+			<ref bean="factory" />
+		</property>
+	</bean>
+	<bean id="IpSecqListDAO" class="za.co.idea.ip.orm.dao.IpSecqListDAO">
 		<property name="factory">
 			<ref bean="factory" />
 		</property>

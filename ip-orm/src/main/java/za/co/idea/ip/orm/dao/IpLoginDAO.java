@@ -245,13 +245,13 @@ public class IpLoginDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public void updateSecurity(String login, String secq, String seca) {
+	public void updateSecurity(String login, Integer secq, String seca) {
 		log.debug("Updating security");
 		Session session = getSession();
 		try {
 			Query query = session.getNamedQuery("updateSecurity");
 			query.setString("login", login);
-			query.setString("secq", secq);
+			query.setInteger("secq", secq);
 			query.setString("seca", seca);
 			query.executeUpdate();
 			session.close();

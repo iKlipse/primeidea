@@ -2,7 +2,6 @@ package za.co.idea.web.util;
 
 import java.util.ResourceBundle;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
@@ -29,14 +28,8 @@ public class SessionPhaseListener implements PhaseListener {
 		UserBean users = (UserBean) context.getExternalContext().getSessionMap().get("user");
 		System.out.println(pe.getPhaseId() + " :: " + context.getViewRoot());
 		if (!bypassAuth && !(context.getViewRoot() == null) && !(StringUtils.contains(((HttpServletRequest) context.getExternalContext().getRequest()).getRequestURL().toString(), "login")) && !(StringUtils.contains(((HttpServletRequest) context.getExternalContext().getRequest()).getRequestURL().toString(), "rPwd"))) {
-			if (users == null) {
-				FacesMessage message = new FacesMessage();
-				message.setSeverity(FacesMessage.SEVERITY_ERROR);
-				message.setSummary("Invalid User Session or Session Expired");
-				message.setDetail("Please Login Again");
-				context.addMessage(null, message);
+			if (users == null)
 				context.getApplication().getNavigationHandler().handleNavigation(context, null, "login");
-			}
 		}
 	}
 

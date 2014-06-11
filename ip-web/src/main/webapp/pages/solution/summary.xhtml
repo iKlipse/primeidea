@@ -19,6 +19,14 @@
 					<p:outputLabel id="txtIDesc" value="#{challengeBean.solutionBean.desc}" escape="false" />
 				</p:column>
 				<p:column>
+					<p:outputLabel id="lblIDownload" value="Download File : " />
+				</p:column>
+				<p:column>
+					<p:commandButton id="btnDownload" value="Download" ajax="false" disabled="#{challengeBean.solFileAvail}">
+						<p:fileDownload value="#{challengeBean.solFileContent}" />
+					</p:commandButton>
+				</p:column>
+				<p:column>
 					<p:outputLabel id="lblITag" value="Tags : " />
 				</p:column>
 				<p:column>

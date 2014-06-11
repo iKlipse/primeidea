@@ -97,7 +97,7 @@ public class ChallengeController implements Serializable {
 			return "chalcc";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -112,7 +112,7 @@ public class ChallengeController implements Serializable {
 			return "chalvc";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -127,7 +127,7 @@ public class ChallengeController implements Serializable {
 			return "chaluc";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -164,7 +164,7 @@ public class ChallengeController implements Serializable {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform edit request", "System error occurred, cannot perform edit request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				chalFileAvail = true;
 				chalFileContent = null;
@@ -172,7 +172,7 @@ public class ChallengeController implements Serializable {
 			return "chalec";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform edit request", "System error occurred, cannot perform edit request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -185,11 +185,51 @@ public class ChallengeController implements Serializable {
 		chalCommentCnt = "(" + chalComments.size() + ")	";
 		showChallengeComments = false;
 		showChallengeLikes = false;
+		viewSolutions = fetchAllSolutionsByChal();
+		try {
+			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
+			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+			getBlobClient.close();
+			if (blobId != -999l) {
+				WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+				getBlobNameClient.close();
+				WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				client.header("Content-Type", "application/json");
+				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+				if (attachment != null) {
+					chalFileAvail = false;
+					challengeBean.setFileName(attachment.getContentDisposition().toString().replace("attachment; filename=", ""));
+					chalFileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), null, blobName);
+				} else {
+					chalFileAvail = true;
+					chalFileContent = null;
+				}
+			} else {
+				chalFileAvail = true;
+				chalFileContent = null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform summary request", "System error occurred, cannot perform summary request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			chalFileAvail = true;
+			chalFileContent = null;
+		}
 		return "chalsc";
 	}
 
 	public String saveChallenge() {
 		try {
+			List<String> errors = validateChallenge();
+			if (errors.size() > 0) {
+				for (String error : errors) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
+				return "";
+			}
 			WebClient addChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/add");
 			ChallengeMessage message = new ChallengeMessage();
 			message.setCatId(challengeBean.getCatId());
@@ -235,7 +275,7 @@ public class ChallengeController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -243,6 +283,14 @@ public class ChallengeController implements Serializable {
 
 	public String updateChallenge() {
 		try {
+			List<String> errors = validateChallenge();
+			if (errors.size() > 0) {
+				for (String error : errors) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
+				return "";
+			}
 			WebClient updateChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/modify");
 			ChallengeMessage message = new ChallengeMessage();
 			message.setCatId(challengeBean.getCatId());
@@ -318,7 +366,7 @@ public class ChallengeController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -383,7 +431,7 @@ public class ChallengeController implements Serializable {
 			return "solcs";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -400,7 +448,7 @@ public class ChallengeController implements Serializable {
 			return "solvs";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -417,7 +465,7 @@ public class ChallengeController implements Serializable {
 			return "solus";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -455,7 +503,7 @@ public class ChallengeController implements Serializable {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				solFileAvail = false;
 				solFileContent = null;
@@ -463,7 +511,7 @@ public class ChallengeController implements Serializable {
 			return "soles";
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -480,11 +528,50 @@ public class ChallengeController implements Serializable {
 		showSolutionComments = false;
 		showSolBuildOns = true;
 		showSolutionLikes = false;
+		try {
+			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
+			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+			getBlobClient.close();
+			if (blobId != -999l) {
+				WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+				getBlobNameClient.close();
+				WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				client.header("Content-Type", "application/json");
+				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+				if (attachment != null) {
+					solFileAvail = false;
+					solutionBean.setFileName(attachment.getContentDisposition().toString().replace("attachment; filename=", ""));
+					solFileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), null, blobName);
+				} else {
+					solFileAvail = true;
+					solFileContent = null;
+				}
+			} else {
+				solFileAvail = true;
+				solFileContent = null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			solFileAvail = false;
+			solFileContent = null;
+		}
 		return "solss";
 	}
 
 	public String saveSolution() {
 		try {
+			List<String> errors = validateSolution();
+			if (errors.size() > 0) {
+				for (String error : errors) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
+				return "";
+			}
 			WebClient addSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/add");
 			SolutionMessage message = new SolutionMessage();
 			message.setCatId(solutionBean.getCatId());
@@ -528,7 +615,7 @@ public class ChallengeController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -536,6 +623,14 @@ public class ChallengeController implements Serializable {
 
 	public String updateSolution() {
 		try {
+			List<String> errors = validateSolution();
+			if (errors.size() > 0) {
+				for (String error : errors) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
+				return "";
+			}
 			WebClient updateSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/modify");
 			SolutionMessage message = new SolutionMessage();
 			message.setCatId(solutionBean.getCatId());
@@ -609,7 +704,7 @@ public class ChallengeController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -813,6 +908,27 @@ public class ChallengeController implements Serializable {
 		return ret;
 	}
 
+	private List<SolutionBean> fetchAllSolutionsByChal() {
+		List<SolutionBean> ret = new ArrayList<SolutionBean>();
+		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/chal/" + challengeBean.getId());
+		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
+		fetchSolutionClient.close();
+		for (SolutionMessage solutionMessage : solutions) {
+			SolutionBean bean = new SolutionBean();
+			bean.setChalId(solutionMessage.getChalId());
+			bean.setCatId(solutionMessage.getCatId());
+			bean.setCrtdById(solutionMessage.getId());
+			bean.setCrtdDt(solutionMessage.getCrtdDt());
+			bean.setDesc(solutionMessage.getDesc());
+			bean.setId(solutionMessage.getId());
+			bean.setStatusId(solutionMessage.getStatusId());
+			bean.setTags(solutionMessage.getTags());
+			bean.setTitle(solutionMessage.getTitle());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
 	public void chalFileUploadHandle(FileUploadEvent fue) {
 		try {
 			UploadedFile file = fue.getFile();
@@ -998,6 +1114,58 @@ public class ChallengeController implements Serializable {
 			ret.add(bean);
 		}
 		return ret;
+	}
+
+	private List<String> validateSolution() {
+		ArrayList<String> ret = new ArrayList<String>();
+		if (solutionBean.getChalId() == null || solutionBean.getChalId().toString().length() == 0) {
+			ret.add("Challenges is Mandatory");
+		}
+		if (solutionBean.getTitle() == null || solutionBean.getTitle().length() == 0) {
+			ret.add("Title is Mandatory");
+		} else if (!lengthValidation(solutionBean.getTitle(), 1, 100)) {
+			ret.add("Title sholud not exceed 100 characters");
+		}
+		if (solutionBean.getCatId() == null || solutionBean.getCatId().toString().length() == 0) {
+			ret.add("Category is Mandatory");
+		}
+		if (solutionBean.getDesc() == null || solutionBean.getDesc().length() == 0) {
+			ret.add("Description is Mandatory");
+		}
+		return ret;
+	}
+
+	private List<String> validateChallenge() {
+		ArrayList<String> ret = new ArrayList<String>();
+		if (challengeBean.getTitle() == null || challengeBean.getTitle().length() == 0) {
+			ret.add("Title is Mandatory");
+		} else if (!lengthValidation(challengeBean.getTitle(), 1, 100)) {
+			ret.add("Title sholud not exceed 100 characters");
+		}
+		if (challengeBean.getCatId() == null || challengeBean.getCatId().toString().length() == 0) {
+			ret.add("Category is Mandatory");
+		}
+		if (challengeBean.getDesc() == null || challengeBean.getDesc().length() == 0) {
+			ret.add("Description is Mandatory");
+		}
+		if (challengeBean.getLaunchDt() == null || challengeBean.getLaunchDt().toString().length() == 0) {
+			ret.add("Launch Date is Mandatory");
+		}
+		if (challengeBean.getExprDt() == null || challengeBean.getExprDt().toString().length() == 0) {
+			ret.add("Expiry Date is Mandatory");
+		}
+		return ret;
+	}
+
+	// This method is used to check length validation
+	public boolean lengthValidation(String str, int minLimit, int maxLimit) {
+		int intLength = str.length();
+		if (intLength >= minLimit && intLength <= maxLimit) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 	public ChallengeBean getChallengeBean() {

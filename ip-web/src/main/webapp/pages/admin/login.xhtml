@@ -10,20 +10,20 @@
 	</h:head>
 	<h:body onload="wvDlgLogin.show()">
 		<h:form id="loginFrm" enctype="multipart/form-data">
-			<p:growl showDetail="true" showSummary="true" />
+			<p:growl id="grlMsg" showDetail="true" showSummary="true" />
 			<p:dialog id="dlgLogin" appendToBody="@(body)" resizable="false" closable="false" modal="false" widgetVar="wvDlgLogin" showHeader="true" header="Login">
 				<p:panelGrid id="pnlLogin" columns="2">
 					<p:column>
 						<p:outputLabel value="Enter Login ID: " />
 					</p:column>
 					<p:column>
-						<p:inputText autocomplete="false" id="txtScName" value="#{adminBean.userBean.scName}" required="true" requiredMessage="User Name is Mandatory" />
+						<p:inputText autocomplete="false" id="txtScName" value="#{adminBean.userBean.scName}" />
 					</p:column>
 					<p:column>
 						<p:outputLabel value="Enter Password: " />
 					</p:column>
 					<p:column>
-						<p:password autocomplete="false" id="txtPwd" value="#{adminBean.userBean.pwd}" feedback="false" required="true" requiredMessage="Password is Mandatory" />
+						<p:password autocomplete="false" id="txtPwd" value="#{adminBean.userBean.pwd}" feedback="false" />
 					</p:column>
 					<p:column>
 						<p:commandButton id="btnSave" action="#{adminBean.login}" value="Login" ajax="false" />

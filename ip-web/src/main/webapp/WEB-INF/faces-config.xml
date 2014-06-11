@@ -188,6 +188,14 @@
 	<lifecycle>
 		<phase-listener>za.co.idea.web.util.SessionPhaseListener</phase-listener>
 	</lifecycle>
+	<converter>
+		<converter-id>userConverter</converter-id>
+		<converter-class>za.co.idea.web.util.UserBeanConverter</converter-class>
+	</converter>
+	<converter>
+		<converter-id>groupConverter</converter-id>
+		<converter-class>za.co.idea.web.util.GroupBeanConverter</converter-class>
+	</converter>
 	<validator>
 		<display-name>SocialConnectorValidator</display-name>
 		<validator-id>za.co.idea.web.util.SocialConnectorValidator</validator-id>

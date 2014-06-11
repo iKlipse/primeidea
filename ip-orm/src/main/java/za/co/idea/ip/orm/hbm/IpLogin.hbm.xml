@@ -20,8 +20,8 @@
 		<property name="loginLastDt" type="java.sql.Timestamp">
 			<column name="login_last_dt" length="19" />
 		</property>
-		<property name="loginSecQ" type="java.lang.String">
-			<column name="login_sec_q" length="450" not-null="true" />
+		<property name="loginSecQ" type="java.lang.Integer">
+			<column name="login_sec_q" not-null="true" />
 		</property>
 		<property name="loginSecA" type="java.lang.String">
 			<column name="login_sec_a" length="450" not-null="true" />
