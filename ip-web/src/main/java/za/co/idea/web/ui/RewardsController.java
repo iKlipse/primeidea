@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -24,6 +25,7 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
+import za.co.idea.ip.ws.bean.AllocationMessage;
 import za.co.idea.ip.ws.bean.AttachmentMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
@@ -31,7 +33,9 @@ import za.co.idea.ip.ws.bean.RewardsMessage;
 import za.co.idea.ip.ws.bean.TagMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
+import za.co.idea.web.ui.bean.AllocationBean;
 import za.co.idea.web.ui.bean.ListSelectorBean;
+import za.co.idea.web.ui.bean.MetaDataBean;
 import za.co.idea.web.ui.bean.RewardsBean;
 import za.co.idea.web.ui.bean.TagBean;
 import za.co.idea.web.ui.bean.UserBean;
@@ -50,10 +54,19 @@ public class RewardsController implements Serializable {
 	private List<ListSelectorBean> rewardsStatus;
 	private List<UserBean> admUsers;
 	private List<TagBean> rewardsWishlist;
+	private List<MetaDataBean> statusList;
+	private List<AllocationBean> allocs;
+	private AllocationBean allocationBean;
+	private String allocId;
 	private String rewardsWishlistCnt;
 	private boolean fileAvail;
 	private boolean showRewardsWishlist;
+	private HashMap<String, String> allocEntityList;
+	private String entity;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
+	private boolean showAddPanel;
+	private boolean showModPanel;
+	private boolean showAddBtn;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
@@ -109,6 +122,34 @@ public class RewardsController implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
+	}
+
+	public String showPointAllocation() {
+		try {
+			this.showAddPanel = false;
+			this.showModPanel = false;
+			this.showAddBtn = false;
+			this.entity = "";
+			this.statusList = null;
+			return "rwpa";
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showAllocationMod() {
+		this.showAddPanel = false;
+		this.showModPanel = true;
+		return "";
+	}
+
+	public String showAllocationAdd() {
+		this.showAddPanel = true;
+		this.showModPanel = false;
+		return "";
 	}
 
 	public String showEditReward() {
@@ -233,27 +274,32 @@ public class RewardsController implements Serializable {
 			ResponseMessage response = addRewardsClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			addRewardsClient.close();
 			if (response.getStatusCode() == 0) {
-				WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
-				AttachmentMessage attach = new AttachmentMessage();
-				attach.setBlobContentType(rewardsBean.getRwFileType());
-				attach.setBlobEntityId(message.getRwId());
-				attach.setBlobEntityTblNm("ip_rewards");
-				attach.setBlobName(rewardsBean.getRwFileName());
-				attach.setBlobId(COUNTER.getNextId("IpBlob"));
-				Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
-				if (crtRes.getStatus() == 200) {
-					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-					client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-					client.header("Accept", "application/json");
-					Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment; filename=" + rewardsBean.getRwFileName())));
-					if (docRes.getStatus() != 200) {
+				if (uploadContent != null) {
+					WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+					AttachmentMessage attach = new AttachmentMessage();
+					attach.setBlobContentType(rewardsBean.getRwFileType());
+					attach.setBlobEntityId(message.getRwId());
+					attach.setBlobEntityTblNm("ip_rewards");
+					attach.setBlobName(rewardsBean.getRwFileName());
+					attach.setBlobId(COUNTER.getNextId("IpBlob"));
+					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
+					createBlobClient.close();
+					if (crtRes.getStatus() == 200) {
+						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+						client.header("Accept", "application/json");
+						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment; filename=" + rewardsBean.getRwFileName())));
+						if (docRes.getStatus() != 200) {
+							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
+							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						}
+						client.close();
+					} else {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
-				} else {
-					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
-					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
+				uploadContent = null;
 				return showViewReward();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -348,6 +394,7 @@ public class RewardsController implements Serializable {
 						}
 					}
 				}
+				uploadContent = null;
 				return showViewReward();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -357,6 +404,62 @@ public class RewardsController implements Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update Reward request", "System error occurred, cannot perform update Reward request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String saveAllocation() {
+		try {
+			WebClient saveAllocClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/alloc/add");
+			AllocationMessage message = new AllocationMessage();
+			message.setAllocDesc(allocationBean.getAllocDesc());
+			message.setAllocEntity(entity);
+			message.setAllocId(COUNTER.getNextId("IpAllocation").intValue());
+			message.setAllocStatusId(allocationBean.getAllocStatusId());
+			message.setAllocVal(allocationBean.getAllocVal());
+			ResponseMessage res = saveAllocClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+			if (res.getStatusCode() == 0) {
+				allocs = fetchAllAllocationsByEntity();
+				this.showAddPanel = false;
+				this.showModPanel = false;
+				return "";
+			} else {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform save allocation request", "System error occurred, cannot perform save allocation request");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform save allocation request", "System error occurred, cannot perform save allocation request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String updateAllocation() {
+		try {
+			WebClient updateAllocClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/alloc/update");
+			AllocationMessage message = new AllocationMessage();
+			message.setAllocDesc(allocationBean.getAllocDesc());
+			message.setAllocEntity(entity);
+			message.setAllocId(allocationBean.getAllocId());
+			message.setAllocStatusId(allocationBean.getAllocStatusId());
+			message.setAllocVal(allocationBean.getAllocVal());
+			ResponseMessage res = updateAllocClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
+			if (res.getStatusCode() == 0) {
+				allocs = fetchAllAllocationsByEntity();
+				this.showAddPanel = false;
+				this.showModPanel = false;
+				return "";
+			} else {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update allocation request", "System error occurred, cannot perform update allocation request");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update allocation request", "System error occurred, cannot perform update allocation request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -403,6 +506,20 @@ public class RewardsController implements Serializable {
 		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
 		return "";
+	}
+
+	public void updateStatusList() {
+		if (entity.equalsIgnoreCase("")) {
+			statusList = new ArrayList<MetaDataBean>();
+			this.showAddPanel = false;
+			this.showModPanel = false;
+			this.showAddBtn = false;
+		} else {
+			statusList = fetchAllMetadata();
+			this.showAddPanel = false;
+			this.showModPanel = false;
+			this.showAddBtn = true;
+		}
 	}
 
 	private List<RewardsBean> fetchAllRewards() {
@@ -512,6 +629,37 @@ public class RewardsController implements Serializable {
 		}
 	}
 
+	private List<MetaDataBean> fetchAllMetadata() {
+		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
+		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/" + entity);
+		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		mDataClient.close();
+		for (MetaDataMessage message : messages) {
+			MetaDataBean bean = new MetaDataBean();
+			bean.setDesc(message.getDesc());
+			bean.setId(message.getId());
+			bean.setTable(message.getTable());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	private List<AllocationBean> fetchAllAllocationsByEntity() {
+		List<AllocationBean> ret = new ArrayList<AllocationBean>();
+		WebClient allocCLient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/alloc/list/" + entity);
+		Collection<? extends AllocationMessage> messages = new ArrayList<AllocationMessage>(allocCLient.accept(MediaType.APPLICATION_JSON).getCollection(AllocationMessage.class));
+		for (AllocationMessage message : messages) {
+			AllocationBean bean = new AllocationBean();
+			bean.setAllocDesc(message.getAllocDesc());
+			bean.setAllocEntity(message.getAllocEntity());
+			bean.setAllocId(message.getAllocId());
+			bean.setAllocStatusId(message.getAllocStatusId());
+			bean.setAllocVal(message.getAllocVal());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
 	public RewardsBean getRewardsBean() {
 		return rewardsBean;
 	}
@@ -598,6 +746,92 @@ public class RewardsController implements Serializable {
 
 	public void setUploadContent(StreamedContent uploadContent) {
 		this.uploadContent = uploadContent;
+	}
+
+	public HashMap<String, String> getAllocEntityList() {
+		if (allocEntityList == null) {
+			allocEntityList = new HashMap<String, String>();
+			allocEntityList.put("Solution", "ip_solution_status");
+			allocEntityList.put("Challenge", "ip_challenge_status");
+			allocEntityList.put("Idea", "ip_idea_status");
+			allocEntityList.put("Claim", "ip_claim_status");
+			allocEntityList.put("Rewards", "ip_rewards_status");
+		}
+		return allocEntityList;
+	}
+
+	public void setAllocEntityList(HashMap<String, String> allocEntityList) {
+		this.allocEntityList = allocEntityList;
+	}
+
+	public List<MetaDataBean> getStatusList() {
+		if (statusList == null)
+			statusList = new ArrayList<MetaDataBean>();
+		return statusList;
+	}
+
+	public void setStatusList(List<MetaDataBean> statusList) {
+		this.statusList = statusList;
+	}
+
+	public String getEntity() {
+		return entity;
+	}
+
+	public void setEntity(String entity) {
+		this.entity = entity;
+	}
+
+	public boolean isShowAddPanel() {
+		return showAddPanel;
+	}
+
+	public boolean isShowModPanel() {
+		return showModPanel;
+	}
+
+	public boolean isShowAddBtn() {
+		return showAddBtn;
+	}
+
+	public void setShowAddPanel(boolean showAddPanel) {
+		this.showAddPanel = showAddPanel;
+	}
+
+	public void setShowModPanel(boolean showModPanel) {
+		this.showModPanel = showModPanel;
+	}
+
+	public void setShowAddBtn(boolean showAddBtn) {
+		this.showAddBtn = showAddBtn;
+	}
+
+	public AllocationBean getAllocationBean() {
+		if (allocationBean == null)
+			allocationBean = new AllocationBean();
+		return allocationBean;
+	}
+
+	public void setAllocationBean(AllocationBean allocationBean) {
+		this.allocationBean = allocationBean;
+	}
+
+	public List<AllocationBean> getAllocs() {
+		if (allocs == null)
+			allocs = new ArrayList<AllocationBean>();
+		return allocs;
+	}
+
+	public void setAllocs(List<AllocationBean> allocs) {
+		this.allocs = allocs;
+	}
+
+	public String getAllocId() {
+		return allocId;
+	}
+
+	public void setAllocId(String allocId) {
+		this.allocId = allocId;
 	}
 
 }

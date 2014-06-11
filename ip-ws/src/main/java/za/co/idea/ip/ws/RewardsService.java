@@ -11,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import za.co.idea.ip.orm.bean.IpAllocation;
 import za.co.idea.ip.orm.bean.IpPoints;
 import za.co.idea.ip.orm.bean.IpRewards;
 import za.co.idea.ip.orm.bean.IpRewardsCat;
@@ -22,6 +23,7 @@ import za.co.idea.ip.orm.dao.IpRewardsDAO;
 import za.co.idea.ip.orm.dao.IpRewardsGroupDAO;
 import za.co.idea.ip.orm.dao.IpRewardsStatusDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
+import za.co.idea.ip.ws.bean.AllocationMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.PointMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
@@ -131,6 +133,7 @@ public class RewardsService {
 				rewards.setRwTitle(ipRewards.getRwTitle());
 				rewards.setRwValue(ipRewards.getRwValue());
 				rewards.setRwPrice(ipRewards.getRwPrice());
+				rewards.setRwQuantity(ipRewards.getRwQuantity());
 				ret.add((T) rewards);
 			}
 		} catch (Exception e) {
@@ -407,6 +410,124 @@ public class RewardsService {
 				message.setUserId(ipPoints.getIpUser().getUserId());
 				ret.add((T) message);
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@POST
+	@Path("/alloc/add")
+	@Produces("application/json")
+	@Consumes("application/json")
+	public ResponseMessage createAllocation(AllocationMessage alloc) {
+		try {
+			IpAllocation ipAllocation = new IpAllocation();
+			ipAllocation.setAllocDesc(alloc.getAllocDesc());
+			ipAllocation.setAllocEntity(alloc.getAllocEntity());
+			ipAllocation.setAllocId(alloc.getAllocId());
+			ipAllocation.setAllocStatusId(alloc.getAllocStatusId());
+			ipAllocation.setAllocVal(alloc.getAllocVal());
+			ipAllocationDAO.save(ipAllocation);
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(0);
+			message.setStatusDesc("Success");
+			return message;
+		} catch (Exception e) {
+			e.printStackTrace();
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(e.getMessage());
+			return message;
+		}
+
+	}
+
+	@PUT
+	@Path("/alloc/update")
+	@Produces("application/json")
+	@Consumes("application/json")
+	public ResponseMessage updateAllocation(AllocationMessage alloc) {
+		try {
+			IpAllocation ipAllocation = new IpAllocation();
+			ipAllocation.setAllocDesc(alloc.getAllocDesc());
+			ipAllocation.setAllocEntity(alloc.getAllocEntity());
+			ipAllocation.setAllocId(alloc.getAllocId());
+			ipAllocation.setAllocStatusId(alloc.getAllocStatusId());
+			ipAllocation.setAllocVal(alloc.getAllocVal());
+			ipAllocationDAO.merge(ipAllocation);
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(0);
+			message.setStatusDesc("Success");
+			return message;
+		} catch (Exception e) {
+			e.printStackTrace();
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(e.getMessage());
+			return message;
+		}
+
+	}
+
+	@GET
+	@Path("/alloc/list")
+	@Produces("application/json")
+	public <T extends AllocationMessage> List<T> listAllocation() {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List alloc = ipAllocationDAO.findAll();
+			for (Object object : alloc) {
+				AllocationMessage msg = new AllocationMessage();
+				IpAllocation allocation = (IpAllocation) object;
+				msg.setAllocDesc(allocation.getAllocDesc());
+				msg.setAllocEntity(allocation.getAllocEntity());
+				msg.setAllocId(allocation.getAllocId());
+				msg.setAllocStatusId(allocation.getAllocStatusId());
+				msg.setAllocVal(allocation.getAllocVal());
+				ret.add((T) msg);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@GET
+	@Path("/alloc/list/{entity}")
+	@Produces("application/json")
+	public <T extends AllocationMessage> List<T> listAllocationByEntity(@PathParam("entity") String entity) {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List alloc = ipAllocationDAO.getAllocationByEntity(entity);
+			for (Object object : alloc) {
+				AllocationMessage msg = new AllocationMessage();
+				IpAllocation allocation = (IpAllocation) object;
+				msg.setAllocDesc(allocation.getAllocDesc());
+				msg.setAllocEntity(allocation.getAllocEntity());
+				msg.setAllocId(allocation.getAllocId());
+				msg.setAllocStatusId(allocation.getAllocStatusId());
+				msg.setAllocVal(allocation.getAllocVal());
+				ret.add((T) msg);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@GET
+	@Path("/alloc/get/{id}")
+	@Produces("application/json")
+	public AllocationMessage getAllocationById(@PathParam("id") Integer id) {
+		AllocationMessage ret = new AllocationMessage();
+		try {
+			IpAllocation allocation = ipAllocationDAO.findById(id);
+			ret.setAllocDesc(allocation.getAllocDesc());
+			ret.setAllocEntity(allocation.getAllocEntity());
+			ret.setAllocId(allocation.getAllocId());
+			ret.setAllocStatusId(allocation.getAllocStatusId());
+			ret.setAllocVal(allocation.getAllocVal());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

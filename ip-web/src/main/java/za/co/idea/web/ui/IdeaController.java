@@ -348,27 +348,32 @@ public class IdeaController implements Serializable {
 			ResponseMessage response = addIdeaClient.accept(MediaType.APPLICATION_JSON).post(ideaMessage, ResponseMessage.class);
 			addIdeaClient.close();
 			if (response.getStatusCode() == 0) {
-				WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
-				AttachmentMessage message = new AttachmentMessage();
-				message.setBlobContentType(ideaBean.getContentType());
-				message.setBlobEntityId(ideaMessage.getIdeaId());
-				message.setBlobEntityTblNm("ip_idea");
-				message.setBlobName(ideaBean.getFileName());
-				message.setBlobId(COUNTER.getNextId("IpBlob"));
-				Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
-				if (crtRes.getStatus() == 200) {
-					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + message.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-					client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-					client.header("Accept", "application/json");
-					Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment; filename=" + ideaBean.getFileName())));
-					if (docRes.getStatus() != 200) {
+				if (uploadContent != null) {
+					WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+					AttachmentMessage message = new AttachmentMessage();
+					message.setBlobContentType(ideaBean.getContentType());
+					message.setBlobEntityId(ideaMessage.getIdeaId());
+					message.setBlobEntityTblNm("ip_idea");
+					message.setBlobName(ideaBean.getFileName());
+					message.setBlobId(COUNTER.getNextId("IpBlob"));
+					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
+					createBlobClient.close();
+					if (crtRes.getStatus() == 200) {
+						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + message.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+						client.header("Accept", "application/json");
+						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment; filename=" + ideaBean.getFileName())));
+						if (docRes.getStatus() != 200) {
+							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
+							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						}
+						client.close();
+					} else {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
-				} else {
-					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
-					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
+				uploadContent = null;
 				return showViewIdeas();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -458,6 +463,7 @@ public class IdeaController implements Serializable {
 						}
 					}
 				}
+				uploadContent = null;
 				return showViewIdeas();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());

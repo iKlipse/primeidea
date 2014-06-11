@@ -12,7 +12,7 @@ public class RewardsMessage {
 	private String rwTitle;
 	private String rwDesc;
 	private Integer rwValue;
-	private Integer rwStockCodeNum;
+	private String rwStockCodeNum;
 	private String rwHoverText;
 	private Date rwLaunchDt;
 	private Date rwExpiryDt;
@@ -69,11 +69,11 @@ public class RewardsMessage {
 		this.rwValue = rwValue;
 	}
 
-	public Integer getRwStockCodeNum() {
+	public String getRwStockCodeNum() {
 		return rwStockCodeNum;
 	}
 
-	public void setRwStockCodeNum(Integer rwStockCodeNum) {
+	public void setRwStockCodeNum(String rwStockCodeNum) {
 		this.rwStockCodeNum = rwStockCodeNum;
 	}
 

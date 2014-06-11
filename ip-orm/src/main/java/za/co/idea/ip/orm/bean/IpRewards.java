@@ -23,7 +23,7 @@ public class IpRewards implements java.io.Serializable {
 	private String rwTitle;
 	private String rwDesc;
 	private Integer rwValue;
-	private Integer rwStockCodeNum;
+	private String rwStockCodeNum;
 	private String rwHoverText;
 	private Date rwLaunchDt;
 	private Date rwExpiryDt;
@@ -41,7 +41,7 @@ public class IpRewards implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpRewards(Long rwId, IpRewardsCat ipRewardsCat, IpRewardsStatus ipRewardsStatus, String rwTitle, String rwDesc, Integer rwValue, Integer rwStockCodeNum, Date rwLaunchDt, Date rwExpiryDt, Date rwCrtdDt, Double rwPrice, Long rwQuantity) {
+	public IpRewards(Long rwId, IpRewardsCat ipRewardsCat, IpRewardsStatus ipRewardsStatus, String rwTitle, String rwDesc, Integer rwValue, String rwStockCodeNum, Date rwLaunchDt, Date rwExpiryDt, Date rwCrtdDt, Double rwPrice, Long rwQuantity) {
 		this.rwId = rwId;
 		this.ipRewardsCat = ipRewardsCat;
 		this.ipRewardsStatus = ipRewardsStatus;
@@ -57,7 +57,7 @@ public class IpRewards implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpRewards(Long rwId, IpRewardsCat ipRewardsCat, IpRewardsStatus ipRewardsStatus, String rwTitle, String rwDesc, Integer rwValue, Integer rwStockCodeNum, String rwHoverText, Date rwLaunchDt, Date rwExpiryDt, String rwTag, Date rwCrtdDt, Double rwPrice, Long rwQuantity, Set ipRewardsGroups, Set ipClaims) {
+	public IpRewards(Long rwId, IpRewardsCat ipRewardsCat, IpRewardsStatus ipRewardsStatus, String rwTitle, String rwDesc, Integer rwValue, String rwStockCodeNum, String rwHoverText, Date rwLaunchDt, Date rwExpiryDt, String rwTag, Date rwCrtdDt, Double rwPrice, Long rwQuantity, Set ipRewardsGroups, Set ipClaims) {
 		this.rwId = rwId;
 		this.ipRewardsCat = ipRewardsCat;
 		this.ipRewardsStatus = ipRewardsStatus;
@@ -126,11 +126,11 @@ public class IpRewards implements java.io.Serializable {
 		this.rwValue = rwValue;
 	}
 
-	public Integer getRwStockCodeNum() {
+	public String getRwStockCodeNum() {
 		return this.rwStockCodeNum;
 	}
 
-	public void setRwStockCodeNum(Integer rwStockCodeNum) {
+	public void setRwStockCodeNum(String rwStockCodeNum) {
 		this.rwStockCodeNum = rwStockCodeNum;
 	}
 

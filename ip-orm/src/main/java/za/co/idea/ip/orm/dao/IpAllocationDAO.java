@@ -181,4 +181,24 @@ public class IpAllocationDAO extends BaseHibernateDAO {
 			throw re;
 		}
 	}
+
+	public List getAllocationByEntity(String entity) {
+		log.debug("Fetching Allocation By Query :: getAllocationByEntity");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			Query query = session.getNamedQuery("getAllocationByEntity");
+			query.setString("entity", entity);
+			List ret = query.list();
+			transaction.commit();
+			session.close();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			transaction.rollback();
+			session.close();
+			throw re;
+		}
+	}
+
 }

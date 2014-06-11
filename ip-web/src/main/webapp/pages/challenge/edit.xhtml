@@ -16,7 +16,7 @@
 					<p:outputLabel id="lblCCat" value="Category : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu style="width: 100%" id="somCCat" value="#{challengeBean.challengeBean.catId}">
+					<p:selectOneMenu style="width: 100%" id="somCCat" value="#{challengeBean.challengeBean.catId}" filter="true" filterMatchMode="contains">
 						<f:selectItem itemLabel="Select One" itemValue="" />
 						<f:selectItems value="#{challengeBean.challengeCats}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
 					</p:selectOneMenu>

@@ -23,8 +23,8 @@
 		<property name="rwValue" type="java.lang.Integer">
 			<column name="rw_value" not-null="true" />
 		</property>
-		<property name="rwStockCodeNum" type="java.lang.Integer">
-			<column name="rw_stock_code_num" not-null="true" />
+		<property name="rwStockCodeNum" type="java.lang.String">
+			<column name="rw_stock_code_num" length="50" />
 		</property>
 		<property name="rwHoverText" type="java.lang.String">
 			<column name="rw_hover_text" length="500" />

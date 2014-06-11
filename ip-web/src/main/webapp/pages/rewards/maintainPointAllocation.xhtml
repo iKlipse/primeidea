@@ -1,0 +1,102 @@
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Maintain Point Allocation</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrPntAlloc">
+			<f:facet name="header">
+					Maintain Point Allocation
+				</f:facet>
+			<p:dataTable id="dtPntAlloc" widgetVar="dtPntAlloc" value="#{rewardsBean.allocs}" var="bean" rows="5" paginator="true" paginatorPosition="bottom" emptyMessage="No Point Allocations Found">
+				<f:facet name="header">
+					<p:selectOneMenu id="somSelectEntity" value="#{rewardsBean.entity}">
+						<p:ajax listener="#{rewardsBean.updateStatusList}" update="dtPntAlloc,:ideaFrm:pnlModPntAlloc,:ideaFrm:pnlAddPntAlloc" />
+						<f:selectItem itemLabel="Please Select" itemValue="" />
+						<f:selectItems value="#{rewardsBean.allocEntityList}" />
+					</p:selectOneMenu>
+				</f:facet>
+				<p:column>
+					<f:facet name="header">Description</f:facet>
+					<p:outputLabel id="lblId" value="#{bean.allocDesc}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Entity Name</f:facet>
+					<p:selectOneMenu id="somSelectEntityName" value="#{bean.allocEntity}">
+						<f:selectItem itemLabel="Please Select" itemValue="" />
+						<f:selectItems value="#{rewardsBean.allocEntityList}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<f:facet name="header">Status</f:facet>
+					<p:selectOneMenu id="somSelectEntityStatus" value="#{bean.allocStatusId}">
+						<f:selectItem itemLabel="Please Select" itemValue="" />
+						<f:selectItems value="#{rewardsBean.statusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<f:facet name="header">Point Value</f:facet>
+					<p:outputLabel id="lblPntVal" value="#{bean.allocVal}" />
+				</p:column>
+				<p:column>
+					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{rewardsBean.showAllocationMod}">
+						<f:setPropertyActionListener value="#{bean}" target="#{rewardsBean.allocationBean}" />
+					</p:commandButton>
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton id="addButton" value="Add" ajax="false" immediate="true" action="#{rewardsBean.showAllocationAdd}" rendered="#{rewardsBean.showAddBtn}" />
+					<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{rewardsBean.showPointAllocation}" />
+				</f:facet>
+			</p:dataTable>
+			<p:panelGrid id="pnlAddPntAlloc" rendered="#{rewardsBean.showAddPanel}" columns="1">
+				<p:column>
+					<p:outputLabel value="Description : " />
+				</p:column>
+				<p:column>
+					<p:inputText id="lblAddId" value="#{rewardsBean.allocationBean.allocDesc}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel value="Status : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somAddSelectEntityStatus" value="#{rewardsBean.allocationBean.allocStatusId}">
+						<f:selectItem itemLabel="Please Select" itemValue="" />
+						<f:selectItems value="#{rewardsBean.statusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel value="Point Value : " />
+				</p:column>
+				<p:column>
+					<p:inputText id="lblAddPntVal" value="#{rewardsBean.allocationBean.allocVal}" />
+				</p:column>
+				<p:column colspan="2">
+					<p:commandButton id="addSaveButton" value="Save" ajax="false" action="#{rewardsBean.saveAllocation}" />
+				</p:column>
+			</p:panelGrid>
+			<p:panelGrid id="pnlModPntAlloc" rendered="#{rewardsBean.showModPanel}" columns="1">
+				<p:column>
+					<p:outputLabel value="Description : " />
+				</p:column>
+				<p:column>
+					<p:inputText id="lblModId" value="#{rewardsBean.allocationBean.allocDesc}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel value="Status : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somModSelectEntityStatus" value="#{rewardsBean.allocationBean.allocStatusId}">
+						<f:selectItem itemLabel="Please Select" itemValue="" />
+						<f:selectItems value="#{rewardsBean.statusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel value="Point Value : " />
+				</p:column>
+				<p:column>
+					<p:inputText id="lblModPntVal" value="#{rewardsBean.allocationBean.allocVal}" />
+				</p:column>
+				<p:column colspan="2">
+					<p:commandButton id="modSaveButton" value="Update" ajax="false" action="#{rewardsBean.updateAllocation}" />
+				</p:column>
+			</p:panelGrid>
+		</p:panel>
+	</ui:define>
+</ui:composition>

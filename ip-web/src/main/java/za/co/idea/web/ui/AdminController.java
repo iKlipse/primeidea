@@ -44,12 +44,7 @@ import za.co.idea.web.ui.bean.MetaDataBean;
 import za.co.idea.web.ui.bean.UserBean;
 import za.co.idea.web.util.IdNumberGen;
 
-import com.restfb.DefaultFacebookClient;
-import com.restfb.DefaultJsonMapper;
 import com.restfb.DefaultWebRequestor;
-import com.restfb.FacebookClient.AccessToken;
-import com.restfb.Parameter;
-import com.restfb.types.User;
 
 public class AdminController implements Serializable {
 	private static final long serialVersionUID = 1441325880500732566L;
@@ -443,7 +438,7 @@ public class AdminController implements Serializable {
 			ResponseMessage response = addUserClient.accept(MediaType.APPLICATION_JSON).post(bean, ResponseMessage.class);
 			addUserClient.close();
 			if (response.getStatusCode() == 0) {
-				try {
+				if (image != null) {
 					WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
 					AttachmentMessage message = new AttachmentMessage();
 					message.setBlobContentType(contentType);
@@ -468,10 +463,6 @@ public class AdminController implements Serializable {
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
 					createBlobClient.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", "Unable to upload attachment. Please update later");
-					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
 				return showViewUsers();
 			} else {
@@ -498,19 +489,21 @@ public class AdminController implements Serializable {
 		if (userBean.getScName() == null || userBean.getScName().length() == 0) {
 			ret.add("Screen Name is Mandatory");
 		}
-		if (userBean.geteMail() == null || userBean.geteMail().length() == 0) {
-			ret.add("EMail is Mandatory");
+		if (userBean.getIdNum() == null || userBean.getIdNum() == 0) {
+			ret.add("ID Number is Mandatory");
 		}
-		if (userBean.getFbHandle() != null && userBean.getFbHandle().length() != 0) {
-			AccessToken accessToken = new DefaultFacebookClient().obtainAppAccessToken("1404712079799728", "fe051d7dcf717d4838629e31807fdcb3");
-			DefaultFacebookClient client = new DefaultFacebookClient(accessToken.getAccessToken(), new ProxyWebRequestor(), new DefaultJsonMapper());
-			String query = "select * from user where profile_url=:profile";
-			Parameter parameter = Parameter.with("profile", "http://www.facebook.com/" + userBean.getFbHandle());
-			List<User> users = client.executeFqlQuery(query, User.class, new Parameter[] { parameter });
-			if (users.size() == 0)
-				ret.add("Invalid Facebook Handle");
+		if (secQ == null || secQ.length() == 0) {
+			ret.add("Security Question is Mandatory");
 		}
-
+		if (userBean.getSecA() == null || userBean.getSecA().length() == 0) {
+			ret.add("Security Answer is Mandatory");
+		}
+		if (userBean.getPwd() == null || userBean.getPwd().length() == 0) {
+			ret.add("Password is Mandatory");
+		}
+		if (userBean.getcPw() == null || userBean.getcPw().length() == 0) {
+			ret.add("Confirm Password is Mandatory");
+		}
 		return ret;
 	}
 
@@ -753,7 +746,7 @@ public class AdminController implements Serializable {
 		}
 	}
 
-	public String updateImage() {
+	public void updateImage() {
 		try {
 			Long userId = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId");
 			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + userId + "/ip_user");
@@ -777,11 +770,9 @@ public class AdminController implements Serializable {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
-					return "";
 				} else {
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-					return "";
 				}
 			} else {
 				WebClient updateBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/update");
@@ -827,13 +818,11 @@ public class AdminController implements Serializable {
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
-				return "";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", "Unable to upload attachment. Please update later");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
 		}
 	}
 

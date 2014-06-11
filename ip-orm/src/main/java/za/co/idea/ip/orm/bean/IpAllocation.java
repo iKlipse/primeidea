@@ -19,6 +19,8 @@ public class IpAllocation implements java.io.Serializable {
 	private Integer allocId;
 	private String allocDesc;
 	private Integer allocVal;
+	private String allocEntity;
+	private Integer allocStatusId;
 	private Set ipPointses = new HashSet(0);
 
 	// Constructors
@@ -33,10 +35,12 @@ public class IpAllocation implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpAllocation(Integer allocId, String allocDesc, Integer allocVal, Set ipPointses) {
+	public IpAllocation(Integer allocId, String allocDesc, String allocEntity, Integer allocStatusId, Integer allocVal, Set ipPointses) {
 		this.allocId = allocId;
 		this.allocDesc = allocDesc;
 		this.allocVal = allocVal;
+		this.allocEntity = allocEntity;
+		this.allocStatusId = allocStatusId;
 		this.ipPointses = ipPointses;
 	}
 
@@ -72,6 +76,22 @@ public class IpAllocation implements java.io.Serializable {
 
 	public void setIpPointses(Set ipPointses) {
 		this.ipPointses = ipPointses;
+	}
+
+	public String getAllocEntity() {
+		return allocEntity;
+	}
+
+	public Integer getAllocStatusId() {
+		return allocStatusId;
+	}
+
+	public void setAllocEntity(String allocEntity) {
+		this.allocEntity = allocEntity;
+	}
+
+	public void setAllocStatusId(Integer allocStatusId) {
+		this.allocStatusId = allocStatusId;
 	}
 
 }

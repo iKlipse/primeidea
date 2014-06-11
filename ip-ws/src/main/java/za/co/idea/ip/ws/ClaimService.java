@@ -97,6 +97,7 @@ public class ClaimService {
 				message.setClaimCrtdDt(claim.getClaimCrtdDt());
 				message.setClaimDesc(claim.getClaimDesc());
 				message.setClaimId(claim.getClaimId());
+				message.setClaimComment(claim.getClaimComment());
 				message.setcStatusId(claim.getIpClaimStatus().getCsId());
 				message.setRewardsId(claim.getIpRewards().getRwId());
 				message.setUserId(claim.getIpUser().getUserId());
@@ -117,6 +118,7 @@ public class ClaimService {
 			IpClaim claim = ipClaimDAO.findById(id);
 			message.setClaimCrtdDt(claim.getClaimCrtdDt());
 			message.setClaimDesc(claim.getClaimDesc());
+			message.setClaimComment(claim.getClaimComment());
 			message.setClaimId(claim.getClaimId());
 			message.setcStatusId(claim.getIpClaimStatus().getCsId());
 			message.setRewardsId(claim.getIpRewards().getRwId());
@@ -138,6 +140,7 @@ public class ClaimService {
 				IpClaim claim = (IpClaim) object;
 				ClaimMessage message = new ClaimMessage();
 				message.setClaimCrtdDt(claim.getClaimCrtdDt());
+				message.setClaimComment(claim.getClaimComment());
 				message.setClaimDesc(claim.getClaimDesc());
 				message.setClaimId(claim.getClaimId());
 				message.setcStatusId(claim.getIpClaimStatus().getCsId());
@@ -163,6 +166,7 @@ public class ClaimService {
 				ClaimMessage message = new ClaimMessage();
 				message.setClaimCrtdDt(claim.getClaimCrtdDt());
 				message.setClaimDesc(claim.getClaimDesc());
+				message.setClaimComment(claim.getClaimComment());
 				message.setClaimId(claim.getClaimId());
 				message.setcStatusId(claim.getIpClaimStatus().getCsId());
 				message.setRewardsId(claim.getIpRewards().getRwId());

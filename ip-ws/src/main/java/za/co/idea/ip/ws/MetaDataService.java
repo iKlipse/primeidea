@@ -12,10 +12,15 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import za.co.idea.ip.orm.bean.IpChallengeCat;
+import za.co.idea.ip.orm.bean.IpChallengeStatus;
+import za.co.idea.ip.orm.bean.IpClaimStatus;
 import za.co.idea.ip.orm.bean.IpIdeaCat;
+import za.co.idea.ip.orm.bean.IpIdeaStatus;
 import za.co.idea.ip.orm.bean.IpRewardsCat;
+import za.co.idea.ip.orm.bean.IpRewardsStatus;
 import za.co.idea.ip.orm.bean.IpSecqList;
 import za.co.idea.ip.orm.bean.IpSolutionCat;
+import za.co.idea.ip.orm.bean.IpSolutionStatus;
 import za.co.idea.ip.orm.dao.IpChallengeCatDAO;
 import za.co.idea.ip.orm.dao.IpChallengeStatusDAO;
 import za.co.idea.ip.orm.dao.IpClaimStatusDAO;
@@ -212,7 +217,59 @@ public class MetaDataService {
 	public <T extends MetaDataMessage> List<T> listByTable(@PathParam("table") String table) {
 		List<T> ret = new ArrayList<T>();
 		try {
-			if (table.equalsIgnoreCase("IpChallengeCat")) {
+			if (table.equalsIgnoreCase("ip_challenge_status")) {
+				List vals = ipChallengeStatusDAO.findAll();
+				for (Object object : vals) {
+					MetaDataMessage message = new MetaDataMessage();
+					IpChallengeStatus cat = (IpChallengeStatus) object;
+					message.setId(cat.getCsId());
+					message.setDesc(cat.getCsDesc());
+					message.setTable("ip_challenge_status");
+					ret.add((T) message);
+				}
+			} else if (table.equalsIgnoreCase("ip_idea_status")) {
+				List vals = ipIdeaStatusDAO.findAll();
+				for (Object object : vals) {
+					MetaDataMessage message = new MetaDataMessage();
+					IpIdeaStatus cat = (IpIdeaStatus) object;
+					message.setId(cat.getIsId());
+					message.setDesc(cat.getIsDesc());
+					message.setTable("ip_idea_status");
+					ret.add((T) message);
+				}
+			}
+			if (table.equalsIgnoreCase("ip_claim_status")) {
+				List vals = ipClaimStatusDAO.findAll();
+				for (Object object : vals) {
+					MetaDataMessage message = new MetaDataMessage();
+					IpClaimStatus cat = (IpClaimStatus) object;
+					message.setId(cat.getCsId());
+					message.setDesc(cat.getCsDesc());
+					message.setTable("ip_claim_status");
+					ret.add((T) message);
+				}
+			}
+			if (table.equalsIgnoreCase("ip_solution_status")) {
+				List vals = ipSolutionStatusDAO.findAll();
+				for (Object object : vals) {
+					MetaDataMessage message = new MetaDataMessage();
+					IpSolutionStatus cat = (IpSolutionStatus) object;
+					message.setId(cat.getSsId());
+					message.setDesc(cat.getSsDesc());
+					message.setTable("ip_solution_status");
+					ret.add((T) message);
+				}
+			} else if (table.equalsIgnoreCase("ip_rewards_status")) {
+				List vals = ipRewardsStatusDAO.findAll();
+				for (Object object : vals) {
+					MetaDataMessage message = new MetaDataMessage();
+					IpRewardsStatus cat = (IpRewardsStatus) object;
+					message.setId(cat.getRsId());
+					message.setDesc(cat.getRsDesc());
+					message.setTable("ip_rewards_status");
+					ret.add((T) message);
+				}
+			} else if (table.equalsIgnoreCase("IpChallengeCat")) {
 				List vals = ipChallengeCatDAO.findAll();
 				for (Object object : vals) {
 					MetaDataMessage message = new MetaDataMessage();
