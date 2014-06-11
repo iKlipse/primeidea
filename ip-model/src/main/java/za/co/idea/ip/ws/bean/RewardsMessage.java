@@ -20,6 +20,7 @@ public class RewardsMessage {
 	private Date rwCrtdDt;
 	private Double rwPrice;
 	private Long rwQuantity;
+	private Long[] groupIdList;
 
 	public Long getRwId() {
 		return rwId;
@@ -131,6 +132,14 @@ public class RewardsMessage {
 
 	public void setRwQuantity(Long rwQuantity) {
 		this.rwQuantity = rwQuantity;
+	}
+
+	public Long[] getGroupIdList() {
+		return groupIdList;
+	}
+
+	public void setGroupIdList(Long[] groupIdList) {
+		this.groupIdList = groupIdList;
 	}
 
 }

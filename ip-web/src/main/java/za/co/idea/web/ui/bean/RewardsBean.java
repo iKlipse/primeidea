@@ -2,6 +2,7 @@ package za.co.idea.web.ui.bean;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class RewardsBean implements Serializable {
 	private static final long serialVersionUID = -2381598448445463625L;
@@ -22,6 +23,7 @@ public class RewardsBean implements Serializable {
 	private String rwFileType;
 	private Double rwPrice;
 	private Long rwQuantity;
+	private List<Long> groupIdList;
 
 	public Long getRwId() {
 		return rwId;
@@ -157,5 +159,13 @@ public class RewardsBean implements Serializable {
 
 	public void setRwQuantity(Long rwQuantity) {
 		this.rwQuantity = rwQuantity;
+	}
+
+	public List<Long> getGroupIdList() {
+		return groupIdList;
+	}
+
+	public void setGroupIdList(List<Long> groupIdList) {
+		this.groupIdList = groupIdList;
 	}
 }

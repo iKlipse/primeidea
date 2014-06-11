@@ -15,8 +15,11 @@ import za.co.idea.ip.orm.bean.IpAllocation;
 import za.co.idea.ip.orm.bean.IpPoints;
 import za.co.idea.ip.orm.bean.IpRewards;
 import za.co.idea.ip.orm.bean.IpRewardsCat;
+import za.co.idea.ip.orm.bean.IpRewardsGroup;
 import za.co.idea.ip.orm.bean.IpRewardsStatus;
 import za.co.idea.ip.orm.dao.IpAllocationDAO;
+import za.co.idea.ip.orm.dao.IpGroupDAO;
+import za.co.idea.ip.orm.dao.IpNativeSQLDAO;
 import za.co.idea.ip.orm.dao.IpPointsDAO;
 import za.co.idea.ip.orm.dao.IpRewardsCatDAO;
 import za.co.idea.ip.orm.dao.IpRewardsDAO;
@@ -39,6 +42,8 @@ public class RewardsService {
 	private IpRewardsGroupDAO ipRewardsGroupDAO;
 	private IpAllocationDAO ipAllocationDAO;
 	private IpPointsDAO ipPointsDAO;
+	private IpGroupDAO ipGroupDAO;
+	private IpNativeSQLDAO ipNativeSQLDAO;
 
 	@POST
 	@Path("/rewards/add")
@@ -62,6 +67,13 @@ public class RewardsService {
 			ipRewards.setRwPrice(rewards.getRwPrice());
 			ipRewards.setRwQuantity(rewards.getRwQuantity());
 			ipRewardsDAO.save(ipRewards);
+			for (Long gId : rewards.getGroupIdList()) {
+				IpRewardsGroup ipRewardsGroup = new IpRewardsGroup();
+				ipRewardsGroup.setRgId(ipNativeSQLDAO.getNextId(IpRewardsGroup.class));
+				ipRewardsGroup.setIpRewards(ipRewards);
+				ipRewardsGroup.setIpGroup(ipGroupDAO.findById(gId));
+				ipRewardsGroupDAO.save(ipRewardsGroup);
+			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
@@ -97,6 +109,14 @@ public class RewardsService {
 			ipRewards.setRwPrice(rewards.getRwPrice());
 			ipRewards.setRwQuantity(rewards.getRwQuantity());
 			ipRewardsDAO.merge(ipRewards);
+			ipRewardsGroupDAO.deleteByRewardsId(rewards.getRwId());
+			for (Long gId : rewards.getGroupIdList()) {
+				IpRewardsGroup ipRewardsGroup = new IpRewardsGroup();
+				ipRewardsGroup.setRgId(ipNativeSQLDAO.getNextId(IpRewardsGroup.class));
+				ipRewardsGroup.setIpRewards(ipRewards);
+				ipRewardsGroup.setIpGroup(ipGroupDAO.findById(gId));
+				ipRewardsGroupDAO.save(ipRewardsGroup);
+			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");

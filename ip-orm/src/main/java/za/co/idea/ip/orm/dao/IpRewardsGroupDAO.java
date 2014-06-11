@@ -2,6 +2,7 @@ package za.co.idea.ip.orm.dao;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -167,6 +168,69 @@ public class IpRewardsGroupDAO extends BaseHibernateDAO {
 			log.error("attach failed", re);
 			transaction.rollback();
 			session.close();
+			throw re;
+		}
+	}
+
+	public void deleteByRewardsId(Long id) {
+		log.debug("Deleting Rewards Groups By Id : " + id);
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			Query query = session.getNamedQuery("deleteRGByRwId");
+			query.setLong("id", id);
+			query.executeUpdate();
+			transaction.commit();
+			session.close();
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			transaction.rollback();
+			throw re;
+		}
+	}
+
+	public List fetchByRewardsId(Long id) {
+		log.debug("Fetching Group Users By Id : " + id);
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			Query query = session.getNamedQuery("fetchRGByRwId");
+			query.setLong("id", id);
+			List ret = query.list();
+			for (Object object : ret) {
+				IpRewardsGroup fg = (IpRewardsGroup) object;
+				Hibernate.initialize(fg.getIpGroup());
+				Hibernate.initialize(fg.getIpRewards());
+			}
+			transaction.commit();
+			session.close();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			transaction.rollback();
+			throw re;
+		}
+	}
+
+	public List fetchByGroupId(Long id) {
+		log.debug("Fetching Group Users By Id : " + id);
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			Query query = session.getNamedQuery("fetchRGByGroupId");
+			query.setLong("id", id);
+			List ret = query.list();
+			for (Object object : ret) {
+				IpRewardsGroup fg = (IpRewardsGroup) object;
+				Hibernate.initialize(fg.getIpGroup());
+				Hibernate.initialize(fg.getIpRewards());
+			}
+			transaction.commit();
+			session.close();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
