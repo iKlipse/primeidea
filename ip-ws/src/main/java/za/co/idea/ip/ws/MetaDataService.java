@@ -11,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import za.co.idea.ip.orm.bean.IpCategory;
 import za.co.idea.ip.orm.bean.IpChallengeCat;
 import za.co.idea.ip.orm.bean.IpChallengeStatus;
 import za.co.idea.ip.orm.bean.IpClaimStatus;
@@ -21,6 +22,7 @@ import za.co.idea.ip.orm.bean.IpRewardsStatus;
 import za.co.idea.ip.orm.bean.IpSecqList;
 import za.co.idea.ip.orm.bean.IpSolutionCat;
 import za.co.idea.ip.orm.bean.IpSolutionStatus;
+import za.co.idea.ip.orm.dao.IpCategoryDAO;
 import za.co.idea.ip.orm.dao.IpChallengeCatDAO;
 import za.co.idea.ip.orm.dao.IpChallengeStatusDAO;
 import za.co.idea.ip.orm.dao.IpClaimStatusDAO;
@@ -47,6 +49,7 @@ public class MetaDataService {
 	private IpSolutionCatDAO ipSolutionCatDAO;
 	private IpSolutionStatusDAO ipSolutionStatusDAO;
 	private IpSecqListDAO ipSecqListDAO;
+	private IpCategoryDAO ipCategoryDAO;
 
 	@POST
 	@Path("/add")
@@ -109,6 +112,18 @@ public class MetaDataService {
 			cat.setIslId(mData.getId());
 			try {
 				ipSecqListDAO.save(cat);
+				success = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				success = false;
+				msg = e.getMessage();
+			}
+		} else if (mData.getTable().equalsIgnoreCase("IpCategory")) {
+			IpCategory cat = new IpCategory();
+			cat.setCategoryDesc(mData.getDesc());
+			cat.setCategoryId(mData.getId());
+			try {
+				ipCategoryDAO.save(cat);
 				success = true;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -190,6 +205,18 @@ public class MetaDataService {
 			cat.setIslId(mData.getId());
 			try {
 				ipSecqListDAO.merge(cat);
+				success = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				success = false;
+				msg = e.getMessage();
+			}
+		} else if (mData.getTable().equalsIgnoreCase("IpCategory")) {
+			IpCategory cat = new IpCategory();
+			cat.setCategoryDesc(mData.getDesc());
+			cat.setCategoryId(mData.getId());
+			try {
+				ipCategoryDAO.merge(cat);
 				success = true;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -319,6 +346,16 @@ public class MetaDataService {
 					message.setTable("ip_secq_list");
 					ret.add((T) message);
 				}
+			} else if (table.equalsIgnoreCase("IpCategory")) {
+				List vals = ipCategoryDAO.findAll();
+				for (Object object : vals) {
+					MetaDataMessage message = new MetaDataMessage();
+					IpCategory cat = (IpCategory) object;
+					message.setDesc(cat.getCategoryDesc());
+					message.setId(cat.getCategoryId());
+					message.setTable("ip_category");
+					ret.add((T) message);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -404,5 +441,13 @@ public class MetaDataService {
 
 	public void setIpSecqListDAO(IpSecqListDAO ipSecqListDAO) {
 		this.ipSecqListDAO = ipSecqListDAO;
+	}
+
+	public IpCategoryDAO getIpCategoryDAO() {
+		return ipCategoryDAO;
+	}
+
+	public void setIpCategoryDAO(IpCategoryDAO ipCategoryDAO) {
+		this.ipCategoryDAO = ipCategoryDAO;
 	}
 }

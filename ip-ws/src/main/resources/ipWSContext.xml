@@ -72,6 +72,7 @@
 		<property name="ipSolutionCatDAO" ref="IpSolutionCatDAO" />
 		<property name="ipSolutionStatusDAO" ref="IpSolutionStatusDAO" />
 		<property name="ipSecqListDAO" ref="IpSecqListDAO" />
+		<property name="IpCategoryDAO" ref="IpCategoryDAO" />
 	</bean>
 	<bean id="documentUploadService" class="za.co.idea.ip.ws.DocumentUploadService">
 		<property name="ipBlobDAO" ref="IpBlobDAO" />
