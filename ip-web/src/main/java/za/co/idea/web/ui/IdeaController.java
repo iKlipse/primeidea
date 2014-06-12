@@ -541,6 +541,7 @@ public class IdeaController implements Serializable {
 			bean.setIdeaTitle(ideaMessage.getIdeaTitle());
 			bean.setSelCatId(ideaMessage.getSelCatId());
 			bean.setSetStatusId(ideaMessage.getSetStatusId());
+			bean.setGroupIdList(getIdsFromArray(ideaMessage.getGroupIdList()));
 			ret.add(bean);
 		}
 		return ret;
@@ -707,6 +708,13 @@ public class IdeaController implements Serializable {
 			ret[i] = bean.getgId();
 			i++;
 		}
+		return ret;
+	}
+
+	private List<Long> getIdsFromArray(Long[] ae) {
+		List<Long> ret = new ArrayList<Long>();
+		for (Long id : ae)
+			ret.add(id);
 		return ret;
 	}
 

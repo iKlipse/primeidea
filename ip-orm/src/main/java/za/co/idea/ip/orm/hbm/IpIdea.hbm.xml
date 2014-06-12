@@ -24,7 +24,7 @@
 			<column name="idea_desc" length="1000" not-null="true" />
 		</property>
 		<property name="ideaBa" type="java.lang.String">
-			<column name="idea_ba" length="1000" not-null="true" />
+			<column name="idea_ba" length="1000" />
 		</property>
 		<property name="ideaDate" type="java.sql.Timestamp">
 			<column name="idea_date" length="19" not-null="true" />

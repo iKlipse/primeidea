@@ -836,6 +836,7 @@ public class ChallengeController implements Serializable {
 			bean.setStatusId(challengeMessage.getStatusId());
 			bean.setTag(challengeMessage.getTag());
 			bean.setTitle(challengeMessage.getTitle());
+			bean.setGroupIdList(getIdsFromArray(challengeMessage.getGroupIdList()));
 			ret.add(bean);
 		}
 		return ret;
@@ -1246,6 +1247,13 @@ public class ChallengeController implements Serializable {
 			ret[i] = bean.getgId();
 			i++;
 		}
+		return ret;
+	}
+
+	private List<Long> getIdsFromArray(Long[] ae) {
+		List<Long> ret = new ArrayList<Long>();
+		for (Long id : ae)
+			ret.add(id);
 		return ret;
 	}
 

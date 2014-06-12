@@ -154,6 +154,16 @@ public class RewardsService {
 				rewards.setRwValue(ipRewards.getRwValue());
 				rewards.setRwPrice(ipRewards.getRwPrice());
 				rewards.setRwQuantity(ipRewards.getRwQuantity());
+				List val = ipRewardsGroupDAO.fetchByRewardsId(ipRewards.getRwId());
+				if (val != null) {
+					Long[] grps = new Long[val.size()];
+					int i = 0;
+					for (Object obj : val) {
+						grps[i] = ((IpRewardsGroup) obj).getIpGroup().getGroupId();
+						i++;
+					}
+					rewards.setGroupIdList(grps);
+				}
 				ret.add((T) rewards);
 			}
 		} catch (Exception e) {
@@ -608,6 +618,22 @@ public class RewardsService {
 
 	public void setIpPointsDAO(IpPointsDAO ipPointsDAO) {
 		this.ipPointsDAO = ipPointsDAO;
+	}
+
+	public IpGroupDAO getIpGroupDAO() {
+		return ipGroupDAO;
+	}
+
+	public IpNativeSQLDAO getIpNativeSQLDAO() {
+		return ipNativeSQLDAO;
+	}
+
+	public void setIpGroupDAO(IpGroupDAO ipGroupDAO) {
+		this.ipGroupDAO = ipGroupDAO;
+	}
+
+	public void setIpNativeSQLDAO(IpNativeSQLDAO ipNativeSQLDAO) {
+		this.ipNativeSQLDAO = ipNativeSQLDAO;
 	}
 
 }

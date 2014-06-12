@@ -230,6 +230,17 @@ public class IdeaService {
 					idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
 				if (ipIdea.getIpUser() != null)
 					idea.setCrtdById(ipIdea.getIpUser().getUserId());
+				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
+				if (val != null) {
+					Long[] grps = new Long[val.size()];
+					int i = 0;
+					for (Object obj : val) {
+						grps[i] = ((IpIdeaGroup) obj).getIpGroup().getGroupId();
+						i++;
+					}
+					idea.setGroupIdList(grps);
+				}
+
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {

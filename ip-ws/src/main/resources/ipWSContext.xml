@@ -52,6 +52,8 @@
 		<property name="ipRewardsGroupDAO" ref="IpRewardsGroupDAO" />
 		<property name="ipAllocationDAO" ref="IpAllocationDAO" />
 		<property name="ipPointsDAO" ref="IpPointsDAO" />
+		<property name="ipNativeSQLDAO" ref="IpNativeSQLDAO" />
+		<property name="ipGroupDAO" ref="IpGroupDAO" />
 	</bean>
 	<bean id="claimService" class="za.co.idea.ip.ws.ClaimService">
 		<property name="ipUserDAO" ref="IpUserDAO" />
