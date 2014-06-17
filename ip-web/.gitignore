@@ -1,6 +1,5 @@
 /target
 /.settings
 *attach*.pid
-/target
-/target
-/.metadata
+.project
+.classpath
