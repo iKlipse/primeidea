@@ -62,6 +62,9 @@ public class AdminController implements Serializable {
 	private DualListModel<UserBean> userTwinSelect;
 	private DualListModel<GroupBean> groupTwinSelect;
 	private boolean available;
+	private boolean availableID;
+	private boolean availableEmail;
+	private boolean availableEmpID;
 	private String secA;
 	private String secQ;
 	private StreamedContent image;
@@ -120,6 +123,8 @@ public class AdminController implements Serializable {
 			bean.setLastLoginDt(userMessage.getLastLoginDt());
 			loggedScrName = userMessage.getScName();
 			secqList = fetchAllSecQ();
+			AccessController controller = new AccessController(bean.getuId());
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("accessBean", controller);
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", bean);
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userId", bean.getuId());
 			try {
@@ -386,6 +391,7 @@ public class AdminController implements Serializable {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter Screen Name to Check Availability", "Enter Screen Name to Check Availability");
 			FacesContext.getCurrentInstance().addMessage("txtSCName", exceptionMessage);
 		}
+		// unique screen name validation
 		WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/screenName/" + userBean.getScName());
 		Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 		checkAvailablityClient.close();
@@ -397,12 +403,55 @@ public class AdminController implements Serializable {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Screen Name Available", "Screen Name Available");
 			FacesContext.getCurrentInstance().addMessage("txtSCName", exceptionMessage);
 		}
+
+		// unique email validation
+		if (userBean.geteMail() == null || userBean.geteMail().length() == 0) {
+
+		} else {
+			checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/email/" + userBean.geteMail());
+			Boolean availE = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
+			checkAvailablityClient.close();
+			availableEmail = availE.booleanValue();
+		}
+		// unique Id Number validation
+		if (userBean.getIdNum() == null || userBean.getIdNum() == 0) {
+
+		} else {
+			checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/idNumber/" + userBean.getIdNum());
+			Boolean availID = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
+			checkAvailablityClient.close();
+			availableID = availID.booleanValue();
+		}
+		// unique Employee ID validation
+		if (userBean.getEmployeeId() == null || userBean.getEmployeeId().length() == 0) {
+
+		} else {
+			checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/employeeId/" + userBean.getEmployeeId());
+			Boolean availEmpID = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
+			checkAvailablityClient.close();
+			availEmpID = availEmpID.booleanValue();
+		}
 	}
 
 	public String saveUser() {
 		try {
 			if (available) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Screen Name Not Available", "Screen Name Not Available");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
+			if (availableID) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ID Number exists already", "ID Number exists already");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
+			if (availableEmpID) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Employee ID exists already", "Employee ID exists already");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
+			if (availableEmail) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email exists already", "Email exists already");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
@@ -479,7 +528,7 @@ public class AdminController implements Serializable {
 	}
 
 	private List<String> validateUser() {
-		ArrayList<String> ret = new ArrayList<>();
+		ArrayList<String> ret = new ArrayList<String>();
 		if (userBean.getfName() == null || userBean.getfName().length() == 0) {
 			ret.add("FirstName is Mandatory");
 		}
@@ -524,7 +573,7 @@ public class AdminController implements Serializable {
 	}
 
 	private ArrayList<String> validateLogin() {
-		ArrayList<String> ret = new ArrayList<>();
+		ArrayList<String> ret = new ArrayList<String>();
 		if (userBean.getScName() == null || userBean.getScName().length() == 0) {
 			ret.add("User Name is Mandatory");
 		}
@@ -535,7 +584,7 @@ public class AdminController implements Serializable {
 	}
 
 	private ArrayList<String> validateRPwd() {
-		ArrayList<String> ret = new ArrayList<>();
+		ArrayList<String> ret = new ArrayList<String>();
 		if (userBean.getScName() == null || userBean.getScName().length() == 0) {
 			ret.add("User Name is Mandatory");
 		}
@@ -562,6 +611,14 @@ public class AdminController implements Serializable {
 
 	public String updateUser() {
 		try {
+			List<String> errors = validateUser();
+			if (errors.size() > 0) {
+				for (String error : errors) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
+				return "";
+			}
 			WebClient updateUserClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/modify");
 			UserMessage bean = new UserMessage();
 			bean.setBio(userBean.getBio());

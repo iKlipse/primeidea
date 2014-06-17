@@ -219,4 +219,19 @@ public class IpFunctionDAO extends BaseHibernateDAO {
 			throw re;
 		}
 	}
+
+	public List getFunctionByUserId(Long id) {
+		log.debug("Fetching Functions by Query :: getFunctionByUserId");
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("getFunctionByUserId");
+			query.setLong("id", id);
+			List ret = query.list();
+			session.close();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
 }

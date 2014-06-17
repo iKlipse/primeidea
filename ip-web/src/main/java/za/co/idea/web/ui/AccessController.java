@@ -1,11 +1,22 @@
 package za.co.idea.web.ui;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.ws.rs.core.MediaType;
 
-public class AccessController {
+import org.apache.cxf.jaxrs.client.WebClient;
+import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 
-	private Long userId;
+import za.co.idea.ip.ws.util.CustomObjectMapper;
+
+public class AccessController implements Serializable {
+	private static final long serialVersionUID = -1940992788177836525L;
+	private List<String> functions;
 	private boolean createUserEnabled;
 	private boolean createGroupEnabled;
 	private boolean createFunctionEnabled;
@@ -19,24 +30,24 @@ public class AccessController {
 	private boolean editChallengeEnabled;
 	private boolean editIdeaEnabled;
 
-	public void initializeAccess() {
+	public AccessController(Long userId) {
 		if (userId == null) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Initialize access without User Session", "Cannot Initialize access without User Session");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		} else {
-
+			WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/func/list/user/" + userId, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+			client.header("Content-Type", "application/json");
+			client.header("Accept", "application/json");
+			String[] funcs = client.accept(MediaType.APPLICATION_JSON).get(String[].class);
+			functions = new ArrayList<String>();
+			for (String string : funcs) {
+				functions.add(string);
+			}
 		}
 	}
 
-	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-
 	public boolean isCreateUserEnabled() {
+		createUserEnabled = functions.contains("Create User");
 		return createUserEnabled;
 	}
 
@@ -45,6 +56,7 @@ public class AccessController {
 	}
 
 	public boolean isCreateGroupEnabled() {
+		createGroupEnabled = functions.contains("Create Group");
 		return createGroupEnabled;
 	}
 
@@ -53,6 +65,7 @@ public class AccessController {
 	}
 
 	public boolean isCreateFunctionEnabled() {
+		createFunctionEnabled = functions.contains("Create Function");
 		return createFunctionEnabled;
 	}
 
@@ -61,6 +74,7 @@ public class AccessController {
 	}
 
 	public boolean isCreateRewardsEnabled() {
+		createRewardsEnabled = functions.contains("Create Rewards");
 		return createRewardsEnabled;
 	}
 
@@ -69,6 +83,7 @@ public class AccessController {
 	}
 
 	public boolean isCreateChallengeEnabled() {
+		createChallengeEnabled = functions.contains("Create Challenge");
 		return createChallengeEnabled;
 	}
 
@@ -77,6 +92,7 @@ public class AccessController {
 	}
 
 	public boolean isCreateIdeaEnabled() {
+		createIdeaEnabled = functions.contains("Create Idea");
 		return createIdeaEnabled;
 	}
 
@@ -85,6 +101,7 @@ public class AccessController {
 	}
 
 	public boolean isEditUserEnabled() {
+		editUserEnabled = functions.contains("Edit User");
 		return editUserEnabled;
 	}
 
@@ -93,6 +110,7 @@ public class AccessController {
 	}
 
 	public boolean isEditGroupEnabled() {
+		editGroupEnabled = functions.contains("Edit Group");
 		return editGroupEnabled;
 	}
 
@@ -101,6 +119,7 @@ public class AccessController {
 	}
 
 	public boolean isEditFunctionEnabled() {
+		editFunctionEnabled = functions.contains("Edit Function");
 		return editFunctionEnabled;
 	}
 
@@ -109,6 +128,7 @@ public class AccessController {
 	}
 
 	public boolean isEditRewardsEnabled() {
+		editRewardsEnabled = functions.contains("Edit Rewards");
 		return editRewardsEnabled;
 	}
 
@@ -117,6 +137,7 @@ public class AccessController {
 	}
 
 	public boolean isEditChallengeEnabled() {
+		editChallengeEnabled = functions.contains("Edit Challenge");
 		return editChallengeEnabled;
 	}
 
@@ -125,11 +146,20 @@ public class AccessController {
 	}
 
 	public boolean isEditIdeaEnabled() {
+		editIdeaEnabled = functions.contains("Edit Idea");
 		return editIdeaEnabled;
 	}
 
 	public void setEditIdeaEnabled(boolean editIdeaEnabled) {
 		this.editIdeaEnabled = editIdeaEnabled;
+	}
+
+	public List<String> getFunctions() {
+		return functions;
+	}
+
+	public void setFunctions(List<String> functions) {
+		this.functions = functions;
 	}
 
 }

@@ -313,9 +313,6 @@ public class IdeaController implements Serializable {
 		if (ideaBean.getIdeaDesc() == null || ideaBean.getIdeaDesc().length() == 0) {
 			ret.add("Description is Mandatory");
 		}
-		if (ideaBean.getIdeaTag() == null || ideaBean.getIdeaTag().length() == 0) {
-			ret.add("Tags is Mandatory");
-		}
 		return ret;
 	}
 

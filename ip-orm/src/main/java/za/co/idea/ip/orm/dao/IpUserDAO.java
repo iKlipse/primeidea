@@ -38,6 +38,7 @@ public class IpUserDAO extends BaseHibernateDAO {
 	public static final String USER_FB_HANDLE = "userFbHandle";
 	public static final String USER_TW_HANDLE = "userTwHandle";
 	public static final String USER_STATUS = "userStatus";
+	public static final String USER_EMPLOYEEID = "userEmployeeId";
 
 	public void save(IpUser transientInstance) {
 		log.debug("saving IpUser instance");
@@ -174,6 +175,10 @@ public class IpUserDAO extends BaseHibernateDAO {
 
 	public List findByUserStatus(Object userStatus) {
 		return findByProperty(USER_STATUS, userStatus);
+	}
+
+	public List findByUserEmployeeId(Object userEmployeeId) {
+		return findByProperty(USER_EMPLOYEEID, userEmployeeId);
 	}
 
 	public List findAll() {

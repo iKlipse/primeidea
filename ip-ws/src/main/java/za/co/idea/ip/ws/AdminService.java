@@ -184,6 +184,25 @@ public class AdminService {
 	}
 
 	@GET
+	@Path("/func/list/user/{id}")
+	@Produces("application/json")
+	public String[] listFunctionByUser(@PathParam("id") Long id) {
+		String[] ret = null;
+		try {
+			List functions = ipFunctionDAO.getFunctionByUserId(id);
+			ret = new String[functions.size()];
+			int i = 0;
+			for (Object object : functions) {
+				ret[i] = (String) object;
+				i++;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@GET
 	@Path("/func/get/{id}")
 	@Produces("application/json")
 	public FunctionMessage getFunctionById(@PathParam("id") Long id) {
@@ -523,6 +542,48 @@ public class AdminService {
 		try {
 			List usersByScName = ipUserDAO.findByUserScreenName(sc);
 			Boolean ret = (usersByScName != null && usersByScName.size() > 0);
+			return ret;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@GET
+	@Path("/user/check/email/{email}")
+	@Produces("application/json")
+	public Boolean checkEmail(@PathParam("email") String email) {
+		try {
+			List usersByEmail = ipUserDAO.findByUserEmail(email);
+			Boolean ret = (usersByEmail != null && usersByEmail.size() > 0);
+			return ret;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@GET
+	@Path("/user/check/idNumber/{id}")
+	@Produces("application/json")
+	public Boolean checkIDNumber(@PathParam("id") String id) {
+		try {
+			List usersByIDNumber = ipUserDAO.findByUserIdNum(id);
+			Boolean ret = (usersByIDNumber != null && usersByIDNumber.size() > 0);
+			return ret;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@GET
+	@Path("/user/check/employeeId/{eId}")
+	@Produces("application/json")
+	public Boolean checkEmployeeID(@PathParam("eId") String eId) {
+		try {
+			List usersByEmployeeID = ipUserDAO.findByUserScreenName(eId);
+			Boolean ret = (usersByEmployeeID != null && usersByEmployeeID.size() > 0);
 			return ret;
 		} catch (Exception e) {
 			e.printStackTrace();
