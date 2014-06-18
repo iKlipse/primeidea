@@ -103,6 +103,10 @@ public class AdminController implements Serializable {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid User Name Password", "Invalid User Name Password");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
+		} else if (userMessage.getuId() == -999l) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "User Profile De-Activated. Please contact Admin.", "User Profile De-Activated. Please contact Admin.");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
 		} else {
 			UserBean bean = new UserBean();
 			bean.setBio(userMessage.getBio());

@@ -5,7 +5,7 @@
 			<f:facet name="header">
 					Maintain Meta-Data
 				</f:facet>
-			<p:dataTable id="dtMetaData" widgetVar="dtMetaData" value="#{metaDataBean.beans}" var="bean" rows="5" paginator="true" paginatorPosition="bottom" emptyMessage="No MetaData Found">
+			<p:dataTable id="dtMetaData" widgetVar="dtMetaData" value="#{metaDataBean.beans}" var="bean" rows="10" paginator="true" paginatorPosition="bottom" emptyMessage="No MetaData Found">
 				<f:facet name="header">
 					<p:selectOneMenu id="somSelectMeta" value="#{metaDataBean.table}">
 						<p:ajax listener="#{metaDataBean.changeMetaData}" update="dtMetaData,:ideaFrm:pnlModMetaData,:ideaFrm:pnlAddMetaData" />
@@ -13,12 +13,10 @@
 						<f:selectItems value="#{metaDataBean.metaList}" />
 					</p:selectOneMenu>
 				</f:facet>
-				<p:column>
-					<f:facet name="header">ID</f:facet>
+				<p:column sortBy="#{bean.id}" headerText="ID">
 					<p:outputLabel id="lblId" value="#{bean.id}" />
 				</p:column>
-				<p:column>
-					<f:facet name="header">Description</f:facet>
+				<p:column sortBy="#{bean.desc}" headerText="Description">
 					<p:outputLabel id="lblDesc" value="#{bean.desc}" />
 				</p:column>
 				<p:column>
@@ -28,7 +26,7 @@
 				</p:column>
 				<f:facet name="footer">
 					<p:commandButton id="addButton" value="Add" ajax="false" immediate="true" action="#{metaDataBean.showMetaDataAdd}" rendered="#{metaDataBean.showAddBtn}" />
-					<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{adminBean.redirectHome}" />
+					<p:commandButton id="btnCancel" value="Return To Home" ajax="false" action="#{adminBean.redirectHome}" />
 				</f:facet>
 			</p:dataTable>
 			<br />

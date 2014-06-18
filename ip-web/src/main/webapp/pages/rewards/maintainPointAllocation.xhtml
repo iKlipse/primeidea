@@ -42,7 +42,7 @@
 				</p:column>
 				<f:facet name="footer">
 					<p:commandButton id="addButton" value="Add" ajax="false" immediate="true" action="#{rewardsBean.showAllocationAdd}" rendered="#{rewardsBean.showAddBtn}" />
-					<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{rewardsBean.showPointAllocation}" />
+					<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{rewardsBean.showPointAllocation}" />
 				</f:facet>
 			</p:dataTable>
 			<p:panelGrid id="pnlAddPntAlloc" rendered="#{rewardsBean.showAddPanel}" columns="1">

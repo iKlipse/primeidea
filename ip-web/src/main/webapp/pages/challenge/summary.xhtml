@@ -50,7 +50,7 @@
 					</p:panelGrid>
 				</p:column>
 				<f:facet name="footer">
-					<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{adminBean.redirectHome}" />
+					<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{adminBean.redirectHome}" />
 				</f:facet>
 			</p:panelGrid>
 			<p:overlayPanel dynamic="true" for="giComment" showEvent="mouseover" hideEvent="mousedown" dismissable="true" showCloseIcon="true">
@@ -101,10 +101,10 @@
 								<p:outputLabel id="txtIDesc" value="#{sol.desc}" escape="false" />
 							</p:column>
 							<p:column>
-								<p:outputLabel id="lblITag" value="Tags : " />
+								<p:outputLabel id="lblICrtdDt" value="Created Date : " />
 							</p:column>
 							<p:column>
-								<p:outputLabel id="txtITag" value="#{sol.tags}" escape="false" />
+								<p:outputLabel id="txtICrtdDt" value="#{sol.crtdDt}" escape="false" />
 							</p:column>
 						</p:panelGrid>
 					</p:panel>

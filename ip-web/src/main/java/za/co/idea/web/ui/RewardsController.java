@@ -280,7 +280,7 @@ public class RewardsController implements Serializable {
 			message.setRwExpiryDt(rewardsBean.getRwExpiryDt());
 			message.setRwPrice(rewardsBean.getRwPrice());
 			message.setRwQuantity(rewardsBean.getRwQuantity());
-			message.setGroupIdList(getSelGroupIds());
+			// message.setGroupIdList(getSelGroupIds());
 			ResponseMessage response = addRewardsClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			addRewardsClient.close();
 			if (response.getStatusCode() == 0) {
@@ -350,7 +350,7 @@ public class RewardsController implements Serializable {
 			message.setRwExpiryDt(rewardsBean.getRwExpiryDt());
 			message.setRwPrice(rewardsBean.getRwPrice());
 			message.setRwQuantity(rewardsBean.getRwQuantity());
-			message.setGroupIdList(getSelGroupIds());
+			// message.setGroupIdList(getSelGroupIds());
 			ResponseMessage response = updateRewardsClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			updateRewardsClient.close();
 			if (response.getStatusCode() == 0) {
@@ -554,7 +554,9 @@ public class RewardsController implements Serializable {
 			bean.setRwValue(message.getRwValue());
 			bean.setRwPrice(message.getRwPrice());
 			bean.setRwQuantity(message.getRwQuantity());
-			bean.setGroupIdList(getIdsFromArray(message.getGroupIdList()));
+//			bean.setGroupIdList(getIdsFromArray(message.getGroupIdList()));
+			bean.setRwImgAvail(message.isRwImgAvail());
+			bean.setRwUrl(message.getRwUrl());
 			ret.add(bean);
 		}
 		return ret;
@@ -581,6 +583,8 @@ public class RewardsController implements Serializable {
 			bean.setRwValue(message.getRwValue());
 			bean.setRwPrice(message.getRwPrice());
 			bean.setRwQuantity(message.getRwQuantity());
+			bean.setRwImgAvail(message.isRwImgAvail());
+			bean.setRwUrl(message.getRwUrl());
 			ret.add(bean);
 		}
 		return ret;
@@ -723,22 +727,22 @@ public class RewardsController implements Serializable {
 		return bean;
 	}
 
-	private Long[] getSelGroupIds() {
-		Long[] ret = new Long[groupTwinSelect.getTarget().size()];
-		int i = 0;
-		for (GroupBean bean : groupTwinSelect.getTarget()) {
-			ret[i] = bean.getgId();
-			i++;
-		}
-		return ret;
-	}
+	// private Long[] getSelGroupIds() {
+	// Long[] ret = new Long[groupTwinSelect.getTarget().size()];
+	// int i = 0;
+	// for (GroupBean bean : groupTwinSelect.getTarget()) {
+	// ret[i] = bean.getgId();
+	// i++;
+	// }
+	// return ret;
+	// }
 
-	private List<Long> getIdsFromArray(Long[] ae) {
-		List<Long> ret = new ArrayList<Long>();
-		for (Long id : ae)
-			ret.add(id);
-		return ret;
-	}
+	// private List<Long> getIdsFromArray(Long[] ae) {
+	// List<Long> ret = new ArrayList<Long>();
+	// for (Long id : ae)
+	// ret.add(id);
+	// return ret;
+	// }
 
 	public RewardsBean getRewardsBean() {
 		return rewardsBean;

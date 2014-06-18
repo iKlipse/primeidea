@@ -38,7 +38,7 @@
 		<return alias="sol" class="za.co.idea.ip.orm.bean.IpSolution" />
 	</sql-query>
 	<sql-query name="getSolutionByChallenge">
-		select sol.* from ip_solution sol where sol.sol_chal_id=:id
+		select sol.* from ip_solution sol where sol.sol_chal_id=:id order by sol.sol_crtd_dt desc
 		<return alias="sol" class="za.co.idea.ip.orm.bean.IpSolution" />
 	</sql-query>
 	<sql-query name="getSolutionByStatus">

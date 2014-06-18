@@ -231,7 +231,7 @@ public class IpSolutionDAO extends BaseHibernateDAO {
 	}
 
 	public List findByChalId(Long id) {
-		log.debug("Fetching Challenge by Query :: getSolutionByStatus");
+		log.debug("Fetching Challenge by Query :: getSolutionByChallenge");
 		Session session = getSession();
 		try {
 			Query query = session.getNamedQuery("getSolutionByChallenge");

@@ -613,26 +613,30 @@ public class AdminService {
 			List logins = ipLoginDAO.verifyLogin(login, pwd);
 			IpLogin ipLogin = (IpLogin) logins.get(0);
 			IpUser ipUser = ipLogin.getIpUser();
-			user.setuId(ipUser.getUserId());
-			user.setContact(ipUser.getUserContact());
-			user.seteMail(ipUser.getUserEmail());
-			user.setfName(ipUser.getUserFName());
-			user.setIdNum(ipUser.getUserIdNum());
-			user.setlName(ipUser.getUserLName());
-			user.setScName(ipUser.getUserScreenName());
-			user.setSkills(ipUser.getUserSkills());
-			user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
-			if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
-				user.setFbHandle(ipUser.getUserFbHandle());
-			if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
-				user.setBio(ipUser.getUserBio());
-			if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
-				user.setmName(ipUser.getUserMName());
-			if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
-				user.setTwHandle(ipUser.getUserTwHandle());
-			user.setLastLoginDt(ipLogin.getLoginLastDt());
-			ipLogin.setLoginLastDt(new Timestamp(System.currentTimeMillis()));
-			ipLoginDAO.merge(ipLogin);
+			if (ipUser.getUserStatus().equalsIgnoreCase("n")) {
+				user.setuId(-999l);
+			} else {
+				user.setuId(ipUser.getUserId());
+				user.setContact(ipUser.getUserContact());
+				user.seteMail(ipUser.getUserEmail());
+				user.setfName(ipUser.getUserFName());
+				user.setIdNum(ipUser.getUserIdNum());
+				user.setlName(ipUser.getUserLName());
+				user.setScName(ipUser.getUserScreenName());
+				user.setSkills(ipUser.getUserSkills());
+				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
+				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
+					user.setFbHandle(ipUser.getUserFbHandle());
+				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
+					user.setBio(ipUser.getUserBio());
+				if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
+					user.setmName(ipUser.getUserMName());
+				if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
+					user.setTwHandle(ipUser.getUserTwHandle());
+				user.setLastLoginDt(ipLogin.getLoginLastDt());
+				ipLogin.setLoginLastDt(new Timestamp(System.currentTimeMillis()));
+				ipLoginDAO.merge(ipLogin);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

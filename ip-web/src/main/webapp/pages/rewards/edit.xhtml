@@ -100,18 +100,18 @@
 				<p:column>
 					<p:fileUpload style="width: 100%" id="fuCUpload" fileUploadListener="#{rewardsBean.rwFileUploadHandle}" multiple="false" />
 				</p:column>
-				<p:column>
+<!-- 				<p:column>
 					<p:outputLabel id="lblFuncGrps" value="Rewards Groups" />
 				</p:column>
 				<p:column>
 					<p:pickList style="width: 100%" id="plGroupPick" converter="groupConverter" value="#{rewardsBean.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" />
 				</p:column>
-				<p:row>
+ -->				<p:row>
 					<p:column>
 						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{rewardsBean.updateRewards}" />
 					</p:column>
 					<p:column>
-						<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{rewardsBean.showViewReward}" />
+						<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{rewardsBean.showViewReward}" />
 					</p:column>
 				</p:row>
 

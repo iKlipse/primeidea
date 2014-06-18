@@ -150,13 +150,14 @@ public class IdeaService {
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
-			for (Long gId : idea.getGroupIdList()) {
-				IpIdeaGroup ipIdeaGroup = new IpIdeaGroup();
-				ipIdeaGroup.setIgId(ipNativeSQLDAO.getNextId(IpIdeaGroup.class));
-				ipIdeaGroup.setIpIdea(ipIdea);
-				ipIdeaGroup.setIpGroup(ipGroupDAO.findById(gId));
-				ipIdeaGroupDAO.save(ipIdeaGroup);
-			}
+			if (idea.getGroupIdList() != null && idea.getGroupIdList().length > 0)
+				for (Long gId : idea.getGroupIdList()) {
+					IpIdeaGroup ipIdeaGroup = new IpIdeaGroup();
+					ipIdeaGroup.setIgId(ipNativeSQLDAO.getNextId(IpIdeaGroup.class));
+					ipIdeaGroup.setIpIdea(ipIdea);
+					ipIdeaGroup.setIpGroup(ipGroupDAO.findById(gId));
+					ipIdeaGroupDAO.save(ipIdeaGroup);
+				}
 			return message;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -191,13 +192,14 @@ public class IdeaService {
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
 			ipIdeaGroupDAO.deleteByIdeaId(idea.getIdeaId());
-			for (Long gId : idea.getGroupIdList()) {
-				IpIdeaGroup ipIdeaGroup = new IpIdeaGroup();
-				ipIdeaGroup.setIgId(ipNativeSQLDAO.getNextId(IpIdeaGroup.class));
-				ipIdeaGroup.setIpIdea(ipIdea);
-				ipIdeaGroup.setIpGroup(ipGroupDAO.findById(gId));
-				ipIdeaGroupDAO.save(ipIdeaGroup);
-			}
+			if (idea.getGroupIdList() != null && idea.getGroupIdList().length > 0)
+				for (Long gId : idea.getGroupIdList()) {
+					IpIdeaGroup ipIdeaGroup = new IpIdeaGroup();
+					ipIdeaGroup.setIgId(ipNativeSQLDAO.getNextId(IpIdeaGroup.class));
+					ipIdeaGroup.setIpIdea(ipIdea);
+					ipIdeaGroup.setIpGroup(ipGroupDAO.findById(gId));
+					ipIdeaGroupDAO.save(ipIdeaGroup);
+				}
 			return message;
 		} catch (Exception e) {
 			e.printStackTrace();

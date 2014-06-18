@@ -28,7 +28,7 @@
 		</property>
 	</class>
 	<sql-query name="verifyLogin">
-		select login.* from ip_login login, ip_user iu where iu.user_status in ('y','Y') and iu.user_id=login.login_user_id and login.login_name=:login and login.login_pwd=:pwd
+		select login.* from ip_login login, ip_user iu where iu.user_id=login.login_user_id and login.login_name=:login and login.login_pwd=:pwd
 		<return alias="login" class="za.co.idea.ip.orm.bean.IpLogin" />
 	</sql-query>
 	<sql-query name="fetchLogin">

@@ -21,6 +21,10 @@ public class RewardsMessage {
 	private Double rwPrice;
 	private Long rwQuantity;
 	private Long[] groupIdList;
+	private String rwUrl;
+	private boolean rwTaggable;
+	private boolean rwClaimable;
+	private boolean rwImgAvail;
 
 	public Long getRwId() {
 		return rwId;
@@ -140,6 +144,38 @@ public class RewardsMessage {
 
 	public void setGroupIdList(Long[] groupIdList) {
 		this.groupIdList = groupIdList;
+	}
+
+	public boolean isRwImgAvail() {
+		return rwImgAvail;
+	}
+
+	public void setRwImgAvail(boolean rwImgAvail) {
+		this.rwImgAvail = rwImgAvail;
+	}
+
+	public String getRwUrl() {
+		return rwUrl;
+	}
+
+	public void setRwUrl(String rwUrl) {
+		this.rwUrl = rwUrl;
+	}
+
+	public boolean isRwTaggable() {
+		return rwTaggable;
+	}
+
+	public void setRwTaggable(boolean rwTaggable) {
+		this.rwTaggable = rwTaggable;
+	}
+
+	public boolean isRwClaimable() {
+		return rwClaimable;
+	}
+
+	public void setRwClaimable(boolean rwClaimable) {
+		this.rwClaimable = rwClaimable;
 	}
 
 }

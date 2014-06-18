@@ -12,12 +12,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import za.co.idea.ip.orm.bean.IpAllocation;
+import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.bean.IpPoints;
 import za.co.idea.ip.orm.bean.IpRewards;
 import za.co.idea.ip.orm.bean.IpRewardsCat;
-import za.co.idea.ip.orm.bean.IpRewardsGroup;
 import za.co.idea.ip.orm.bean.IpRewardsStatus;
 import za.co.idea.ip.orm.dao.IpAllocationDAO;
+import za.co.idea.ip.orm.dao.IpBlobDAO;
 import za.co.idea.ip.orm.dao.IpGroupDAO;
 import za.co.idea.ip.orm.dao.IpNativeSQLDAO;
 import za.co.idea.ip.orm.dao.IpPointsDAO;
@@ -44,6 +45,7 @@ public class RewardsService {
 	private IpPointsDAO ipPointsDAO;
 	private IpGroupDAO ipGroupDAO;
 	private IpNativeSQLDAO ipNativeSQLDAO;
+	private IpBlobDAO ipBlobDAO;
 
 	@POST
 	@Path("/rewards/add")
@@ -67,13 +69,13 @@ public class RewardsService {
 			ipRewards.setRwPrice(rewards.getRwPrice());
 			ipRewards.setRwQuantity(rewards.getRwQuantity());
 			ipRewardsDAO.save(ipRewards);
-			for (Long gId : rewards.getGroupIdList()) {
-				IpRewardsGroup ipRewardsGroup = new IpRewardsGroup();
-				ipRewardsGroup.setRgId(ipNativeSQLDAO.getNextId(IpRewardsGroup.class));
-				ipRewardsGroup.setIpRewards(ipRewards);
-				ipRewardsGroup.setIpGroup(ipGroupDAO.findById(gId));
-				ipRewardsGroupDAO.save(ipRewardsGroup);
-			}
+			// for (Long gId : rewards.getGroupIdList()) {
+			// IpRewardsGroup ipRewardsGroup = new IpRewardsGroup();
+			// ipRewardsGroup.setRgId(ipNativeSQLDAO.getNextId(IpRewardsGroup.class));
+			// ipRewardsGroup.setIpRewards(ipRewards);
+			// ipRewardsGroup.setIpGroup(ipGroupDAO.findById(gId));
+			// ipRewardsGroupDAO.save(ipRewardsGroup);
+			// }
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
@@ -110,13 +112,13 @@ public class RewardsService {
 			ipRewards.setRwQuantity(rewards.getRwQuantity());
 			ipRewardsDAO.merge(ipRewards);
 			ipRewardsGroupDAO.deleteByRewardsId(rewards.getRwId());
-			for (Long gId : rewards.getGroupIdList()) {
-				IpRewardsGroup ipRewardsGroup = new IpRewardsGroup();
-				ipRewardsGroup.setRgId(ipNativeSQLDAO.getNextId(IpRewardsGroup.class));
-				ipRewardsGroup.setIpRewards(ipRewards);
-				ipRewardsGroup.setIpGroup(ipGroupDAO.findById(gId));
-				ipRewardsGroupDAO.save(ipRewardsGroup);
-			}
+			// for (Long gId : rewards.getGroupIdList()) {
+			// IpRewardsGroup ipRewardsGroup = new IpRewardsGroup();
+			// ipRewardsGroup.setRgId(ipNativeSQLDAO.getNextId(IpRewardsGroup.class));
+			// ipRewardsGroup.setIpRewards(ipRewards);
+			// ipRewardsGroup.setIpGroup(ipGroupDAO.findById(gId));
+			// ipRewardsGroupDAO.save(ipRewardsGroup);
+			// }
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
@@ -154,16 +156,24 @@ public class RewardsService {
 				rewards.setRwValue(ipRewards.getRwValue());
 				rewards.setRwPrice(ipRewards.getRwPrice());
 				rewards.setRwQuantity(ipRewards.getRwQuantity());
-				List val = ipRewardsGroupDAO.fetchByRewardsId(ipRewards.getRwId());
-				if (val != null) {
-					Long[] grps = new Long[val.size()];
-					int i = 0;
-					for (Object obj : val) {
-						grps[i] = ((IpRewardsGroup) obj).getIpGroup().getGroupId();
-						i++;
-					}
-					rewards.setGroupIdList(grps);
+				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipRewards.getRwId(), "ip_rewards");
+				if (ipBlob != null) {
+					rewards.setRwUrl("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + ipBlob.getBlobId() + "/" + ipBlob.getBlobName());
+					rewards.setRwImgAvail(true);
+				} else {
+					rewards.setRwImgAvail(false);
 				}
+				// List val =
+				// ipRewardsGroupDAO.fetchByRewardsId(ipRewards.getRwId());
+				// if (val != null) {
+				// Long[] grps = new Long[val.size()];
+				// int i = 0;
+				// for (Object obj : val) {
+				// grps[i] = ((IpRewardsGroup) obj).getIpGroup().getGroupId();
+				// i++;
+				// }
+				// rewards.setGroupIdList(grps);
+				// }
 				ret.add((T) rewards);
 			}
 		} catch (Exception e) {
@@ -193,6 +203,13 @@ public class RewardsService {
 			rewards.setRwValue(ipRewards.getRwValue());
 			rewards.setRwPrice(ipRewards.getRwPrice());
 			rewards.setRwQuantity(ipRewards.getRwQuantity());
+			IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipRewards.getRwId(), "ip_rewards");
+			if (ipBlob != null) {
+				rewards.setRwUrl("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + ipBlob.getBlobId() + "/" + ipBlob.getBlobName());
+				rewards.setRwImgAvail(true);
+			} else {
+				rewards.setRwImgAvail(false);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -223,6 +240,13 @@ public class RewardsService {
 				rewards.setRwValue(ipRewards.getRwValue());
 				rewards.setRwPrice(ipRewards.getRwPrice());
 				rewards.setRwQuantity(ipRewards.getRwQuantity());
+				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipRewards.getRwId(), "ip_rewards");
+				if (ipBlob != null) {
+					rewards.setRwUrl("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + ipBlob.getBlobId() + "/" + ipBlob.getBlobName());
+					rewards.setRwImgAvail(true);
+				} else {
+					rewards.setRwImgAvail(false);
+				}
 				ret.add((T) rewards);
 			}
 		} catch (Exception e) {
@@ -255,6 +279,13 @@ public class RewardsService {
 				rewards.setRwValue(ipRewards.getRwValue());
 				rewards.setRwPrice(ipRewards.getRwPrice());
 				rewards.setRwQuantity(ipRewards.getRwQuantity());
+				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipRewards.getRwId(), "ip_rewards");
+				if (ipBlob != null) {
+					rewards.setRwUrl("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + ipBlob.getBlobId() + "/" + ipBlob.getBlobName());
+					rewards.setRwImgAvail(true);
+				} else {
+					rewards.setRwImgAvail(false);
+				}
 				ret.add((T) rewards);
 			}
 		} catch (Exception e) {
@@ -634,6 +665,14 @@ public class RewardsService {
 
 	public void setIpNativeSQLDAO(IpNativeSQLDAO ipNativeSQLDAO) {
 		this.ipNativeSQLDAO = ipNativeSQLDAO;
+	}
+
+	public IpBlobDAO getIpBlobDAO() {
+		return ipBlobDAO;
+	}
+
+	public void setIpBlobDAO(IpBlobDAO ipBlobDAO) {
+		this.ipBlobDAO = ipBlobDAO;
 	}
 
 }
