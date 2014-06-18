@@ -826,7 +826,7 @@ public class ChallengeController implements Serializable {
 		for (ChallengeMessage challengeMessage : challenges) {
 			ChallengeBean bean = new ChallengeBean();
 			bean.setCatId(challengeMessage.getCatId());
-			bean.setCrtdById(challengeMessage.getId());
+			bean.setCrtdById(challengeMessage.getCrtdById());
 			bean.setCrtdDt(challengeMessage.getCrtdDt());
 			bean.setDesc(challengeMessage.getDesc());
 			bean.setExprDt(challengeMessage.getExprDt());
@@ -850,7 +850,7 @@ public class ChallengeController implements Serializable {
 		for (ChallengeMessage challengeMessage : challenges) {
 			ChallengeBean bean = new ChallengeBean();
 			bean.setCatId(challengeMessage.getCatId());
-			bean.setCrtdById(challengeMessage.getId());
+			bean.setCrtdById(challengeMessage.getCrtdById());
 			bean.setCrtdDt(challengeMessage.getCrtdDt());
 			bean.setDesc(challengeMessage.getDesc());
 			bean.setExprDt(challengeMessage.getExprDt());
@@ -873,7 +873,7 @@ public class ChallengeController implements Serializable {
 		for (ChallengeMessage challengeMessage : challenges) {
 			ChallengeBean bean = new ChallengeBean();
 			bean.setCatId(challengeMessage.getCatId());
-			bean.setCrtdById(challengeMessage.getId());
+			bean.setCrtdById(challengeMessage.getCrtdById());
 			bean.setCrtdDt(challengeMessage.getCrtdDt());
 			bean.setDesc(challengeMessage.getDesc());
 			bean.setExprDt(challengeMessage.getExprDt());
@@ -897,7 +897,7 @@ public class ChallengeController implements Serializable {
 			SolutionBean bean = new SolutionBean();
 			bean.setChalId(solutionMessage.getChalId());
 			bean.setCatId(solutionMessage.getCatId());
-			bean.setCrtdById(solutionMessage.getId());
+			bean.setCrtdById(solutionMessage.getCrtdById());
 			bean.setCrtdDt(solutionMessage.getCrtdDt());
 			bean.setDesc(solutionMessage.getDesc());
 			bean.setId(solutionMessage.getId());
@@ -918,7 +918,7 @@ public class ChallengeController implements Serializable {
 			SolutionBean bean = new SolutionBean();
 			bean.setChalId(solutionMessage.getChalId());
 			bean.setCatId(solutionMessage.getCatId());
-			bean.setCrtdById(solutionMessage.getId());
+			bean.setCrtdById(solutionMessage.getCrtdById());
 			bean.setCrtdDt(solutionMessage.getCrtdDt());
 			bean.setDesc(solutionMessage.getDesc());
 			bean.setId(solutionMessage.getId());
@@ -939,7 +939,7 @@ public class ChallengeController implements Serializable {
 			SolutionBean bean = new SolutionBean();
 			bean.setChalId(solutionMessage.getChalId());
 			bean.setCatId(solutionMessage.getCatId());
-			bean.setCrtdById(solutionMessage.getId());
+			bean.setCrtdById(solutionMessage.getCrtdById());
 			bean.setCrtdDt(solutionMessage.getCrtdDt());
 			bean.setDesc(solutionMessage.getDesc());
 			bean.setId(solutionMessage.getId());

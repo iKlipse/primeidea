@@ -41,9 +41,9 @@
 				</p:column>
 				<p:column>
 					<f:facet name="header">Active</f:facet>
-					<p:selectBooleanButton id="sbbActive" value="#{user.isActive}" disabled="true" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
+					<p:selectBooleanButton id="sbbActive" value="#{user.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
 				</p:column>
-				<p:column>
+				<p:column rendered="#{accessBean.editUserEnabled}" >
 					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminBean.showEditUser}">
 						<f:setPropertyActionListener value="#{user}" target="#{adminBean.userBean}" />
 					</p:commandButton>

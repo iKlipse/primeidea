@@ -14,7 +14,7 @@
 					<f:facet name="header">Function Name</f:facet>
 					<p:outputLabel id="txtFuncName" value="#{func.funcName}" />
 				</p:column>
-				<p:column>
+				<p:column rendered="#{accessBean.editFunctionEnabled}" >
 					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminBean.showEditFunction}">
 						<f:setPropertyActionListener value="#{func}" target="#{adminBean.functionBean}" />
 					</p:commandButton>

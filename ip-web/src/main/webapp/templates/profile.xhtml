@@ -5,9 +5,7 @@
 				<p:fileUpload id="fuProfileImg" update="imgAvatar" widgetVar="fuImg" fileUploadListener="#{adminBean.fileImageUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 			</p:column>
 			<p:column>
-				<p:commandButton id="btnProfileImgUpload" value="Update" actionListener="#{adminBean.updateImage}">
-					<p:ajax update="imgAvatar" />
-				</p:commandButton>
+				<p:commandButton id="btnProfileImgUpload" value="Update" action="#{adminBean.updateImage}" ajax="false" immediate="true" />
 			</p:column>
 		</p:panelGrid>
 	</p:dialog>

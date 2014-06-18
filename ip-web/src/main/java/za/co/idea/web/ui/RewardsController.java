@@ -1,5 +1,6 @@
 package za.co.idea.web.ui;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -95,6 +96,21 @@ public class RewardsController implements Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create reward request", "System error occurred, cannot perform create reward request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showRewardStore() {
+		try {
+			admUsers = fetchAllUsers();
+			rewardsCat = fetchAllRewardsCat();
+			rewardsStatus = fetchAllRewardsStatuses();
+			viewRewardsBeans = fetchAllAvailableRewards();
+			return "rwsr";
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -554,9 +570,20 @@ public class RewardsController implements Serializable {
 			bean.setRwValue(message.getRwValue());
 			bean.setRwPrice(message.getRwPrice());
 			bean.setRwQuantity(message.getRwQuantity());
-//			bean.setGroupIdList(getIdsFromArray(message.getGroupIdList()));
+			// bean.setGroupIdList(getIdsFromArray(message.getGroupIdList()));
 			bean.setRwImgAvail(message.isRwImgAvail());
-			bean.setRwUrl(message.getRwUrl());
+			if (message.isRwImgAvail()) {
+				WebClient client = WebClient.create(message.getRwUrl(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				client.header("Content-Type", "application/json");
+				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+				if (attachment != null)
+					try {
+						bean.setRwUrl(new DefaultStreamedContent(attachment.getDataHandler().getInputStream()));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+			}
 			ret.add(bean);
 		}
 		return ret;
@@ -584,7 +611,44 @@ public class RewardsController implements Serializable {
 			bean.setRwPrice(message.getRwPrice());
 			bean.setRwQuantity(message.getRwQuantity());
 			bean.setRwImgAvail(message.isRwImgAvail());
-			bean.setRwUrl(message.getRwUrl());
+			if (message.isRwImgAvail()) {
+				WebClient client = WebClient.create(message.getRwUrl(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				client.header("Content-Type", "application/json");
+				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+				if (attachment != null)
+					try {
+						bean.setRwUrl(new DefaultStreamedContent(attachment.getDataHandler().getInputStream()));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+			}
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	private List<RewardsBean> fetchAllAvailableRewards() {
+		List<RewardsBean> ret = new ArrayList<RewardsBean>();
+		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list/3");
+		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
+		viewRewardsClient.close();
+		for (RewardsMessage message : rewards) {
+			RewardsBean bean = new RewardsBean();
+			bean.setrCatId(message.getrCatId());
+			bean.setrStatusId(message.getrStatusId());
+			bean.setRwCrtdDt(message.getRwCrtdDt());
+			bean.setRwDesc(message.getRwDesc());
+			bean.setRwExpiryDt(message.getRwExpiryDt());
+			bean.setRwHoverText(message.getRwHoverText());
+			bean.setRwId(message.getRwId());
+			bean.setRwLaunchDt(message.getRwLaunchDt());
+			bean.setRwStockCodeNum(message.getRwStockCodeNum());
+			bean.setRwTag(message.getRwTag());
+			bean.setRwTitle(message.getRwTitle());
+			bean.setRwValue(message.getRwValue());
+			bean.setRwPrice(message.getRwPrice());
+			bean.setRwQuantity(message.getRwQuantity());
 			ret.add(bean);
 		}
 		return ret;

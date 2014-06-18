@@ -12,7 +12,7 @@
 				</p:column>
 				<p:column>
 					<f:facet name="header">Status</f:facet>
-					<p:selectOneMenu id="somIStatus" value="#{claim.cStatusId}" disabled="true">
+					<p:selectOneMenu id="somIStatus" value="#{claim.cStatusId}" >
 						<f:selectItems value="#{claimBean.claimStatus}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
 					</p:selectOneMenu>
 				</p:column>
@@ -22,7 +22,7 @@
 				</p:column>
 				<p:column>
 					<f:facet name="header">Created By</f:facet>
-					<p:selectOneMenu id="somACrtdBy" value="#{claim.userId}" disabled="true">
+					<p:selectOneMenu id="somACrtdBy" value="#{claim.userId}" >
 						<f:selectItems value="#{claimBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
 					</p:selectOneMenu>
 				</p:column>

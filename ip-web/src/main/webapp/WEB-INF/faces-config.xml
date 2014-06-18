@@ -157,8 +157,12 @@
 			<to-view-id>/pages/rewards/edit.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>rwvr</from-outcome>
+			<from-outcome>rwsr</from-outcome>
 			<to-view-id>/pages/rewards/store.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>rwvr</from-outcome>
+			<to-view-id>/pages/rewards/view.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>rwur</from-outcome>

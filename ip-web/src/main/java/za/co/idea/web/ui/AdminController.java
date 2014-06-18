@@ -807,7 +807,7 @@ public class AdminController implements Serializable {
 		}
 	}
 
-	public void updateImage() {
+	public String updateImage() {
 		try {
 			Long userId = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId");
 			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + userId + "/ip_user");
@@ -885,6 +885,7 @@ public class AdminController implements Serializable {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", "Unable to upload attachment. Please update later");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
+		return "";
 	}
 
 	private Long[] getSelUserIds() {

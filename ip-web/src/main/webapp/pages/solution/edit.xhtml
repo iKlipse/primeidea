@@ -10,7 +10,7 @@
 					<p:outputLabel id="lblSChal" value="Challenges : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu style="width: 100%" id="somSChal" value="#{challengeBean.solutionBean.chalId}" disabled="true">
+					<p:selectOneMenu style="width: 100%" id="somSChal" value="#{challengeBean.solutionBean.chalId}" >
 						<f:selectItem itemLabel="Select One" itemValue="" />
 						<f:selectItems value="#{challengeBean.viewChallenges}" var="schal" itemLabel="#{schal.title}" itemValue="#{schal.id}" />
 					</p:selectOneMenu>
@@ -19,7 +19,7 @@
 					<p:outputLabel id="lblSTitle" value="Title : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtSTitle" value="#{challengeBean.solutionBean.title}" disabled="true" />
+					<p:inputText style="width: 100%" autocomplete="false" id="txtSTitle" value="#{challengeBean.solutionBean.title}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblSCat" value="Category : " />

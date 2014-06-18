@@ -531,7 +531,6 @@ public class IdeaController implements Serializable {
 			IdeaBean bean = new IdeaBean();
 			bean.setCrtdById(ideaMessage.getCrtdById());
 			bean.setCrtdDate(ideaMessage.getCrtdDate());
-			bean.setIdeaBa(ideaMessage.getIdeaBa());
 			bean.setIdeaDesc(ideaMessage.getIdeaDesc());
 			bean.setIdeaTag(ideaMessage.getIdeaTag());
 			bean.setIdeaId(ideaMessage.getIdeaId());
@@ -553,7 +552,6 @@ public class IdeaController implements Serializable {
 			IdeaBean bean = new IdeaBean();
 			bean.setCrtdById(ideaMessage.getCrtdById());
 			bean.setCrtdDate(ideaMessage.getCrtdDate());
-			bean.setIdeaBa(ideaMessage.getIdeaBa());
 			bean.setIdeaDesc(ideaMessage.getIdeaDesc());
 			bean.setIdeaTag(ideaMessage.getIdeaTag());
 			bean.setIdeaId(ideaMessage.getIdeaId());

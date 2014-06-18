@@ -35,18 +35,18 @@
 						<p:outputLabel id="lblModId" value="ID : " />
 					</p:column>
 					<p:column>
-						<p:inputText  style="width: 100%" autocomplete="false" id="txtModId" value="#{metaDataBean.selId}" disabled="true" />
+						<p:inputText style="width: 100%" autocomplete="false" id="txtModId" value="#{metaDataBean.selId}" />
 					</p:column>
 				
 					<p:column>
 						<p:outputLabel id="lblModDesc" value="Description : " />
 					</p:column>
 					<p:column>
-						<p:inputText  style="width: 100%" autocomplete="false" id="txtModDesc" value="#{metaDataBean.selVal}" />
+						<p:inputText style="width: 100%" autocomplete="false" id="txtModDesc" value="#{metaDataBean.selVal}" />
 					</p:column>
 				
 					<p:column colspan="2">
-						<p:commandButton   id="modSaveButton" value="Update" ajax="false" action="#{metaDataBean.updateMetaData}" />
+						<p:commandButton  id="modSaveButton" value="Update" ajax="false" action="#{metaDataBean.updateMetaData}" />
 					</p:column>
 				
 			</p:panelGrid>
@@ -57,7 +57,7 @@
 						<p:outputLabel id="lblAddId" value="ID : " />
 					</p:column>
 					<p:column>
-						<p:inputText  style="width: 100%" autocomplete="false" id="txtAddId" value="#{metaDataBean.selId}" disabled="true" />
+						<p:inputText style="width: 100%" autocomplete="false" id="txtAddId" value="#{metaDataBean.selId}" />
 					</p:column>
 				</p:row>
 				<p:row>
@@ -65,7 +65,7 @@
 						<p:outputLabel id="lblAddDesc" value="Description : " />
 					</p:column>
 					<p:column>
-						<p:inputText  style="width: 100%" autocomplete="false" id="txtAddDesc" value="#{metaDataBean.selVal}" />
+						<p:inputText style="width: 100%" autocomplete="false" id="txtAddDesc" value="#{metaDataBean.selVal}" />
 					</p:column>
 				</p:row>
 				<p:row>

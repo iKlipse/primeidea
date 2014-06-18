@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import org.primefaces.model.DefaultStreamedContent;
+
 public class RewardsBean implements Serializable {
 	private static final long serialVersionUID = -2381598448445463625L;
 	private Long rwId;
@@ -24,7 +26,7 @@ public class RewardsBean implements Serializable {
 	private Double rwPrice;
 	private Long rwQuantity;
 	private List<Long> groupIdList;
-	private String rwUrl;
+	private DefaultStreamedContent rwUrl;
 	private boolean rwTaggable;
 	private boolean rwClaimable;
 	private boolean rwImgAvail;
@@ -173,11 +175,11 @@ public class RewardsBean implements Serializable {
 		this.groupIdList = groupIdList;
 	}
 
-	public String getRwUrl() {
+	public DefaultStreamedContent getRwUrl() {
 		return rwUrl;
 	}
 
-	public void setRwUrl(String rwUrl) {
+	public void setRwUrl(DefaultStreamedContent rwUrl) {
 		this.rwUrl = rwUrl;
 	}
 

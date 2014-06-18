@@ -1,28 +1,29 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
 	<p:menubar>
 		<p:submenu label="Admin" style="width: 16% !important; float: right !important;">
-			<p:menuitem value="Create User" action="#{adminBean.showCreateUser}" immediate="true" ajax="false" />
+			<p:menuitem value="Create User" action="#{adminBean.showCreateUser}" immediate="true" ajax="false" rendered="#{accessBean.createUserEnabled}" />
 			<p:menuitem value="View Users" action="#{adminBean.showViewUsers}" immediate="true" ajax="false" />
-			<p:menuitem value="Create Group" action="#{adminBean.showCreateGroup}" immediate="true" ajax="false" />
+			<p:menuitem value="Create Group" action="#{adminBean.showCreateGroup}" immediate="true" ajax="false" rendered="#{accessBean.createGroupEnabled}" />
 			<p:menuitem value="View Groups" action="#{adminBean.showViewGroups}" immediate="true" ajax="false" />
 			<p:menuitem value="View Functions" action="#{adminBean.showViewFunction}" immediate="true" ajax="false" />
-			<p:menuitem value="Maintain Point Allocation" action="#{rewardsBean.showPointAllocation}" immediate="true" ajax="false" />
-			<p:menuitem value="Maintain MetaData" action="#{metaDataBean.showMetadataMaintain}" immediate="true" ajax="false" />
+			<p:menuitem value="Maintain Point Allocation" action="#{rewardsBean.showPointAllocation}" immediate="true" ajax="false" rendered="#{accessBean.maintainPointAllocEnabled}" />
+			<p:menuitem value="Maintain MetaData" action="#{metaDataBean.showMetadataMaintain}" immediate="true" ajax="false" rendered="#{accessBean.maintainMetaDataEnabled}" />
 		</p:submenu>
 		<p:submenu label="Rewards" style="width: 16% !important; float: right !important;">
-			<p:menuitem value="Create Reward" action="#{rewardsBean.showCreateReward}" immediate="true" ajax="false" />
-			<p:menuitem value="Online Store" action="#{rewardsBean.showViewReward}" immediate="true" ajax="false" />
+			<p:menuitem value="Create Reward" action="#{rewardsBean.showCreateReward}" immediate="true" ajax="false" rendered="#{accessBean.createRewardsEnabled}" />
+			<p:menuitem value="View Rewards" action="#{rewardsBean.showViewReward}" immediate="true" ajax="false" />
+			<p:menuitem value="Online Store" action="#{rewardsBean.showRewardStore}" immediate="true" ajax="false" />
 			<p:menuitem value="Submit Claim" action="#{claimBean.showCreateClaim}" immediate="true" ajax="false" />
 			<p:menuitem value="View Claims" action="#{claimBean.showViewClaim}" immediate="true" ajax="false" />
 		</p:submenu>
 		<p:submenu label="Challenge" style="width: 16% !important; float: right !important;">
-			<p:menuitem value="Create Challenge" action="#{challengeBean.showCreateChallenge}" immediate="true" ajax="false" />
+			<p:menuitem value="Create Challenge" action="#{challengeBean.showCreateChallenge}" immediate="true" ajax="false" rendered="#{accessBean.createChallengeEnabled}" />
 			<p:menuitem value="View Challenge" action="#{challengeBean.showViewChallenge}" immediate="true" ajax="false" />
 			<p:menuitem value="Submit Solution" action="#{challengeBean.showCreateSolution}" immediate="true" ajax="false" />
 			<p:menuitem value="View Solution" action="#{challengeBean.showViewSolution}" immediate="true" ajax="false" />
 		</p:submenu>
 		<p:submenu label="Idea" style="width: 16% !important; float: right !important;">
-			<p:menuitem value="Create Random Idea" action="#{ideaBean.showCreateIdea}" immediate="true" ajax="false" />
+			<p:menuitem value="Create Random Idea" action="#{ideaBean.showCreateIdea}" immediate="true" ajax="false" rendered="#{accessBean.createIdeaEnabled}" />
 			<p:menuitem value="View Random Idea" action="#{ideaBean.showViewIdeas}" immediate="true" ajax="false" />
 		</p:submenu>
 		<p:submenu label="User" style="width: 16% !important; float: right !important;">

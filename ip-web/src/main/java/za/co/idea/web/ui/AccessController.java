@@ -28,7 +28,11 @@ public class AccessController implements Serializable {
 	private boolean editFunctionEnabled;
 	private boolean editRewardsEnabled;
 	private boolean editChallengeEnabled;
+	private boolean editClaimEnabled;
+	private boolean editSolutionEnabled;
 	private boolean editIdeaEnabled;
+	private boolean maintainPointAllocEnabled;
+	private boolean maintainMetaDataEnabled;
 
 	public AccessController(Long userId) {
 		if (userId == null) {
@@ -160,6 +164,42 @@ public class AccessController implements Serializable {
 
 	public void setFunctions(List<String> functions) {
 		this.functions = functions;
+	}
+
+	public boolean isMaintainPointAllocEnabled() {
+		maintainPointAllocEnabled = functions.contains("Maintain Point Allocation");
+		return maintainPointAllocEnabled;
+	}
+
+	public void setMaintainPointAllocEnabled(boolean maintainPointAllocEnabled) {
+		this.maintainPointAllocEnabled = maintainPointAllocEnabled;
+	}
+
+	public boolean isMaintainMetaDataEnabled() {
+		maintainMetaDataEnabled = functions.contains("Maintain MetaData");
+		return maintainMetaDataEnabled;
+	}
+
+	public void setMaintainMetaDataEnabled(boolean maintainMetaDataEnabled) {
+		this.maintainMetaDataEnabled = maintainMetaDataEnabled;
+	}
+
+	public boolean isEditClaimEnabled() {
+		editClaimEnabled = functions.contains("Edit Claim");
+		return editClaimEnabled;
+	}
+
+	public void setEditClaimEnabled(boolean editClaimEnabled) {
+		this.editClaimEnabled = editClaimEnabled;
+	}
+
+	public boolean isEditSolutionEnabled() {
+		editSolutionEnabled = functions.contains("Edit Solution");
+		return editSolutionEnabled;
+	}
+
+	public void setEditSolutionEnabled(boolean editSolutionEnabled) {
+		this.editSolutionEnabled = editSolutionEnabled;
 	}
 
 }

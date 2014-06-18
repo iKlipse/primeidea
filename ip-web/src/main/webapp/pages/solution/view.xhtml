@@ -12,23 +12,23 @@
 				</p:column>
 				<p:column>
 					<f:facet name="header">Category</f:facet>
-					<p:selectOneMenu id="somICat" value="#{solution.catId}" disabled="true">
+					<p:selectOneMenu id="somICat" value="#{solution.catId}" >
 						<f:selectItems value="#{challengeBean.solutionCats}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
 					<f:facet name="header">Status</f:facet>
-					<p:selectOneMenu id="somIStatus" value="#{solution.statusId}" disabled="true">
+					<p:selectOneMenu id="somIStatus" value="#{solution.statusId}" >
 						<f:selectItems value="#{challengeBean.solutionStatuses}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
 					<f:facet name="header">Created By</f:facet>
-					<p:selectOneMenu id="somACrtdBy" value="#{solution.crtdById}" disabled="true">
+					<p:selectOneMenu id="somACrtdBy" value="#{solution.crtdById}" >
 						<f:selectItems value="#{challengeBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
 					</p:selectOneMenu>
 				</p:column>
-				<p:column>
+				<p:column rendered="#{accessBean.editSolutionEnabled}" >
 					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{challengeBean.showEditSolution}">
 						<f:setPropertyActionListener value="#{solution}" target="#{challengeBean.solutionBean}" />
 					</p:commandButton>
