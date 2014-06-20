@@ -99,7 +99,7 @@ public class AdminController implements Serializable {
 		WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/login/" + userBean.getScName() + "/" + Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())));
 		UserMessage userMessage = loginClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 		loginClient.close();
-		if (userMessage.getuId() == -999l) {
+		if (userMessage != null && userMessage.getuId() == -999l) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "User Profile De-Activated. Please contact Admin.", "User Profile De-Activated. Please contact Admin.");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -341,6 +341,7 @@ public class AdminController implements Serializable {
 			viewGroups = pGrps = fetchAllGroups();
 			admUsers = fetchAllUsers();
 			userTwinSelect = initializeSelectedUsers(admUsers);
+			functions = fetchAllFunctionsByGroup();
 			return "admeg";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -579,19 +580,20 @@ public class AdminController implements Serializable {
 
 	private List<String> updateUserValidation() {
 		ArrayList<String> ret = new ArrayList<String>();
-		if (userBean.getfName() == null || userBean.getfName().length() == 0) {
-			ret.add("FirstName is Mandatory");
+		if (userBean.getIsActive()) {
+			if (userBean.getfName() == null || userBean.getfName().length() == 0) {
+				ret.add("FirstName is Mandatory");
+			}
+			if (userBean.getlName() == null || userBean.getlName().length() == 0) {
+				ret.add("LastName is Mandatory");
+			}
+			if (userBean.getScName() == null || userBean.getScName().length() == 0) {
+				ret.add("Screen Name is Mandatory");
+			}
+			if (userBean.getIdNum() == null || userBean.getIdNum() == 0) {
+				ret.add("ID Number is Mandatory");
+			}
 		}
-		if (userBean.getlName() == null || userBean.getlName().length() == 0) {
-			ret.add("LastName is Mandatory");
-		}
-		if (userBean.getScName() == null || userBean.getScName().length() == 0) {
-			ret.add("Screen Name is Mandatory");
-		}
-		if (userBean.getIdNum() == null || userBean.getIdNum() == 0) {
-			ret.add("ID Number is Mandatory");
-		}
-
 		return ret;
 	}
 
@@ -1022,6 +1024,24 @@ public class AdminController implements Serializable {
 	private List<FunctionBean> fetchAllFunctions() {
 		List<FunctionBean> ret = new ArrayList<FunctionBean>();
 		WebClient viewFunctionsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/func/list");
+		Collection<? extends FunctionMessage> functions = new ArrayList<FunctionMessage>(viewFunctionsClient.accept(MediaType.APPLICATION_JSON).getCollection(FunctionMessage.class));
+		viewFunctionsClient.close();
+		for (FunctionMessage functionMessage : functions) {
+			FunctionBean bean = new FunctionBean();
+			bean.setFuncId(functionMessage.getFuncId());
+			bean.setFuncName(functionMessage.getFuncName());
+			bean.getGroupIdList().clear();
+			for (Long id : functionMessage.getGroupIdList())
+				if (id != null)
+					bean.getGroupIdList().add(id);
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	private List<FunctionBean> fetchAllFunctionsByGroup() {
+		List<FunctionBean> ret = new ArrayList<FunctionBean>();
+		WebClient viewFunctionsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/func/group/list/" + groupBean.getgId());
 		Collection<? extends FunctionMessage> functions = new ArrayList<FunctionMessage>(viewFunctionsClient.accept(MediaType.APPLICATION_JSON).getCollection(FunctionMessage.class));
 		viewFunctionsClient.close();
 		for (FunctionMessage functionMessage : functions) {

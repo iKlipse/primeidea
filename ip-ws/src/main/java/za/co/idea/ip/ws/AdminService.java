@@ -184,6 +184,39 @@ public class AdminService {
 	}
 
 	@GET
+	@Path("/func/group/list/{grpId}")
+	@Produces("application/json")
+	public <T extends FunctionMessage> List<T> listFunctionByGroup(@PathParam("grpId") Long grpId) {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List functions = ipFuncGroupDAO.fetchByGroupId(grpId);
+			if (functions != null) {
+				for (Object object : functions) {
+					IpFunction ipFunction = ((IpFuncGroup) object).getIpFunction();
+					FunctionMessage function = new FunctionMessage();
+					function.setFuncId(ipFunction.getFuncId());
+					function.setFuncName(ipFunction.getFuncName());
+					List fgs = ipFuncGroupDAO.fetchByFuncId(ipFunction.getFuncId());
+					if (fgs != null) {
+						Long[] gList = new Long[fgs.size()];
+						int i = 0;
+						for (Object obj : fgs) {
+							IpFuncGroup fg = (IpFuncGroup) obj;
+							gList[i] = fg.getIpGroup().getGroupId();
+							i++;
+						}
+						function.setGroupIdList(gList);
+					}
+					ret.add((T) function);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@GET
 	@Path("/func/list/user/{id}")
 	@Produces("application/json")
 	public String[] listFunctionByUser(@PathParam("id") Long id) {

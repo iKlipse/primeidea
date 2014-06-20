@@ -23,7 +23,7 @@
 		<return alias="iis" class="za.co.idea.ip.orm.bean.IpChallengeStatus" />
 	</sql-query>
 	<sql-query name="getNonAllocChalStatus">
-		select iis.* from ip_challenge_status iis where iis.cs_id not in (select ia.alloc_status_id from ip_allocation ia where lower(ia.alloc_status_id)='ip_challenge_status')
+		select iis.* from ip_challenge_status iis where iis.cs_id not in (select ia.alloc_status_id from ip_allocation ia where lower(ia.alloc_entity)='ip_challenge_status')
 		<return alias="iis" class="za.co.idea.ip.orm.bean.IpChallengeStatus" />
 	</sql-query>
 </hibernate-mapping>

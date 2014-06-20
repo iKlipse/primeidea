@@ -28,7 +28,7 @@
 					<f:facet name="header">Status</f:facet>
 					<p:selectOneMenu id="somSelectEntityStatus" value="#{bean.allocStatusId}">
 						<f:selectItem itemLabel="Please Select" itemValue="" />
-						<f:selectItems value="#{rewardsBean.statusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
+						<f:selectItems value="#{rewardsBean.disStatusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
@@ -69,6 +69,7 @@
 				</p:column>
 				<p:column colspan="2">
 					<p:commandButton id="addSaveButton" value="Save" ajax="false" action="#{rewardsBean.saveAllocation}" />
+					<p:commandButton id="addCancelButton" value="Cancel" ajax="false" action="#{rewardsBean.cancelAllocation}" />
 				</p:column>
 			</p:panelGrid>
 			<p:panelGrid id="pnlModPntAlloc" rendered="#{rewardsBean.showModPanel}" columns="1">
@@ -95,6 +96,7 @@
 				</p:column>
 				<p:column colspan="2">
 					<p:commandButton id="modSaveButton" value="Update" ajax="false" action="#{rewardsBean.updateAllocation}" />
+					<p:commandButton id="modCancelButton" value="Cancel" ajax="false" action="#{rewardsBean.cancelAllocation}" />
 				</p:column>
 			</p:panelGrid>
 		</p:panel>

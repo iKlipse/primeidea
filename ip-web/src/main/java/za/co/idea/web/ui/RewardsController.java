@@ -59,6 +59,12 @@ public class RewardsController implements Serializable {
 	private List<UserBean> admUsers;
 	private List<TagBean> rewardsWishlist;
 	private List<MetaDataBean> statusList;
+	private List<MetaDataBean> disStatusList;
+	private List<MetaDataBean> chalStatusList;
+	private List<MetaDataBean> claimStatusList;
+	private List<MetaDataBean> ideaStatusList;
+	private List<MetaDataBean> rewardsStatusList;
+	private List<MetaDataBean> solStatusList;
 	private List<AllocationBean> allocs;
 	private List<GroupBean> pGrps;
 	private DualListModel<GroupBean> groupTwinSelect;
@@ -153,7 +159,8 @@ public class RewardsController implements Serializable {
 			this.showModPanel = false;
 			this.showAddBtn = false;
 			this.entity = "";
-			this.statusList = null;
+			this.statusList = new ArrayList<MetaDataBean>();
+			this.disStatusList = new ArrayList<MetaDataBean>();
 			return "rwpa";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -166,14 +173,61 @@ public class RewardsController implements Serializable {
 	public String showAllocationMod() {
 		this.showAddPanel = false;
 		this.showModPanel = true;
+		disStatusList = fetchAllStatusList();
+		if (entity.equalsIgnoreCase("ip_solution_status"))
+			statusList = getSolStatusList();
+		else if (entity.equalsIgnoreCase("ip_challenge_status"))
+			statusList = getChalStatusList();
+		else if (entity.equalsIgnoreCase("ip_idea_status"))
+			statusList = getIdeaStatusList();
+		else if (entity.equalsIgnoreCase("ip_claim_status"))
+			statusList = getClaimStatusList();
+		else if (entity.equalsIgnoreCase("ip_rewards_status"))
+			statusList = getRewardsStatusList();
 		return "";
 	}
 
 	public String showAllocationAdd() {
 		this.showAddPanel = true;
 		this.showModPanel = false;
+		statusList = fetchAllNonAllocStatus();
+		disStatusList = fetchAllStatusList();
 		allocationBean = new AllocationBean();
 		return "";
+	}
+
+	public String cancelAllocation() {
+		this.showAddPanel = false;
+		this.showModPanel = false;
+		entity = "";
+		allocs = new ArrayList<AllocationBean>();
+		statusList = new ArrayList<MetaDataBean>();
+		disStatusList = new ArrayList<MetaDataBean>();
+		return "";
+	}
+
+	public void updateStatusList() {
+		if (entity.equalsIgnoreCase("")) {
+			statusList = new ArrayList<MetaDataBean>();
+			allocs = new ArrayList<AllocationBean>();
+			this.showAddBtn = false;
+		} else {
+			allocs = fetchAllAllocationsByEntity();
+			disStatusList = fetchAllStatusList();
+			if (entity.equalsIgnoreCase("ip_solution_status"))
+				statusList = getSolStatusList();
+			else if (entity.equalsIgnoreCase("ip_challenge_status"))
+				statusList = getChalStatusList();
+			else if (entity.equalsIgnoreCase("ip_idea_status"))
+				statusList = getIdeaStatusList();
+			else if (entity.equalsIgnoreCase("ip_claim_status"))
+				statusList = getClaimStatusList();
+			else if (entity.equalsIgnoreCase("ip_rewards_status"))
+				statusList = getRewardsStatusList();
+			this.showAddBtn = true;
+		}
+		this.showAddPanel = false;
+		this.showModPanel = false;
 	}
 
 	public String showEditReward() {
@@ -536,20 +590,6 @@ public class RewardsController implements Serializable {
 		return "";
 	}
 
-	public void updateStatusList() {
-		if (entity.equalsIgnoreCase("")) {
-			statusList = new ArrayList<MetaDataBean>();
-			this.showAddPanel = false;
-			this.showModPanel = false;
-			this.showAddBtn = false;
-		} else {
-			statusList = fetchAllMetadata();
-			this.showAddPanel = false;
-			this.showModPanel = false;
-			this.showAddBtn = true;
-		}
-	}
-
 	private List<RewardsBean> fetchAllRewards() {
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
 		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list");
@@ -710,9 +750,9 @@ public class RewardsController implements Serializable {
 		}
 	}
 
-	private List<MetaDataBean> fetchAllMetadata() {
+	private List<MetaDataBean> fetchAllNonAllocStatus() {
 		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/" + entity);
+		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/non/" + entity);
 		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		mDataClient.close();
 		for (MetaDataMessage message : messages) {
@@ -997,6 +1037,124 @@ public class RewardsController implements Serializable {
 
 	public void setGroupTwinSelect(DualListModel<GroupBean> groupTwinSelect) {
 		this.groupTwinSelect = groupTwinSelect;
+	}
+
+	public List<MetaDataBean> getChalStatusList() {
+		chalStatusList = new ArrayList<MetaDataBean>();
+		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/ip_challenge_status");
+		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		mDataClient.close();
+		for (MetaDataMessage message : messages) {
+			MetaDataBean bean = new MetaDataBean();
+			bean.setDesc(message.getDesc());
+			bean.setId(message.getId());
+			bean.setTable(message.getTable());
+			chalStatusList.add(bean);
+		}
+		return chalStatusList;
+	}
+
+	public void setChalStatusList(List<MetaDataBean> chalStatusList) {
+		this.chalStatusList = chalStatusList;
+	}
+
+	public List<MetaDataBean> getClaimStatusList() {
+		claimStatusList = new ArrayList<MetaDataBean>();
+		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/ip_claim_status");
+		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		mDataClient.close();
+		for (MetaDataMessage message : messages) {
+			MetaDataBean bean = new MetaDataBean();
+			bean.setDesc(message.getDesc());
+			bean.setId(message.getId());
+			bean.setTable(message.getTable());
+			claimStatusList.add(bean);
+		}
+		return claimStatusList;
+	}
+
+	private List<MetaDataBean> fetchAllStatusList() {
+		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
+		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/" + entity);
+		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		mDataClient.close();
+		for (MetaDataMessage message : messages) {
+			MetaDataBean bean = new MetaDataBean();
+			bean.setDesc(message.getDesc());
+			bean.setId(message.getId());
+			bean.setTable(message.getTable());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public void setClaimStatusList(List<MetaDataBean> claimStatusList) {
+		this.claimStatusList = claimStatusList;
+	}
+
+	public List<MetaDataBean> getIdeaStatusList() {
+		ideaStatusList = new ArrayList<MetaDataBean>();
+		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/ip_idea_status");
+		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		mDataClient.close();
+		for (MetaDataMessage message : messages) {
+			MetaDataBean bean = new MetaDataBean();
+			bean.setDesc(message.getDesc());
+			bean.setId(message.getId());
+			bean.setTable(message.getTable());
+			ideaStatusList.add(bean);
+		}
+		return ideaStatusList;
+	}
+
+	public void setIdeaStatusList(List<MetaDataBean> ideaStatusList) {
+		this.ideaStatusList = ideaStatusList;
+	}
+
+	public List<MetaDataBean> getRewardsStatusList() {
+		rewardsStatusList = new ArrayList<MetaDataBean>();
+		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/ip_rewards_status");
+		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		mDataClient.close();
+		for (MetaDataMessage message : messages) {
+			MetaDataBean bean = new MetaDataBean();
+			bean.setDesc(message.getDesc());
+			bean.setId(message.getId());
+			bean.setTable(message.getTable());
+			rewardsStatusList.add(bean);
+		}
+		return rewardsStatusList;
+	}
+
+	public void setRewardsStatusList(List<MetaDataBean> rewardsStatusList) {
+		this.rewardsStatusList = rewardsStatusList;
+	}
+
+	public List<MetaDataBean> getSolStatusList() {
+		solStatusList = new ArrayList<MetaDataBean>();
+		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/ip_solution_status");
+		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		mDataClient.close();
+		for (MetaDataMessage message : messages) {
+			MetaDataBean bean = new MetaDataBean();
+			bean.setDesc(message.getDesc());
+			bean.setId(message.getId());
+			bean.setTable(message.getTable());
+			solStatusList.add(bean);
+		}
+		return solStatusList;
+	}
+
+	public void setSolStatusList(List<MetaDataBean> solStatusList) {
+		this.solStatusList = solStatusList;
+	}
+
+	public List<MetaDataBean> getDisStatusList() {
+		return disStatusList;
+	}
+
+	public void setDisStatusList(List<MetaDataBean> disStatusList) {
+		this.disStatusList = disStatusList;
 	}
 
 }

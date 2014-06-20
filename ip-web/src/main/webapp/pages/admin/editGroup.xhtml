@@ -48,6 +48,16 @@
 				<p:column>
 					<p:selectBooleanButton style="width: 100%" id="sbbActive" value="#{adminBean.groupBean.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
 				</p:column>
+				<p:column>
+					<p:outputLabel id="lblGrpFuncs" value="Assigned Fuctions : " />
+				</p:column>
+				<p:column>
+					<p:dataTable id="dtViewGrpFunctions" value="#{adminBean.functions}" var="func" paginator="true" paginatorPosition="bottom" rows="10" emptyMessage="No Functions Found for Group">
+						<p:column>
+							<p:outputLabel id="txtFuncName" value="#{func.funcName}" />
+						</p:column>
+					</p:dataTable>
+				</p:column>
 				<p:row>
 					<p:column colspan="2">
 						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{adminBean.updateGroup}" />
