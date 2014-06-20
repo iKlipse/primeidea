@@ -195,4 +195,22 @@ public class IpClaimStatusDAO extends BaseHibernateDAO {
 			throw re;
 		}
 	}
+	public List findAllNonAlloc() {
+		log.debug("finding all IpClaimStatus instances");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			Query query = session.getNamedQuery("getNonAllocClaimStatus");
+			List ret = query.list();
+			transaction.commit();
+			session.close();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			transaction.rollback();
+			session.close();
+			throw re;
+		}
+	}
+
 }

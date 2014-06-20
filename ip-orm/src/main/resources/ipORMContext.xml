@@ -52,6 +52,7 @@
 				<value>za/co/idea/ip/orm/hbm/IpBlob.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpSecqList.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpCategory.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpNews.hbm.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -226,6 +227,11 @@
 		</property>
 	</bean>
 	<bean id="IpCategoryDAO" class="za.co.idea.ip.orm.dao.IpCategoryDAO">
+		<property name="factory">
+			<ref bean="factory" />
+		</property>
+	</bean>
+	<bean id="IpNewsDAO" class="za.co.idea.ip.orm.dao.IpNewsDAO">
 		<property name="factory">
 			<ref bean="factory" />
 		</property>

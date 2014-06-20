@@ -57,7 +57,7 @@
 					<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{challengeBean.showViewChallenge}" />
 				</f:facet>
 			</p:panelGrid>
-			<p:overlayPanel dynamic="true" for="giComment" showEvent="mouseover" hideEvent="mousedown" dismissable="true" showCloseIcon="true">
+			<p:overlayPanel dynamic="true" for="giComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
 				<p:panelGrid id="pnlSolutionComment" columns="1">
 					<p:column>
 						<p:dataGrid id="dtViewComments" widgetVar="dtViewComments" value="#{challengeBean.solComments}" var="comment" columns="1" emptyMessage="No Comments Found">
@@ -82,12 +82,12 @@
 					</p:column>
 				</p:panelGrid>
 			</p:overlayPanel>
-			<p:overlayPanel dynamic="true" for="giLike" showEvent="mouseover" hideEvent="mousedown" dismissable="true" showCloseIcon="true">
+			<p:overlayPanel dynamic="true" for="giLike" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
 				<p:panelGrid id="pnlSolutionLikes" columns="1">
 					<p:tagCloud id="tgLikes" model="#{challengeBean.solLikes}" />
 				</p:panelGrid>
 			</p:overlayPanel>
-			<p:overlayPanel dynamic="true" for="giBuildOn" showEvent="mouseover" hideEvent="mousedown" dismissable="true" showCloseIcon="true">
+			<p:overlayPanel dynamic="true" for="giBuildOn" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
 				<p:panelGrid id="pnlSolutionBuildOn" columns="1">
 					<p:column>
 						<p:dataGrid id="dtViewBuildOns" widgetVar="dtViewBuildOns" value="#{challengeBean.buildOns}" var="buildOn" columns="1" emptyMessage="No BuildOns Found">

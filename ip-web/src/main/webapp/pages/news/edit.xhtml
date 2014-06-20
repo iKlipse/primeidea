@@ -1,0 +1,42 @@
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Edit News</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrEditNews">
+			<f:facet name="header">
+					Edit News
+				</f:facet>
+			<p:panelGrid columns="2" id="pnlEditNews">
+				<p:column>
+					<p:outputLabel id="lblnTitle" value="Title : " />
+				</p:column>
+				<p:column>
+					<p:inputText  style="width: 100%" autocomplete="false" id="nTitle" value="#{newsBean.newsBean.nTitle}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblNSDt" value="Start Date : " />
+				</p:column>
+				<p:column>
+					<p:calendar style="width: 100%" mode="popup" showOn="button" id="txtStartDate" value="#{newsBean.newsBean.nStartDate}" pattern="yyyy/MM/dd HH:mm" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblNEDt" value="End Date : " />
+				</p:column>
+				<p:column>
+					<p:calendar style="width: 100%" mode="popup" showOn="button" id="txtEndDate" value="#{newsBean.newsBean.nEndDate}" pattern="yyyy/MM/dd HH:mm" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblnContent" value="Content : " />
+				</p:column>
+				<p:column style="width: 100%">
+					<p:editor id="txtContent" value="#{newsBean.newsBean.nContent}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+				</p:column>
+				<p:row>
+					<p:column colspan="2">
+						<p:commandButton id="btnSave" value="Edit" ajax="false" action="#{newsBean.updateNews}" />
+						<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{newsBean.showViewNews}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</p:panel>
+	</ui:define>
+</ui:composition>

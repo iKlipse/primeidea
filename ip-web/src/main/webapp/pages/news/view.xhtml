@@ -1,0 +1,38 @@
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">View News</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrViewNews" style="width: 100% !important">
+			<f:facet name="header">
+					View News
+				</f:facet>
+			<p:dataTable id="dtViewNews" value="#{newsBean.viewNewsBeans}" var="news" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No News Found" style="width: 100% !important">
+				<p:column>
+					<f:facet name="header">News ID</f:facet>
+					<p:outputLabel id="txtNewsId" value="#{news.nId}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Title</f:facet>
+					<p:outputLabel id="newsTitle" value="#{news.nTitle}" />
+
+				</p:column>
+				<p:column>
+					<f:facet name="header">Start Date</f:facet>
+					<p:calendar mode="popup" showOn="button" id="newsStartDate" value="#{news.nStartDate}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">End Date</f:facet>
+					<p:calendar mode="popup" showOn="button" id="newsEndDate" value="#{news.nEndDate}" />
+				</p:column>
+
+				<p:column rendered="#{accessBean.editNewsEnabled}">
+					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{newsBean.showEditNews}">
+						<f:setPropertyActionListener value="#{news}" target="#{newsBean.newsBean}" />
+					</p:commandButton>
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton id="btnCancel" value="Return To view" ajax="false" action="#{adminBean.redirectHome}" />
+				</f:facet>
+			</p:dataTable>
+		</p:panel>
+	</ui:define>
+</ui:composition>

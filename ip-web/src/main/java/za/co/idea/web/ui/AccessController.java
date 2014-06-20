@@ -23,6 +23,7 @@ public class AccessController implements Serializable {
 	private boolean createRewardsEnabled;
 	private boolean createChallengeEnabled;
 	private boolean createIdeaEnabled;
+	private boolean createNewsEnabled;
 	private boolean editUserEnabled;
 	private boolean editGroupEnabled;
 	private boolean editFunctionEnabled;
@@ -31,6 +32,7 @@ public class AccessController implements Serializable {
 	private boolean editClaimEnabled;
 	private boolean editSolutionEnabled;
 	private boolean editIdeaEnabled;
+	private boolean editNewsEnabled;
 	private boolean maintainPointAllocEnabled;
 	private boolean maintainMetaDataEnabled;
 
@@ -200,6 +202,24 @@ public class AccessController implements Serializable {
 
 	public void setEditSolutionEnabled(boolean editSolutionEnabled) {
 		this.editSolutionEnabled = editSolutionEnabled;
+	}
+
+	public boolean isCreateNewsEnabled() {
+		createNewsEnabled = functions.contains("Create News");
+		return createNewsEnabled;
+	}
+
+	public void setCreateNewsEnabled(boolean createNewsEnabled) {
+		this.createNewsEnabled = createNewsEnabled;
+	}
+
+	public boolean isEditNewsEnabled() {
+		editNewsEnabled = functions.contains("Edit News");
+		return editNewsEnabled;
+	}
+
+	public void setEditNewsEnabled(boolean editNewsEnabled) {
+		this.editNewsEnabled = editNewsEnabled;
 	}
 
 }

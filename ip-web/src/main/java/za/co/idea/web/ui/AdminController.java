@@ -99,12 +99,12 @@ public class AdminController implements Serializable {
 		WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/login/" + userBean.getScName() + "/" + Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())));
 		UserMessage userMessage = loginClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 		loginClient.close();
-		if (userMessage == null || userMessage.getuId() == null || userMessage.getScName() == null) {
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid User Name Password", "Invalid User Name Password");
+		if (userMessage.getuId() == -999l) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "User Profile De-Activated. Please contact Admin.", "User Profile De-Activated. Please contact Admin.");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
-		} else if (userMessage.getuId() == -999l) {
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "User Profile De-Activated. Please contact Admin.", "User Profile De-Activated. Please contact Admin.");
+		} else if (userMessage == null || userMessage.getuId() == null || userMessage.getScName() == null) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid User Name Password", "Invalid User Name Password");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		} else {
@@ -407,33 +407,50 @@ public class AdminController implements Serializable {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Screen Name Available", "Screen Name Available");
 			FacesContext.getCurrentInstance().addMessage("txtSCName", exceptionMessage);
 		}
+	}
 
-		// unique email validation
+	public void checkAvailabilityEmail() {
 		if (userBean.geteMail() == null || userBean.geteMail().length() == 0) {
 
 		} else {
-			checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/email/" + userBean.geteMail());
+			WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/email/" + userBean.geteMail());
 			Boolean availE = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 			checkAvailablityClient.close();
 			availableEmail = availE.booleanValue();
+			if (availableEmail) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email already exists", "Email already exists");
+				FacesContext.getCurrentInstance().addMessage("txtEMail", exceptionMessage);
+			}
 		}
-		// unique Id Number validation
+	}
+
+	public void checkAvailabilityIDNumber() {
 		if (userBean.getIdNum() == null || userBean.getIdNum() == 0) {
 
 		} else {
-			checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/idNumber/" + userBean.getIdNum());
+			WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/idNumber/" + userBean.getIdNum());
 			Boolean availID = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 			checkAvailablityClient.close();
 			availableID = availID.booleanValue();
+			if (availableID) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ID Number already exists", "ID Number already exists");
+				FacesContext.getCurrentInstance().addMessage("txtIdNum", exceptionMessage);
+			}
 		}
-		// unique Employee ID validation
+	}
+
+	public void checkAvailabilityEmployeeID() {
 		if (userBean.getEmployeeId() == null || userBean.getEmployeeId().length() == 0) {
 
 		} else {
-			checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/employeeId/" + userBean.getEmployeeId());
+			WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/employeeId/" + userBean.getEmployeeId());
 			Boolean availEmpID = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 			checkAvailablityClient.close();
-			availEmpID = availEmpID.booleanValue();
+			availableEmpID = availEmpID.booleanValue();
+			if (availableEmpID) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Employee ID already exists", "Employee ID already exists");
+				FacesContext.getCurrentInstance().addMessage("txtEmpId", exceptionMessage);
+			}
 		}
 	}
 
@@ -560,6 +577,24 @@ public class AdminController implements Serializable {
 		return ret;
 	}
 
+	private List<String> updateUserValidation() {
+		ArrayList<String> ret = new ArrayList<String>();
+		if (userBean.getfName() == null || userBean.getfName().length() == 0) {
+			ret.add("FirstName is Mandatory");
+		}
+		if (userBean.getlName() == null || userBean.getlName().length() == 0) {
+			ret.add("LastName is Mandatory");
+		}
+		if (userBean.getScName() == null || userBean.getScName().length() == 0) {
+			ret.add("Screen Name is Mandatory");
+		}
+		if (userBean.getIdNum() == null || userBean.getIdNum() == 0) {
+			ret.add("ID Number is Mandatory");
+		}
+
+		return ret;
+	}
+
 	private List<String> validateFunction() {
 		ArrayList<String> ret = new ArrayList<String>();
 		if (functionBean.getFuncName() == null || functionBean.getFuncName().length() == 0) {
@@ -615,7 +650,7 @@ public class AdminController implements Serializable {
 
 	public String updateUser() {
 		try {
-			List<String> errors = validateUser();
+			List<String> errors = updateUserValidation();
 			if (errors.size() > 0) {
 				for (String error : errors) {
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);

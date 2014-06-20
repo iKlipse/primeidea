@@ -35,6 +35,11 @@
 		<managed-bean-class>za.co.idea.web.ui.MetaDataController</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>newsBean</managed-bean-name>
+		<managed-bean-class>za.co.idea.web.ui.NewsController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 	<navigation-rule>
 		<navigation-case>
 			<from-outcome>login</from-outcome>
@@ -191,6 +196,24 @@
 		<navigation-case>
 			<from-outcome>clmuc</from-outcome>
 			<to-view-id>/pages/user/claims.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>nscc</from-outcome>
+			<to-view-id>/pages/news/create.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>nsec</from-outcome>
+			<to-view-id>/pages/news/edit.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>nsvc</from-outcome>
+			<to-view-id>/pages/news/view.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>nssc</from-outcome>
+			<to-view-id>/pages/news/summary.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<lifecycle>

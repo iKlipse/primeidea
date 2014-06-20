@@ -157,6 +157,7 @@ public class MetaDataController {
 			metaList = new HashMap<String, String>();
 			metaList.put("Security Questions", "IpSecqList");
 			metaList.put("Category", "IpCategory");
+			metaList.put("Rewards Category", "IpRewardsCat");
 		}
 		return metaList;
 	}

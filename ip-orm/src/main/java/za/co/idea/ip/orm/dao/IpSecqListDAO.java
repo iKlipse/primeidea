@@ -126,7 +126,7 @@ public class IpSecqListDAO extends BaseHibernateDAO {
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			String queryString = "from IpSecqList";
+			String queryString = "from IpSecqList isl order by isl.islDesc asc";
 			Query queryObject = session.createQuery(queryString);
 			List results = queryObject.list();
 			transaction.commit();

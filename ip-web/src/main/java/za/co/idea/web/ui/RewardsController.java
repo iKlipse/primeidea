@@ -172,6 +172,7 @@ public class RewardsController implements Serializable {
 	public String showAllocationAdd() {
 		this.showAddPanel = true;
 		this.showModPanel = false;
+		allocationBean = new AllocationBean();
 		return "";
 	}
 

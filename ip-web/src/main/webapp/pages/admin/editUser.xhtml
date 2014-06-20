@@ -20,39 +20,45 @@
 					<p:outputLabel id="lblFName" value="First Name : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtFName" value="#{adminBean.userBean.fName}" disabled="false" />
+					<p:inputText style="width: 100%" autocomplete="false" id="txtFName" value="#{adminBean.userBean.fName}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblMName" value="Middle Name : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtMName" value="#{adminBean.userBean.mName}" disabled="false" />
+					<p:inputText style="width: 100%" autocomplete="false" id="txtMName" value="#{adminBean.userBean.mName}" />
 				</p:column>
 
 				<p:column>
 					<p:outputLabel id="lblLName" value="Last Name : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtLName" value="#{adminBean.userBean.lName}" disabled="false" />
+					<p:inputText style="width: 100%" autocomplete="false" id="txtLName" value="#{adminBean.userBean.lName}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblIdNum" value="ID Number : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtIdNum" value="#{adminBean.userBean.idNum}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="txtIdNum" value="#{adminBean.userBean.idNum}">
+						<p:ajax listener="#{adminBean.checkAvailabilityIDNumber}" event="blur" update="grlMsg" />
+					</p:inputText>
 				</p:column>
 
 				<p:column>
 					<p:outputLabel id="lblEMail" value="EMail : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtEUEMail" value="#{adminBean.userBean.eMail}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="txtEUEMail" value="#{adminBean.userBean.eMail}">
+						<p:ajax listener="#{adminBean.checkAvailabilityEmail}" event="blur" update="grlMsg" />
+					</p:inputText>
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblEmpId" value="Employee ID : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtEmpId" value="#{adminBean.userBean.employeeId}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="txtEmpId" value="#{adminBean.userBean.employeeId}">
+						<p:ajax listener="#{adminBean.checkAvailabilityEmployeeID}" event="blur" update="grlMsg" />
+					</p:inputText>
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblContact" value="Contact Number : " />

@@ -78,4 +78,7 @@
 	<bean id="documentUploadService" class="za.co.idea.ip.ws.DocumentUploadService">
 		<property name="ipBlobDAO" ref="IpBlobDAO" />
 	</bean>
+	<bean id="newsService" class="za.co.idea.ip.ws.NewsService">
+		<property name="ipNewsDAO" ref="IpNewsDAO" />
+	</bean>
 </beans>

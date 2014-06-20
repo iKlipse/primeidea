@@ -25,6 +25,7 @@
 			<ref bean="rewardsService" />
 			<ref bean="metaDataService" />
 			<ref bean="documentUploadService" />
+			<ref bean="newsService" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider">

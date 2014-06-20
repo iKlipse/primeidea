@@ -22,4 +22,8 @@
 		select iis.* from ip_idea_status iis where (iis.is_id=:curr or iis.is_id in (select st.tran_next_state from ip_state_tran st where st.tran_curr_state=:curr and lower(st.tran_entity)='ip_idea_status'))
 		<return alias="iis" class="za.co.idea.ip.orm.bean.IpIdeaStatus" />
 	</sql-query>
+	<sql-query name="getNonAllocIdeaStatus">
+		select iis.* from ip_idea_status iis where iis.is_id not in (select ia.alloc_status_id from ip_allocation ia where lower(ia.alloc_status_id)='ip_idea_status')
+		<return alias="iis" class="za.co.idea.ip.orm.bean.IpIdeaStatus" />
+	</sql-query>
 </hibernate-mapping>

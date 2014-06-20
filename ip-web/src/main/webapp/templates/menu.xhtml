@@ -5,6 +5,8 @@
 			<p:menuitem value="View Users" action="#{adminBean.showViewUsers}" immediate="true" ajax="false" />
 			<p:menuitem value="Create Group" action="#{adminBean.showCreateGroup}" immediate="true" ajax="false" rendered="#{accessBean.createGroupEnabled}" />
 			<p:menuitem value="View Groups" action="#{adminBean.showViewGroups}" immediate="true" ajax="false" />
+			<p:menuitem value="Create News" action="#{newsBean.showCreateNews}" immediate="true" ajax="false" rendered="#{accessBean.createNewsEnabled}" />
+			<p:menuitem value="View News" action="#{newsBean.showViewNews}" immediate="true" ajax="false" />
 			<p:menuitem value="View Functions" action="#{adminBean.showViewFunction}" immediate="true" ajax="false" />
 			<p:menuitem value="Maintain Point Allocation" action="#{rewardsBean.showPointAllocation}" immediate="true" ajax="false" rendered="#{accessBean.maintainPointAllocEnabled}" />
 			<p:menuitem value="Maintain MetaData" action="#{metaDataBean.showMetadataMaintain}" immediate="true" ajax="false" rendered="#{accessBean.maintainMetaDataEnabled}" />
@@ -33,6 +35,7 @@
 			<p:menuitem value="My Claims" action="#{claimBean.showViewClaimByUser}" immediate="true" ajax="false" />
 			<p:menuitem value="Rewards Wishlist" action="#{rewardsBean.showViewRewardByUser}" immediate="true" ajax="false" />
 			<p:menuitem value="Point Profile" action="#{rewardsBean.showPointProfile}" immediate="true" ajax="false" />
+			<p:menuitem value="News" action="#{newsBean.showSummaryNews}" immediate="true" ajax="false" />
 		</p:submenu>
 	</p:menubar>
 </ui:composition>

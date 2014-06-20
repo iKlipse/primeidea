@@ -363,6 +363,72 @@ public class MetaDataService {
 		return ret;
 	}
 
+	@GET
+	@Path("/list/non/{table}")
+	@Produces("application/json")
+	@Consumes("application/json")
+	public <T extends MetaDataMessage> List<T> listNonAllocatedByTable(@PathParam("table") String table) {
+		List<T> ret = new ArrayList<T>();
+		try {
+			if (table.equalsIgnoreCase("ip_challenge_status")) {
+				List vals = ipChallengeStatusDAO.findAllNonAlloc();
+				for (Object object : vals) {
+					MetaDataMessage message = new MetaDataMessage();
+					IpChallengeStatus cat = (IpChallengeStatus) object;
+					message.setId(cat.getCsId());
+					message.setDesc(cat.getCsDesc());
+					message.setTable("ip_challenge_status");
+					ret.add((T) message);
+				}
+			} else if (table.equalsIgnoreCase("ip_idea_status")) {
+				List vals = ipIdeaStatusDAO.findAllNonAlloc();
+				for (Object object : vals) {
+					MetaDataMessage message = new MetaDataMessage();
+					IpIdeaStatus cat = (IpIdeaStatus) object;
+					message.setId(cat.getIsId());
+					message.setDesc(cat.getIsDesc());
+					message.setTable("ip_idea_status");
+					ret.add((T) message);
+				}
+			}
+			if (table.equalsIgnoreCase("ip_claim_status")) {
+				List vals = ipClaimStatusDAO.findAllNonAlloc();
+				for (Object object : vals) {
+					MetaDataMessage message = new MetaDataMessage();
+					IpClaimStatus cat = (IpClaimStatus) object;
+					message.setId(cat.getCsId());
+					message.setDesc(cat.getCsDesc());
+					message.setTable("ip_claim_status");
+					ret.add((T) message);
+				}
+			}
+			if (table.equalsIgnoreCase("ip_solution_status")) {
+				List vals = ipSolutionStatusDAO.findAllNonAlloc();
+				for (Object object : vals) {
+					MetaDataMessage message = new MetaDataMessage();
+					IpSolutionStatus cat = (IpSolutionStatus) object;
+					message.setId(cat.getSsId());
+					message.setDesc(cat.getSsDesc());
+					message.setTable("ip_solution_status");
+					ret.add((T) message);
+				}
+			} else if (table.equalsIgnoreCase("ip_rewards_status")) {
+				List vals = ipRewardsStatusDAO.findAllNonAlloc();
+				for (Object object : vals) {
+					MetaDataMessage message = new MetaDataMessage();
+					IpRewardsStatus cat = (IpRewardsStatus) object;
+					message.setId(cat.getRsId());
+					message.setDesc(cat.getRsDesc());
+					message.setTable("ip_rewards_status");
+					ret.add((T) message);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
 	public IpChallengeCatDAO getIpChallengeCatDAO() {
 		return ipChallengeCatDAO;
 	}

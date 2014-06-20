@@ -1,0 +1,26 @@
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">View News</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrViewNews" style="width: 100% !important">
+			<f:facet name="header">
+					News
+				</f:facet>
+			<p:dataGrid id="dgNews" value="#{newsBean.viewNewsBeans}" var="news" columns="1">
+				<p:scrollPanel style="border: 0px !important;">
+					<p:panel style="border: 0px !important;">
+						<p:panelGrid columns="1" id="pnlNews">
+							<p:column>
+								<h3>
+									<p:outputLabel id="lblITitle" value="#{news.nTitle}" />
+								</h3>
+							</p:column>
+							<p:column>
+								<p:outputLabel id="txtIDesc" value="#{news.nContent}" escape="false" />
+							</p:column>
+						</p:panelGrid>
+					</p:panel>
+				</p:scrollPanel>
+			</p:dataGrid>
+		</p:panel>
+	</ui:define>
+</ui:composition>

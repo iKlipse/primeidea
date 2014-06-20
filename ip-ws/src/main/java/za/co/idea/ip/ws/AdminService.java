@@ -566,7 +566,7 @@ public class AdminService {
 	@GET
 	@Path("/user/check/idNumber/{id}")
 	@Produces("application/json")
-	public Boolean checkIDNumber(@PathParam("id") String id) {
+	public Boolean checkIDNumber(@PathParam("id") Long id) {
 		try {
 			List usersByIDNumber = ipUserDAO.findByUserIdNum(id);
 			Boolean ret = (usersByIDNumber != null && usersByIDNumber.size() > 0);
@@ -582,7 +582,7 @@ public class AdminService {
 	@Produces("application/json")
 	public Boolean checkEmployeeID(@PathParam("eId") String eId) {
 		try {
-			List usersByEmployeeID = ipUserDAO.findByUserScreenName(eId);
+			List usersByEmployeeID = ipUserDAO.findByUserEmployeeId(eId);
 			Boolean ret = (usersByEmployeeID != null && usersByEmployeeID.size() > 0);
 			return ret;
 		} catch (Exception e) {
