@@ -4,40 +4,49 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "pointMessage")
 public class PointMessage {
-	private long userId;
-	private int allocId;
-	private int pointValue;
-	private long pointId;
+	private Long userId;
+	private Integer allocId;
+	private Integer pointValue;
+	private Long pointId;
+	private String comments;
 
-	public long getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
-	public int getAllocId() {
+	public Integer getAllocId() {
 		return allocId;
 	}
 
-	public void setAllocId(int allocId) {
+	public void setAllocId(Integer allocId) {
 		this.allocId = allocId;
 	}
 
-	public int getPointValue() {
+	public Integer getPointValue() {
 		return pointValue;
 	}
 
-	public void setPointValue(int pointValue) {
+	public void setPointValue(Integer pointValue) {
 		this.pointValue = pointValue;
 	}
 
-	public long getPointId() {
+	public Long getPointId() {
 		return pointId;
 	}
 
-	public void setPointId(long pointId) {
+	public void setPointId(Long pointId) {
 		this.pointId = pointId;
+	}
+
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
 }

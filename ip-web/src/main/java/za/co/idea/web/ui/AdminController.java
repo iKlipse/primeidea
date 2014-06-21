@@ -99,7 +99,7 @@ public class AdminController implements Serializable {
 		WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/login/" + userBean.getScName() + "/" + Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())));
 		UserMessage userMessage = loginClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 		loginClient.close();
-		if (userMessage != null && userMessage.getuId() == -999l) {
+		if (userMessage != null && userMessage.getuId() != null && userMessage.getuId() == -999l) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "User Profile De-Activated. Please contact Admin.", "User Profile De-Activated. Please contact Admin.");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";

@@ -174,4 +174,22 @@ public class IpRewardsCatDAO extends BaseHibernateDAO {
 			throw re;
 		}
 	}
+
+	public List listDependentCat() {
+		log.debug("checking category dependency");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			Query query = session.getNamedQuery("checkRwDependency");
+			List ret = query.list();
+			transaction.commit();
+			session.close();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("checking category", re);
+			transaction.rollback();
+			session.close();
+			throw re;
+		}
+	}
 }

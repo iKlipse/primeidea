@@ -178,6 +178,10 @@
 			<to-view-id>/pages/rewards/maintainPointAllocation.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>rwap</from-outcome>
+			<to-view-id>/pages/admin/allocatePoints.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>rwpp</from-outcome>
 			<to-view-id>/pages/user/points.xhtml</to-view-id>
 		</navigation-case>

@@ -11,14 +11,13 @@ import org.slf4j.LoggerFactory;
 
 import za.co.idea.ip.orm.bean.IpCategory;
 
-
 /**
  * A data access object (DAO) providing persistence and search support for
- * IpCategory entities. Transaction control of the save(), update() and
- * delete() operations can directly support Spring container-managed
- * transactions or they can be augmented to handle user-managed Spring
- * transactions. Each of these methods provides additional information for how
- * to configure it for the desired type of transaction control.
+ * IpCategory entities. Transaction control of the save(), update() and delete()
+ * operations can directly support Spring container-managed transactions or they
+ * can be augmented to handle user-managed Spring transactions. Each of these
+ * methods provides additional information for how to configure it for the
+ * desired type of transaction control.
  * 
  * @see za.co.idea.ip.orm.dao.IpCategoryDAO
  * @author MyEclipse Persistence Tools
@@ -28,7 +27,7 @@ public class IpCategoryDAO extends BaseHibernateDAO {
 	private static final Logger log = LoggerFactory.getLogger(IpCategoryDAO.class);
 	// property constants
 	public static final String CATEGORY_DESC = "categoryDesc";
-	
+
 	public void save(IpCategory transientInstance) {
 		log.debug("saving IpCategory instance");
 		Session session = getSession();
@@ -45,7 +44,7 @@ public class IpCategoryDAO extends BaseHibernateDAO {
 			throw re;
 		}
 	}
-	
+
 	public void delete(IpCategory persistentInstance) {
 		log.debug("deleting IpCategory instance");
 		Session session = getSession();
@@ -177,6 +176,23 @@ public class IpCategoryDAO extends BaseHibernateDAO {
 			throw re;
 		}
 	}
+
+	public List listDependentCat(Long catId) {
+		log.debug("checking category dependency");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			Query query = session.getNamedQuery("checkDependency");
+			query.setLong("id", catId);
+			List ret = query.list();
+			transaction.commit();
+			session.close();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("checking category", re);
+			transaction.rollback();
+			session.close();
+			throw re;
+		}
+	}
 }
-
-

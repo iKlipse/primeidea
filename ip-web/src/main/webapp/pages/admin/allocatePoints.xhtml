@@ -1,0 +1,55 @@
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Allocate Points</ui:define>
+	<ui:define name="body">
+		<p:panel id="pnlPointAlloc" header="Allocate Points">
+			<p:panelGrid id="grdPointAlloc" columns="2">
+				<p:column>
+					<p:outputLabel id="lblEntity" value="Entity : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somSelectEntity" value="#{rewardsBean.entity}">
+						<p:ajax listener="#{rewardsBean.updateEntityChange}" update="somSelectAllocation,:ideaFrm:txtPointVal" />
+						<f:selectItem itemLabel="Please Select" itemValue="" />
+						<f:selectItems value="#{rewardsBean.allocEntityList}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblALLoc" value="Allocation : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somSelectAllocation" value="#{rewardsBean.selAllocId}">
+						<p:ajax listener="#{rewardsBean.updateAllocationChange}" update="txtPointVal" />
+						<f:selectItem itemLabel="Please Select" itemValue="" />
+						<f:selectItem itemLabel="Custom Allocation" itemValue="0" />
+						<f:selectItems value="#{rewardsBean.allocs}" var="a" itemLabel="#{a.allocDesc}" itemValue="#{a.allocId}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblAdmUser" value="Select User : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu style="width: 100%" id="somAdmUser" value="#{rewardsBean.userId}">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{rewardsBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblPointVal" value="Point Value : " />
+				</p:column>
+				<p:column>
+					<p:inputText style="width: 100%" id="txtPointVal" value="#{rewardsBean.pointVal}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblComments" value="Comments : " />
+				</p:column>
+				<p:column>
+					<p:inputText style="width: 100%" id="txtComments" value="#{rewardsBean.comments}" />
+				</p:column>
+				<p:column>
+					<p:commandButton id="btnSavePoint" value="Add Points" action="#{rewardsBean.savePoints}" ajax="false" />
+					<p:commandButton id="btnCancel" value="Return To Home" ajax="false" action="#{adminBean.redirectHome}" />
+				</p:column>
+			</p:panelGrid>
+		</p:panel>
+	</ui:define>
+</ui:composition>

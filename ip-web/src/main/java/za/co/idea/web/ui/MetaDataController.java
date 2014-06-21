@@ -95,6 +95,27 @@ public class MetaDataController {
 		}
 	}
 
+	public String deleteMetaData() {
+		this.showAddPanel = false;
+		this.showModPanel = false;
+		this.showAddBtn = true;
+		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/delete");
+		MetaDataMessage message = new MetaDataMessage();
+		message.setDesc(selVal);
+		message.setId(Integer.valueOf(selId));
+		message.setTable(table);
+		ResponseMessage response = mDataClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
+		mDataClient.close();
+		if (response.getStatusCode() == 0) {
+			beans = fetchAllMetadata();
+			return "mdata";
+		} else {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
 	public String addMetaData() {
 		this.showAddPanel = false;
 		this.showModPanel = false;

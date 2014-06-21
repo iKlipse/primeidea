@@ -505,6 +505,41 @@ public class RewardsService {
 	}
 
 	@PUT
+	@Path("/alloc/delete")
+	@Produces("application/json")
+	@Consumes("application/json")
+	public ResponseMessage deleteAllocation(AllocationMessage alloc) {
+		try {
+			List allocated = ipAllocationDAO.getUtilisedAllocation(alloc.getAllocEntity());
+			if (allocated != null && allocated.size() > 0) {
+				ResponseMessage message = new ResponseMessage();
+				message.setStatusCode(2);
+				message.setStatusDesc("Points Allocation Active cannot be deleted.");
+				return message;
+			} else {
+				IpAllocation ipAllocation = new IpAllocation();
+				ipAllocation.setAllocDesc(alloc.getAllocDesc());
+				ipAllocation.setAllocEntity(alloc.getAllocEntity());
+				ipAllocation.setAllocId(alloc.getAllocId());
+				ipAllocation.setAllocStatusId(alloc.getAllocStatusId());
+				ipAllocation.setAllocVal(alloc.getAllocVal());
+				ipAllocationDAO.delete(ipAllocation);
+				ResponseMessage message = new ResponseMessage();
+				message.setStatusCode(0);
+				message.setStatusDesc("Success");
+				return message;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(e.getMessage());
+			return message;
+		}
+
+	}
+
+	@PUT
 	@Path("/alloc/update")
 	@Produces("application/json")
 	@Consumes("application/json")

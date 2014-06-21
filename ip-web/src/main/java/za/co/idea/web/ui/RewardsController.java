@@ -31,6 +31,7 @@ import za.co.idea.ip.ws.bean.AllocationMessage;
 import za.co.idea.ip.ws.bean.AttachmentMessage;
 import za.co.idea.ip.ws.bean.GroupMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
+import za.co.idea.ip.ws.bean.PointMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.RewardsMessage;
 import za.co.idea.ip.ws.bean.TagMessage;
@@ -79,6 +80,10 @@ public class RewardsController implements Serializable {
 	private boolean showAddPanel;
 	private boolean showModPanel;
 	private boolean showAddBtn;
+	private Integer pointVal;
+	private Integer selAllocId;
+	private String comments;
+	private Long userId;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
@@ -204,6 +209,41 @@ public class RewardsController implements Serializable {
 		statusList = new ArrayList<MetaDataBean>();
 		disStatusList = new ArrayList<MetaDataBean>();
 		return "";
+	}
+
+	public String showAllocatePoints() {
+		try {
+			entity = "";
+			admUsers = fetchAllUsers();
+			allocs = new ArrayList<AllocationBean>();
+			return "rwap";
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public void updateEntityChange() {
+		if (entity.equalsIgnoreCase("")) {
+			entity = "";
+			allocs = new ArrayList<AllocationBean>();
+		} else {
+			allocs = fetchAllAllocationsByEntity();
+		}
+		pointVal = null;
+	}
+
+	public void updateAllocationChange() {
+		if (entity.equalsIgnoreCase("")) {
+			pointVal = null;
+		} else {
+			if (allocationBean != null && allocationBean.getAllocVal() != null)
+				pointVal = allocationBean.getAllocVal();
+			else
+				pointVal = 0;
+		}
 	}
 
 	public void updateStatusList() {
@@ -519,6 +559,37 @@ public class RewardsController implements Serializable {
 		}
 	}
 
+	public String savePoints() {
+		try {
+			WebClient savePointsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/points/add");
+			PointMessage message = new PointMessage();
+			message.setAllocId(selAllocId);
+			message.setPointId(COUNTER.getNextId("IpPoints"));
+			message.setPointValue(pointVal);
+			message.setUserId(userId);
+			message.setComments(comments);
+			ResponseMessage res = savePointsClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+			if (res.getStatusCode() == 0) {
+				selAllocId = null;
+				pointVal = null;
+				userId = null;
+				entity = null;
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucessfully added points", "Sucessfully added points");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			} else {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform save point request", "System error occurred, cannot perform save point request");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform save point request", "System error occurred, cannot perform save point request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
 	public String updateAllocation() {
 		try {
 			WebClient updateAllocClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/alloc/update");
@@ -536,6 +607,34 @@ public class RewardsController implements Serializable {
 				return "";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update allocation request", "System error occurred, cannot perform update allocation request");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update allocation request", "System error occurred, cannot perform update allocation request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String deleteAllocation() {
+		try {
+			WebClient updateAllocClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/alloc/delete");
+			AllocationMessage message = new AllocationMessage();
+			message.setAllocDesc(allocationBean.getAllocDesc());
+			message.setAllocEntity(entity);
+			message.setAllocId(allocationBean.getAllocId());
+			message.setAllocStatusId(allocationBean.getAllocStatusId());
+			message.setAllocVal(allocationBean.getAllocVal());
+			ResponseMessage res = updateAllocClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
+			if (res.getStatusCode() == 0) {
+				allocs = fetchAllAllocationsByEntity();
+				this.showAddPanel = false;
+				this.showModPanel = false;
+				return "";
+			} else {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, res.getStatusDesc(), res.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
@@ -1155,6 +1254,38 @@ public class RewardsController implements Serializable {
 
 	public void setDisStatusList(List<MetaDataBean> disStatusList) {
 		this.disStatusList = disStatusList;
+	}
+
+	public Integer getPointVal() {
+		return pointVal;
+	}
+
+	public void setPointVal(Integer pointVal) {
+		this.pointVal = pointVal;
+	}
+
+	public Integer getSelAllocId() {
+		return selAllocId;
+	}
+
+	public void setSelAllocId(Integer selAllocId) {
+		this.selAllocId = selAllocId;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
 
 }

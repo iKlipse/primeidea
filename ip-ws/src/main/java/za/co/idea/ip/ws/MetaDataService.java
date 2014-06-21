@@ -237,6 +237,111 @@ public class MetaDataService {
 		}
 	}
 
+	@PUT
+	@Path("/delete")
+	@Produces("application/json")
+	@Consumes("application/json")
+	public ResponseMessage deleteMetaData(MetaDataMessage mData) {
+		boolean success = false;
+		String msg = "Invalid Table Selected :: " + mData;
+		if (mData.getTable().equalsIgnoreCase("IpChallengeCat")) {
+			IpChallengeCat cat = new IpChallengeCat();
+			cat.setCcDesc(mData.getDesc());
+			cat.setCcId(mData.getId());
+			try {
+				ipChallengeCatDAO.delete(cat);
+				success = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				success = false;
+				msg = e.getMessage();
+			}
+		} else if (mData.getTable().equalsIgnoreCase("IpIdeaCat")) {
+			IpIdeaCat cat = new IpIdeaCat();
+			cat.setIcDesc(mData.getDesc());
+			cat.setIcId(mData.getId());
+			try {
+				ipIdeaCatDAO.delete(cat);
+				success = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				success = false;
+				msg = e.getMessage();
+			}
+		} else if (mData.getTable().equalsIgnoreCase("IpRewardsCat")) {
+			List depend = ipRewardsCatDAO.listDependentCat();
+			if (depend != null && depend.size() > 0) {
+				success = false;
+				msg = "Rewards Dependant on Category";
+			} else {
+				IpRewardsCat cat = new IpRewardsCat();
+				cat.setRcDesc(mData.getDesc());
+				cat.setRcId(mData.getId());
+				try {
+					ipRewardsCatDAO.delete(cat);
+					success = true;
+				} catch (Exception e) {
+					e.printStackTrace();
+					success = false;
+					msg = e.getMessage();
+				}
+			}
+		} else if (mData.getTable().equalsIgnoreCase("IpSolutionCat")) {
+			IpSolutionCat cat = new IpSolutionCat();
+			cat.setScDesc(mData.getDesc());
+			cat.setScId(mData.getId());
+			try {
+				ipSolutionCatDAO.delete(cat);
+				success = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				success = false;
+				msg = e.getMessage();
+			}
+		} else if (mData.getTable().equalsIgnoreCase("IpSecqList")) {
+			IpSecqList cat = new IpSecqList();
+			cat.setIslDesc(mData.getDesc());
+			cat.setIslId(mData.getId());
+			try {
+				ipSecqListDAO.delete(cat);
+				success = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				success = false;
+				msg = e.getMessage();
+			}
+		} else if (mData.getTable().equalsIgnoreCase("IpCategory")) {
+			List depend = ipCategoryDAO.listDependentCat(mData.getId().longValue());
+			if (depend != null && depend.size() > 0) {
+				success = false;
+				msg = "Entities Dependant on Category";
+			} else {
+				IpCategory cat = new IpCategory();
+				cat.setCategoryDesc(mData.getDesc());
+				cat.setCategoryId(mData.getId());
+				try {
+					ipCategoryDAO.delete(cat);
+					success = true;
+				} catch (Exception e) {
+					e.printStackTrace();
+					success = false;
+					msg = e.getMessage();
+				}
+			}
+		}
+		if (success) {
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(0);
+			message.setStatusDesc("Success");
+			return message;
+		} else {
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(msg);
+			return message;
+		}
+	}
+
 	@GET
 	@Path("/list/{table}")
 	@Produces("application/json")

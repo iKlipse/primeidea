@@ -16,6 +16,7 @@ public class IpPoints implements java.io.Serializable {
 	private IpAllocation ipAllocation;
 	private IpUser ipUser;
 	private Integer pointValue;
+	private String comments;
 
 	// Constructors
 
@@ -69,6 +70,14 @@ public class IpPoints implements java.io.Serializable {
 
 	public void setPointValue(Integer pointValue) {
 		this.pointValue = pointValue;
+	}
+
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
 
 }

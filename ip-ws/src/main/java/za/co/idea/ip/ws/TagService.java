@@ -22,7 +22,7 @@ import za.co.idea.ip.orm.dao.IpUserDAO;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.TagMessage;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "unchecked", "rawtypes" })
 @Path(value = "/ts")
 public class TagService {
 	private IpTagDAO ipTagDAO;
@@ -91,10 +91,18 @@ public class TagService {
 	@Produces("application/json")
 	public ResponseMessage createTag(TagMessage tag) {
 		try {
-			if (!tag.isDuplicate() && ipTagDAO.getTagByFilterB(tag.getEntityId(), tag.getTeId(), tag.getTtId(), tag.getUserId()).size() != 0) {
+			List tags = ipTagDAO.getTagByFilterB(tag.getEntityId(), tag.getTeId(), tag.getTtId(), tag.getUserId());
+			if (!tag.isDuplicate() && tags.size() != 0 && tag.getTtId() != 1) {
 				ResponseMessage message = new ResponseMessage();
-				message.setStatusCode(1);
+				message.setStatusCode(2);
 				message.setStatusDesc("Tag Already exists. Cannot Create Duplicate");
+				return message;
+			} else if (!tag.isDuplicate() && tags.size() != 0 && tag.getTtId() == 1) {
+				IpTag ipTag = (IpTag) tags.get(0);
+				ipTagDAO.delete(ipTag);
+				ResponseMessage message = new ResponseMessage();
+				message.setStatusCode(0);
+				message.setStatusDesc("Success");
 				return message;
 			} else {
 				IpTag ipTag = new IpTag();

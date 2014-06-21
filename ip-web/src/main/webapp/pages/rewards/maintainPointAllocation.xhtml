@@ -35,7 +35,7 @@
 					<f:facet name="header">Point Value</f:facet>
 					<p:outputLabel id="lblPntVal" value="#{bean.allocVal}" />
 				</p:column>
-				<p:column>
+				<p:column rendered="#{accessBean.maintainPointAllocEnabled}">
 					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{rewardsBean.showAllocationMod}">
 						<f:setPropertyActionListener value="#{bean}" target="#{rewardsBean.allocationBean}" />
 					</p:commandButton>
@@ -96,6 +96,7 @@
 				</p:column>
 				<p:column colspan="2">
 					<p:commandButton id="modSaveButton" value="Update" ajax="false" action="#{rewardsBean.updateAllocation}" />
+					<p:commandButton id="modDeleteButton" value="Delete" ajax="false" action="#{rewardsBean.deleteAllocation}" />
 					<p:commandButton id="modCancelButton" value="Cancel" ajax="false" action="#{rewardsBean.cancelAllocation}" />
 				</p:column>
 			</p:panelGrid>

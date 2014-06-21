@@ -35,6 +35,7 @@ public class AccessController implements Serializable {
 	private boolean editNewsEnabled;
 	private boolean maintainPointAllocEnabled;
 	private boolean maintainMetaDataEnabled;
+	private boolean createAllocatePoints;
 
 	public AccessController(Long userId) {
 		if (userId == null) {
@@ -220,6 +221,15 @@ public class AccessController implements Serializable {
 
 	public void setEditNewsEnabled(boolean editNewsEnabled) {
 		this.editNewsEnabled = editNewsEnabled;
+	}
+
+	public boolean isCreateAllocatePoints() {
+		createAllocatePoints = functions.contains("Allocate Points");
+		return createAllocatePoints;
+	}
+
+	public void setCreateAllocatePoints(boolean createAllocatePoints) {
+		this.createAllocatePoints = createAllocatePoints;
 	}
 
 }
