@@ -10,7 +10,7 @@
 					<p:outputLabel id="lblnTitle" value="Title : " />
 				</p:column>
 				<p:column>
-					<p:inputText  style="width: 100%" autocomplete="false" id="nTitle" value="#{newsBean.newsBean.nTitle}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="nTitle" value="#{newsBean.newsBean.nTitle}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblNSDt" value="Start Date : " />
@@ -30,10 +30,16 @@
 				<p:column style="width: 100%">
 					<p:editor id="txtContent" value="#{newsBean.newsBean.nContent}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
 				</p:column>
+				<p:column>
+					<p:outputLabel id="lblProfImage" value="News Files : " />
+				</p:column>
+				<p:column>
+					<p:fileUpload id="fuCUpload" style="background-color: #55a616;width: 100% !important" fileUploadListener="#{newsBean.fileUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+				</p:column>
 				<p:row>
 					<p:column colspan="2">
-						<p:commandButton id="btnSave" value="Edit" ajax="false" action="#{newsBean.updateNews}" />
-						<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{newsBean.showViewNews}" />
+						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{newsBean.updateNews}" />
+						<p:commandButton id="btnCancel" value="Return To view" ajax="false" action="#{newsBean.showViewNews}" />
 					</p:column>
 				</p:row>
 			</p:panelGrid>

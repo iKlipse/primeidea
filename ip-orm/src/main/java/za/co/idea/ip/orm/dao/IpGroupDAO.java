@@ -185,4 +185,22 @@ public class IpGroupDAO extends BaseHibernateDAO {
 			throw re;
 		}
 	}
+
+	public String getGroupHierarchy(Long grpId) {
+		log.debug("Fetching Group By Query :: fetchGroupHierarchy");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			Query query = session.createSQLQuery("select calc_grp_path_in(" + grpId + ") from dual");
+			List ret = query.list();
+			transaction.commit();
+			session.close();
+			return (ret != null && ret.get(0) != null) ? ret.get(0).toString() : "";
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			transaction.rollback();
+			session.close();
+			throw re;
+		}
+	}
 }

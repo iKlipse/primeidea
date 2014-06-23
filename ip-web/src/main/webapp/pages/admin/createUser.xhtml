@@ -114,7 +114,15 @@
 				<p:column>
 					<p:fileUpload id="fuCUpload" style="background-color: #55a616;width: 100% !important" fileUploadListener="#{adminBean.fileUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 				</p:column>
-
+				<p:column>
+					<p:outputLabel id="lblGroup" value="Primary Group : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somPriGroup" value="#{adminBean.userBean.groupId}" style="width: 100% !important">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{adminBean.viewGroups}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
+					</p:selectOneMenu>
+				</p:column>
 				<p:column>
 					<p:outputLabel id="lblSecQ" value="Security Question : " />
 				</p:column>

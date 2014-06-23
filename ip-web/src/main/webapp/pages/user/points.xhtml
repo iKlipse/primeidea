@@ -5,6 +5,20 @@
 			<f:facet name="header">
 					Point Profile
 			</f:facet>
+			<p:dataTable id="dtViewPoints" value="#{rewardsBean.pointBeans}" var="point" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Points Found" style="width: 100% !important">
+				<f:facet name="header">
+					<p:outputLabel id="ttlPntsHeader" value="Total Points : " />
+					<p:outputLabel id="ttlPnts" value="#{rewardsBean.totalPoints}" />
+				</f:facet>
+				<p:column>
+					<f:facet name="header">Comments</f:facet>
+					<p:outputLabel id="txtComments" value="#{point.comments}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Point Value</f:facet>
+					<p:outputLabel id="txtPointVal" value="#{point.pointValue}" />
+				</p:column>
+			</p:dataTable>
 			<f:facet name="footer">
 				<p:commandButton id="btnCancel" value="Return To Home" ajax="false" action="#{adminBean.redirectHome}" />
 			</f:facet>

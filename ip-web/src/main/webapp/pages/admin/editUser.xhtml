@@ -28,7 +28,6 @@
 				<p:column>
 					<p:inputText style="width: 100%" autocomplete="false" id="txtMName" value="#{adminBean.userBean.mName}" />
 				</p:column>
-
 				<p:column>
 					<p:outputLabel id="lblLName" value="Last Name : " />
 				</p:column>
@@ -105,6 +104,15 @@
 				</p:column>
 				<p:column>
 					<p:inputText style="width: 100%" autocomplete="false" id="txtSCName" value="#{adminBean.userBean.scName}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblGroup" value=" Primary Group : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somPriGroup" value="#{adminBean.userBean.groupId}" style="width: 100% !important">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{adminBean.viewGroups}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
+					</p:selectOneMenu>
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblActive" value="Active : " />

@@ -30,6 +30,7 @@ public class IpUser implements java.io.Serializable {
 	private String userTwHandle;
 	private String userStatus;
 	private String userEmployeeId;
+	private IpGroup ipGroup;
 	private Set ipGroups = new HashSet(0);
 	private Set ipGroupUsers = new HashSet(0);
 	private Set ipTags = new HashSet(0);
@@ -64,7 +65,7 @@ public class IpUser implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpUser(Long userId, String userFName, String userLName, String userMName, Long userIdNum, String userScreenName, String userEmail, String userContact, String userSkills, String userBio, String userFbHandle, String userTwHandle, String userStatus, String userEmployeeId, Set ipGroups, Set ipGroupUsers, Set ipTags, Set ipFunctions, Set ipClaims, Set ipPointses, Set ipChallenges, Set ipIdeas, Set ipLogins, Set ipSolutions) {
+	public IpUser(Long userId, IpGroup ipGroup, String userFName, String userLName, String userMName, Long userIdNum, String userScreenName, String userEmail, String userContact, String userSkills, String userBio, String userFbHandle, String userTwHandle, String userStatus, String userEmployeeId, Set ipGroups, Set ipGroupUsers, Set ipTags, Set ipFunctions, Set ipClaims, Set ipPointses, Set ipChallenges, Set ipIdeas, Set ipLogins, Set ipSolutions) {
 		this.userId = userId;
 		this.userFName = userFName;
 		this.userLName = userLName;
@@ -89,6 +90,7 @@ public class IpUser implements java.io.Serializable {
 		this.ipIdeas = ipIdeas;
 		this.ipLogins = ipLogins;
 		this.ipSolutions = ipSolutions;
+		this.ipGroup = ipGroup;
 	}
 
 	// Property accessors
@@ -283,6 +285,14 @@ public class IpUser implements java.io.Serializable {
 
 	public void setIpSolutions(Set ipSolutions) {
 		this.ipSolutions = ipSolutions;
+	}
+
+	public IpGroup getIpGroup() {
+		return ipGroup;
+	}
+
+	public void setIpGroup(IpGroup ipGroup) {
+		this.ipGroup = ipGroup;
 	}
 
 }

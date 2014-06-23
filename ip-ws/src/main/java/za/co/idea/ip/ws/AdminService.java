@@ -153,6 +153,19 @@ public class AdminService {
 	}
 
 	@GET
+	@Path("/group/hierarchy/{id}")
+	@Produces("application/json")
+	public String hierarchyGroup(@PathParam("id") Long id) {
+		String ret = "";
+		try {
+			ret = ipGroupDAO.getGroupHierarchy(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@GET
 	@Path("/func/list")
 	@Produces("application/json")
 	public <T extends FunctionMessage> List<T> listFunction() {
@@ -306,6 +319,7 @@ public class AdminService {
 			ipUser.setUserLName(user.getlName());
 			ipUser.setUserScreenName(user.getScName());
 			ipUser.setUserSkills(user.getSkills());
+			ipUser.setIpGroup(ipGroupDAO.findById(user.getGroupId()));
 			ipUser.setuserEmployeeId(user.getEmployeeId());
 			ipUser.setUserStatus(((user.getIsActive() != null && user.getIsActive()) ? "y" : "n"));
 			if (user.getFbHandle() != null && user.getFbHandle().length() > 0)
@@ -428,6 +442,7 @@ public class AdminService {
 			ipUser.setUserScreenName(user.getScName());
 			ipUser.setUserSkills(user.getSkills());
 			ipUser.setuserEmployeeId(user.getEmployeeId());
+			ipUser.setIpGroup(ipGroupDAO.findById(user.getGroupId()));
 			ipUser.setUserStatus(((user.getIsActive() != null && user.getIsActive()) ? "y" : "n"));
 			if (user.getFbHandle() != null && user.getFbHandle().length() > 0)
 				ipUser.setUserFbHandle(user.getFbHandle());
@@ -471,6 +486,7 @@ public class AdminService {
 				user.setSkills(ipUser.getUserSkills());
 				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
 				user.setEmployeeId(ipUser.getuserEmployeeId());
+				user.setGroupId(ipUser.getIpGroup().getGroupId());
 				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
 					user.setFbHandle(ipUser.getUserFbHandle());
 				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
@@ -657,6 +673,7 @@ public class AdminService {
 				user.setlName(ipUser.getUserLName());
 				user.setScName(ipUser.getUserScreenName());
 				user.setSkills(ipUser.getUserSkills());
+				user.setGroupId(ipUser.getIpGroup().getGroupId());
 				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
 				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
 					user.setFbHandle(ipUser.getUserFbHandle());

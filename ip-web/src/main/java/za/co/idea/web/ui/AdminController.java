@@ -71,6 +71,7 @@ public class AdminController implements Serializable {
 	private String fileName;
 	private String contentType;
 	private StreamedContent uploadImage;
+	private StreamedContent uploadUser;
 	private String uploadFileName;
 	private String uploadContentType;
 	private String uploadSrc;
@@ -79,6 +80,15 @@ public class AdminController implements Serializable {
 	private boolean enableUpload;
 	private String loggedScrName;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
+	private String hierarchy;
+
+	public String getHierarchy() {
+		return hierarchy;
+	}
+
+	public void setHierarchy(String hierarchy) {
+		this.hierarchy = hierarchy;
+	}
 
 	private WebClient createCustomClient(String url) {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
@@ -127,6 +137,13 @@ public class AdminController implements Serializable {
 			bean.setLastLoginDt(userMessage.getLastLoginDt());
 			loggedScrName = userMessage.getScName();
 			secqList = fetchAllSecQ();
+			if (userMessage.getGroupId() != null) {
+				WebClient hClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/hierarchy/" + userMessage.getGroupId());
+				hierarchy = hClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+				hClient.close();
+			} else {
+				hierarchy = "assign primary group";
+			}
 			AccessController controller = new AccessController(bean.getuId());
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("accessBean", controller);
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", bean);
@@ -273,6 +290,7 @@ public class AdminController implements Serializable {
 		try {
 			userBean.setcPw(userBean.getPwd());
 			secqList = fetchAllSecQ();
+			viewGroups = fetchAllGroups();
 			return "admeu";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -299,6 +317,7 @@ public class AdminController implements Serializable {
 		try {
 			userBean = new UserBean();
 			secqList = fetchAllSecQ();
+			viewGroups = fetchAllGroups();
 			return "admcu";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -506,6 +525,7 @@ public class AdminController implements Serializable {
 			bean.setSecQ(Integer.valueOf(secQ));
 			bean.setSecA(userBean.getSecA());
 			bean.setEmployeeId(userBean.getEmployeeId());
+			bean.setGroupId(userBean.getGroupId());
 			ResponseMessage response = addUserClient.accept(MediaType.APPLICATION_JSON).post(bean, ResponseMessage.class);
 			addUserClient.close();
 			if (response.getStatusCode() == 0) {
@@ -575,6 +595,9 @@ public class AdminController implements Serializable {
 		if (userBean.getcPw() == null || userBean.getcPw().length() == 0) {
 			ret.add("Confirm Password is Mandatory");
 		}
+		if (userBean.getGroupId() == null) {
+			ret.add("Primary Group Id is Mandatory");
+		}
 		return ret;
 	}
 
@@ -592,6 +615,9 @@ public class AdminController implements Serializable {
 			}
 			if (userBean.getIdNum() == null || userBean.getIdNum() == 0) {
 				ret.add("ID Number is Mandatory");
+			}
+			if (userBean.getGroupId() == null) {
+				ret.add("Primary Group Id is Mandatory");
 			}
 		}
 		return ret;
@@ -679,6 +705,7 @@ public class AdminController implements Serializable {
 			bean.setuId(userBean.getuId());
 			bean.setLastLoginDt(userBean.getLastLoginDt());
 			bean.setEmployeeId(userBean.getEmployeeId());
+			bean.setGroupId(userBean.getGroupId());
 			ResponseMessage response = updateUserClient.accept(MediaType.APPLICATION_JSON).put(bean, ResponseMessage.class);
 			updateUserClient.close();
 			if (response.getStatusCode() == 0)
@@ -722,9 +749,35 @@ public class AdminController implements Serializable {
 			groupMessage.setpGrpId(groupBean.getSelPGrp());
 			ResponseMessage response = addGroupClient.accept(MediaType.APPLICATION_JSON).post(groupMessage, ResponseMessage.class);
 			addGroupClient.close();
-			if (response.getStatusCode() == 0)
+			if (response.getStatusCode() == 0) {
+				if (image != null) {
+					WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+					AttachmentMessage message = new AttachmentMessage();
+					message.setBlobContentType(contentType);
+					message.setBlobEntityId(groupBean.getgId());
+					message.setBlobEntityTblNm("ip_group");
+					message.setBlobName(fileName);
+					message.setBlobId(COUNTER.getNextId("IpBlob"));
+					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
+					if (crtRes.getStatus() == 200) {
+						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + message.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+						client.header("Accept", "application/json");
+						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
+						if (docRes.getStatus() != 0) {
+							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
+							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						}
+						client.close();
+						return showViewUsers();
+					} else {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+					}
+					createBlobClient.close();
+				}
 				return showViewGroups();
-			else {
+			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
@@ -796,9 +849,63 @@ public class AdminController implements Serializable {
 			groupMessage.setpGrpId(groupBean.getSelPGrp());
 			ResponseMessage response = updateGroupClient.accept(MediaType.APPLICATION_JSON).put(groupMessage, ResponseMessage.class);
 			updateGroupClient.close();
-			if (response.getStatusCode() == 0)
+			if (response.getStatusCode() == 0) {
+				if (image != null) {
+					WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + groupBean.getgId() + "/ip_group");
+					Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+					if (blobId == -999) {
+						WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+						AttachmentMessage message = new AttachmentMessage();
+						message.setBlobContentType(contentType);
+						message.setBlobEntityId(groupBean.getgId());
+						message.setBlobEntityTblNm("ip_group");
+						message.setBlobName(fileName);
+						message.setBlobId(COUNTER.getNextId("IpBlob"));
+						Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
+						if (crtRes.getStatus() == 200) {
+							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + message.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+							client.header("Accept", "application/json");
+							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
+							if (docRes.getStatus() != 0) {
+								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
+								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+							}
+							client.close();
+						} else {
+							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
+							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						}
+						createBlobClient.close();
+					} else {
+						WebClient updateBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/update");
+						AttachmentMessage attach = new AttachmentMessage();
+						attach.setBlobContentType(contentType);
+						attach.setBlobEntityId(groupBean.getgId());
+						attach.setBlobEntityTblNm("ip_group");
+						attach.setBlobName(fileName);
+						attach.setBlobId(blobId);
+						Response updRes = updateBlobClient.accept(MediaType.APPLICATION_JSON).put(attach);
+						updateBlobClient.close();
+						if (updRes.getStatus() == 200) {
+							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+							client.header("Accept", "application/json");
+							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), image.getStream(), new ContentDisposition("attachment; filename=" + fileName)));
+							if (docRes.getStatus() != 200) {
+								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
+								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+							}
+							client.close();
+						} else {
+							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
+							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						}
+					}
+				}
+				image = null;
 				return showViewGroups();
-			else {
+			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
@@ -1367,6 +1474,38 @@ public class AdminController implements Serializable {
 
 	public void setGroupTwinSelect(DualListModel<GroupBean> groupTwinSelect) {
 		this.groupTwinSelect = groupTwinSelect;
+	}
+
+	public boolean isAvailableID() {
+		return availableID;
+	}
+
+	public void setAvailableID(boolean availableID) {
+		this.availableID = availableID;
+	}
+
+	public boolean isAvailableEmail() {
+		return availableEmail;
+	}
+
+	public void setAvailableEmail(boolean availableEmail) {
+		this.availableEmail = availableEmail;
+	}
+
+	public boolean isAvailableEmpID() {
+		return availableEmpID;
+	}
+
+	public void setAvailableEmpID(boolean availableEmpID) {
+		this.availableEmpID = availableEmpID;
+	}
+
+	public StreamedContent getUploadUser() {
+		return uploadUser;
+	}
+
+	public void setUploadUser(StreamedContent uploadUser) {
+		this.uploadUser = uploadUser;
 	}
 
 }

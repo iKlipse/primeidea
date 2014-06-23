@@ -32,10 +32,16 @@
 				<p:column style="width: 100%">
 					<p:editor id="txtContent" value="#{newsBean.newsBean.nContent}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
 				</p:column>
+				<p:column>
+					<p:outputLabel id="lblProfImage" value="News Files : " />
+				</p:column>
+				<p:column>
+					<p:fileUpload id="fuCUpload" style="background-color: #55a616;width: 100% !important" fileUploadListener="#{newsBean.fileUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+				</p:column>
 				<p:row>
 					<p:column colspan="2">
 						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{newsBean.saveNews}" />
-						<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{adminBean.redirectHome}" />
+						<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{newsBean.showViewNews}" />
 					</p:column>
 				</p:row>
 			</p:panelGrid>

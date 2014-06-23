@@ -24,6 +24,7 @@ public class UserMessage {
 	private Boolean isActive;
 	private Date lastLoginDt;
 	private String employeeId;
+	private Long groupId;
 
 	public Long getuId() {
 		return uId;
@@ -167,6 +168,14 @@ public class UserMessage {
 
 	public void setEmployeeId(String employeeId) {
 		this.employeeId = employeeId;
+	}
+
+	public Long getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(Long groupId) {
+		this.groupId = groupId;
 	}
 
 }

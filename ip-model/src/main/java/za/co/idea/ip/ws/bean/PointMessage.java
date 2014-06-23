@@ -9,6 +9,7 @@ public class PointMessage {
 	private Integer pointValue;
 	private Long pointId;
 	private String comments;
+	private Long entityId;
 
 	public Long getUserId() {
 		return userId;
@@ -48,5 +49,13 @@ public class PointMessage {
 
 	public void setComments(String comments) {
 		this.comments = comments;
+	}
+
+	public Long getEntityId() {
+		return entityId;
+	}
+
+	public void setEntityId(Long entityId) {
+		this.entityId = entityId;
 	}
 }

@@ -28,6 +28,12 @@
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
+					<p:outputLabel id="lblProfImage" value="Group Image : " />
+				</p:column>
+				<p:column>
+					<p:fileUpload id="fuCUpload" style="background-color: #55a616;width: 100% !important" fileUploadListener="#{adminBean.fileUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+				</p:column>
+				<p:column>
 					<p:outputLabel id="lblAdmUser" value="Admin User : " />
 				</p:column>
 				<p:column>

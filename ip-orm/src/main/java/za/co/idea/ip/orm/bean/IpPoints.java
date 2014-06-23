@@ -17,6 +17,7 @@ public class IpPoints implements java.io.Serializable {
 	private IpUser ipUser;
 	private Integer pointValue;
 	private String comments;
+	private Long entityId;
 
 	// Constructors
 
@@ -78,6 +79,14 @@ public class IpPoints implements java.io.Serializable {
 
 	public void setComments(String comments) {
 		this.comments = comments;
+	}
+
+	public Long getEntityId() {
+		return entityId;
+	}
+
+	public void setEntityId(Long entityId) {
+		this.entityId = entityId;
 	}
 
 }

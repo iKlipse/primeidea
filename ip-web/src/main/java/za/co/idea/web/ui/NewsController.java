@@ -3,17 +3,28 @@ package za.co.idea.web.ui;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.client.WebClient;
+import org.apache.cxf.jaxrs.ext.multipart.Attachment;
+import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
+import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
+
 import za.co.idea.ip.ws.util.CustomObjectMapper;
 import za.co.idea.web.ui.bean.NewsBean;
 import za.co.idea.web.util.IdNumberGen;
+import za.co.idea.ip.ws.bean.AttachmentMessage;
 import za.co.idea.ip.ws.bean.NewsMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 
@@ -24,6 +35,9 @@ public class NewsController implements Serializable {
 	 */
 	private static final long serialVersionUID = 8898258487836934087L;
 	private NewsBean newsBean;
+	private StreamedContent image;
+	private String fileName;
+	private String contentType;
 	private List<NewsBean> viewNewsBeans;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 
@@ -81,6 +95,31 @@ public class NewsController implements Serializable {
 			ResponseMessage response = addNewsClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			addNewsClient.close();
 			if (response.getStatusCode() == 0) {
+				if (image != null) {
+					WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+					AttachmentMessage attach = new AttachmentMessage();
+					attach.setBlobContentType(contentType);
+					attach.setBlobEntityId(newsBean.getnId());
+					attach.setBlobEntityTblNm("ip_news");
+					attach.setBlobName(fileName);
+					attach.setBlobId(COUNTER.getNextId("IpBlob"));
+					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
+					if (crtRes.getStatus() == 200) {
+						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + attach.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+						client.header("Accept", "application/json");
+						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
+						if (docRes.getStatus() != 0) {
+							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
+							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						}
+						client.close();
+					} else {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+					}
+					createBlobClient.close();
+				}
 				return showViewNews();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -107,6 +146,60 @@ public class NewsController implements Serializable {
 			ResponseMessage response = updateNewsClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			updateNewsClient.close();
 			if (response.getStatusCode() == 0) {
+				if (image != null) {
+					WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + newsBean.getnId() + "/ip_news");
+					Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+					if (blobId == -999) {
+						WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+						AttachmentMessage attach = new AttachmentMessage();
+						attach.setBlobContentType(contentType);
+						attach.setBlobEntityId(newsBean.getnId());
+						attach.setBlobEntityTblNm("ip_news");
+						attach.setBlobName(fileName);
+						attach.setBlobId(COUNTER.getNextId("IpBlob"));
+						Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
+						if (crtRes.getStatus() == 200) {
+							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + attach.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+							client.header("Accept", "application/json");
+							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
+							if (docRes.getStatus() != 0) {
+								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
+								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+							}
+							client.close();
+						} else {
+							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
+							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						}
+						createBlobClient.close();
+					} else {
+						WebClient updateBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/update");
+						AttachmentMessage attach = new AttachmentMessage();
+						attach.setBlobContentType(contentType);
+						attach.setBlobEntityId(newsBean.getnId());
+						attach.setBlobEntityTblNm("ip_news");
+						attach.setBlobName(fileName);
+						attach.setBlobId(blobId);
+						Response updRes = updateBlobClient.accept(MediaType.APPLICATION_JSON).put(attach);
+						updateBlobClient.close();
+						if (updRes.getStatus() == 200) {
+							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+							client.header("Accept", "application/json");
+							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), image.getStream(), new ContentDisposition("attachment; filename=" + fileName)));
+							if (docRes.getStatus() != 200) {
+								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
+								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+							}
+							client.close();
+						} else {
+							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
+							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						}
+					}
+				}
+				image = null;
 				return showViewNews();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -138,6 +231,19 @@ public class NewsController implements Serializable {
 		return ret;
 	}
 
+	public void fileUploadHandle(FileUploadEvent fue) {
+		try {
+			UploadedFile file = fue.getFile();
+			this.image = new DefaultStreamedContent(file.getInputstream());
+			this.fileName = file.getFileName();
+			this.contentType = file.getContentType();
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+	}
+
 	public NewsBean getNewsBean() {
 		return newsBean;
 	}
@@ -152,5 +258,29 @@ public class NewsController implements Serializable {
 
 	public void setViewNewsBeans(List<NewsBean> viewNewsBeans) {
 		this.viewNewsBeans = viewNewsBeans;
+	}
+
+	public StreamedContent getImage() {
+		return image;
+	}
+
+	public void setImage(StreamedContent image) {
+		this.image = image;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 }

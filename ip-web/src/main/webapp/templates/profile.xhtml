@@ -43,6 +43,10 @@
 				<p:graphicImage style="float: right !important;" id="imgAvatarDefault" name="profile.jpg" library="images" height="100px" width="100px" rendered="#{adminBean.showDef}" ondblclick="PF('dlgProfileImgUpload').show()" />
 			</p:column>
 			<p:column>
+				<p:outputLabel style="float: Left !important;" id="lblGrpHText" value="Group Hierarchy :" />
+				<p:outputLabel style="float: right !important;" id="lblGrpH" value="#{adminBean.hierarchy}" />
+			</p:column>
+			<p:column>
 				<p:outputLabel style="float: Left !important;" id="lblLastLoginText" value="Last Login :" />
 				<p:outputLabel style="float: right !important;" id="lblLastLogin" value="#{user.lastLoginDt}">
 					<f:convertDateTime pattern="dd.MM.yyyy HH:mm" />

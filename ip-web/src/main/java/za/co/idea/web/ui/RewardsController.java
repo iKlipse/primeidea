@@ -1,6 +1,5 @@
 package za.co.idea.web.ui;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,6 +40,7 @@ import za.co.idea.web.ui.bean.AllocationBean;
 import za.co.idea.web.ui.bean.GroupBean;
 import za.co.idea.web.ui.bean.ListSelectorBean;
 import za.co.idea.web.ui.bean.MetaDataBean;
+import za.co.idea.web.ui.bean.PointBean;
 import za.co.idea.web.ui.bean.RewardsBean;
 import za.co.idea.web.ui.bean.TagBean;
 import za.co.idea.web.ui.bean.UserBean;
@@ -68,6 +68,9 @@ public class RewardsController implements Serializable {
 	private List<MetaDataBean> solStatusList;
 	private List<AllocationBean> allocs;
 	private List<GroupBean> pGrps;
+	private List<PointBean> pointBeans;
+	private PointBean pointBean;
+	private Long totalPoints;
 	private DualListModel<GroupBean> groupTwinSelect;
 	private AllocationBean allocationBean;
 	private String allocId;
@@ -166,6 +169,7 @@ public class RewardsController implements Serializable {
 			this.entity = "";
 			this.statusList = new ArrayList<MetaDataBean>();
 			this.disStatusList = new ArrayList<MetaDataBean>();
+			this.allocs = new ArrayList<AllocationBean>();
 			return "rwpa";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -319,6 +323,7 @@ public class RewardsController implements Serializable {
 	}
 
 	public String showPointProfile() {
+		pointBeans = fetchAllPointsByUser();
 		return "rwpp";
 	}
 
@@ -537,6 +542,7 @@ public class RewardsController implements Serializable {
 			AllocationMessage message = new AllocationMessage();
 			message.setAllocDesc(allocationBean.getAllocDesc());
 			message.setAllocEntity(entity);
+			allocationBean.setAllocEntity(entity);
 			message.setAllocId(COUNTER.getNextId("IpAllocation").intValue());
 			message.setAllocStatusId(allocationBean.getAllocStatusId());
 			message.setAllocVal(allocationBean.getAllocVal());
@@ -596,6 +602,7 @@ public class RewardsController implements Serializable {
 			AllocationMessage message = new AllocationMessage();
 			message.setAllocDesc(allocationBean.getAllocDesc());
 			message.setAllocEntity(entity);
+			allocationBean.setAllocEntity(entity);
 			message.setAllocId(allocationBean.getAllocId());
 			message.setAllocStatusId(allocationBean.getAllocStatusId());
 			message.setAllocVal(allocationBean.getAllocVal());
@@ -710,20 +717,8 @@ public class RewardsController implements Serializable {
 			bean.setRwValue(message.getRwValue());
 			bean.setRwPrice(message.getRwPrice());
 			bean.setRwQuantity(message.getRwQuantity());
-			// bean.setGroupIdList(getIdsFromArray(message.getGroupIdList()));
 			bean.setRwImgAvail(message.isRwImgAvail());
-			if (message.isRwImgAvail()) {
-				WebClient client = WebClient.create(message.getRwUrl(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-				client.header("Content-Type", "application/json");
-				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-				if (attachment != null)
-					try {
-						bean.setRwUrl(new DefaultStreamedContent(attachment.getDataHandler().getInputStream()));
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-			}
+			bean.setRwUrl(message.getRwUrl());
 			ret.add(bean);
 		}
 		return ret;
@@ -751,18 +746,27 @@ public class RewardsController implements Serializable {
 			bean.setRwPrice(message.getRwPrice());
 			bean.setRwQuantity(message.getRwQuantity());
 			bean.setRwImgAvail(message.isRwImgAvail());
-			if (message.isRwImgAvail()) {
-				WebClient client = WebClient.create(message.getRwUrl(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-				client.header("Content-Type", "application/json");
-				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-				if (attachment != null)
-					try {
-						bean.setRwUrl(new DefaultStreamedContent(attachment.getDataHandler().getInputStream()));
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-			}
+			bean.setRwUrl(message.getRwUrl());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	private List<PointBean> fetchAllPointsByUser() {
+		List<PointBean> ret = new ArrayList<PointBean>();
+		WebClient viewPointClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/points/get/user/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		Collection<? extends PointMessage> points = new ArrayList<PointMessage>(viewPointClient.accept(MediaType.APPLICATION_JSON).getCollection(PointMessage.class));
+		viewPointClient.close();
+		totalPoints = 0l;
+		for (PointMessage message : points) {
+			PointBean bean = new PointBean();
+			bean.setAllocId(message.getAllocId());
+			bean.setComments(message.getComments());
+			bean.setEntityId(message.getEntityId());
+			bean.setPointId(message.getPointId());
+			bean.setPointValue(message.getPointValue());
+			bean.setUserId(message.getUserId());
+			totalPoints += message.getPointValue();
 			ret.add(bean);
 		}
 		return ret;
@@ -789,6 +793,8 @@ public class RewardsController implements Serializable {
 			bean.setRwValue(message.getRwValue());
 			bean.setRwPrice(message.getRwPrice());
 			bean.setRwQuantity(message.getRwQuantity());
+			bean.setRwImgAvail(message.isRwImgAvail());
+			bean.setRwUrl(message.getRwUrl());
 			ret.add(bean);
 		}
 		return ret;
@@ -1043,7 +1049,6 @@ public class RewardsController implements Serializable {
 			allocEntityList.put("Challenge", "ip_challenge_status");
 			allocEntityList.put("Idea", "ip_idea_status");
 			allocEntityList.put("Claim", "ip_claim_status");
-			allocEntityList.put("Rewards", "ip_rewards_status");
 		}
 		return allocEntityList;
 	}
@@ -1286,6 +1291,30 @@ public class RewardsController implements Serializable {
 
 	public void setComments(String comments) {
 		this.comments = comments;
+	}
+
+	public List<PointBean> getPointBeans() {
+		return pointBeans;
+	}
+
+	public void setPointBeans(List<PointBean> pointBeans) {
+		this.pointBeans = pointBeans;
+	}
+
+	public PointBean getPointBean() {
+		return pointBean;
+	}
+
+	public void setPointBean(PointBean pointBean) {
+		this.pointBean = pointBean;
+	}
+
+	public Long getTotalPoints() {
+		return totalPoints;
+	}
+
+	public void setTotalPoints(Long totalPoints) {
+		this.totalPoints = totalPoints;
 	}
 
 }

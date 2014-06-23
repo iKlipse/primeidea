@@ -436,7 +436,7 @@ public class RewardsService {
 
 	}
 
-	@PUT
+	@GET
 	@Path("/points/get/{id}")
 	@Produces("application/json")
 	@Consumes("application/json")
@@ -447,6 +447,7 @@ public class RewardsService {
 			message.setAllocId(ipPoints.getIpAllocation().getAllocId());
 			message.setPointId(ipPoints.getPointId());
 			message.setPointValue(ipPoints.getPointValue());
+			message.setComments(ipPoints.getComments());
 			message.setUserId(ipPoints.getIpUser().getUserId());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -454,8 +455,8 @@ public class RewardsService {
 		return message;
 	}
 
-	@PUT
-	@Path("/points/get/{id}")
+	@GET
+	@Path("/points/get/user/{id}")
 	@Produces("application/json")
 	@Consumes("application/json")
 	public <T extends PointMessage> List<T> listPointsByUser(@PathParam("id") Long id) {
@@ -468,6 +469,7 @@ public class RewardsService {
 				message.setAllocId(ipPoints.getIpAllocation().getAllocId());
 				message.setPointId(ipPoints.getPointId());
 				message.setPointValue(ipPoints.getPointValue());
+				message.setComments(ipPoints.getComments());
 				message.setUserId(ipPoints.getIpUser().getUserId());
 				ret.add((T) message);
 			}

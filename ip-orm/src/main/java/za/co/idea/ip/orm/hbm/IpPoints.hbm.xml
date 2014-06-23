@@ -20,6 +20,9 @@
 		<property name="comments" type="java.lang.String">
 			<column name="comments" length="450" />
 		</property>
+		<property name="entityId" type="java.lang.Long">
+			<column name="entity_id"/>
+		</property>
 	</class>
 	<sql-query name="getPointsByUser">
 		select pts.* from ip_points pts where pts.user_id=:id
