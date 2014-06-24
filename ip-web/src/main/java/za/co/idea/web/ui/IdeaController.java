@@ -236,7 +236,7 @@ public class IdeaController implements Serializable {
 		showIdeaBuildOns = false;
 	}
 
-	public String commentIdea() {
+	public void commentIdea() {
 		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
@@ -256,7 +256,6 @@ public class IdeaController implements Serializable {
 		showIdeaComments = true;
 		showIdeaLikes = false;
 		showIdeaBuildOns = false;
-		return "";
 	}
 
 	public String buildOnIdea() {

@@ -80,7 +80,15 @@ public class NewsController implements Serializable {
 	}
 
 	public String showSummaryNews() {
-		return "nssc";
+		try {
+			viewNewsBeans = fetchAllNews();
+			return "nssc";
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news view request", "System error occurred, cannot perform news view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
 	}
 
 	public String saveNews() {
@@ -109,13 +117,13 @@ public class NewsController implements Serializable {
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 						client.header("Accept", "application/json");
 						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
-						if (docRes.getStatus() != 0) {
-							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
+						if (docRes.getStatus() != 200) {
+							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "News Attachment Not Uploaded", "News Attachment Not Uploaded");
 							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 						}
 						client.close();
 					} else {
-						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "News Attachment Not Uploaded", "News Attachment Not Uploaded");
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
 					createBlobClient.close();
@@ -164,12 +172,12 @@ public class NewsController implements Serializable {
 							client.header("Accept", "application/json");
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
 							if (docRes.getStatus() != 0) {
-								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
+								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "News Attachment Not Uploaded", "News Attachment Not Uploaded");
 								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 							}
 							client.close();
 						} else {
-							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
+							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "News Attachment Not Uploaded", "News Attachment Not Uploaded");
 							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 						}
 						createBlobClient.close();

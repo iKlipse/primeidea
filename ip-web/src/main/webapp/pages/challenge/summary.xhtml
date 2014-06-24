@@ -74,7 +74,7 @@
 						<p:editor id="edComment" value="#{challengeBean.commentText}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
 					</p:column>
 					<p:column>
-						<p:commandButton id="btnSubmitComment" value="Post" action="#{challengeBean.commentChallenge}" ajax="false" />
+						<p:commandButton id="btnSubmitComment" value="Post" actionListener="#{challengeBean.commentChallenge}" update="dtViewComments" />
 					</p:column>
 				</p:panelGrid>
 			</p:overlayPanel>

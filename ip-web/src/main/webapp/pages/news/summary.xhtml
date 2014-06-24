@@ -6,20 +6,21 @@
 					News
 				</f:facet>
 			<p:dataGrid id="dgNews" value="#{newsBean.viewNewsBeans}" var="news" columns="1">
-				<p:scrollPanel style="border: 0px !important;">
-					<p:panel style="border: 0px !important;">
-						<p:panelGrid columns="1" id="pnlNews">
-							<p:column>
-								<h3>
-									<p:outputLabel id="lblITitle" value="#{news.nTitle}" />
-								</h3>
-							</p:column>
-							<p:column>
-								<p:outputLabel id="txtIDesc" value="#{news.nContent}" escape="false" />
-							</p:column>
-						</p:panelGrid>
-					</p:panel>
-				</p:scrollPanel>
+				<p:panel style="border: 0px !important;">
+					<f:facet name="header">
+						<p:outputLabel id="lblNewsDate" value="#{news.nStartDate}" style="float: right !important" />
+					</f:facet>
+					<p:panelGrid columns="1" id="pnlNews">
+						<p:column>
+							<h3>
+								<p:outputLabel id="lblITitle" value="#{news.nTitle}" />
+							</h3>
+						</p:column>
+						<p:column>
+							<p:outputLabel id="txtIDesc" value="#{news.nContent}" escape="false" />
+						</p:column>
+					</p:panelGrid>
+				</p:panel>
 			</p:dataGrid>
 		</p:panel>
 	</ui:define>

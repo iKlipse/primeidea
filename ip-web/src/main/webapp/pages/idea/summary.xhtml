@@ -75,10 +75,10 @@
 						</p:dataGrid>
 					</p:column>
 					<p:column>
-						<p:editor id="edComment" value="#{ideaBean.commentText}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+						<p:editor id="edComment" value="#{ideaBean.commentText}" height="100" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
 					</p:column>
 					<p:column>
-						<p:commandButton id="btnSubmitComment" value="Post" action="#{ideaBean.commentIdea}" ajax="false" />
+						<p:commandButton id="btnSubmitComment" value="Post" update="dtViewComments" actionListener="#{ideaBean.commentIdea}" />
 					</p:column>
 				</p:panelGrid>
 			</p:overlayPanel>

@@ -387,7 +387,7 @@ public class ChallengeController implements Serializable {
 		}
 	}
 
-	public String commentChallenge() {
+	public void commentChallenge() {
 		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(challengeBean.getId());
@@ -406,7 +406,6 @@ public class ChallengeController implements Serializable {
 		commentText = "";
 		showChallengeComments = true;
 		showChallengeLikes = false;
-		return "";
 	}
 
 	public String likeChallenge() {
@@ -751,7 +750,7 @@ public class ChallengeController implements Serializable {
 		return "";
 	}
 
-	public String commentSolution() {
+	public void commentSolution() {
 		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(solutionBean.getId());
@@ -770,7 +769,6 @@ public class ChallengeController implements Serializable {
 		commentText = "";
 		showSolutionComments = true;
 		showSolutionLikes = false;
-		return "";
 	}
 
 	public String buildOnSolution() {

@@ -543,7 +543,7 @@ public class AdminController implements Serializable {
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 						client.header("Accept", "application/json");
 						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
-						if (docRes.getStatus() != 0) {
+						if (docRes.getStatus() != 200) {
 							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
 							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 						}
@@ -764,7 +764,7 @@ public class AdminController implements Serializable {
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 						client.header("Accept", "application/json");
 						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
-						if (docRes.getStatus() != 0) {
+						if (docRes.getStatus() != 200) {
 							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
 							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 						}
@@ -867,7 +867,7 @@ public class AdminController implements Serializable {
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
-							if (docRes.getStatus() != 0) {
+							if (docRes.getStatus() != 200) {
 								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
 								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 							}
