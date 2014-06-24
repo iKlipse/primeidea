@@ -262,7 +262,6 @@ public class ClaimController implements Serializable {
 		for (RewardsMessage message : rewards) {
 			RewardsBean bean = new RewardsBean();
 			bean.setrCatId(message.getrCatId());
-			bean.setrStatusId(message.getrStatusId());
 			bean.setRwCrtdDt(message.getRwCrtdDt());
 			bean.setRwDesc(message.getRwDesc());
 			bean.setRwExpiryDt(message.getRwExpiryDt());
@@ -280,13 +279,12 @@ public class ClaimController implements Serializable {
 
 	private List<RewardsBean> fetchAllAvailableRewards() {
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
-		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list/3");
+		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list/avail");
 		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
 		viewRewardsClient.close();
 		for (RewardsMessage message : rewards) {
 			RewardsBean bean = new RewardsBean();
 			bean.setrCatId(message.getrCatId());
-			bean.setrStatusId(message.getrStatusId());
 			bean.setRwCrtdDt(message.getRwCrtdDt());
 			bean.setRwDesc(message.getRwDesc());
 			bean.setRwExpiryDt(message.getRwExpiryDt());

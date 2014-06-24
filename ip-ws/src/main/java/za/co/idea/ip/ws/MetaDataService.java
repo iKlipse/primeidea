@@ -18,7 +18,6 @@ import za.co.idea.ip.orm.bean.IpClaimStatus;
 import za.co.idea.ip.orm.bean.IpIdeaCat;
 import za.co.idea.ip.orm.bean.IpIdeaStatus;
 import za.co.idea.ip.orm.bean.IpRewardsCat;
-import za.co.idea.ip.orm.bean.IpRewardsStatus;
 import za.co.idea.ip.orm.bean.IpSecqList;
 import za.co.idea.ip.orm.bean.IpSolutionCat;
 import za.co.idea.ip.orm.bean.IpSolutionStatus;
@@ -29,7 +28,6 @@ import za.co.idea.ip.orm.dao.IpClaimStatusDAO;
 import za.co.idea.ip.orm.dao.IpIdeaCatDAO;
 import za.co.idea.ip.orm.dao.IpIdeaStatusDAO;
 import za.co.idea.ip.orm.dao.IpRewardsCatDAO;
-import za.co.idea.ip.orm.dao.IpRewardsStatusDAO;
 import za.co.idea.ip.orm.dao.IpSecqListDAO;
 import za.co.idea.ip.orm.dao.IpSolutionCatDAO;
 import za.co.idea.ip.orm.dao.IpSolutionStatusDAO;
@@ -45,7 +43,6 @@ public class MetaDataService {
 	private IpIdeaCatDAO ipIdeaCatDAO;
 	private IpIdeaStatusDAO ipIdeaStatusDAO;
 	private IpRewardsCatDAO ipRewardsCatDAO;
-	private IpRewardsStatusDAO ipRewardsStatusDAO;
 	private IpSolutionCatDAO ipSolutionCatDAO;
 	private IpSolutionStatusDAO ipSolutionStatusDAO;
 	private IpSecqListDAO ipSecqListDAO;
@@ -391,16 +388,6 @@ public class MetaDataService {
 					message.setTable("ip_solution_status");
 					ret.add((T) message);
 				}
-			} else if (table.equalsIgnoreCase("ip_rewards_status")) {
-				List vals = ipRewardsStatusDAO.findAll();
-				for (Object object : vals) {
-					MetaDataMessage message = new MetaDataMessage();
-					IpRewardsStatus cat = (IpRewardsStatus) object;
-					message.setId(cat.getRsId());
-					message.setDesc(cat.getRsDesc());
-					message.setTable("ip_rewards_status");
-					ret.add((T) message);
-				}
 			} else if (table.equalsIgnoreCase("IpChallengeCat")) {
 				List vals = ipChallengeCatDAO.findAll();
 				for (Object object : vals) {
@@ -517,16 +504,6 @@ public class MetaDataService {
 					message.setTable("ip_solution_status");
 					ret.add((T) message);
 				}
-			} else if (table.equalsIgnoreCase("ip_rewards_status")) {
-				List vals = ipRewardsStatusDAO.findAllNonAlloc();
-				for (Object object : vals) {
-					MetaDataMessage message = new MetaDataMessage();
-					IpRewardsStatus cat = (IpRewardsStatus) object;
-					message.setId(cat.getRsId());
-					message.setDesc(cat.getRsDesc());
-					message.setTable("ip_rewards_status");
-					ret.add((T) message);
-				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -580,14 +557,6 @@ public class MetaDataService {
 
 	public void setIpRewardsCatDAO(IpRewardsCatDAO ipRewardsCatDAO) {
 		this.ipRewardsCatDAO = ipRewardsCatDAO;
-	}
-
-	public IpRewardsStatusDAO getIpRewardsStatusDAO() {
-		return ipRewardsStatusDAO;
-	}
-
-	public void setIpRewardsStatusDAO(IpRewardsStatusDAO ipRewardsStatusDAO) {
-		this.ipRewardsStatusDAO = ipRewardsStatusDAO;
 	}
 
 	public IpSolutionCatDAO getIpSolutionCatDAO() {

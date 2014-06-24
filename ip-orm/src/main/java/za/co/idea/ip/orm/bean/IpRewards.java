@@ -19,7 +19,6 @@ public class IpRewards implements java.io.Serializable {
 	private static final long serialVersionUID = 6833158177169162762L;
 	private Long rwId;
 	private IpRewardsCat ipRewardsCat;
-	private IpRewardsStatus ipRewardsStatus;
 	private String rwTitle;
 	private String rwDesc;
 	private Integer rwValue;
@@ -41,10 +40,9 @@ public class IpRewards implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpRewards(Long rwId, IpRewardsCat ipRewardsCat, IpRewardsStatus ipRewardsStatus, String rwTitle, String rwDesc, Integer rwValue, String rwStockCodeNum, Date rwLaunchDt, Date rwExpiryDt, Date rwCrtdDt, Double rwPrice, Long rwQuantity) {
+	public IpRewards(Long rwId, IpRewardsCat ipRewardsCat, String rwTitle, String rwDesc, Integer rwValue, String rwStockCodeNum, Date rwLaunchDt, Date rwExpiryDt, Date rwCrtdDt, Double rwPrice, Long rwQuantity) {
 		this.rwId = rwId;
 		this.ipRewardsCat = ipRewardsCat;
-		this.ipRewardsStatus = ipRewardsStatus;
 		this.rwTitle = rwTitle;
 		this.rwDesc = rwDesc;
 		this.rwValue = rwValue;
@@ -57,10 +55,9 @@ public class IpRewards implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpRewards(Long rwId, IpRewardsCat ipRewardsCat, IpRewardsStatus ipRewardsStatus, String rwTitle, String rwDesc, Integer rwValue, String rwStockCodeNum, String rwHoverText, Date rwLaunchDt, Date rwExpiryDt, String rwTag, Date rwCrtdDt, Double rwPrice, Long rwQuantity, Set ipRewardsGroups, Set ipClaims) {
+	public IpRewards(Long rwId, IpRewardsCat ipRewardsCat, String rwTitle, String rwDesc, Integer rwValue, String rwStockCodeNum, String rwHoverText, Date rwLaunchDt, Date rwExpiryDt, String rwTag, Date rwCrtdDt, Double rwPrice, Long rwQuantity, Set ipRewardsGroups, Set ipClaims) {
 		this.rwId = rwId;
 		this.ipRewardsCat = ipRewardsCat;
-		this.ipRewardsStatus = ipRewardsStatus;
 		this.rwTitle = rwTitle;
 		this.rwDesc = rwDesc;
 		this.rwValue = rwValue;
@@ -92,14 +89,6 @@ public class IpRewards implements java.io.Serializable {
 
 	public void setIpRewardsCat(IpRewardsCat ipRewardsCat) {
 		this.ipRewardsCat = ipRewardsCat;
-	}
-
-	public IpRewardsStatus getIpRewardsStatus() {
-		return this.ipRewardsStatus;
-	}
-
-	public void setIpRewardsStatus(IpRewardsStatus ipRewardsStatus) {
-		this.ipRewardsStatus = ipRewardsStatus;
 	}
 
 	public String getRwTitle() {

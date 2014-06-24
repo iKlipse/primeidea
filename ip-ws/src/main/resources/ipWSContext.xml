@@ -48,7 +48,6 @@
 		<property name="ipUserDAO" ref="IpUserDAO" />
 		<property name="ipRewardsCatDAO" ref="IpRewardsCatDAO" />
 		<property name="ipRewardsDAO" ref="IpRewardsDAO" />
-		<property name="ipRewardsStatusDAO" ref="IpRewardsStatusDAO" />
 		<property name="ipRewardsGroupDAO" ref="IpRewardsGroupDAO" />
 		<property name="ipAllocationDAO" ref="IpAllocationDAO" />
 		<property name="ipPointsDAO" ref="IpPointsDAO" />
@@ -69,7 +68,6 @@
 		<property name="ipIdeaCatDAO" ref="IpIdeaCatDAO" />
 		<property name="ipIdeaStatusDAO" ref="IpIdeaStatusDAO" />
 		<property name="ipRewardsCatDAO" ref="IpRewardsCatDAO" />
-		<property name="ipRewardsStatusDAO" ref="IpRewardsStatusDAO" />
 		<property name="ipSolutionCatDAO" ref="IpSolutionCatDAO" />
 		<property name="ipSolutionStatusDAO" ref="IpSolutionStatusDAO" />
 		<property name="ipSecqListDAO" ref="IpSecqListDAO" />

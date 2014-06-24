@@ -56,7 +56,6 @@ public class RewardsController implements Serializable {
 	private StreamedContent uploadContent;
 	private List<RewardsBean> viewRewardsBeans;
 	private List<ListSelectorBean> rewardsCat;
-	private List<ListSelectorBean> rewardsStatus;
 	private List<UserBean> admUsers;
 	private List<TagBean> rewardsWishlist;
 	private List<MetaDataBean> statusList;
@@ -64,7 +63,6 @@ public class RewardsController implements Serializable {
 	private List<MetaDataBean> chalStatusList;
 	private List<MetaDataBean> claimStatusList;
 	private List<MetaDataBean> ideaStatusList;
-	private List<MetaDataBean> rewardsStatusList;
 	private List<MetaDataBean> solStatusList;
 	private List<AllocationBean> allocs;
 	private List<GroupBean> pGrps;
@@ -102,7 +100,6 @@ public class RewardsController implements Serializable {
 		try {
 			admUsers = fetchAllUsers();
 			rewardsCat = fetchAllRewardsCat();
-			rewardsStatus = fetchAllRewardsStatuses();
 			pGrps = fetchAllGroups();
 			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 			rewardsBean = new RewardsBean();
@@ -119,7 +116,6 @@ public class RewardsController implements Serializable {
 		try {
 			admUsers = fetchAllUsers();
 			rewardsCat = fetchAllRewardsCat();
-			rewardsStatus = fetchAllRewardsStatuses();
 			viewRewardsBeans = fetchAllAvailableRewards();
 			return "rwsr";
 		} catch (Exception e) {
@@ -134,7 +130,6 @@ public class RewardsController implements Serializable {
 		try {
 			admUsers = fetchAllUsers();
 			rewardsCat = fetchAllRewardsCat();
-			rewardsStatus = fetchAllRewardsStatuses();
 			viewRewardsBeans = fetchAllRewards();
 			return "rwvr";
 		} catch (Exception e) {
@@ -149,7 +144,6 @@ public class RewardsController implements Serializable {
 		try {
 			admUsers = fetchAllUsers();
 			rewardsCat = fetchAllRewardsCat();
-			rewardsStatus = fetchAllRewardsStatuses();
 			rewardsBean = new RewardsBean();
 			viewRewardsBeans = fetchAllRewardsByUser();
 			return "rwur";
@@ -191,8 +185,6 @@ public class RewardsController implements Serializable {
 			statusList = getIdeaStatusList();
 		else if (entity.equalsIgnoreCase("ip_claim_status"))
 			statusList = getClaimStatusList();
-		else if (entity.equalsIgnoreCase("ip_rewards_status"))
-			statusList = getRewardsStatusList();
 		return "";
 	}
 
@@ -266,8 +258,6 @@ public class RewardsController implements Serializable {
 				statusList = getIdeaStatusList();
 			else if (entity.equalsIgnoreCase("ip_claim_status"))
 				statusList = getClaimStatusList();
-			else if (entity.equalsIgnoreCase("ip_rewards_status"))
-				statusList = getRewardsStatusList();
 			this.showAddBtn = true;
 		}
 		this.showAddPanel = false;
@@ -278,7 +268,6 @@ public class RewardsController implements Serializable {
 		try {
 			admUsers = fetchAllUsers();
 			rewardsCat = fetchAllRewardsCat();
-			rewardsStatus = fetchNextRewardsStatuses();
 			pGrps = fetchAllGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
@@ -386,7 +375,6 @@ public class RewardsController implements Serializable {
 			message.setRwCrtdDt(new Date());
 			message.setRwDesc(rewardsBean.getRwDesc());
 			message.setRwId(COUNTER.getNextId("IpRewards"));
-			message.setrStatusId(1);
 			message.setRwTag(rewardsBean.getRwTag());
 			message.setRwTitle(rewardsBean.getRwTitle());
 			message.setRwValue(rewardsBean.getRwValue());
@@ -456,7 +444,6 @@ public class RewardsController implements Serializable {
 			message.setRwCrtdDt(new Date());
 			message.setRwDesc(rewardsBean.getRwDesc());
 			message.setRwId(rewardsBean.getRwId());
-			message.setrStatusId(rewardsBean.getrStatusId());
 			message.setRwTag(rewardsBean.getRwTag());
 			message.setRwTitle(rewardsBean.getRwTitle());
 			message.setRwValue(rewardsBean.getRwValue());
@@ -580,6 +567,7 @@ public class RewardsController implements Serializable {
 				pointVal = null;
 				userId = null;
 				entity = null;
+				comments = null;
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucessfully added points", "Sucessfully added points");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
@@ -704,7 +692,6 @@ public class RewardsController implements Serializable {
 		for (RewardsMessage message : rewards) {
 			RewardsBean bean = new RewardsBean();
 			bean.setrCatId(message.getrCatId());
-			bean.setrStatusId(message.getrStatusId());
 			bean.setRwCrtdDt(message.getRwCrtdDt());
 			bean.setRwDesc(message.getRwDesc());
 			bean.setRwExpiryDt(message.getRwExpiryDt());
@@ -732,7 +719,6 @@ public class RewardsController implements Serializable {
 		for (RewardsMessage message : rewards) {
 			RewardsBean bean = new RewardsBean();
 			bean.setrCatId(message.getrCatId());
-			bean.setrStatusId(message.getrStatusId());
 			bean.setRwCrtdDt(message.getRwCrtdDt());
 			bean.setRwDesc(message.getRwDesc());
 			bean.setRwExpiryDt(message.getRwExpiryDt());
@@ -774,13 +760,12 @@ public class RewardsController implements Serializable {
 
 	private List<RewardsBean> fetchAllAvailableRewards() {
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
-		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list/3");
+		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list/avail");
 		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
 		viewRewardsClient.close();
 		for (RewardsMessage message : rewards) {
 			RewardsBean bean = new RewardsBean();
 			bean.setrCatId(message.getrCatId());
-			bean.setrStatusId(message.getrStatusId());
 			bean.setRwCrtdDt(message.getRwCrtdDt());
 			bean.setRwDesc(message.getRwDesc());
 			bean.setRwExpiryDt(message.getRwExpiryDt());
@@ -803,34 +788,6 @@ public class RewardsController implements Serializable {
 	private List<ListSelectorBean> fetchAllRewardsCat() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewRewardsSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/cat/list");
-		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewRewardsSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		viewRewardsSelectClient.close();
-		for (MetaDataMessage metaDataMessage : md) {
-			ListSelectorBean bean = new ListSelectorBean();
-			bean.setId(metaDataMessage.getId());
-			bean.setDesc(metaDataMessage.getDesc());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<ListSelectorBean> fetchAllRewardsStatuses() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewRewardsSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/status/list");
-		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewRewardsSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		viewRewardsSelectClient.close();
-		for (MetaDataMessage metaDataMessage : md) {
-			ListSelectorBean bean = new ListSelectorBean();
-			bean.setId(metaDataMessage.getId());
-			bean.setDesc(metaDataMessage.getDesc());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<ListSelectorBean> fetchNextRewardsStatuses() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewRewardsSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/status/list/" + rewardsBean.getrStatusId());
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewRewardsSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewRewardsSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -984,14 +941,6 @@ public class RewardsController implements Serializable {
 
 	public void setRewardsCat(List<ListSelectorBean> rewardsCat) {
 		this.rewardsCat = rewardsCat;
-	}
-
-	public List<ListSelectorBean> getRewardsStatus() {
-		return rewardsStatus;
-	}
-
-	public void setRewardsStatus(List<ListSelectorBean> rewardsStatus) {
-		this.rewardsStatus = rewardsStatus;
 	}
 
 	public List<UserBean> getAdmUsers() {
@@ -1213,25 +1162,6 @@ public class RewardsController implements Serializable {
 
 	public void setIdeaStatusList(List<MetaDataBean> ideaStatusList) {
 		this.ideaStatusList = ideaStatusList;
-	}
-
-	public List<MetaDataBean> getRewardsStatusList() {
-		rewardsStatusList = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/ip_rewards_status");
-		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		mDataClient.close();
-		for (MetaDataMessage message : messages) {
-			MetaDataBean bean = new MetaDataBean();
-			bean.setDesc(message.getDesc());
-			bean.setId(message.getId());
-			bean.setTable(message.getTable());
-			rewardsStatusList.add(bean);
-		}
-		return rewardsStatusList;
-	}
-
-	public void setRewardsStatusList(List<MetaDataBean> rewardsStatusList) {
-		this.rewardsStatusList = rewardsStatusList;
 	}
 
 	public List<MetaDataBean> getSolStatusList() {

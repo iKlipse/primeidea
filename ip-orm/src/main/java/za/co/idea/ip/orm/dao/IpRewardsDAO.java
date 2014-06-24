@@ -201,17 +201,15 @@ public class IpRewardsDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public List findByStatusId(Integer id) {
-		log.debug("Fetching Challenge by Query :: getRewardsByStatus");
+	public List findByAvail() {
+		log.debug("Fetching Challenge by Query :: getRewardsByAvail");
 		Session session = getSession();
 		try {
-			Query query = session.getNamedQuery("getRewardsByStatus");
-			query.setLong("id", id);
+			Query query = session.getNamedQuery("getRewardsByAvail");
 			List ret = query.list();
 			for (Object object : ret) {
 				IpRewards rw = (IpRewards) object;
 				Hibernate.initialize(rw.getIpRewardsCat());
-				Hibernate.initialize(rw.getIpRewardsStatus());
 			}
 			session.close();
 			return ret;
@@ -231,7 +229,6 @@ public class IpRewardsDAO extends BaseHibernateDAO {
 			for (Object object : ret) {
 				IpRewards rw = (IpRewards) object;
 				Hibernate.initialize(rw.getIpRewardsCat());
-				Hibernate.initialize(rw.getIpRewardsStatus());
 			}
 			session.close();
 			return ret;

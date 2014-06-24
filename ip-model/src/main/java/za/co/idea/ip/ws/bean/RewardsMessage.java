@@ -8,7 +8,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class RewardsMessage {
 	private Long rwId;
 	private Integer rCatId;
-	private Integer rStatusId;
 	private String rwTitle;
 	private String rwDesc;
 	private Integer rwValue;
@@ -40,14 +39,6 @@ public class RewardsMessage {
 
 	public void setrCatId(Integer rCatId) {
 		this.rCatId = rCatId;
-	}
-
-	public Integer getrStatusId() {
-		return rStatusId;
-	}
-
-	public void setrStatusId(Integer rStatusId) {
-		this.rStatusId = rStatusId;
 	}
 
 	public String getRwTitle() {

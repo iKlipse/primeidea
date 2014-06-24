@@ -41,7 +41,6 @@
 				<value>za/co/idea/ip/orm/hbm/IpRewards.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpRewardsCat.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpRewardsGroup.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpRewardsStatus.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpSolution.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpSolutionCat.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpSolutionStatus.hbm.xml</value>
@@ -132,11 +131,6 @@
 		</property>
 	</bean>
 	<bean id="IpTagDAO" class="za.co.idea.ip.orm.dao.IpTagDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpRewardsStatusDAO" class="za.co.idea.ip.orm.dao.IpRewardsStatusDAO">
 		<property name="factory">
 			<ref bean="factory" />
 		</property>

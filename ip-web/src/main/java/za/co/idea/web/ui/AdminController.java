@@ -70,6 +70,9 @@ public class AdminController implements Serializable {
 	private StreamedContent image;
 	private String fileName;
 	private String contentType;
+	private StreamedContent grpImage;
+	private String grpFileName;
+	private String grpContentType;
 	private StreamedContent uploadImage;
 	private StreamedContent uploadUser;
 	private String uploadFileName;
@@ -81,14 +84,6 @@ public class AdminController implements Serializable {
 	private String loggedScrName;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 	private String hierarchy;
-
-	public String getHierarchy() {
-		return hierarchy;
-	}
-
-	public void setHierarchy(String hierarchy) {
-		this.hierarchy = hierarchy;
-	}
 
 	private WebClient createCustomClient(String url) {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
@@ -750,20 +745,20 @@ public class AdminController implements Serializable {
 			ResponseMessage response = addGroupClient.accept(MediaType.APPLICATION_JSON).post(groupMessage, ResponseMessage.class);
 			addGroupClient.close();
 			if (response.getStatusCode() == 0) {
-				if (image != null) {
+				if (grpImage != null) {
 					WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
 					AttachmentMessage message = new AttachmentMessage();
-					message.setBlobContentType(contentType);
+					message.setBlobContentType(grpContentType);
 					message.setBlobEntityId(groupBean.getgId());
 					message.setBlobEntityTblNm("ip_group");
-					message.setBlobName(fileName);
+					message.setBlobName(grpFileName);
 					message.setBlobId(COUNTER.getNextId("IpBlob"));
 					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
 					if (crtRes.getStatus() == 200) {
 						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + message.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 						client.header("Accept", "application/json");
-						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
+						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), grpImage.getStream(), new ContentDisposition("attachment; filename=" + grpFileName)));
 						if (docRes.getStatus() != 200) {
 							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
 							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -850,23 +845,23 @@ public class AdminController implements Serializable {
 			ResponseMessage response = updateGroupClient.accept(MediaType.APPLICATION_JSON).put(groupMessage, ResponseMessage.class);
 			updateGroupClient.close();
 			if (response.getStatusCode() == 0) {
-				if (image != null) {
+				if (grpImage != null) {
 					WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + groupBean.getgId() + "/ip_group");
 					Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 					if (blobId == -999) {
 						WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
 						AttachmentMessage message = new AttachmentMessage();
-						message.setBlobContentType(contentType);
+						message.setBlobContentType(grpContentType);
 						message.setBlobEntityId(groupBean.getgId());
 						message.setBlobEntityTblNm("ip_group");
-						message.setBlobName(fileName);
+						message.setBlobName(grpFileName);
 						message.setBlobId(COUNTER.getNextId("IpBlob"));
 						Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
 						if (crtRes.getStatus() == 200) {
 							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + message.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
-							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
+							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), grpImage.getStream(), new ContentDisposition("attachment; filename=" + grpFileName)));
 							if (docRes.getStatus() != 200) {
 								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
 								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -880,10 +875,10 @@ public class AdminController implements Serializable {
 					} else {
 						WebClient updateBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/update");
 						AttachmentMessage attach = new AttachmentMessage();
-						attach.setBlobContentType(contentType);
+						attach.setBlobContentType(grpContentType);
 						attach.setBlobEntityId(groupBean.getgId());
 						attach.setBlobEntityTblNm("ip_group");
-						attach.setBlobName(fileName);
+						attach.setBlobName(grpFileName);
 						attach.setBlobId(blobId);
 						Response updRes = updateBlobClient.accept(MediaType.APPLICATION_JSON).put(attach);
 						updateBlobClient.close();
@@ -891,7 +886,7 @@ public class AdminController implements Serializable {
 							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
-							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), image.getStream(), new ContentDisposition("attachment; filename=" + fileName)));
+							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), grpImage.getStream(), new ContentDisposition("attachment; filename=" + grpFileName)));
 							if (docRes.getStatus() != 200) {
 								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
 								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -1229,6 +1224,19 @@ public class AdminController implements Serializable {
 		}
 	}
 
+	public void fileGroupUploadHandle(FileUploadEvent fue) {
+		try {
+			UploadedFile file = fue.getFile();
+			this.grpImage = new DefaultStreamedContent(file.getInputstream());
+			this.grpFileName = file.getFileName();
+			this.grpContentType = file.getContentType();
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+	}
+
 	public void fileImageUploadHandle(FileUploadEvent fue) {
 		try {
 			UploadedFile file = fue.getFile();
@@ -1506,6 +1514,38 @@ public class AdminController implements Serializable {
 
 	public void setUploadUser(StreamedContent uploadUser) {
 		this.uploadUser = uploadUser;
+	}
+
+	public StreamedContent getGrpImage() {
+		return grpImage;
+	}
+
+	public void setGrpImage(StreamedContent grpImage) {
+		this.grpImage = grpImage;
+	}
+
+	public String getGrpFileName() {
+		return grpFileName;
+	}
+
+	public void setGrpFileName(String grpFileName) {
+		this.grpFileName = grpFileName;
+	}
+
+	public String getGrpContentType() {
+		return grpContentType;
+	}
+
+	public void setGrpContentType(String grpContentType) {
+		this.grpContentType = grpContentType;
+	}
+
+	public String getHierarchy() {
+		return hierarchy;
+	}
+
+	public void setHierarchy(String hierarchy) {
+		this.hierarchy = hierarchy;
 	}
 
 }

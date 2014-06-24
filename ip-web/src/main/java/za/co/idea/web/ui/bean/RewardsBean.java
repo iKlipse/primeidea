@@ -20,7 +20,6 @@ public class RewardsBean implements Serializable {
 	private static final long serialVersionUID = -2381598448445463625L;
 	private Long rwId;
 	private Integer rCatId;
-	private Integer rStatusId;
 	private String rwTitle;
 	private String rwDesc;
 	private Integer rwValue;
@@ -56,14 +55,6 @@ public class RewardsBean implements Serializable {
 
 	public void setrCatId(Integer rCatId) {
 		this.rCatId = rCatId;
-	}
-
-	public Integer getrStatusId() {
-		return rStatusId;
-	}
-
-	public void setrStatusId(Integer rStatusId) {
-		this.rStatusId = rStatusId;
 	}
 
 	public String getRwTitle() {

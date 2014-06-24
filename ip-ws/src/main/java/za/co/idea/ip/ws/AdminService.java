@@ -403,7 +403,7 @@ public class AdminService {
 			ipFunction.setFuncName(function.getFuncName());
 			ipFunction.setFuncCrtdDt(new Timestamp(System.currentTimeMillis()));
 			ipFunction.setIpUser(ipUserDAO.findById(function.getCrtdBy()));
-			ipFunction.setFuncIsCore("n");
+			ipFunction.setFuncIsCore("y");
 			ipFunctionDAO.merge(ipFunction);
 			ipFuncGroupDAO.deleteByFunctionId(ipFunction.getFuncId());
 			for (Long gId : function.getGroupIdList()) {

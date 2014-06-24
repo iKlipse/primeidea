@@ -17,12 +17,6 @@
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
-					<f:facet name="header">Status</f:facet>
-					<p:selectOneMenu id="somIStatus" value="#{rewards.rStatusId}">
-						<f:selectItems value="#{rewardsBean.rewardsStatus}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
-					</p:selectOneMenu>
-				</p:column>
-				<p:column>
 					<f:facet name="header">Launch Date</f:facet>
 					<p:calendar mode="popup" showOn="button" id="calLaunchDT" value="#{rewards.rwLaunchDt}" />
 				</p:column>

@@ -11,9 +11,6 @@
 		<many-to-one name="ipRewardsCat" class="za.co.idea.ip.orm.bean.IpRewardsCat" fetch="select" lazy="proxy">
 			<column name="rw_cat" not-null="true" />
 		</many-to-one>
-		<many-to-one name="ipRewardsStatus" class="za.co.idea.ip.orm.bean.IpRewardsStatus" fetch="select" lazy="proxy">
-			<column name="rw_status" not-null="true" />
-		</many-to-one>
 		<property name="rwTitle" type="java.lang.String">
 			<column name="rw_title" length="100" not-null="true" />
 		</property>
@@ -64,8 +61,8 @@
 		select rw.* from ip_rewards rw, ip_tag t where t.tag_entity_id=rw.rw_id and t.tag_user_id=:id and t.tag_entity_type=4 and t.tag_type=4
 		<return alias="rw" class="za.co.idea.ip.orm.bean.IpRewards" />
 	</sql-query>
-	<sql-query name="getRewardsByStatus">
-		select rw.* from ip_rewards rw where rw.rw_status=:id
+	<sql-query name="getRewardsByAvail">
+		select rw.* from ip_rewards rw where current_timestamp between rw.rw_launch_dt and rw.rw_expiry_dt
 		<return alias="rw" class="za.co.idea.ip.orm.bean.IpRewards" />
 	</sql-query>
 </hibernate-mapping>
