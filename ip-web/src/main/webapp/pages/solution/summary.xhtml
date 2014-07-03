@@ -38,7 +38,7 @@
 				<p:column>
 					<p:panelGrid columns="3" style="border: 0px !important;">
 						<p:column>
-							<p:commandLink id="lnkLikeIdea" action="#{challengeBean.likeSolution}" update="lblLikeCnt, :ideaFrm:tgLikes">
+							<p:commandLink id="lnkLikeSolution" action="#{challengeBean.likeSolution}" update="lblLikeCnt, :ideaFrm:tgLikes">
 								<p:outputLabel id="lblLikeCnt" value="#{challengeBean.solLikeCnt}" style="height:25px; width:25px;" />
 								<p:graphicImage id="giLike" name="like-128.png" library="images" height="25px" width="25px" />
 							</p:commandLink>
@@ -48,8 +48,12 @@
 							<p:graphicImage id="giComment" name="comment.jpg" library="images" height="25px" width="25px" />
 						</p:column>
 						<p:column>
-							<p:outputLabel id="lblBuildOnCnt" value="#{challengeBean.buildOnCnt}" style="height:25px; width:25px;" />
-							<p:graphicImage id="giBuildOn" name="lego.png" library="images" height="25px" width="25px" />
+							<p:commandLink id="lnkBuildonSolution" action="#{buildonBean.showBuildon}">
+								<f:param name="entityId" id="entityId" value="#{challengeBean.solutionBean.id}" />
+								<f:param name="entityType" id="entityType" value="3" />
+								<p:outputLabel id="lblBuildOnCnt" value="#{challengeBean.buildOnCnt}" style="height:25px; width:25px;" />
+								<p:graphicImage id="giBuildOn" name="lego.png" library="images" height="25px" width="25px" />
+							</p:commandLink>
 						</p:column>
 					</p:panelGrid>
 				</p:column>
@@ -85,31 +89,6 @@
 			<p:overlayPanel dynamic="true" for="giLike" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
 				<p:panelGrid id="pnlSolutionLikes" columns="1">
 					<p:tagCloud id="tgLikes" model="#{challengeBean.solLikes}" />
-				</p:panelGrid>
-			</p:overlayPanel>
-			<p:overlayPanel dynamic="true" for="giBuildOn" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
-				<p:panelGrid id="pnlSolutionBuildOn" columns="1">
-					<p:column>
-						<p:dataGrid id="dtViewBuildOns" widgetVar="dtViewBuildOns" value="#{challengeBean.buildOns}" var="buildOn" columns="1" emptyMessage="No BuildOns Found">
-							<p:panel style="border: 0px !important;">
-								<f:facet name="header">
-									<p:outputLabel style="float: left !important" value="#{buildOn.usrScreenName}" />
-								</f:facet>
-								<f:facet name="footer">
-									<p:outputLabel style="float: right !important" value="#{buildOn.tagDate}" />
-								</f:facet>
-								<p:column>
-									<p:outputLabel value="#{buildOn.tagText}" />
-								</p:column>
-							</p:panel>
-						</p:dataGrid>
-					</p:column>
-					<p:column>
-						<p:editor id="edBuildOn" value="#{challengeBean.buildOnText}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
-					</p:column>
-					<p:column>
-						<p:commandButton id="btnSubmitBuildOn" value="Post" action="#{challengeBean.buildOnSolution}" ajax="false" />
-					</p:column>
 				</p:panelGrid>
 			</p:overlayPanel>
 		</p:panel>

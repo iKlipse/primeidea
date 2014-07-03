@@ -10,9 +10,9 @@
 					<p:outputLabel id="lblCRw" value="Reward : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu style="width: 100%" id="somCRw" value="#{claimBean.claimBean.rewardsId}">
-						<f:selectItem itemLabel="Select One" itemValue="" />
-						<f:selectItems value="#{claimBean.viewRewardsBeans}" var="ccat" itemLabel="#{ccat.rwTitle}" itemValue="#{ccat.rwId}" />
+					<p:selectOneMenu style="width: 100%" id="somCRw" value="#{claimBean.selRwId}">
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+						<f:selectItems value="#{claimBean.viewRewardsBeans}" var="ccat" itemLabel="#{ccat.rwTitle}" itemValue="#{ccat.rwId}^#{ccat.rwQuantity}^#{ccat.rwValue}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>

@@ -9,7 +9,7 @@
 			<generator class="assigned" />
 		</id>
 		<many-to-one name="ipGroup" class="za.co.idea.ip.orm.bean.IpGroup" fetch="select" lazy="proxy">
-			<column name="pri_grp_id" not-null="true" />
+			<column name="pri_grp_id" />
 		</many-to-one>
 		<property name="userFName" type="java.lang.String">
 			<column name="user_f_name" length="75" not-null="true" />
@@ -27,7 +27,7 @@
 			<column name="user_screen_name" length="50" not-null="true" unique="true" />
 		</property>
 		<property name="userEmail" type="java.lang.String">
-			<column name="user_email" length="65535" not-null="true" />
+			<column name="user_email" length="65535" />
 		</property>
 		<property name="userContact" type="java.lang.String">
 			<column name="user_contact" length="20" />
@@ -48,7 +48,7 @@
 			<column name="user_status" length="1" not-null="true" />
 		</property>
 		<property name="userEmployeeId" type="java.lang.String">
-			<column name="user_employeeId"  length="20"/>
+			<column name="user_employeeId" length="20" />
 		</property>
 		<set name="ipGroups" inverse="true">
 			<key>

@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
 
@@ -39,8 +40,7 @@ public class DocumentUploadService {
 			if (blob != null) {
 				File file = new File(BUNDLE.getString("base.dir") + File.separator + blob.getBlobEntityTblNm() + File.separator + blob.getBlobEntityId() + File.separator + blob.getBlobName());
 				if (file.getParentFile().exists())
-					file.getParentFile().delete();
-				file.getParentFile().mkdirs();
+					FileUtils.cleanDirectory(file.getParentFile());
 				file.createNewFile();
 				FileOutputStream data = new FileOutputStream(file);
 				byte[] buf = new byte[4096];
@@ -67,7 +67,7 @@ public class DocumentUploadService {
 			if (blob != null) {
 				File file = new File(BUNDLE.getString("base.dir") + File.separator + blob.getBlobEntityTblNm() + File.separator + blob.getBlobEntityId() + File.separator + blob.getBlobName());
 				FileInputStream reader = new FileInputStream(file);
-				Attachment attachment = new Attachment(blob.getBlobId().toString(), reader, new ContentDisposition("attachment; filename=" + name));
+				Attachment attachment = new Attachment(blob.getBlobId().toString(), reader, new ContentDisposition("attachment;filename=" + name));
 				return attachment;
 			} else {
 				return null;

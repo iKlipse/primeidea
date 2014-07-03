@@ -17,7 +17,7 @@
 				</p:column>
 				<p:column>
 					<p:selectOneMenu style="width: 100%" id="somRCat" value="#{rewardsBean.rewardsBean.rCatId}">
-						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{rewardsBean.rewardsCat}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
 					</p:selectOneMenu>
 				</p:column>

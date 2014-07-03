@@ -42,7 +42,6 @@
 						<p:ajax listener="#{adminBean.checkAvailabilityIDNumber}" event="blur" update="grlMsg" />
 					</p:inputText>
 				</p:column>
-
 				<p:column>
 					<p:outputLabel id="lblEMail" value="EMail : " />
 				</p:column>
@@ -65,7 +64,6 @@
 				<p:column>
 					<p:inputMask style="width: 100% !important" id="txtContact" value="#{adminBean.userBean.contact}" mask="+99 999999999" />
 				</p:column>
-
 				<p:column>
 					<p:outputLabel id="lblFBHandle" value="Facebook Handle : " />
 				</p:column>
@@ -98,7 +96,6 @@
 						</p:column>
 					</p:row>
 				</p:column>
-
 				<p:column>
 					<p:outputLabel id="lblSCName" value="Screen Name : " />
 				</p:column>
@@ -110,9 +107,15 @@
 				</p:column>
 				<p:column>
 					<p:selectOneMenu id="somPriGroup" value="#{adminBean.userBean.groupId}" style="width: 100% !important">
-						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{adminBean.viewGroups}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblSecQ" value="Security Question : " />
+				</p:column>
+				<p:column>
+					<p:inputText style="width: 100%" autocomplete="false" id="txtSecA" value="#{adminBean.userBean.secA}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblActive" value="Active : " />
@@ -120,21 +123,30 @@
 				<p:column>
 					<p:selectBooleanButton id="sbbActive" value="#{adminBean.userBean.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
 				</p:column>
-
+				<p:column>
+					<p:outputLabel id="lblRsetPasswd" value="Reset Password : " />
+				</p:column>
+				<p:column>
+					<p:selectBooleanButton id="sbbRsetPasswd" value="#{adminBean.resetPasswd}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblResetSec" value="Reset Security : " />
+				</p:column>
+				<p:column>
+					<p:selectBooleanButton id="sbbResetSec" value="#{adminBean.resetSec}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
+				</p:column>
 				<p:column>
 					<p:outputLabel id="lblSkills" value="Skills : " />
 				</p:column>
 				<p:column style="width: 100%">
 					<p:editor id="txtSkills" value="#{adminBean.userBean.skills}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
 				</p:column>
-
 				<p:column>
 					<p:outputLabel id="lblBio" value="Bio : " />
 				</p:column>
 				<p:column style="width: 100%">
 					<p:editor id="txtBio" value="#{adminBean.userBean.bio}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
 				</p:column>
-
 				<p:row>
 					<p:column colspan="2" style="align: center;">
 						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{adminBean.updateUser}" />

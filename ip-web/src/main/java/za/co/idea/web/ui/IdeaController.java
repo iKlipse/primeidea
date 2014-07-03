@@ -128,8 +128,8 @@ public class IdeaController implements Serializable {
 					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 					if (attachment != null) {
 						fileAvail = false;
-						ideaBean.setFileName(attachment.getContentDisposition().toString().replace("attachment; filename=", ""));
-						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), null, blobName);
+						ideaBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
+						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
 					} else {
 						fileAvail = true;
 						fileContent = null;
@@ -180,8 +180,8 @@ public class IdeaController implements Serializable {
 				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 				if (attachment != null) {
 					fileAvail = false;
-					ideaBean.setFileName(attachment.getContentDisposition().toString().replace("attachment; filename=", ""));
-					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), null, blobName);
+					ideaBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
+					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
 				} else {
 					fileAvail = true;
 					fileContent = null;
@@ -365,7 +365,7 @@ public class IdeaController implements Serializable {
 						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + message.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 						client.header("Accept", "application/json");
-						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment; filename=" + ideaBean.getFileName())));
+						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment;filename=" + ideaBean.getFileName())));
 						if (docRes.getStatus() != 200) {
 							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
 							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -431,7 +431,7 @@ public class IdeaController implements Serializable {
 							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + message.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
-							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment; filename=" + ideaBean.getFileName())));
+							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment;filename=" + ideaBean.getFileName())));
 							if (docRes.getStatus() != 200) {
 								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
 								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -454,7 +454,7 @@ public class IdeaController implements Serializable {
 							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
-							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), uploadContent.getStream(), new ContentDisposition("attachment; filename=" + ideaBean.getFileName())));
+							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), uploadContent.getStream(), new ContentDisposition("attachment;filename=" + ideaBean.getFileName())));
 							if (docRes.getStatus() != 200) {
 								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
 								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);

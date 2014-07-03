@@ -17,7 +17,7 @@
 				</p:column>
 				<p:column>
 					<p:selectOneMenu style="width: 100%" id="somICat" value="#{ideaBean.ideaBean.selCatId}">
-						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{ideaBean.ideaCats}" var="ic" itemLabel="#{ic.desc}" itemValue="#{ic.id}" />
 					</p:selectOneMenu>
 				</p:column>

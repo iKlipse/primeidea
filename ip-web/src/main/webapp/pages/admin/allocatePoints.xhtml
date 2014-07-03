@@ -9,7 +9,7 @@
 				<p:column>
 					<p:selectOneMenu id="somSelectEntity" value="#{rewardsBean.entity}">
 						<p:ajax listener="#{rewardsBean.updateEntityChange}" update="somSelectAllocation,:ideaFrm:txtPointVal" />
-						<f:selectItem itemLabel="Please Select" itemValue="" />
+						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{rewardsBean.allocEntityList}" />
 					</p:selectOneMenu>
 				</p:column>
@@ -19,7 +19,7 @@
 				<p:column>
 					<p:selectOneMenu id="somSelectAllocation" value="#{rewardsBean.selAllocId}">
 						<p:ajax listener="#{rewardsBean.updateAllocationChange}" update="txtPointVal" />
-						<f:selectItem itemLabel="Please Select" itemValue="" />
+						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
 						<f:selectItem itemLabel="Custom Allocation" itemValue="0" />
 						<f:selectItems value="#{rewardsBean.allocs}" var="a" itemLabel="#{a.allocDesc}" itemValue="#{a.allocId}" />
 					</p:selectOneMenu>
@@ -29,7 +29,7 @@
 				</p:column>
 				<p:column>
 					<p:selectOneMenu style="width: 100%" id="somAdmUser" value="#{rewardsBean.userId}">
-						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{rewardsBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
 					</p:selectOneMenu>
 				</p:column>

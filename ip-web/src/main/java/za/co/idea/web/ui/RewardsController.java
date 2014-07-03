@@ -284,8 +284,8 @@ public class RewardsController implements Serializable {
 					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 					if (attachment != null) {
 						fileAvail = false;
-						rewardsBean.setRwFileName(attachment.getContentDisposition().toString().replace("attachment; filename=", ""));
-						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), null, blobName);
+						rewardsBean.setRwFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
+						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
 					} else {
 						fileAvail = true;
 						fileContent = null;
@@ -316,7 +316,6 @@ public class RewardsController implements Serializable {
 		return "rwpp";
 	}
 
-	// This method is used to validate Idea create and update form-Sharanya
 	private List<String> validateRewards() {
 		ArrayList<String> ret = new ArrayList<String>();
 		if (rewardsBean.getRwTitle() == null || rewardsBean.getRwTitle().length() == 0) {
@@ -348,7 +347,6 @@ public class RewardsController implements Serializable {
 		return ret;
 	}
 
-	// This method is used to check length validation-Sharanya
 	public boolean lengthValidation(String str, int minLimit, int maxLimit) {
 		int intLength = str.length();
 		if (intLength >= minLimit && intLength <= maxLimit) {
@@ -384,7 +382,6 @@ public class RewardsController implements Serializable {
 			message.setRwExpiryDt(rewardsBean.getRwExpiryDt());
 			message.setRwPrice(rewardsBean.getRwPrice());
 			message.setRwQuantity(rewardsBean.getRwQuantity());
-			// message.setGroupIdList(getSelGroupIds());
 			ResponseMessage response = addRewardsClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			addRewardsClient.close();
 			if (response.getStatusCode() == 0) {
@@ -402,7 +399,7 @@ public class RewardsController implements Serializable {
 						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 						client.header("Accept", "application/json");
-						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment; filename=" + rewardsBean.getRwFileName())));
+						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment;filename=" + rewardsBean.getRwFileName())));
 						if (docRes.getStatus() != 200) {
 							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
 							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -453,7 +450,6 @@ public class RewardsController implements Serializable {
 			message.setRwExpiryDt(rewardsBean.getRwExpiryDt());
 			message.setRwPrice(rewardsBean.getRwPrice());
 			message.setRwQuantity(rewardsBean.getRwQuantity());
-			// message.setGroupIdList(getSelGroupIds());
 			ResponseMessage response = updateRewardsClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			updateRewardsClient.close();
 			if (response.getStatusCode() == 0) {
@@ -473,7 +469,7 @@ public class RewardsController implements Serializable {
 							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
-							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment; filename=" + rewardsBean.getRwFileName())));
+							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment;filename=" + rewardsBean.getRwFileName())));
 							if (docRes.getStatus() != 200) {
 								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
 								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -496,7 +492,7 @@ public class RewardsController implements Serializable {
 							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
-							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), uploadContent.getStream(), new ContentDisposition("attachment; filename=" + rewardsBean.getRwFileName())));
+							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), uploadContent.getStream(), new ContentDisposition("attachment;filename=" + rewardsBean.getRwFileName())));
 							if (docRes.getStatus() != 200) {
 								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
 								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -685,6 +681,7 @@ public class RewardsController implements Serializable {
 	}
 
 	private List<RewardsBean> fetchAllRewards() {
+		fetchAllPointsByUser();
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
 		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list");
 		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
@@ -706,12 +703,14 @@ public class RewardsController implements Serializable {
 			bean.setRwQuantity(message.getRwQuantity());
 			bean.setRwImgAvail(message.isRwImgAvail());
 			bean.setRwUrl(message.getRwUrl());
+			bean.setRwClaimable(totalPoints > message.getRwValue() && message.getRwQuantity() > 0);
 			ret.add(bean);
 		}
 		return ret;
 	}
 
 	private List<RewardsBean> fetchAllRewardsByUser() {
+		fetchAllPointsByUser();
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
 		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
 		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
@@ -733,6 +732,7 @@ public class RewardsController implements Serializable {
 			bean.setRwQuantity(message.getRwQuantity());
 			bean.setRwImgAvail(message.isRwImgAvail());
 			bean.setRwUrl(message.getRwUrl());
+			bean.setRwClaimable(totalPoints >= message.getRwValue() && message.getRwQuantity() > 0);
 			ret.add(bean);
 		}
 		return ret;
@@ -759,6 +759,7 @@ public class RewardsController implements Serializable {
 	}
 
 	private List<RewardsBean> fetchAllAvailableRewards() {
+		fetchAllPointsByUser();
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
 		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list/avail");
 		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
@@ -780,6 +781,7 @@ public class RewardsController implements Serializable {
 			bean.setRwQuantity(message.getRwQuantity());
 			bean.setRwImgAvail(message.isRwImgAvail());
 			bean.setRwUrl(message.getRwUrl());
+			bean.setRwClaimable(totalPoints >= message.getRwValue() && message.getRwQuantity() > 0);
 			ret.add(bean);
 		}
 		return ret;
@@ -893,23 +895,6 @@ public class RewardsController implements Serializable {
 		bean.setSelPGrp(groupMessage.getpGrpId());
 		return bean;
 	}
-
-	// private Long[] getSelGroupIds() {
-	// Long[] ret = new Long[groupTwinSelect.getTarget().size()];
-	// int i = 0;
-	// for (GroupBean bean : groupTwinSelect.getTarget()) {
-	// ret[i] = bean.getgId();
-	// i++;
-	// }
-	// return ret;
-	// }
-
-	// private List<Long> getIdsFromArray(Long[] ae) {
-	// List<Long> ret = new ArrayList<Long>();
-	// for (Long id : ae)
-	// ret.add(id);
-	// return ret;
-	// }
 
 	public RewardsBean getRewardsBean() {
 		return rewardsBean;

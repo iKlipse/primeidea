@@ -9,7 +9,7 @@
 				<f:facet name="header">
 					<p:selectOneMenu id="somSelectEntity" value="#{rewardsBean.entity}">
 						<p:ajax listener="#{rewardsBean.updateStatusList}" update="dtPntAlloc,:ideaFrm:pnlModPntAlloc,:ideaFrm:pnlAddPntAlloc" />
-						<f:selectItem itemLabel="Please Select" itemValue="" />
+						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{rewardsBean.allocEntityList}" />
 					</p:selectOneMenu>
 				</f:facet>
@@ -20,14 +20,14 @@
 				<p:column>
 					<f:facet name="header">Entity Name</f:facet>
 					<p:selectOneMenu id="somSelectEntityName" value="#{rewardsBean.entity}">
-						<f:selectItem itemLabel="Please Select" itemValue="" />
+						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{rewardsBean.allocEntityList}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
 					<f:facet name="header">Status</f:facet>
 					<p:selectOneMenu id="somSelectEntityStatus" value="#{bean.allocStatusId}">
-						<f:selectItem itemLabel="Please Select" itemValue="" />
+						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{rewardsBean.disStatusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
 					</p:selectOneMenu>
 				</p:column>
@@ -57,7 +57,7 @@
 				</p:column>
 				<p:column>
 					<p:selectOneMenu id="somAddSelectEntityStatus" value="#{rewardsBean.allocationBean.allocStatusId}">
-						<f:selectItem itemLabel="Please Select" itemValue="" />
+						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{rewardsBean.statusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
 					</p:selectOneMenu>
 				</p:column>
@@ -84,7 +84,7 @@
 				</p:column>
 				<p:column>
 					<p:selectOneMenu id="somModSelectEntityStatus" value="#{rewardsBean.allocationBean.allocStatusId}">
-						<f:selectItem itemLabel="Please Select" itemValue="" />
+						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{rewardsBean.statusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
 					</p:selectOneMenu>
 				</p:column>

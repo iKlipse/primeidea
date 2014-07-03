@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseId;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.jaxrs.client.WebClient;
@@ -202,17 +204,22 @@ public class RewardsBean implements Serializable {
 	}
 
 	public StreamedContent getRwImg() {
-		WebClient client = WebClient.create(rwUrl, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-		client.header("Content-Type", "application/json");
-		client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-		Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-		if (attachment != null)
-			try {
-				rwImg = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		return rwImg;
+		FacesContext context = FacesContext.getCurrentInstance();
+		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
+			return new DefaultStreamedContent();
+		} else {
+			WebClient client = WebClient.create(rwUrl, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+			client.header("Content-Type", "application/json");
+			client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+			Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+			if (attachment != null)
+				try {
+					rwImg = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			return rwImg;
+		}
 	}
 
 	public void setRwImg(StreamedContent rwImg) {

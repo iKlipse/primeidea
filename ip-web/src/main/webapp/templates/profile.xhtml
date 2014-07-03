@@ -5,7 +5,7 @@
 				<p:fileUpload id="fuProfileImg" update="imgAvatar" widgetVar="fuImg" fileUploadListener="#{adminBean.fileImageUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 			</p:column>
 			<p:column>
-				<p:commandButton id="btnProfileImgUpload" value="Update" action="#{adminBean.updateImage}" ajax="false" immediate="true" />
+				<p:commandButton id="btnProfileImgUpload" value="Update" actionListener="#{adminBean.updateImage}" ajax="false" update="imgAvatar,:ideaFrm:grlMsg" />
 			</p:column>
 		</p:panelGrid>
 	</p:dialog>
@@ -16,7 +16,7 @@
 			</p:column>
 			<p:column>
 				<p:selectOneMenu id="somRSecQId" value="#{adminBean.secQ}">
-					<f:selectItem itemLabel="Select One" itemValue="" />
+					<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 					<f:selectItems value="#{adminBean.secqList}" var="p" itemLabel="#{p.desc}" itemValue="#{p.id}" />
 				</p:selectOneMenu>
 			</p:column>

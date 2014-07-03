@@ -1,5 +1,5 @@
 <ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<ui:define name="title">Rewards Store</ui:define>
+	<ui:define name="title">My Wishlist</ui:define>
 	<ui:define name="body">
 		<p:panel id="ctrMyWishlist">
 			<f:facet name="header">
@@ -13,9 +13,6 @@
 						<p:outputLabel id="txtExpiry" value="#{rewards.rwExpiryDt}">
 							<f:convertDateTime pattern="dd.MM.yyyy" />
 						</p:outputLabel>
-						<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{rewardsBean.showEditReward}">
-							<f:setPropertyActionListener value="#{rewards}" target="#{rewardsBean.rewardsBean}" />
-						</p:commandButton>
 					</p:panelGrid>
 				</p:panel>
 				<f:facet name="footer">

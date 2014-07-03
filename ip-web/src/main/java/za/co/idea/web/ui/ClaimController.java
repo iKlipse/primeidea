@@ -5,23 +5,27 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.primefaces.model.StreamedContent;
 
 import za.co.idea.ip.ws.bean.ClaimMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
+import za.co.idea.ip.ws.bean.PointMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.RewardsMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
 import za.co.idea.web.ui.bean.ClaimBean;
 import za.co.idea.web.ui.bean.ListSelectorBean;
+import za.co.idea.web.ui.bean.PointBean;
 import za.co.idea.web.ui.bean.RewardsBean;
 import za.co.idea.web.ui.bean.UserBean;
 import za.co.idea.web.util.IdNumberGen;
@@ -35,6 +39,8 @@ public class ClaimController implements Serializable {
 	private List<RewardsBean> viewRewardsBeans;
 	private List<ListSelectorBean> claimStatus;
 	private List<UserBean> admUsers;
+	private Long totalPoints;
+	private String selRwId;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -53,6 +59,25 @@ public class ClaimController implements Serializable {
 			claimStatus = fetchAllClaimStatuses();
 			viewRewardsBeans = fetchAllAvailableRewards();
 			claimBean = new ClaimBean();
+			selRwId = "";
+			fetchAllPointsByUser();
+			return "clmcc";
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showClaimReward() {
+		try {
+			Map<String, String> reqMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+			admUsers = fetchAllUsers();
+			claimStatus = fetchAllClaimStatuses();
+			viewRewardsBeans = fetchAllAvailableRewards();
+			claimBean = new ClaimBean();
+			this.selRwId = reqMap.get("rewardsId") + "^" + reqMap.get("rwQuantity") + "^" + reqMap.get("rwValue");
 			return "clmcc";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -108,13 +133,28 @@ public class ClaimController implements Serializable {
 
 	public String saveClaim() {
 		try {
+			if (selRwId == null || selRwId.trim().length() == 0) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please Select A Reward", "Please Select A Reward");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
+			if (Long.valueOf(StringUtils.split(selRwId, "^")[1]) == 0) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Rewards Stock Not Available", "Rewards Stock Not Available");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
+			if (totalPoints < Integer.valueOf(StringUtils.split(selRwId, "^")[2])) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not enough points to submit a claim for reward.", "Not enough points to submit a claim for reward.");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
 			WebClient addClaimClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cls/claim/add");
 			ClaimMessage message = new ClaimMessage();
 			message.setClaimCrtdDt(new Date());
 			message.setClaimDesc(claimBean.getClaimDesc());
 			message.setClaimId(COUNTER.getNextId("IpClaim"));
 			message.setcStatusId(1);
-			message.setRewardsId(claimBean.getRewardsId());
+			message.setRewardsId(Long.valueOf(StringUtils.split(selRwId, "^")[0]));
 			message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 			ResponseMessage response = addClaimClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			addClaimClient.close();
@@ -209,7 +249,7 @@ public class ClaimController implements Serializable {
 
 	private List<ClaimBean> fetchAllClaimsByUser() {
 		List<ClaimBean> ret = new ArrayList<ClaimBean>();
-		WebClient fetchClaimClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cls/claim/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		WebClient fetchClaimClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cls/claim/list/user/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
 		Collection<? extends ClaimMessage> claims = new ArrayList<ClaimMessage>(fetchClaimClient.accept(MediaType.APPLICATION_JSON).getCollection(ClaimMessage.class));
 		fetchClaimClient.close();
 		for (ClaimMessage message : claims) {
@@ -272,6 +312,7 @@ public class ClaimController implements Serializable {
 			bean.setRwTag(message.getRwTag());
 			bean.setRwTitle(message.getRwTitle());
 			bean.setRwValue(message.getRwValue());
+			bean.setRwQuantity(message.getRwQuantity());
 			ret.add(bean);
 		}
 		return ret;
@@ -295,6 +336,27 @@ public class ClaimController implements Serializable {
 			bean.setRwTag(message.getRwTag());
 			bean.setRwTitle(message.getRwTitle());
 			bean.setRwValue(message.getRwValue());
+			bean.setRwQuantity(message.getRwQuantity());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	private List<PointBean> fetchAllPointsByUser() {
+		List<PointBean> ret = new ArrayList<PointBean>();
+		WebClient viewPointClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/points/get/user/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		Collection<? extends PointMessage> points = new ArrayList<PointMessage>(viewPointClient.accept(MediaType.APPLICATION_JSON).getCollection(PointMessage.class));
+		viewPointClient.close();
+		totalPoints = 0l;
+		for (PointMessage message : points) {
+			PointBean bean = new PointBean();
+			bean.setAllocId(message.getAllocId());
+			bean.setComments(message.getComments());
+			bean.setEntityId(message.getEntityId());
+			bean.setPointId(message.getPointId());
+			bean.setPointValue(message.getPointValue());
+			bean.setUserId(message.getUserId());
+			totalPoints += message.getPointValue();
 			ret.add(bean);
 		}
 		return ret;
@@ -346,5 +408,21 @@ public class ClaimController implements Serializable {
 
 	public void setViewRewardsBeans(List<RewardsBean> viewRewardsBeans) {
 		this.viewRewardsBeans = viewRewardsBeans;
+	}
+
+	public Long getTotalPoints() {
+		return totalPoints;
+	}
+
+	public void setTotalPoints(Long totalPoints) {
+		this.totalPoints = totalPoints;
+	}
+
+	public String getSelRwId() {
+		return selRwId;
+	}
+
+	public void setSelRwId(String selRwId) {
+		this.selRwId = selRwId;
 	}
 }

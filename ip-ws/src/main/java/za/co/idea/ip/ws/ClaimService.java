@@ -130,7 +130,7 @@ public class ClaimService {
 	}
 
 	@GET
-	@Path("/claim/list/{id}")
+	@Path("/claim/list/status/{id}")
 	@Produces("application/json")
 	public <T extends ClaimMessage> List<T> listClaimByStatus(@PathParam("id") Integer id) {
 		List<T> ret = new ArrayList<T>();
@@ -155,7 +155,7 @@ public class ClaimService {
 	}
 
 	@GET
-	@Path("/claim/list/{id}")
+	@Path("/claim/list/user/{id}")
 	@Produces("application/json")
 	public <T extends ClaimMessage> List<T> listClaimByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();

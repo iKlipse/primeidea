@@ -26,7 +26,7 @@
 					</p:column>
 					<p:column>
 						<p:selectOneMenu style="width: 100%" id="somRSecQId" value="#{adminBean.secQ}">
-							<f:selectItem itemLabel="Select One" itemValue="" />
+							<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 							<f:selectItems value="#{adminBean.secqList}" var="p" itemLabel="#{p.desc}" itemValue="#{p.id}" />
 						</p:selectOneMenu>
 					</p:column>

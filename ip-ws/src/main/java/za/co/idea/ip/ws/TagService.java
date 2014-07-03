@@ -92,12 +92,12 @@ public class TagService {
 	public ResponseMessage createTag(TagMessage tag) {
 		try {
 			List tags = ipTagDAO.getTagByFilterB(tag.getEntityId(), tag.getTeId(), tag.getTtId(), tag.getUserId());
-			if (!tag.isDuplicate() && tags.size() != 0 && tag.getTtId() != 1) {
+			if (!tag.isDuplicate() && tags.size() != 0 && tag.getTtId() != 1 && tag.getTtId() != 4) {
 				ResponseMessage message = new ResponseMessage();
 				message.setStatusCode(2);
 				message.setStatusDesc("Tag Already exists. Cannot Create Duplicate");
 				return message;
-			} else if (!tag.isDuplicate() && tags.size() != 0 && tag.getTtId() == 1) {
+			} else if (!tag.isDuplicate() && tags.size() != 0 && (tag.getTtId() == 1 || tag.getTtId() == 4)) {
 				IpTag ipTag = (IpTag) tags.get(0);
 				ipTagDAO.delete(ipTag);
 				ResponseMessage message = new ResponseMessage();

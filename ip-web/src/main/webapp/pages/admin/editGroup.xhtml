@@ -22,8 +22,8 @@
 					<p:outputLabel id="lblParentGId" value="Parent : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu style="width: 100%" id="somPGrpId" value="#{adminBean.groupBean.selPGrp}">
-						<f:selectItem itemLabel="Select One" itemValue="" />
+					<p:selectOneMenu style="width: 100%" id="somPGrpId" value="#{adminBean.groupBean.selPGrp}" filter="true" filterMatchMode="contains">
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{adminBean.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 					</p:selectOneMenu>
 				</p:column>
@@ -31,15 +31,15 @@
 					<p:outputLabel id="lblProfImage" value="Group Image : " />
 				</p:column>
 				<p:column>
-					<p:fileUpload id="fuCUpload" style="background-color: #55a616;width: 100% !important" fileUploadListener="#{adminBean.fileUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+					<p:fileUpload id="fuCUpload" style="background-color: #55a616;width: 100% !important" fileUploadListener="#{adminBean.fileGroupUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblAdmUser" value="Admin User : " />
 				</p:column>
 				<p:column>
 					<p:selectOneMenu style="width: 100%" id="somAdmUser" value="#{adminBean.groupBean.selAdmUser}">
-						<f:selectItem itemLabel="Select One" itemValue="" />
-						<f:selectItems value="#{adminBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+						<f:selectItems value="#{adminBean.admUsers}" var="a" itemLabel="#{a.fName} #{a.lName}" itemValue="#{a.uId}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>

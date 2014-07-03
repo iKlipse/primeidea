@@ -48,8 +48,12 @@
 							<p:graphicImage id="giComment" name="comment.jpg" library="images" height="25px" width="25px" />
 						</p:column>
 						<p:column>
-							<p:outputLabel id="lblBuildOnCnt" value="#{ideaBean.buildOnCnt}" style="height:25px; width:25px;" />
-							<p:graphicImage id="giBuildOn" name="lego.png" library="images" height="25px" width="25px" />
+							<p:commandLink id="lnkBuildonIdea" action="#{buildonBean.showBuildon}">
+								<f:param name="entityId" id="entityId" value="#{ideaBean.ideaBean.ideaId}" />
+								<f:param name="entityType" id="entityType" value="1" />
+								<p:outputLabel id="lblBuildOnCnt" value="#{ideaBean.buildOnCnt}" style="height:25px; width:25px;" />
+								<p:graphicImage id="giBuildOn" name="lego.png" library="images" height="25px" width="25px" />
+							</p:commandLink>
 						</p:column>
 					</p:panelGrid>
 				</p:column>

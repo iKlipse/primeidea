@@ -38,6 +38,8 @@ public class NewsController implements Serializable {
 	private StreamedContent image;
 	private String fileName;
 	private String contentType;
+	private StreamedContent fileContent;
+	private boolean fileAvail;
 	private List<NewsBean> viewNewsBeans;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 
@@ -76,6 +78,36 @@ public class NewsController implements Serializable {
 	}
 
 	public String showEditNews() {
+		try {
+			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + newsBean.getnId() + "/ip_news");
+			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+			getBlobClient.close();
+			if (blobId != -999l) {
+				WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+				getBlobNameClient.close();
+				WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				client.header("Content-Type", "application/json");
+				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+				if (attachment != null) {
+					fileAvail = false;
+					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+				} else {
+					fileAvail = true;
+					fileContent = null;
+				}
+			} else {
+				fileAvail = true;
+				fileContent = null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			fileAvail = true;
+			fileContent = null;
+		}
 		return "nsec";
 	}
 
@@ -195,7 +227,7 @@ public class NewsController implements Serializable {
 							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
-							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), image.getStream(), new ContentDisposition("attachment; filename=" + fileName)));
+							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), image.getStream(), new ContentDisposition("attachment;filename=" + fileName)));
 							if (docRes.getStatus() != 200) {
 								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
 								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -290,5 +322,21 @@ public class NewsController implements Serializable {
 
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
+	}
+
+	public StreamedContent getFileContent() {
+		return fileContent;
+	}
+
+	public void setFileContent(StreamedContent fileContent) {
+		this.fileContent = fileContent;
+	}
+
+	public boolean isFileAvail() {
+		return fileAvail;
+	}
+
+	public void setFileAvail(boolean fileAvail) {
+		this.fileAvail = fileAvail;
 	}
 }

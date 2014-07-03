@@ -319,9 +319,10 @@ public class AdminService {
 			ipUser.setUserLName(user.getlName());
 			ipUser.setUserScreenName(user.getScName());
 			ipUser.setUserSkills(user.getSkills());
-			ipUser.setIpGroup(ipGroupDAO.findById(user.getGroupId()));
 			ipUser.setuserEmployeeId(user.getEmployeeId());
 			ipUser.setUserStatus(((user.getIsActive() != null && user.getIsActive()) ? "y" : "n"));
+			if (user.getGroupId() != null)
+				ipUser.setIpGroup(ipGroupDAO.findById(user.getGroupId()));
 			if (user.getFbHandle() != null && user.getFbHandle().length() > 0)
 				ipUser.setUserFbHandle(user.getFbHandle());
 			if (user.getBio() != null && user.getBio().length() > 0)
@@ -442,8 +443,9 @@ public class AdminService {
 			ipUser.setUserScreenName(user.getScName());
 			ipUser.setUserSkills(user.getSkills());
 			ipUser.setuserEmployeeId(user.getEmployeeId());
-			ipUser.setIpGroup(ipGroupDAO.findById(user.getGroupId()));
 			ipUser.setUserStatus(((user.getIsActive() != null && user.getIsActive()) ? "y" : "n"));
+			if (user.getGroupId() != null)
+				ipUser.setIpGroup(ipGroupDAO.findById(user.getGroupId()));
 			if (user.getFbHandle() != null && user.getFbHandle().length() > 0)
 				ipUser.setUserFbHandle(user.getFbHandle());
 			if (user.getBio() != null && user.getBio().length() > 0)

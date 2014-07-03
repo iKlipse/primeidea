@@ -1,0 +1,37 @@
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Submit Buildon</ui:define>
+	<ui:define name="body">
+		<p:panelGrid id="pnlBuildOn" columns="1">
+			<p:column>
+				<p:dataTable id="dtViewBuildOns" widgetVar="dtViewBuildOns" value="#{buildonBean.buildons}" var="buildOn" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No BuildOns Found">
+					<p:column headerText="User Id">
+						<p:outputLabel style="float: left !important" value="#{buildOn.usrScreenName}" />
+					</p:column>
+					<p:column headerText="Tag Date">
+						<p:outputLabel style="float: right !important" value="#{buildOn.tagDate}" />
+					</p:column>
+					<p:column headerText="Tag Text">
+						<p:outputLabel style="float: right !important" value="#{buildOn.tagText}" />
+					</p:column>
+					<p:column>
+						<p:commandButton id="summaryButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{buildonBean.showSummaryBuildon}">
+							<f:setPropertyActionListener value="#{buildOn}" target="#{buildonBean.buildon}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:column>
+			<p:column>
+				<p:editor id="edBuildOn" value="#{buildonBean.buildon.tagText}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+			</p:column>
+			<p:column>
+				<p:outputLabel id="lblProfImage" value="Attachments : " />
+				<p:fileUpload id="fuCUpload" style="background-color: #55a616;width: 100% !important" fileUploadListener="#{buildonBean.fileUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+			</p:column>
+			<p:column>
+				<p:commandButton id="btnSubmitBuildOn" value="Post" action="#{buildonBean.createBuildOn}" ajax="false" />
+				<p:commandButton id="btnRedirectIdeaSummary" value="Return To Idea" action="#{ideaBean.showSummaryIdea}" ajax="false" rendered="#{buildonBean.entityType==1}" />
+				<p:commandButton id="btnRedirectSolutionSummary" value="Return To Solution" action="#{challengeBean.showSummarySolution}" ajax="false" rendered="#{buildonBean.entityType==3}" />
+			</p:column>
+		</p:panelGrid>
+	</ui:define>
+</ui:composition>

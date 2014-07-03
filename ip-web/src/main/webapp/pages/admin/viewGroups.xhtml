@@ -10,7 +10,7 @@
 					<f:facet name="header">Group ID</f:facet>
 					<p:outputLabel id="txtGrpId" value="#{grp.gId}" />
 				</p:column>
-				<p:column filterBy="#{grp.gId}" filterMatchMode="contains">
+				<p:column filterBy="#{grp.gName}" filterMatchMode="contains" sortBy="#{grp.gName}">
 					<f:facet name="header">Group Name</f:facet>
 					<p:outputLabel id="txtGrpName" value="#{grp.gName}" />
 				</p:column>
@@ -21,14 +21,14 @@
 				<p:column>
 					<f:facet name="header">Parent Group</f:facet>
 					<p:selectOneMenu id="somPGrpId" value="#{grp.selPGrp}">
-						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{adminBean.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
 					<f:facet name="header">Admin User</f:facet>
 					<p:selectOneMenu id="somAdmUser" value="#{grp.selAdmUser}">
-						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{adminBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
 					</p:selectOneMenu>
 				</p:column>

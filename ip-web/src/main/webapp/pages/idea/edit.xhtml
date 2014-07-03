@@ -17,7 +17,7 @@
 				</p:column>
 				<p:column>
 					<p:selectOneMenu style="width: 100%" id="somICat" value="#{ideaBean.ideaBean.selCatId}">
-						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{ideaBean.ideaCats}" var="ic" itemLabel="#{ic.desc}" itemValue="#{ic.id}" />
 					</p:selectOneMenu>
 				</p:column>
@@ -26,7 +26,7 @@
 				</p:column>
 				<p:column>
 					<p:selectOneMenu style="width: 100%" id="somIStatus" value="#{ideaBean.ideaBean.setStatusId}">
-						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{ideaBean.ideaStatuses}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
 					</p:selectOneMenu>
 				</p:column>
@@ -67,7 +67,7 @@
 				</p:column>
 				<p:column>
 					<p:selectOneMenu style="width: 100%" id="somACrtdBy" value="#{ideaBean.ideaBean.crtdById}" >
-						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{ideaBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
 					</p:selectOneMenu>
 				</p:column>

@@ -65,13 +65,6 @@ public class RewardsService {
 			ipRewards.setRwPrice(rewards.getRwPrice());
 			ipRewards.setRwQuantity(rewards.getRwQuantity());
 			ipRewardsDAO.save(ipRewards);
-			// for (Long gId : rewards.getGroupIdList()) {
-			// IpRewardsGroup ipRewardsGroup = new IpRewardsGroup();
-			// ipRewardsGroup.setRgId(ipNativeSQLDAO.getNextId(IpRewardsGroup.class));
-			// ipRewardsGroup.setIpRewards(ipRewards);
-			// ipRewardsGroup.setIpGroup(ipGroupDAO.findById(gId));
-			// ipRewardsGroupDAO.save(ipRewardsGroup);
-			// }
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
@@ -107,13 +100,6 @@ public class RewardsService {
 			ipRewards.setRwQuantity(rewards.getRwQuantity());
 			ipRewardsDAO.merge(ipRewards);
 			ipRewardsGroupDAO.deleteByRewardsId(rewards.getRwId());
-			// for (Long gId : rewards.getGroupIdList()) {
-			// IpRewardsGroup ipRewardsGroup = new IpRewardsGroup();
-			// ipRewardsGroup.setRgId(ipNativeSQLDAO.getNextId(IpRewardsGroup.class));
-			// ipRewardsGroup.setIpRewards(ipRewards);
-			// ipRewardsGroup.setIpGroup(ipGroupDAO.findById(gId));
-			// ipRewardsGroupDAO.save(ipRewardsGroup);
-			// }
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
@@ -157,17 +143,6 @@ public class RewardsService {
 				} else {
 					rewards.setRwImgAvail(false);
 				}
-				// List val =
-				// ipRewardsGroupDAO.fetchByRewardsId(ipRewards.getRwId());
-				// if (val != null) {
-				// Long[] grps = new Long[val.size()];
-				// int i = 0;
-				// for (Object obj : val) {
-				// grps[i] = ((IpRewardsGroup) obj).getIpGroup().getGroupId();
-				// i++;
-				// }
-				// rewards.setGroupIdList(grps);
-				// }
 				ret.add((T) rewards);
 			}
 		} catch (Exception e) {

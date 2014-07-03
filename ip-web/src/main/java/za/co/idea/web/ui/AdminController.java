@@ -23,6 +23,12 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
@@ -84,6 +90,9 @@ public class AdminController implements Serializable {
 	private String loggedScrName;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 	private String hierarchy;
+	private ArrayList<String> uploadErrors;
+	private boolean resetPasswd;
+	private boolean resetSec;
 
 	private WebClient createCustomClient(String url) {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
@@ -272,6 +281,10 @@ public class AdminController implements Serializable {
 		}
 	}
 
+	public String showUploadUsers() {
+		return "admuu";
+	}
+
 	public String showRPw() {
 		secqList = fetchAllSecQ();
 		return "rpw";
@@ -283,9 +296,10 @@ public class AdminController implements Serializable {
 
 	public String showEditUser() {
 		try {
-			userBean.setcPw(userBean.getPwd());
 			secqList = fetchAllSecQ();
 			viewGroups = fetchAllGroups();
+			resetPasswd = false;
+			resetSec = false;
 			return "admeu";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -410,7 +424,6 @@ public class AdminController implements Serializable {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter Screen Name to Check Availability", "Enter Screen Name to Check Availability");
 			FacesContext.getCurrentInstance().addMessage("txtSCName", exceptionMessage);
 		}
-		// unique screen name validation
 		WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/screenName/" + userBean.getScName());
 		Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 		checkAvailablityClient.close();
@@ -467,6 +480,123 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage("txtEmpId", exceptionMessage);
 			}
 		}
+	}
+
+	public String saveUploadUsers() {
+		int i = 3;
+		try {
+			uploadErrors = null;
+			Workbook workbook = null;
+			if (uploadFileName.endsWith("xlsx"))
+				workbook = new XSSFWorkbook(uploadUser.getStream());
+			else if (uploadFileName.endsWith("xls"))
+				workbook = new HSSFWorkbook(uploadUser.getStream());
+			Sheet sheet = workbook.getSheetAt(0);
+			Row row = sheet.getRow(i);
+			Cell cell0 = row.getCell(0);
+			while ((cell0 != null && cell0.getStringCellValue() != null) || cell0.getStringCellValue().length() != 0) {
+				try {
+					UserBean bean = new UserBean();
+					bean.setContact("+27 " + row.getCell(5).getStringCellValue().substring(1));
+					bean.seteMail(row.getCell(6).getStringCellValue());
+					bean.setEmployeeId(row.getCell(0).getStringCellValue());
+					bean.setIdNum(Long.valueOf(row.getCell(4).getStringCellValue()));
+					bean.setIsActive(false);
+					bean.setlName(row.getCell(1).getStringCellValue());
+					bean.setfName(row.getCell(3).getStringCellValue());
+					bean.setPwd("Passw123");
+					bean.setSecQ(4);
+					bean.setSecA("Johannesburg");
+					bean.setScName(bean.getlName().toLowerCase() + row.getCell(2).getStringCellValue().toLowerCase());
+					if (bean.geteMail() != null && bean.geteMail().length() != 0) {
+						WebClient checkEAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/email/" + bean.geteMail());
+						Boolean availE = checkEAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
+						checkEAvailablityClient.close();
+						if (availE) {
+							getUploadErrors().add("EMail Id already registered :: " + bean.geteMail() + " row number :: " + i);
+							i++;
+							row = sheet.getRow(i);
+							cell0 = row.getCell(0);
+							continue;
+						}
+					}
+					if (bean.getIdNum() != null) {
+						WebClient checkIAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/idNumber/" + bean.getIdNum());
+						Boolean availID = checkIAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
+						checkIAvailablityClient.close();
+						if (availID) {
+							getUploadErrors().add("Id Number already registered :: " + bean.getIdNum() + " row number :: " + i);
+							i++;
+							row = sheet.getRow(i);
+							cell0 = row.getCell(0);
+							continue;
+						}
+					} else {
+						getUploadErrors().add("Id Number cannot be empty row number :: " + i);
+						i++;
+						row = sheet.getRow(i);
+						cell0 = row.getCell(0);
+						continue;
+					}
+					if (bean.getEmployeeId() != null && bean.getEmployeeId().length() != 0) {
+						WebClient checkEIAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/employeeId/" + bean.getEmployeeId());
+						Boolean availEmpID = checkEIAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
+						checkEIAvailablityClient.close();
+						if (availEmpID) {
+							getUploadErrors().add("Employee Id already registered :: " + bean.getEmployeeId() + " row number :: " + i);
+							i++;
+							row = sheet.getRow(i);
+							cell0 = row.getCell(0);
+							continue;
+						}
+					}
+					WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/screenName/" + bean.getScName());
+					Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
+					checkAvailablityClient.close();
+					if (avail)
+						bean.setScName(bean.getScName() + i);
+					WebClient addUserClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/add");
+					UserMessage msg = new UserMessage();
+					msg.setContact(bean.getContact());
+					msg.seteMail(bean.geteMail());
+					msg.setfName(bean.getfName());
+					msg.setIdNum(bean.getIdNum());
+					msg.setlName(bean.getlName());
+					msg.setPwd(bean.getPwd());
+					msg.setScName(bean.getScName());
+					msg.setIsActive(false);
+					msg.setuId(COUNTER.getNextId("IpUser"));
+					msg.setLastLoginDt(new Date());
+					msg.setSecQ(bean.getSecQ());
+					msg.setSecA(bean.getSecA());
+					msg.setEmployeeId(bean.getEmployeeId());
+					msg.setGroupId(14l);
+					ResponseMessage response = addUserClient.accept(MediaType.APPLICATION_JSON).post(msg, ResponseMessage.class);
+					addUserClient.close();
+					if (response.getStatusCode() != 0) {
+						getUploadErrors().add("User creation service call failed due to :: " + response.getStatusDesc() + " row number :: " + i);
+						i++;
+						row = sheet.getRow(i);
+						cell0 = row.getCell(0);
+						continue;
+					}
+				} catch (Exception e) {
+					getUploadErrors().add("User creation service call failed due to :: " + e.getMessage() + " row number :: " + i);
+					i++;
+					row = sheet.getRow(i);
+					cell0 = row.getCell(0);
+					continue;
+				}
+				i++;
+				row = sheet.getRow(i);
+				cell0 = row.getCell(0);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			getUploadErrors().add("User creation service call failed due to :: " + e.getMessage() + " row number :: " + i);
+			return "admuresz";
+		}
+		return "admuresz";
 	}
 
 	public String saveUser() {
@@ -703,6 +833,18 @@ public class AdminController implements Serializable {
 			bean.setGroupId(userBean.getGroupId());
 			ResponseMessage response = updateUserClient.accept(MediaType.APPLICATION_JSON).put(bean, ResponseMessage.class);
 			updateUserClient.close();
+			if (resetPasswd) {
+				WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/rpw/");
+				loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5("Passw123".getBytes())) }, ResponseMessage.class);
+				loginClient.close();
+				resetPasswd = false;
+			}
+			if (resetSec) {
+				WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/rsec");
+				loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), "4", "Johannesburg" }, ResponseMessage.class);
+				loginClient.close();
+				resetSec = false;
+			}
 			if (response.getStatusCode() == 0)
 				return showViewUsers();
 			else {
@@ -758,7 +900,7 @@ public class AdminController implements Serializable {
 						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + message.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 						client.header("Accept", "application/json");
-						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), grpImage.getStream(), new ContentDisposition("attachment; filename=" + grpFileName)));
+						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), grpImage.getStream(), new ContentDisposition("attachment;filename=" + grpFileName)));
 						if (docRes.getStatus() != 200) {
 							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
 							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -861,7 +1003,7 @@ public class AdminController implements Serializable {
 							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + message.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
-							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), grpImage.getStream(), new ContentDisposition("attachment; filename=" + grpFileName)));
+							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), grpImage.getStream(), new ContentDisposition("attachment;filename=" + grpFileName)));
 							if (docRes.getStatus() != 200) {
 								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
 								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -886,7 +1028,7 @@ public class AdminController implements Serializable {
 							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
-							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), grpImage.getStream(), new ContentDisposition("attachment; filename=" + grpFileName)));
+							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), grpImage.getStream(), new ContentDisposition("attachment;filename=" + grpFileName)));
 							if (docRes.getStatus() != 200) {
 								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
 								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -898,7 +1040,7 @@ public class AdminController implements Serializable {
 						}
 					}
 				}
-				image = null;
+				grpImage = null;
 				return showViewGroups();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -946,7 +1088,7 @@ public class AdminController implements Serializable {
 		}
 	}
 
-	public String updateImage() {
+	public void updateImage() {
 		try {
 			Long userId = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId");
 			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + userId + "/ip_user");
@@ -965,10 +1107,14 @@ public class AdminController implements Serializable {
 					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 					client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 					client.header("Accept", "application/json");
-					Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), uploadImage.getStream(), new ContentDisposition("attachment; filename=" + fileName)));
+					Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), uploadImage.getStream(), new ContentDisposition("attachment;filename=" + fileName)));
 					if (docRes.getStatus() != 200) {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+					} else {
+						FacesMessage successMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Profile Image Successfully Uploaded", "Profile Image Successfully Uploaded");
+						FacesContext.getCurrentInstance().addMessage(null, successMsg);
+						this.image = uploadImage;
 					}
 				} else {
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
@@ -988,30 +1134,14 @@ public class AdminController implements Serializable {
 					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 					client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 					client.header("Accept", "application/json");
-					Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), uploadImage.getStream(), new ContentDisposition("attachment; filename=" + uploadFileName)));
+					Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), uploadImage.getStream(), new ContentDisposition("attachment;filename=" + uploadFileName)));
 					if (docRes.getStatus() != 200) {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					} else {
-						WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
-						String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-						getBlobNameClient.close();
-						WebClient docClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-						docClient.header("Content-Type", "application/json");
-						docClient.header("Accept", MediaType.MULTIPART_FORM_DATA);
-						Attachment attachment = docClient.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-						if (attachment != null) {
-							this.image = null;
-							this.image = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
-							show = true;
-							showDef = false;
-						} else {
-							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Load Profile image", "Cannot Load Profile image");
-							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-							show = false;
-							showDef = true;
-						}
-						docClient.close();
+						FacesMessage successMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Profile Image Successfully Uploaded", "Profile Image Successfully Uploaded");
+						FacesContext.getCurrentInstance().addMessage(null, successMsg);
+						this.image = uploadImage;
 					}
 					client.close();
 				} else {
@@ -1024,7 +1154,6 @@ public class AdminController implements Serializable {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", "Unable to upload attachment. Please update later");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
-		return "";
 	}
 
 	private Long[] getSelUserIds() {
@@ -1241,6 +1370,21 @@ public class AdminController implements Serializable {
 		try {
 			UploadedFile file = fue.getFile();
 			this.uploadImage = new DefaultStreamedContent(file.getInputstream());
+			this.uploadFileName = file.getFileName();
+			this.uploadContentType = file.getContentType();
+			enableUpload = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			enableUpload = false;
+		}
+	}
+
+	public void userUploadHandle(FileUploadEvent fue) {
+		try {
+			UploadedFile file = fue.getFile();
+			this.uploadUser = new DefaultStreamedContent(file.getInputstream());
 			this.uploadFileName = file.getFileName();
 			this.uploadContentType = file.getContentType();
 			enableUpload = true;
@@ -1546,6 +1690,32 @@ public class AdminController implements Serializable {
 
 	public void setHierarchy(String hierarchy) {
 		this.hierarchy = hierarchy;
+	}
+
+	public ArrayList<String> getUploadErrors() {
+		if (uploadErrors == null)
+			uploadErrors = new ArrayList<String>();
+		return uploadErrors;
+	}
+
+	public void setUploadErrors(ArrayList<String> uploadErrors) {
+		this.uploadErrors = uploadErrors;
+	}
+
+	public boolean isResetPasswd() {
+		return resetPasswd;
+	}
+
+	public void setResetPasswd(boolean resetPasswd) {
+		this.resetPasswd = resetPasswd;
+	}
+
+	public boolean isResetSec() {
+		return resetSec;
+	}
+
+	public void setResetSec(boolean resetSec) {
+		this.resetSec = resetSec;
 	}
 
 }

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <faces-config version="2.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+	<converter>
+		<converter-id>userConverter</converter-id>
+		<converter-class>za.co.idea.web.util.UserBeanConverter</converter-class>
+	</converter>
+	<converter>
+		<converter-id>groupConverter</converter-id>
+		<converter-class>za.co.idea.web.util.GroupBeanConverter</converter-class>
+	</converter>
 	<managed-bean>
 		<managed-bean-name>menuListener</managed-bean-name>
 		<managed-bean-class>za.co.idea.web.util.MenuListener</managed-bean-class>
@@ -40,6 +48,11 @@
 		<managed-bean-class>za.co.idea.web.ui.NewsController</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>buildonBean</managed-bean-name>
+		<managed-bean-class>za.co.idea.web.ui.BuildonController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 	<navigation-rule>
 		<navigation-case>
 			<from-outcome>login</from-outcome>
@@ -64,6 +77,14 @@
 		<navigation-case>
 			<from-outcome>admvu</from-outcome>
 			<to-view-id>/pages/admin/viewUsers.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admuu</from-outcome>
+			<to-view-id>/pages/admin/upload.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admuresz</from-outcome>
+			<to-view-id>/pages/admin/uploadRes.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>admcg</from-outcome>
@@ -201,6 +222,14 @@
 			<from-outcome>clmuc</from-outcome>
 			<to-view-id>/pages/user/claims.xhtml</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>bovw</from-outcome>
+			<to-view-id>/pages/tag/create.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>bosw</from-outcome>
+			<to-view-id>/pages/tag/summary.xhtml</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
 		<navigation-case>
@@ -220,17 +249,6 @@
 			<to-view-id>/pages/news/summary.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	<lifecycle>
-		<phase-listener>za.co.idea.web.util.SessionPhaseListener</phase-listener>
-	</lifecycle>
-	<converter>
-		<converter-id>userConverter</converter-id>
-		<converter-class>za.co.idea.web.util.UserBeanConverter</converter-class>
-	</converter>
-	<converter>
-		<converter-id>groupConverter</converter-id>
-		<converter-class>za.co.idea.web.util.GroupBeanConverter</converter-class>
-	</converter>
 	<validator>
 		<display-name>SocialConnectorValidator</display-name>
 		<validator-id>za.co.idea.web.util.SocialConnectorValidator</validator-id>
@@ -239,4 +257,7 @@
 	<application>
 		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
 	</application>
+	<lifecycle>
+		<phase-listener>za.co.idea.web.util.SessionPhaseListener</phase-listener>
+	</lifecycle>
 </faces-config>

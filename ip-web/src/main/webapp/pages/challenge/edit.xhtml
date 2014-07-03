@@ -17,7 +17,7 @@
 				</p:column>
 				<p:column>
 					<p:selectOneMenu style="width: 100%" id="somCCat" value="#{challengeBean.challengeBean.catId}" filter="true" filterMatchMode="contains">
-						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{challengeBean.challengeCats}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
 					</p:selectOneMenu>
 				</p:column>
@@ -26,7 +26,7 @@
 				</p:column>
 				<p:column>
 					<p:selectOneMenu style="width: 100%" id="somCStatus" value="#{challengeBean.challengeBean.statusId}">
-						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{challengeBean.challengeStatuses}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
 					</p:selectOneMenu>
 				</p:column>

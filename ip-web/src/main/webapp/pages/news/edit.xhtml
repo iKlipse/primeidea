@@ -31,6 +31,14 @@
 					<p:editor id="txtContent" value="#{newsBean.newsBean.nContent}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
 				</p:column>
 				<p:column>
+					<p:outputLabel id="lblIDownload" value="Download File : " />
+				</p:column>
+				<p:column>
+					<p:commandButton style="width: 100%" id="btnDownload" value="Download" ajax="false" disabled="#{newsBean.fileAvail}">
+						<p:fileDownload value="#{newsBean.fileContent}" />
+					</p:commandButton>
+				</p:column>
+				<p:column>
 					<p:outputLabel id="lblProfImage" value="News Files : " />
 				</p:column>
 				<p:column>

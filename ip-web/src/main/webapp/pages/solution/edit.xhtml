@@ -11,7 +11,7 @@
 				</p:column>
 				<p:column>
 					<p:selectOneMenu style="width: 100%" id="somSChal" value="#{challengeBean.solutionBean.chalId}" >
-						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{challengeBean.viewChallenges}" var="schal" itemLabel="#{schal.title}" itemValue="#{schal.id}" />
 					</p:selectOneMenu>
 				</p:column>
@@ -26,7 +26,7 @@
 				</p:column>
 				<p:column>
 					<p:selectOneMenu style="width: 100%" id="somSCat" value="#{challengeBean.solutionBean.catId}">
-						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{challengeBean.solutionCats}" var="scat" itemLabel="#{scat.desc}" itemValue="#{scat.id}" />
 					</p:selectOneMenu>
 				</p:column>
@@ -35,7 +35,7 @@
 				</p:column>
 				<p:column>
 					<p:selectOneMenu style="width: 100%" id="somSStatus" value="#{challengeBean.solutionBean.statusId}">
-						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{challengeBean.solutionStatuses}" var="scat" itemLabel="#{scat.desc}" itemValue="#{scat.id}" />
 					</p:selectOneMenu>
 				</p:column>

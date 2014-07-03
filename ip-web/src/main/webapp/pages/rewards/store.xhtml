@@ -9,7 +9,9 @@
 				<p:panel header="#{rewards.rwTitle}" style="text-align:center">
 					<p:panelGrid id="pnlContent" columns="2">
 						<p:column>
-							<p:graphicImage value="#{rewards.rwImg}" rendered="#{rewards.rwImgAvail}" />
+							<p:graphicImage value="#{rewards.rwImg}" rendered="#{rewards.rwImgAvail}">
+								<f:param name="url" id="url" value="#{rewards.rwUrl}" />
+							</p:graphicImage>
 						</p:column>
 						<p:column>
 						</p:column>
@@ -24,6 +26,16 @@
 						</p:column>
 						<p:column>
 							<p:outputLabel value="#{rewards.rwValue}" />
+						</p:column>
+						<p:column>
+							<p:commandButton id="btnWish" value="W" ajax="false" action="#{rewardsBean.addToWishlist}">
+								<f:setPropertyActionListener value="#{rewards}" target="#{rewardsBean.rewardsBean}" />
+							</p:commandButton>
+							<p:commandButton id="btnClaim" value="C" ajax="false" action="#{claimBean.showClaimReward}" rendered="#{rewards.rwClaimable}">
+								<f:param name="rewardsId" id="rewardsId" value="#{rewards.rwId}" />
+								<f:param name="rwQuantity" id="rwQuantity" value="#{rewards.rwQuantity}" />
+								<f:param name="rwValue" id="rwValue" value="#{rewards.rwValue}" />
+							</p:commandButton>
 						</p:column>
 					</p:panelGrid>
 				</p:panel>
