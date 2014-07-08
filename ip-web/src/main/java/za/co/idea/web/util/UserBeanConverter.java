@@ -52,6 +52,7 @@ public class UserBeanConverter implements Converter {
 		bean.setSkills(userMessage.getSkills());
 		bean.setTwHandle(userMessage.getTwHandle());
 		bean.setIsActive(true);
+		bean.setPriGroupName(userMessage.getPriGroupName());
 		bean.setuId(userMessage.getuId());
 		return bean;
 	}

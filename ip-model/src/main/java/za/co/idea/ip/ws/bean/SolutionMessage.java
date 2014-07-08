@@ -15,6 +15,7 @@ public class SolutionMessage {
 	private String tags;
 	private Date crtdDt;
 	private Long crtdById;
+	private String crtByName;
 
 	public Long getId() {
 		return id;
@@ -86,6 +87,14 @@ public class SolutionMessage {
 
 	public void setCrtdById(Long crtdById) {
 		this.crtdById = crtdById;
+	}
+
+	public String getCrtByName() {
+		return crtByName;
+	}
+
+	public void setCrtByName(String crtByName) {
+		this.crtByName = crtByName;
 	}
 
 }

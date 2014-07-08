@@ -106,6 +106,7 @@ public class SolutionService {
 				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
 				solution.setCrtdById(ipSolution.getIpUser().getUserId());
+				solution.setCrtByName(ipUserDAO.findById(ipSolution.getIpUser().getUserId()).getUserFName());
 				solution.setCrtdDt(ipSolution.getSolCrtdDt());
 				solution.setDesc(ipSolution.getSolDesc());
 				solution.setId(ipSolution.getSolId());
@@ -133,6 +134,7 @@ public class SolutionService {
 				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
 				solution.setCrtdById(ipSolution.getIpUser().getUserId());
+				solution.setCrtByName(ipUserDAO.findById(ipSolution.getIpUser().getUserId()).getUserFName());
 				solution.setCrtdDt(ipSolution.getSolCrtdDt());
 				solution.setDesc(ipSolution.getSolDesc());
 				solution.setId(ipSolution.getSolId());
@@ -160,6 +162,7 @@ public class SolutionService {
 				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
 				solution.setCrtdById(ipSolution.getIpUser().getUserId());
+				solution.setCrtByName(ipUserDAO.findById(ipSolution.getIpUser().getUserId()).getUserFName());
 				solution.setCrtdDt(ipSolution.getSolCrtdDt());
 				solution.setDesc(ipSolution.getSolDesc());
 				solution.setId(ipSolution.getSolId());
@@ -187,6 +190,7 @@ public class SolutionService {
 				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
 				solution.setCrtdById(ipSolution.getIpUser().getUserId());
+				solution.setCrtByName(ipUserDAO.findById(ipSolution.getIpUser().getUserId()).getUserFName());
 				solution.setCrtdDt(ipSolution.getSolCrtdDt());
 				solution.setDesc(ipSolution.getSolDesc());
 				solution.setId(ipSolution.getSolId());

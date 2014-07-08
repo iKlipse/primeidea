@@ -18,6 +18,7 @@ public class SolutionBean implements Serializable {
 	private Long crtdById;
 	private String contentType;
 	private String fileName;
+	private String crtByName;
 
 	public Long getId() {
 		return id;
@@ -113,6 +114,14 @@ public class SolutionBean implements Serializable {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public String getCrtByName() {
+		return crtByName;
+	}
+
+	public void setCrtByName(String crtByName) {
+		this.crtByName = crtByName;
 	}
 
 }

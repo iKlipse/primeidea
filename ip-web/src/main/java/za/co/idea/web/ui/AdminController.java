@@ -169,21 +169,17 @@ public class AdminController implements Serializable {
 						show = true;
 						showDef = false;
 					} else {
-						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Load Profile image", "Cannot Load Profile image");
-						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 						show = false;
 						showDef = true;
 					}
 					client.close();
 				} else {
-					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Load Profile image", "Cannot Load Profile image");
-					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					show = false;
 					showDef = true;
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Load Profile image", "System error occurred, cannot perform Create request");
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform Login request", "System error occurred, cannot perform Login request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				show = false;
 				showDef = true;
@@ -223,6 +219,8 @@ public class AdminController implements Serializable {
 			if (response.getStatusCode() == 0) {
 				FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 				userBean = new UserBean();
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Reset Successful", "Password Reset Successful");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "login";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusCode() + " :: " + response.getStatusDesc(), response.getStatusCode() + " :: " + response.getStatusDesc());
@@ -680,6 +678,8 @@ public class AdminController implements Serializable {
 					}
 					createBlobClient.close();
 				}
+				FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "User '" + userBean.getfName() + "' created successfully", "User '" + userBean.getfName() + "' created successfully");
+				FacesContext.getCurrentInstance().addMessage(null, successMessage);
 				return showViewUsers();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -1199,6 +1199,7 @@ public class AdminController implements Serializable {
 			bean.setIsActive(userMessage.getIsActive());
 			bean.setuId(userMessage.getuId());
 			bean.setEmployeeId(userMessage.getEmployeeId());
+			bean.setPriGroupName(userMessage.getPriGroupName());
 			ret.add(bean);
 		}
 		return ret;
@@ -1335,6 +1336,7 @@ public class AdminController implements Serializable {
 		bean.setScName(userMessage.getScName());
 		bean.setSkills(userMessage.getSkills());
 		bean.setTwHandle(userMessage.getTwHandle());
+		bean.setPriGroupName(userMessage.getPriGroupName());
 		bean.setIsActive(true);
 		bean.setuId(userMessage.getuId());
 		return bean;

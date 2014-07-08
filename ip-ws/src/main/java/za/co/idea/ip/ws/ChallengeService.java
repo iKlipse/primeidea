@@ -176,6 +176,16 @@ public class ChallengeService {
 				challenge.setStatusId(ipChallenge.getIpChallengeStatus().getCsId());
 				challenge.setTag(ipChallenge.getChalTags());
 				challenge.setTitle(ipChallenge.getChalTitle());
+				List val = ipChallengeGroupDAO.fetchByChallengeId(ipChallenge.getChalId());
+				if (val != null) {
+					Long[] grps = new Long[val.size()];
+					int i = 0;
+					for (Object obj : val) {
+						grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
+						i++;
+					}
+					challenge.setGroupIdList(grps);
+				}
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
@@ -205,6 +215,16 @@ public class ChallengeService {
 				challenge.setStatusId(ipChallenge.getIpChallengeStatus().getCsId());
 				challenge.setTag(ipChallenge.getChalTags());
 				challenge.setTitle(ipChallenge.getChalTitle());
+				List val = ipChallengeGroupDAO.fetchByChallengeId(ipChallenge.getChalId());
+				if (val != null) {
+					Long[] grps = new Long[val.size()];
+					int i = 0;
+					for (Object obj : val) {
+						grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
+						i++;
+					}
+					challenge.setGroupIdList(grps);
+				}
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {

@@ -10,7 +10,9 @@
 					<p:outputLabel id="lblITitle" value="Title : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtITitle" value="#{ideaBean.ideaBean.ideaTitle}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="txtITitle" value="#{ideaBean.ideaBean.ideaTitle}">
+						<p:ajax listener="#{ideaBean.checkTitleAvailability}" event="blur" update="grlMsg" />
+					</p:inputText>
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblICat" value="Category : " />
@@ -66,7 +68,7 @@
 					<p:outputLabel id="lblCrtdBy" value="Created By : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu style="width: 100%" id="somACrtdBy" value="#{ideaBean.ideaBean.crtdById}" >
+					<p:selectOneMenu style="width: 100%" id="somACrtdBy" value="#{ideaBean.ideaBean.crtdById}">
 						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{ideaBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
 					</p:selectOneMenu>

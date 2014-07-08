@@ -43,6 +43,12 @@
 					<p:inputText style="width: 100%" autocomplete="false" id="txtSTag" value="#{challengeBean.solutionBean.tags}" />
 				</p:column>
 				<p:column>
+					<p:outputLabel id="lblOpen" value="Save as Open : " />
+				</p:column>
+				<p:column>
+					<p:selectBooleanButton id="sbOpen" value="#{challengeBean.saveAsOpen}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
+				</p:column>
+				<p:column>
 					<p:outputLabel id="lblSUpload" value="Upload File : " />
 				</p:column>
 				<p:column>

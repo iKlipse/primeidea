@@ -65,6 +65,8 @@ public class IdeaController implements Serializable {
 	private String likeCnt;
 	private String commentCnt;
 	private String buildOnCnt;
+	private boolean saveAsOpen;
+	private boolean titleAvail;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -79,7 +81,7 @@ public class IdeaController implements Serializable {
 
 	public String showViewIdeas() {
 		try {
-			viewIdeas = fetchAllIdeas();
+			viewIdeas = fetchAllIdeasByUser();
 			ideaCats = fetchAllIdeaCat();
 			admUsers = fetchAllUsers();
 			ideaStatuses = fetchAllIdeaStatuses();
@@ -284,6 +286,7 @@ public class IdeaController implements Serializable {
 	public String showCreateIdea() {
 		try {
 			ideaCats = fetchAllIdeaCat();
+			saveAsOpen = false;
 			admUsers = fetchAllUsers();
 			ideaStatuses = fetchAllIdeaStatuses();
 			ideaBean = new IdeaBean();
@@ -326,8 +329,31 @@ public class IdeaController implements Serializable {
 
 	}
 
+	public void checkTitleAvailability() {
+		if (ideaBean.getIdeaTitle() == null || ideaBean.getIdeaTitle().length() == 0) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter Title to Check Availability", "Enter Title to Check Availability");
+			FacesContext.getCurrentInstance().addMessage("txtITitle", exceptionMessage);
+		}
+		WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/check/title/" + ideaBean.getIdeaTitle());
+		Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
+		checkAvailablityClient.close();
+		titleAvail = avail.booleanValue();
+		if (titleAvail) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
+			FacesContext.getCurrentInstance().addMessage("txtITitle", exceptionMessage);
+		} else {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Title Available", "Title Available");
+			FacesContext.getCurrentInstance().addMessage("txtITitle", exceptionMessage);
+		}
+	}
+
 	public String saveIdea() {
 		try {
+			if (titleAvail) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
 			List<String> errors = validateIdea();
 			if (errors.size() > 0) {
 				for (String error : errors) {
@@ -347,7 +373,11 @@ public class IdeaController implements Serializable {
 			ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
 			ideaMessage.setGroupIdList(getSelGroupIds());
-			ideaMessage.setSetStatusId(1l);
+			if (saveAsOpen) {
+				ideaMessage.setSetStatusId(2l);
+			} else {
+				ideaMessage.setSetStatusId(1l);
+			}
 			ResponseMessage response = addIdeaClient.accept(MediaType.APPLICATION_JSON).post(ideaMessage, ResponseMessage.class);
 			addIdeaClient.close();
 			if (response.getStatusCode() == 0) {
@@ -377,6 +407,7 @@ public class IdeaController implements Serializable {
 					}
 				}
 				uploadContent = null;
+				saveAsOpen = false;
 				return showViewIdeas();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -412,6 +443,7 @@ public class IdeaController implements Serializable {
 			ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
 			ideaMessage.setSetStatusId(ideaBean.getSetStatusId());
+			ideaMessage.setGroupIdList(getSelGroupIds());
 			ResponseMessage response = updateIdeaClient.accept(MediaType.APPLICATION_JSON).put(ideaMessage, ResponseMessage.class);
 			updateIdeaClient.close();
 			if (response.getStatusCode() == 0) {
@@ -521,7 +553,7 @@ public class IdeaController implements Serializable {
 		return ret;
 	}
 
-	private List<IdeaBean> fetchAllIdeas() {
+	protected List<IdeaBean> fetchAllIdeas() {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
 		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list");
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
@@ -557,6 +589,7 @@ public class IdeaController implements Serializable {
 			bean.setIdeaTitle(ideaMessage.getIdeaTitle());
 			bean.setSelCatId(ideaMessage.getSelCatId());
 			bean.setSetStatusId(ideaMessage.getSetStatusId());
+			bean.setGroupIdList(getIdsFromArray(ideaMessage.getGroupIdList()));
 			ret.add(bean);
 		}
 		return ret;
@@ -707,8 +740,9 @@ public class IdeaController implements Serializable {
 
 	private List<Long> getIdsFromArray(Long[] ae) {
 		List<Long> ret = new ArrayList<Long>();
-		for (Long id : ae)
-			ret.add(id);
+		if (ae != null)
+			for (Long id : ae)
+				ret.add(id);
 		return ret;
 	}
 
@@ -892,5 +926,21 @@ public class IdeaController implements Serializable {
 
 	public void setpGrps(List<GroupBean> pGrps) {
 		this.pGrps = pGrps;
+	}
+
+	public boolean isSaveAsOpen() {
+		return saveAsOpen;
+	}
+
+	public void setSaveAsOpen(boolean saveAsOpen) {
+		this.saveAsOpen = saveAsOpen;
+	}
+
+	public boolean isTitleAvail() {
+		return titleAvail;
+	}
+
+	public void setTitleAvail(boolean titleAvail) {
+		this.titleAvail = titleAvail;
 	}
 }

@@ -39,14 +39,14 @@
 				<p:column>
 					<p:selectOneMenu style="width: 100%" id="somAdmUser" value="#{adminBean.groupBean.selAdmUser}">
 						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{adminBean.admUsers}" var="a" itemLabel="#{a.fName} #{a.lName}" itemValue="#{a.uId}" />
+						<f:selectItems value="#{adminBean.admUsers}" var="a" itemLabel="#{a.priGroupName} - #{a.fName} #{a.lName}" itemValue="#{a.uId}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblFuncUsers" value="Group Users" />
 				</p:column>
 				<p:column>
-					<p:pickList style="width: 100%" id="plUserPick" converter="userConverter" value="#{adminBean.userTwinSelect}" var="user" itemLabel="#{user.scName}" itemValue="#{user.uId}" />
+					<p:pickList style="width: 100%" id="plUserPick" converter="userConverter" value="#{adminBean.userTwinSelect}" var="user" itemLabel="#{user.priGroupName} - #{user.fName} #{user.lName}" itemValue="#{user.uId}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblActive" value="Active : " />

@@ -27,6 +27,7 @@ public class UserBean implements Serializable {
 	private Date lastLoginDt;
 	private String employeeId;
 	private Long groupId;
+	private String priGroupName;
 
 	public Long getuId() {
 		return uId;
@@ -194,6 +195,14 @@ public class UserBean implements Serializable {
 
 	public void setGroupId(Long groupId) {
 		this.groupId = groupId;
+	}
+
+	public String getPriGroupName() {
+		return priGroupName;
+	}
+
+	public void setPriGroupName(String priGroupName) {
+		this.priGroupName = priGroupName;
 	}
 
 }

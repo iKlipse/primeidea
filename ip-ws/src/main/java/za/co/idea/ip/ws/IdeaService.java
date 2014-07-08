@@ -38,6 +38,20 @@ public class IdeaService {
 	private IpGroupDAO ipGroupDAO;
 
 	@GET
+	@Path("/idea/check/title/{title}")
+	@Produces("application/json")
+	public Boolean checkScreenName(@PathParam("title") String ideaTitle) {
+		try {
+			List ideasByTitle = ipIdeaDAO.findByIdeaTitle(ideaTitle);
+			Boolean ret = (ideasByTitle != null && ideasByTitle.size() > 0);
+			return ret;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@GET
 	@Path("/idea/cat/list")
 	@Produces("application/json")
 	public <T extends MetaDataMessage> List<T> listIdeaCat() {
@@ -273,6 +287,16 @@ public class IdeaService {
 					idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
 				if (ipIdea.getIpUser() != null)
 					idea.setCrtdById(ipIdea.getIpUser().getUserId());
+				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
+				if (val != null) {
+					Long[] grps = new Long[val.size()];
+					int i = 0;
+					for (Object obj : val) {
+						grps[i] = ((IpIdeaGroup) obj).getIpGroup().getGroupId();
+						i++;
+					}
+					idea.setGroupIdList(grps);
+				}
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {

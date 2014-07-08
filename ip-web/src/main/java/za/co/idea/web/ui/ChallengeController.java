@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -81,6 +82,7 @@ public class ChallengeController implements Serializable {
 	private boolean showSolutionComments;
 	private boolean showSolutionLikes;
 	private Date selLaunchDate;
+	private boolean saveAsOpen;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -112,7 +114,7 @@ public class ChallengeController implements Serializable {
 
 	public String showViewChallenge() {
 		try {
-			viewChallenges = fetchAllChallenges();
+			viewChallenges = fetchAllChallengesByUser();
 			challengeCats = fetchAllChallengeCat();
 			admUsers = fetchAllUsers();
 			challengeStatuses = fetchAllChallengeStatuses();
@@ -442,6 +444,25 @@ public class ChallengeController implements Serializable {
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
 			solutionBean = new SolutionBean();
+			saveAsOpen = false;
+			return "solcs";
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showSubmitSolution() {
+		try {
+			Map<String, String> reqMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+			admUsers = fetchAllUsers();
+			viewChallenges = fetchAllAvailableChallenges();
+			solutionCats = fetchAllSolutionCat();
+			solutionStatuses = fetchAllSolutionStatuses();
+			solutionBean = new SolutionBean();
+			solutionBean.setChalId(Long.valueOf(reqMap.get("chalId")));
 			return "solcs";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -454,11 +475,11 @@ public class ChallengeController implements Serializable {
 	public String showViewSolution() {
 		try {
 			admUsers = fetchAllUsers();
-			viewChallenges = fetchAllChallenges();
+			viewChallenges = fetchAllChallengesByUser();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
 			solutionBean = new SolutionBean();
-			viewSolutions = fetchAllSolutions();
+			viewSolutions = fetchAllSolutionsByUser();
 			return "solvs";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -471,7 +492,7 @@ public class ChallengeController implements Serializable {
 	public String showViewSolutionByUser() {
 		try {
 			admUsers = fetchAllUsers();
-			viewChallenges = fetchAllChallenges();
+			viewChallenges = fetchAllChallengesByUser();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
 			solutionBean = new SolutionBean();
@@ -488,7 +509,7 @@ public class ChallengeController implements Serializable {
 	public String showEditSolution() {
 		try {
 			admUsers = fetchAllUsers();
-			viewChallenges = fetchAllChallenges();
+			viewChallenges = fetchAllChallengesByUser();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchNextSolutionStatuses();
 			try {
@@ -594,7 +615,11 @@ public class ChallengeController implements Serializable {
 			message.setCrtdDt(new Date());
 			message.setDesc(solutionBean.getDesc());
 			message.setId(COUNTER.getNextId("IpSolution"));
-			message.setStatusId(1);
+			if (saveAsOpen) {
+				message.setStatusId(2);
+			} else {
+				message.setStatusId(1);
+			}
 			message.setTags(solutionBean.getTags());
 			message.setTitle(solutionBean.getTitle());
 			ResponseMessage response = addSolutionClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
@@ -626,6 +651,7 @@ public class ChallengeController implements Serializable {
 					}
 				}
 				solUploadContent = null;
+				saveAsOpen = false;
 				return showViewSolution();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -816,7 +842,7 @@ public class ChallengeController implements Serializable {
 		return ret;
 	}
 
-	private List<ChallengeBean> fetchAllChallenges() {
+	protected List<ChallengeBean> fetchAllChallenges() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
 		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list");
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
@@ -858,6 +884,7 @@ public class ChallengeController implements Serializable {
 			bean.setStatusId(challengeMessage.getStatusId());
 			bean.setTag(challengeMessage.getTag());
 			bean.setTitle(challengeMessage.getTitle());
+			bean.setGroupIdList(getIdsFromArray(challengeMessage.getGroupIdList()));
 			ret.add(bean);
 		}
 		return ret;
@@ -881,12 +908,13 @@ public class ChallengeController implements Serializable {
 			bean.setStatusId(challengeMessage.getStatusId());
 			bean.setTag(challengeMessage.getTag());
 			bean.setTitle(challengeMessage.getTitle());
+			bean.setGroupIdList(getIdsFromArray(challengeMessage.getGroupIdList()));
 			ret.add(bean);
 		}
 		return ret;
 	}
 
-	private List<SolutionBean> fetchAllSolutions() {
+	protected List<SolutionBean> fetchAllSolutions() {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
 		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list");
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
@@ -900,6 +928,7 @@ public class ChallengeController implements Serializable {
 			bean.setDesc(solutionMessage.getDesc());
 			bean.setId(solutionMessage.getId());
 			bean.setStatusId(solutionMessage.getStatusId());
+			bean.setCrtByName(solutionMessage.getCrtByName());
 			bean.setTags(solutionMessage.getTags());
 			bean.setTitle(solutionMessage.getTitle());
 			ret.add(bean);
@@ -917,6 +946,7 @@ public class ChallengeController implements Serializable {
 			bean.setChalId(solutionMessage.getChalId());
 			bean.setCatId(solutionMessage.getCatId());
 			bean.setCrtdById(solutionMessage.getCrtdById());
+			bean.setCrtByName(solutionMessage.getCrtByName());
 			bean.setCrtdDt(solutionMessage.getCrtdDt());
 			bean.setDesc(solutionMessage.getDesc());
 			bean.setId(solutionMessage.getId());
@@ -938,6 +968,7 @@ public class ChallengeController implements Serializable {
 			bean.setChalId(solutionMessage.getChalId());
 			bean.setCatId(solutionMessage.getCatId());
 			bean.setCrtdById(solutionMessage.getCrtdById());
+			bean.setCrtByName(solutionMessage.getCrtByName());
 			bean.setCrtdDt(solutionMessage.getCrtdDt());
 			bean.setDesc(solutionMessage.getDesc());
 			bean.setId(solutionMessage.getId());
@@ -1250,8 +1281,9 @@ public class ChallengeController implements Serializable {
 
 	private List<Long> getIdsFromArray(Long[] ae) {
 		List<Long> ret = new ArrayList<Long>();
-		for (Long id : ae)
-			ret.add(id);
+		if (ae != null)
+			for (Long id : ae)
+				ret.add(id);
 		return ret;
 	}
 
@@ -1563,6 +1595,14 @@ public class ChallengeController implements Serializable {
 
 	public void setGroupTwinSelect(DualListModel<GroupBean> groupTwinSelect) {
 		this.groupTwinSelect = groupTwinSelect;
+	}
+
+	public boolean isSaveAsOpen() {
+		return saveAsOpen;
+	}
+
+	public void setSaveAsOpen(boolean saveAsOpen) {
+		this.saveAsOpen = saveAsOpen;
 	}
 
 }

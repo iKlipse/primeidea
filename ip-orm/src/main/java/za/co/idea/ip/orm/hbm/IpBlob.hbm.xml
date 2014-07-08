@@ -23,6 +23,9 @@
 		<property name="blobEntityTblNm" type="java.lang.String">
 			<column name="blob_entity_tbl_nm" length="450" />
 		</property>
+		<property name="blobSize" type="java.lang.Long">
+			<column name="blob_size" />
+		</property>
 	</class>
 	<sql-query name="getBlobByEntity">
 		select ib.* from ip_blob ib where ib.blob_entity_id=:id and lower(ib.blob_entity_tbl_nm)=lower(:tblNm)

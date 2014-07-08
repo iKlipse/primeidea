@@ -112,12 +112,6 @@
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblSecQ" value="Security Question : " />
-				</p:column>
-				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtSecA" value="#{adminBean.userBean.secA}" />
-				</p:column>
-				<p:column>
 					<p:outputLabel id="lblActive" value="Active : " />
 				</p:column>
 				<p:column>
@@ -127,12 +121,14 @@
 					<p:outputLabel id="lblRsetPasswd" value="Reset Password : " />
 				</p:column>
 				<p:column>
+					<pe:tooltip for="sbbRsetPasswd" value="If Selected Password will be reset to Passw123" />
 					<p:selectBooleanButton id="sbbRsetPasswd" value="#{adminBean.resetPasswd}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblResetSec" value="Reset Security : " />
 				</p:column>
 				<p:column>
+					<pe:tooltip for="sbbResetSec" value="If Selected Security Question will be reset to Home Town and Answer will be reset to Johannesburg" />
 					<p:selectBooleanButton id="sbbResetSec" value="#{adminBean.resetSec}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
 				</p:column>
 				<p:column>

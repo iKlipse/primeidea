@@ -31,6 +31,7 @@ public class IpBlobDAO extends BaseHibernateDAO {
 	public static final String BLOB_CONTENT = "blobContent";
 	public static final String BLOB_ENTITY_ID = "blobEntityId";
 	public static final String BLOB_ENTITY_TBL_NM = "blobEntityTblNm";
+	public static final String BLOB_SIZE = "blobSize";
 
 	public void save(IpBlob transientInstance) {
 		log.debug("saving IpBlob instance");
@@ -139,6 +140,10 @@ public class IpBlobDAO extends BaseHibernateDAO {
 
 	public List findByBlobEntityTblNm(Object blobEntityTblNm) {
 		return findByProperty(BLOB_ENTITY_TBL_NM, blobEntityTblNm);
+	}
+
+	public List findByBlobSize(Object blobSize) {
+		return findByProperty(BLOB_SIZE, blobSize);
 	}
 
 	public List findAll() {

@@ -488,8 +488,10 @@ public class AdminService {
 				user.setSkills(ipUser.getUserSkills());
 				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
 				user.setEmployeeId(ipUser.getuserEmployeeId());
-				if (ipUser.getIpGroup() != null)
+				if (ipUser.getIpGroup() != null) {
 					user.setGroupId(ipUser.getIpGroup().getGroupId());
+					user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
+				}
 				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
 					user.setFbHandle(ipUser.getUserFbHandle());
 				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
@@ -523,6 +525,10 @@ public class AdminService {
 			user.setSkills(ipUser.getUserSkills());
 			user.setEmployeeId(ipUser.getuserEmployeeId());
 			user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
+			if (ipUser.getIpGroup() != null) {
+				user.setGroupId(ipUser.getIpGroup().getGroupId());
+				user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
+			}
 			if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
 				user.setFbHandle(ipUser.getUserFbHandle());
 			if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)

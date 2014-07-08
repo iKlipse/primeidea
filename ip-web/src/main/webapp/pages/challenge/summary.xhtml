@@ -50,6 +50,9 @@
 					</p:panelGrid>
 				</p:column>
 				<f:facet name="footer">
+					<p:commandButton id="btnSolSubmit" value="Submit a Solution" ajax="false" action="#{challengeBean.showSubmitSolution}">
+						<f:param name="chalId" id="chalId" value="#{challengeBean.challengeBean.id}" />
+					</p:commandButton>
 					<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{challengeBean.showViewChallenge}" />
 				</f:facet>
 			</p:panelGrid>
@@ -86,14 +89,10 @@
 			<p:dataGrid id="dgSolForChal" value="#{challengeBean.viewSolutions}" var="sol" columns="1">
 				<p:scrollPanel style="border: 0px !important;">
 					<p:panel style="border: 0px !important;">
-						<f:facet name="header">Solutions</f:facet>
+						<f:facet name="header">
+							Solution By - <p:outputLabel value="#{sol.crtByName}" /> - <p:outputLabel value="#{sol.crtdDt}" />
+						</f:facet>
 						<p:panelGrid columns="2" id="pnlSolForChal">
-							<p:column>
-								<p:outputLabel id="lblITitle" value="Title : " />
-							</p:column>
-							<p:column>
-								<p:outputLabel id="txtITitle" value="#{sol.title}" />
-							</p:column>
 							<p:column>
 								<p:outputLabel id="lblIDesc" value="Description : " />
 							</p:column>

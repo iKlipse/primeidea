@@ -64,6 +64,7 @@ public class BuildonController implements Serializable {
 		entityId = Long.valueOf(reqMap.get("entityId"));
 		entityType = Integer.parseInt(reqMap.get("entityType"));
 		buildons = fetchAllBuildOns();
+		buildon = new TagBean();
 		commentText = "";
 		return "bovw";
 	}

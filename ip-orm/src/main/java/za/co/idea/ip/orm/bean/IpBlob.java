@@ -17,6 +17,7 @@ public class IpBlob implements java.io.Serializable {
 	private Blob blobContent;
 	private Long blobEntityId;
 	private String blobEntityTblNm;
+	private Long blobSize;
 
 	// Constructors
 
@@ -30,13 +31,14 @@ public class IpBlob implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpBlob(Long blobId, String blobName, String blobContentType, Blob blobContent, Long blobEntityId, String blobEntityTblNm) {
+	public IpBlob(Long blobId, String blobName, String blobContentType, Blob blobContent, Long blobEntityId, String blobEntityTblNm, Long blobSize) {
 		this.blobId = blobId;
 		this.blobName = blobName;
 		this.blobContentType = blobContentType;
 		this.blobContent = blobContent;
 		this.blobEntityId = blobEntityId;
 		this.blobEntityTblNm = blobEntityTblNm;
+		this.blobSize = blobSize;
 	}
 
 	// Property accessors
@@ -87,6 +89,14 @@ public class IpBlob implements java.io.Serializable {
 
 	public void setBlobEntityTblNm(String blobEntityTblNm) {
 		this.blobEntityTblNm = blobEntityTblNm;
+	}
+
+	public Long getBlobSize() {
+		return blobSize;
+	}
+
+	public void setBlobSize(Long blobSize) {
+		this.blobSize = blobSize;
 	}
 
 }

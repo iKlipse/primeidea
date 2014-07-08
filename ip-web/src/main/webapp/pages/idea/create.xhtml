@@ -10,7 +10,9 @@
 					<p:outputLabel id="lblITitle" value="Title : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtITitle" value="#{ideaBean.ideaBean.ideaTitle}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="txtITitle" value="#{ideaBean.ideaBean.ideaTitle}">
+						<p:ajax listener="#{ideaBean.checkTitleAvailability}" event="blur" update="grlMsg" />
+					</p:inputText>
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblICat" value="Category : " />
@@ -32,6 +34,12 @@
 				</p:column>
 				<p:column>
 					<p:inputText style="width: 100%" autocomplete="false" id="txtITag" value="#{ideaBean.ideaBean.ideaTag}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblOpen" value="Save as Open : " />
+				</p:column>
+				<p:column>
+					<p:selectBooleanButton id="sbOpen" value="#{ideaBean.saveAsOpen}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblIUpload" value="Upload File : " />
