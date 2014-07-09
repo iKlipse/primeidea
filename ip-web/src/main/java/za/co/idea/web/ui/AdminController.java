@@ -410,6 +410,52 @@ public class AdminController implements Serializable {
 		}
 	}
 
+	public String showSummaryGroup() {
+		try {
+			viewGroups = pGrps = fetchAllGroups();
+			admUsers = fetchAllUsersSortByPG();
+			userTwinSelect = initializeSelectedUsers(admUsers);
+			functions = fetchAllFunctionsByGroup();
+			try {
+				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + groupBean.getgId() + "/ip_group");
+				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+				getBlobClient.close();
+				if (blobId != -999l) {
+					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+					getBlobNameClient.close();
+					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					client.header("Content-Type", "application/json");
+					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+					if (attachment != null) {
+						fileAvail = false;
+						groupBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
+						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+					} else {
+						fileAvail = true;
+						fileContent = null;
+					}
+				} else {
+					fileAvail = true;
+					fileContent = null;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				fileAvail = true;
+				fileContent = null;
+			}
+			return "admsg";
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated groups view request", "System error occurred, cannot perform updated groups view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
 	public String showCreateFunction() {
 		try {
 			pGrps = fetchAllGroups();

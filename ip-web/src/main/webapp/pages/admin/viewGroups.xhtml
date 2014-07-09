@@ -41,6 +41,11 @@
 						<f:setPropertyActionListener value="#{grp}" target="#{adminBean.groupBean}" />
 					</p:commandButton>
 				</p:column>
+				<p:column>
+					<p:commandButton id="summaryButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminBean.showSummaryGroup}">
+						<f:setPropertyActionListener value="#{grp}" target="#{adminBean.groupBean}" />
+					</p:commandButton>
+				</p:column>
 				<f:facet name="footer">
 					<p:commandButton id="btnAdd" value="Create Group" ajax="false" action="#{adminBean.showCreateGroup}" rendered="#{accessBean.createGroupEnabled}" />
 					<p:commandButton id="btnCancel" value="Return To Home" ajax="false" action="#{adminBean.redirectHome}" />

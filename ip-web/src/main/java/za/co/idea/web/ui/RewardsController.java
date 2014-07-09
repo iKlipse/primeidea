@@ -677,6 +677,7 @@ public class RewardsController implements Serializable {
 		addTagClient.close();
 		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
+		viewRewardsBeans = fetchAllAvailableRewards();
 		return "";
 	}
 
@@ -782,9 +783,16 @@ public class RewardsController implements Serializable {
 			bean.setRwImgAvail(message.isRwImgAvail());
 			bean.setRwUrl(message.getRwUrl());
 			bean.setRwClaimable(totalPoints >= message.getRwValue() && message.getRwQuantity() > 0);
+			bean.setRwTaggable(isWishlist(message.getRwId()));
 			ret.add(bean);
 		}
 		return ret;
+	}
+
+	private boolean isWishlist(Long rwId) {
+		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/getByUser/" + rwId + "/4/4/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		Collection<? extends TagMessage> rewards = new ArrayList<TagMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
+		return (rewards.size() > 0);
 	}
 
 	private List<ListSelectorBean> fetchAllRewardsCat() {

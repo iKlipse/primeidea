@@ -1,0 +1,42 @@
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Create Notification</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrCrtNotif">
+			<f:facet name="header">
+					Create Notification
+				</f:facet>
+			<p:panelGrid columns="2" id="pnlCrtNotif">
+				<p:column>
+					<p:outputLabel id="lblSubject" value="Subject : " />
+				</p:column>
+				<p:column>
+					<p:inputText style="width: 100%" autocomplete="false" id="txtSubject" value="#{notificationBean.notificationBean.notifSubject}"/>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblBody" value="Body : " />
+				</p:column>
+				<p:column>
+					<p:editor style="width: 100%" id="txtBody" value="#{notificationBean.notificationBean.notifBody}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblNUpload" value="Upload File : " />
+				</p:column>
+				<p:column>
+					<p:fileUpload style="width: 100%" id="fuNUpload" fileUploadListener="#{notificationBean.fileUploadHandle}" multiple="false" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblFuncGrps" value="Notification Groups" />
+				</p:column>
+				<p:column>
+					<p:pickList style="width: 100%" id="plGroupPick" converter="groupConverter" value="#{notificationBean.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" />
+				</p:column>
+				<p:row>
+					<p:column colspan="2">
+						<p:commandButton id="btnCrtISave" value="Save" ajax="false" action="#{notificationBean.saveNotification}" />
+						<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{notificationBean.showViewNotifications}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</p:panel>
+	</ui:define>
+</ui:composition>

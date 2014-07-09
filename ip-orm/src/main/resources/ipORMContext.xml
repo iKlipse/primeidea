@@ -52,6 +52,8 @@
 				<value>za/co/idea/ip/orm/hbm/IpSecqList.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpCategory.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpNews.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpNotif.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpNotifGroup.hbm.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -226,6 +228,16 @@
 		</property>
 	</bean>
 	<bean id="IpNewsDAO" class="za.co.idea.ip.orm.dao.IpNewsDAO">
+		<property name="factory">
+			<ref bean="factory" />
+		</property>
+	</bean>
+	<bean id="IpNotifDAO" class="za.co.idea.ip.orm.dao.IpNotifDAO">
+		<property name="factory">
+			<ref bean="factory" />
+		</property>
+	</bean>
+	<bean id="IpNotifGroupDAO" class="za.co.idea.ip.orm.dao.IpNotifGroupDAO">
 		<property name="factory">
 			<ref bean="factory" />
 		</property>

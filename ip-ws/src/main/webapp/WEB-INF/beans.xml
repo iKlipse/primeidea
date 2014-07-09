@@ -26,6 +26,7 @@
 			<ref bean="metaDataService" />
 			<ref bean="documentUploadService" />
 			<ref bean="newsService" />
+			<ref bean="notificationService" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider">

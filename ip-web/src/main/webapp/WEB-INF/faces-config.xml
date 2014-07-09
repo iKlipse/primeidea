@@ -53,6 +53,11 @@
 		<managed-bean-class>za.co.idea.web.ui.BuildonController</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>notificationBean</managed-bean-name>
+		<managed-bean-class>za.co.idea.web.ui.NotificationController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 	<navigation-rule>
 		<navigation-case>
 			<from-outcome>login</from-outcome>
@@ -93,6 +98,10 @@
 		<navigation-case>
 			<from-outcome>admeg</from-outcome>
 			<to-view-id>/pages/admin/editGroup.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admsg</from-outcome>
+			<to-view-id>/pages/admin/summaryGroup.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>admvg</from-outcome>
@@ -247,6 +256,10 @@
 		<navigation-case>
 			<from-outcome>nssc</from-outcome>
 			<to-view-id>/pages/news/summary.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>notifc</from-outcome>
+			<to-view-id>/pages/notifications/create.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<validator>

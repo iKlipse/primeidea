@@ -30,7 +30,7 @@
 			<p:submenu label="User" style="float: right !important;">
 				<p:menuitem value="Create" action="#{adminBean.showCreateUser}" immediate="true" ajax="false" rendered="#{accessBean.createUserEnabled}" />
 				<p:menuitem value="View" action="#{adminBean.showViewUsers}" immediate="true" ajax="false" />
-				<p:menuitem value="Upload" action="#{adminBean.showUploadUsers}" immediate="true" ajax="false" />
+				<p:menuitem value="Upload" action="#{adminBean.showUploadUsers}" immediate="true" ajax="false" />				
 			</p:submenu>
 			<p:submenu label="Group" style="float: right !important;">
 				<p:menuitem value="Create Group" action="#{adminBean.showCreateGroup}" immediate="true" ajax="false" rendered="#{accessBean.createGroupEnabled}" />
@@ -43,7 +43,9 @@
 				<p:menuitem value="Allocate Points" action="#{rewardsBean.showAllocatePoints}" immediate="true" ajax="false" rendered="#{accessBean.createAllocatePoints}" />
 				<p:menuitem value="Maintain Point Allocation" action="#{rewardsBean.showPointAllocation}" immediate="true" ajax="false" rendered="#{accessBean.maintainPointAllocEnabled}" />
 				<p:menuitem value="Maintain MetaData" action="#{metaDataBean.showMetadataMaintain}" immediate="true" ajax="false" rendered="#{accessBean.maintainMetaDataEnabled}" />
+				<p:menuitem value="Send Broadcast" action="#{notificationBean.showCreateNotification}" immediate="true" ajax="false" />
 			</p:submenu>
+			
 		</p:submenu>
 	</p:menubar>
 </ui:composition>

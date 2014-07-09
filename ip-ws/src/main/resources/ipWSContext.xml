@@ -79,6 +79,11 @@
 	<bean id="newsService" class="za.co.idea.ip.ws.NewsService">
 		<property name="ipNewsDAO" ref="IpNewsDAO" />
 	</bean>
+	<bean id="notificationService" class="za.co.idea.ip.ws.NotificationService">
+		<property name="ipNativeSQLDAO" ref="IpNativeSQLDAO" />
+		<property name="ipNotifGroupDAO" ref="IpNotifGroupDAO" />
+		<property name="ipNotifDAO" ref="IpNotifDAO" />
+	</bean>
 	<bean id="ChallengeExpiryJob" class="org.springframework.scheduling.quartz.JobDetailBean">
 		<property name="jobClass" value="za.co.idea.ip.jobs.ChallengeExpiryJob" />
 		<property name="jobDataAsMap">
@@ -87,9 +92,25 @@
 			</map>
 		</property>
 	</bean>
+	<bean id="NotificationEmailJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="za.co.idea.ip.jobs.NotificationEmailJob" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="ipNotifDAO" value-ref="IpNotifDAO" />
+				<entry key="ipNotifGroupDAO" value-ref="IpNotifGroupDAO" />
+				<entry key="ipGroupUserDAO" value-ref="IpGroupUserDAO" />
+				<entry key="ipUserDAO" value-ref="IpUserDAO" />
+				<entry key="sender" value-ref="mailSender" />
+			</map>
+		</property>
+	</bean>
 	<bean id="ChallengeExpiryJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="ChallengeExpiryJob" />
 		<property name="cronExpression" value="0 0/10 * * * ?" />
+	</bean>
+	<bean id="NotificationEmailJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="NotificationEmailJob" />
+		<property name="cronExpression" value="0 0/5 * * * ?" />
 	</bean>
 	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
@@ -98,4 +119,18 @@
 			</list>
 		</property>
 	</bean>
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" />
+		<property name="username" value="madhav.venu.p@gmail.com" />
+		<property name="password" value="vahdamUnEv140609" />
+
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+			</props>
+		</property>
+	</bean>
+
 </beans>

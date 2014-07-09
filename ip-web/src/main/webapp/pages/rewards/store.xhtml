@@ -26,9 +26,11 @@
 							<p:outputLabel value="#{rewards.rwValue}" />
 						</p:column>
 						<p:column>
-							<p:commandButton id="btnWish" value="W" ajax="false" action="#{rewardsBean.addToWishlist}">
+							<p:commandLink id="btnWish" ajax="false" action="#{rewardsBean.addToWishlist}">
+								<p:graphicImage library="images" name="star_highlight.jpg" height="30px" width="30px" rendered="#{rewards.rwTaggable}" />
+								<p:graphicImage library="images" name="star.jpg" height="30px" width="30px" rendered="#{!rewards.rwTaggable}" />
 								<f:setPropertyActionListener value="#{rewards}" target="#{rewardsBean.rewardsBean}" />
-							</p:commandButton>
+							</p:commandLink>
 							<p:commandButton id="btnClaim" value="C" ajax="false" action="#{claimBean.showClaimReward}" rendered="#{rewards.rwClaimable}">
 								<f:param name="rewardsId" id="rewardsId" value="#{rewards.rwId}" />
 								<f:param name="rwQuantity" id="rwQuantity" value="#{rewards.rwQuantity}" />
