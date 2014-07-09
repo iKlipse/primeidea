@@ -50,6 +50,7 @@ public class BuildonController implements Serializable {
 	private String fileName;
 	private String contentType;
 	private StreamedContent fileContent;
+	private boolean taggable;
 	private boolean fileAvail;
 
 	private WebClient createCustomClient(String url) {
@@ -63,6 +64,7 @@ public class BuildonController implements Serializable {
 		Map<String, String> reqMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		entityId = Long.valueOf(reqMap.get("entityId"));
 		entityType = Integer.parseInt(reqMap.get("entityType"));
+		taggable = Boolean.parseBoolean(reqMap.get("taggable"));
 		buildons = fetchAllBuildOns();
 		buildon = new TagBean();
 		commentText = "";
@@ -380,6 +382,14 @@ public class BuildonController implements Serializable {
 
 	public void setFileAvail(boolean fileAvail) {
 		this.fileAvail = fileAvail;
+	}
+
+	public boolean isTaggable() {
+		return taggable;
+	}
+
+	public void setTaggable(boolean taggable) {
+		this.taggable = taggable;
 	}
 
 }

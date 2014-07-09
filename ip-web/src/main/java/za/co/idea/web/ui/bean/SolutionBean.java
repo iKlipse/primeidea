@@ -19,6 +19,7 @@ public class SolutionBean implements Serializable {
 	private String contentType;
 	private String fileName;
 	private String crtByName;
+	private boolean taggable;
 
 	public Long getId() {
 		return id;
@@ -122,6 +123,14 @@ public class SolutionBean implements Serializable {
 
 	public void setCrtByName(String crtByName) {
 		this.crtByName = crtByName;
+	}
+
+	public boolean isTaggable() {
+		return taggable;
+	}
+
+	public void setTaggable(boolean taggable) {
+		this.taggable = taggable;
 	}
 
 }

@@ -114,4 +114,8 @@
 	<sql-query name="updateImage">
 		update ip_user set user_avatar=:avatar where user_id=:id
 	</sql-query>
+	<sql-query name="sortListByPrimaryGrp">
+		select iu.* from ip_user iu, ip_group ig where iu.pri_grp_id=ig.group_id order by ig.group_name
+		<return alias="iu" class="za.co.idea.ip.orm.bean.IpUser" />
+	</sql-query>
 </hibernate-mapping>

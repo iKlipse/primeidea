@@ -14,6 +14,8 @@ public class GroupBean implements Serializable {
 	private Long selAdmUser;
 	private Boolean isActive;
 	private List<Long> userIdList;
+	private String contentType;
+	private String fileName;
 
 	public Long getgId() {
 		return gId;
@@ -71,6 +73,22 @@ public class GroupBean implements Serializable {
 
 	public void setUserIdList(List<Long> userIdList) {
 		this.userIdList = userIdList;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 }

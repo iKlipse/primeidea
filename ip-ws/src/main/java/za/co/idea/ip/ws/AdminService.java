@@ -509,6 +509,46 @@ public class AdminService {
 	}
 
 	@GET
+	@Path("/user/list/sort/pg")
+	@Produces("application/json")
+	public <T extends UserMessage> List<T> listUserSortedByPrimaryGroup() {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List users = ipUserDAO.fetchSortByPrimaryGroup();
+			for (Object object : users) {
+				IpUser ipUser = (IpUser) object;
+				UserMessage user = new UserMessage();
+				user.setuId(ipUser.getUserId());
+				user.setContact(ipUser.getUserContact());
+				user.seteMail(ipUser.getUserEmail());
+				user.setfName(ipUser.getUserFName());
+				user.setIdNum(ipUser.getUserIdNum());
+				user.setlName(ipUser.getUserLName());
+				user.setScName(ipUser.getUserScreenName());
+				user.setSkills(ipUser.getUserSkills());
+				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
+				user.setEmployeeId(ipUser.getuserEmployeeId());
+				if (ipUser.getIpGroup() != null) {
+					user.setGroupId(ipUser.getIpGroup().getGroupId());
+					user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
+				}
+				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
+					user.setFbHandle(ipUser.getUserFbHandle());
+				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
+					user.setBio(ipUser.getUserBio());
+				if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
+					user.setmName(ipUser.getUserMName());
+				if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
+					user.setTwHandle(ipUser.getUserTwHandle());
+				ret.add((T) user);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@GET
 	@Path("/user/get/{id}")
 	@Produces("application/json")
 	public UserMessage getUserById(@PathParam("id") Long id) {

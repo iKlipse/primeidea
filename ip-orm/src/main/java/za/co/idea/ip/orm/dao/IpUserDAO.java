@@ -234,4 +234,19 @@ public class IpUserDAO extends BaseHibernateDAO {
 			throw re;
 		}
 	}
+
+	public List fetchSortByPrimaryGroup() {
+		log.debug("Fetching User by Query :: sortListByPrimaryGrp");
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("sortListByPrimaryGrp");
+			List ret = query.list();
+			session.close();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
 }

@@ -93,6 +93,8 @@ public class AdminController implements Serializable {
 	private ArrayList<String> uploadErrors;
 	private boolean resetPasswd;
 	private boolean resetSec;
+	private boolean fileAvail;
+	private StreamedContent fileContent;
 
 	private WebClient createCustomClient(String url) {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
@@ -351,8 +353,8 @@ public class AdminController implements Serializable {
 		try {
 			groupBean = new GroupBean();
 			viewGroups = pGrps = fetchAllGroups();
-			admUsers = fetchAllUsers();
-			userTwinSelect = new DualListModel<UserBean>(fetchAllUsers(), new ArrayList<UserBean>());
+			admUsers = fetchAllUsersSortByPG();
+			userTwinSelect = new DualListModel<UserBean>(fetchAllUsersSortByPG(), new ArrayList<UserBean>());
 			return "admcg";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -365,9 +367,40 @@ public class AdminController implements Serializable {
 	public String showEditGroup() {
 		try {
 			viewGroups = pGrps = fetchAllGroups();
-			admUsers = fetchAllUsers();
+			admUsers = fetchAllUsersSortByPG();
 			userTwinSelect = initializeSelectedUsers(admUsers);
 			functions = fetchAllFunctionsByGroup();
+			try {
+				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + groupBean.getgId() + "/ip_group");
+				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+				getBlobClient.close();
+				if (blobId != -999l) {
+					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+					getBlobNameClient.close();
+					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					client.header("Content-Type", "application/json");
+					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+					if (attachment != null) {
+						fileAvail = false;
+						groupBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
+						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+					} else {
+						fileAvail = true;
+						fileContent = null;
+					}
+				} else {
+					fileAvail = true;
+					fileContent = null;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				fileAvail = true;
+				fileContent = null;
+			}
 			return "admeg";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -652,6 +685,8 @@ public class AdminController implements Serializable {
 			ResponseMessage response = addUserClient.accept(MediaType.APPLICATION_JSON).post(bean, ResponseMessage.class);
 			addUserClient.close();
 			if (response.getStatusCode() == 0) {
+				FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "User '" + userBean.getScName() + "' created successfully", "User '" + userBean.getScName() + "' created successfully");
+				FacesContext.getCurrentInstance().addMessage(null, successMessage);
 				if (image != null) {
 					WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
 					AttachmentMessage message = new AttachmentMessage();
@@ -678,8 +713,6 @@ public class AdminController implements Serializable {
 					}
 					createBlobClient.close();
 				}
-				FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "User '" + userBean.getfName() + "' created successfully", "User '" + userBean.getfName() + "' created successfully");
-				FacesContext.getCurrentInstance().addMessage(null, successMessage);
 				return showViewUsers();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -1179,6 +1212,35 @@ public class AdminController implements Serializable {
 	private List<UserBean> fetchAllUsers() {
 		List<UserBean> ret = new ArrayList<UserBean>();
 		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/list");
+		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
+		viewUsersClient.close();
+		for (UserMessage userMessage : users) {
+			UserBean bean = new UserBean();
+			bean.setBio(userMessage.getBio());
+			bean.setContact(userMessage.getContact());
+			bean.seteMail(userMessage.geteMail());
+			bean.setFbHandle(userMessage.getFbHandle());
+			bean.setfName(userMessage.getfName());
+			bean.setIdNum(userMessage.getIdNum());
+			bean.setIsActive(userMessage.getIsActive());
+			bean.setlName(userMessage.getlName());
+			bean.setmName(userMessage.getmName());
+			bean.setPwd(userMessage.getPwd());
+			bean.setScName(userMessage.getScName());
+			bean.setSkills(userMessage.getSkills());
+			bean.setTwHandle(userMessage.getTwHandle());
+			bean.setIsActive(userMessage.getIsActive());
+			bean.setuId(userMessage.getuId());
+			bean.setEmployeeId(userMessage.getEmployeeId());
+			bean.setPriGroupName(userMessage.getPriGroupName());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	private List<UserBean> fetchAllUsersSortByPG() {
+		List<UserBean> ret = new ArrayList<UserBean>();
+		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/list/sort/pg");
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
 		viewUsersClient.close();
 		for (UserMessage userMessage : users) {
@@ -1718,6 +1780,22 @@ public class AdminController implements Serializable {
 
 	public void setResetSec(boolean resetSec) {
 		this.resetSec = resetSec;
+	}
+
+	public boolean isFileAvail() {
+		return fileAvail;
+	}
+
+	public void setFileAvail(boolean fileAvail) {
+		this.fileAvail = fileAvail;
+	}
+
+	public StreamedContent getFileContent() {
+		return fileContent;
+	}
+
+	public void setFileContent(StreamedContent fileContent) {
+		this.fileContent = fileContent;
 	}
 
 }

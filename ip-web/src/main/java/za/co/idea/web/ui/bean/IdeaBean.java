@@ -21,6 +21,7 @@ public class IdeaBean implements Serializable {
 	private Long crtdById;
 	private Date crtdDate;
 	private List<Long> groupIdList;
+	private boolean taggable;
 
 	public Long getIdeaId() {
 		return ideaId;
@@ -124,5 +125,13 @@ public class IdeaBean implements Serializable {
 
 	public void setGroupIdList(List<Long> groupIdList) {
 		this.groupIdList = groupIdList;
+	}
+
+	public boolean isTaggable() {
+		return taggable;
+	}
+
+	public void setTaggable(boolean taggable) {
+		this.taggable = taggable;
 	}
 }

@@ -40,7 +40,7 @@ public class IdeaService {
 	@GET
 	@Path("/idea/check/title/{title}")
 	@Produces("application/json")
-	public Boolean checkScreenName(@PathParam("title") String ideaTitle) {
+	public Boolean checkTitle(@PathParam("title") String ideaTitle) {
 		try {
 			List ideasByTitle = ipIdeaDAO.findByIdeaTitle(ideaTitle);
 			Boolean ret = (ideasByTitle != null && ideasByTitle.size() > 0);

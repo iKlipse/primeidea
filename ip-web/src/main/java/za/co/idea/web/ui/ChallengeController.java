@@ -83,6 +83,7 @@ public class ChallengeController implements Serializable {
 	private boolean showSolutionLikes;
 	private Date selLaunchDate;
 	private boolean saveAsOpen;
+	private boolean titleAvail;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -563,6 +564,7 @@ public class ChallengeController implements Serializable {
 		showSolutionComments = false;
 		showSolBuildOns = true;
 		showSolutionLikes = false;
+		solutionBean.setTaggable(solutionBean.getStatusId() != 2);
 		try {
 			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
 			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
@@ -597,8 +599,31 @@ public class ChallengeController implements Serializable {
 		return "solss";
 	}
 
+	public void checkTitleAvailability() {
+		if (solutionBean.getTitle() == null || solutionBean.getTitle().length() == 0) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter Title to Check Availability", "Enter Title to Check Availability");
+			FacesContext.getCurrentInstance().addMessage("txtITitle", exceptionMessage);
+		}
+		WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/solution/check/title/" + solutionBean.getTitle());
+		Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
+		checkAvailablityClient.close();
+		titleAvail = avail.booleanValue();
+		if (titleAvail) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
+			FacesContext.getCurrentInstance().addMessage("txtITitle", exceptionMessage);
+		} else {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Title Available", "Title Available");
+			FacesContext.getCurrentInstance().addMessage("txtITitle", exceptionMessage);
+		}
+	}
+
 	public String saveSolution() {
 		try {
+			if (titleAvail) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
 			List<String> errors = validateSolution();
 			if (errors.size() > 0) {
 				for (String error : errors) {
@@ -1142,7 +1167,7 @@ public class ChallengeController implements Serializable {
 
 	private List<UserBean> fetchAllUsers() {
 		List<UserBean> ret = new ArrayList<UserBean>();
-		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/list");
+		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/list/sort/pg");
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
 		viewUsersClient.close();
 		for (UserMessage userMessage : users) {
@@ -1603,6 +1628,14 @@ public class ChallengeController implements Serializable {
 
 	public void setSaveAsOpen(boolean saveAsOpen) {
 		this.saveAsOpen = saveAsOpen;
+	}
+
+	public boolean isTitleAvail() {
+		return titleAvail;
+	}
+
+	public void setTitleAvail(boolean titleAvail) {
+		this.titleAvail = titleAvail;
 	}
 
 }

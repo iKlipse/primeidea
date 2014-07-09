@@ -19,7 +19,9 @@
 					<p:outputLabel id="lblSTitle" value="Title : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtSTitle" value="#{challengeBean.solutionBean.title}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="txtSTitle" value="#{challengeBean.solutionBean.title}">
+						<p:ajax listener="#{challengeBean.checkTitleAvailability}" event="blur" update="grlMsg" />
+					</p:inputText>
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblSCat" value="Category : " />

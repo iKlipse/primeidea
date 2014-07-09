@@ -11,7 +11,7 @@
 						<p:outputLabel style="float: right !important" value="#{buildOn.tagDate}" />
 					</p:column>
 					<p:column headerText="Tag Text">
-						<p:outputLabel style="float: right !important" value="#{buildOn.tagText}" />
+						<p:outputLabel style="float: right !important" value="#{buildOn.tagText}" escape="false" />
 					</p:column>
 					<p:column>
 						<p:commandButton id="summaryButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{buildonBean.showSummaryBuildon}">
@@ -19,16 +19,17 @@
 						</p:commandButton>
 					</p:column>
 				</p:dataTable>
+				<p:tooltip for="dtViewBuildOns" value="Tags disabled as Item not in open status" rendered="#{buildonBean.taggable}" />
 			</p:column>
-			<p:column>
+			<p:column rendered="#{!buildonBean.taggable}">
 				<p:editor id="edBuildOn" value="#{buildonBean.buildon.tagText}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
 			</p:column>
-			<p:column>
+			<p:column rendered="#{!buildonBean.taggable}">
 				<p:outputLabel id="lblProfImage" value="Attachments : " />
 				<p:fileUpload id="fuCUpload" style="background-color: #55a616;width: 100% !important" fileUploadListener="#{buildonBean.fileUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 			</p:column>
 			<p:column>
-				<p:commandButton id="btnSubmitBuildOn" value="Post" action="#{buildonBean.createBuildOn}" ajax="false" />
+				<p:commandButton id="btnSubmitBuildOn" value="Post" action="#{buildonBean.createBuildOn}" ajax="false" rendered="#{!buildonBean.taggable}" />
 				<p:commandButton id="btnRedirectIdeaSummary" value="Return To Idea" action="#{ideaBean.showSummaryIdea}" ajax="false" rendered="#{buildonBean.entityType==1}" />
 				<p:commandButton id="btnRedirectSolutionSummary" value="Return To Solution" action="#{challengeBean.showSummarySolution}" ajax="false" rendered="#{buildonBean.entityType==3}" />
 			</p:column>

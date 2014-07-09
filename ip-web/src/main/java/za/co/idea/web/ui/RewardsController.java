@@ -381,7 +381,7 @@ public class RewardsController implements Serializable {
 			message.setRwLaunchDt(rewardsBean.getRwLaunchDt());
 			message.setRwExpiryDt(rewardsBean.getRwExpiryDt());
 			message.setRwPrice(rewardsBean.getRwPrice());
-			message.setRwQuantity(rewardsBean.getRwQuantity());
+			message.setRwQuantity((rewardsBean.getRwQuantity() == null) ? 0l : rewardsBean.getRwQuantity());
 			ResponseMessage response = addRewardsClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			addRewardsClient.close();
 			if (response.getStatusCode() == 0) {
@@ -639,7 +639,7 @@ public class RewardsController implements Serializable {
 
 	private List<UserBean> fetchAllUsers() {
 		List<UserBean> ret = new ArrayList<UserBean>();
-		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/list");
+		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/list/sort/pg");
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
 		viewUsersClient.close();
 		for (UserMessage userMessage : users) {

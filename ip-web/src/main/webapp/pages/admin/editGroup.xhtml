@@ -19,6 +19,14 @@
 					<p:inputText style="width: 100%" autocomplete="false" id="txtEMail" value="#{adminBean.groupBean.geMail}" />
 				</p:column>
 				<p:column>
+					<p:outputLabel id="lblIDownload" value="Download File : " />
+				</p:column>
+				<p:column>
+					<p:commandButton id="btnDownload" value="Download" ajax="false" disabled="#{adminBean.fileAvail}">
+						<p:fileDownload value="#{adminBean.fileContent}" />
+					</p:commandButton>
+				</p:column>
+				<p:column>
 					<p:outputLabel id="lblParentGId" value="Parent : " />
 				</p:column>
 				<p:column>

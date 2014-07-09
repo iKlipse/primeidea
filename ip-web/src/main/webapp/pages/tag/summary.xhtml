@@ -17,7 +17,7 @@
 					<p:outputLabel value="Tag Text : " />
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblBTagText" value="#{buildonBean.buildon.tagText}" escape="true" />
+					<p:outputLabel id="lblBTagText" value="#{buildonBean.buildon.tagText}" escape="false" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblIDownload" value="Download File : " />
@@ -32,14 +32,16 @@
 			<p:column>
 				<p:panelGrid columns="2" style="border: 0px !important;">
 					<p:column>
-						<p:commandLink id="lnkLikeIdea" action="#{buildonBean.likeBuildon}" update="lblLikeCnt, :ideaFrm:tgLikes">
+						<p:commandLink id="lnkLikeIdea" action="#{buildonBean.likeBuildon}" update="lblLikeCnt, :ideaFrm:tgLikes" disabled="#{buildonBean.taggable}">
 							<p:outputLabel id="lblLikeCnt" value="#{buildonBean.buildonLikeCnt}" style="height:25px; width:25px;" />
 							<p:graphicImage id="giLike" name="like-128.png" library="images" height="25px" width="25px" />
+							<p:tooltip for="giLike" value="Tags disabled as item not in open status" rendered="#{buildonBean.taggable}" />
 						</p:commandLink>
 					</p:column>
 					<p:column>
 						<p:outputLabel id="lblCommentCnt" value="#{buildonBean.buildonCommentCnt}" style="height:25px; width:25px;" />
 						<p:graphicImage id="giComment" name="comment.jpg" library="images" height="25px" width="25px" />
+						<p:tooltip for="giComment" value="Tags disabled as item not in open status" rendered="#{buildonBean.taggable}" />
 					</p:column>
 				</p:panelGrid>
 			</p:column>
@@ -60,11 +62,12 @@
 							</p:column>
 						</p:panel>
 					</p:dataGrid>
+					<p:tooltip for="dtViewComments" value="Tags disabled as item not in open status" rendered="#{buildonBean.taggable}" />
 				</p:column>
-				<p:column>
+				<p:column rendered="#{!buildonBean.taggable}">
 					<p:editor id="edComment" value="#{buildonBean.commentText}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
 				</p:column>
-				<p:column>
+				<p:column rendered="#{!buildonBean.taggable}">
 					<p:commandButton id="btnSubmitComment" value="Post" actionListener="#{buildonBean.commentBuildon}" update="dtViewComments" />
 				</p:column>
 			</p:panelGrid>

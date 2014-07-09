@@ -32,6 +32,20 @@ public class SolutionService {
 	private IpUserDAO ipUserDAO;
 	private IpChallengeDAO ipChallengeDAO;
 
+	@GET
+	@Path("/solution/check/title/{title}")
+	@Produces("application/json")
+	public Boolean checkTitle(@PathParam("title") String title) {
+		try {
+			List solByTitle = ipSolutionDAO.findBySolTitle(title);
+			Boolean ret = (solByTitle != null && solByTitle.size() > 0);
+			return ret;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 	@POST
 	@Path("/solution/add")
 	@Consumes("application/json")

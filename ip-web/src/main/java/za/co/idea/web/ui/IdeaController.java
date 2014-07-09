@@ -168,6 +168,7 @@ public class IdeaController implements Serializable {
 		showIdeaComments = false;
 		showIdeaLikes = false;
 		showIdeaBuildOns = false;
+		ideaBean.setTaggable(ideaBean.getSetStatusId() != 2);
 		try {
 			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
 			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
@@ -652,7 +653,7 @@ public class IdeaController implements Serializable {
 
 	private List<UserBean> fetchAllUsers() {
 		List<UserBean> ret = new ArrayList<UserBean>();
-		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/list");
+		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/list/sort/pg");
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
 		viewUsersClient.close();
 		for (UserMessage userMessage : users) {
