@@ -79,4 +79,23 @@
 	<bean id="newsService" class="za.co.idea.ip.ws.NewsService">
 		<property name="ipNewsDAO" ref="IpNewsDAO" />
 	</bean>
+	<bean id="ChallengeExpiryJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="za.co.idea.ip.jobs.ChallengeExpiryJob" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="ipChallengeDAO" value-ref="IpChallengeDAO" />
+			</map>
+		</property>
+	</bean>
+	<bean id="ChallengeExpiryJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="ChallengeExpiryJob" />
+		<property name="cronExpression" value="0 0/10 * * * ?" />
+	</bean>
+	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="ChallengeExpiryJobTrigger" />
+			</list>
+		</property>
+	</bean>
 </beans>

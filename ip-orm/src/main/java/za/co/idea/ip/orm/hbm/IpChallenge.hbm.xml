@@ -59,4 +59,7 @@
 		select chal.* from ip_challenge chal where chal.chal_status=:id
 		<return alias="chal" class="za.co.idea.ip.orm.bean.IpChallenge" />
 	</sql-query>
+	<sql-query name="updateStatusOnExpiry">
+		update ip_challenge set chal_status=7 where current_timestamp > chal_expiry_dt
+	</sql-query>
 </hibernate-mapping>

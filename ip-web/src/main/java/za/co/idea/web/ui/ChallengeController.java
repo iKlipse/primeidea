@@ -604,7 +604,7 @@ public class ChallengeController implements Serializable {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter Title to Check Availability", "Enter Title to Check Availability");
 			FacesContext.getCurrentInstance().addMessage("txtITitle", exceptionMessage);
 		}
-		WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/solution/check/title/" + solutionBean.getTitle());
+		WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/check/title/" + solutionBean.getTitle());
 		Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 		checkAvailablityClient.close();
 		titleAvail = avail.booleanValue();

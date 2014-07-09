@@ -196,6 +196,7 @@ public class IpChallengeDAO extends BaseHibernateDAO {
 	public List findByUserId(Long id) {
 		log.debug("Fetching Challenge by Query :: getChallengeByUser");
 		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
 			Query query = session.getNamedQuery("getChallengeByUser");
 			query.setLong("id", id);
@@ -206,9 +207,11 @@ public class IpChallengeDAO extends BaseHibernateDAO {
 				Hibernate.initialize(chal.getIpChallengeStatus());
 				Hibernate.initialize(chal.getIpUser());
 			}
+			transaction.commit();
 			session.close();
 			return ret;
 		} catch (RuntimeException re) {
+			transaction.rollback();
 			log.error("attach failed", re);
 			throw re;
 		}
@@ -217,6 +220,7 @@ public class IpChallengeDAO extends BaseHibernateDAO {
 	public List findByStatusId(Integer id) {
 		log.debug("Fetching Challenge by Query :: getChallengeByStatus");
 		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
 			Query query = session.getNamedQuery("getChallengeByStatus");
 			query.setInteger("id", id);
@@ -227,9 +231,28 @@ public class IpChallengeDAO extends BaseHibernateDAO {
 				Hibernate.initialize(chal.getIpChallengeStatus());
 				Hibernate.initialize(chal.getIpUser());
 			}
+			transaction.commit();
 			session.close();
 			return ret;
 		} catch (RuntimeException re) {
+			transaction.rollback();
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	public int updateStatusOnExpiry() {
+		log.debug("Updating Challenge by Query :: updateStatusOnExpiry");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			Query query = session.getNamedQuery("updateStatusOnExpiry");
+			int ret = query.executeUpdate();
+			transaction.commit();
+			session.close();
+			return ret;
+		} catch (RuntimeException re) {
+			transaction.rollback();
 			log.error("attach failed", re);
 			throw re;
 		}
