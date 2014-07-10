@@ -128,9 +128,24 @@ public class ChallengeController implements Serializable {
 		}
 	}
 
+	public String showViewOpenChallenge() {
+		try {
+			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
+			challengeCats = fetchAllChallengeCat();
+			admUsers = fetchAllUsers();
+			challengeStatuses = fetchAllChallengeStatuses();
+			return "chalvc";
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
 	public String showViewChallengeByUser() {
 		try {
-			viewChallenges = fetchAllChallengesByUser();
+			viewChallenges = fetchAllChallengesCreatedByUser();
 			challengeCats = fetchAllChallengeCat();
 			admUsers = fetchAllUsers();
 			challengeStatuses = fetchAllChallengeStatuses();
@@ -190,6 +205,53 @@ public class ChallengeController implements Serializable {
 		}
 	}
 
+	public String showEditOpenChallenge() {
+		try {
+			challengeCats = fetchAllChallengeCat();
+			admUsers = fetchAllUsers();
+			challengeStatuses = fetchNextChallengeStatuses();
+			pGrps = fetchAllGroups();
+			groupTwinSelect = initializeSelectedGroups(pGrps);
+			try {
+				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
+				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+				getBlobClient.close();
+				if (blobId != -999l) {
+					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+					getBlobNameClient.close();
+					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					client.header("Content-Type", "application/json");
+					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+					if (attachment != null) {
+						chalFileAvail = false;
+						challengeBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
+						chalFileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+					} else {
+						chalFileAvail = true;
+						chalFileContent = null;
+					}
+				} else {
+					chalFileAvail = true;
+					chalFileContent = null;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform edit request", "System error occurred, cannot perform edit request");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				chalFileAvail = true;
+				chalFileContent = null;
+			}
+			return "chaleoc";
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform edit request", "System error occurred, cannot perform edit request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
 	public String showSummaryChallenge() {
 		chalLikes = fetchAllChalLikes();
 		chalComments = fetchAllChalComments();
@@ -230,6 +292,48 @@ public class ChallengeController implements Serializable {
 			chalFileContent = null;
 		}
 		return "chalsc";
+	}
+
+	public String showSummaryOpenChallenge() {
+		chalLikes = fetchAllChalLikes();
+		chalComments = fetchAllChalComments();
+		chalLikeCnt = "(" + chalLikes.getTags().size() + ")	";
+		chalCommentCnt = "(" + chalComments.size() + ")	";
+		showChallengeComments = false;
+		showChallengeLikes = false;
+		viewSolutions = fetchAllSolutionsByChal();
+		try {
+			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
+			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+			getBlobClient.close();
+			if (blobId != -999l) {
+				WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+				getBlobNameClient.close();
+				WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				client.header("Content-Type", "application/json");
+				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+				if (attachment != null) {
+					chalFileAvail = false;
+					challengeBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
+					chalFileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+				} else {
+					chalFileAvail = true;
+					chalFileContent = null;
+				}
+			} else {
+				chalFileAvail = true;
+				chalFileContent = null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform summary request", "System error occurred, cannot perform summary request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			chalFileAvail = true;
+			chalFileContent = null;
+		}
+		return "chalsoc";
 	}
 
 	public String saveChallenge() {
@@ -441,7 +545,7 @@ public class ChallengeController implements Serializable {
 	public String showCreateSolution() {
 		try {
 			admUsers = fetchAllUsers();
-			viewChallenges = fetchAllAvailableChallenges();
+			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
 			solutionBean = new SolutionBean();
@@ -490,6 +594,23 @@ public class ChallengeController implements Serializable {
 		}
 	}
 
+	public String showViewOpenSolution() {
+		try {
+			admUsers = fetchAllUsers();
+			viewChallenges = fetchAllChallengesByUser();
+			solutionCats = fetchAllSolutionCat();
+			solutionStatuses = fetchAllSolutionStatuses();
+			solutionBean = new SolutionBean();
+			viewSolutions = fetchAllSolutionsByStatusIdUserId(2);
+			return "solvs";
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
 	public String showViewSolutionByUser() {
 		try {
 			admUsers = fetchAllUsers();
@@ -497,7 +618,7 @@ public class ChallengeController implements Serializable {
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
 			solutionBean = new SolutionBean();
-			viewSolutions = fetchAllSolutionsByUser();
+			viewSolutions = fetchAllSolutionsCreatedByUser();
 			return "solus";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -553,6 +674,52 @@ public class ChallengeController implements Serializable {
 		}
 	}
 
+	public String showEditOpenSolution() {
+		try {
+			admUsers = fetchAllUsers();
+			viewChallenges = fetchAllChallengesByUser();
+			solutionCats = fetchAllSolutionCat();
+			solutionStatuses = fetchNextSolutionStatuses();
+			try {
+				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
+				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+				getBlobClient.close();
+				if (blobId != -999l) {
+					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+					getBlobNameClient.close();
+					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					client.header("Content-Type", "application/json");
+					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+					if (attachment != null) {
+						solFileAvail = false;
+						solutionBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
+						solFileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+					} else {
+						solFileAvail = true;
+						solFileContent = null;
+					}
+				} else {
+					solFileAvail = true;
+					solFileContent = null;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				solFileAvail = false;
+				solFileContent = null;
+			}
+			return "soleos";
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
 	public String showSummarySolution() {
 		solLikes = fetchAllSolLikes();
 		solComments = fetchAllSolComments();
@@ -597,6 +764,52 @@ public class ChallengeController implements Serializable {
 			solFileContent = null;
 		}
 		return "solss";
+	}
+
+	public String showSummaryOpenSolution() {
+		solLikes = fetchAllSolLikes();
+		solComments = fetchAllSolComments();
+		solLikeCnt = "(" + solLikes.getTags().size() + ")	";
+		solCommentCnt = "(" + solComments.size() + ")	";
+		buildOns = fetchAllBuildOns();
+		buildOnCnt = "(" + buildOns.size() + ")	";
+		buildOnText = "";
+		showSolutionComments = false;
+		showSolBuildOns = true;
+		showSolutionLikes = false;
+		solutionBean.setTaggable(solutionBean.getStatusId() != 2);
+		try {
+			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
+			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+			getBlobClient.close();
+			if (blobId != -999l) {
+				WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+				getBlobNameClient.close();
+				WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				client.header("Content-Type", "application/json");
+				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+				if (attachment != null) {
+					solFileAvail = false;
+					solutionBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
+					solFileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+				} else {
+					solFileAvail = true;
+					solFileContent = null;
+				}
+			} else {
+				solFileAvail = true;
+				solFileContent = null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			solFileAvail = false;
+			solFileContent = null;
+		}
+		return "solsos";
 	}
 
 	public void checkTitleAvailability() {
@@ -917,7 +1130,55 @@ public class ChallengeController implements Serializable {
 
 	private List<ChallengeBean> fetchAllChallengesByUser() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
-		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/access/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
+		fetchChallengeClient.close();
+		for (ChallengeMessage challengeMessage : challenges) {
+			ChallengeBean bean = new ChallengeBean();
+			bean.setCatId(challengeMessage.getCatId());
+			bean.setCrtdById(challengeMessage.getCrtdById());
+			bean.setCrtdDt(challengeMessage.getCrtdDt());
+			bean.setDesc(challengeMessage.getDesc());
+			bean.setExprDt(challengeMessage.getExprDt());
+			bean.setHoverText(challengeMessage.getHoverText());
+			bean.setId(challengeMessage.getId());
+			bean.setLaunchDt(challengeMessage.getLaunchDt());
+			bean.setStatusId(challengeMessage.getStatusId());
+			bean.setTag(challengeMessage.getTag());
+			bean.setTitle(challengeMessage.getTitle());
+			bean.setGroupIdList(getIdsFromArray(challengeMessage.getGroupIdList()));
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	private List<ChallengeBean> fetchAllChallengesCreatedByUser() {
+		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
+		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/created/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
+		fetchChallengeClient.close();
+		for (ChallengeMessage challengeMessage : challenges) {
+			ChallengeBean bean = new ChallengeBean();
+			bean.setCatId(challengeMessage.getCatId());
+			bean.setCrtdById(challengeMessage.getCrtdById());
+			bean.setCrtdDt(challengeMessage.getCrtdDt());
+			bean.setDesc(challengeMessage.getDesc());
+			bean.setExprDt(challengeMessage.getExprDt());
+			bean.setHoverText(challengeMessage.getHoverText());
+			bean.setId(challengeMessage.getId());
+			bean.setLaunchDt(challengeMessage.getLaunchDt());
+			bean.setStatusId(challengeMessage.getStatusId());
+			bean.setTag(challengeMessage.getTag());
+			bean.setTitle(challengeMessage.getTitle());
+			bean.setGroupIdList(getIdsFromArray(challengeMessage.getGroupIdList()));
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	private List<ChallengeBean> fetchAllChallengesByStatusIdUserId(Integer status) {
+		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
+		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/status/" + status + "/user/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
@@ -963,7 +1224,51 @@ public class ChallengeController implements Serializable {
 
 	private List<SolutionBean> fetchAllSolutionsByUser() {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
-		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/access/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
+		fetchSolutionClient.close();
+		for (SolutionMessage solutionMessage : solutions) {
+			SolutionBean bean = new SolutionBean();
+			bean.setChalId(solutionMessage.getChalId());
+			bean.setCatId(solutionMessage.getCatId());
+			bean.setCrtdById(solutionMessage.getCrtdById());
+			bean.setCrtByName(solutionMessage.getCrtByName());
+			bean.setCrtdDt(solutionMessage.getCrtdDt());
+			bean.setDesc(solutionMessage.getDesc());
+			bean.setId(solutionMessage.getId());
+			bean.setStatusId(solutionMessage.getStatusId());
+			bean.setTags(solutionMessage.getTags());
+			bean.setTitle(solutionMessage.getTitle());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	private List<SolutionBean> fetchAllSolutionsCreatedByUser() {
+		List<SolutionBean> ret = new ArrayList<SolutionBean>();
+		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/created/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
+		fetchSolutionClient.close();
+		for (SolutionMessage solutionMessage : solutions) {
+			SolutionBean bean = new SolutionBean();
+			bean.setChalId(solutionMessage.getChalId());
+			bean.setCatId(solutionMessage.getCatId());
+			bean.setCrtdById(solutionMessage.getCrtdById());
+			bean.setCrtByName(solutionMessage.getCrtByName());
+			bean.setCrtdDt(solutionMessage.getCrtdDt());
+			bean.setDesc(solutionMessage.getDesc());
+			bean.setId(solutionMessage.getId());
+			bean.setStatusId(solutionMessage.getStatusId());
+			bean.setTags(solutionMessage.getTags());
+			bean.setTitle(solutionMessage.getTitle());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	private List<SolutionBean> fetchAllSolutionsByStatusIdUserId(Integer status) {
+		List<SolutionBean> ret = new ArrayList<SolutionBean>();
+		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/status/" + status + "/user/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
 		fetchSolutionClient.close();
 		for (SolutionMessage solutionMessage : solutions) {

@@ -33,6 +33,10 @@
 			<column name="idea_tag" length="500" not-null="true" />
 		</property>
 	</class>
+	<sql-query name="getIdeaCreatedByUser">
+		select idea.* from ip_idea idea where idea.idea_user_id=:id
+		<return alias="idea" class="za.co.idea.ip.orm.bean.IpIdea" />
+	</sql-query>
 	<sql-query name="getIdeaByUser">
 		select idea.* from ip_idea idea where idea.idea_user_id=:id union select idea.* from ip_idea idea, ip_group_user igu, ip_idea_group iig where igu.gu_usr_id=:id and igu.gu_grp_id=iig.ig_grp_id and iig.ig_idea_id=idea.idea_id union select idea.* from ip_idea idea where idea.idea_id not in (select iig.ig_idea_id from ip_idea_group iig)
 		<return alias="idea" class="za.co.idea.ip.orm.bean.IpIdea" />

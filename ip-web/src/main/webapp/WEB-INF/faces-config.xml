@@ -164,12 +164,24 @@
 			<to-view-id>/pages/challenge/edit.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>chaleoc</from-outcome>
+			<to-view-id>/pages/challenge/editOpen.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>chalvc</from-outcome>
 			<to-view-id>/pages/challenge/view.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>chalvoc</from-outcome>
+			<to-view-id>/pages/challenge/viewOpen.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>chalsc</from-outcome>
 			<to-view-id>/pages/challenge/summary.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>chalsoc</from-outcome>
+			<to-view-id>/pages/challenge/summaryOpen.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>chaluc</from-outcome>
@@ -184,12 +196,24 @@
 			<to-view-id>/pages/solution/edit.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>soleos</from-outcome>
+			<to-view-id>/pages/solution/editOpen.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>solvs</from-outcome>
 			<to-view-id>/pages/solution/view.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>solvos</from-outcome>
+			<to-view-id>/pages/solution/viewOpen.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>solss</from-outcome>
 			<to-view-id>/pages/solution/summary.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>solsos</from-outcome>
+			<to-view-id>/pages/solution/summaryOpen.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>solus</from-outcome>

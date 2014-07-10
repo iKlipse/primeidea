@@ -33,8 +33,16 @@
 			<column name="sol_crtd_dt" length="19" not-null="true" />
 		</property>
 	</class>
-	<sql-query name="getSolutionByUser">
+	<sql-query name="getSolutionCreatedByUser">
 		select sol.* from ip_solution sol where sol.sol_crtd_by=:id
+		<return alias="sol" class="za.co.idea.ip.orm.bean.IpSolution" />
+	</sql-query>
+	<sql-query name="getSolutionByUser">
+		select sol.* from ip_solution sol where sol.sol_crtd_by=:id union select sol.* from ip_solution sol where sol.sol_chal_id in (select icg.cg_chal_id from ip_challenge_group icg, ip_group_user igu where igu.gu_usr_id=:id and igu.gu_grp_id=icg.cg_group_id) union select sol.* from ip_solution sol where sol.sol_chal_id in (select ic.chal_id from ip_challenge ic where ic.chal_id not in (select icg.cg_chal_id from ip_challenge_group icg))
+		<return alias="sol" class="za.co.idea.ip.orm.bean.IpSolution" />
+	</sql-query>
+	<sql-query name="getSolutionByUserStatus">
+		select sol.* from ip_solution sol where sol.sol_crtd_by=:id and sol.sol_status=:sid union select sol.* from ip_solution sol where sol.sol_chal_id in (select icg.cg_chal_id from ip_challenge_group icg, ip_group_user igu where igu.gu_usr_id=:id and igu.gu_grp_id=icg.cg_group_id) and sol.sol_status=:sid union select sol.* from ip_solution sol where sol.sol_chal_id in (select ic.chal_id from ip_challenge ic where ic.chal_id not in (select icg.cg_chal_id from ip_challenge_group icg)) and sol.sol_status=:sid
 		<return alias="sol" class="za.co.idea.ip.orm.bean.IpSolution" />
 	</sql-query>
 	<sql-query name="getSolutionByChallenge">

@@ -51,8 +51,16 @@
 			<one-to-many class="za.co.idea.ip.orm.bean.IpSolution" />
 		</set>
 	</class>
+	<sql-query name="getChallengeCreatedByUser">
+		select chal.* from ip_challenge chal where chal.chal_crtd_by=:id
+		<return alias="chal" class="za.co.idea.ip.orm.bean.IpChallenge" />
+	</sql-query>
 	<sql-query name="getChallengeByUser">
 		select chal.* from ip_challenge chal where chal.chal_crtd_by=:id union select chal.* from ip_challenge chal,ip_challenge_group icg, ip_group_user igu where igu.gu_usr_id=:id and igu.gu_grp_id=icg.cg_group_id and icg.cg_chal_id=chal.chal_id union select chal.* from ip_challenge chal where chal.chal_id not in (select icg.cg_chal_id from ip_challenge_group icg)
+		<return alias="chal" class="za.co.idea.ip.orm.bean.IpChallenge" />
+	</sql-query>
+	<sql-query name="getChallengeByStatusUser">
+		select chal.* from ip_challenge chal where chal.chal_crtd_by=:id and chal.chal_status=:sid union select chal.* from ip_challenge chal,ip_challenge_group icg, ip_group_user igu where igu.gu_usr_id=:id and igu.gu_grp_id=icg.cg_group_id and icg.cg_chal_id=chal.chal_id and chal.chal_status=:sid union select chal.* from ip_challenge chal where chal.chal_id not in (select icg.cg_chal_id from ip_challenge_group icg) and chal.chal_status=:sid
 		<return alias="chal" class="za.co.idea.ip.orm.bean.IpChallenge" />
 	</sql-query>
 	<sql-query name="getChallengeByStatus">

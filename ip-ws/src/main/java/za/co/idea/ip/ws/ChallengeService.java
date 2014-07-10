@@ -156,12 +156,51 @@ public class ChallengeService {
 	}
 
 	@GET
-	@Path("/challenge/list/{id}")
+	@Path("/challenge/list/user/access/{id}")
 	@Produces("application/json")
 	public <T extends ChallengeMessage> List<T> listChallengeByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
 			List challenges = ipChallengeDAO.findByUserId(id);
+			for (Object object : challenges) {
+				IpChallenge ipChallenge = (IpChallenge) object;
+				ChallengeMessage challenge = new ChallengeMessage();
+				challenge.setId(ipChallenge.getChalId());
+				challenge.setCatId(ipChallenge.getIpChallengeCat().getCcId());
+				challenge.setCrtdById(ipChallenge.getIpUser().getUserId());
+				challenge.setCrtdDt(ipChallenge.getChalCrtdDt());
+				challenge.setDesc(ipChallenge.getChalDesc());
+				challenge.setExprDt(ipChallenge.getChalExpiryDt());
+				challenge.setHoverText(ipChallenge.getChalHoverTxt());
+				challenge.setLaunchDt(ipChallenge.getChalLaunchDt());
+				challenge.setStatusId(ipChallenge.getIpChallengeStatus().getCsId());
+				challenge.setTag(ipChallenge.getChalTags());
+				challenge.setTitle(ipChallenge.getChalTitle());
+				List val = ipChallengeGroupDAO.fetchByChallengeId(ipChallenge.getChalId());
+				if (val != null) {
+					Long[] grps = new Long[val.size()];
+					int i = 0;
+					for (Object obj : val) {
+						grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
+						i++;
+					}
+					challenge.setGroupIdList(grps);
+				}
+				ret.add((T) challenge);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@GET
+	@Path("/challenge/list/user/created/{id}")
+	@Produces("application/json")
+	public <T extends ChallengeMessage> List<T> listChallengeCreatedByUser(@PathParam("id") Long id) {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List challenges = ipChallengeDAO.findCreatedByUserId(id);
 			for (Object object : challenges) {
 				IpChallenge ipChallenge = (IpChallenge) object;
 				ChallengeMessage challenge = new ChallengeMessage();
@@ -201,6 +240,45 @@ public class ChallengeService {
 		List<T> ret = new ArrayList<T>();
 		try {
 			List challenges = ipChallengeDAO.findByStatusId(id);
+			for (Object object : challenges) {
+				IpChallenge ipChallenge = (IpChallenge) object;
+				ChallengeMessage challenge = new ChallengeMessage();
+				challenge.setId(ipChallenge.getChalId());
+				challenge.setCatId(ipChallenge.getIpChallengeCat().getCcId());
+				challenge.setCrtdById(ipChallenge.getIpUser().getUserId());
+				challenge.setCrtdDt(ipChallenge.getChalCrtdDt());
+				challenge.setDesc(ipChallenge.getChalDesc());
+				challenge.setExprDt(ipChallenge.getChalExpiryDt());
+				challenge.setHoverText(ipChallenge.getChalHoverTxt());
+				challenge.setLaunchDt(ipChallenge.getChalLaunchDt());
+				challenge.setStatusId(ipChallenge.getIpChallengeStatus().getCsId());
+				challenge.setTag(ipChallenge.getChalTags());
+				challenge.setTitle(ipChallenge.getChalTitle());
+				List val = ipChallengeGroupDAO.fetchByChallengeId(ipChallenge.getChalId());
+				if (val != null) {
+					Long[] grps = new Long[val.size()];
+					int i = 0;
+					for (Object obj : val) {
+						grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
+						i++;
+					}
+					challenge.setGroupIdList(grps);
+				}
+				ret.add((T) challenge);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@GET
+	@Path("/challenge/list/status/{sid}/user/{id}")
+	@Produces("application/json")
+	public <T extends ChallengeMessage> List<T> listChallengeByStatusIdUserId(@PathParam("sid") Integer sid, @PathParam("id") Long id) {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List challenges = ipChallengeDAO.findByStatusIdUserId(sid, id);
 			for (Object object : challenges) {
 				IpChallenge ipChallenge = (IpChallenge) object;
 				ChallengeMessage challenge = new ChallengeMessage();

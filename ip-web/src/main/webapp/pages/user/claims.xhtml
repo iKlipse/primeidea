@@ -1,28 +1,24 @@
 <ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="title">View Claims</ui:define>
 	<ui:define name="body">
-		<p:panel id="ctrMyClaims">
+		<p:panel id="ctrMyClaims" style="width: 100% !important">
 			<f:facet name="header">
 					My Claims
 				</f:facet>
-			<p:dataTable id="dtViewClaims" value="#{claimBean.viewClaimBeans}" var="claim" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Claims Found">
-				<p:column filterBy="#{claim.claimId}" filterMatchMode="contains">
-					<f:facet name="header">Claim Id</f:facet>
-					<p:outputLabel id="txtClaimId" value="#{claim.claimId}" />
-				</p:column>
+			<p:dataTable id="dtViewClaims" style="width: 100% !important" value="#{claimBean.viewClaimBeans}" var="claim" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Claims Found">
 				<p:column>
 					<f:facet name="header">Status</f:facet>
-					<p:selectOneMenu id="somIStatus" value="#{claim.cStatusId}" >
+					<p:selectOneMenu id="somIStatus" value="#{claim.cStatusId}">
 						<f:selectItems value="#{claimBean.claimStatus}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
 					<f:facet name="header">Created Date</f:facet>
-					<p:calendar mode="popup" showOn="button" id="calLaunchDT" value="#{claim.claimCrtdDt}" />
+					<p:calendar mode="popup" id="calLaunchDT" value="#{claim.claimCrtdDt}" disabled="true" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">Created By</f:facet>
-					<p:selectOneMenu id="somACrtdBy" value="#{claim.userId}" >
+					<p:selectOneMenu id="somACrtdBy" value="#{claim.userId}" disabled="true">
 						<f:selectItems value="#{claimBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
 					</p:selectOneMenu>
 				</p:column>

@@ -111,7 +111,7 @@ public class IdeaController implements Serializable {
 
 	public String showViewIdeasByUser() {
 		try {
-			viewIdeas = fetchAllIdeasByUser();
+			viewIdeas = fetchAllIdeasCreatedByUser();
 			ideaCats = fetchAllIdeaCat();
 			admUsers = fetchAllUsers();
 			ideaStatuses = fetchAllIdeaStatuses();
@@ -686,7 +686,28 @@ public class IdeaController implements Serializable {
 
 	private List<IdeaBean> fetchAllIdeasByUser() {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
-		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
+		fetchIdeaClient.close();
+		for (IdeaMessage ideaMessage : ideas) {
+			IdeaBean bean = new IdeaBean();
+			bean.setCrtdById(ideaMessage.getCrtdById());
+			bean.setCrtdDate(ideaMessage.getCrtdDate());
+			bean.setIdeaDesc(ideaMessage.getIdeaDesc());
+			bean.setIdeaTag(ideaMessage.getIdeaTag());
+			bean.setIdeaId(ideaMessage.getIdeaId());
+			bean.setIdeaTitle(ideaMessage.getIdeaTitle());
+			bean.setSelCatId(ideaMessage.getSelCatId());
+			bean.setSetStatusId(ideaMessage.getSetStatusId());
+			bean.setGroupIdList(getIdsFromArray(ideaMessage.getGroupIdList()));
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	private List<IdeaBean> fetchAllIdeasCreatedByUser() {
+		List<IdeaBean> ret = new ArrayList<IdeaBean>();
+		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/created/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		fetchIdeaClient.close();
 		for (IdeaMessage ideaMessage : ideas) {

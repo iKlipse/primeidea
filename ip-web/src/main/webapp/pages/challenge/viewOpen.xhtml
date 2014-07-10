@@ -1,9 +1,9 @@
 <ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<ui:define name="title">My Challenges</ui:define>
+	<ui:define name="title">View Challenges</ui:define>
 	<ui:define name="body">
-		<p:panel id="ctrMyChallenges" style="width: 100% !important">
+		<p:panel id="ctrViewChallenges" style="width: 100% !important">
 			<f:facet name="header">
-					My Challenges
+					View Challenges
 				</f:facet>
 			<p:dataTable id="dtViewChallenges" value="#{challengeBean.viewChallenges}" var="challenge" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Challenges Found" style="width: 100% !important">
 				<p:column filterBy="#{challenge.title}" filterMatchMode="contains">
@@ -30,19 +30,13 @@
 					<f:facet name="header">Expiry Date</f:facet>
 					<p:calendar mode="popup" id="calExprDT" value="#{challenge.exprDt}" disabled="true" />
 				</p:column>
-				<p:column>
-					<f:facet name="header">Created By</f:facet>
-					<p:selectOneMenu id="somACrtdBy" value="#{challenge.crtdById}" disabled="true">
-						<f:selectItems value="#{challengeBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
-					</p:selectOneMenu>
-				</p:column>
-				<p:column>
-					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{challengeBean.showEditChallenge}">
+				<p:column rendered="#{accessBean.editChallengeEnabled}">
+					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{challengeBean.showEditOpenChallenge}">
 						<f:setPropertyActionListener value="#{challenge}" target="#{challengeBean.challengeBean}" />
 					</p:commandButton>
 				</p:column>
 				<p:column>
-					<p:commandButton id="summaryButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{challengeBean.showSummaryChallenge}">
+					<p:commandButton id="summaryButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{challengeBean.showSummaryOpenChallenge}">
 						<f:setPropertyActionListener value="#{challenge}" target="#{challengeBean.challengeBean}" />
 					</p:commandButton>
 				</p:column>

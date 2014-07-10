@@ -19,7 +19,6 @@ public class AccessController implements Serializable {
 	private List<String> functions;
 	private boolean createUserEnabled;
 	private boolean createGroupEnabled;
-	private boolean createFunctionEnabled;
 	private boolean createRewardsEnabled;
 	private boolean createChallengeEnabled;
 	private boolean createIdeaEnabled;
@@ -36,6 +35,24 @@ public class AccessController implements Serializable {
 	private boolean maintainPointAllocEnabled;
 	private boolean maintainMetaDataEnabled;
 	private boolean createAllocatePoints;
+	private boolean viewRewardsEnabled;
+	private boolean onlineStoreEnabled;
+	private boolean submitClaimEnabled;
+	private boolean viewClaimsEnabled;
+	private boolean viewChallengeEnabled;
+	private boolean viewPublishedChallengesEnabled;
+	private boolean submitSolutionEnabled;
+	private boolean viewSolutionEnabled;
+	private boolean viewOpenSolutionEnabled;
+	private boolean viewRandomIdeaEnabled;
+	private boolean viewOpenRandomIdeaEnabled;
+	private boolean viewUserEnabled;
+	private boolean uploadUserEnabled;
+	private boolean viewGroupsEnabled;
+	private boolean viewFunctionsEnabled;
+	private boolean viewNewsEnabled;
+	private boolean sendBroadcastEnabled;
+	private boolean adminEnabled;
 
 	public AccessController(Long userId) {
 		if (userId == null) {
@@ -69,15 +86,6 @@ public class AccessController implements Serializable {
 
 	public void setCreateGroupEnabled(boolean createGroupEnabled) {
 		this.createGroupEnabled = createGroupEnabled;
-	}
-
-	public boolean isCreateFunctionEnabled() {
-		createFunctionEnabled = functions.contains("Create Function");
-		return createFunctionEnabled;
-	}
-
-	public void setCreateFunctionEnabled(boolean createFunctionEnabled) {
-		this.createFunctionEnabled = createFunctionEnabled;
 	}
 
 	public boolean isCreateRewardsEnabled() {
@@ -230,6 +238,168 @@ public class AccessController implements Serializable {
 
 	public void setCreateAllocatePoints(boolean createAllocatePoints) {
 		this.createAllocatePoints = createAllocatePoints;
+	}
+
+	public boolean isViewRewardsEnabled() {
+		viewRewardsEnabled = functions.contains("View Rewards");
+		return viewRewardsEnabled;
+	}
+
+	public void setViewRewardsEnabled(boolean viewRewardsEnabled) {
+		this.viewRewardsEnabled = viewRewardsEnabled;
+	}
+
+	public boolean isOnlineStoreEnabled() {
+		onlineStoreEnabled = functions.contains("Online Store");
+		return onlineStoreEnabled;
+	}
+
+	public void setOnlineStoreEnabled(boolean onlineStoreEnabled) {
+		this.onlineStoreEnabled = onlineStoreEnabled;
+	}
+
+	public boolean isSubmitClaimEnabled() {
+		submitClaimEnabled = functions.contains("Submit Claim");
+		return submitClaimEnabled;
+	}
+
+	public void setSubmitClaimEnabled(boolean submitClaimEnabled) {
+		this.submitClaimEnabled = submitClaimEnabled;
+	}
+
+	public boolean isViewClaimsEnabled() {
+		viewClaimsEnabled = functions.contains("View Claims");
+		return viewClaimsEnabled;
+	}
+
+	public void setViewClaimsEnabled(boolean viewClaimsEnabled) {
+		this.viewClaimsEnabled = viewClaimsEnabled;
+	}
+
+	public boolean isViewChallengeEnabled() {
+		viewChallengeEnabled = functions.contains("View Challenge");
+		return viewChallengeEnabled;
+	}
+
+	public void setViewChallengeEnabled(boolean viewChallengeEnabled) {
+		this.viewChallengeEnabled = viewChallengeEnabled;
+	}
+
+	public boolean isViewPublishedChallengesEnabled() {
+		viewPublishedChallengesEnabled = functions.contains("View Published Challenges");
+		return viewPublishedChallengesEnabled;
+	}
+
+	public void setViewPublishedChallengesEnabled(boolean viewPublishedChallengesEnabled) {
+		this.viewPublishedChallengesEnabled = viewPublishedChallengesEnabled;
+	}
+
+	public boolean isSubmitSolutionEnabled() {
+		submitSolutionEnabled = functions.contains("Submit Solution");
+		return submitSolutionEnabled;
+	}
+
+	public void setSubmitSolutionEnabled(boolean submitSolutionEnabled) {
+		this.submitSolutionEnabled = submitSolutionEnabled;
+	}
+
+	public boolean isViewSolutionEnabled() {
+		viewSolutionEnabled = functions.contains("View Solution");
+		return viewSolutionEnabled;
+	}
+
+	public void setViewSolutionEnabled(boolean viewSolutionEnabled) {
+		this.viewSolutionEnabled = viewSolutionEnabled;
+	}
+
+	public boolean isViewOpenSolutionEnabled() {
+		viewOpenSolutionEnabled = functions.contains("View Open Solution");
+		return viewOpenSolutionEnabled;
+	}
+
+	public void setViewOpenSolutionEnabled(boolean viewOpenSolutionEnabled) {
+		this.viewOpenSolutionEnabled = viewOpenSolutionEnabled;
+	}
+
+	public boolean isViewRandomIdeaEnabled() {
+		viewRandomIdeaEnabled = functions.contains("View Random Idea");
+		return viewRandomIdeaEnabled;
+	}
+
+	public void setViewRandomIdeaEnabled(boolean viewRandomIdeaEnabled) {
+		this.viewRandomIdeaEnabled = viewRandomIdeaEnabled;
+	}
+
+	public boolean isViewOpenRandomIdeaEnabled() {
+		viewOpenRandomIdeaEnabled = functions.contains("View Open Random Idea");
+		return viewOpenRandomIdeaEnabled;
+	}
+
+	public void setViewOpenRandomIdeaEnabled(boolean viewOpenRandomIdeaEnabled) {
+		this.viewOpenRandomIdeaEnabled = viewOpenRandomIdeaEnabled;
+	}
+
+	public boolean isViewUserEnabled() {
+		viewUserEnabled = functions.contains("View User");
+		return viewUserEnabled;
+	}
+
+	public void setViewUserEnabled(boolean viewUserEnabled) {
+		this.viewUserEnabled = viewUserEnabled;
+	}
+
+	public boolean isUploadUserEnabled() {
+		uploadUserEnabled = functions.contains("Upload User");
+		return uploadUserEnabled;
+	}
+
+	public void setUploadUserEnabled(boolean uploadUserEnabled) {
+		this.uploadUserEnabled = uploadUserEnabled;
+	}
+
+	public boolean isViewGroupsEnabled() {
+		viewGroupsEnabled = functions.contains("View Groups");
+		return viewGroupsEnabled;
+	}
+
+	public void setViewGroupsEnabled(boolean viewGroupsEnabled) {
+		this.viewGroupsEnabled = viewGroupsEnabled;
+	}
+
+	public boolean isViewFunctionsEnabled() {
+		viewFunctionsEnabled = functions.contains("View Functions");
+		return viewFunctionsEnabled;
+	}
+
+	public void setViewFunctionsEnabled(boolean viewFunctionsEnabled) {
+		this.viewFunctionsEnabled = viewFunctionsEnabled;
+	}
+
+	public boolean isViewNewsEnabled() {
+		viewNewsEnabled = functions.contains("View News");
+		return viewNewsEnabled;
+	}
+
+	public void setViewNewsEnabled(boolean viewNewsEnabled) {
+		this.viewNewsEnabled = viewNewsEnabled;
+	}
+
+	public boolean isSendBroadcastEnabled() {
+		sendBroadcastEnabled = functions.contains("Send Broadcast");
+		return sendBroadcastEnabled;
+	}
+
+	public void setSendBroadcastEnabled(boolean sendBroadcastEnabled) {
+		this.sendBroadcastEnabled = sendBroadcastEnabled;
+	}
+
+	public boolean isAdminEnabled() {
+		adminEnabled = functions.contains("Admin");
+		return adminEnabled;
+	}
+
+	public void setAdminEnabled(boolean adminEnabled) {
+		this.adminEnabled = adminEnabled;
 	}
 
 }

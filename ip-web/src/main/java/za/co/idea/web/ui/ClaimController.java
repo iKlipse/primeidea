@@ -76,6 +76,7 @@ public class ClaimController implements Serializable {
 			admUsers = fetchAllUsers();
 			claimStatus = fetchAllClaimStatuses();
 			viewRewardsBeans = fetchAllAvailableRewards();
+			fetchAllPointsByUser();
 			claimBean = new ClaimBean();
 			this.selRwId = reqMap.get("rewardsId") + "^" + reqMap.get("rwQuantity") + "^" + reqMap.get("rwValue");
 			return "clmcc";

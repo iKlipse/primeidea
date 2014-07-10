@@ -1,0 +1,120 @@
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Challenge Summary</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrSummaryChallenges">
+			<f:facet name="header">
+					Challenge Summary
+				</f:facet>
+			<p:panelGrid columns="2" id="pnlSummaryChallenge">
+				<p:column>
+					<p:outputLabel id="lblITitle" value="Title : " />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="txtITitle" value="#{challengeBean.challengeBean.title}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblIDesc" value="Description : " />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="txtIDesc" value="#{challengeBean.challengeBean.desc}" escape="false" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblIDownload" value="Download File : " />
+				</p:column>
+				<p:column>
+					<p:commandButton id="btnDownload" value="Download" ajax="false" disabled="#{challengeBean.chalFileAvail}">
+						<p:fileDownload value="#{challengeBean.chalFileContent}" />
+					</p:commandButton>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblITag" value="Tags : " />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="txtITag" value="#{challengeBean.challengeBean.tag}" escape="false" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblISocial" value="Social : " />
+				</p:column>
+				<p:column>
+					<p:panelGrid columns="2" style="border: 0px !important;">
+						<p:column>
+							<p:commandLink id="lnkLikeIdea" action="#{challengeBean.likeChallenge}" update="lblLikeCnt, :ideaFrm:tgLikes">
+								<p:outputLabel id="lblLikeCnt" value="#{challengeBean.chalLikeCnt}" style="height:25px; width:25px;" />
+								<p:graphicImage id="giLike" name="like-128.png" library="images" height="25px" width="25px" />
+							</p:commandLink>
+						</p:column>
+						<p:column>
+							<p:outputLabel id="lblCommentCnt" value="#{challengeBean.chalCommentCnt}" style="height:25px; width:25px;" />
+							<p:graphicImage id="giComment" name="comment.jpg" library="images" height="25px" width="25px" />
+						</p:column>
+					</p:panelGrid>
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton id="btnSolSubmit" value="Submit a Solution" ajax="false" action="#{challengeBean.showSubmitSolution}" rendered="#{challengeBean.challengeBean.statusId == 4}">
+						<f:param name="chalId" id="chalId" value="#{challengeBean.challengeBean.id}" />
+					</p:commandButton>
+					<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{challengeBean.showViewOpenChallenge}" />
+				</f:facet>
+			</p:panelGrid>
+			<p:overlayPanel dynamic="true" for="giComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
+				<p:panelGrid id="pnlChallengeComment" columns="1">
+					<p:column>
+						<p:dataGrid id="dtViewComments" widgetVar="dtViewComments" value="#{challengeBean.chalComments}" var="comment" columns="1" emptyMessage="No Comments Found">
+							<p:panel style="border: 0px !important;">
+								<f:facet name="header">
+									<p:outputLabel style="float: left !important" value="#{comment.usrScreenName}" />
+								</f:facet>
+								<f:facet name="footer">
+									<p:outputLabel style="float: right !important" value="#{comment.tagDate}" />
+								</f:facet>
+								<p:column>
+									<p:outputLabel value="#{comment.tagText}" />
+								</p:column>
+							</p:panel>
+						</p:dataGrid>
+					</p:column>
+					<p:column>
+						<p:editor id="edComment" value="#{challengeBean.commentText}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+					</p:column>
+					<p:column>
+						<p:commandButton id="btnSubmitComment" value="Post" actionListener="#{challengeBean.commentChallenge}" update="dtViewComments" />
+					</p:column>
+				</p:panelGrid>
+			</p:overlayPanel>
+			<p:overlayPanel dynamic="true" for="giLike" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
+				<p:panelGrid id="pnlChallengeLikes" columns="1">
+					<p:tagCloud id="tgLikes" model="#{challengeBean.chalLikes}" />
+				</p:panelGrid>
+			</p:overlayPanel>
+			<p:dataGrid id="dgSolForChal" value="#{challengeBean.viewSolutions}" var="sol" columns="1">
+				<p:scrollPanel style="border: 0px !important;">
+					<p:panel style="border: 0px !important;">
+						<f:facet name="header">
+							Solution By - <p:outputLabel value="#{sol.crtByName}" /> - <p:outputLabel value="#{sol.crtdDt}" />
+						</f:facet>
+						<p:panelGrid columns="2" id="pnlSolForChal">
+							<p:column>
+								<p:outputLabel id="lblISolTitle" value="Title : " />
+							</p:column>
+							<p:column>
+								<p:outputLabel id="txtISolTitle" value="#{sol.title}" escape="false" />
+							</p:column>
+							<p:column>
+								<p:outputLabel id="lblIDesc" value="Description : " />
+							</p:column>
+							<p:column>
+								<p:outputLabel id="txtIDesc" value="#{sol.desc}" escape="false" />
+							</p:column>
+							<p:column>
+								<p:outputLabel id="lblICrtdDt" value="Created Date : " />
+							</p:column>
+							<p:column>
+								<p:outputLabel id="txtICrtdDt" value="#{sol.crtdDt}" escape="false" />
+							</p:column>
+						</p:panelGrid>
+					</p:panel>
+				</p:scrollPanel>
+			</p:dataGrid>
+		</p:panel>
+	</ui:define>
+</ui:composition>
