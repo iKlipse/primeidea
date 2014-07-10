@@ -1,15 +1,11 @@
 <ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="title">View Users</ui:define>
 	<ui:define name="body">
-		<p:panel id="ctrVwUser">
+		<p:panel id="ctrVwUser" style="width: 100% !important">
 			<f:facet name="header">
 					View Users
 				</f:facet>
-			<p:dataTable id="dtViewUsers" value="#{adminBean.viewUsers}" var="user" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Users Found">
-				<p:column filterBy="#{user.uId}" filterMatchMode="contains">
-					<f:facet name="header">User ID</f:facet>
-					<p:outputLabel id="txtUserId" value="#{user.uId}" />
-				</p:column>
+			<p:dataTable id="dtViewUsers" value="#{adminBean.viewUsers}" var="user" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Users Found" style="width: 100% !important">
 				<p:column>
 					<f:facet name="header">First Name</f:facet>
 					<p:outputLabel id="txtFName" value="#{user.fName}" />
@@ -41,9 +37,9 @@
 				</p:column>
 				<p:column>
 					<f:facet name="header">Active</f:facet>
-					<p:selectBooleanButton id="sbbActive" value="#{user.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
+					<p:selectBooleanButton id="sbbActive" value="#{user.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" disabled="true" />
 				</p:column>
-				<p:column rendered="#{accessBean.editUserEnabled}" >
+				<p:column rendered="#{accessBean.editUserEnabled}">
 					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminBean.showEditUser}">
 						<f:setPropertyActionListener value="#{user}" target="#{adminBean.userBean}" />
 					</p:commandButton>

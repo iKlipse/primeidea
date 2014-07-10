@@ -1,3 +1,17 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:cxf="http://cxf.apache.org/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+	<bean id="RewardsStoreImageSyncJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="za.co.idea.ip.jobs.RewardsStoreImageSyncJob" />
+	</bean>
+	<bean id="RewardsStoreImageSyncJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="RewardsStoreImageSyncJob" />
+		<property name="cronExpression" value="0 0/3 * * * ?" />
+	</bean>
+	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="RewardsStoreImageSyncJobTrigger" />
+			</list>
+		</property>
+	</bean>
 </beans>

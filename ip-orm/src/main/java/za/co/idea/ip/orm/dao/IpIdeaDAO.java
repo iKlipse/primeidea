@@ -213,4 +213,47 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 			throw re;
 		}
 	}
+
+	public List findByStatusId(Integer id) {
+		log.debug("finding IpIdea instances by status id :: " + id);
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("getIdeaByStatus");
+			query.setInteger("id", id);
+			List ret = query.list();
+			for (Object object : ret) {
+				IpIdea idea = (IpIdea) object;
+				Hibernate.initialize(idea.getIpIdeaCat());
+				Hibernate.initialize(idea.getIpIdeaStatus());
+				Hibernate.initialize(idea.getIpUser());
+			}
+			session.close();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
+	}
+
+	public List findByStatusIdUserId(Integer sid, Long id) {
+		log.debug("finding IpIdea instances by status id :: " + sid + " :: user id :: " + id);
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("getIdeaByStatusUser");
+			query.setLong("id", id);
+			query.setInteger("sid", sid);
+			List ret = query.list();
+			for (Object object : ret) {
+				IpIdea idea = (IpIdea) object;
+				Hibernate.initialize(idea.getIpIdeaCat());
+				Hibernate.initialize(idea.getIpIdeaStatus());
+				Hibernate.initialize(idea.getIpUser());
+			}
+			session.close();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
+	}
 }

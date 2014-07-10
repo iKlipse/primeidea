@@ -17,11 +17,11 @@
 				</p:column>
 				<p:column>
 					<f:facet name="header">Start Date</f:facet>
-					<p:calendar mode="popup" showOn="button" id="newsStartDate" value="#{news.nStartDate}" />
+					<p:calendar mode="popup" id="newsStartDate" value="#{news.nStartDate}" disabled="true" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">End Date</f:facet>
-					<p:calendar mode="popup" showOn="button" id="newsEndDate" value="#{news.nEndDate}" />
+					<p:calendar mode="popup" id="newsEndDate" value="#{news.nEndDate}" disabled="true" />
 				</p:column>
 
 				<p:column rendered="#{accessBean.editNewsEnabled}">

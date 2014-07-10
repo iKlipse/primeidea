@@ -10,12 +10,15 @@
 		<p:submenu label="Challenge" style="width: 16% !important; float: right !important;">
 			<p:menuitem value="Create Challenge" action="#{challengeBean.showCreateChallenge}" immediate="true" ajax="false" rendered="#{accessBean.createChallengeEnabled}" />
 			<p:menuitem value="View Challenge" action="#{challengeBean.showViewChallenge}" immediate="true" ajax="false" />
+			<p:menuitem value="View Open Challenge" action="#{challengeBean.showViewOpenChallenge}" immediate="true" ajax="false" />
 			<p:menuitem value="Submit Solution" action="#{challengeBean.showCreateSolution}" immediate="true" ajax="false" />
 			<p:menuitem value="View Solution" action="#{challengeBean.showViewSolution}" immediate="true" ajax="false" />
+			<p:menuitem value="View Open Solution" action="#{challengeBean.showViewOpenSolution}" immediate="true" ajax="false" />
 		</p:submenu>
 		<p:submenu label="Idea" style="width: 16% !important; float: right !important;">
 			<p:menuitem value="Create Random Idea" action="#{ideaBean.showCreateIdea}" immediate="true" ajax="false" rendered="#{accessBean.createIdeaEnabled}" />
 			<p:menuitem value="View Random Idea" action="#{ideaBean.showViewIdeas}" immediate="true" ajax="false" />
+			<p:menuitem value="View Open Random Idea" action="#{ideaBean.showViewOpenIdeas}" immediate="true" ajax="false" />
 		</p:submenu>
 		<p:submenu label="User" style="width: 16% !important; float: right !important;">
 			<p:menuitem value="My Ideas" action="#{ideaBean.showViewIdeasByUser}" immediate="true" ajax="false" />
@@ -30,7 +33,7 @@
 			<p:submenu label="User" style="float: right !important;">
 				<p:menuitem value="Create" action="#{adminBean.showCreateUser}" immediate="true" ajax="false" rendered="#{accessBean.createUserEnabled}" />
 				<p:menuitem value="View" action="#{adminBean.showViewUsers}" immediate="true" ajax="false" />
-				<p:menuitem value="Upload" action="#{adminBean.showUploadUsers}" immediate="true" ajax="false" />				
+				<p:menuitem value="Upload" action="#{adminBean.showUploadUsers}" immediate="true" ajax="false" />
 			</p:submenu>
 			<p:submenu label="Group" style="float: right !important;">
 				<p:menuitem value="Create Group" action="#{adminBean.showCreateGroup}" immediate="true" ajax="false" rendered="#{accessBean.createGroupEnabled}" />
@@ -45,7 +48,7 @@
 				<p:menuitem value="Maintain MetaData" action="#{metaDataBean.showMetadataMaintain}" immediate="true" ajax="false" rendered="#{accessBean.maintainMetaDataEnabled}" />
 				<p:menuitem value="Send Broadcast" action="#{notificationBean.showCreateNotification}" immediate="true" ajax="false" />
 			</p:submenu>
-			
+
 		</p:submenu>
 	</p:menubar>
 </ui:composition>

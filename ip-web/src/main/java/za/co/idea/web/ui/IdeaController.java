@@ -94,6 +94,21 @@ public class IdeaController implements Serializable {
 		}
 	}
 
+	public String showViewOpenIdeas() {
+		try {
+			viewIdeas = fetchAllIdeasByStatusIdUserId(2);
+			ideaCats = fetchAllIdeaCat();
+			admUsers = fetchAllUsers();
+			ideaStatuses = fetchAllIdeaStatuses();
+			return "ideavoi";
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
 	public String showViewIdeasByUser() {
 		try {
 			viewIdeas = fetchAllIdeasByUser();
@@ -158,6 +173,55 @@ public class IdeaController implements Serializable {
 		}
 	}
 
+	public String showEditOpenIdea() {
+		try {
+			ideaCats = fetchAllIdeaCat();
+			admUsers = fetchAllUsers();
+			ideaStatuses = fetchNextIdeaStatuses();
+			pGrps = fetchAllGroups();
+			groupTwinSelect = initializeSelectedGroups(pGrps);
+			try {
+				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
+				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+				getBlobClient.close();
+				if (blobId != -999l) {
+					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+					getBlobNameClient.close();
+					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					client.header("Content-Type", "application/json");
+					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+					if (attachment != null) {
+						fileAvail = false;
+						ideaBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
+						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+					} else {
+						fileAvail = true;
+						fileContent = null;
+					}
+				} else {
+					fileAvail = true;
+					fileContent = null;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				fileAvail = true;
+				fileContent = null;
+			}
+			return "ideaeoi";
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			fileAvail = true;
+			fileContent = null;
+			return "";
+		}
+	}
+
 	public String showSummaryIdea() {
 		likes = fetchAllLikes();
 		comments = fetchAllComments();
@@ -201,6 +265,51 @@ public class IdeaController implements Serializable {
 			fileContent = null;
 		}
 		return "ideasi";
+	}
+
+	public String showSummaryOpenIdea() {
+		likes = fetchAllLikes();
+		comments = fetchAllComments();
+		buildOns = fetchAllBuildOns();
+		likeCnt = "(" + likes.getTags().size() + ")	";
+		commentCnt = "(" + comments.size() + ")	";
+		buildOnCnt = "(" + buildOns.size() + ")	";
+		showIdeaComments = false;
+		showIdeaLikes = false;
+		showIdeaBuildOns = false;
+		ideaBean.setTaggable(ideaBean.getSetStatusId() != 2);
+		try {
+			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
+			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+			getBlobClient.close();
+			if (blobId != -999l) {
+				WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+				getBlobNameClient.close();
+				WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				client.header("Content-Type", "application/json");
+				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+				if (attachment != null) {
+					fileAvail = false;
+					ideaBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
+					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+				} else {
+					fileAvail = true;
+					fileContent = null;
+				}
+			} else {
+				fileAvail = true;
+				fileContent = null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform summary request", "System error occurred, cannot perform summary request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			fileAvail = true;
+			fileContent = null;
+		}
+		return "ideasoi";
 	}
 
 	public String showCommentIdea() {
@@ -578,6 +687,48 @@ public class IdeaController implements Serializable {
 	private List<IdeaBean> fetchAllIdeasByUser() {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
 		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
+		fetchIdeaClient.close();
+		for (IdeaMessage ideaMessage : ideas) {
+			IdeaBean bean = new IdeaBean();
+			bean.setCrtdById(ideaMessage.getCrtdById());
+			bean.setCrtdDate(ideaMessage.getCrtdDate());
+			bean.setIdeaDesc(ideaMessage.getIdeaDesc());
+			bean.setIdeaTag(ideaMessage.getIdeaTag());
+			bean.setIdeaId(ideaMessage.getIdeaId());
+			bean.setIdeaTitle(ideaMessage.getIdeaTitle());
+			bean.setSelCatId(ideaMessage.getSelCatId());
+			bean.setSetStatusId(ideaMessage.getSetStatusId());
+			bean.setGroupIdList(getIdsFromArray(ideaMessage.getGroupIdList()));
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	protected List<IdeaBean> fetchAllIdeasByStatus(Integer status) {
+		List<IdeaBean> ret = new ArrayList<IdeaBean>();
+		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/status/" + status);
+		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
+		fetchIdeaClient.close();
+		for (IdeaMessage ideaMessage : ideas) {
+			IdeaBean bean = new IdeaBean();
+			bean.setCrtdById(ideaMessage.getCrtdById());
+			bean.setCrtdDate(ideaMessage.getCrtdDate());
+			bean.setIdeaDesc(ideaMessage.getIdeaDesc());
+			bean.setIdeaTag(ideaMessage.getIdeaTag());
+			bean.setIdeaId(ideaMessage.getIdeaId());
+			bean.setIdeaTitle(ideaMessage.getIdeaTitle());
+			bean.setSelCatId(ideaMessage.getSelCatId());
+			bean.setSetStatusId(ideaMessage.getSetStatusId());
+			bean.setGroupIdList(getIdsFromArray(ideaMessage.getGroupIdList()));
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	protected List<IdeaBean> fetchAllIdeasByStatusIdUserId(Integer status) {
+		List<IdeaBean> ret = new ArrayList<IdeaBean>();
+		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/status/" + status + "/user/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		fetchIdeaClient.close();
 		for (IdeaMessage ideaMessage : ideas) {

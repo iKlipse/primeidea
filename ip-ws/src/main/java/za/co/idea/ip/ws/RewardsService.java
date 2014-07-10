@@ -138,7 +138,7 @@ public class RewardsService {
 				rewards.setRwQuantity(ipRewards.getRwQuantity());
 				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipRewards.getRwId(), "ip_rewards");
 				if (ipBlob != null) {
-					rewards.setRwUrl("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + ipBlob.getBlobId() + "/" + ipBlob.getBlobName());
+					rewards.setRwUrl("ip_rewards/" + ipRewards.getRwId() + "/" + ipBlob.getBlobName());
 					rewards.setRwImgAvail(true);
 				} else {
 					rewards.setRwImgAvail(false);
@@ -173,7 +173,7 @@ public class RewardsService {
 			rewards.setRwQuantity(ipRewards.getRwQuantity());
 			IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipRewards.getRwId(), "ip_rewards");
 			if (ipBlob != null) {
-				rewards.setRwUrl("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + ipBlob.getBlobId() + "/" + ipBlob.getBlobName());
+				rewards.setRwUrl("ip_rewards/" + ipRewards.getRwId() + "/" + ipBlob.getBlobName());
 				rewards.setRwImgAvail(true);
 			} else {
 				rewards.setRwImgAvail(false);
@@ -209,7 +209,7 @@ public class RewardsService {
 				rewards.setRwQuantity(ipRewards.getRwQuantity());
 				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipRewards.getRwId(), "ip_rewards");
 				if (ipBlob != null) {
-					rewards.setRwUrl("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + ipBlob.getBlobId() + "/" + ipBlob.getBlobName());
+					rewards.setRwUrl("ip_rewards/" + ipRewards.getRwId() + "/" + ipBlob.getBlobName());
 					rewards.setRwImgAvail(true);
 				} else {
 					rewards.setRwImgAvail(false);
@@ -247,7 +247,7 @@ public class RewardsService {
 				rewards.setRwQuantity(ipRewards.getRwQuantity());
 				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipRewards.getRwId(), "ip_rewards");
 				if (ipBlob != null) {
-					rewards.setRwUrl("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + ipBlob.getBlobId() + "/" + ipBlob.getBlobName());
+					rewards.setRwUrl("ip_rewards/" + ipRewards.getRwId() + "/" + ipBlob.getBlobName());
 					rewards.setRwImgAvail(true);
 				} else {
 					rewards.setRwImgAvail(false);

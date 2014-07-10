@@ -132,12 +132,24 @@
 			<to-view-id>/pages/idea/edit.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>ideaeoi</from-outcome>
+			<to-view-id>/pages/idea/editOpen.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>ideavi</from-outcome>
 			<to-view-id>/pages/idea/view.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>ideavoi</from-outcome>
+			<to-view-id>/pages/idea/viewOpen.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>ideasi</from-outcome>
 			<to-view-id>/pages/idea/summary.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>ideasoi</from-outcome>
+			<to-view-id>/pages/idea/summaryOpen.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>ideaui</from-outcome>

@@ -1,22 +1,8 @@
 package za.co.idea.web.ui.bean;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
-import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseId;
-import javax.ws.rs.core.MediaType;
-
-import org.apache.cxf.jaxrs.client.WebClient;
-import org.apache.cxf.jaxrs.ext.multipart.Attachment;
-import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
-
-import za.co.idea.ip.ws.util.CustomObjectMapper;
 
 public class RewardsBean implements Serializable {
 	private static final long serialVersionUID = -2381598448445463625L;
@@ -38,7 +24,6 @@ public class RewardsBean implements Serializable {
 	private Long rwQuantity;
 	private List<Long> groupIdList;
 	private String rwUrl;
-	private StreamedContent rwImg;
 	private boolean rwTaggable;
 	private boolean rwClaimable;
 	private boolean rwImgAvail;
@@ -201,29 +186,6 @@ public class RewardsBean implements Serializable {
 
 	public void setRwImgAvail(boolean rwImgAvail) {
 		this.rwImgAvail = rwImgAvail;
-	}
-
-	public StreamedContent getRwImg() {
-		FacesContext context = FacesContext.getCurrentInstance();
-		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
-			return new DefaultStreamedContent();
-		} else {
-			WebClient client = WebClient.create(rwUrl, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-			client.header("Content-Type", "application/json");
-			client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-			Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-			if (attachment != null)
-				try {
-					rwImg = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			return rwImg;
-		}
-	}
-
-	public void setRwImg(StreamedContent rwImg) {
-		this.rwImg = rwImg;
 	}
 
 	public String getRwUrl() {

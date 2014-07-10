@@ -1,0 +1,101 @@
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Idea Summary</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrSummaryIeas">
+			<f:facet name="header">
+					Idea Summary
+				</f:facet>
+			<p:panelGrid columns="2" id="pnlSummaryIdea">
+				<p:column>
+					<p:outputLabel id="lblITitle" value="Title : " />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="txtITitle" value="#{ideaBean.ideaBean.ideaTitle}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblIDesc" value="Description : " />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="txtIDesc" value="#{ideaBean.ideaBean.ideaDesc}" escape="false" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblIDownload" value="Download File : " />
+				</p:column>
+				<p:column>
+					<p:commandButton id="btnDownload" value="Download" ajax="false" disabled="#{ideaBean.fileAvail}">
+						<p:fileDownload value="#{ideaBean.fileContent}" />
+					</p:commandButton>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblITag" value="Tags : " />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="txtITag" value="#{ideaBean.ideaBean.ideaTag}" escape="false" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblISocial" value="Social : " />
+				</p:column>
+				<p:column>
+					<p:panelGrid columns="3" style="border: 0px !important;">
+						<p:column>
+							<p:commandLink id="lnkLikeIdea" action="#{ideaBean.likeIdea}" update="lblLikeCnt, :ideaFrm:tgLikes" disabled="#{ideaBean.ideaBean.taggable}">
+								<p:outputLabel id="lblLikeCnt" value="#{ideaBean.likeCnt}" style="height:25px; width:25px;" />
+								<p:graphicImage id="giLike" name="like-128.png" library="images" height="25px" width="25px" />
+								<p:tooltip for="giLike" value="Tags disabled as idea not in open status" rendered="#{ideaBean.ideaBean.taggable}" />
+							</p:commandLink>
+						</p:column>
+						<p:column>
+							<p:outputLabel id="lblCommentCnt" value="#{ideaBean.commentCnt}" style="height:25px; width:25px;" />
+							<p:graphicImage id="giComment" name="comment.jpg" library="images" height="25px" width="25px" />
+							<p:tooltip for="giComment" value="Tags disabled as idea not in open status" rendered="#{ideaBean.ideaBean.taggable}" />
+						</p:column>
+						<p:column>
+							<p:commandLink id="lnkBuildonIdea" action="#{buildonBean.showBuildon}">
+								<f:param name="entityId" id="entityId" value="#{ideaBean.ideaBean.ideaId}" />
+								<f:param name="entityType" id="entityType" value="1" />
+								<f:param name="taggable" id="taggable" value="#{ideaBean.ideaBean.taggable}" />
+								<p:outputLabel id="lblBuildOnCnt" value="#{ideaBean.buildOnCnt}" style="height:25px; width:25px;" />
+								<p:graphicImage id="giBuildOn" name="lego.png" library="images" height="25px" width="25px" />
+								<p:tooltip for="giBuildOn" value="Tags disabled as idea not in open status" rendered="#{ideaBean.ideaBean.taggable}" />
+							</p:commandLink>
+						</p:column>
+					</p:panelGrid>
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{ideaBean.showViewOpenIdeas}" />
+				</f:facet>
+			</p:panelGrid>
+			<p:overlayPanel dynamic="true" for="giComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
+				<p:panelGrid id="pnlIdeaComment" columns="1">
+					<p:column>
+						<p:dataGrid id="dtViewComments" widgetVar="dtViewComments" value="#{ideaBean.comments}" var="comment" columns="1" emptyMessage="No Comments Found">
+							<p:panel style="border: 0px !important;">
+								<f:facet name="header">
+									<p:outputLabel style="float: left !important" value="#{comment.usrScreenName}" />
+								</f:facet>
+								<f:facet name="footer">
+									<p:outputLabel style="float: right !important" value="#{comment.tagDate}" />
+								</f:facet>
+								<p:column>
+									<p:outputLabel value="#{comment.tagText}" />
+								</p:column>
+							</p:panel>
+						</p:dataGrid>
+						<p:tooltip for="dtViewComments" value="Tags disabled as idea not in open status" rendered="#{ideaBean.ideaBean.taggable}" />
+					</p:column>
+					<p:column rendered="#{!ideaBean.ideaBean.taggable}">
+						<p:editor id="edComment" value="#{ideaBean.commentText}" height="100" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+					</p:column>
+					<p:column rendered="#{!ideaBean.ideaBean.taggable}">
+						<p:commandButton id="btnSubmitComment" value="Post" update="dtViewComments" actionListener="#{ideaBean.commentIdea}" />
+					</p:column>
+				</p:panelGrid>
+			</p:overlayPanel>
+			<p:overlayPanel dynamic="true" for="giLike" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
+				<p:panelGrid id="pnlIdeaLikes" columns="1">
+					<p:tagCloud id="tgLikes" model="#{ideaBean.likes}" />
+				</p:panelGrid>
+			</p:overlayPanel>
+		</p:panel>
+	</ui:define>
+</ui:composition>
