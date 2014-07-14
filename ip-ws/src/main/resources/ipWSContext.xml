@@ -120,14 +120,11 @@
 		</property>
 	</bean>
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="smtp.gmail.com" />
-		<property name="port" value="587" />
-		<property name="username" value="madhav.venu.p@gmail.com" />
-		<property name="password" value="vahdamUnEv140609" />
-
+		<property name="host" value=" vpbrjhbpexc02.corp.primedia.co.za" />
+		<property name="port" value="25" />
 		<property name="javaMailProperties">
 			<props>
-				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.auth">false</prop>
 				<prop key="mail.smtp.starttls.enable">true</prop>
 			</props>
 		</property>

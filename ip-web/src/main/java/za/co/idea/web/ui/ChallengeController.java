@@ -918,7 +918,7 @@ public class ChallengeController implements Serializable {
 			SolutionMessage message = new SolutionMessage();
 			message.setCatId(solutionBean.getCatId());
 			message.setChalId(solutionBean.getChalId());
-			message.setCrtdById((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
+			message.setCrtdById(solutionBean.getCrtdById());
 			message.setCrtdDt(new Date());
 			message.setDesc(solutionBean.getDesc());
 			message.setId(solutionBean.getId());

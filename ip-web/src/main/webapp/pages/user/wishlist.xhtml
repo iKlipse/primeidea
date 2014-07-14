@@ -9,7 +9,11 @@
 				<p:panel header="#{rewards.rwTitle}" style="text-align:center">
 					<p:panelGrid id="pnlContent" columns="1">
 						<p:column>
-							<p:graphicImage library="images" name="#{rewards.rwUrl}" height="150px" width="150px" />
+							<p:lightBox>
+								<h:outputLink value="../../resources/images/#{rewards.rwUrl}" title="#{rewards.rwTitle}">
+									<p:graphicImage library="images" name="#{rewards.rwUrl}" height="150px" width="150px" />
+								</h:outputLink>
+							</p:lightBox>
 						</p:column>
 						<p:column>
 							<p:outputLabel value="#{rewards.rwQuantity}" />

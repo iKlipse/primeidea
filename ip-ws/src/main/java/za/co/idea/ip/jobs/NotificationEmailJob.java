@@ -2,6 +2,7 @@ package za.co.idea.ip.jobs;
 
 import java.util.List;
 
+import org.apache.cxf.common.util.StringUtils;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
@@ -43,10 +44,16 @@ public class NotificationEmailJob extends QuartzJobBean implements StatefulJob {
 						message.setTo(igu.getIpUser().getUserEmail());
 						sender.send(message);
 					}
-					ipNotifGroupDAO.delete(group);
 				}
+				ipNotifGroupDAO.deleteByNotifId(ipNotif.getNotifId());
+			} else {
+				SimpleMailMessage message = new SimpleMailMessage();
+				message.setText(ipNotif.getNotifBody());
+				message.setSubject(ipNotif.getNotifSubject());
+				message.setTo(StringUtils.split(ipNotif.getNotifList(), ";"));
+				sender.send(message);
 			}
-			ipNotifDAO.delete(ipNotif);
+			ipNotifDAO.deleteByNotifId(ipNotif.getNotifId());
 		}
 	}
 

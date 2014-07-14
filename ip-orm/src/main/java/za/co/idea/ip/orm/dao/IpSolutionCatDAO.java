@@ -34,12 +34,12 @@ public class IpSolutionCatDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			session.save(transientInstance);
-			transaction.commit();
+			transaction.commit();session.close();
 			
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
-			transaction.rollback();
+			transaction.rollback();session.close();
 			
 			throw re;
 		}
@@ -51,12 +51,12 @@ public class IpSolutionCatDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			session.delete(persistentInstance);
-			transaction.commit();
+			transaction.commit();session.close();
 			
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
-			transaction.rollback();
+			transaction.rollback();session.close();
 			
 			throw re;
 		}
@@ -68,12 +68,12 @@ public class IpSolutionCatDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			IpSolutionCat instance = (IpSolutionCat) session.get("za.co.idea.ip.orm.bean.IpSolutionCat", id);
-			transaction.commit();
+			transaction.commit();session.close();
 			
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
-			transaction.rollback();
+			transaction.rollback();session.close();
 			
 			throw re;
 		}
@@ -86,12 +86,12 @@ public class IpSolutionCatDAO extends BaseHibernateDAO {
 		try {
 			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpSolutionCat").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
-			transaction.commit();
+			transaction.commit();session.close();
 			
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
-			transaction.rollback();
+			transaction.rollback();session.close();
 			
 			throw re;
 		}
@@ -106,12 +106,12 @@ public class IpSolutionCatDAO extends BaseHibernateDAO {
 			Query queryObject = session.createQuery(queryString);
 			queryObject.setParameter(0, value);
 			List results = queryObject.list();
-			transaction.commit();
+			transaction.commit();session.close();
 			
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
-			transaction.rollback();
+			transaction.rollback();session.close();
 			
 			throw re;
 		}
@@ -129,12 +129,12 @@ public class IpSolutionCatDAO extends BaseHibernateDAO {
 			String queryString = "from IpSolutionCat";
 			Query queryObject = session.createQuery(queryString);
 			List results = queryObject.list();
-			transaction.commit();
+			transaction.commit();session.close();
 			
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
-			transaction.rollback();
+			transaction.rollback();session.close();
 			
 			throw re;
 		}
@@ -147,12 +147,12 @@ public class IpSolutionCatDAO extends BaseHibernateDAO {
 		try {
 			IpSolutionCat result = (IpSolutionCat) session.merge(detachedInstance);
 			log.debug("merge successful");
-			transaction.commit();
+			transaction.commit();session.close();
 			
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
-			transaction.rollback();
+			transaction.rollback();session.close();
 			
 			throw re;
 		}
@@ -164,12 +164,12 @@ public class IpSolutionCatDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			session.saveOrUpdate(instance);
-			transaction.commit();
+			transaction.commit();session.close();
 			
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
-			transaction.rollback();
+			transaction.rollback();session.close();
 			
 			throw re;
 		}

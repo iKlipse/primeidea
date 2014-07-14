@@ -20,10 +20,10 @@ public class IpNativeSQLDAO extends BaseHibernateDAO {
 			List res = query.list();
 			if (res != null && res.size() > 0)
 				ret = Long.valueOf(res.get(0).toString());
-			transaction.commit();
+			transaction.commit();session.close();
 			
 		} catch (Exception e) {
-			transaction.rollback();
+			transaction.rollback();session.close();
 			
 			throw new RuntimeException(e);
 		}
