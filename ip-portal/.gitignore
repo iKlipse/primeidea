@@ -1,0 +1,7 @@
+/target
+/.settings
+*attach*.pid
+.project
+.classpath
+/.metadata
+/ws
