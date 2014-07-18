@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<p:dataGrid id="dgViewChallenges" value="#{challengeBean.viewChallenges}" var="challenge" paginator="true" paginatorPosition="bottom" rows="5" columns="1" emptyMessage="No Challenges Found" style="width: 100% !important">
+		<p:panel style="width: 100% !important">
+			<f:facet name="header" style="align-text: left !important">
+				<p:selectOneMenu value="#{challenge.crtdById}">
+					<f:selectItems value="#{landingPageController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
+				</p:selectOneMenu>
+			</f:facet>
+			<f:facet name="actions" style="float: right !important;">
+				<p:commandButton value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{landingPageController.showEditChallenge}">
+					<f:setPropertyActionListener value="#{challenge}" target="#{landingPageController.challengeBean}" />
+				</p:commandButton>
+				<p:commandButton value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{landingPageController.showSummaryChallenge}">
+					<f:setPropertyActionListener value="#{challenge}" target="#{landingPageController.challengeBean}" />
+				</p:commandButton>
+			</f:facet>
+			<h3>
+				<p:outputLabel value="#{challenge.title}" />
+			</h3>
+			<p>
+				<b> <p:outputLabel value="#{challenge.launchDt}" escape="false" /> <p:outputLabel value=" - " escape="false" /> <p:outputLabel value="#{challenge.exprDt}" escape="false" /></b>
+			</p>
+			<p>
+				<p:outputLabel value="#{challenge.desc}" escape="false" />
+			</p>
+		</p:panel>
+	</p:dataGrid>
+</ui:composition>
