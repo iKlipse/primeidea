@@ -1305,6 +1305,8 @@ public class ChallengeController implements Serializable {
 			bean.setStatusId(solutionMessage.getStatusId());
 			bean.setTags(solutionMessage.getTags());
 			bean.setTitle(solutionMessage.getTitle());
+			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
+			bean.setSolImg(solutionMessage.getSolImg());
 			ret.add(bean);
 		}
 		return ret;

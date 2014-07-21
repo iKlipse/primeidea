@@ -29,7 +29,7 @@ public class SocialConnectorValidator implements Validator {
 
 	protected static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-web");
 
-	@Override
+	
 	public void validate(FacesContext arg0, UIComponent arg1, Object arg2) throws ValidatorException {
 		if (arg1.getAttributes().get("function").toString().equalsIgnoreCase("FB")) {
 			AccessToken accessToken = new DefaultFacebookClient().obtainAppAccessToken("1404712079799728", "fe051d7dcf717d4838629e31807fdcb3");

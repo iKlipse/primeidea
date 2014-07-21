@@ -15,12 +15,12 @@ import za.co.idea.web.ui.bean.UserBean;
 public class SessionPhaseListener implements PhaseListener {
 	private static final long serialVersionUID = 3201240827257809143L;
 
-	@Override
+	
 	public void afterPhase(PhaseEvent pe) {
 		System.out.println(pe.getPhaseId() + " :: " + pe.getFacesContext().getViewRoot());
 	}
 
-	@Override
+	
 	public void beforePhase(PhaseEvent pe) {
 		FacesContext context = pe.getFacesContext();
 		ResourceBundle bundle = ResourceBundle.getBundle("ip-web");
@@ -33,7 +33,7 @@ public class SessionPhaseListener implements PhaseListener {
 		}
 	}
 
-	@Override
+	
 	public PhaseId getPhaseId() {
 		return PhaseId.RENDER_RESPONSE;
 	}

@@ -26,7 +26,6 @@ public class NotificationEmailJob extends QuartzJobBean implements StatefulJob {
 	private IpUserDAO ipUserDAO;
 	private MailSender sender;
 
-	@Override
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 		List notifications = ipNotifDAO.findAll();
 		for (Object object : notifications) {
@@ -39,6 +38,7 @@ public class NotificationEmailJob extends QuartzJobBean implements StatefulJob {
 					for (Object usr : groupList) {
 						IpGroupUser igu = (IpGroupUser) usr;
 						SimpleMailMessage message = new SimpleMailMessage();
+						message.setFrom("ipnotif@primedia.co.za");
 						message.setText(ipNotif.getNotifBody());
 						message.setSubject(ipNotif.getNotifSubject());
 						message.setTo(igu.getIpUser().getUserEmail());
@@ -48,6 +48,7 @@ public class NotificationEmailJob extends QuartzJobBean implements StatefulJob {
 				ipNotifGroupDAO.deleteByNotifId(ipNotif.getNotifId());
 			} else {
 				SimpleMailMessage message = new SimpleMailMessage();
+				message.setFrom("ipnotif@primedia.co.za");
 				message.setText(ipNotif.getNotifBody());
 				message.setSubject(ipNotif.getNotifSubject());
 				message.setTo(StringUtils.split(ipNotif.getNotifList(), ";"));

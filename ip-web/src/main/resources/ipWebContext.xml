@@ -3,14 +3,30 @@
 	<bean id="RewardsStoreImageSyncJob" class="org.springframework.scheduling.quartz.JobDetailBean">
 		<property name="jobClass" value="za.co.idea.ip.jobs.RewardsStoreImageSyncJob" />
 	</bean>
+	<bean id="NewsSummaryImageSyncJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="za.co.idea.ip.jobs.NewsSummaryImageSyncJob" />
+	</bean>
+	<bean id="SolutionsViewImagesSyncJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="za.co.idea.ip.jobs.SolutionsViewImagesSyncJob" />
+	</bean>
 	<bean id="RewardsStoreImageSyncJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="RewardsStoreImageSyncJob" />
+		<property name="cronExpression" value="0 0/3 * * * ?" />
+	</bean>
+	<bean id="SolutionsViewImagesSyncJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="SolutionsViewImagesSyncJob" />
+		<property name="cronExpression" value="0 0/3 * * * ?" />
+	</bean>
+	<bean id="NewsSummaryImageSyncJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="NewsSummaryImageSyncJob" />
 		<property name="cronExpression" value="0 0/3 * * * ?" />
 	</bean>
 	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
 				<ref bean="RewardsStoreImageSyncJobTrigger" />
+				<ref bean="NewsSummaryImageSyncJobTrigger" />
+				<ref bean="SolutionsViewImagesSyncJobTrigger" />
 			</list>
 		</property>
 	</bean>

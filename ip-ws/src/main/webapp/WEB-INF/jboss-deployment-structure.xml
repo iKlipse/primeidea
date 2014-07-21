@@ -4,5 +4,9 @@
 			<subsystem name="webservices" />
 			<subsystem name="weld" />
 		</exclude-subsystems>
+		<exclusions>
+			<module name="org.apache.log4j" />
+			<module name="org.apache.commons.logging" />
+		</exclusions>
 	</deployment>
 </jboss-deployment-structure>

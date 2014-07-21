@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.primefaces.event.FileUploadEvent;
@@ -21,12 +22,12 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
-import za.co.idea.ip.ws.util.CustomObjectMapper;
-import za.co.idea.web.ui.bean.NewsBean;
-import za.co.idea.web.util.IdNumberGen;
 import za.co.idea.ip.ws.bean.AttachmentMessage;
 import za.co.idea.ip.ws.bean.NewsMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
+import za.co.idea.ip.ws.util.CustomObjectMapper;
+import za.co.idea.web.ui.bean.NewsBean;
+import za.co.idea.web.util.IdNumberGen;
 
 public class NewsController implements Serializable {
 
@@ -42,6 +43,8 @@ public class NewsController implements Serializable {
 	private boolean fileAvail;
 	private List<NewsBean> viewNewsBeans;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
+	private static final Logger logger = Logger.getLogger(NewsController.class);
+
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
@@ -79,9 +82,12 @@ public class NewsController implements Serializable {
 
 	public String showEditNews() {
 		try {
+			logger.debug("In showEditNew method");
+			logger.info("Sending request to NewsService");
 			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + newsBean.getnId() + "/ip_news");
 			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 			getBlobClient.close();
+			logger.info("After gettin response from NewsService");
 			if (blobId != -999l) {
 				WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
 				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
@@ -103,6 +109,7 @@ public class NewsController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.debug("Error while displaying edit news form: "+e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			fileAvail = true;
@@ -113,9 +120,12 @@ public class NewsController implements Serializable {
 
 	public String showSummaryNews() {
 		try {
+			logger.debug("In showSummaryNews method");
 			viewNewsBeans = fetchAllNews();
+			logger.info("News details after fetching data from fetchALLNews(): "+viewNewsBeans);
 			return "nssc";
 		} catch (Exception e) {
+			logger.debug("Error while displaying news summary details: "+e.getMessage());
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news view request", "System error occurred, cannot perform news view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -125,6 +135,7 @@ public class NewsController implements Serializable {
 
 	public String saveNews() {
 		try {
+			logger.debug("Control handled in saveNews method");
 			WebClient addNewsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ns/news/add");
 			NewsMessage message = new NewsMessage();
 			message.setnTitle(newsBean.getnTitle());
@@ -134,16 +145,19 @@ public class NewsController implements Serializable {
 			message.setEndDate(newsBean.getnEndDate());
 			ResponseMessage response = addNewsClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			addNewsClient.close();
+			logger.info("dispalying response of save news action : "+response.getStatusCode());
 			if (response.getStatusCode() == 0) {
 				if (image != null) {
+					logger.info("Before adding file content details");
 					WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
 					AttachmentMessage attach = new AttachmentMessage();
 					attach.setBlobContentType(contentType);
-					attach.setBlobEntityId(newsBean.getnId());
+					attach.setBlobEntityId(message.getnId());
 					attach.setBlobEntityTblNm("ip_news");
 					attach.setBlobName(fileName);
 					attach.setBlobId(COUNTER.getNextId("IpBlob"));
 					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
+					logger.info("Reponse code of file attachment - "+crtRes.getStatus());
 					if (crtRes.getStatus() == 200) {
 						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + attach.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
@@ -255,10 +269,12 @@ public class NewsController implements Serializable {
 	}
 
 	private List<NewsBean> fetchAllNews() {
-		List<NewsBean> ret = new ArrayList<NewsBean>();
+		logger.debug("Control handled in fetchAllNews method of NewsController ");
+		List<NewsBean> ret = new ArrayList<NewsBean>();		
 		WebClient fetchNewsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ns/news/list");
 		Collection<? extends NewsMessage> news = new ArrayList<NewsMessage>(fetchNewsClient.accept(MediaType.APPLICATION_JSON).getCollection(NewsMessage.class));
 		fetchNewsClient.close();
+		logger.info("News data adding to List: ");
 		for (NewsMessage message : news) {
 			NewsBean bean = new NewsBean();
 			bean.setnId(message.getnId());
@@ -266,8 +282,11 @@ public class NewsController implements Serializable {
 			bean.setnEndDate(message.getEndDate());
 			bean.setnStartDate(message.getStartDate());
 			bean.setnTitle(message.getnTitle());
+			bean.setNewsUrl(message.getNewsUrl());
+			bean.setNwImgAvail(message.isNwImgAvail());
 			ret.add(bean);
 		}
+		logger.info("News data displaying from List: "+ret);
 		return ret;
 	}
 
@@ -279,6 +298,7 @@ public class NewsController implements Serializable {
 			this.contentType = file.getContentType();
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Error occured while uploading file : "+e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}

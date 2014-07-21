@@ -23,6 +23,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -55,6 +57,7 @@ import com.restfb.DefaultWebRequestor;
 public class AdminController implements Serializable {
 	private static final long serialVersionUID = 1441325880500732566L;
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-web");
+	private static final Logger logger = Logger.getLogger(AdminController.class);
 
 	private UserBean userBean;
 	private GroupBean groupBean;
@@ -100,6 +103,7 @@ public class AdminController implements Serializable {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 		client.header("Content-Type", "application/json");
 		client.header("Accept", "application/json");
+		logger.log(Priority.INFO, "Web Client Initialized with URL :: " + url);
 		return client;
 	}
 

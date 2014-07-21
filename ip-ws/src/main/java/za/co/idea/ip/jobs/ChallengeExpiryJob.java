@@ -10,7 +10,7 @@ import za.co.idea.ip.orm.dao.IpChallengeDAO;
 public class ChallengeExpiryJob extends QuartzJobBean implements StatefulJob {
 	private IpChallengeDAO ipChallengeDAO;
 
-	@Override
+	
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 		ipChallengeDAO.updateStatusOnExpiry();
 	}

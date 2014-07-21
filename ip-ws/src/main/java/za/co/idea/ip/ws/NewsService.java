@@ -11,7 +11,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.bean.IpNews;
+import za.co.idea.ip.orm.dao.IpBlobDAO;
 import za.co.idea.ip.orm.dao.IpNewsDAO;
 import za.co.idea.ip.ws.bean.NewsMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
@@ -21,6 +23,7 @@ import za.co.idea.ip.ws.bean.ResponseMessage;
 public class NewsService {
 
 	private IpNewsDAO ipNewsDAO;
+	private IpBlobDAO ipBlobDAO;
 
 	@POST
 	@Path("/news/add")
@@ -89,6 +92,14 @@ public class NewsService {
 				message.setStartDate(news.getnStartDate());
 				message.setEndDate(news.getnEndDate());
 				message.setnTitle(news.getnTitle());
+				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(news.getNewsId(), "ip_news");
+				if (ipBlob != null) {
+					message.setNewsUrl("ip_news/" + news.getNewsId() + "/" + ipBlob.getBlobName());
+					message.setNwImgAvail(true);
+				} else {
+					message.setNwImgAvail(false);
+				}
+				
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
@@ -121,6 +132,14 @@ public class NewsService {
 
 	public void setIpNewsDAO(IpNewsDAO ipNewsDAO) {
 		this.ipNewsDAO = ipNewsDAO;
+	}
+	
+	public IpBlobDAO getIpBlobDAO() {
+		return ipBlobDAO;
+	}
+
+	public void setIpBlobDAO(IpBlobDAO ipBlobDAO) {
+		this.ipBlobDAO = ipBlobDAO;
 	}
 
 }

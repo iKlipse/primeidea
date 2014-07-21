@@ -11,6 +11,13 @@
 						<p:outputLabel id="lblNewsDate" value="#{news.nStartDate}" style="float: right !important" />
 					</f:facet>
 					<p:panelGrid columns="1" id="pnlNews">
+						<p:column>						    
+							<p:lightBox>
+								<h:outputLink value="../../resources/images/#{news.newsUrl}" title="#{news.nTitle}">
+									<p:graphicImage library="images" name="#{news.newsUrl}" height="150px" width="150px" />
+								</h:outputLink>
+							</p:lightBox>
+						</p:column>
 						<p:column>
 							<h3>
 								<p:outputLabel id="lblITitle" value="#{news.nTitle}" />

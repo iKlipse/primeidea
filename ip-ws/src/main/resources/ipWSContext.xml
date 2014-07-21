@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee" xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+               http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 	<import resource="classpath:ipORMContext.xml" />
 	<bean id="adminService" class="za.co.idea.ip.ws.AdminService">
 		<property name="ipGroupDAO" ref="IpGroupDAO" />
@@ -43,6 +44,7 @@
 		<property name="ipSolutionDAO" ref="IpSolutionDAO" />
 		<property name="ipUserDAO" ref="IpUserDAO" />
 		<property name="ipChallengeDAO" ref="IpChallengeDAO" />
+		<property name="ipBlobDAO" ref="IpBlobDAO" />
 	</bean>
 	<bean id="rewardsService" class="za.co.idea.ip.ws.RewardsService" lazy-init="false">
 		<property name="ipUserDAO" ref="IpUserDAO" />
@@ -78,6 +80,7 @@
 	</bean>
 	<bean id="newsService" class="za.co.idea.ip.ws.NewsService">
 		<property name="ipNewsDAO" ref="IpNewsDAO" />
+		<property name="ipBlobDAO" ref="IpBlobDAO" />
 	</bean>
 	<bean id="notificationService" class="za.co.idea.ip.ws.NotificationService">
 		<property name="ipNativeSQLDAO" ref="IpNativeSQLDAO" />
@@ -116,18 +119,12 @@
 		<property name="triggers">
 			<list>
 				<ref bean="ChallengeExpiryJobTrigger" />
+				<ref bean="NotificationEmailJobTrigger" />
 			</list>
 		</property>
 	</bean>
+	<jee:jndi-lookup id="mailSession" jndi-name="java:/mail/session" />
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value=" vpbrjhbpexc02.corp.primedia.co.za" />
-		<property name="port" value="25" />
-		<property name="javaMailProperties">
-			<props>
-				<prop key="mail.smtp.auth">false</prop>
-				<prop key="mail.smtp.starttls.enable">true</prop>
-			</props>
-		</property>
+		<property name="session" ref="mailSession" />
 	</bean>
-
 </beans>

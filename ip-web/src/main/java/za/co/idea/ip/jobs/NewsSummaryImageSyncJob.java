@@ -12,15 +12,15 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 
-public class RewardsStoreImageSyncJob extends QuartzJobBean implements StatefulJob {
-	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-web");
+public class NewsSummaryImageSyncJob extends QuartzJobBean implements StatefulJob {
+private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-web");
 
 	
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 		WebApplicationContext wac = ContextLoader.getCurrentWebApplicationContext();
 		File file = new File(wac.getServletContext().getRealPath("/resources/images"));
-		File srcFile = new File(BUNDLE.getString("base.dir") + File.separator + "ip_rewards");
-		File destFile = new File(file.getAbsolutePath() + File.separator + "ip_rewards");
+		File srcFile = new File(BUNDLE.getString("base.dir") + File.separator + "ip_news");
+		File destFile = new File(file.getAbsolutePath() + File.separator + "ip_news");
 		try {
 			FileUtils.copyDirectory(srcFile, destFile);
 		} catch (IOException e) {

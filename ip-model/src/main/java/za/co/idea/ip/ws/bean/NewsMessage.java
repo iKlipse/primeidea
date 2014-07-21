@@ -12,7 +12,15 @@ public class NewsMessage {
 	private Date endDate;
 	private String nTitle;
 	private String content;
+	private String newsUrl;
+	private boolean nwImgAvail;
 	
+	public String getNewsUrl() {
+		return newsUrl;
+	}
+	public void setNewsUrl(String newsUrl) {
+		this.newsUrl = newsUrl;
+	}
 	public Long getnId() {
 		return nId;
 	}
@@ -42,6 +50,12 @@ public class NewsMessage {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	public boolean isNwImgAvail() {
+		return nwImgAvail;
+	}
+	public void setNwImgAvail(boolean nwImgAvail) {
+		this.nwImgAvail = nwImgAvail;
 	}
 	
 	

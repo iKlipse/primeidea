@@ -16,12 +16,12 @@ import za.co.idea.web.ui.bean.UserBean;
 
 public class UserBeanConverter implements Converter {
 
-	@Override
+	
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
 		return getUserById(Long.valueOf(arg2));
 	}
 
-	@Override
+	
 	public String getAsString(FacesContext arg0, UIComponent arg1, Object arg2) {
 		return ((Long) arg2).toString();
 	}

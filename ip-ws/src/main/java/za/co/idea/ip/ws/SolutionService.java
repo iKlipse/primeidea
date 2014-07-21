@@ -11,9 +11,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.bean.IpSolution;
 import za.co.idea.ip.orm.bean.IpSolutionCat;
 import za.co.idea.ip.orm.bean.IpSolutionStatus;
+import za.co.idea.ip.orm.dao.IpBlobDAO;
 import za.co.idea.ip.orm.dao.IpChallengeDAO;
 import za.co.idea.ip.orm.dao.IpSolutionCatDAO;
 import za.co.idea.ip.orm.dao.IpSolutionDAO;
@@ -31,6 +33,7 @@ public class SolutionService {
 	private IpSolutionStatusDAO ipSolutionStatusDAO;
 	private IpUserDAO ipUserDAO;
 	private IpChallengeDAO ipChallengeDAO;
+	private IpBlobDAO ipBlobDAO;
 
 	@GET
 	@Path("/solution/check/title/{title}")
@@ -126,6 +129,13 @@ public class SolutionService {
 				solution.setId(ipSolution.getSolId());
 				solution.setTags(ipSolution.getSolTags());
 				solution.setTitle(ipSolution.getSolTitle());
+				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
+				if (ipBlob != null) {
+					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
+					solution.setSolImgAvl(true);
+				} else {
+					solution.setSolImgAvl(false);
+				}
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -154,6 +164,13 @@ public class SolutionService {
 				solution.setId(ipSolution.getSolId());
 				solution.setTags(ipSolution.getSolTags());
 				solution.setTitle(ipSolution.getSolTitle());
+				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
+				if (ipBlob != null) {
+					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
+					solution.setSolImgAvl(true);
+				} else {
+					solution.setSolImgAvl(false);
+				}
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -182,6 +199,13 @@ public class SolutionService {
 				solution.setId(ipSolution.getSolId());
 				solution.setTags(ipSolution.getSolTags());
 				solution.setTitle(ipSolution.getSolTitle());
+				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
+				if (ipBlob != null) {
+					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
+					solution.setSolImgAvl(true);
+				} else {
+					solution.setSolImgAvl(false);
+				}
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -210,6 +234,13 @@ public class SolutionService {
 				solution.setId(ipSolution.getSolId());
 				solution.setTags(ipSolution.getSolTags());
 				solution.setTitle(ipSolution.getSolTitle());
+				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
+				if (ipBlob != null) {
+					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
+					solution.setSolImgAvl(true);
+				} else {
+					solution.setSolImgAvl(false);
+				}
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -238,6 +269,13 @@ public class SolutionService {
 				solution.setId(ipSolution.getSolId());
 				solution.setTags(ipSolution.getSolTags());
 				solution.setTitle(ipSolution.getSolTitle());
+				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
+				if (ipBlob != null) {
+					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
+					solution.setSolImgAvl(true);
+				} else {
+					solution.setSolImgAvl(false);
+				}
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -266,6 +304,13 @@ public class SolutionService {
 				solution.setId(ipSolution.getSolId());
 				solution.setTags(ipSolution.getSolTags());
 				solution.setTitle(ipSolution.getSolTitle());
+				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
+				if (ipBlob != null) {
+					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
+					solution.setSolImgAvl(true);
+				} else {
+					solution.setSolImgAvl(false);
+				}
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -424,5 +469,13 @@ public class SolutionService {
 
 	public void setIpChallengeDAO(IpChallengeDAO ipChallengeDAO) {
 		this.ipChallengeDAO = ipChallengeDAO;
+	}
+
+	public IpBlobDAO getIpBlobDAO() {
+		return ipBlobDAO;
+	}
+
+	public void setIpBlobDAO(IpBlobDAO ipBlobDAO) {
+		this.ipBlobDAO = ipBlobDAO;
 	}
 }

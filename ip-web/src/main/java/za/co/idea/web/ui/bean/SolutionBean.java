@@ -20,6 +20,8 @@ public class SolutionBean implements Serializable {
 	private String fileName;
 	private String crtByName;
 	private boolean taggable;
+	private boolean solImgAvl;
+	private String solImg;
 
 	public Long getId() {
 		return id;
@@ -131,6 +133,22 @@ public class SolutionBean implements Serializable {
 
 	public void setTaggable(boolean taggable) {
 		this.taggable = taggable;
+	}
+
+	public boolean isSolImgAvl() {
+		return solImgAvl;
+	}
+
+	public void setSolImgAvl(boolean solImgAvl) {
+		this.solImgAvl = solImgAvl;
+	}
+
+	public String getSolImg() {
+		return solImg;
+	}
+
+	public void setSolImg(String solImg) {
+		this.solImg = solImg;
 	}
 
 }

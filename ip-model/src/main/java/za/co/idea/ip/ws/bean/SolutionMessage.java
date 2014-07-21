@@ -16,6 +16,8 @@ public class SolutionMessage {
 	private Date crtdDt;
 	private Long crtdById;
 	private String crtByName;
+	private boolean solImgAvl;
+	private String solImg;
 
 	public Long getId() {
 		return id;
@@ -95,6 +97,22 @@ public class SolutionMessage {
 
 	public void setCrtByName(String crtByName) {
 		this.crtByName = crtByName;
+	}
+
+	public boolean isSolImgAvl() {
+		return solImgAvl;
+	}
+
+	public void setSolImgAvl(boolean solImgAvl) {
+		this.solImgAvl = solImgAvl;
+	}
+
+	public String getSolImg() {
+		return solImg;
+	}
+
+	public void setSolImg(String solImg) {
+		this.solImg = solImg;
 	}
 
 }
