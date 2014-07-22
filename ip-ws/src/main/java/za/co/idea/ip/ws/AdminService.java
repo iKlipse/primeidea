@@ -455,6 +455,10 @@ public class AdminService {
 			if (user.getTwHandle() != null && user.getTwHandle().length() > 0)
 				ipUser.setUserTwHandle(user.getTwHandle());
 			ipUserDAO.merge(ipUser);
+			IpLogin ipLogin = new IpLogin();
+			ipLogin.setIpUser(ipUser);
+			ipLogin.setLoginName(ipUser.getUserScreenName());
+			ipLoginDAO.merge(ipLogin);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
@@ -724,6 +728,7 @@ public class AdminService {
 				user.setSkills(ipUser.getUserSkills());
 				if (ipUser.getIpGroup() != null)
 					user.setGroupId(ipUser.getIpGroup().getGroupId());
+				user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
 				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
 				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
 					user.setFbHandle(ipUser.getUserFbHandle());

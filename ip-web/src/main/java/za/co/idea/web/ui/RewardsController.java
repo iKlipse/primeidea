@@ -18,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.primefaces.event.FileUploadEvent;
@@ -85,6 +86,8 @@ public class RewardsController implements Serializable {
 	private Integer selAllocId;
 	private String comments;
 	private Long userId;
+	private Integer selRwCatId;
+	private static final Logger logger = Logger.getLogger(RewardsController.class);
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
@@ -117,6 +120,20 @@ public class RewardsController implements Serializable {
 			admUsers = fetchAllUsers();
 			rewardsCat = fetchAllRewardsCat();
 			viewRewardsBeans = fetchAllAvailableRewards();
+			return "rwsr";
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showRewardStoreByCategory() {
+		try {
+			admUsers = fetchAllUsers();
+			rewardsCat = fetchAllRewardsCat();
+			viewRewardsBeans = fetchAllAvailableRewardsByCat();
 			return "rwsr";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -681,6 +698,55 @@ public class RewardsController implements Serializable {
 		return "";
 	}
 
+	public String removeFromWishlist() {
+		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
+		TagMessage message = new TagMessage();
+		message.setEntityId(rewardsBean.getRwId());
+		message.setTagId(COUNTER.getNextId("IpTag"));
+		message.setTeId(4);
+		message.setTtId(4);
+		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
+		message.setDuplicate(false);
+		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+		addTagClient.close();
+		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
+		viewRewardsBeans = fetchAllRewardsByUser();
+		return "";
+	}
+
+	private List<RewardsBean> fetchAllAvailableRewardsByCat() {
+		fetchAllPointsByUser();
+		List<RewardsBean> ret = new ArrayList<RewardsBean>();
+		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list/cat/" + selRwCatId);
+		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
+		viewRewardsClient.close();
+		for (RewardsMessage message : rewards) {
+			RewardsBean bean = new RewardsBean();
+			bean.setrCatId(message.getrCatId());
+			bean.setRwCrtdDt(message.getRwCrtdDt());
+			bean.setRwDesc(message.getRwDesc());
+			bean.setRwExpiryDt(message.getRwExpiryDt());
+			bean.setRwHoverText(message.getRwHoverText());
+			bean.setRwId(message.getRwId());
+			bean.setRwLaunchDt(message.getRwLaunchDt());
+			bean.setRwStockCodeNum(message.getRwStockCodeNum());
+			bean.setRwTag(message.getRwTag());
+			bean.setRwTitle(message.getRwTitle());
+			bean.setRwValue(message.getRwValue());
+			bean.setRwPrice(message.getRwPrice());
+			bean.setRwQuantity(message.getRwQuantity());
+			bean.setRwImgAvail(message.isRwImgAvail());
+			bean.setRwUrl(message.getRwUrl());
+			bean.setRwTaggable(isWishlist(message.getRwId()));
+			bean.setRwClaimable(totalPoints >= message.getRwValue() && message.getRwQuantity() > 0);
+			logger.info("-----in whishlist ----" + bean.isRwTaggable());
+			ret.add(bean);
+		}
+		return ret;
+
+	}
+
 	private List<RewardsBean> fetchAllRewards() {
 		fetchAllPointsByUser();
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
@@ -705,6 +771,7 @@ public class RewardsController implements Serializable {
 			bean.setRwImgAvail(message.isRwImgAvail());
 			bean.setRwUrl(message.getRwUrl());
 			bean.setRwClaimable(totalPoints > message.getRwValue() && message.getRwQuantity() > 0);
+			bean.setRwTaggable(isWishlist(message.getRwId()));
 			ret.add(bean);
 		}
 		return ret;
@@ -733,6 +800,7 @@ public class RewardsController implements Serializable {
 			bean.setRwQuantity(message.getRwQuantity());
 			bean.setRwImgAvail(message.isRwImgAvail());
 			bean.setRwUrl(message.getRwUrl());
+			bean.setRwTaggable(isWishlist(message.getRwId()));
 			bean.setRwClaimable(totalPoints >= message.getRwValue() && message.getRwQuantity() > 0);
 			ret.add(bean);
 		}
@@ -784,6 +852,7 @@ public class RewardsController implements Serializable {
 			bean.setRwUrl(message.getRwUrl());
 			bean.setRwClaimable(totalPoints >= message.getRwValue() && message.getRwQuantity() > 0);
 			bean.setRwTaggable(isWishlist(message.getRwId()));
+			logger.info("id ----+" + bean.getRwTitle() + "---------" + bean.isRwTaggable());
 			ret.add(bean);
 		}
 		return ret;
@@ -1238,6 +1307,14 @@ public class RewardsController implements Serializable {
 
 	public void setTotalPoints(Long totalPoints) {
 		this.totalPoints = totalPoints;
+	}
+
+	public Integer getSelRwCatId() {
+		return selRwCatId;
+	}
+
+	public void setSelRwCatId(Integer selRwCatId) {
+		this.selRwCatId = selRwCatId;
 	}
 
 }

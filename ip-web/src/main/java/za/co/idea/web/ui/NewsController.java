@@ -45,7 +45,6 @@ public class NewsController implements Serializable {
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 	private static final Logger logger = Logger.getLogger(NewsController.class);
 
-
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
 		List providers = new ArrayList();
@@ -109,7 +108,7 @@ public class NewsController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.debug("Error while displaying edit news form: "+e.getMessage());
+			logger.debug("Error while displaying edit news form: " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			fileAvail = true;
@@ -122,10 +121,10 @@ public class NewsController implements Serializable {
 		try {
 			logger.debug("In showSummaryNews method");
 			viewNewsBeans = fetchAllNews();
-			logger.info("News details after fetching data from fetchALLNews(): "+viewNewsBeans);
+			logger.info("News details after fetching data from fetchALLNews(): " + viewNewsBeans);
 			return "nssc";
 		} catch (Exception e) {
-			logger.debug("Error while displaying news summary details: "+e.getMessage());
+			logger.debug("Error while displaying news summary details: " + e.getMessage());
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news view request", "System error occurred, cannot perform news view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -145,7 +144,7 @@ public class NewsController implements Serializable {
 			message.setEndDate(newsBean.getnEndDate());
 			ResponseMessage response = addNewsClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			addNewsClient.close();
-			logger.info("dispalying response of save news action : "+response.getStatusCode());
+			logger.info("dispalying response of save news action : " + response.getStatusCode());
 			if (response.getStatusCode() == 0) {
 				if (image != null) {
 					logger.info("Before adding file content details");
@@ -157,7 +156,7 @@ public class NewsController implements Serializable {
 					attach.setBlobName(fileName);
 					attach.setBlobId(COUNTER.getNextId("IpBlob"));
 					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
-					logger.info("Reponse code of file attachment - "+crtRes.getStatus());
+					logger.info("Reponse code of file attachment - " + crtRes.getStatus());
 					if (crtRes.getStatus() == 200) {
 						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + attach.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
@@ -270,7 +269,7 @@ public class NewsController implements Serializable {
 
 	private List<NewsBean> fetchAllNews() {
 		logger.debug("Control handled in fetchAllNews method of NewsController ");
-		List<NewsBean> ret = new ArrayList<NewsBean>();		
+		List<NewsBean> ret = new ArrayList<NewsBean>();
 		WebClient fetchNewsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ns/news/list");
 		Collection<? extends NewsMessage> news = new ArrayList<NewsMessage>(fetchNewsClient.accept(MediaType.APPLICATION_JSON).getCollection(NewsMessage.class));
 		fetchNewsClient.close();
@@ -286,7 +285,7 @@ public class NewsController implements Serializable {
 			bean.setNwImgAvail(message.isNwImgAvail());
 			ret.add(bean);
 		}
-		logger.info("News data displaying from List: "+ret);
+		logger.info("News data displaying from List: " + ret);
 		return ret;
 	}
 
@@ -298,7 +297,7 @@ public class NewsController implements Serializable {
 			this.contentType = file.getContentType();
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("Error occured while uploading file : "+e.getMessage());
+			logger.error("Error occured while uploading file : " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}

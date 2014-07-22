@@ -5,6 +5,20 @@
 			<f:facet name="header">
 					Rewards Store
 				</f:facet>
+				<p:panelGrid style="width: 30%" columns="2" id="pnlViewRewards">
+				<p:column>
+					<p:outputLabel id="lblRCat" value="Category : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu style="width: 100%" id="somRCat" value="#{rewardsBean.selRwCatId}">
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+						<f:selectItems value="#{rewardsBean.rewardsCat}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
+						<f:selectItem itemLabel="All Items" itemValue="0" noSelectionOption="true" />
+						<p:ajax listener="#{rewardsBean.showRewardStoreByCategory}" event="change" update="dgRewards" />						
+					</p:selectOneMenu>
+				</p:column>
+
+			</p:panelGrid>
 			<p:dataGrid id="dgRewards" var="rewards" value="#{rewardsBean.viewRewardsBeans}" columns="3" rows="12" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="9,12,15">
 				<p:panel header="#{rewards.rwTitle}" style="text-align:center">
 					<p:panelGrid id="pnlContent" columns="1">

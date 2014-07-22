@@ -65,4 +65,8 @@
 		select rw.* from ip_rewards rw where current_timestamp between rw.rw_launch_dt and rw.rw_expiry_dt
 		<return alias="rw" class="za.co.idea.ip.orm.bean.IpRewards" />
 	</sql-query>
+	<sql-query name="getRewardsByCatId">
+		select rw.* from ip_rewards rw where current_timestamp between rw.rw_launch_dt and rw.rw_expiry_dt and rw.rw_cat=:id
+		<return alias="rw" class="za.co.idea.ip.orm.bean.IpRewards" />
+	</sql-query>	
 </hibernate-mapping>

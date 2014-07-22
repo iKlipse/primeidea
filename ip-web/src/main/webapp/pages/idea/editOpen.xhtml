@@ -15,15 +15,6 @@
 					</p:inputText>
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblICat" value="Category : " />
-				</p:column>
-				<p:column>
-					<p:selectOneMenu style="width: 100%" id="somICat" value="#{ideaBean.ideaBean.selCatId}">
-						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{ideaBean.ideaCats}" var="ic" itemLabel="#{ic.desc}" itemValue="#{ic.id}" />
-					</p:selectOneMenu>
-				</p:column>
-				<p:column>
 					<p:outputLabel id="lblIStatus" value="Status : " />
 				</p:column>
 				<p:column>
@@ -39,7 +30,7 @@
 					<p:editor style="width: 100%" id="txtIDesc" value="#{ideaBean.ideaBean.ideaDesc}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblITag" value="Tags : " />
+					<p:outputLabel id="lblITag" value="Keywords to Describe Your Idea : " />
 				</p:column>
 				<p:column>
 					<p:inputText style="width: 100%" autocomplete="false" id="txtITag" value="#{ideaBean.ideaBean.ideaTag}" />

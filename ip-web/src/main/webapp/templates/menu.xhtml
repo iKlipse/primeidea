@@ -15,18 +15,18 @@
 			<p:menuitem value="View Solution" action="#{challengeBean.showViewSolution}" immediate="true" ajax="false" rendered="#{accessBean.viewSolutionEnabled}" />
 			<p:menuitem value="View Open Solution" action="#{challengeBean.showViewOpenSolution}" immediate="true" ajax="false" rendered="#{accessBean.viewOpenSolutionEnabled}" />
 		</p:submenu>
-		<p:submenu label="Idea" style="width: 16% !important; float: right !important;">
+		<p:submenu label="Random Idea" style="width: 16% !important; float: right !important;">
 			<p:menuitem value="Create Random Idea" action="#{ideaBean.showCreateIdea}" immediate="true" ajax="false" rendered="#{accessBean.createIdeaEnabled}" />
 			<p:menuitem value="View Random Idea" action="#{ideaBean.showViewIdeas}" immediate="true" ajax="false" rendered="#{accessBean.viewRandomIdeaEnabled}" />
 			<p:menuitem value="View Open Random Idea" action="#{ideaBean.showViewOpenIdeas}" immediate="true" ajax="false" rendered="#{accessBean.viewOpenRandomIdeaEnabled}" />
 		</p:submenu>
-		<p:submenu label="User" style="width: 16% !important; float: right !important;">
+		<p:submenu label="My Views" style="width: 16% !important; float: right !important;">
 			<p:menuitem value="My Ideas" action="#{ideaBean.showViewIdeasByUser}" immediate="true" ajax="false" />
 			<p:menuitem value="My Challenges" action="#{challengeBean.showViewChallengeByUser}" immediate="true" ajax="false" />
 			<p:menuitem value="My Solutions" action="#{challengeBean.showViewSolutionByUser}" immediate="true" ajax="false" />
 			<p:menuitem value="My Claims" action="#{claimBean.showViewClaimByUser}" immediate="true" ajax="false" />
-			<p:menuitem value="Rewards Wishlist" action="#{rewardsBean.showViewRewardByUser}" immediate="true" ajax="false" />
-			<p:menuitem value="Point Profile" action="#{rewardsBean.showPointProfile}" immediate="true" ajax="false" />
+			<p:menuitem value="My Rewards Wishlist" action="#{rewardsBean.showViewRewardByUser}" immediate="true" ajax="false" />
+			<p:menuitem value="My Points Profile" action="#{rewardsBean.showPointProfile}" immediate="true" ajax="false" />
 			<p:menuitem value="News" action="#{newsBean.showSummaryNews}" immediate="true" ajax="false" />
 		</p:submenu>
 		<p:submenu label="Admin" style="width: 16% !important; float: right !important;" rendered="#{accessBean.adminEnabled}">

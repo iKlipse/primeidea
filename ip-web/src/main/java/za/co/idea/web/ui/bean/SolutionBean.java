@@ -3,6 +3,8 @@ package za.co.idea.web.ui.bean;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.primefaces.model.StreamedContent;
+
 public class SolutionBean implements Serializable {
 
 	private static final long serialVersionUID = 5175633384603270214L;
@@ -22,6 +24,7 @@ public class SolutionBean implements Serializable {
 	private boolean taggable;
 	private boolean solImgAvl;
 	private String solImg;
+	private StreamedContent solStream;
 
 	public Long getId() {
 		return id;
@@ -149,6 +152,14 @@ public class SolutionBean implements Serializable {
 
 	public void setSolImg(String solImg) {
 		this.solImg = solImg;
+	}
+
+	public StreamedContent getSolStream() {
+		return solStream;
+	}
+
+	public void setSolStream(StreamedContent solStream) {
+		this.solStream = solStream;
 	}
 
 }

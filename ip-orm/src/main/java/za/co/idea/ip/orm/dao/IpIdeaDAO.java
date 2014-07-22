@@ -38,13 +38,17 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			session.save(transientInstance);
-			transaction.commit();session.close();
-			
+			transaction.commit();
+			session.close();
+
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
-			transaction.rollback();session.close();
-			
+			if (transaction.isActive())
+				transaction.rollback();
+			if (session.isOpen())
+				session.close();
+
 			throw re;
 		}
 	}
@@ -55,13 +59,17 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			session.delete(persistentInstance);
-			transaction.commit();session.close();
-			
+			transaction.commit();
+			session.close();
+
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
-			transaction.rollback();session.close();
-			
+			if (transaction.isActive())
+				transaction.rollback();
+			if (session.isOpen())
+				session.close();
+
 			throw re;
 		}
 	}
@@ -72,13 +80,17 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			IpIdea instance = (IpIdea) session.get("za.co.idea.ip.orm.bean.IpIdea", id);
-			transaction.commit();session.close();
-			
+			transaction.commit();
+			session.close();
+
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
-			transaction.rollback();session.close();
-			
+			if (transaction.isActive())
+				transaction.rollback();
+			if (session.isOpen())
+				session.close();
+
 			throw re;
 		}
 	}
@@ -89,14 +101,18 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpIdea").add(Example.create(instance)).list();
-			transaction.commit();session.close();
-			
+			transaction.commit();
+			session.close();
+
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
-			transaction.rollback();session.close();
-			
+			if (transaction.isActive())
+				transaction.rollback();
+			if (session.isOpen())
+				session.close();
+
 			throw re;
 		}
 	}
@@ -110,14 +126,18 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 			Query queryObject = session.createQuery(queryString);
 			queryObject.setParameter(0, value);
 			List results = queryObject.list();
-			transaction.commit();session.close();
-			
+			transaction.commit();
+			session.close();
+
 			return results;
 
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
-			transaction.rollback();session.close();
-			
+			if (transaction.isActive())
+				transaction.rollback();
+			if (session.isOpen())
+				session.close();
+
 			throw re;
 		}
 	}
@@ -146,14 +166,18 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 			String queryString = "from IpIdea";
 			Query queryObject = session.createQuery(queryString);
 			List results = queryObject.list();
-			transaction.commit();session.close();
-			
+			transaction.commit();
+			session.close();
+
 			return results;
 
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
-			transaction.rollback();session.close();
-			
+			if (transaction.isActive())
+				transaction.rollback();
+			if (session.isOpen())
+				session.close();
+
 			throw re;
 		}
 	}
@@ -164,14 +188,18 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			IpIdea result = (IpIdea) session.merge(detachedInstance);
-			transaction.commit();session.close();
-			
+			transaction.commit();
+			session.close();
+
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
-			transaction.rollback();session.close();
-			
+			if (transaction.isActive())
+				transaction.rollback();
+			if (session.isOpen())
+				session.close();
+
 			throw re;
 		}
 	}
@@ -182,13 +210,17 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			session.saveOrUpdate(instance);
-			transaction.commit();session.close();
-			
+			transaction.commit();
+			session.close();
+
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
-			transaction.rollback();session.close();
-			
+			if (transaction.isActive())
+				transaction.rollback();
+			if (session.isOpen())
+				session.close();
+
 			throw re;
 		}
 	}
@@ -206,7 +238,7 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 				Hibernate.initialize(idea.getIpIdeaStatus());
 				Hibernate.initialize(idea.getIpUser());
 			}
-			
+
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
@@ -227,7 +259,7 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 				Hibernate.initialize(idea.getIpIdeaStatus());
 				Hibernate.initialize(idea.getIpUser());
 			}
-			
+
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
@@ -248,7 +280,7 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 				Hibernate.initialize(idea.getIpIdeaStatus());
 				Hibernate.initialize(idea.getIpUser());
 			}
-			
+
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
@@ -270,7 +302,7 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 				Hibernate.initialize(idea.getIpIdeaStatus());
 				Hibernate.initialize(idea.getIpUser());
 			}
-			
+
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);

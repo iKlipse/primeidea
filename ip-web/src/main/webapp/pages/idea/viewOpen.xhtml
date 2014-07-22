@@ -11,12 +11,6 @@
 					<p:outputLabel id="txtIdeaTitle" value="#{idea.ideaTitle}" />
 				</p:column>
 				<p:column>
-					<f:facet name="header">Category</f:facet>
-					<p:selectOneMenu id="somICat" value="#{idea.selCatId}" disabled="true">
-						<f:selectItems value="#{ideaBean.ideaCats}" var="ic" itemLabel="#{ic.desc}" itemValue="#{ic.id}" />
-					</p:selectOneMenu>
-				</p:column>
-				<p:column>
 					<f:facet name="header">Status</f:facet>
 					<p:selectOneMenu id="somIStatus" value="#{idea.setStatusId}" disabled="true">
 						<f:selectItems value="#{ideaBean.ideaStatuses}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />

@@ -10,6 +10,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.portlet.Event;
+import javax.portlet.PortletRequest;
 import javax.portlet.faces.BridgeEventHandler;
 import javax.portlet.faces.event.EventNavigationResult;
 import javax.ws.rs.core.MediaType;
@@ -48,9 +49,12 @@ public class LandingPageController implements Serializable {
 	private List<ListSelectorBean> solutionStatuses;
 	private List<SolutionBean> viewSolutions;
 	private SolutionBean solutionBean;
+	private Long userId;
 
 	public void initializePage() {
 		try {
+			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			userId = Long.valueOf(request.getParameter("userId"));
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			viewIdeas = fetchAllIdeasByUser();
 			ideaCats = fetchAllIdeaCat();
@@ -132,11 +136,9 @@ public class LandingPageController implements Serializable {
 
 	private List<IdeaBean> fetchAllIdeasByUser() {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
+		WebClient fetchIdeaClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/" + userId);
 		// WebClient fetchIdeaClient =
-		// RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/"
-		// + ((Long)
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
-		WebClient fetchIdeaClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/0");
+		// RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/0");
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		fetchIdeaClient.close();
 		for (IdeaMessage ideaMessage : ideas) {
@@ -157,11 +159,9 @@ public class LandingPageController implements Serializable {
 
 	private List<ChallengeBean> fetchAllChallengesByUser() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
+		WebClient fetchChallengeClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/access/" + userId);
 		// WebClient fetchChallengeClient =
-		// RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/access/"
-		// + ((Long)
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
-		WebClient fetchChallengeClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/access/0");
+		// RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/access/0");
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
@@ -185,11 +185,9 @@ public class LandingPageController implements Serializable {
 
 	private List<SolutionBean> fetchAllSolutionsByUser() {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
+		WebClient fetchSolutionClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/access/" + userId);
 		// WebClient fetchSolutionClient =
-		// RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/access/"
-		// + ((Long)
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
-		WebClient fetchSolutionClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/access/0");
+		// RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/access/0");
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
 		fetchSolutionClient.close();
 		for (SolutionMessage solutionMessage : solutions) {
@@ -421,6 +419,14 @@ public class LandingPageController implements Serializable {
 
 	public void setSolutionBean(SolutionBean solutionBean) {
 		this.solutionBean = solutionBean;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public class LoginBridgeEventHandler implements BridgeEventHandler {

@@ -16,12 +16,10 @@ import za.co.idea.web.ui.bean.GroupBean;
 
 public class GroupBeanConverter implements Converter {
 
-	
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
 		return getGroupById(Long.valueOf(arg2));
 	}
 
-	
 	public String getAsString(FacesContext arg0, UIComponent arg1, Object arg2) {
 		return ((Long) arg2).toString();
 	}

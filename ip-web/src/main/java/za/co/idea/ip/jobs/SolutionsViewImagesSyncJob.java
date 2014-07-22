@@ -7,13 +7,14 @@ import java.util.ResourceBundle;
 import org.apache.commons.io.FileUtils;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.StatefulJob;
+import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 
-public class SolutionsViewImagesSyncJob {
-private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-web");
+public class SolutionsViewImagesSyncJob extends QuartzJobBean implements StatefulJob {
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-web");
 
-	
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 		WebApplicationContext wac = ContextLoader.getCurrentWebApplicationContext();
 		File file = new File(wac.getServletContext().getRealPath("/resources/images"));

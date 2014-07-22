@@ -15,7 +15,7 @@
 			<column name="idea_user_id" not-null="true" />
 		</many-to-one>
 		<many-to-one name="ipIdeaCat" class="za.co.idea.ip.orm.bean.IpIdeaCat" fetch="select" lazy="proxy">
-			<column name="idea_cat" not-null="true" />
+			<column name="idea_cat" />
 		</many-to-one>
 		<property name="ideaTitle" type="java.lang.String">
 			<column name="idea_title" length="100" not-null="true" />

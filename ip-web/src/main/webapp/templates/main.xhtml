@@ -6,9 +6,10 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title><ui:insert name="title" /></title>
 	<h:outputStylesheet id="jquery_css_main" name="ip.css" library="css" />
+	
 </h:head>
 <h:body>
-	<h:form id="ideaFrm" enctype="multipart/form-data" acceptcharset="UTF-8">
+	<h:form id="ideaFrm" enctype="multipart/form-data" onkeypress="if( event.keyCode == 13){event.keyCode=0;}" acceptcharset="UTF-8">
 		<div class="menu">
 			<ui:insert name="menu" />
 		</div>

@@ -21,6 +21,18 @@
 						<p:column>
 							<p:outputLabel value="#{rewards.rwValue}" />
 						</p:column>
+						<p:column>
+							<p:commandLink id="btnWish" ajax="false" action="#{rewardsBean.removeFromWishlist}">
+								<p:graphicImage library="images" name="star_highlight.jpg" height="30px" width="30px" rendered="#{rewards.rwTaggable}" />
+								<p:graphicImage library="images" name="star.jpg" height="30px" width="30px" rendered="#{!rewards.rwTaggable}" />
+								<f:setPropertyActionListener value="#{rewards}" target="#{rewardsBean.rewardsBean}" />
+							</p:commandLink>
+							<p:commandButton id="btnClaim" value="C" ajax="false" action="#{claimBean.showClaimReward}" rendered="#{rewards.rwClaimable}">
+								<f:param name="rewardsId" id="rewardsId" value="#{rewards.rwId}" />
+								<f:param name="rwQuantity" id="rwQuantity" value="#{rewards.rwQuantity}" />
+								<f:param name="rwValue" id="rwValue" value="#{rewards.rwValue}" />
+							</p:commandButton>
+						</p:column>
 					</p:panelGrid>
 				</p:panel>
 				<f:facet name="footer">

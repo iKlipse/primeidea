@@ -99,7 +99,7 @@ public class NewsService {
 				} else {
 					message.setNwImgAvail(false);
 				}
-				
+
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
@@ -133,7 +133,7 @@ public class NewsService {
 	public void setIpNewsDAO(IpNewsDAO ipNewsDAO) {
 		this.ipNewsDAO = ipNewsDAO;
 	}
-	
+
 	public IpBlobDAO getIpBlobDAO() {
 		return ipBlobDAO;
 	}

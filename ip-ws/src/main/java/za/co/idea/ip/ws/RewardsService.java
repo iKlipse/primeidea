@@ -223,6 +223,44 @@ public class RewardsService {
 	}
 
 	@GET
+	@Path("/rewards/list/cat/{catId}")
+	@Produces("application/json")
+	public <T extends RewardsMessage> List<T> listRewardsByCat(@PathParam("catId") Integer id) {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List rewardList = ipRewardsDAO.findByCatId(id);
+			for (Object object : rewardList) {
+				IpRewards ipRewards = (IpRewards) object;
+				RewardsMessage rewards = new RewardsMessage();
+				rewards.setrCatId(ipRewards.getIpRewardsCat().getRcId());
+				rewards.setRwCrtdDt(ipRewards.getRwCrtdDt());
+				rewards.setRwDesc(ipRewards.getRwDesc());
+				rewards.setRwExpiryDt(ipRewards.getRwExpiryDt());
+				rewards.setRwHoverText(ipRewards.getRwHoverText());
+				rewards.setRwId(ipRewards.getRwId());
+				rewards.setRwLaunchDt(ipRewards.getRwLaunchDt());
+				rewards.setRwStockCodeNum(ipRewards.getRwStockCodeNum());
+				rewards.setRwTag(ipRewards.getRwTag());
+				rewards.setRwTitle(ipRewards.getRwTitle());
+				rewards.setRwValue(ipRewards.getRwValue());
+				rewards.setRwPrice(ipRewards.getRwPrice());
+				rewards.setRwQuantity(ipRewards.getRwQuantity());
+				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipRewards.getRwId(), "ip_rewards");
+				if (ipBlob != null) {
+					rewards.setRwUrl("ip_rewards/" + ipRewards.getRwId() + "/" + ipBlob.getBlobName());
+					rewards.setRwImgAvail(true);
+				} else {
+					rewards.setRwImgAvail(false);
+				}
+				ret.add((T) rewards);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@GET
 	@Path("/rewards/list/{id}")
 	@Produces("application/json")
 	public <T extends RewardsMessage> List<T> listRewardsByUser(@PathParam("id") Long id) {

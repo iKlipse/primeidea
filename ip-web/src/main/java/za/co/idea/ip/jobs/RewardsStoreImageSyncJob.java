@@ -15,7 +15,6 @@ import org.springframework.web.context.WebApplicationContext;
 public class RewardsStoreImageSyncJob extends QuartzJobBean implements StatefulJob {
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-web");
 
-	
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 		WebApplicationContext wac = ContextLoader.getCurrentWebApplicationContext();
 		File file = new File(wac.getServletContext().getRealPath("/resources/images"));

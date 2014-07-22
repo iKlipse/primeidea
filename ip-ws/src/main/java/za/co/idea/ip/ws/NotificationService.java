@@ -21,11 +21,11 @@ import za.co.idea.ip.ws.bean.ResponseMessage;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Path(value = "/nos")
 public class NotificationService {
-	
+
 	private IpNotifDAO ipNotifDAO;
 	private IpNativeSQLDAO ipNativeSQLDAO;
 	private IpNotifGroupDAO ipNotifGroupDAO;
-	
+
 	@POST
 	@Path("/notif/add")
 	@Consumes("application/json")
@@ -40,14 +40,16 @@ public class NotificationService {
 			ipNotif.setNotifEntityTblName(notif.getNotifEntityTblName());
 			ipNotif.setNotifId(notif.getNotifId());
 			ipNotif.setNotifStatus(notif.getNotifStatus());
-			ipNotif.setNotifSubject(notif.getNotifSubject());			
+			ipNotif.setNotifSubject(notif.getNotifSubject());
 			ipNotifDAO.save(ipNotif);
 			if (notif.getGroupIdList() != null && notif.getGroupIdList().length > 0)
 				for (Long gId : notif.getGroupIdList()) {
 					IpNotifGroup ipNotifGroup = new IpNotifGroup();
 					ipNotifGroup.setIngId(ipNativeSQLDAO.getNextId(IpNotifGroup.class));
-					ipNotifGroup.setIngGrpId(gId);;
-					ipNotifGroup.setIngNotifId(notif.getNotifId());;
+					ipNotifGroup.setIngGrpId(gId);
+					;
+					ipNotifGroup.setIngNotifId(notif.getNotifId());
+					;
 					ipNotifGroupDAO.save(ipNotifGroup);
 				}
 			ResponseMessage message = new ResponseMessage();
@@ -62,7 +64,7 @@ public class NotificationService {
 			return message;
 		}
 	}
-	
+
 	@DELETE
 	@Path("/notif/delete")
 	@Consumes("application/json")
@@ -77,7 +79,7 @@ public class NotificationService {
 			ipNotif.setNotifEntityTblName(notif.getNotifEntityTblName());
 			ipNotif.setNotifId(notif.getNotifId());
 			ipNotif.setNotifStatus(notif.getNotifStatus());
-			ipNotif.setNotifSubject(notif.getNotifSubject());			
+			ipNotif.setNotifSubject(notif.getNotifSubject());
 			ipNotifDAO.delete(ipNotif);
 			ipNotifGroupDAO.deleteByNotifId(notif.getNotifId());
 			ResponseMessage message = new ResponseMessage();
@@ -92,7 +94,7 @@ public class NotificationService {
 			return message;
 		}
 	}
-	
+
 	@GET
 	@Path("/notif/list")
 	@Produces("application/json")
@@ -110,7 +112,7 @@ public class NotificationService {
 				notif.setNotifEntityTblName(ipNotif.getNotifEntityTblName());
 				notif.setNotifId(ipNotif.getNotifId());
 				notif.setNotifStatus(ipNotif.getNotifStatus());
-				notif.setNotifSubject(ipNotif.getNotifSubject());	
+				notif.setNotifSubject(ipNotif.getNotifSubject());
 				List val = ipNotifGroupDAO.fetchByNotifId(ipNotif.getNotifId());
 				if (val != null) {
 					Long[] grps = new Long[val.size()];
@@ -129,6 +131,7 @@ public class NotificationService {
 		}
 		return ret;
 	}
+
 	public IpNotifDAO getIpNotifDAO() {
 		return ipNotifDAO;
 	}

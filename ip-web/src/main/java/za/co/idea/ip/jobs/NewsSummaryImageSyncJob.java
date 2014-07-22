@@ -13,9 +13,8 @@ import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 
 public class NewsSummaryImageSyncJob extends QuartzJobBean implements StatefulJob {
-private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-web");
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-web");
 
-	
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 		WebApplicationContext wac = ContextLoader.getCurrentWebApplicationContext();
 		File file = new File(wac.getServletContext().getRealPath("/resources/images"));

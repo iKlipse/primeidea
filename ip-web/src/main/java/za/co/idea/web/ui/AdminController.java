@@ -24,7 +24,6 @@ import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -57,7 +56,7 @@ import com.restfb.DefaultWebRequestor;
 public class AdminController implements Serializable {
 	private static final long serialVersionUID = 1441325880500732566L;
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-web");
-	private static final Logger logger = Logger.getLogger(AdminController.class);
+	protected static final Logger logger = Logger.getLogger(AdminController.class);
 
 	private UserBean userBean;
 	private GroupBean groupBean;
@@ -103,7 +102,6 @@ public class AdminController implements Serializable {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 		client.header("Content-Type", "application/json");
 		client.header("Accept", "application/json");
-		logger.log(Priority.INFO, "Web Client Initialized with URL :: " + url);
 		return client;
 	}
 
@@ -145,6 +143,8 @@ public class AdminController implements Serializable {
 			bean.setIsActive(userMessage.getIsActive());
 			bean.setuId(userMessage.getuId());
 			bean.setLastLoginDt(userMessage.getLastLoginDt());
+			bean.setGroupId(userMessage.getGroupId());
+			bean.setPriGroupName(userMessage.getPriGroupName());
 			loggedScrName = userMessage.getScName();
 			secqList = fetchAllSecQ();
 			if (userMessage.getGroupId() != null) {
@@ -315,9 +315,10 @@ public class AdminController implements Serializable {
 
 	public String showEditProfile() {
 		try {
+			viewGroups = fetchAllGroups();
 			userBean = (UserBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
 			userBean.setcPw(userBean.getPwd());
-			return "admeu";
+			return "upe";
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated user profile view request", "System error occurred, cannot perform updated user profile view request");
@@ -358,7 +359,7 @@ public class AdminController implements Serializable {
 			groupBean = new GroupBean();
 			viewGroups = pGrps = fetchAllGroups();
 			admUsers = fetchAllUsersSortByPG();
-			userTwinSelect = new DualListModel<UserBean>(fetchAllUsersSortByPG(), new ArrayList<UserBean>());
+			userTwinSelect = new DualListModel<UserBean>(fetchAllUsersSortByPG(), fetchAdminUser());
 			return "admcg";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -735,8 +736,6 @@ public class AdminController implements Serializable {
 			ResponseMessage response = addUserClient.accept(MediaType.APPLICATION_JSON).post(bean, ResponseMessage.class);
 			addUserClient.close();
 			if (response.getStatusCode() == 0) {
-				FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "User '" + userBean.getScName() + "' created successfully", "User '" + userBean.getScName() + "' created successfully");
-				FacesContext.getCurrentInstance().addMessage(null, successMessage);
 				if (image != null) {
 					WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
 					AttachmentMessage message = new AttachmentMessage();
@@ -763,6 +762,8 @@ public class AdminController implements Serializable {
 					}
 					createBlobClient.close();
 				}
+				FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "User '" + userBean.getfName() + "' created successfully", "User '" + userBean.getfName() + "' created successfully");
+				FacesContext.getCurrentInstance().addMessage(null, successMessage);
 				return showViewUsers();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -928,9 +929,72 @@ public class AdminController implements Serializable {
 				loginClient.close();
 				resetSec = false;
 			}
-			if (response.getStatusCode() == 0)
+			if (response.getStatusCode() == 0) {
+				FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "User '" + userBean.getfName() + "' updated successfully", "User '" + userBean.getfName() + "' updated successfully");
+				FacesContext.getCurrentInstance().addMessage(null, successMessage);
 				return showViewUsers();
-			else {
+			} else {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update User", "Unable to update User");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String updateUserProfile() {
+		try {
+			List<String> errors = updateUserValidation();
+			if (errors.size() > 0) {
+				for (String error : errors) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
+				return "";
+			}
+			WebClient updateUserClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/modify");
+			UserMessage bean = new UserMessage();
+			bean.setBio(userBean.getBio());
+			bean.setContact(userBean.getContact());
+			bean.seteMail(userBean.geteMail());
+			bean.setFbHandle(userBean.getFbHandle());
+			bean.setfName(userBean.getfName());
+			bean.setIdNum(userBean.getIdNum());
+			bean.setIsActive(userBean.getIsActive());
+			bean.setlName(userBean.getlName());
+			bean.setmName(userBean.getmName());
+			bean.setPwd(userBean.getPwd());
+			bean.setScName(userBean.getScName());
+			bean.setSkills(userBean.getSkills());
+			bean.setTwHandle(userBean.getTwHandle());
+			bean.setIsActive(userBean.getIsActive());
+			bean.setuId(userBean.getuId());
+			bean.setLastLoginDt(userBean.getLastLoginDt());
+			bean.setEmployeeId(userBean.getEmployeeId());
+			bean.setGroupId(userBean.getGroupId());
+			ResponseMessage response = updateUserClient.accept(MediaType.APPLICATION_JSON).put(bean, ResponseMessage.class);
+			updateUserClient.close();
+			if (resetPasswd) {
+				WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/rpw/");
+				loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5("Passw123".getBytes())) }, ResponseMessage.class);
+				loginClient.close();
+				resetPasswd = false;
+			}
+			if (resetSec) {
+				WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/rsec");
+				loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), "4", "Johannesburg" }, ResponseMessage.class);
+				loginClient.close();
+				resetSec = false;
+			}
+			if (response.getStatusCode() == 0) {
+				FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "User '" + userBean.getScName() + "' profile updated successfully", "User '" + userBean.getScName() + "' profile updated successfully");
+				FacesContext.getCurrentInstance().addMessage(null, successMessage);
+				return redirectHome();
+			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update User", "Unable to update User");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
@@ -1283,6 +1347,7 @@ public class AdminController implements Serializable {
 			bean.setuId(userMessage.getuId());
 			bean.setEmployeeId(userMessage.getEmployeeId());
 			bean.setPriGroupName(userMessage.getPriGroupName());
+			bean.setGroupId(userMessage.getGroupId());
 			ret.add(bean);
 		}
 		return ret;
@@ -1314,6 +1379,33 @@ public class AdminController implements Serializable {
 			bean.setPriGroupName(userMessage.getPriGroupName());
 			ret.add(bean);
 		}
+		return ret;
+	}
+
+	private List<UserBean> fetchAdminUser() {
+		List<UserBean> ret = new ArrayList<UserBean>();
+		WebClient userByIdClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/get/" + 0l);
+		UserMessage userMessage = userByIdClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+		userByIdClient.close();
+		UserBean bean = new UserBean();
+		bean.setBio(userMessage.getBio());
+		bean.setContact(userMessage.getContact());
+		bean.seteMail(userMessage.geteMail());
+		bean.setFbHandle(userMessage.getFbHandle());
+		bean.setfName(userMessage.getfName());
+		bean.setIdNum(userMessage.getIdNum());
+		bean.setIsActive(userMessage.getIsActive());
+		bean.setlName(userMessage.getlName());
+		bean.setmName(userMessage.getmName());
+		bean.setPwd(userMessage.getPwd());
+		bean.setScName(userMessage.getScName());
+		bean.setSkills(userMessage.getSkills());
+		bean.setTwHandle(userMessage.getTwHandle());
+		bean.setIsActive(userMessage.getIsActive());
+		bean.setuId(userMessage.getuId());
+		bean.setEmployeeId(userMessage.getEmployeeId());
+		bean.setPriGroupName(userMessage.getPriGroupName());
+		ret.add(bean);
 		return ret;
 	}
 

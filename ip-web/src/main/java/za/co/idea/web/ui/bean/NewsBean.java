@@ -50,7 +50,7 @@ public class NewsBean {
 	public void setnContent(String nContent) {
 		this.nContent = nContent;
 	}
-	
+
 	public String getNewsUrl() {
 		return newsUrl;
 	}

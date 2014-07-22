@@ -12,6 +12,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import za.co.idea.ip.orm.bean.IpBlob;
+import za.co.idea.ip.orm.bean.IpChallenge;
 import za.co.idea.ip.orm.bean.IpSolution;
 import za.co.idea.ip.orm.bean.IpSolutionCat;
 import za.co.idea.ip.orm.bean.IpSolutionStatus;
@@ -56,8 +57,9 @@ public class SolutionService {
 	public ResponseMessage createSolution(SolutionMessage solution) {
 		IpSolution ipSolution = new IpSolution();
 		try {
+			IpChallenge ipChallenge = ipChallengeDAO.findById(solution.getChalId());
 			ipSolution.setIpChallenge(ipChallengeDAO.findById(solution.getChalId()));
-			ipSolution.setIpSolutionCat(ipSolutionCatDAO.findById(solution.getCatId()));
+			ipSolution.setIpSolutionCat(ipSolutionCatDAO.findById(ipChallenge.getIpChallengeCat().getCcId()));
 			ipSolution.setIpSolutionStatus(ipSolutionStatusDAO.findById(solution.getStatusId()));
 			ipSolution.setIpUser(ipUserDAO.findById(solution.getCrtdById()));
 			ipSolution.setSolCrtdDt(solution.getCrtdDt());

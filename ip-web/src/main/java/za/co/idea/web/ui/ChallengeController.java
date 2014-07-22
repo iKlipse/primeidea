@@ -10,12 +10,14 @@ import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.primefaces.event.FileUploadEvent;
@@ -85,6 +87,7 @@ public class ChallengeController implements Serializable {
 	private boolean saveAsOpen;
 	private boolean titleAvail;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
+	private static final Logger logger = Logger.getLogger(ChallengeController.class);
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
@@ -162,7 +165,11 @@ public class ChallengeController implements Serializable {
 		try {
 			challengeCats = fetchAllChallengeCat();
 			admUsers = fetchAllUsers();
-			challengeStatuses = fetchNextChallengeStatuses();
+			if (((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue() == 0l) {
+				challengeStatuses = fetchAllChallengeStatuses();
+			} else {
+				challengeStatuses = fetchNextChallengeStatuses();
+			}
 			pGrps = fetchAllGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
@@ -253,6 +260,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String showSummaryChallenge() {
+		logger.debug("Control handled in showSummaryChallenge method");
 		chalLikes = fetchAllChalLikes();
 		chalComments = fetchAllChalComments();
 		chalLikeCnt = "(" + chalLikes.getTags().size() + ")	";
@@ -633,7 +641,11 @@ public class ChallengeController implements Serializable {
 			admUsers = fetchAllUsers();
 			viewChallenges = fetchAllChallengesByUser();
 			solutionCats = fetchAllSolutionCat();
-			solutionStatuses = fetchNextSolutionStatuses();
+			if (((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue() == 0l) {
+				solutionStatuses = fetchAllSolutionStatuses();
+			} else {
+				solutionStatuses = fetchNextSolutionStatuses();
+			}
 			try {
 				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
 				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
@@ -890,7 +902,7 @@ public class ChallengeController implements Serializable {
 				}
 				solUploadContent = null;
 				saveAsOpen = false;
-				return showViewSolution();
+				return showViewOpenChallenge();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -1217,6 +1229,10 @@ public class ChallengeController implements Serializable {
 			bean.setCrtByName(solutionMessage.getCrtByName());
 			bean.setTags(solutionMessage.getTags());
 			bean.setTitle(solutionMessage.getTitle());
+			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
+			bean.setSolImg(solutionMessage.getSolImg());
+			if (solutionMessage.isSolImgAvl())
+				bean.setSolStream(new DefaultStreamedContent(((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
 			ret.add(bean);
 		}
 		return ret;
@@ -1239,6 +1255,10 @@ public class ChallengeController implements Serializable {
 			bean.setStatusId(solutionMessage.getStatusId());
 			bean.setTags(solutionMessage.getTags());
 			bean.setTitle(solutionMessage.getTitle());
+			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
+			bean.setSolImg(solutionMessage.getSolImg());
+			if (solutionMessage.isSolImgAvl())
+				bean.setSolStream(new DefaultStreamedContent(((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
 			ret.add(bean);
 		}
 		return ret;
@@ -1261,6 +1281,10 @@ public class ChallengeController implements Serializable {
 			bean.setStatusId(solutionMessage.getStatusId());
 			bean.setTags(solutionMessage.getTags());
 			bean.setTitle(solutionMessage.getTitle());
+			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
+			bean.setSolImg(solutionMessage.getSolImg());
+			if (solutionMessage.isSolImgAvl())
+				bean.setSolStream(new DefaultStreamedContent(((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
 			ret.add(bean);
 		}
 		return ret;
@@ -1283,16 +1307,22 @@ public class ChallengeController implements Serializable {
 			bean.setStatusId(solutionMessage.getStatusId());
 			bean.setTags(solutionMessage.getTags());
 			bean.setTitle(solutionMessage.getTitle());
+			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
+			bean.setSolImg(solutionMessage.getSolImg());
+			if (solutionMessage.isSolImgAvl())
+				bean.setSolStream(new DefaultStreamedContent(((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
 			ret.add(bean);
 		}
 		return ret;
 	}
 
 	private List<SolutionBean> fetchAllSolutionsByChal() {
+		logger.debug("Control handled in fetchAllSolutionsByChal method ");
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
 		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/chal/" + challengeBean.getId());
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
 		fetchSolutionClient.close();
+		logger.info("Before getting all solutions in controller");
 		for (SolutionMessage solutionMessage : solutions) {
 			SolutionBean bean = new SolutionBean();
 			bean.setChalId(solutionMessage.getChalId());
@@ -1307,6 +1337,9 @@ public class ChallengeController implements Serializable {
 			bean.setTitle(solutionMessage.getTitle());
 			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
 			bean.setSolImg(solutionMessage.getSolImg());
+			if (solutionMessage.isSolImgAvl())
+				bean.setSolStream(new DefaultStreamedContent(((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
+			logger.info("Solution: Id-" + solutionMessage.getId() + " name-" + solutionMessage.getTitle() + " image-" + solutionMessage.getSolImg());
 			ret.add(bean);
 		}
 		return ret;
@@ -1508,9 +1541,6 @@ public class ChallengeController implements Serializable {
 			ret.add("Title is Mandatory");
 		} else if (!lengthValidation(solutionBean.getTitle(), 1, 100)) {
 			ret.add("Title sholud not exceed 100 characters");
-		}
-		if (solutionBean.getCatId() == null || solutionBean.getCatId().toString().length() == 0) {
-			ret.add("Category is Mandatory");
 		}
 		if (solutionBean.getDesc() == null || solutionBean.getDesc().length() == 0) {
 			ret.add("Description is Mandatory");

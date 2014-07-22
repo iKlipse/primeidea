@@ -128,7 +128,11 @@ public class IdeaController implements Serializable {
 		try {
 			ideaCats = fetchAllIdeaCat();
 			admUsers = fetchAllUsers();
-			ideaStatuses = fetchNextIdeaStatuses();
+			if (((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue() == 0l) {
+				ideaStatuses = fetchAllIdeaStatuses();
+			} else {
+				ideaStatuses = fetchNextIdeaStatuses();
+			}
 			pGrps = fetchAllGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
@@ -418,9 +422,6 @@ public class IdeaController implements Serializable {
 			ret.add("Title is Mandatory");
 		} else if (!lengthValidation(ideaBean.getIdeaTitle(), 1, 100)) {
 			ret.add("Title sholud not exceed 100 characters");
-		}
-		if (ideaBean.getSelCatId() == null || ideaBean.getSelCatId().toString().length() == 0) {
-			ret.add("Category is Mandatory");
 		}
 		if (ideaBean.getIdeaDesc() == null || ideaBean.getIdeaDesc().length() == 0) {
 			ret.add("Description is Mandatory");
