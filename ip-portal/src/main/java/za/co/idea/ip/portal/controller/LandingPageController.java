@@ -30,6 +30,10 @@ import za.co.idea.ip.ws.bean.ChallengeMessage;
 import za.co.idea.ip.ws.bean.IdeaMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.SolutionMessage;
+import za.co.idea.ip.ws.bean.UserMessage;
+
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
 
 @ManagedBean(name = "landingPageController")
 @SessionScoped
@@ -54,7 +58,10 @@ public class LandingPageController implements Serializable {
 	public void initializePage() {
 		try {
 			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-			userId = Long.valueOf(request.getParameter("userId"));
+			User user = (User) request.getAttribute(WebKeys.USER);
+			WebClient client = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+			userId = message.getuId();
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			viewIdeas = fetchAllIdeasByUser();
 			ideaCats = fetchAllIdeaCat();
@@ -136,9 +143,10 @@ public class LandingPageController implements Serializable {
 
 	private List<IdeaBean> fetchAllIdeasByUser() {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
-		WebClient fetchIdeaClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/" + userId);
 		// WebClient fetchIdeaClient =
-		// RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/0");
+		// RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/"
+		// + userId);
+		WebClient fetchIdeaClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/0");
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		fetchIdeaClient.close();
 		for (IdeaMessage ideaMessage : ideas) {
@@ -159,9 +167,10 @@ public class LandingPageController implements Serializable {
 
 	private List<ChallengeBean> fetchAllChallengesByUser() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
-		WebClient fetchChallengeClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/access/" + userId);
 		// WebClient fetchChallengeClient =
-		// RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/access/0");
+		// RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/access/"
+		// + userId);
+		WebClient fetchChallengeClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/access/0");
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
@@ -185,9 +194,10 @@ public class LandingPageController implements Serializable {
 
 	private List<SolutionBean> fetchAllSolutionsByUser() {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
-		WebClient fetchSolutionClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/access/" + userId);
 		// WebClient fetchSolutionClient =
-		// RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/access/0");
+		// RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/access/"
+		// + userId);
+		WebClient fetchSolutionClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/access/0");
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
 		fetchSolutionClient.close();
 		for (SolutionMessage solutionMessage : solutions) {

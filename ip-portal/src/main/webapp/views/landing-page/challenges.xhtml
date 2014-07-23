@@ -1,5 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<p:dataGrid id="dgViewChallenges" value="#{challengeBean.viewChallenges}" var="challenge" paginator="true" paginatorPosition="bottom" rows="5" columns="1" emptyMessage="No Challenges Found" style="width: 100% !important">
+	<p:dataGrid id="dgViewChallenges" value="#{landingPageController.viewChallenges}" var="challenge" paginator="true" paginatorPosition="bottom" rows="5" columns="1" emptyMessage="No Challenges Found" style="width: 100% !important">
 		<p:panel style="width: 100% !important">
 			<f:facet name="header" style="align-text: left !important">
 				<p:selectOneMenu value="#{challenge.crtdById}">

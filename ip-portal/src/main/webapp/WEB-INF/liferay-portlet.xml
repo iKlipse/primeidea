@@ -28,14 +28,6 @@
 		<footer-portlet-javascript></footer-portlet-javascript>
 		<css-class-wrapper>random-idea-portlet</css-class-wrapper>
 	</portlet>
-	<portlet>
-		<portlet-name>session-variables</portlet-name>
-		<icon></icon>
-		<requires-namespaced-parameters>false</requires-namespaced-parameters>
-		<header-portlet-css></header-portlet-css>
-		<footer-portlet-javascript></footer-portlet-javascript>
-		<css-class-wrapper></css-class-wrapper>
-	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

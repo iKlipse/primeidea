@@ -6,8 +6,8 @@
 	</h:head>
 	<h:body>
 		<h:form id="frmHome" enctype="multipart/form-data">
-			<p:remoteCommand actionListener="#{landingPageController.initializePage}" name="onload" autoRun="true" />
-			<p:tabView dynamic="true">
+			<p:remoteCommand actionListener="#{landingPageController.initializePage}" name="onload" autoRun="true" update="tbvLanding" />
+			<p:tabView id="tbvLanding" widgetVar="tbvLanding" dynamic="true">
 				<p:ajax event="tabChange" listener="#{landingPageController.onTabChange}" />
 				<p:tab id="tbMyIdeas" title="My Ideas">
 					<p:panel id="ctrMyIdeas" style="width: 100% !important">
