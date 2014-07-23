@@ -69,7 +69,7 @@
 		<portlet-class>javax.portlet.faces.GenericFacesPortlet</portlet-class>
 		<init-param>
 			<name>javax.portlet.faces.defaultViewId.view</name>
-			<value>/views/random-idea/view.xhtml</value>
+			<value>/views/random-idea/main.xhtml</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
