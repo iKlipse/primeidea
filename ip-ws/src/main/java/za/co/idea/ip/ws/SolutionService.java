@@ -11,6 +11,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.apache.log4j.Logger;
+
 import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.bean.IpChallenge;
 import za.co.idea.ip.orm.bean.IpSolution;
@@ -35,6 +37,7 @@ public class SolutionService {
 	private IpUserDAO ipUserDAO;
 	private IpChallengeDAO ipChallengeDAO;
 	private IpBlobDAO ipBlobDAO;
+	private static final Logger logger = Logger.getLogger(SolutionService.class);
 
 	@GET
 	@Path("/solution/check/title/{title}")
@@ -135,6 +138,8 @@ public class SolutionService {
 				if (ipBlob != null) {
 					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
 					solution.setSolImgAvl(true);
+					solution.setFileName(ipBlob.getBlobName());
+					solution.setContentType(ipBlob.getBlobContentType());
 				} else {
 					solution.setSolImgAvl(false);
 				}
@@ -151,7 +156,9 @@ public class SolutionService {
 	@Produces("application/json")
 	public <T extends SolutionMessage> List<T> listSolutionByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
+		logger.debug("Control handled in listSolutionByUser() of /solution/list/user/access/{id} service ");
 		try {
+			logger.info("User Id :"+id);
 			List solutions = ipSolutionDAO.findByUserId(id);
 			for (Object object : solutions) {
 				IpSolution ipSolution = (IpSolution) object;
@@ -170,12 +177,15 @@ public class SolutionService {
 				if (ipBlob != null) {
 					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
 					solution.setSolImgAvl(true);
+					solution.setFileName(ipBlob.getBlobName());
+					solution.setContentType(ipBlob.getBlobContentType());
 				} else {
 					solution.setSolImgAvl(false);
-				}
+				}				
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
+			logger.error("Error in service : "+e.getMessage());
 			e.printStackTrace();
 		}
 		return ret;
@@ -205,6 +215,8 @@ public class SolutionService {
 				if (ipBlob != null) {
 					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
 					solution.setSolImgAvl(true);
+					solution.setFileName(ipBlob.getBlobName());
+					solution.setContentType(ipBlob.getBlobContentType());
 				} else {
 					solution.setSolImgAvl(false);
 				}
@@ -240,9 +252,12 @@ public class SolutionService {
 				if (ipBlob != null) {
 					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
 					solution.setSolImgAvl(true);
+					solution.setFileName(ipBlob.getBlobName());
+					solution.setContentType(ipBlob.getBlobContentType());
 				} else {
 					solution.setSolImgAvl(false);
 				}
+				
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -275,6 +290,8 @@ public class SolutionService {
 				if (ipBlob != null) {
 					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
 					solution.setSolImgAvl(true);
+					solution.setFileName(ipBlob.getBlobName());
+					solution.setContentType(ipBlob.getBlobContentType());
 				} else {
 					solution.setSolImgAvl(false);
 				}
@@ -310,6 +327,8 @@ public class SolutionService {
 				if (ipBlob != null) {
 					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
 					solution.setSolImgAvl(true);
+					solution.setFileName(ipBlob.getBlobName());
+					solution.setContentType(ipBlob.getBlobContentType());
 				} else {
 					solution.setSolImgAvl(false);
 				}

@@ -62,7 +62,7 @@
 		<return alias="rw" class="za.co.idea.ip.orm.bean.IpRewards" />
 	</sql-query>
 	<sql-query name="getRewardsByAvail">
-		select rw.* from ip_rewards rw where current_timestamp between rw.rw_launch_dt and rw.rw_expiry_dt
+		select rw.* from ip_rewards rw where current_timestamp between rw.rw_launch_dt and rw.rw_expiry_dt order by rw.rw_value
 		<return alias="rw" class="za.co.idea.ip.orm.bean.IpRewards" />
 	</sql-query>
 	<sql-query name="getRewardsByCatId">

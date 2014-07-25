@@ -6,22 +6,22 @@
 	</h:head>
 	<h:body>
 		<h:form id="frmRandomIdea" enctype="multipart/form-data">
-			<p:remoteCommand actionListener="#{randomIdeaController.initializePage}" name="onload" autoRun="true" update="tbViewIdeas" />
-			<p:tabView id="tbvRandomIdea" widgetVar="tbvLanding" dynamic="true" activeIndex="#{randomIdeaController.activeIndex}">
+			<p:remoteCommand actionListener="#{randomIdeaController.initializePage}" name="onload" autoRun="true" update="tbvRandomIdea" />
+			<p:tabView id="tbvRandomIdea" widgetVar="tbvRandomIdea" dynamic="true" activeIndex="#{randomIdeaController.activeIndex}" style="width=100% !important">
 				<p:ajax event="tabChange" listener="#{randomIdeaController.onTabChange}" />
-				<p:tab id="tbViewIdeas" title="View Ideas">
+				<p:tab id="tbViewIdeas" title="View Ideas" style="width=100% !important">
 					<p:panel id="ctrViewIdeas" style="width: 100% !important">
 						<f:facet name="header">View Ideas</f:facet>
 						<ui:include src="/views/random-idea/view.xhtml" />
 					</p:panel>
 				</p:tab>
-				<p:tab id="tbViewOpenIdeas" title="View Open Ideas">
+				<p:tab id="tbViewOpenIdeas" title="View Open Ideas" style="width=100% !important">
 					<p:panel id="ctrViewOpenIdeas" style="width: 100% !important">
 						<f:facet name="header">View Open Ideas</f:facet>
 						<ui:include src="/views/random-idea/viewOpen.xhtml" />
 					</p:panel>
 				</p:tab>
-				<p:tab id="tbCreateIdeas" title="CreateIdeas">
+				<p:tab id="tbCreateIdeas" title="CreateIdeas" style="width=100% !important">
 					<p:panel id="ctrCreateIdeas" style="width: 100% !important">
 						<f:facet name="header">Create Ideas</f:facet>
 						<ui:include src="/views/random-idea/create.xhtml" />

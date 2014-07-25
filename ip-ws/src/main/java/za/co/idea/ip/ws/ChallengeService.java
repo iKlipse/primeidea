@@ -154,6 +154,40 @@ public class ChallengeService {
 		}
 		return ret;
 	}
+	
+	@GET
+	@Path("/challenge/get/{id}")
+	@Produces("application/json")
+	public ChallengeMessage getGroupById(@PathParam("id") Long id) {
+		ChallengeMessage challenge = new ChallengeMessage();
+		try {
+			IpChallenge ipChallenge = ipChallengeDAO.findById(id);			
+			challenge.setId(ipChallenge.getChalId());
+			challenge.setCatId(ipChallenge.getIpChallengeCat().getCcId());
+			challenge.setCrtdById(ipChallenge.getIpUser().getUserId());
+			challenge.setCrtdDt(ipChallenge.getChalCrtdDt());
+			challenge.setDesc(ipChallenge.getChalDesc());
+			challenge.setExprDt(ipChallenge.getChalExpiryDt());
+			challenge.setHoverText(ipChallenge.getChalHoverTxt());
+			challenge.setLaunchDt(ipChallenge.getChalLaunchDt());
+			challenge.setStatusId(ipChallenge.getIpChallengeStatus().getCsId());
+			challenge.setTag(ipChallenge.getChalTags());
+			challenge.setTitle(ipChallenge.getChalTitle());
+			List val = ipChallengeGroupDAO.fetchByChallengeId(ipChallenge.getChalId());
+			if (val != null) {
+				Long[] grps = new Long[val.size()];
+				int i = 0;
+				for (Object obj : val) {
+					grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
+					i++;
+				}
+				challenge.setGroupIdList(grps);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return challenge;
+	}
 
 	@GET
 	@Path("/challenge/list/user/access/{id}")

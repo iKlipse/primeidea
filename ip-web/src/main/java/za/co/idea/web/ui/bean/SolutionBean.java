@@ -2,6 +2,7 @@ package za.co.idea.web.ui.bean;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import org.primefaces.model.StreamedContent;
 
@@ -25,6 +26,10 @@ public class SolutionBean implements Serializable {
 	private boolean solImgAvl;
 	private String solImg;
 	private StreamedContent solStream;
+	private String solLikeCnt;
+	private String solCommentCnt;
+	private String buildOnCnt;
+	private List<TagBean> solComments;
 
 	public Long getId() {
 		return id;
@@ -142,6 +147,22 @@ public class SolutionBean implements Serializable {
 		return solImgAvl;
 	}
 
+	public String getSolLikeCnt() {
+		return solLikeCnt;
+	}
+
+	public void setSolLikeCnt(String solLikeCnt) {
+		this.solLikeCnt = solLikeCnt;
+	}
+
+	public String getSolCommentCnt() {
+		return solCommentCnt;
+	}
+
+	public void setSolCommentCnt(String solCommentCnt) {
+		this.solCommentCnt = solCommentCnt;
+	}
+
 	public void setSolImgAvl(boolean solImgAvl) {
 		this.solImgAvl = solImgAvl;
 	}
@@ -160,6 +181,22 @@ public class SolutionBean implements Serializable {
 
 	public void setSolStream(StreamedContent solStream) {
 		this.solStream = solStream;
+	}
+
+	public String getBuildOnCnt() {
+		return buildOnCnt;
+	}
+
+	public void setBuildOnCnt(String buildOnCnt) {
+		this.buildOnCnt = buildOnCnt;
+	}
+
+	public List<TagBean> getSolComments() {
+		return solComments;
+	}
+
+	public void setSolComments(List<TagBean> solComments) {
+		this.solComments = solComments;
 	}
 
 }

@@ -159,19 +159,29 @@ public class AdminController implements Serializable {
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", bean);
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userId", bean.getuId());
 			try {
+				logger.info("Before image displaying");
 				WebClient docIdClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + userMessage.getuId() + "/ip_user");
 				Long blobId = docIdClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 				docIdClient.close();
+				logger.info("After getting response from service /ds/doc/getId: "+userMessage.getuId()+" --blobId---"+blobId);
 				if (blobId != -999l) {
 					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
 					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 					getBlobNameClient.close();
+					logger.info("blob name: "+blobName);
 					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 					client.header("Content-Type", "application/json");
 					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+					logger.info("After getting attachment");
 					if (attachment != null) {
-						this.image = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+						logger.info("Before getting blob content type");
+						WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+						getBlobTypeClient.close();
+						logger.info("blob type: "+blobType);
+						this.image = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
+						logger.info("After setting streamed content to image");
 						show = true;
 						showDef = false;
 					} else {
@@ -185,6 +195,7 @@ public class AdminController implements Serializable {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+				logger.error("Error while login : "+e.getMessage());
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform Login request", "System error occurred, cannot perform Login request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				show = false;
@@ -389,8 +400,11 @@ public class AdminController implements Serializable {
 					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 					if (attachment != null) {
 						fileAvail = false;
+						WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+						getBlobTypeClient.close();
 						groupBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
 					} else {
 						fileAvail = true;
 						fileContent = null;
@@ -435,8 +449,11 @@ public class AdminController implements Serializable {
 					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 					if (attachment != null) {
 						fileAvail = false;
+						WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+						getBlobTypeClient.close();
 						groupBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
 					} else {
 						fileAvail = true;
 						fileContent = null;

@@ -88,6 +88,7 @@ public class RandomIdeaController implements Serializable {
 
 	public void initializePage() {
 		showViewIdeas();
+		activeIndex = 0;
 	}
 
 	public void onTabChange(TabChangeEvent event) {
@@ -357,7 +358,9 @@ public class RandomIdeaController implements Serializable {
 		message.setTagId(COUNTER.getNextId("IpTag"));
 		message.setTeId(1);
 		message.setTtId(1);
-		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
+		// message.setUserId((Long)
+		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
+		message.setUserId(0l);
 		message.setDuplicate(false);
 		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 		addTagClient.close();
@@ -379,7 +382,9 @@ public class RandomIdeaController implements Serializable {
 		message.setTeId(1);
 		message.setTtId(2);
 		message.setDuplicate(true);
-		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
+		// message.setUserId((Long)
+		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
+		message.setUserId(0l);
 		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 		addTagClient.close();
 		if (response.getStatusCode() != 0)
@@ -401,7 +406,9 @@ public class RandomIdeaController implements Serializable {
 		message.setTeId(1);
 		message.setTtId(3);
 		message.setDuplicate(true);
-		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
+		// message.setUserId((Long)
+		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
+		message.setUserId(0l);
 		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 		addTagClient.close();
 		if (response.getStatusCode() != 0)
@@ -489,7 +496,9 @@ public class RandomIdeaController implements Serializable {
 			}
 			WebClient addIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/add");
 			IdeaMessage ideaMessage = new IdeaMessage();
-			ideaMessage.setCrtdById((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
+			// ideaMessage.setCrtdById((Long)
+			// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
+			ideaMessage.setCrtdById(0l);
 			ideaMessage.setCrtdDate(new Date());
 			ideaMessage.setIdeaBa(ideaBean.getIdeaBa());
 			ideaMessage.setIdeaDesc(ideaBean.getIdeaDesc());
@@ -694,7 +703,11 @@ public class RandomIdeaController implements Serializable {
 
 	private List<IdeaBean> fetchAllIdeasByUser() {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
-		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		// WebClient fetchIdeaClient =
+		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/"
+		// + ((Long)
+		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/0");
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		fetchIdeaClient.close();
 		for (IdeaMessage ideaMessage : ideas) {
@@ -715,7 +728,11 @@ public class RandomIdeaController implements Serializable {
 
 	private List<IdeaBean> fetchAllIdeasCreatedByUser() {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
-		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/created/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		// WebClient fetchIdeaClient =
+		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/created/"
+		// + ((Long)
+		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/created/0");
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		fetchIdeaClient.close();
 		for (IdeaMessage ideaMessage : ideas) {
@@ -757,7 +774,11 @@ public class RandomIdeaController implements Serializable {
 
 	protected List<IdeaBean> fetchAllIdeasByStatusIdUserId(Integer status) {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
-		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/status/" + status + "/user/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		// WebClient fetchIdeaClient =
+		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/status/"
+		// + status + "/user/" + ((Long)
+		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/status/" + status + "/user/0");
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		fetchIdeaClient.close();
 		for (IdeaMessage ideaMessage : ideas) {

@@ -47,20 +47,24 @@ public class NewsController implements Serializable {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
+		logger.debug("Control handled in createCustomClient()");
 		List providers = new ArrayList();
 		providers.add(new JacksonJaxbJsonProvider(new CustomObjectMapper(), JacksonJaxbJsonProvider.DEFAULT_ANNOTATIONS));
 		WebClient client = WebClient.create(url, providers);
 		client.header("Content-Type", "application/json");
 		client.header("Accept", "application/json");
+		logger.info("Returning the web client from this method "+client);
 		return client;
 	}
 
 	public String showCreateNews() {
 		try {
+			logger.debug("Control handled in createCustomClient()");
 			newsBean = new NewsBean();
 			return "nscc";
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Error while displaying show create news form: " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news create request", "System error occurred, cannot perform news create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -69,10 +73,12 @@ public class NewsController implements Serializable {
 
 	public String showViewNews() {
 		try {
+			logger.debug("Control handled in createCustomClient()");
 			viewNewsBeans = fetchAllNews();
 			return "nsvc";
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Error while displaying show view news form: " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news view request", "System error occurred, cannot perform news view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -81,7 +87,7 @@ public class NewsController implements Serializable {
 
 	public String showEditNews() {
 		try {
-			logger.debug("In showEditNew method");
+			logger.debug("Control handled in showEditNews() method");
 			logger.info("Sending request to NewsService");
 			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + newsBean.getnId() + "/ip_news");
 			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
@@ -97,7 +103,10 @@ public class NewsController implements Serializable {
 				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 				if (attachment != null) {
 					fileAvail = false;
-					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+					WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+					String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+					getBlobTypeClient.close();
+					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
 				} else {
 					fileAvail = true;
 					fileContent = null;
@@ -108,7 +117,7 @@ public class NewsController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.debug("Error while displaying edit news form: " + e.getMessage());
+			logger.error("Error while displaying edit news form: " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			fileAvail = true;
@@ -124,7 +133,7 @@ public class NewsController implements Serializable {
 			logger.info("News details after fetching data from fetchALLNews(): " + viewNewsBeans);
 			return "nssc";
 		} catch (Exception e) {
-			logger.debug("Error while displaying news summary details: " + e.getMessage());
+			logger.error("Error while displaying news summary details: " + e.getMessage());
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news view request", "System error occurred, cannot perform news view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -180,6 +189,7 @@ public class NewsController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
+			logger.error("Error in creating news data : "+e.getMessage());
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news create request", "System error occurred, cannot perform news create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -189,6 +199,7 @@ public class NewsController implements Serializable {
 
 	public String updateNews() {
 		try {
+			logger.debug("Control handled in updateNews()");
 			WebClient updateNewsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ns/news/modify");
 			NewsMessage message = new NewsMessage();
 			message.setnId(newsBean.getnId());
@@ -261,6 +272,7 @@ public class NewsController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Error in updating news data : "+e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -268,8 +280,9 @@ public class NewsController implements Serializable {
 	}
 
 	private List<NewsBean> fetchAllNews() {
-		logger.debug("Control handled in fetchAllNews method of NewsController ");
 		List<NewsBean> ret = new ArrayList<NewsBean>();
+		try {
+		logger.debug("Control handled in fetchAllNews method of NewsController ");		
 		WebClient fetchNewsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ns/news/list");
 		Collection<? extends NewsMessage> news = new ArrayList<NewsMessage>(fetchNewsClient.accept(MediaType.APPLICATION_JSON).getCollection(NewsMessage.class));
 		fetchNewsClient.close();
@@ -285,12 +298,16 @@ public class NewsController implements Serializable {
 			bean.setNwImgAvail(message.isNwImgAvail());
 			ret.add(bean);
 		}
+		}catch(Exception e){
+			logger.error("Error in fetching data : "+e.getMessage());
+		}
 		logger.info("News data displaying from List: " + ret);
 		return ret;
 	}
 
 	public void fileUploadHandle(FileUploadEvent fue) {
 		try {
+			logger.debug("Control handled in fileUploadHandle()");
 			UploadedFile file = fue.getFile();
 			this.image = new DefaultStreamedContent(file.getInputstream());
 			this.fileName = file.getFileName();

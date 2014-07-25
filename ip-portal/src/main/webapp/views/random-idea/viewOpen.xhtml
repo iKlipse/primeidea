@@ -1,33 +1,30 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<p:panel id="ctrViewIdeas" style="width: 100% !important">
-		<f:facet name="header">View Ideas</f:facet>
-		<p:dataTable id="dtViewIdeas" value="#{randomIdeaController.viewIdeas}" var="idea" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Ideas Found" style="width: 100% !important">
-			<p:column filterBy="#{idea.ideaTitle}" filterMatchMode="contains">
-				<f:facet name="header">Title</f:facet>
-				<p:outputLabel id="txtIdeaTitle" value="#{idea.ideaTitle}" />
-			</p:column>
-			<p:column>
-				<f:facet name="header">Status</f:facet>
-				<p:selectOneMenu id="somIStatus" value="#{idea.setStatusId}" disabled="true">
-					<f:selectItems value="#{randomIdeaController.ideaStatuses}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
-				</p:selectOneMenu>
-			</p:column>
-			<p:column>
-				<f:facet name="header">Created By</f:facet>
-				<p:selectOneMenu id="somACrtdBy" value="#{idea.crtdById}" disabled="true">
-					<f:selectItems value="#{randomIdeaController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
-				</p:selectOneMenu>
-			</p:column>
-			<p:column rendered="#{accessBean.createIdeaEnabled}">
-				<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{randomIdeaController.showEditOpenIdea}">
-					<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
-				</p:commandButton>
-			</p:column>
-			<p:column>
-				<p:commandButton id="summaryButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{randomIdeaController.showSummaryOpenIdea}">
-					<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
-				</p:commandButton>
-			</p:column>
-		</p:dataTable>
-	</p:panel>
+	<p:dataTable id="dtViewOpenIdeas" value="#{randomIdeaController.viewIdeas}" var="idea" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Ideas Found" style="width: 100% !important">
+		<p:column filterBy="#{idea.ideaTitle}" filterMatchMode="contains">
+			<f:facet name="header">Title</f:facet>
+			<p:outputLabel id="txtVwOIdeaTitle" value="#{idea.ideaTitle}" />
+		</p:column>
+		<p:column>
+			<f:facet name="header">Status</f:facet>
+			<p:selectOneMenu id="somVwOIStatus" value="#{idea.setStatusId}" disabled="true">
+				<f:selectItems value="#{randomIdeaController.ideaStatuses}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
+			</p:selectOneMenu>
+		</p:column>
+		<p:column>
+			<f:facet name="header">Created By</f:facet>
+			<p:selectOneMenu id="somVwOACrtdBy" value="#{idea.crtdById}" disabled="true">
+				<f:selectItems value="#{randomIdeaController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
+			</p:selectOneMenu>
+		</p:column>
+		<p:column>
+			<p:commandButton id="viewVwOButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{randomIdeaController.showEditOpenIdea}">
+				<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
+			</p:commandButton>
+		</p:column>
+		<p:column>
+			<p:commandButton id="summaryVwOButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{randomIdeaController.showSummaryOpenIdea}">
+				<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
+			</p:commandButton>
+		</p:column>
+	</p:dataTable>
 </ui:composition>

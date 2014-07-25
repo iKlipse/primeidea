@@ -70,7 +70,7 @@ public class BuildonController implements Serializable {
 		commentText = "";
 		return "bovw";
 	}
-
+	
 	public String showSummaryBuildon() {
 		buildonLikes = fetchAllBuildonLikes();
 		buildonComments = fetchAllBuildonComments();
@@ -92,7 +92,10 @@ public class BuildonController implements Serializable {
 				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 				if (attachment != null) {
 					fileAvail = false;
-					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+					WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+					String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+					getBlobTypeClient.close();
+					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
 				} else {
 					fileAvail = true;
 					fileContent = null;

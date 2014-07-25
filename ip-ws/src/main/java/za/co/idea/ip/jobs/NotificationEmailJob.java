@@ -27,11 +27,13 @@ public class NotificationEmailJob extends QuartzJobBean implements StatefulJob {
 	private MailSender sender;
 
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
+		try {
 		List notifications = ipNotifDAO.findAll();
 		for (Object object : notifications) {
 			IpNotif ipNotif = (IpNotif) object;
 			if (ipNotif.getNotifList() == null || ipNotif.getNotifList().length() == 0) {
-				List notifList = ipNotifGroupDAO.findByIngNotifId(ipNotif.getNotifId());
+				List notifList = ipNotifGroupDAO.findByIngNotifId((Object)ipNotif.getNotifId());
+				if(notifList!=null && !notifList.isEmpty()) {
 				for (Object obj : notifList) {
 					IpNotifGroup group = (IpNotifGroup) obj;
 					List groupList = ipGroupUserDAO.fetchByGroupId(group.getIngGrpId());
@@ -55,6 +57,10 @@ public class NotificationEmailJob extends QuartzJobBean implements StatefulJob {
 				sender.send(message);
 			}
 			ipNotifDAO.deleteByNotifId(ipNotif.getNotifId());
+			}
+		}
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 	}
 

@@ -6,5 +6,7 @@
 		<portlet id="login-portlet"></portlet>
 		<portlet id="landing-page"></portlet>
 		<portlet id="random-idea"></portlet>
+		<portlet id="menu"></portlet>
+		<portlet id="challenge"></portlet>
 	</category>
 </display>

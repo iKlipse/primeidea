@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<f:view xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+	<h:head />
+	<h:body>
+		<h:form id="frmChalCtrlr" enctype="multipart/form-data">
+			<p:remoteCommand actionListener="#{challengeController.initializePage}" name="onload" autoRun="true" update="tbvChallenges" />
+			<p:tabView id="tbvChallenges" widgetVar="tbvChallenges" dynamic="true" activeIndex="#{challengeController.activeIndex}">
+				<p:ajax event="tabChange" listener="#{challengeController.onTabChange}" />
+				<p:tab id="tbVwChallenges" title="View Challenges">
+					<p:panel id="ctrVwChallenges" style="width: 100% !important">
+						<f:facet name="header">View Challenges</f:facet>
+						<ui:include src="/views/challenge/view.xhtml" />
+					</p:panel>
+				</p:tab>
+				<p:tab id="tbVwPChallenges" title="Published Challenges">
+					<p:panel id="ctrVwPChallenges" style="width: 100% !important">
+						<f:facet name="header">Published Challenges</f:facet>
+						<ui:include src="/views/challenge/viewOpen.xhtml" />
+					</p:panel>
+				</p:tab>
+				<p:tab id="tbCrtChallenge" title="Create Challenge">
+					<p:panel id="ctrCrtChallenge" style="width: 100% !important">
+						<f:facet name="header">Create Challenge</f:facet>
+						<ui:include src="/views/challenge/create.xhtml" />
+					</p:panel>
+				</p:tab>
+			</p:tabView>
+		</h:form>
+	</h:body>
+</f:view>

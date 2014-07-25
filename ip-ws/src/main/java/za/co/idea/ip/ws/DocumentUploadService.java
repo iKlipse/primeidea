@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.io.FileUtils;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
+import org.apache.log4j.Logger;
 
 import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.dao.IpBlobDAO;
@@ -29,6 +30,7 @@ public class DocumentUploadService {
 
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-ws");
 	private IpBlobDAO ipBlobDAO;
+	protected static final Logger logger = Logger.getLogger(DocumentUploadService.class);
 
 	@POST
 	@Path("/doc/upload/{blobId}")
@@ -157,4 +159,27 @@ public class DocumentUploadService {
 			ret = blob.getBlobName();
 		return ret;
 	}
+	
+
+	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/doc/getContentType/{blobId}")
+	public String getMimeType(@PathParam("blobId") Long blobId) {
+		String mimeType="";
+		try {
+			logger.info("in try block of getMimeTpe() of service /doc/getContentType/{blobId}");
+			IpBlob blob = ipBlobDAO.findById(blobId);
+			if (blob != null)
+				mimeType=blob.getBlobContentType();
+			logger.info("blob type in service : "+mimeType);
+			return mimeType;
+			
+		} catch (Exception e) {
+			logger.error("Error in contetype service :"+e.getMessage());
+			e.printStackTrace();
+			return mimeType;
+		}
+	}
+
 }

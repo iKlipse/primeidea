@@ -18,6 +18,9 @@ public class SolutionMessage {
 	private String crtByName;
 	private boolean solImgAvl;
 	private String solImg;
+    private String contentType;
+	private String fileName;
+	
 
 	public Long getId() {
 		return id;
@@ -113,6 +116,22 @@ public class SolutionMessage {
 
 	public void setSolImg(String solImg) {
 		this.solImg = solImg;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 }

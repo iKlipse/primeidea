@@ -91,6 +91,7 @@ public class RewardsController implements Serializable {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
+		
 		List providers = new ArrayList();
 		providers.add(new JacksonJaxbJsonProvider(new CustomObjectMapper(), JacksonJaxbJsonProvider.DEFAULT_ANNOTATIONS));
 		WebClient client = WebClient.create(url, providers);
@@ -108,6 +109,7 @@ public class RewardsController implements Serializable {
 			rewardsBean = new RewardsBean();
 			return "rwcr";
 		} catch (Exception e) {
+			logger.error("Error while displaying show create reward form : " + e.getMessage());
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create reward request", "System error occurred, cannot perform create reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -301,8 +303,11 @@ public class RewardsController implements Serializable {
 					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 					if (attachment != null) {
 						fileAvail = false;
+						WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+						getBlobTypeClient.close();
 						rewardsBean.setRwFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
 					} else {
 						fileAvail = true;
 						fileContent = null;

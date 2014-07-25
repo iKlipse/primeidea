@@ -107,6 +107,18 @@
 			</map>
 		</property>
 	</bean>
+	<bean id="UserNotificationsJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="za.co.idea.ip.jobs.UserNotificationsJob" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="ipChallengeDAO" value-ref="IpChallengeDAO" />
+				<entry key="ipIdeaDAO" value-ref="IpIdeaDAO" />
+				<entry key="ipSolutionDAO" value-ref="IpSolutionDAO" />
+				<entry key="ipUserDAO" value-ref="IpUserDAO" />
+				<entry key="sender" value-ref="mailSender" />
+			</map>
+		</property>
+	</bean>	
 	<bean id="ChallengeExpiryJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="ChallengeExpiryJob" />
 		<property name="cronExpression" value="0 0/10 * * * ?" />
@@ -115,11 +127,16 @@
 		<property name="jobDetail" ref="NotificationEmailJob" />
 		<property name="cronExpression" value="0 0/10 * * * ?" />
 	</bean>
+	<bean id="UserNotificationsJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="UserNotificationsJob" />
+		<property name="cronExpression" value="0 0 12 ? * TUE *" />
+	</bean>	
 	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
 				<ref bean="ChallengeExpiryJobTrigger" />
 				<ref bean="NotificationEmailJobTrigger" />
+				<ref bean="UserNotificationsJobTrigger" />				
 			</list>
 		</property>
 	</bean>
@@ -129,7 +146,8 @@
 				<prop key="mail.smtp.host">vpbrjhbpexc02.corp.primedia.co.za</prop>
 				<prop key="mail.smtp.port">25</prop>
 				<prop key="mail.smtp.auth">false</prop>
-				<prop key="mail.smtp.starttls.enable">false</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.debug">true</prop>
 			</props>
 		</property>
 	</bean>

@@ -1,51 +1,49 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<p:panel id="ctrCrtIdea">
-		<f:facet name="header">Create Idea</f:facet>
-		<p:panelGrid columns="2" id="pnlCrtIdea">
-			<p:column>
-				<p:outputLabel id="lblITitle" value="Title : " />
+	<p:growl id="grlMsg" showDetail="true" showSummary="false" />
+	<p:panelGrid columns="2" id="pnlCrtIdea" style="width:100% !important">
+		<p:column>
+			<p:outputLabel id="lblCrtITitle" value="Title : " />
+		</p:column>
+		<p:column>
+			<p:inputText style="width: 100%" autocomplete="false" id="txtCrtITitle" value="#{randomIdeaController.ideaBean.ideaTitle}">
+				<p:ajax listener="#{randomIdeaController.checkTitleAvailability}" event="blur" update="grlMsg" />
+			</p:inputText>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblCrtIDesc" value="Description : " />
+		</p:column>
+		<p:column>
+			<p:editor style="width: 100%" id="txtCrtIDesc" value="#{randomIdeaController.ideaBean.ideaDesc}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblCrtITag" value="Keywords to Describe Your Idea : " />
+		</p:column>
+		<p:column>
+			<p:inputText style="width: 100%" autocomplete="false" id="txtCrtITag" value="#{randomIdeaController.ideaBean.ideaTag}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblCrtOpen" value="Save as Open : " />
+		</p:column>
+		<p:column>
+			<p:selectBooleanButton id="sbCrtIOpen" value="#{randomIdeaController.saveAsOpen}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblCrtIUpload" value="Upload File : " />
+		</p:column>
+		<p:column>
+			<p:fileUpload style="width: 100%" id="fuCrtIUpload" fileUploadListener="#{randomIdeaController.fileUploadHandle}" multiple="false" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblCrtFuncGrps" value="Idea Groups" />
+		</p:column>
+		<p:column>
+			<p:pickList style="width: 100%" id="plCrtGroupPick" converter="groupConverter" value="#{randomIdeaController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" />
+		</p:column>
+		<p:row>
+			<p:column colspan="2">
+				<p:commandButton id="btnCrtCrtISave" value="Save" ajax="false" actionListener="#{randomIdeaController.saveIdea}" />
+				<p:commandButton id="btnCrtCancel" value="Return To View" ajax="false" actionListener="#{randomIdeaController.showViewIdeas}" />
 			</p:column>
-			<p:column>
-				<p:inputText style="width: 100%" autocomplete="false" id="txtITitle" value="#{randomIdeaController.ideaBean.ideaTitle}">
-					<p:ajax listener="#{randomIdeaController.checkTitleAvailability}" event="blur" update="grlMsg" />
-				</p:inputText>
-			</p:column>
-			<p:column>
-				<p:outputLabel id="lblIDesc" value="Description : " />
-			</p:column>
-			<p:column>
-				<p:editor style="width: 100%" id="txtIDesc" value="#{randomIdeaController.ideaBean.ideaDesc}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
-			</p:column>
-			<p:column>
-				<p:outputLabel id="lblITag" value="Keywords to Describe Your Idea : " />
-			</p:column>
-			<p:column>
-				<p:inputText style="width: 100%" autocomplete="false" id="txtITag" value="#{randomIdeaController.ideaBean.ideaTag}" />
-			</p:column>
-			<p:column>
-				<p:outputLabel id="lblOpen" value="Save as Open : " />
-			</p:column>
-			<p:column>
-				<p:selectBooleanButton id="sbOpen" value="#{randomIdeaController.saveAsOpen}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
-			</p:column>
-			<p:column>
-				<p:outputLabel id="lblIUpload" value="Upload File : " />
-			</p:column>
-			<p:column>
-				<p:fileUpload style="width: 100%" id="fuIUpload" fileUploadListener="#{randomIdeaController.fileUploadHandle}" multiple="false" />
-			</p:column>
-			<p:column>
-				<p:outputLabel id="lblFuncGrps" value="Idea Groups" />
-			</p:column>
-			<p:column>
-				<p:pickList style="width: 100%" id="plGroupPick" converter="groupConverter" value="#{randomIdeaController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" />
-			</p:column>
-			<p:row>
-				<p:column colspan="2">
-					<p:commandButton id="btnCrtISave" value="Save" ajax="false" actionListener="#{randomIdeaController.saveIdea}" />
-					<p:commandButton id="btnCancel" value="Return To View" ajax="false" actionListener="#{randomIdeaController.showViewIdeas}" />
-				</p:column>
-			</p:row>
-		</p:panelGrid>
-	</p:panel>
+		</p:row>
+	</p:panelGrid>
 </ui:composition>

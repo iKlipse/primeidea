@@ -2,6 +2,9 @@ package za.co.idea.ip.portal.bean;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
+import org.primefaces.model.StreamedContent;
 
 public class SolutionBean implements Serializable {
 
@@ -20,6 +23,13 @@ public class SolutionBean implements Serializable {
 	private String fileName;
 	private String crtByName;
 	private boolean taggable;
+	private boolean solImgAvl;
+	private String solImg;
+	private StreamedContent solStream;
+	private String solLikeCnt;
+	private String solCommentCnt;
+	private String buildOnCnt;
+	private List<TagBean> solComments;
 
 	public Long getId() {
 		return id;
@@ -131,6 +141,62 @@ public class SolutionBean implements Serializable {
 
 	public void setTaggable(boolean taggable) {
 		this.taggable = taggable;
+	}
+
+	public boolean isSolImgAvl() {
+		return solImgAvl;
+	}
+
+	public String getSolLikeCnt() {
+		return solLikeCnt;
+	}
+
+	public void setSolLikeCnt(String solLikeCnt) {
+		this.solLikeCnt = solLikeCnt;
+	}
+
+	public String getSolCommentCnt() {
+		return solCommentCnt;
+	}
+
+	public void setSolCommentCnt(String solCommentCnt) {
+		this.solCommentCnt = solCommentCnt;
+	}
+
+	public void setSolImgAvl(boolean solImgAvl) {
+		this.solImgAvl = solImgAvl;
+	}
+
+	public String getSolImg() {
+		return solImg;
+	}
+
+	public void setSolImg(String solImg) {
+		this.solImg = solImg;
+	}
+
+	public StreamedContent getSolStream() {
+		return solStream;
+	}
+
+	public void setSolStream(StreamedContent solStream) {
+		this.solStream = solStream;
+	}
+
+	public String getBuildOnCnt() {
+		return buildOnCnt;
+	}
+
+	public void setBuildOnCnt(String buildOnCnt) {
+		this.buildOnCnt = buildOnCnt;
+	}
+
+	public List<TagBean> getSolComments() {
+		return solComments;
+	}
+
+	public void setSolComments(List<TagBean> solComments) {
+		this.solComments = solComments;
 	}
 
 }
