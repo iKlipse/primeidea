@@ -1,2 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<PROCESS model-entity="JSFProcess"/>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:" SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::0" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="chale::#views#challenge#container#editContainer.xhtml"
+    NAME="output" PATH="/views/challenge/container/editContainer.xhtml"
+    TARGET="rules:#views#challenge#container#editContainer.xhtml"
+    TITLE="chale" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="chaleo::#views#challenge#container#editOpenContainer.xhtml"
+    NAME="output1"
+    PATH="/views/challenge/container/editOpenContainer.xhtml"
+    TARGET="rules:#views#challenge#container#editOpenContainer.xhtml"
+    TITLE="chaleo" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="chals::#views#challenge#container#summaryContainer.xhtml"
+    NAME="output2"
+    PATH="/views/challenge/container/summaryContainer.xhtml"
+    TARGET="rules:#views#challenge#container#summaryContainer.xhtml"
+    TITLE="chals" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="chalso::#views#challenge#container#summaryOpenContainer.xhtml"
+    NAME="output3"
+    PATH="/views/challenge/container/summaryOpenContainer.xhtml"
+    TARGET="rules:#views#challenge#container#summaryOpenContainer.xhtml"
+    TITLE="chalso" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#views#challenge#container#editOpenContainer.xhtml"
+  PATH="/views/challenge/container/editOpenContainer.xhtml"
+  SHAPE="256,177,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#views#challenge#container#editContainer.xhtml"
+  PATH="/views/challenge/container/editContainer.xhtml"
+  SHAPE="256,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#views#challenge#container#summaryContainer.xhtml"
+  PATH="/views/challenge/container/summaryContainer.xhtml"
+  SHAPE="288,353,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#views#challenge#container#summaryOpenContainer.xhtml"
+  PATH="/views/challenge/container/summaryOpenContainer.xhtml"
+  SHAPE="288,465,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>

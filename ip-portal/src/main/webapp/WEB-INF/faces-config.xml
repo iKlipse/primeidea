@@ -1,20 +1,36 @@
 <?xml version="1.0"?>
-<faces-config version="2.1" xmlns="http://java.sun.com/xml/ns/javaee"
- xmlns:xi="http://www.w3.org/2001/XInclude"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
- <converter>
-  <converter-id>userConverter</converter-id>
-  <converter-class>za.co.idea.ip.portal.util.UserBeanConverter</converter-class>
- </converter>
- <converter>
-  <converter-id>groupConverter</converter-id>
-  <converter-class>za.co.idea.ip.portal.util.GroupBeanConverter</converter-class>
- </converter>
- <application>
-  <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
- </application>
- <lifecycle>
-  <phase-listener>com.liferay.faces.util.lifecycle.DebugPhaseListener</phase-listener>
-  <phase-listener>com.liferay.faces.util.lifecycle.ViewScopePhaseListener</phase-listener>
- </lifecycle>
+<faces-config version="2.1" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>chale</from-outcome>
+			<to-view-id>/views/challenge/container/editContainer.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>chaleo</from-outcome>
+			<to-view-id>/views/challenge/container/editOpenContainer.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>chals</from-outcome>
+			<to-view-id>/views/challenge/container/summaryContainer.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>chalso</from-outcome>
+			<to-view-id>/views/challenge/container/summaryOpenContainer.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<converter>
+		<converter-id>userConverter</converter-id>
+		<converter-class>za.co.idea.ip.portal.util.UserBeanConverter</converter-class>
+	</converter>
+	<converter>
+		<converter-id>groupConverter</converter-id>
+		<converter-class>za.co.idea.ip.portal.util.GroupBeanConverter</converter-class>
+	</converter>
+	<application>
+		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+	</application>
+	<lifecycle>
+		<phase-listener>com.liferay.faces.util.lifecycle.DebugPhaseListener</phase-listener>
+		<phase-listener>com.liferay.faces.util.lifecycle.ViewScopePhaseListener</phase-listener>
+	</lifecycle>
 </faces-config>

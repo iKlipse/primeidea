@@ -4,28 +4,28 @@
 	<h:head />
 	<h:body>
 		<h:form id="frmChalCtrlr" enctype="multipart/form-data">
-			<p:remoteCommand actionListener="#{challengeController.initializePage}" name="onload" autoRun="true" update="tbvChallenges" />
-			<p:tabView id="tbvChallenges" widgetVar="tbvChallenges" dynamic="true" activeIndex="#{challengeController.activeIndex}">
-				<p:ajax event="tabChange" listener="#{challengeController.onTabChange}" />
-				<p:tab id="tbVwChallenges" title="View Challenges">
-					<p:panel id="ctrVwChallenges" style="width: 100% !important">
-						<f:facet name="header">View Challenges</f:facet>
-						<ui:include src="/views/challenge/view.xhtml" />
-					</p:panel>
-				</p:tab>
-				<p:tab id="tbVwPChallenges" title="Published Challenges">
-					<p:panel id="ctrVwPChallenges" style="width: 100% !important">
-						<f:facet name="header">Published Challenges</f:facet>
-						<ui:include src="/views/challenge/viewOpen.xhtml" />
-					</p:panel>
-				</p:tab>
-				<p:tab id="tbCrtChallenge" title="Create Challenge">
-					<p:panel id="ctrCrtChallenge" style="width: 100% !important">
-						<f:facet name="header">Create Challenge</f:facet>
-						<ui:include src="/views/challenge/create.xhtml" />
-					</p:panel>
-				</p:tab>
-			</p:tabView>
+			<p:remoteCommand actionListener="#{challengeController.showPublishedChallenges}" name="onload" autoRun="true" update="pnlChalDet" />
+			<p:panel id="pnlChalMenu" style="border: 0px !important">
+				<p:commandLink value="Published Challenges" actionListener="#{challengeController.showPublishedChallenges}" update="pnlChalDet" />
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="View Challenges" actionListener="#{challengeController.showViewChallenges}" update="pnlChalDet" />
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="Create Challenge" actionListener="#{challengeController.showCreateChallenges}" update="pnlChalDet" />
+			</p:panel>
+			<p:panel id="pnlChalDet" style="border: 0px !important">
+				<p:panel id="ctrVwPChallenges" style="width: 100% !important" rendered="#{challengeController.showPubChal}">
+					<f:facet name="header">Published Challenges</f:facet>
+					<ui:include src="/views/challenge/viewOpen.xhtml" />
+				</p:panel>
+				<p:panel id="ctrVwChallenges" style="width: 100% !important" rendered="#{challengeController.showViewChal}">
+					<f:facet name="header">View Challenges</f:facet>
+					<ui:include src="/views/challenge/view.xhtml" />
+				</p:panel>
+				<p:panel id="ctrCrtChallenge" style="width: 100% !important" rendered="#{challengeController.showCrtChal}">
+					<f:facet name="header">Create Challenge</f:facet>
+					<ui:include src="/views/challenge/create.xhtml" />
+				</p:panel>
+			</p:panel>
 		</h:form>
 	</h:body>
 </f:view>

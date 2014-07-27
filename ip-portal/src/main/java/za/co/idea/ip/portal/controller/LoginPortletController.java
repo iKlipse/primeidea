@@ -48,7 +48,7 @@ public class LoginPortletController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			} else {
 				PortletRequest request = LiferayFacesContext.getInstance().getPortletRequest();
-				String url = new URL(request.getScheme(), request.getServerName(), request.getServerPort(), "/web/ip/landing-page").toString();
+				String url = new URL(request.getScheme(), request.getServerName(), request.getServerPort(), "/web/ip/landing").toString();
 				FacesContext.getCurrentInstance().getExternalContext().redirect(url);
 			}
 		} catch (Exception e) {

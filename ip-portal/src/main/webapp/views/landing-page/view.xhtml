@@ -6,28 +6,28 @@
 	</h:head>
 	<h:body>
 		<h:form id="frmHome" enctype="multipart/form-data">
-			<p:remoteCommand actionListener="#{landingPageController.initializePage}" name="onload" autoRun="true" update="tbvLanding" />
-			<p:tabView id="tbvLanding" widgetVar="tbvLanding" dynamic="true">
-				<p:ajax event="tabChange" listener="#{landingPageController.onTabChange}" />
-				<p:tab id="tbMyIdeas" title="My Ideas">
-					<p:panel id="ctrMyIdeas" style="width: 100% !important">
-						<f:facet name="header">My Ideas</f:facet>
-						<ui:include src="/views/landing-page/ideas.xhtml" />
-					</p:panel>
-				</p:tab>
-				<p:tab id="tbMyChallenges" title="My Challenges">
-					<p:panel id="ctrMyChallenges" style="width: 100% !important">
-						<f:facet name="header">My Challenges</f:facet>
-						<ui:include src="/views/landing-page/challenges.xhtml" />
-					</p:panel>
-				</p:tab>
-				<p:tab id="tbMySolutions" title="My Solutions">
-					<p:panel id="ctrMySolutions" style="width: 100% !important">
-						<f:facet name="header">My Solutions</f:facet>
-						<ui:include src="/views/landing-page/solutions.xhtml" />
-					</p:panel>
-				</p:tab>
-			</p:tabView>
+			<p:remoteCommand actionListener="#{landingPageController.initializePage}" name="onload" autoRun="true" update="pnlLPDet" />
+			<p:panel id="pnlLPMenu" style="border: 0px !important">
+				<p:commandLink value="My Ideas" actionListener="#{landingPageController.changeIdea}" update="pnlLPDet" />
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="My Challenges" actionListener="#{landingPageController.changeChallenge}" update="pnlLPDet" />
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="My Solutions" actionListener="#{landingPageController.changeSolution}" update="pnlLPDet" />
+			</p:panel>
+			<p:panel id="pnlLPDet" style="border: 0px !important">
+				<p:panel id="ctrMyIdeas" style="width: 100% !important" rendered="#{landingPageController.showIdeas}">
+					<f:facet name="header">My Ideas</f:facet>
+					<ui:include src="/views/landing-page/ideas.xhtml" />
+				</p:panel>
+				<p:panel id="ctrMyChallenges" style="width: 100% !important" rendered="#{landingPageController.showChals}">
+					<f:facet name="header">My Challenges</f:facet>
+					<ui:include src="/views/landing-page/challenges.xhtml" />
+				</p:panel>
+				<p:panel id="ctrMySolutions" style="width: 100% !important" rendered="#{landingPageController.showSols}">
+					<f:facet name="header">My Solutions</f:facet>
+					<ui:include src="/views/landing-page/solutions.xhtml" />
+				</p:panel>
+			</p:panel>
 		</h:form>
 	</h:body>
 </f:view>

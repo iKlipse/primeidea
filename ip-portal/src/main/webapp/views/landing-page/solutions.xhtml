@@ -2,21 +2,21 @@
 	<p:dataGrid id="dtViewSolutions" value="#{landingPageController.viewSolutions}" style="width: 100% !important" var="solution" paginator="true" paginatorPosition="bottom" rows="5" columns="1" emptyMessage="No Solutions Found">
 		<p:panel style="width: 100% !important">
 			<f:facet name="header" style="align-text: left !important">
-				<p:selectOneMenu value="#{solution.crtdById}">
-					<f:selectItems value="#{landingPageController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
+				<p:selectOneMenu value="#{solution.crtdById}" disabled="true" >
+					<f:selectItems value="#{landingPageController.admUsers}" var="a" itemLabel="#{a.scName} - #{a.fName} - #{a.lName}" itemValue="#{a.uId}"/>
 				</p:selectOneMenu>
 			</f:facet>
-			<f:facet name="actions" style="float: right !important;">
-				<p:commandButton value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{landingPageController.showEditSolution}">
-					<f:setPropertyActionListener value="#{solution}" target="#{landingPageController.solutionBean}" />
-				</p:commandButton>
-				<p:commandButton value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{landingPageController.showSummarySolution}">
-					<f:setPropertyActionListener value="#{solution}" target="#{landingPageController.solutionBean}" />
-				</p:commandButton>
+			<f:facet name="options" style="float: right !important;">
+				<p:menu style="vertical-align: center !important">
+					<p:menuitem value="Edit" ajax="false" immediate="true" action="#{landingPageController.showEditSolution}">
+						<f:setPropertyActionListener value="#{solution}" target="#{landingPageController.solutionBean}" />
+					</p:menuitem>
+					<p:menuitem value="Summary" ajax="false" immediate="true" action="#{landingPageController.showSummarySolution}">
+						<f:setPropertyActionListener value="#{solution}" target="#{landingPageController.solutionBean}" />
+					</p:menuitem>
+				</p:menu>
 			</f:facet>
-			<h3>
-				<p:outputLabel value="#{solution.title}" />
-			</h3>
+			<b><p:outputLabel value="#{solution.title}" /></b>
 			<p>
 				<p:outputLabel value="#{solution.desc}" escape="false" />
 			</p>

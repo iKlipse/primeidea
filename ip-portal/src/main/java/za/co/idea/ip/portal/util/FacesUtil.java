@@ -19,4 +19,15 @@ public class FacesUtil {
 	public static String getBaseURL(final HttpServletRequest request) throws MalformedURLException {
 		return new URL(request.getScheme(), request.getServerName(), request.getServerPort(), request.getContextPath()).toString();
 	}
+
+	public static boolean lengthValidation(String str, int minLimit, int maxLimit) {
+		int intLength = str.length();
+		if (intLength >= minLimit && intLength <= maxLimit) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
 }

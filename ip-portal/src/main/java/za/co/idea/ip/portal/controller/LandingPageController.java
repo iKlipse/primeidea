@@ -10,14 +10,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.portlet.Event;
-import javax.portlet.PortletRequest;
 import javax.portlet.faces.BridgeEventHandler;
 import javax.portlet.faces.event.EventNavigationResult;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.jaxrs.client.WebClient;
-import org.primefaces.component.tabview.Tab;
-import org.primefaces.event.TabChangeEvent;
 
 import za.co.idea.ip.portal.bean.ChallengeBean;
 import za.co.idea.ip.portal.bean.IdeaBean;
@@ -27,13 +24,8 @@ import za.co.idea.ip.portal.bean.UserBean;
 import za.co.idea.ip.portal.util.FacesContextHelper;
 import za.co.idea.ip.portal.util.RESTServiceHelper;
 import za.co.idea.ip.ws.bean.ChallengeMessage;
-import za.co.idea.ip.ws.bean.IdeaMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.SolutionMessage;
-import za.co.idea.ip.ws.bean.UserMessage;
-
-import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.model.User;
 
 @ManagedBean(name = "landingPageController")
 @SessionScoped
@@ -54,16 +46,23 @@ public class LandingPageController implements Serializable {
 	private List<SolutionBean> viewSolutions;
 	private SolutionBean solutionBean;
 	private Long userId;
+	private boolean showIdeas;
+	private boolean showChals;
+	private boolean showSols;
 
 	public void initializePage() {
 		try {
-			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-			User user = (User) request.getAttribute(WebKeys.USER);
-			WebClient client = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/verify/" + user.getScreenName());
-			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
-			userId = message.getuId();
+			// PortletRequest request = (PortletRequest)
+			// FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			// User user = (User) request.getAttribute(WebKeys.USER);
+			// WebClient client =
+			// RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/verify/"
+			// + user.getScreenName());
+			// UserMessage message =
+			// client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+			// userId = message.getuId();
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			viewIdeas = fetchAllIdeasByUser();
+			viewIdeas = RESTServiceHelper.fetchAllIdeasByUser();
 			ideaCats = fetchAllIdeaCat();
 			ideaStatuses = fetchAllIdeaStatuses();
 			viewChallenges = fetchAllChallengesByUser();
@@ -72,6 +71,9 @@ public class LandingPageController implements Serializable {
 			viewSolutions = fetchAllSolutionsByUser();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
+			showIdeas = true;
+			showChals = false;
+			showSols = false;
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
@@ -79,41 +81,51 @@ public class LandingPageController implements Serializable {
 		}
 	}
 
-	public void onTabChange(TabChangeEvent event) {
-		Tab tab = event.getTab();
-		if (tab.getId().equalsIgnoreCase("tbMyIdeas")) {
-			try {
-				viewIdeas = fetchAllIdeasByUser();
-				ideaCats = fetchAllIdeaCat();
-				admUsers = RESTServiceHelper.fetchAllUsers();
-				ideaStatuses = fetchAllIdeaStatuses();
-			} catch (Exception e) {
-				e.printStackTrace();
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			}
-		} else if (tab.getId().equalsIgnoreCase("tbMyChallenges")) {
-			try {
-				viewChallenges = fetchAllChallengesByUser();
-				challengeCats = fetchAllChallengeCat();
-				admUsers = RESTServiceHelper.fetchAllUsers();
-				challengeStatuses = fetchAllChallengeStatuses();
-			} catch (Exception e) {
-				e.printStackTrace();
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			}
-		} else if (tab.getId().equalsIgnoreCase("tbMySolutions")) {
-			try {
-				viewSolutions = fetchAllSolutionsByUser();
-				solutionCats = fetchAllSolutionCat();
-				admUsers = RESTServiceHelper.fetchAllUsers();
-				solutionStatuses = fetchAllSolutionStatuses();
-			} catch (Exception e) {
-				e.printStackTrace();
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			}
+	public void changeIdea() {
+		try {
+			viewIdeas = RESTServiceHelper.fetchAllIdeasByUser();
+			ideaCats = fetchAllIdeaCat();
+			admUsers = RESTServiceHelper.fetchAllUsers();
+			ideaStatuses = fetchAllIdeaStatuses();
+			showIdeas = true;
+			showChals = false;
+			showSols = false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+	}
+
+	public void changeChallenge() {
+		try {
+			viewChallenges = fetchAllChallengesByUser();
+			challengeCats = fetchAllChallengeCat();
+			admUsers = RESTServiceHelper.fetchAllUsers();
+			challengeStatuses = fetchAllChallengeStatuses();
+			showIdeas = false;
+			showChals = true;
+			showSols = false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+	}
+
+	public void changeSolution() {
+		try {
+			viewSolutions = fetchAllSolutionsByUser();
+			solutionCats = fetchAllSolutionCat();
+			admUsers = RESTServiceHelper.fetchAllUsers();
+			solutionStatuses = fetchAllSolutionStatuses();
+			showIdeas = false;
+			showChals = false;
+			showSols = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
 	}
 
@@ -139,30 +151,6 @@ public class LandingPageController implements Serializable {
 
 	public void showSummarySolution() {
 
-	}
-
-	private List<IdeaBean> fetchAllIdeasByUser() {
-		List<IdeaBean> ret = new ArrayList<IdeaBean>();
-		// WebClient fetchIdeaClient =
-		// RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/"
-		// + userId);
-		WebClient fetchIdeaClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/0");
-		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
-		fetchIdeaClient.close();
-		for (IdeaMessage ideaMessage : ideas) {
-			IdeaBean bean = new IdeaBean();
-			bean.setCrtdById(ideaMessage.getCrtdById());
-			bean.setCrtdDate(ideaMessage.getCrtdDate());
-			bean.setIdeaDesc(ideaMessage.getIdeaDesc());
-			bean.setIdeaTag(ideaMessage.getIdeaTag());
-			bean.setIdeaId(ideaMessage.getIdeaId());
-			bean.setIdeaTitle(ideaMessage.getIdeaTitle());
-			bean.setSelCatId(ideaMessage.getSelCatId());
-			bean.setSetStatusId(ideaMessage.getSetStatusId());
-			bean.setGroupIdList(FacesContextHelper.getIdsFromArray(ideaMessage.getGroupIdList()));
-			ret.add(bean);
-		}
-		return ret;
 	}
 
 	private List<ChallengeBean> fetchAllChallengesByUser() {
@@ -437,6 +425,30 @@ public class LandingPageController implements Serializable {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public boolean isShowIdeas() {
+		return showIdeas;
+	}
+
+	public void setShowIdeas(boolean showIdeas) {
+		this.showIdeas = showIdeas;
+	}
+
+	public boolean isShowChals() {
+		return showChals;
+	}
+
+	public void setShowChals(boolean showChals) {
+		this.showChals = showChals;
+	}
+
+	public boolean isShowSols() {
+		return showSols;
+	}
+
+	public void setShowSols(boolean showSols) {
+		this.showSols = showSols;
 	}
 
 	public class LoginBridgeEventHandler implements BridgeEventHandler {

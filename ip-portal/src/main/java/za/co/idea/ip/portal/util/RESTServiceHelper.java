@@ -10,7 +10,13 @@ import javax.ws.rs.core.MediaType;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 
+import za.co.idea.ip.portal.bean.GroupBean;
+import za.co.idea.ip.portal.bean.IdeaBean;
+import za.co.idea.ip.portal.bean.ListSelectorBean;
 import za.co.idea.ip.portal.bean.UserBean;
+import za.co.idea.ip.ws.bean.GroupMessage;
+import za.co.idea.ip.ws.bean.IdeaMessage;
+import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
 
@@ -22,6 +28,7 @@ public class RESTServiceHelper {
 		return client;
 	}
 
+	// Users Section
 	public static List<UserBean> fetchAllUsers() {
 		List<UserBean> ret = new ArrayList<UserBean>();
 		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/list/sort/pg");
@@ -46,6 +53,211 @@ public class RESTServiceHelper {
 			bean.setuId(userMessage.getuId());
 			ret.add(bean);
 		}
+		return ret;
+	}
+
+	// Group Section
+	public static List<GroupBean> fetchAllGroups() {
+		List<GroupBean> ret = new ArrayList<GroupBean>();
+		WebClient viewGroupsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/list");
+		Collection<? extends GroupMessage> groups = new ArrayList<GroupMessage>(viewGroupsClient.accept(MediaType.APPLICATION_JSON).getCollection(GroupMessage.class));
+		viewGroupsClient.close();
+		for (GroupMessage groupMessage : groups) {
+			GroupBean bean = new GroupBean();
+			bean.setgId(groupMessage.getgId());
+			bean.setGeMail(groupMessage.getGeMail());
+			bean.setgName(groupMessage.getgName());
+			bean.setIsActive(groupMessage.getIsActive());
+			bean.setSelAdmUser(groupMessage.getAdmUserId());
+			bean.setSelPGrp(groupMessage.getpGrpId());
+			bean.getUserIdList().clear();
+			for (Long id : groupMessage.getUserIdList())
+				if (id != null)
+					bean.getUserIdList().add(id);
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static GroupBean getGroupById(Long pGrpId) {
+		GroupBean bean = new GroupBean();
+		WebClient groupByIdClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/get/" + pGrpId);
+		GroupMessage groupMessage = groupByIdClient.accept(MediaType.APPLICATION_JSON).get(GroupMessage.class);
+		groupByIdClient.close();
+		bean.setgId(groupMessage.getgId());
+		bean.setGeMail(groupMessage.getGeMail());
+		bean.setgName(groupMessage.getgName());
+		bean.setIsActive(groupMessage.getIsActive());
+		bean.setSelAdmUser(groupMessage.getAdmUserId());
+		bean.setSelPGrp(groupMessage.getpGrpId());
+		return bean;
+	}
+
+	// Ideas Section
+	public List<IdeaBean> fetchAllIdeas() {
+		List<IdeaBean> ret = new ArrayList<IdeaBean>();
+		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list");
+		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
+		fetchIdeaClient.close();
+		for (IdeaMessage ideaMessage : ideas) {
+			IdeaBean bean = new IdeaBean();
+			bean.setCrtdById(ideaMessage.getCrtdById());
+			bean.setCrtdDate(ideaMessage.getCrtdDate());
+			bean.setIdeaDesc(ideaMessage.getIdeaDesc());
+			bean.setIdeaTag(ideaMessage.getIdeaTag());
+			bean.setIdeaId(ideaMessage.getIdeaId());
+			bean.setIdeaTitle(ideaMessage.getIdeaTitle());
+			bean.setSelCatId(ideaMessage.getSelCatId());
+			bean.setSetStatusId(ideaMessage.getSetStatusId());
+			bean.setGroupIdList(getIdsFromArray(ideaMessage.getGroupIdList()));
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<IdeaBean> fetchAllIdeasByUser() {
+		List<IdeaBean> ret = new ArrayList<IdeaBean>();
+		// WebClient fetchIdeaClient =
+		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/"
+		// + ((Long)
+		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/0");
+		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
+		fetchIdeaClient.close();
+		for (IdeaMessage ideaMessage : ideas) {
+			IdeaBean bean = new IdeaBean();
+			bean.setCrtdById(ideaMessage.getCrtdById());
+			bean.setCrtdDate(ideaMessage.getCrtdDate());
+			bean.setIdeaDesc(ideaMessage.getIdeaDesc());
+			bean.setIdeaTag(ideaMessage.getIdeaTag());
+			bean.setIdeaId(ideaMessage.getIdeaId());
+			bean.setIdeaTitle(ideaMessage.getIdeaTitle());
+			bean.setSelCatId(ideaMessage.getSelCatId());
+			bean.setSetStatusId(ideaMessage.getSetStatusId());
+			bean.setGroupIdList(getIdsFromArray(ideaMessage.getGroupIdList()));
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<IdeaBean> fetchAllIdeasCreatedByUser() {
+		List<IdeaBean> ret = new ArrayList<IdeaBean>();
+		// WebClient fetchIdeaClient =
+		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/created/"
+		// + ((Long)
+		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/created/0");
+		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
+		fetchIdeaClient.close();
+		for (IdeaMessage ideaMessage : ideas) {
+			IdeaBean bean = new IdeaBean();
+			bean.setCrtdById(ideaMessage.getCrtdById());
+			bean.setCrtdDate(ideaMessage.getCrtdDate());
+			bean.setIdeaDesc(ideaMessage.getIdeaDesc());
+			bean.setIdeaTag(ideaMessage.getIdeaTag());
+			bean.setIdeaId(ideaMessage.getIdeaId());
+			bean.setIdeaTitle(ideaMessage.getIdeaTitle());
+			bean.setSelCatId(ideaMessage.getSelCatId());
+			bean.setSetStatusId(ideaMessage.getSetStatusId());
+			bean.setGroupIdList(getIdsFromArray(ideaMessage.getGroupIdList()));
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<IdeaBean> fetchAllIdeasByStatus(Integer status) {
+		List<IdeaBean> ret = new ArrayList<IdeaBean>();
+		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/status/" + status);
+		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
+		fetchIdeaClient.close();
+		for (IdeaMessage ideaMessage : ideas) {
+			IdeaBean bean = new IdeaBean();
+			bean.setCrtdById(ideaMessage.getCrtdById());
+			bean.setCrtdDate(ideaMessage.getCrtdDate());
+			bean.setIdeaDesc(ideaMessage.getIdeaDesc());
+			bean.setIdeaTag(ideaMessage.getIdeaTag());
+			bean.setIdeaId(ideaMessage.getIdeaId());
+			bean.setIdeaTitle(ideaMessage.getIdeaTitle());
+			bean.setSelCatId(ideaMessage.getSelCatId());
+			bean.setSetStatusId(ideaMessage.getSetStatusId());
+			bean.setGroupIdList(getIdsFromArray(ideaMessage.getGroupIdList()));
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<IdeaBean> fetchAllIdeasByStatusIdUserId(Integer status) {
+		List<IdeaBean> ret = new ArrayList<IdeaBean>();
+		// WebClient fetchIdeaClient =
+		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/status/"
+		// + status + "/user/" + ((Long)
+		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/status/" + status + "/user/0");
+		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
+		fetchIdeaClient.close();
+		for (IdeaMessage ideaMessage : ideas) {
+			IdeaBean bean = new IdeaBean();
+			bean.setCrtdById(ideaMessage.getCrtdById());
+			bean.setCrtdDate(ideaMessage.getCrtdDate());
+			bean.setIdeaDesc(ideaMessage.getIdeaDesc());
+			bean.setIdeaTag(ideaMessage.getIdeaTag());
+			bean.setIdeaId(ideaMessage.getIdeaId());
+			bean.setIdeaTitle(ideaMessage.getIdeaTitle());
+			bean.setSelCatId(ideaMessage.getSelCatId());
+			bean.setSetStatusId(ideaMessage.getSetStatusId());
+			bean.setGroupIdList(getIdsFromArray(ideaMessage.getGroupIdList()));
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<ListSelectorBean> fetchAllIdeaStatuses() {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		WebClient viewIdeaSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/status/list");
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewIdeaSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewIdeaSelectClient.close();
+		for (MetaDataMessage metaDataMessage : md) {
+			ListSelectorBean bean = new ListSelectorBean();
+			bean.setId(metaDataMessage.getId());
+			bean.setDesc(metaDataMessage.getDesc());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<ListSelectorBean> fetchNextIdeaStatuses(Integer status) {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		WebClient viewIdeaSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/status/list/" + status);
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewIdeaSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewIdeaSelectClient.close();
+		for (MetaDataMessage metaDataMessage : md) {
+			ListSelectorBean bean = new ListSelectorBean();
+			bean.setId(metaDataMessage.getId());
+			bean.setDesc(metaDataMessage.getDesc());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<ListSelectorBean> fetchAllIdeaCat() {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		WebClient viewIdeaSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/cat/list");
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewIdeaSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewIdeaSelectClient.close();
+		for (MetaDataMessage metaDataMessage : md) {
+			ListSelectorBean bean = new ListSelectorBean();
+			bean.setId(metaDataMessage.getId());
+			bean.setDesc(metaDataMessage.getDesc());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	private static List<Long> getIdsFromArray(Long[] ae) {
+		List<Long> ret = new ArrayList<Long>();
+		if (ae != null)
+			for (Long id : ae)
+				ret.add(id);
 		return ret;
 	}
 
