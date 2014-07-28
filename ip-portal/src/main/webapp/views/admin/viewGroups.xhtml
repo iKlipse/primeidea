@@ -1,0 +1,52 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">View Groups</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrVWGroup" style="width: 100% !important">
+			<f:facet name="header">
+					View Groups
+				</f:facet>
+			<p:dataTable id="dtViewGroups" value="#{adminBean.viewGroups}" var="grp" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Groups Found" style="width: 100% !important">
+				<p:column filterBy="#{grp.gName}" filterMatchMode="contains" sortBy="#{grp.gName}">
+					<f:facet name="header">Group Name</f:facet>
+					<p:outputLabel id="txtGrpName" value="#{grp.gName}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Group EMail</f:facet>
+					<p:outputLabel id="txtGrpEMail" value="#{grp.geMail}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Parent Group</f:facet>
+					<p:selectOneMenu id="somPGrpId" value="#{grp.selPGrp}" disabled="true">
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+						<f:selectItems value="#{adminBean.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<f:facet name="header">Admin User</f:facet>
+					<p:selectOneMenu id="somAdmUser" value="#{grp.selAdmUser}" disabled="true">
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+						<f:selectItems value="#{adminBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<f:facet name="header">Active</f:facet>
+					<p:selectBooleanButton id="sbbActive" value="#{grp.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" disabled="true" />
+				</p:column>
+				<p:column rendered="#{accessBean.editGroupEnabled}">
+					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminBean.showEditGroup}">
+						<f:setPropertyActionListener value="#{grp}" target="#{adminBean.groupBean}" />
+					</p:commandButton>
+				</p:column>
+				<p:column>
+					<p:commandButton id="summaryButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminBean.showSummaryGroup}">
+						<f:setPropertyActionListener value="#{grp}" target="#{adminBean.groupBean}" />
+					</p:commandButton>
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton id="btnAdd" value="Create Group" ajax="false" action="#{adminBean.showCreateGroup}" rendered="#{accessBean.createGroupEnabled}" />
+					<p:commandButton id="btnCancel" value="Return To Home" ajax="false" action="#{adminBean.redirectHome}" />
+				</f:facet>
+			</p:dataTable>
+		</p:panel>
+	</ui:define>
+</ui:composition>

@@ -1,39 +1,39 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<p:dataTable id="dtViewSolutions" value="#{challengeBean.viewSolutions}" var="solution" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Solutions Found" style="width: 100% !important">
+	<p:dataTable id="dtViewOpenSolutions" value="#{challengeController.viewSolutions}" var="solution" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Solutions Found" style="width: 100% !important">
 		<p:column filterBy="#{solution.title}" filterMatchMode="contains">
 			<f:facet name="header">Title</f:facet>
-			<p:outputLabel id="txtSolutionTitle" value="#{solution.title}" />
+			<p:outputLabel id="txtVwoSolutionTitle" value="#{solution.title}" />
 		</p:column>
 		<p:column>
 			<f:facet name="header">Category</f:facet>
-			<p:selectOneMenu id="somICat" value="#{solution.catId}" disabled="true">
-				<f:selectItems value="#{challengeBean.solutionCats}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
+			<p:selectOneMenu id="somVwoICat" value="#{solution.catId}" disabled="true">
+				<f:selectItems value="#{challengeController.solutionCats}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
 			</p:selectOneMenu>
 		</p:column>
 		<p:column>
 			<f:facet name="header">Status</f:facet>
-			<p:selectOneMenu id="somIStatus" value="#{solution.statusId}" disabled="true">
-				<f:selectItems value="#{challengeBean.solutionStatuses}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
+			<p:selectOneMenu id="somVwoIStatus" value="#{solution.statusId}" disabled="true">
+				<f:selectItems value="#{challengeController.solutionStatuses}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
 			</p:selectOneMenu>
 		</p:column>
 		<p:column>
 			<f:facet name="header">Created By</f:facet>
-			<p:selectOneMenu id="somACrtdBy" value="#{solution.crtdById}" disabled="true">
-				<f:selectItems value="#{challengeBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
+			<p:selectOneMenu id="somVwoACrtdBy" value="#{solution.crtdById}" disabled="true">
+				<f:selectItems value="#{challengeController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
 			</p:selectOneMenu>
 		</p:column>
-		<p:column rendered="#{accessBean.editSolutionEnabled}">
-			<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{challengeBean.showEditOpenSolution}">
-				<f:setPropertyActionListener value="#{solution}" target="#{challengeBean.solutionBean}" />
+		<p:column>
+			<p:commandButton id="viewVwoButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{challengeController.showEditOpenSolution}">
+				<f:setPropertyActionListener value="#{solution}" target="#{challengeController.solutionBean}" />
 			</p:commandButton>
 		</p:column>
 		<p:column>
-			<p:commandButton id="summaryButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{challengeBean.showSummaryOpenSolution}">
-				<f:setPropertyActionListener value="#{solution}" target="#{challengeBean.solutionBean}" />
+			<p:commandButton id="summaryVwoButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{challengeController.showSummaryOpenSolution}">
+				<f:setPropertyActionListener value="#{solution}" target="#{challengeController.solutionBean}" />
 			</p:commandButton>
 		</p:column>
 		<f:facet name="footer">
-			<p:commandButton id="btnCancel" value="Return To Home" ajax="false" action="#{adminBean.redirectHome}" />
+			<p:commandButton id="btnVwoCancel" value="Return To Home" ajax="false" action="#{adminBean.redirectHome}" />
 		</f:facet>
 	</p:dataTable>
 </ui:composition>

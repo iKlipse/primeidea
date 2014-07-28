@@ -1,0 +1,30 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Create Function</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrCrtFunction">
+			<f:facet name="header">
+					Create Function
+				</f:facet>
+			<p:panelGrid id="pnlCrtFunction" columns="2">
+				<p:column>
+					<p:outputLabel id="lblFuncName" value="Function Name" />
+				</p:column>
+				<p:column>
+					<p:inputText style="width: 100%" autocomplete="false" id="txtFuncName" value="#{adminBean.functionBean.funcName}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblFuncGrps" value="Function Groups" />
+				</p:column>
+				<p:column>
+					<p:pickList style="width: 100%" id="plGroupPick" converter="groupConverter" value="#{adminBean.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" />
+				</p:column>
+				<p:row>
+					<p:column colspan="2">
+						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{adminBean.saveFunction}" />
+						<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{adminBean.showViewFunction}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</p:panel>
+	</ui:define>
+</ui:composition>

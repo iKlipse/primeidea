@@ -162,7 +162,7 @@
 		<portlet-class>javax.portlet.faces.GenericFacesPortlet</portlet-class>
 		<init-param>
 			<name>javax.portlet.faces.defaultViewId.view</name>
-			<value>/views/solution/view.xhtml</value>
+			<value>/views/solution/main.xhtml</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
@@ -193,7 +193,7 @@
 		<portlet-class>javax.portlet.faces.GenericFacesPortlet</portlet-class>
 		<init-param>
 			<name>javax.portlet.faces.defaultViewId.view</name>
-			<value>/views/rewards/view.xhtml</value>
+			<value>/views/rewards/main.xhtml</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>

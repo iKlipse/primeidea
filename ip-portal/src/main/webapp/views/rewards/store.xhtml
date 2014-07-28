@@ -1,20 +1,20 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
 	<p:panelGrid style="width: 30%" columns="2" id="pnlViewRewards">
 		<p:column>
-			<p:outputLabel id="lblRCat" value="Category : " />
+			<p:outputLabel id="lblStrRCat" value="Category : " />
 		</p:column>
 		<p:column>
-			<p:selectOneMenu style="width: 100%" id="somRCat" value="#{rewardsBean.selRwCatId}">
+			<p:selectOneMenu style="width: 100%" id="somStrRCat" value="#{rewardsController.selRwCatId}">
 				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-				<f:selectItems value="#{rewardsBean.rewardsCat}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
+				<f:selectItems value="#{rewardsController.rewardsCat}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
 				<f:selectItem itemLabel="All Items" itemValue="0" noSelectionOption="true" />
-				<p:ajax listener="#{rewardsBean.showRewardStoreByCategory}" event="change" update="dgRewards" />
+				<p:ajax listener="#{rewardsController.showRewardStoreByCategory}" event="change" update="dgStrRewards" />
 			</p:selectOneMenu>
 		</p:column>
 	</p:panelGrid>
-	<p:dataGrid id="dgRewards" var="rewards" value="#{rewardsBean.viewRewardsBeans}" columns="3" rows="12" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="9,12,15">
+	<p:dataGrid id="dgStrRewards" var="rewards" value="#{rewardsController.viewRewardsBeans}" columns="3" rows="12" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="9,12,15">
 		<p:panel header="#{rewards.rwTitle}" style="text-align:center">
-			<p:panelGrid id="pnlContent" columns="1">
+			<p:panelGrid id="pnlStrContent" columns="1">
 				<p:column>
 					<p:lightBox>
 						<h:outputLink value="../../resources/images/#{rewards.rwUrl}" title="#{rewards.rwTitle}">
@@ -26,12 +26,12 @@
 					<p:outputLabel value="#{rewards.rwValue}" />
 				</p:column>
 				<p:column>
-					<p:commandLink id="btnWish" ajax="false" action="#{rewardsBean.addToWishlist}">
+					<p:commandLink id="btnStrWish" ajax="false" action="#{rewardsController.addToWishlist}">
 						<p:graphicImage library="images" name="star_highlight.jpg" height="30px" width="30px" rendered="#{rewards.rwTaggable}" />
 						<p:graphicImage library="images" name="star.jpg" height="30px" width="30px" rendered="#{!rewards.rwTaggable}" />
-						<f:setPropertyActionListener value="#{rewards}" target="#{rewardsBean.rewardsBean}" />
+						<f:setPropertyActionListener value="#{rewards}" target="#{rewardsController.rewardsBean}" />
 					</p:commandLink>
-					<p:commandButton id="btnClaim" value="C" ajax="false" action="#{claimBean.showClaimReward}" rendered="#{rewards.rwClaimable}">
+					<p:commandButton id="btnStrClaim" value="C" ajax="false" action="#{claimBean.showClaimReward}" rendered="#{rewards.rwClaimable}">
 						<f:param name="rewardsId" id="rewardsId" value="#{rewards.rwId}" />
 						<f:param name="rwQuantity" id="rwQuantity" value="#{rewards.rwQuantity}" />
 						<f:param name="rwValue" id="rwValue" value="#{rewards.rwValue}" />
@@ -40,7 +40,7 @@
 			</p:panelGrid>
 		</p:panel>
 		<f:facet name="footer">
-			<p:commandButton id="btnCancel" value="Return To Home" ajax="false" action="#{adminBean.redirectHome}" />
+			<p:commandButton id="btnStrCancel" value="Return To Home" ajax="false" action="#{adminBean.redirectHome}" />
 		</f:facet>
 	</p:dataGrid>
 </ui:composition>

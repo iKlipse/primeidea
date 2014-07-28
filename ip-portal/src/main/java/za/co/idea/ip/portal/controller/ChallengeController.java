@@ -13,7 +13,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
+import javax.portlet.PortletContext;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -96,6 +96,9 @@ public class ChallengeController implements Serializable {
 	private boolean showPubChal;
 	private boolean showViewChal;
 	private boolean showCrtChal;
+	private boolean showPubSol;
+	private boolean showViewSol;
+	private boolean showCrtSol;
 	private static final Logger logger = Logger.getLogger(ChallengeController.class);
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -562,6 +565,9 @@ public class ChallengeController implements Serializable {
 			solutionStatuses = fetchAllSolutionStatuses();
 			solutionBean = new SolutionBean();
 			saveAsOpen = false;
+			showPubSol = false;
+			showViewSol = false;
+			showCrtSol = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
@@ -593,7 +599,9 @@ public class ChallengeController implements Serializable {
 			solutionStatuses = fetchAllSolutionStatuses();
 			solutionBean = new SolutionBean();
 			viewSolutions = fetchAllSolutionsByUser();
-			logger.info("solutions in showViewSolutions(): " + viewSolutions);
+			showPubSol = false;
+			showViewSol = true;
+			showCrtSol = false;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Error in view solution: " + e.getMessage());
@@ -610,6 +618,9 @@ public class ChallengeController implements Serializable {
 			solutionStatuses = fetchAllSolutionStatuses();
 			solutionBean = new SolutionBean();
 			viewSolutions = fetchAllSolutionsByStatusIdUserId(2);
+			showPubSol = true;
+			showViewSol = false;
+			showCrtSol = false;
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
@@ -617,22 +628,7 @@ public class ChallengeController implements Serializable {
 		}
 	}
 
-	public void showViewSolutionByUser() {
-		try {
-			admUsers = fetchAllUsers();
-			viewChallenges = fetchAllChallengesByUser();
-			solutionCats = fetchAllSolutionCat();
-			solutionStatuses = fetchAllSolutionStatuses();
-			solutionBean = new SolutionBean();
-			viewSolutions = fetchAllSolutionsCreatedByUser();
-		} catch (Exception e) {
-			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		}
-	}
-
-	public void showEditSolution() {
+	public String showEditSolution() {
 		try {
 			admUsers = fetchAllUsers();
 			viewChallenges = fetchAllChallengesByUser();
@@ -671,21 +667,24 @@ public class ChallengeController implements Serializable {
 					solFileAvail = true;
 					solFileContent = null;
 				}
+				return "sole";
 			} catch (Exception e) {
 				e.printStackTrace();
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				solFileAvail = false;
 				solFileContent = null;
+				return "";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
 		}
 	}
 
-	public void showEditOpenSolution() {
+	public String showEditOpenSolution() {
 		try {
 			admUsers = fetchAllUsers();
 			viewChallenges = fetchAllChallengesByUser();
@@ -718,21 +717,24 @@ public class ChallengeController implements Serializable {
 					solFileAvail = true;
 					solFileContent = null;
 				}
+				return "soleo";
 			} catch (Exception e) {
 				e.printStackTrace();
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				solFileAvail = false;
 				solFileContent = null;
+				return "";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
 		}
 	}
 
-	public void showSummarySolution() {
+	public String showSummarySolution() {
 		solLikes = fetchAllSolLikes();
 		solComments = fetchAllSolComments();
 		solLikeCnt = "(" + solLikes.getTags().size() + ")	";
@@ -771,16 +773,18 @@ public class ChallengeController implements Serializable {
 				solFileAvail = true;
 				solFileContent = null;
 			}
+			return "sols";
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			solFileAvail = false;
 			solFileContent = null;
+			return "";
 		}
 	}
 
-	public void showSummaryOpenSolution() {
+	public String showSummaryOpenSolution() {
 		solLikes = fetchAllSolLikes();
 		solComments = fetchAllSolComments();
 		solLikeCnt = "(" + solLikes.getTags().size() + ")	";
@@ -819,12 +823,14 @@ public class ChallengeController implements Serializable {
 				solFileAvail = true;
 				solFileContent = null;
 			}
+			return "solso";
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			solFileAvail = false;
 			solFileContent = null;
+			return "";
 		}
 	}
 
@@ -1298,7 +1304,7 @@ public class ChallengeController implements Serializable {
 			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
 			bean.setSolImg(solutionMessage.getSolImg());
 			if (solutionMessage.isSolImgAvl())
-				bean.setSolStream(new DefaultStreamedContent(((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
+				bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
 			ret.add(bean);
 		}
 		return ret;
@@ -1328,13 +1334,13 @@ public class ChallengeController implements Serializable {
 			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
 			bean.setSolImg(solutionMessage.getSolImg());
 			if (solutionMessage.isSolImgAvl())
-				bean.setSolStream(new DefaultStreamedContent(((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
+				bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
 			ret.add(bean);
 		}
 		return ret;
 	}
 
-	private List<SolutionBean> fetchAllSolutionsCreatedByUser() {
+	public List<SolutionBean> fetchAllSolutionsCreatedByUser() {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
 		// WebClient fetchSolutionClient =
 		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/created/"
@@ -1358,7 +1364,7 @@ public class ChallengeController implements Serializable {
 			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
 			bean.setSolImg(solutionMessage.getSolImg());
 			if (solutionMessage.isSolImgAvl())
-				bean.setSolStream(new DefaultStreamedContent(((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
+				bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
 			ret.add(bean);
 		}
 		return ret;
@@ -1388,7 +1394,7 @@ public class ChallengeController implements Serializable {
 			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
 			bean.setSolImg(solutionMessage.getSolImg());
 			if (solutionMessage.isSolImgAvl())
-				bean.setSolStream(new DefaultStreamedContent(((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
+				bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
 			ret.add(bean);
 		}
 		return ret;
@@ -1425,7 +1431,7 @@ public class ChallengeController implements Serializable {
 					File file = new File("/resources/images/" + solutionMessage.getSolImg());
 					if (file.exists()) {
 						logger.info("image file content type---" + solutionMessage.getContentType() + "-----file name -----" + solutionMessage.getFileName() + "-------imag file ----" + solutionMessage.getSolImg());
-						bean.setSolStream(new DefaultStreamedContent(((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg()), solutionMessage.getContentType(), solutionMessage.getFileName()));
+						bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg()), solutionMessage.getContentType(), solutionMessage.getFileName()));
 					} else {
 						bean.setSolImgAvl(false);
 					}
@@ -2133,6 +2139,30 @@ public class ChallengeController implements Serializable {
 
 	public void setShowCrtChal(boolean showCrtChal) {
 		this.showCrtChal = showCrtChal;
+	}
+
+	public boolean isShowPubSol() {
+		return showPubSol;
+	}
+
+	public void setShowPubSol(boolean showPubSol) {
+		this.showPubSol = showPubSol;
+	}
+
+	public boolean isShowViewSol() {
+		return showViewSol;
+	}
+
+	public void setShowViewSol(boolean showViewSol) {
+		this.showViewSol = showViewSol;
+	}
+
+	public boolean isShowCrtSol() {
+		return showCrtSol;
+	}
+
+	public void setShowCrtSol(boolean showCrtSol) {
+		this.showCrtSol = showCrtSol;
 	}
 
 }

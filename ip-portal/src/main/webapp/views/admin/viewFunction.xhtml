@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">View Functions</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrVWFunction">
+			<f:facet name="header">
+					View Function
+			</f:facet>
+			<p:dataTable id="dtViewFunctions" value="#{adminBean.functions}" var="func" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Functions Found">
+				<p:column filterBy="#{func.funcId}" filterMatchMode="contains">
+					<f:facet name="header">Function ID</f:facet>
+					<p:outputLabel id="txtFuncId" value="#{func.funcId}" />
+				</p:column>
+				<p:column filterBy="#{func.funcName}" filterMatchMode="contains">
+					<f:facet name="header">Function Name</f:facet>
+					<p:outputLabel id="txtFuncName" value="#{func.funcName}" />
+				</p:column>
+				<p:column rendered="#{accessBean.editFunctionEnabled}" >
+					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminBean.showEditFunction}">
+						<f:setPropertyActionListener value="#{func}" target="#{adminBean.functionBean}" />
+					</p:commandButton>
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton id="btnCancel" value="Return To Home" ajax="false" action="#{adminBean.redirectHome}" />
+				</f:facet>
+			</p:dataTable>
+		</p:panel>
+	</ui:define>
+</ui:composition>

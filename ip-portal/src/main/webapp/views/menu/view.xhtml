@@ -14,7 +14,9 @@
 						</p:column>
 						<p:column>
 							<p:commandLink>
-								<p:graphicImage library="images" name="solution_hdr.png" height="135" width="72" />
+								<p:commandLink actionListener="#{menuController.redirectSolution}">
+									<p:graphicImage library="images" name="solution_hdr.png" height="135" width="72" />
+								</p:commandLink>
 							</p:commandLink>
 						</p:column>
 						<p:column>
@@ -24,7 +26,9 @@
 						</p:column>
 						<p:column>
 							<p:commandLink>
-								<p:graphicImage library="images" name="reward_hdr.png" height="135" width="72" />
+								<p:commandLink actionListener="#{menuController.redirectRewards}">
+									<p:graphicImage library="images" name="reward_hdr.png" height="135" width="72" />
+								</p:commandLink>
 							</p:commandLink>
 						</p:column>
 					</p:panelGrid>

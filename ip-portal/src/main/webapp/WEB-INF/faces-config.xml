@@ -36,6 +36,24 @@
 			<to-view-id>/views/random-idea/container/summaryOpenContainer.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>sole</from-outcome>
+			<to-view-id>/views/solution/container/editContainer.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>soleo</from-outcome>
+			<to-view-id>/views/solution/container/editOpenContainer.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>sols</from-outcome>
+			<to-view-id>/views/solution/container/summaryContainer.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>solso</from-outcome>
+			<to-view-id>/views/solution/container/summaryOpenContainer.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
 	<converter>
 		<converter-id>userConverter</converter-id>
 		<converter-class>za.co.idea.ip.portal.util.UserBeanConverter</converter-class>

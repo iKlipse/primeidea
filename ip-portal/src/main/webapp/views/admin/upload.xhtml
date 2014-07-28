@@ -1,0 +1,19 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Upload Users</ui:define>
+	<ui:define name="body">
+		<p:panel id="pnlUploadUsers" header="Upload Users">
+			<p:column>
+				<p:outputLabel id="lblCUpload" value="Upload File : " />
+			</p:column>
+			<p:column>
+				<p:fileUpload style="width: 100%" id="fuCUpload" fileUploadListener="#{adminBean.userUploadHandle}" multiple="false" allowTypes="/(\.|\/)(xls|xlsx)$/" />
+			</p:column>
+			<p:row>
+				<p:column colspan="2">
+					<p:commandButton id="btnSave" value="Save" ajax="false" action="#{adminBean.saveUploadUsers}" />
+					<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{adminBean.showViewUsers}" />
+				</p:column>
+			</p:row>
+		</p:panel>
+	</ui:define>
+</ui:composition>

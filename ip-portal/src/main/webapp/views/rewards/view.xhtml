@@ -1,5 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<p:dataTable id="dtRewards" var="rewards" value="#{rewardsBean.viewRewardsBeans}" style="width: 100% !important" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+	<p:dataTable id="dtRewards" var="rewards" value="#{rewardsController.viewRewardsBeans}" style="width: 100% !important" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
 		<p:column filterBy="#{rewards.rwTitle}" filterMatchMode="contains">
 			<f:facet name="header">Title</f:facet>
 			<p:outputLabel id="txtRewardTitle" value="#{rewards.rwTitle}" />
@@ -7,7 +7,7 @@
 		<p:column>
 			<f:facet name="header">Category</f:facet>
 			<p:selectOneMenu id="somICat" value="#{rewards.rCatId}" disabled="true">
-				<f:selectItems value="#{rewardsBean.rewardsCat}" var="ic" itemLabel="#{ic.desc}" itemValue="#{ic.id}" />
+				<f:selectItems value="#{rewardsController.rewardsCat}" var="ic" itemLabel="#{ic.desc}" itemValue="#{ic.id}" />
 			</p:selectOneMenu>
 		</p:column>
 		<p:column>
@@ -18,13 +18,13 @@
 			<f:facet name="header">Expiry Date</f:facet>
 			<p:calendar mode="popup" id="calExprDT" value="#{rewards.rwExpiryDt}" disabled="true" />
 		</p:column>
-		<p:column rendered="#{accessBean.editRewardsEnabled}">
-			<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{rewardsBean.showEditReward}">
-				<f:setPropertyActionListener value="#{rewards}" target="#{rewardsBean.rewardsBean}" />
+		<p:column>
+			<p:commandButton id="viewVwButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{rewardsController.showEditReward}">
+				<f:setPropertyActionListener value="#{rewards}" target="#{rewardsController.rewardsBean}" />
 			</p:commandButton>
 		</p:column>
 		<f:facet name="footer">
-			<p:commandButton id="btnCancel" value="Return To Home" ajax="false" action="#{adminBean.redirectHome}" />
+			<p:commandButton id="btnVwCancel" value="Return To Home" ajax="false" action="#{adminBean.redirectHome}" />
 		</f:facet>
 	</p:dataTable>
 </ui:composition>

@@ -87,4 +87,47 @@
   NAME="rules:#views#random-idea#container#summaryOpenContainer.xhtml"
   PATH="/views/random-idea/container/summaryOpenContainer.xhtml"
   SHAPE="288,785,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules::2" SHAPE="32,769,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::2" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="sole::#views#solution#container#editContainer.xhtml"
+    NAME="output" PATH="/views/solution/container/editContainer.xhtml"
+    TARGET="rules:#views#solution#container#editContainer.xhtml"
+    TITLE="sole" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="soleo::#views#solution#container#editOpenContainer.xhtml"
+    NAME="output1"
+    PATH="/views/solution/container/editOpenContainer.xhtml"
+    TARGET="rules:#views#solution#container#editOpenContainer.xhtml"
+    TITLE="soleo" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="sols::#views#solution#container#summaryContainer.xhtml"
+    NAME="output2"
+    PATH="/views/solution/container/summaryContainer.xhtml"
+    TARGET="rules:#views#solution#container#summaryContainer.xhtml"
+    TITLE="sols" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="solso::#views#solution#container#summaryOpenContainer.xhtml"
+    NAME="output3"
+    PATH="/views/solution/container/summaryOpenContainer.xhtml"
+    TARGET="rules:#views#solution#container#summaryOpenContainer.xhtml"
+    TITLE="solso" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#views#solution#container#editContainer.xhtml"
+  PATH="/views/solution/container/editContainer.xhtml"
+  SHAPE="288,897,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#views#solution#container#editOpenContainer.xhtml"
+  PATH="/views/solution/container/editOpenContainer.xhtml"
+  SHAPE="288,897,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#views#solution#container#summaryContainer.xhtml"
+  PATH="/views/solution/container/summaryContainer.xhtml"
+  SHAPE="288,897,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#views#solution#container#summaryOpenContainer.xhtml"
+  PATH="/views/solution/container/summaryOpenContainer.xhtml"
+  SHAPE="288,1329,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>
