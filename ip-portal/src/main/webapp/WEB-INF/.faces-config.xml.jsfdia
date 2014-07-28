@@ -43,4 +43,48 @@
   NAME="rules:#views#challenge#container#summaryOpenContainer.xhtml"
   PATH="/views/challenge/container/summaryOpenContainer.xhtml"
   SHAPE="288,465,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules::1" SHAPE="32,225,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::1" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="ideae::#views#random-idea#container#editContainer.xhtml"
+    NAME="output"
+    PATH="/views/random-idea/container/editContainer.xhtml"
+    TARGET="rules:#views#random-idea#container#editContainer.xhtml"
+    TITLE="ideae" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="ideaeo::#views#random-idea#container#editOpenContainer.xhtml"
+    NAME="output1"
+    PATH="/views/random-idea/container/editOpenContainer.xhtml"
+    TARGET="rules:#views#random-idea#container#editOpenContainer.xhtml"
+    TITLE="ideaeo" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="ideas::#views#random-idea#container#summaryContainer.xhtml"
+    NAME="output2"
+    PATH="/views/random-idea/container/summaryContainer.xhtml"
+    TARGET="rules:#views#random-idea#container#summaryContainer.xhtml"
+    TITLE="ideas" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="ideaso::#views#random-idea#container#summaryOpenContainer.xhtml"
+    NAME="output3"
+    PATH="/views/random-idea/container/summaryOpenContainer.xhtml"
+    TARGET="rules:#views#random-idea#container#summaryOpenContainer.xhtml"
+    TITLE="ideaso" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#views#random-idea#container#editContainer.xhtml"
+  PATH="/views/random-idea/container/editContainer.xhtml"
+  SHAPE="288,353,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#views#random-idea#container#editOpenContainer.xhtml"
+  PATH="/views/random-idea/container/editOpenContainer.xhtml"
+  SHAPE="288,353,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#views#random-idea#container#summaryContainer.xhtml"
+  PATH="/views/random-idea/container/summaryContainer.xhtml"
+  SHAPE="288,353,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#views#random-idea#container#summaryOpenContainer.xhtml"
+  PATH="/views/random-idea/container/summaryOpenContainer.xhtml"
+  SHAPE="288,785,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

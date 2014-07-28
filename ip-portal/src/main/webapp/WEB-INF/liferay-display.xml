@@ -8,5 +8,8 @@
 		<portlet id="random-idea"></portlet>
 		<portlet id="menu"></portlet>
 		<portlet id="challenge"></portlet>
+		<portlet id="Solution"></portlet>
+		<portlet id="Rewards"></portlet>
+		<portlet id="Admin"></portlet>
 	</category>
 </display>

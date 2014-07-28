@@ -18,6 +18,24 @@
 			<to-view-id>/views/challenge/container/summaryOpenContainer.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>ideae</from-outcome>
+			<to-view-id>/views/random-idea/container/editContainer.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>ideaeo</from-outcome>
+			<to-view-id>/views/random-idea/container/editOpenContainer.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>ideas</from-outcome>
+			<to-view-id>/views/random-idea/container/summaryContainer.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>ideaso</from-outcome>
+			<to-view-id>/views/random-idea/container/summaryOpenContainer.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
 	<converter>
 		<converter-id>userConverter</converter-id>
 		<converter-class>za.co.idea.ip.portal.util.UserBeanConverter</converter-class>

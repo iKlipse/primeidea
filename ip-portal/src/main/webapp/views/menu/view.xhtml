@@ -7,7 +7,9 @@
 					<p:panelGrid columns="2">
 						<p:column>
 							<p:commandLink>
-								<p:graphicImage library="images" name="idea_hdr.png" height="135" width="72" />
+								<p:commandLink actionListener="#{menuController.redirectIdea}">
+									<p:graphicImage library="images" name="idea_hdr.png" height="135" width="72" />
+								</p:commandLink>
 							</p:commandLink>
 						</p:column>
 						<p:column>

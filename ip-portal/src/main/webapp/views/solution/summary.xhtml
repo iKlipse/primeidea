@@ -1,0 +1,93 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<p:panelGrid columns="2" id="pnlSummarySolution">
+		<p:column>
+			<p:outputLabel id="lblITitle" value="Title : " />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="txtITitle" value="#{challengeBean.solutionBean.title}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblIDesc" value="Description : " />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="txtIDesc" value="#{challengeBean.solutionBean.desc}" escape="false" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblIDownload" value="Download File : " />
+		</p:column>
+		<p:column>
+			<p:commandButton id="btnDownload" value="Download" ajax="false" disabled="#{challengeBean.solFileAvail}">
+				<p:fileDownload value="#{challengeBean.solFileContent}" />
+			</p:commandButton>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblITag" value="Keywords to Describe Your Solution : " />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="txtITag" value="#{challengeBean.solutionBean.tags}" escape="false" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblISocial" value="Social : " />
+		</p:column>
+		<p:column>
+			<p:panelGrid columns="3" style="border: 0px !important;">
+				<p:column>
+					<p:commandLink id="lnkLikeSolution" action="#{challengeBean.likeSolution}" update="lblLikeCnt, :frmSummarySol:tgLikes" disabled="#{challengeBean.solutionBean.taggable}">
+						<p:outputLabel id="lblLikeCnt" value="#{challengeBean.solLikeCnt}" style="height:25px; width:25px;" />
+						<p:graphicImage id="giLike" name="like-128.png" library="images" height="25px" width="25px" />
+						<p:tooltip for="giLike" value="Tags disabled as solution not in open status" rendered="#{challengeBean.solutionBean.taggable}" />
+					</p:commandLink>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblCommentCnt" value="#{challengeBean.solCommentCnt}" style="height:25px; width:25px;" />
+					<p:graphicImage id="giComment" name="comment.jpg" library="images" height="25px" width="25px" />
+					<p:tooltip for="giComment" value="Tags disabled as solution not in open status" rendered="#{challengeBean.solutionBean.taggable}" />
+				</p:column>
+				<p:column>
+					<p:commandLink id="lnkBuildonSolution" action="#{buildonBean.showBuildon}">
+						<f:param name="entityId" id="entityId" value="#{challengeBean.solutionBean.id}" />
+						<f:param name="entityType" id="entityType" value="3" />
+						<f:param name="taggable" id="taggable" value="#{challengeBean.solutionBean.taggable}" />
+						<p:outputLabel id="lblBuildOnCnt" value="#{challengeBean.buildOnCnt}" style="height:25px; width:25px;" />
+						<p:graphicImage id="giBuildOn" name="lego.png" library="images" height="25px" width="25px" />
+						<p:tooltip for="giBuildOn" value="Tags disabled as solution not in open status" rendered="#{challengeBean.solutionBean.taggable}" />
+					</p:commandLink>
+				</p:column>
+			</p:panelGrid>
+		</p:column>
+		<f:facet name="footer">
+			<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{challengeBean.showViewSolution}" />
+		</f:facet>
+	</p:panelGrid>
+	<p:overlayPanel dynamic="true" for="giComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
+		<p:panelGrid id="pnlSolutionComment" columns="1">
+			<p:column>
+				<p:dataGrid id="dtViewComments" widgetVar="dtViewComments" value="#{challengeBean.solComments}" var="comment" columns="1" emptyMessage="No Comments Found">
+					<p:panel style="border: 0px !important;">
+						<f:facet name="header">
+							<p:outputLabel style="float: left !important" value="#{comment.usrScreenName}" />
+						</f:facet>
+						<f:facet name="footer">
+							<p:outputLabel style="float: right !important" value="#{comment.tagDate}" />
+						</f:facet>
+						<p:column>
+							<p:outputLabel value="#{comment.tagText}" />
+						</p:column>
+					</p:panel>
+				</p:dataGrid>
+				<p:tooltip for="dtViewComments" value="Tags disabled as solution not in open status" rendered="#{challengeBean.solutionBean.taggable}" />
+			</p:column>
+			<p:column rendered="#{!challengeBean.solutionBean.taggable}">
+				<p:editor id="edComment" value="#{challengeBean.commentText}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+			</p:column>
+			<p:column rendered="#{!challengeBean.solutionBean.taggable}">
+				<p:commandButton id="btnSubmitComment" value="Post" actionListener="#{challengeBean.commentSolution}" />
+			</p:column>
+		</p:panelGrid>
+	</p:overlayPanel>
+	<p:overlayPanel dynamic="true" for="giLike" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
+		<p:panelGrid id="pnlSolutionLikes" columns="1">
+			<p:tagCloud id="tgLikes" model="#{challengeBean.solLikes}" />
+		</p:panelGrid>
+	</p:overlayPanel>
+</ui:composition>

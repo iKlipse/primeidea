@@ -1,94 +1,87 @@
-<f:view xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<h:body>
-		<h:form id="frmEditOpenChal" enctype="multipart/form-data">
-			<ui:composition>
-				<p:panel header="Edit Challenge">
-					<p:panelGrid columns="2" id="pnlEdtoChallenge">
-						<p:column>
-							<p:outputLabel id="lblEdtoCTitle" value="Title : " />
-						</p:column>
-						<p:column>
-							<p:inputText style="width: 100%" autocomplete="false" id="txtEdtoCTitle" value="#{challengeController.challengeBean.title}" />
-						</p:column>
-						<p:column>
-							<p:outputLabel id="lblEdtoCCat" value="Category : " />
-						</p:column>
-						<p:column>
-							<p:selectOneMenu style="width: 100%" id="somEdtoCCat" value="#{challengeController.challengeBean.catId}" filter="true" filterMatchMode="contains">
-								<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-								<f:selectItems value="#{challengeController.challengeCats}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
-							</p:selectOneMenu>
-						</p:column>
-						<p:column>
-							<p:outputLabel id="lblEdtoCStatus" value="Status : " />
-						</p:column>
-						<p:column>
-							<p:selectOneMenu style="width: 100%" id="somEdtoCStatus" value="#{challengeController.challengeBean.statusId}">
-								<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-								<f:selectItems value="#{challengeController.challengeStatuses}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
-							</p:selectOneMenu>
-						</p:column>
-						<p:column>
-							<p:outputLabel id="lblEdtoCDesc" value="Description : " />
-						</p:column>
-						<p:column>
-							<p:editor style="width: 100%" id="txtEdtoCDesc" value="#{challengeController.challengeBean.desc}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
-						</p:column>
-						<p:column>
-							<p:outputLabel id="lblEdtoCHoverText" value="Hover Text : " />
-						</p:column>
-						<p:column>
-							<p:inputText style="width: 100%" autocomplete="false" id="txtEdtoCHoverText" value="#{challengeController.challengeBean.hoverText}" />
-						</p:column>
-						<p:column>
-							<p:outputLabel id="lblEdtoCLaunchDt" value="Launch Date : " />
-						</p:column>
-						<p:column>
-							<p:calendar style="width: 100%" mode="popup" showOn="button" id="txtEdtoCLaunchDt" value="#{challengeController.challengeBean.launchDt}" pattern="yyyy/MM/dd HH:mm">
-								<p:ajax event="blur" update="txtEdtoCExpiryDt" />
-							</p:calendar>
-						</p:column>
-						<p:column>
-							<p:outputLabel id="lblEdtoCExpiryDt" value="Expiry Date : " />
-						</p:column>
-						<p:column>
-							<p:calendar style="width: 100%" mode="popup" showOn="button" id="txtEdtoCExpiryDt" value="#{challengeController.challengeBean.exprDt}" pattern="yyyy/MM/dd HH:mm" mindate="#{challengeController.challengeBean.launchDt}" />
-						</p:column>
-						<p:column>
-							<p:outputLabel id="lblEdtoCTag" value="Keywords to Describe Your Challenge : " />
-						</p:column>
-						<p:column>
-							<p:inputText style="width: 100%" autocomplete="false" id="txtEdtoCTag" value="#{challengeController.challengeBean.tag}" />
-						</p:column>
-						<p:column>
-							<p:outputLabel id="lblEdtoIDownload" value="Download File : " />
-						</p:column>
-						<p:column>
-							<p:commandButton id="btnEdtoDownload" value="Download" ajax="false" disabled="#{challengeController.chalFileAvail}">
-								<p:fileDownload value="#{challengeController.chalFileContent}" />
-							</p:commandButton>
-						</p:column>
-						<p:column>
-							<p:outputLabel id="lblEdtoCUpload" value="Upload File : " />
-						</p:column>
-						<p:column>
-							<p:fileUpload style="width: 100%" id="fuEdtoCUpload" fileUploadListener="#{challengeController.chalFileUploadHandle}" multiple="false" />
-						</p:column>
-						<p:column>
-							<p:outputLabel id="lblEdtoFuncGrps" value="Challenge Groups" />
-						</p:column>
-						<p:column>
-							<p:pickList style="width: 100%" id="plEdtoGroupPick" converter="groupConverter" value="#{challengeController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" />
-						</p:column>
-						<p:row>
-							<p:column colspan="2">
-								<p:commandButton id="btnEdtoSave" value="Save" ajax="false" action="#{challengeController.updateChallenge}" />
-								<p:commandButton id="btnEdtoCancel" value="Return To View" ajax="false" action="#{challengeController.showPublishedChallenges}" />
-							</p:column>
-						</p:row>
-					</p:panelGrid>
-				</p:panel>
-			</ui:composition>
-		</h:form>
-	</h:body>
-</f:view>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<p:growl id="grlMsg" showDetail="true" showSummary="true" />
+	<p:panelGrid columns="2" id="pnlEdtoChallenge">
+		<p:column>
+			<p:outputLabel id="lblEdtoCTitle" value="Title : " />
+		</p:column>
+		<p:column>
+			<p:inputText style="width: 100%" autocomplete="false" id="txtEdtoCTitle" value="#{challengeController.challengeBean.title}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblEdtoCCat" value="Category : " />
+		</p:column>
+		<p:column>
+			<p:selectOneMenu style="width: 100%" id="somEdtoCCat" value="#{challengeController.challengeBean.catId}" filter="true" filterMatchMode="contains">
+				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+				<f:selectItems value="#{challengeController.challengeCats}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
+			</p:selectOneMenu>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblEdtoCStatus" value="Status : " />
+		</p:column>
+		<p:column>
+			<p:selectOneMenu style="width: 100%" id="somEdtoCStatus" value="#{challengeController.challengeBean.statusId}">
+				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+				<f:selectItems value="#{challengeController.challengeStatuses}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
+			</p:selectOneMenu>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblEdtoCDesc" value="Description : " />
+		</p:column>
+		<p:column>
+			<p:editor style="width: 100%" id="txtEdtoCDesc" value="#{challengeController.challengeBean.desc}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblEdtoCHoverText" value="Hover Text : " />
+		</p:column>
+		<p:column>
+			<p:inputText style="width: 100%" autocomplete="false" id="txtEdtoCHoverText" value="#{challengeController.challengeBean.hoverText}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblEdtoCLaunchDt" value="Launch Date : " />
+		</p:column>
+		<p:column>
+			<p:calendar style="width: 100%" mode="popup" showOn="button" id="txtEdtoCLaunchDt" value="#{challengeController.challengeBean.launchDt}" pattern="yyyy/MM/dd HH:mm">
+				<p:ajax event="blur" update="txtEdtoCExpiryDt" />
+			</p:calendar>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblEdtoCExpiryDt" value="Expiry Date : " />
+		</p:column>
+		<p:column>
+			<p:calendar style="width: 100%" mode="popup" showOn="button" id="txtEdtoCExpiryDt" value="#{challengeController.challengeBean.exprDt}" pattern="yyyy/MM/dd HH:mm" mindate="#{challengeController.challengeBean.launchDt}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblEdtoCTag" value="Keywords to Describe Your Challenge : " />
+		</p:column>
+		<p:column>
+			<p:inputText style="width: 100%" autocomplete="false" id="txtEdtoCTag" value="#{challengeController.challengeBean.tag}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblEdtoIDownload" value="Download File : " />
+		</p:column>
+		<p:column>
+			<p:commandButton id="btnEdtoDownload" value="Download" ajax="false" disabled="#{challengeController.chalFileAvail}">
+				<p:fileDownload value="#{challengeController.chalFileContent}" />
+			</p:commandButton>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblEdtoCUpload" value="Upload File : " />
+		</p:column>
+		<p:column>
+			<p:fileUpload style="width: 100%" id="fuEdtoCUpload" fileUploadListener="#{challengeController.chalFileUploadHandle}" multiple="false" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblEdtoFuncGrps" value="Challenge Groups" />
+		</p:column>
+		<p:column>
+			<p:pickList style="width: 100%" id="plEdtoGroupPick" converter="groupConverter" value="#{challengeController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" />
+		</p:column>
+		<p:row>
+			<p:column colspan="2">
+				<p:commandButton id="btnEdtoSave" value="Save" ajax="false" action="#{challengeController.updateChallenge}" />
+				<p:commandButton id="btnEdtoCancel" value="Return To View" ajax="false" action="#{challengeController.showPublishedChallenges}" />
+			</p:column>
+		</p:row>
+	</p:panelGrid>
+</ui:composition>

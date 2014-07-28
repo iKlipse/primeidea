@@ -1,0 +1,87 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<p:panelGrid columns="2" id="pnlCrtRewards">
+		<p:column>
+			<p:outputLabel id="lblRTitle" value="Title : " />
+		</p:column>
+		<p:column>
+			<p:inputText style="width: 100%" autocomplete="false" id="txtRTitle" value="#{rewardsBean.rewardsBean.rwTitle}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblRCat" value="Category : " />
+		</p:column>
+		<p:column>
+			<p:selectOneMenu style="width: 100%" id="somRCat" value="#{rewardsBean.rewardsBean.rCatId}">
+				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+				<f:selectItems value="#{rewardsBean.rewardsCat}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
+			</p:selectOneMenu>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblRDesc" value="Description : " />
+		</p:column>
+		<p:column>
+			<p:editor style="width: 100%" id="txtRDesc" value="#{rewardsBean.rewardsBean.rwDesc}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblRPoint" value="Point Value : " />
+		</p:column>
+		<p:column>
+			<p:inputText style="width: 100%" autocomplete="false" id="txtRPoint" value="#{rewardsBean.rewardsBean.rwValue}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblRStockCdNum" value="Stock Code Num : " />
+		</p:column>
+		<p:column>
+			<p:inputText style="width: 100%" autocomplete="false" id="txtRStockCdNum" value="#{rewardsBean.rewardsBean.rwStockCodeNum}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblRPrice" value="Price : " />
+		</p:column>
+		<p:column>
+			<p:inputText style="width: 100%" autocomplete="false" id="txtRPrice" value="#{rewardsBean.rewardsBean.rwPrice}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblRQuantity" value="Quantity : " />
+		</p:column>
+		<p:column>
+			<p:inputText style="width: 100%" autocomplete="false" id="txtRQuantity" value="#{rewardsBean.rewardsBean.rwQuantity}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblRHoverText" value="Hover Text : " />
+		</p:column>
+		<p:column>
+			<p:inputText style="width: 100%" autocomplete="false" id="txtRHoverText" value="#{rewardsBean.rewardsBean.rwHoverText}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblRLaunchDt" value="Launch Date : " />
+		</p:column>
+		<p:column>
+			<p:calendar style="width: 100%" mode="popup" showOn="button" id="txtRLaunchDt" value="#{rewardsBean.rewardsBean.rwLaunchDt}" pattern="yyyy/MM/dd HH:mm">
+				<p:ajax event="blur" update="txtRExpiryDt" />
+			</p:calendar>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblRExpiryDt" value="Expiry Date : " />
+		</p:column>
+		<p:column>
+			<p:calendar style="width: 100%" mode="popup" showOn="button" id="txtRExpiryDt" value="#{rewardsBean.rewardsBean.rwExpiryDt}" pattern="yyyy/MM/dd HH:mm" mindate="#{rewardsBean.rewardsBean.rwLaunchDt}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblRTag" value="Tags : " />
+		</p:column>
+		<p:column>
+			<p:inputText style="width: 100%" autocomplete="false" id="txtRTag" value="#{rewardsBean.rewardsBean.rwTag}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblRUpload" value="Upload File : " />
+		</p:column>
+		<p:column>
+			<p:fileUpload style="width: 100%" id="fuCUpload" fileUploadListener="#{rewardsBean.rwFileUploadHandle}" multiple="false" />
+		</p:column>
+		<p:row>
+			<p:column colspan="2">
+				<p:commandButton id="btnSave" value="Save" ajax="false" action="#{rewardsBean.saveRewards}" />
+				<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{rewardsBean.showViewReward}" />
+			</p:column>
+		</p:row>
+	</p:panelGrid>
+</ui:composition>

@@ -1,19 +1,20 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<p:panelGrid columns="2" id="pnlSummaryIdea" style="width=100% !important">
+	<p:growl id="grlMsg" showDetail="true" showSummary="true" />
+	<p:panelGrid columns="2" id="pnlSummaryOpenIdea" style="width=100% !important">
 		<p:column>
-			<p:outputLabel id="lblITitle" value="Title : " />
+			<p:outputLabel id="lblSumoITitle" value="Title : " />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="txtITitle" value="#{randomIdeaController.ideaBean.ideaTitle}" />
 		</p:column>
 		<p:column>
-			<p:outputLabel id="lblIDesc" value="Description : " />
+			<p:outputLabel id="lblSumoIDesc" value="Description : " />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="txtIDesc" value="#{randomIdeaController.ideaBean.ideaDesc}" escape="false" />
 		</p:column>
 		<p:column>
-			<p:outputLabel id="lblIDownload" value="Download File : " />
+			<p:outputLabel id="lblSumoIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
 			<p:commandButton id="btnDownload" value="Download" ajax="false" disabled="#{randomIdeaController.fileAvail}">
@@ -21,25 +22,25 @@
 			</p:commandButton>
 		</p:column>
 		<p:column>
-			<p:outputLabel id="lblITag" value="Keywords to Describe Your Idea : " />
+			<p:outputLabel id="lblSumoITag" value="Keywords to Describe Your Idea : " />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="txtITag" value="#{randomIdeaController.ideaBean.ideaTag}" escape="false" />
 		</p:column>
 		<p:column>
-			<p:outputLabel id="lblISocial" value="Social : " />
+			<p:outputLabel id="lblSumoISocial" value="Social : " />
 		</p:column>
 		<p:column>
 			<p:panelGrid columns="3" style="border: 0px !important;">
 				<p:column>
-					<p:commandLink id="lnkLikeIdea" action="#{randomIdeaController.likeIdea}" update="lblLikeCnt, :ideaFrm:tgLikes" disabled="#{randomIdeaController.ideaBean.taggable}">
-						<p:outputLabel id="lblLikeCnt" value="#{randomIdeaController.likeCnt}" style="height:25px; width:25px;" />
+					<p:commandLink id="lnkLikeIdea" action="#{randomIdeaController.likeIdea}" update="lblSumoLikeCnt, :frmSummaryOpenIdea:tgLikes" disabled="#{randomIdeaController.ideaBean.taggable}">
+						<p:outputLabel id="lblSumoLikeCnt" value="#{randomIdeaController.likeCnt}" style="height:25px; width:25px;" />
 						<p:graphicImage id="giLike" name="like-128.png" library="images" height="25px" width="25px" />
 						<p:tooltip for="giLike" value="Tags disabled as idea not in open status" rendered="#{randomIdeaController.ideaBean.taggable}" />
 					</p:commandLink>
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblCommentCnt" value="#{randomIdeaController.commentCnt}" style="height:25px; width:25px;" />
+					<p:outputLabel id="lblSumoCommentCnt" value="#{randomIdeaController.commentCnt}" style="height:25px; width:25px;" />
 					<p:graphicImage id="giComment" name="comment.jpg" library="images" height="25px" width="25px" />
 					<p:tooltip for="giComment" value="Tags disabled as idea not in open status" rendered="#{randomIdeaController.ideaBean.taggable}" />
 				</p:column>
@@ -48,7 +49,7 @@
 						<f:param name="entityId" id="entityId" value="#{randomIdeaController.ideaBean.ideaId}" />
 						<f:param name="entityType" id="entityType" value="1" />
 						<f:param name="taggable" id="taggable" value="#{randomIdeaController.ideaBean.taggable}" />
-						<p:outputLabel id="lblBuildOnCnt" value="#{randomIdeaController.buildOnCnt}" style="height:25px; width:25px;" />
+						<p:outputLabel id="lblSumoBuildOnCnt" value="#{randomIdeaController.buildOnCnt}" style="height:25px; width:25px;" />
 						<p:graphicImage id="giBuildOn" name="lego.png" library="images" height="25px" width="25px" />
 						<p:tooltip for="giBuildOn" value="Tags disabled as idea not in open status" rendered="#{randomIdeaController.ideaBean.taggable}" />
 					</p:commandLink>

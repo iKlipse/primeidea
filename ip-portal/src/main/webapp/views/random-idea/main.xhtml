@@ -1,33 +1,32 @@
 <?xml version="1.0"?>
 
 <f:view xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
-	<h:head>
-		<title>Random Idea Page</title>
-	</h:head>
+	<h:head />
 	<h:body>
 		<h:form id="frmRandomIdea" enctype="multipart/form-data">
-			<p:remoteCommand actionListener="#{randomIdeaController.initializePage}" name="onload" autoRun="true" update="tbvRandomIdea" />
-			<p:tabView id="tbvRandomIdea" widgetVar="tbvRandomIdea" dynamic="true" activeIndex="#{randomIdeaController.activeIndex}" style="width=100% !important">
-				<p:ajax event="tabChange" listener="#{randomIdeaController.onTabChange}" />
-				<p:tab id="tbViewIdeas" title="View Ideas" style="width=100% !important">
-					<p:panel id="ctrViewIdeas" style="width: 100% !important">
-						<f:facet name="header">View Ideas</f:facet>
-						<ui:include src="/views/random-idea/view.xhtml" />
-					</p:panel>
-				</p:tab>
-				<p:tab id="tbViewOpenIdeas" title="View Open Ideas" style="width=100% !important">
-					<p:panel id="ctrViewOpenIdeas" style="width: 100% !important">
-						<f:facet name="header">View Open Ideas</f:facet>
-						<ui:include src="/views/random-idea/viewOpen.xhtml" />
-					</p:panel>
-				</p:tab>
-				<p:tab id="tbCreateIdeas" title="CreateIdeas" style="width=100% !important">
-					<p:panel id="ctrCreateIdeas" style="width: 100% !important">
-						<f:facet name="header">Create Ideas</f:facet>
-						<ui:include src="/views/random-idea/create.xhtml" />
-					</p:panel>
-				</p:tab>
-			</p:tabView>
+			<p:growl id="grlMsg" showDetail="true" showSummary="true" />
+			<p:remoteCommand actionListener="#{randomIdeaController.showCreateIdea}" name="onload" autoRun="true" update="pnlIdeaDet" />
+			<p:panel id="pnlIdeaMenu" style="border: 0px !important">
+				<p:commandLink value="View Open Ideas" actionListener="#{randomIdeaController.showViewOpenIdeas}" update="pnlIdeaDet" />
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="View Ideas" actionListener="#{randomIdeaController.showViewIdeas}" update="pnlIdeaDet" />
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="Create Idea" actionListener="#{randomIdeaController.showCreateIdea}" update="pnlIdeaDet" />
+			</p:panel>
+			<p:panel id="pnlIdeaDet" style="border: 0px !important">
+				<p:panel id="ctrViewIdeas" style="width: 100% !important" rendered="#{randomIdeaController.showViewIdea}">
+					<f:facet name="header">View Ideas</f:facet>
+					<ui:include src="/views/random-idea/view.xhtml" />
+				</p:panel>
+				<p:panel id="ctrViewOpenIdeas" style="width: 100% !important" rendered="#{randomIdeaController.showViewOpenIdea}">
+					<f:facet name="header">View Open Ideas</f:facet>
+					<ui:include src="/views/random-idea/viewOpen.xhtml" />
+				</p:panel>
+				<p:panel id="ctrCreateIdeas" style="width: 100% !important" rendered="#{randomIdeaController.showCrtIdea}">
+					<f:facet name="header">Create Ideas</f:facet>
+					<ui:include src="/views/random-idea/create.xhtml" />
+				</p:panel>
+			</p:panel>
 		</h:form>
 	</h:body>
 </f:view>

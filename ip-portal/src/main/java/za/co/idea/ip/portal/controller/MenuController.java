@@ -41,4 +41,15 @@ public class MenuController implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
 	}
+
+	public void redirectIdea() {
+		try {
+			PortletRequest request = LiferayFacesContext.getInstance().getPortletRequest();
+			String url = new URL(request.getScheme(), request.getServerName(), request.getServerPort(), "/web/ip/idea").toString();
+			FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System Exception Occured During Login", "System Exception Occured During Login");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+	}
 }

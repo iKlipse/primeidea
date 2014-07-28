@@ -1,0 +1,51 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<p:panelGrid columns="2" id="pnlCrtSolution">
+		<p:column>
+			<p:outputLabel id="lblSChal" value="Challenges : " />
+		</p:column>
+		<p:column>
+			<p:selectOneMenu style="width: 100%" id="somSChal" value="#{challengeBean.solutionBean.chalId}">
+				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+				<f:selectItems value="#{challengeBean.viewChallenges}" var="schal" itemLabel="#{schal.title}" itemValue="#{schal.id}" />
+			</p:selectOneMenu>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblSTitle" value="Title : " />
+		</p:column>
+		<p:column>
+			<p:inputText style="width: 100%" autocomplete="false" id="txtSTitle" value="#{challengeBean.solutionBean.title}">
+				<p:ajax listener="#{challengeBean.checkTitleAvailability}" event="blur" update="grlMsg" />
+			</p:inputText>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblSDesc" value="Description : " />
+		</p:column>
+		<p:column>
+			<p:editor style="width: 100%" id="txtSDesc" value="#{challengeBean.solutionBean.desc}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblSTag" value="Keywords to Describe Your Solution : " />
+		</p:column>
+		<p:column>
+			<p:inputText style="width: 100%" autocomplete="false" id="txtSTag" value="#{challengeBean.solutionBean.tags}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblOpen" value="Save as Open : " />
+		</p:column>
+		<p:column>
+			<p:selectBooleanButton id="sbOpen" value="#{challengeBean.saveAsOpen}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblSUpload" value="Upload File : " />
+		</p:column>
+		<p:column>
+			<p:fileUpload style="width: 100%" id="fuSUpload" fileUploadListener="#{challengeBean.solFileUploadHandle}" multiple="false" />
+		</p:column>
+		<p:row>
+			<p:column colspan="2">
+				<p:commandButton id="btnSave" value="Save" ajax="false" action="#{challengeBean.saveSolution}" />
+				<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{challengeBean.showViewSolution}" />
+			</p:column>
+		</p:row>
+	</p:panelGrid>
+</ui:composition>
