@@ -86,6 +86,10 @@ public class RandomIdeaController implements Serializable {
 		return client;
 	}
 
+	public String redirectMain() {
+		return "ideah";
+	}
+
 	public void showViewIdeas() {
 		try {
 			viewIdeas = RESTServiceHelper.fetchAllIdeasByUser();

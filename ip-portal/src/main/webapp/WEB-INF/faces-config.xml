@@ -2,6 +2,10 @@
 <faces-config version="2.1" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
 	<navigation-rule>
 		<navigation-case>
+			<from-outcome>chalh</from-outcome>
+			<to-view-id>/views/challenge/main.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>chale</from-outcome>
 			<to-view-id>/views/challenge/container/editContainer.xhtml</to-view-id>
 		</navigation-case>
@@ -20,6 +24,10 @@
 	</navigation-rule>
 	<navigation-rule>
 		<navigation-case>
+			<from-outcome>ideah</from-outcome>
+			<to-view-id>/views/random-idea/main.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>ideae</from-outcome>
 			<to-view-id>/views/random-idea/container/editContainer.xhtml</to-view-id>
 		</navigation-case>
@@ -37,6 +45,10 @@
 		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
+		<navigation-case>
+			<from-outcome>solh</from-outcome>
+			<to-view-id>/views/solution/main.xhtml</to-view-id>
+		</navigation-case>
 		<navigation-case>
 			<from-outcome>sole</from-outcome>
 			<to-view-id>/views/solution/container/editContainer.xhtml</to-view-id>
