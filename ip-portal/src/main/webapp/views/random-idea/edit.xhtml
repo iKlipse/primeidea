@@ -61,9 +61,13 @@
 		</p:column>
 		<p:row>
 			<p:column colspan="2">
-				<p:commandButton id="btnEdtSave" value="Save" ajax="false" action="#{randomIdeaController.updateIdea}" />
+				<p:commandButton id="btnEdtSave" value="Save" ajax="false" action="#{randomIdeaController.updateIdea}">
+					<f:setPropertyActionListener value="1" target="#{landingPageController.toView}" />
+					<f:setPropertyActionListener value="2" target="#{randomIdeaController.toView}" />
+				</p:commandButton>
 				<p:commandButton id="btnEdtCancel" value="Return To View" ajax="false" action="#{randomIdeaController.redirectMain}">
 					<f:setPropertyActionListener value="1" target="#{landingPageController.toView}" />
+					<f:setPropertyActionListener value="2" target="#{randomIdeaController.toView}" />
 				</p:commandButton>
 			</p:column>
 		</p:row>

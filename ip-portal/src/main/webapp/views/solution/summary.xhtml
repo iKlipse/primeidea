@@ -58,6 +58,7 @@
 		<f:facet name="footer">
 			<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{challengeController.redirectMain}">
 				<f:setPropertyActionListener value="3" target="#{landingPageController.toView}" />
+				<f:setPropertyActionListener value="3" target="#{challengeController.toView}" />
 			</p:commandButton>
 		</f:facet>
 	</p:panelGrid>

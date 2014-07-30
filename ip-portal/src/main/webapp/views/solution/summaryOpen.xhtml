@@ -56,7 +56,10 @@
 			</p:panelGrid>
 		</p:column>
 		<f:facet name="footer">
-			<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{challengeController.showViewOpenSolution}" />
+			<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{challengeController.redirectMain}">
+				<f:setPropertyActionListener value="3" target="#{landingPageController.toView}" />
+				<f:setPropertyActionListener value="2" target="#{challengeController.toView}" />
+			</p:commandButton>
 		</f:facet>
 	</p:panelGrid>
 	<p:overlayPanel dynamic="true" for="giComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">

@@ -113,7 +113,7 @@ public class ChallengeController implements Serializable {
 		return client;
 	}
 
-	public void initializePage() {
+	public void initializeChalPage() {
 		try {
 			challengeCats = fetchAllChallengeCat();
 			admUsers = fetchAllUsers();
@@ -157,12 +157,68 @@ public class ChallengeController implements Serializable {
 		}
 	}
 
+	public void initializeSolPage() {
+		try {
+			admUsers = fetchAllUsers();
+			solutionCats = fetchAllSolutionCat();
+			solutionStatuses = fetchAllSolutionStatuses();
+			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
+			solutionBean = new SolutionBean();
+			saveAsOpen = false;
+			showPubSol = false;
+			showViewSol = false;
+			showCrtSol = true;
+			if (toView != null && Integer.valueOf(toView) != -1) {
+				switch (Integer.valueOf(toView)) {
+				case 1:
+					viewChallenges = fetchAllChallengesByStatusIdUserId(4);
+					solutionBean = new SolutionBean();
+					saveAsOpen = false;
+					showPubSol = false;
+					showViewSol = false;
+					showCrtSol = true;
+					break;
+				case 2:
+					solutionBean = new SolutionBean();
+					viewChallenges = fetchAllChallengesByUser();
+					viewSolutions = fetchAllSolutionsByStatusIdUserId(2);
+					showPubSol = true;
+					showViewSol = false;
+					showCrtSol = false;
+					break;
+				case 3:
+					solutionBean = new SolutionBean();
+					viewChallenges = fetchAllChallengesByUser();
+					viewSolutions = fetchAllSolutionsByUser();
+					showPubSol = false;
+					showViewSol = true;
+					showCrtSol = false;
+					break;
+				default:
+					viewChallenges = fetchAllChallengesByStatusIdUserId(4);
+					solutionBean = new SolutionBean();
+					saveAsOpen = false;
+					showPubSol = false;
+					showViewSol = false;
+					showCrtSol = true;
+					break;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+	}
+
 	public String redirectMain() {
 		switch (Integer.valueOf(returnView)) {
 		case 1:
 			return "lani";
 		case 2:
 			return "chalv";
+		case 3:
+			return "solv";
 		default:
 			return "";
 		}
@@ -418,7 +474,7 @@ public class ChallengeController implements Serializable {
 		}
 	}
 
-	public void saveChallenge() {
+	public String saveChallenge() {
 		try {
 			List<String> errors = validateChallenge();
 			if (errors.size() > 0) {
@@ -468,18 +524,21 @@ public class ChallengeController implements Serializable {
 					}
 				}
 				chalUploadContent = null;
+				return redirectMain();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
 		}
 	}
 
-	public void updateChallenge() {
+	public String updateChallenge() {
 		try {
 			List<String> errors = validateChallenge();
 			if (errors.size() > 0) {
@@ -557,14 +616,17 @@ public class ChallengeController implements Serializable {
 					}
 				}
 				chalUploadContent = null;
+				return redirectMain();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
 		}
 	}
 
@@ -909,7 +971,7 @@ public class ChallengeController implements Serializable {
 		}
 	}
 
-	public void saveSolution() {
+	public String saveSolution() {
 		try {
 			if (titleAvail) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
@@ -967,18 +1029,21 @@ public class ChallengeController implements Serializable {
 				}
 				solUploadContent = null;
 				saveAsOpen = false;
+				return redirectMain();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
 		}
 	}
 
-	public void updateSolution() {
+	public String updateSolution() {
 		try {
 			List<String> errors = validateSolution();
 			if (errors.size() > 0) {
@@ -1053,14 +1118,17 @@ public class ChallengeController implements Serializable {
 					}
 				}
 				solUploadContent = null;
+				return redirectMain();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
 		}
 	}
 

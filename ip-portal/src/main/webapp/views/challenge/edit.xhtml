@@ -79,7 +79,9 @@
 		</p:column>
 		<p:row>
 			<p:column colspan="2">
-				<p:commandButton id="btnEdtSave" value="Save" ajax="false" action="#{challengeController.updateChallenge}" />
+				<p:commandButton id="btnEdtSave" value="Save" ajax="false" action="#{challengeController.updateChallenge}">
+					<f:setPropertyActionListener value="2" target="#{challengeController.toView}" />
+				</p:commandButton>
 				<p:commandButton id="btnEdtCancel" value="Return To View" ajax="false" action="#{challengeController.redirectMain}">
 					<f:setPropertyActionListener value="2" target="#{landingPageController.toView}" />
 					<f:setPropertyActionListener value="2" target="#{challengeController.toView}" />

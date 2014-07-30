@@ -5,13 +5,19 @@
 	<h:body>
 		<h:form id="frmChalCtrlr" enctype="multipart/form-data">
 			<p:growl id="grlMsg" showDetail="true" showSummary="true" />
-			<p:remoteCommand actionListener="#{challengeController.initializePage}" name="onload" autoRun="true" update="pnlChalDet" />
+			<p:remoteCommand actionListener="#{challengeController.initializeChalPage}" name="onload" autoRun="true" update="pnlChalDet" />
 			<p:panel id="pnlChalMenu" style="border: 0px !important">
-				<p:commandLink value="Published Challenges" actionListener="#{challengeController.showPublishedChallenges}" update="pnlChalDet" />
+				<p:commandLink value="Published Challenges" actionListener="#{challengeController.showPublishedChallenges}" update="pnlChalDet">
+					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
+				</p:commandLink>
 				<p:graphicImage name="separator.png" library="images" />
-				<p:commandLink value="View Challenges" actionListener="#{challengeController.showViewChallenges}" update="pnlChalDet" />
+				<p:commandLink value="View Challenges" actionListener="#{challengeController.showViewChallenges}" update="pnlChalDet">
+					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
+				</p:commandLink>
 				<p:graphicImage name="separator.png" library="images" />
-				<p:commandLink value="Create Challenge" actionListener="#{challengeController.showCreateChallenges}" update="pnlChalDet" />
+				<p:commandLink value="Create Challenge" actionListener="#{challengeController.showCreateChallenges}" update="pnlChalDet">
+					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
+				</p:commandLink>
 			</p:panel>
 			<p:panel id="pnlChalDet" style="border: 0px !important">
 				<p:panel id="ctrVwPChallenges" style="width: 100% !important" rendered="#{challengeController.showPubChal}">

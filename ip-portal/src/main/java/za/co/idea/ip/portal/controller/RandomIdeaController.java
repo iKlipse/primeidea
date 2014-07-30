@@ -75,6 +75,7 @@ public class RandomIdeaController implements Serializable {
 	private boolean showViewIdea;
 	private boolean showCrtIdea;
 	private String returnView;
+	private String toView;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -87,28 +88,61 @@ public class RandomIdeaController implements Serializable {
 		return client;
 	}
 
-	public String redirectMain() {
-		switch (Integer.valueOf(returnView)) {
-		case 1:
-			return "lani";
-		default:
-			return "";
-		}
-	}
-
-	public void showViewIdeas() {
+	public void initializePage() {
 		try {
-			viewIdeas = RESTServiceHelper.fetchAllIdeasByUser();
+			viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(2);
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
 			showViewOpenIdea = false;
 			showViewIdea = true;
 			showCrtIdea = false;
+			if (toView != null && Integer.valueOf(toView) != -1) {
+				switch (Integer.valueOf(toView)) {
+				case 1:
+					viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(2);
+					showViewOpenIdea = true;
+					showViewIdea = false;
+					showCrtIdea = false;
+					break;
+				case 2:
+					viewIdeas = RESTServiceHelper.fetchAllIdeasByUser();
+					showViewOpenIdea = false;
+					showViewIdea = true;
+					showCrtIdea = false;
+					break;
+				case 3:
+					saveAsOpen = false;
+					ideaBean = new IdeaBean();
+					pGrps = RESTServiceHelper.fetchAllGroups();
+					groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
+					showViewOpenIdea = false;
+					showViewIdea = false;
+					showCrtIdea = true;
+					break;
+				default:
+					viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(2);
+					showViewOpenIdea = false;
+					showViewIdea = true;
+					showCrtIdea = false;
+					break;
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+	}
+
+	public String redirectMain() {
+		switch (Integer.valueOf(returnView)) {
+		case 1:
+			return "lani";
+		case 2:
+			return "ideav";
+		default:
+			return "";
 		}
 	}
 
@@ -120,6 +154,22 @@ public class RandomIdeaController implements Serializable {
 			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
 			showViewOpenIdea = true;
 			showViewIdea = false;
+			showCrtIdea = false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+	}
+
+	public void showViewIdeas() {
+		try {
+			viewIdeas = RESTServiceHelper.fetchAllIdeasByUser();
+			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
+			admUsers = RESTServiceHelper.fetchAllUsers();
+			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
+			showViewOpenIdea = false;
+			showViewIdea = true;
 			showCrtIdea = false;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -470,7 +520,7 @@ public class RandomIdeaController implements Serializable {
 		}
 	}
 
-	public void saveIdea() {
+	public String saveIdea() {
 		try {
 			if (titleAvail) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
@@ -531,18 +581,21 @@ public class RandomIdeaController implements Serializable {
 				}
 				uploadContent = null;
 				saveAsOpen = false;
+				return redirectMain();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create Idea request", "System error occurred, cannot perform create Idea request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
 		}
 	}
 
-	public void updateIdea() {
+	public String updateIdea() {
 		try {
 			List<String> errors = validateIdea();
 			if (errors.size() > 0) {
@@ -618,14 +671,17 @@ public class RandomIdeaController implements Serializable {
 					}
 				}
 				uploadContent = null;
+				return redirectMain();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update Idea request", "System error occurred, cannot perform update Idea request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
 		}
 	}
 
@@ -937,11 +993,19 @@ public class RandomIdeaController implements Serializable {
 		this.showCrtIdea = showCrtIdea;
 	}
 
-	public String isReturnView() {
+	public String getReturnView() {
 		return returnView;
 	}
 
 	public void setReturnView(String returnView) {
 		this.returnView = returnView;
+	}
+
+	public String getToView() {
+		return toView;
+	}
+
+	public void setToView(String toView) {
+		this.toView = toView;
 	}
 }

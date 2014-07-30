@@ -19,11 +19,13 @@
 		<p:column>
 			<p:commandButton id="viewVwOButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{randomIdeaController.showEditOpenIdea}">
 				<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
+				<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />
 			</p:commandButton>
 		</p:column>
 		<p:column>
 			<p:commandButton id="summaryVwOButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{randomIdeaController.showSummaryOpenIdea}">
 				<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
+				<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />
 			</p:commandButton>
 		</p:column>
 	</p:dataTable>

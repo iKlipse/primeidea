@@ -75,6 +75,14 @@
 			<from-outcome>chalv</from-outcome>
 			<to-view-id>/views/challenge/main.xhtml</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>ideav</from-outcome>
+			<to-view-id>/views/random-idea/main.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>solv</from-outcome>
+			<to-view-id>/views/solution/main.xhtml</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 	<converter>
 		<converter-id>userConverter</converter-id>

@@ -25,15 +25,14 @@
 		<p:column>
 			<p:commandButton id="viewVwButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{challengeController.showEditSolution}">
 				<f:setPropertyActionListener value="#{solution}" target="#{challengeController.solutionBean}" />
+				<f:setPropertyActionListener value="3" target="#{challengeController.returnView}" />
 			</p:commandButton>
 		</p:column>
 		<p:column>
 			<p:commandButton id="summaryVwButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{challengeController.showSummarySolution}">
 				<f:setPropertyActionListener value="#{solution}" target="#{challengeController.solutionBean}" />
+				<f:setPropertyActionListener value="3" target="#{challengeController.returnView}" />
 			</p:commandButton>
 		</p:column>
-		<f:facet name="footer">
-			<p:commandButton id="btnVwCancel" value="Return To Home" ajax="false" action="#{adminBean.redirectHome}" />
-		</f:facet>
 	</p:dataTable>
 </ui:composition>

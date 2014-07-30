@@ -165,6 +165,12 @@
    <PROCESS-ITEM-OUTPUT ID="chalv::#views#challenge#main.xhtml"
     NAME="output1" PATH="/views/challenge/main.xhtml"
     TARGET="rules:#views#challenge#main.xhtml" TITLE="chalv" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="ideav::#views#random-idea#main.xhtml"
+    NAME="output2" PATH="/views/random-idea/main.xhtml"
+    TARGET="rules:#views#random-idea#main.xhtml" TITLE="ideav" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="solv::#views#solution#main.xhtml"
+    NAME="output3" PATH="/views/solution/main.xhtml"
+    TARGET="rules:#views#solution#main.xhtml" TITLE="solv" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#views#landing-page#view.xhtml"

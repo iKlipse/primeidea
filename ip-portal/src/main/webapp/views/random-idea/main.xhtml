@@ -5,13 +5,19 @@
 	<h:body>
 		<h:form id="frmRandomIdea" enctype="multipart/form-data">
 			<p:growl id="grlMsg" showDetail="true" showSummary="true" />
-			<p:remoteCommand actionListener="#{randomIdeaController.showCreateIdea}" name="onload" autoRun="true" update="pnlIdeaDet" />
+			<p:remoteCommand actionListener="#{randomIdeaController.initializePage}" name="onload" autoRun="true" update="pnlIdeaDet" />
 			<p:panel id="pnlIdeaMenu" style="border: 0px !important">
-				<p:commandLink value="View Open Ideas" actionListener="#{randomIdeaController.showViewOpenIdeas}" update="pnlIdeaDet" />
+				<p:commandLink value="View Open Ideas" actionListener="#{randomIdeaController.showViewOpenIdeas}" update="pnlIdeaDet">
+					<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />
+				</p:commandLink>
 				<p:graphicImage name="separator.png" library="images" />
-				<p:commandLink value="View Ideas" actionListener="#{randomIdeaController.showViewIdeas}" update="pnlIdeaDet" />
+				<p:commandLink value="View Ideas" actionListener="#{randomIdeaController.showViewIdeas}" update="pnlIdeaDet">
+					<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />
+				</p:commandLink>
 				<p:graphicImage name="separator.png" library="images" />
-				<p:commandLink value="Create Idea" actionListener="#{randomIdeaController.showCreateIdea}" update="pnlIdeaDet" />
+				<p:commandLink value="Create Idea" actionListener="#{randomIdeaController.showCreateIdea}" update="pnlIdeaDet">
+					<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />
+				</p:commandLink>
 			</p:panel>
 			<p:panel id="pnlIdeaDet" style="border: 0px !important">
 				<p:panel id="ctrViewIdeas" style="width: 100% !important" rendered="#{randomIdeaController.showViewIdea}">

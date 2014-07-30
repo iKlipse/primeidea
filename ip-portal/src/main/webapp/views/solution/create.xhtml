@@ -43,8 +43,9 @@
 		</p:column>
 		<p:row>
 			<p:column colspan="2">
-				<p:commandButton id="btnCrtSave" value="Save" ajax="false" action="#{challengeController.saveSolution}" />
-				<p:commandButton id="btnCrtCancel" value="Return To View" ajax="false" action="#{challengeController.showViewSolution}" />
+				<p:commandButton id="btnCrtSave" value="Save" ajax="false" action="#{challengeController.saveSolution}">
+					<f:setPropertyActionListener value="3" target="#{challengeController.toView}" />
+				</p:commandButton>
 			</p:column>
 		</p:row>
 	</p:panelGrid>

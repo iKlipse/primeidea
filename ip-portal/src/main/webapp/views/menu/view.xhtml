@@ -9,6 +9,7 @@
 							<p:commandLink>
 								<p:commandLink actionListener="#{menuController.redirectIdea}">
 									<p:graphicImage library="images" name="idea_hdr.png" style="max-width: 100% !important; height: 100% !important" />
+									<f:setPropertyActionListener value="-1" target="#{randomIdeaController.returnView}" />
 								</p:commandLink>
 							</p:commandLink>
 						</p:column>
@@ -16,12 +17,14 @@
 							<p:commandLink>
 								<p:commandLink actionListener="#{menuController.redirectSolution}">
 									<p:graphicImage library="images" name="solution_hdr.png" style="max-width: 100% !important; height: 100% !important" />
+									<f:setPropertyActionListener value="-1" target="#{challengeController.returnView}" />
 								</p:commandLink>
 							</p:commandLink>
 						</p:column>
 						<p:column>
 							<p:commandLink actionListener="#{menuController.redirectChallenge}">
 								<p:graphicImage library="images" name="challenge_hdr.png" style="max-width: 100% !important; height: 100% !important" />
+								<f:setPropertyActionListener value="-1" target="#{challengeController.returnView}" />
 							</p:commandLink>
 						</p:column>
 						<p:column>

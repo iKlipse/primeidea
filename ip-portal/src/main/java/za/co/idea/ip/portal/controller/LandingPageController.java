@@ -154,30 +154,6 @@ public class LandingPageController implements Serializable {
 		}
 	}
 
-	public void showEditIdea() {
-
-	}
-
-	public void showSummaryIdea() {
-
-	}
-
-	public void showEditChallenge() {
-
-	}
-
-	public void showSummaryChallenge() {
-
-	}
-
-	public void showEditSolution() {
-
-	}
-
-	public void showSummarySolution() {
-
-	}
-
 	private List<ChallengeBean> fetchAllChallengesByUser() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
 		// WebClient fetchChallengeClient =
