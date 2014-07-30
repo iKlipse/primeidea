@@ -3,15 +3,17 @@
 		<p:panel style="width: 100% !important">
 			<f:facet name="options">
 				<p:menu style="vertical-align: center !important">
-					<p:menuitem value="Edit" ajax="false" immediate="true" action="#{landingPageController.showEditIdea}">
-						<f:setPropertyActionListener value="#{idea}" target="#{landingPageController.ideaBean}" />
+					<p:menuitem value="Edit" ajax="false" immediate="true" action="#{randomIdeaController.showEditIdea}">
+						<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
+						<f:setPropertyActionListener value="1" target="#{randomIdeaController.returnView}" />
 					</p:menuitem>
-					<p:menuitem value="Summary" ajax="false" immediate="true" action="#{landingPageController.showSummaryIdea}">
-						<f:setPropertyActionListener value="#{idea}" target="#{landingPageController.ideaBean}" />
+					<p:menuitem value="Summary" ajax="false" immediate="true" action="#{randomIdeaController.showSummaryIdea}">
+						<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
+						<f:setPropertyActionListener value="1" target="#{randomIdeaController.returnView}" />
 					</p:menuitem>
 				</p:menu>
 			</f:facet>
-			<f:facet name="header" style="vertical-align: center !important; height:100% !important; align-text: left !important" disabled="true">
+			<f:facet name="header" style="vertical-align: center !important; height:100% !important; align-text: left !important">
 				<p:selectOneMenu value="#{idea.crtdById}">
 					<f:selectItems value="#{landingPageController.admUsers}" var="a" itemLabel="#{a.scName} - #{a.fName} - #{a.lName}" itemValue="#{a.uId}" />
 				</p:selectOneMenu>

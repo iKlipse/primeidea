@@ -99,6 +99,8 @@ public class ChallengeController implements Serializable {
 	private boolean showPubSol;
 	private boolean showViewSol;
 	private boolean showCrtSol;
+	private String returnView;
+	private String toView;
 	private static final Logger logger = Logger.getLogger(ChallengeController.class);
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -109,6 +111,61 @@ public class ChallengeController implements Serializable {
 		client.header("Content-Type", "application/json");
 		client.header("Accept", "application/json");
 		return client;
+	}
+
+	public void initializePage() {
+		try {
+			challengeCats = fetchAllChallengeCat();
+			admUsers = fetchAllUsers();
+			challengeStatuses = fetchAllChallengeStatuses();
+			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
+			showPubChal = true;
+			showViewChal = false;
+			showCrtChal = false;
+			if (toView != null && Integer.valueOf(toView) != -1) {
+				switch (Integer.valueOf(toView)) {
+				case 1:
+					viewChallenges = fetchAllChallengesByStatusIdUserId(4);
+					showPubChal = true;
+					showViewChal = false;
+					showCrtChal = false;
+					break;
+				case 2:
+					viewChallenges = fetchAllChallengesByUser();
+					showPubChal = false;
+					showViewChal = true;
+					showCrtChal = false;
+					break;
+				case 3:
+					pGrps = fetchAllGroups();
+					groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
+					challengeBean = new ChallengeBean();
+					showPubChal = false;
+					showViewChal = false;
+					showCrtChal = true;
+					break;
+				default:
+					viewChallenges = fetchAllChallengesByStatusIdUserId(4);
+					showPubChal = true;
+					showViewChal = false;
+					showCrtChal = false;
+				}
+			}
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+	}
+
+	public String redirectMain() {
+		switch (Integer.valueOf(returnView)) {
+		case 1:
+			return "lani";
+		case 2:
+			return "chalv";
+		default:
+			return "";
+		}
 	}
 
 	public void showPublishedChallenges() {
@@ -2163,6 +2220,22 @@ public class ChallengeController implements Serializable {
 
 	public void setShowCrtSol(boolean showCrtSol) {
 		this.showCrtSol = showCrtSol;
+	}
+
+	public String getReturnView() {
+		return returnView;
+	}
+
+	public void setReturnView(String returnView) {
+		this.returnView = returnView;
+	}
+
+	public String getToView() {
+		return toView;
+	}
+
+	public void setToView(String toView) {
+		this.toView = toView;
 	}
 
 }

@@ -62,7 +62,9 @@
 		<p:row>
 			<p:column colspan="2">
 				<p:commandButton id="btnSave" value="Save" ajax="false" action="#{challengeController.updateSolution}" />
-				<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{challengeController.showViewSolution}" />
+				<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{challengeController.redirectMain}">
+					<f:setPropertyActionListener value="3" target="#{landingPageController.toView}" />
+				</p:commandButton>
 			</p:column>
 		</p:row>
 	</p:panelGrid>

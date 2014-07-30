@@ -5,7 +5,7 @@
 	<h:body>
 		<h:form id="frmChalCtrlr" enctype="multipart/form-data">
 			<p:growl id="grlMsg" showDetail="true" showSummary="true" />
-			<p:remoteCommand actionListener="#{challengeController.showPublishedChallenges}" name="onload" autoRun="true" update="pnlChalDet" />
+			<p:remoteCommand actionListener="#{challengeController.initializePage}" name="onload" autoRun="true" update="pnlChalDet" />
 			<p:panel id="pnlChalMenu" style="border: 0px !important">
 				<p:commandLink value="Published Challenges" actionListener="#{challengeController.showPublishedChallenges}" update="pnlChalDet" />
 				<p:graphicImage name="separator.png" library="images" />

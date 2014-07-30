@@ -3,29 +3,33 @@
  <PROCESS-ITEM NAME="rules:" SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules::0" NAME="item" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT ID="chalh::#views#challenge#main.xhtml"
-    NAME="output" PATH="/views/challenge/main.xhtml"
+    NAME="output" PATH="/views/challenge/main.xhtml" SHAPE="-1,16"
     TARGET="rules:#views#challenge#main.xhtml" TITLE="chalh" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="chale::#views#challenge#container#editContainer.xhtml"
     NAME="output1" PATH="/views/challenge/container/editContainer.xhtml"
+    SHAPE="-1,24"
     TARGET="rules:#views#challenge#container#editContainer.xhtml"
     TITLE="chale" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="chaleo::#views#challenge#container#editOpenContainer.xhtml"
     NAME="output2"
     PATH="/views/challenge/container/editOpenContainer.xhtml"
+    SHAPE="-1,32"
     TARGET="rules:#views#challenge#container#editOpenContainer.xhtml"
     TITLE="chaleo" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="chals::#views#challenge#container#summaryContainer.xhtml"
     NAME="output3"
     PATH="/views/challenge/container/summaryContainer.xhtml"
+    SHAPE="-1,40"
     TARGET="rules:#views#challenge#container#summaryContainer.xhtml"
     TITLE="chals" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="chalso::#views#challenge#container#summaryOpenContainer.xhtml"
     NAME="output4"
     PATH="/views/challenge/container/summaryOpenContainer.xhtml"
+    SHAPE="-1,48"
     TARGET="rules:#views#challenge#container#summaryOpenContainer.xhtml"
     TITLE="chalso" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
@@ -33,46 +37,50 @@
  <PROCESS-ITEM
   NAME="rules:#views#challenge#container#editOpenContainer.xhtml"
   PATH="/views/challenge/container/editOpenContainer.xhtml"
-  SHAPE="256,177,0,0" model-entity="JSFProcessGroup"/>
+  SHAPE="304,385,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM
   NAME="rules:#views#challenge#container#editContainer.xhtml"
   PATH="/views/challenge/container/editContainer.xhtml"
-  SHAPE="256,33,0,0" model-entity="JSFProcessGroup"/>
+  SHAPE="304,273,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM
   NAME="rules:#views#challenge#container#summaryContainer.xhtml"
   PATH="/views/challenge/container/summaryContainer.xhtml"
-  SHAPE="288,353,0,0" model-entity="JSFProcessGroup"/>
+  SHAPE="304,497,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM
   NAME="rules:#views#challenge#container#summaryOpenContainer.xhtml"
   PATH="/views/challenge/container/summaryOpenContainer.xhtml"
-  SHAPE="288,465,0,0" model-entity="JSFProcessGroup"/>
- <PROCESS-ITEM NAME="rules::1" SHAPE="32,225,0,0" model-entity="JSFProcessGroup">
+  SHAPE="304,609,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules::1" SHAPE="32,705,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules::1" NAME="item" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT ID="ideah::#views#random-idea#main.xhtml"
-    NAME="output" PATH="/views/random-idea/main.xhtml"
+    NAME="output" PATH="/views/random-idea/main.xhtml" SHAPE="-1,16"
     TARGET="rules:#views#random-idea#main.xhtml" TITLE="ideah" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="ideae::#views#random-idea#container#editContainer.xhtml"
     NAME="output1"
     PATH="/views/random-idea/container/editContainer.xhtml"
+    SHAPE="-1,24"
     TARGET="rules:#views#random-idea#container#editContainer.xhtml"
     TITLE="ideae" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="ideaeo::#views#random-idea#container#editOpenContainer.xhtml"
     NAME="output2"
     PATH="/views/random-idea/container/editOpenContainer.xhtml"
+    SHAPE="-1,32"
     TARGET="rules:#views#random-idea#container#editOpenContainer.xhtml"
     TITLE="ideaeo" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="ideas::#views#random-idea#container#summaryContainer.xhtml"
     NAME="output3"
     PATH="/views/random-idea/container/summaryContainer.xhtml"
+    SHAPE="-1,40"
     TARGET="rules:#views#random-idea#container#summaryContainer.xhtml"
     TITLE="ideas" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="ideaso::#views#random-idea#container#summaryOpenContainer.xhtml"
     NAME="output4"
     PATH="/views/random-idea/container/summaryOpenContainer.xhtml"
+    SHAPE="-1,48"
     TARGET="rules:#views#random-idea#container#summaryOpenContainer.xhtml"
     TITLE="ideaso" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
@@ -80,45 +88,49 @@
  <PROCESS-ITEM
   NAME="rules:#views#random-idea#container#editContainer.xhtml"
   PATH="/views/random-idea/container/editContainer.xhtml"
-  SHAPE="288,353,0,0" model-entity="JSFProcessGroup"/>
+  SHAPE="304,961,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM
   NAME="rules:#views#random-idea#container#editOpenContainer.xhtml"
   PATH="/views/random-idea/container/editOpenContainer.xhtml"
-  SHAPE="288,353,0,0" model-entity="JSFProcessGroup"/>
+  SHAPE="304,1073,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM
   NAME="rules:#views#random-idea#container#summaryContainer.xhtml"
   PATH="/views/random-idea/container/summaryContainer.xhtml"
-  SHAPE="288,353,0,0" model-entity="JSFProcessGroup"/>
+  SHAPE="304,1185,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM
   NAME="rules:#views#random-idea#container#summaryOpenContainer.xhtml"
   PATH="/views/random-idea/container/summaryOpenContainer.xhtml"
-  SHAPE="288,785,0,0" model-entity="JSFProcessGroup"/>
- <PROCESS-ITEM NAME="rules::2" SHAPE="32,769,0,0" model-entity="JSFProcessGroup">
+  SHAPE="304,1297,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules::2" SHAPE="32,1393,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules::2" NAME="item" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT ID="solh::#views#solution#main.xhtml"
-    NAME="output" PATH="/views/solution/main.xhtml"
+    NAME="output" PATH="/views/solution/main.xhtml" SHAPE="-1,16"
     TARGET="rules:#views#solution#main.xhtml" TITLE="solh" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="sole::#views#solution#container#editContainer.xhtml"
     NAME="output1" PATH="/views/solution/container/editContainer.xhtml"
+    SHAPE="-1,24"
     TARGET="rules:#views#solution#container#editContainer.xhtml"
     TITLE="sole" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="soleo::#views#solution#container#editOpenContainer.xhtml"
     NAME="output2"
     PATH="/views/solution/container/editOpenContainer.xhtml"
+    SHAPE="-1,32"
     TARGET="rules:#views#solution#container#editOpenContainer.xhtml"
     TITLE="soleo" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="sols::#views#solution#container#summaryContainer.xhtml"
     NAME="output3"
     PATH="/views/solution/container/summaryContainer.xhtml"
+    SHAPE="-1,40"
     TARGET="rules:#views#solution#container#summaryContainer.xhtml"
     TITLE="sols" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="solso::#views#solution#container#summaryOpenContainer.xhtml"
     NAME="output4"
     PATH="/views/solution/container/summaryOpenContainer.xhtml"
+    SHAPE="-1,48"
     TARGET="rules:#views#solution#container#summaryOpenContainer.xhtml"
     TITLE="solso" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
@@ -126,23 +138,35 @@
  <PROCESS-ITEM
   NAME="rules:#views#solution#container#editContainer.xhtml"
   PATH="/views/solution/container/editContainer.xhtml"
-  SHAPE="288,897,0,0" model-entity="JSFProcessGroup"/>
+  SHAPE="304,1649,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM
   NAME="rules:#views#solution#container#editOpenContainer.xhtml"
   PATH="/views/solution/container/editOpenContainer.xhtml"
-  SHAPE="288,897,0,0" model-entity="JSFProcessGroup"/>
+  SHAPE="304,1761,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM
   NAME="rules:#views#solution#container#summaryContainer.xhtml"
   PATH="/views/solution/container/summaryContainer.xhtml"
-  SHAPE="288,897,0,0" model-entity="JSFProcessGroup"/>
+  SHAPE="304,1873,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM
   NAME="rules:#views#solution#container#summaryOpenContainer.xhtml"
   PATH="/views/solution/container/summaryOpenContainer.xhtml"
-  SHAPE="288,1329,0,0" model-entity="JSFProcessGroup"/>
+  SHAPE="304,1985,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#views#challenge#main.xhtml"
-  PATH="/views/challenge/main.xhtml" SHAPE="304,385,0,0" model-entity="JSFProcessGroup"/>
+  PATH="/views/challenge/main.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#views#random-idea#main.xhtml"
-  PATH="/views/random-idea/main.xhtml" SHAPE="288,817,0,0" model-entity="JSFProcessGroup"/>
+  PATH="/views/random-idea/main.xhtml" SHAPE="304,721,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#views#solution#main.xhtml"
-  PATH="/views/solution/main.xhtml" SHAPE="304,1425,0,0" model-entity="JSFProcessGroup"/>
+  PATH="/views/solution/main.xhtml" SHAPE="304,1409,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules::3" SHAPE="32,2081,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::3" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="lani::#views#landing-page#view.xhtml"
+    NAME="output" PATH="/views/landing-page/view.xhtml" SHAPE="-1,16"
+    TARGET="rules:#views#landing-page#view.xhtml" TITLE="lani" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="chalv::#views#challenge#main.xhtml"
+    NAME="output1" PATH="/views/challenge/main.xhtml"
+    TARGET="rules:#views#challenge#main.xhtml" TITLE="chalv" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#views#landing-page#view.xhtml"
+  PATH="/views/landing-page/view.xhtml" SHAPE="240,2097,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

@@ -49,6 +49,7 @@ public class LandingPageController implements Serializable {
 	private boolean showIdeas;
 	private boolean showChals;
 	private boolean showSols;
+	private String toView;
 
 	public void initializePage() {
 		try {
@@ -74,6 +75,30 @@ public class LandingPageController implements Serializable {
 			showIdeas = true;
 			showChals = false;
 			showSols = false;
+			if (toView != null && Integer.valueOf(toView) != -1) {
+				switch (Integer.valueOf(toView)) {
+				case 1:
+					showIdeas = true;
+					showChals = false;
+					showSols = false;
+					break;
+				case 2:
+					showIdeas = false;
+					showChals = true;
+					showSols = false;
+					break;
+				case 3:
+					showIdeas = false;
+					showChals = false;
+					showSols = true;
+					break;
+				default:
+					showIdeas = true;
+					showChals = false;
+					showSols = false;
+				}
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
@@ -449,6 +474,14 @@ public class LandingPageController implements Serializable {
 
 	public void setShowSols(boolean showSols) {
 		this.showSols = showSols;
+	}
+
+	public String getToView() {
+		return toView;
+	}
+
+	public void setToView(String toView) {
+		this.toView = toView;
 	}
 
 	public class LoginBridgeEventHandler implements BridgeEventHandler {

@@ -66,6 +66,16 @@
 			<to-view-id>/views/solution/container/summaryOpenContainer.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>lani</from-outcome>
+			<to-view-id>/views/landing-page/view.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>chalv</from-outcome>
+			<to-view-id>/views/challenge/main.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
 	<converter>
 		<converter-id>userConverter</converter-id>
 		<converter-class>za.co.idea.ip.portal.util.UserBeanConverter</converter-class>

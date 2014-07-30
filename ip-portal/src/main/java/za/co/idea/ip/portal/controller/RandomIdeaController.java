@@ -74,6 +74,7 @@ public class RandomIdeaController implements Serializable {
 	private boolean showViewOpenIdea;
 	private boolean showViewIdea;
 	private boolean showCrtIdea;
+	private String returnView;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -87,7 +88,12 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	public String redirectMain() {
-		return "ideah";
+		switch (Integer.valueOf(returnView)) {
+		case 1:
+			return "lani";
+		default:
+			return "";
+		}
 	}
 
 	public void showViewIdeas() {
@@ -145,11 +151,14 @@ public class RandomIdeaController implements Serializable {
 		try {
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			if (((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue() == 0l) {
-				ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
-			} else {
-				ideaStatuses = RESTServiceHelper.fetchNextIdeaStatuses(ideaBean.getSetStatusId().intValue());
-			}
+			// if (((Long)
+			// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue()
+			// == 0l) {
+			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
+			// } else {
+			// ideaStatuses =
+			// RESTServiceHelper.fetchNextIdeaStatuses(ideaBean.getSetStatusId().intValue());
+			// }
 			pGrps = RESTServiceHelper.fetchAllGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
@@ -199,7 +208,14 @@ public class RandomIdeaController implements Serializable {
 		try {
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			ideaStatuses = RESTServiceHelper.fetchNextIdeaStatuses(ideaBean.getSetStatusId().intValue());
+			// if (((Long)
+			// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue()
+			// == 0l) {
+			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
+			// } else {
+			// ideaStatuses =
+			// RESTServiceHelper.fetchNextIdeaStatuses(ideaBean.getSetStatusId().intValue());
+			// }
 			pGrps = RESTServiceHelper.fetchAllGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
@@ -919,5 +935,13 @@ public class RandomIdeaController implements Serializable {
 
 	public void setShowCrtIdea(boolean showCrtIdea) {
 		this.showCrtIdea = showCrtIdea;
+	}
+
+	public String isReturnView() {
+		return returnView;
+	}
+
+	public void setReturnView(String returnView) {
+		this.returnView = returnView;
 	}
 }

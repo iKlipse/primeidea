@@ -3,15 +3,17 @@
 		<p:panel style="width: 100% !important">
 			<f:facet name="options">
 				<p:menu style="vertical-align: center !important">
-					<p:menuitem value="Edit" ajax="false" immediate="true" action="#{landingPageController.showEditChallenge}">
-						<f:setPropertyActionListener value="#{challenge}" target="#{landingPageController.challengeBean}" />
+					<p:menuitem value="Edit" ajax="false" immediate="true" action="#{challengeController.showEditChallenge}">
+						<f:setPropertyActionListener value="#{challenge}" target="#{challengeController.challengeBean}" />
+						<f:setPropertyActionListener value="1" target="#{challengeController.returnView}" />
 					</p:menuitem>
-					<p:menuitem value="Summary" ajax="false" immediate="true" action="#{landingPageController.showSummaryChallenge}">
-						<f:setPropertyActionListener value="#{challenge}" target="#{landingPageController.challengeBean}" />
+					<p:menuitem value="Summary" ajax="false" immediate="true" action="#{challengeController.showSummaryChallenge}">
+						<f:setPropertyActionListener value="#{challenge}" target="#{challengeController.challengeBean}" />
+						<f:setPropertyActionListener value="1" target="#{challengeController.returnView}" />
 					</p:menuitem>
 				</p:menu>
 			</f:facet>
-			<f:facet name="header" style="align-text: left !important" disabled="true">
+			<f:facet name="header" style="align-text: left !important">
 				<p:selectOneMenu value="#{challenge.crtdById}">
 					<f:selectItems value="#{landingPageController.admUsers}" var="a" itemLabel="#{a.scName} - #{a.fName} - #{a.lName}" itemValue="#{a.uId}" />
 				</p:selectOneMenu>

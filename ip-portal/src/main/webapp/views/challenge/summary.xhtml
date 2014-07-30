@@ -48,7 +48,10 @@
 			<p:commandButton id="btnSumSolSubmit" value="Submit a Solution" ajax="false" action="#{challengeController.showSubmitSolution}" rendered="#{challengeController.challengeBean.statusId == 4}">
 				<f:param name="chalId" value="#{challengeController.challengeBean.id}" />
 			</p:commandButton>
-			<p:commandButton id="btnSumCancel" value="Return To View" ajax="false" action="#{challengeController.showViewChallenges}" />
+				<p:commandButton id="btnEdtCancel" value="Return To View" ajax="false" action="#{challengeController.redirectMain}">
+					<f:setPropertyActionListener value="2" target="#{landingPageController.toView}" />
+					<f:setPropertyActionListener value="2" target="#{challengeController.toView}" />
+				</p:commandButton>
 		</f:facet>
 	</p:panelGrid>
 	<p:overlayPanel dynamic="true" for="giSumComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
