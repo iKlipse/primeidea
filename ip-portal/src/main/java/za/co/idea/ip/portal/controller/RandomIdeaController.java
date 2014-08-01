@@ -11,6 +11,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.portlet.PortletRequest;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -28,6 +29,9 @@ import org.primefaces.model.tagcloud.DefaultTagCloudItem;
 import org.primefaces.model.tagcloud.DefaultTagCloudModel;
 import org.primefaces.model.tagcloud.TagCloudModel;
 
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
+
 import za.co.idea.ip.portal.bean.GroupBean;
 import za.co.idea.ip.portal.bean.IdeaBean;
 import za.co.idea.ip.portal.bean.ListSelectorBean;
@@ -40,6 +44,7 @@ import za.co.idea.ip.ws.bean.AttachmentMessage;
 import za.co.idea.ip.ws.bean.IdeaMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.TagMessage;
+import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
 
 @ManagedBean(name = "randomIdeaController")
@@ -58,6 +63,7 @@ public class RandomIdeaController implements Serializable {
 	private StreamedContent fileContent;
 	private StreamedContent uploadContent;
 	private List<GroupBean> pGrps;
+	private String[] selGrpId;
 	private DualListModel<GroupBean> groupTwinSelect;
 	private String commentText;
 	private String buildOnText;
@@ -76,6 +82,7 @@ public class RandomIdeaController implements Serializable {
 	private boolean showCrtIdea;
 	private String returnView;
 	private String toView;
+	private long userId;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -90,6 +97,11 @@ public class RandomIdeaController implements Serializable {
 
 	public void initializePage() {
 		try {
+			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			User user = (User) request.getAttribute(WebKeys.USER);
+			WebClient client = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+			userId = message.getuId();
 			viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(2);
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
@@ -106,7 +118,7 @@ public class RandomIdeaController implements Serializable {
 					showCrtIdea = false;
 					break;
 				case 2:
-					viewIdeas = RESTServiceHelper.fetchAllIdeasByUser();
+					viewIdeas = RESTServiceHelper.fetchAllIdeasByUser(userId);
 					showViewOpenIdea = false;
 					showViewIdea = true;
 					showCrtIdea = false;
@@ -164,7 +176,7 @@ public class RandomIdeaController implements Serializable {
 
 	public void showViewIdeas() {
 		try {
-			viewIdeas = RESTServiceHelper.fetchAllIdeasByUser();
+			viewIdeas = RESTServiceHelper.fetchAllIdeasByUser(userId);
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
@@ -545,7 +557,8 @@ public class RandomIdeaController implements Serializable {
 			ideaMessage.setIdeaId(COUNTER.getNextId("IpIdea"));
 			ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
-			ideaMessage.setGroupIdList(getSelGroupIds());
+			// ideaMessage.setGroupIdList(getSelGroupIds());
+			ideaMessage.setGroupIdList(toLongArray(selGrpId));
 			if (saveAsOpen) {
 				ideaMessage.setSetStatusId(2l);
 			} else {
@@ -615,7 +628,8 @@ public class RandomIdeaController implements Serializable {
 			ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
 			ideaMessage.setSetStatusId(ideaBean.getSetStatusId());
-			ideaMessage.setGroupIdList(getSelGroupIds());
+			// ideaMessage.setGroupIdList(getSelGroupIds());
+			ideaMessage.setGroupIdList(toLongArray(selGrpId));
 			ResponseMessage response = updateIdeaClient.accept(MediaType.APPLICATION_JSON).put(ideaMessage, ResponseMessage.class);
 			updateIdeaClient.close();
 			if (response.getStatusCode() == 0) {
@@ -683,6 +697,13 @@ public class RandomIdeaController implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
+	}
+
+	protected Long[] toLongArray(String[] val) {
+		Long[] ret = new Long[val.length];
+		for (int i = 0; i < val.length; i++)
+			ret[i] = Long.valueOf(val[i]);
+		return ret;
 	}
 
 	private TagCloudModel fetchAllLikes() {
@@ -753,7 +774,7 @@ public class RandomIdeaController implements Serializable {
 		return ret;
 	}
 
-	private Long[] getSelGroupIds() {
+	protected Long[] getSelGroupIds() {
 		Long[] ret = new Long[groupTwinSelect.getTarget().size()];
 		int i = 0;
 		for (GroupBean bean : groupTwinSelect.getTarget()) {
@@ -945,6 +966,14 @@ public class RandomIdeaController implements Serializable {
 		this.pGrps = pGrps;
 	}
 
+	public String[] getSelGrpId() {
+		return selGrpId;
+	}
+
+	public void setSelGrpId(String[] selGrpId) {
+		this.selGrpId = selGrpId;
+	}
+
 	public boolean isSaveAsOpen() {
 		return saveAsOpen;
 	}
@@ -1007,5 +1036,13 @@ public class RandomIdeaController implements Serializable {
 
 	public void setToView(String toView) {
 		this.toView = toView;
+	}
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
 }

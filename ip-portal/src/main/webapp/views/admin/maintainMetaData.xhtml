@@ -1,80 +1,83 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<ui:define name="title">Maintain Metadata</ui:define>
-	<ui:define name="body">
-		<p:panel id="ctrMetaData">
-			<f:facet name="header">
-					Maintain Meta-Data
-				</f:facet>
-			<p:dataTable id="dtMetaData" widgetVar="dtMetaData" value="#{metaDataBean.beans}" var="bean" rows="10" paginator="true" paginatorPosition="bottom" emptyMessage="No MetaData Found">
+	<p:dataTable id="ldtMetaData" widgetVar="dtMetaData" value="#{adminController.beans}" var="bean" rows="10" paginator="true" paginatorPosition="bottom" emptyMessage="No MetaData Found">
 				<f:facet name="header">
-					<p:selectOneMenu id="somSelectMeta" value="#{metaDataBean.table}">
-						<p:ajax listener="#{metaDataBean.changeMetaData}" update="dtMetaData,:ideaFrm:pnlModMetaData,:ideaFrm:pnlAddMetaData" />
+					<p:selectOneMenu id="lsomSelectMeta" value="#{adminController.table}">
+						<p:ajax listener="#{adminController.changeMetaData}" update="dtMetaData,:frmAdmin:pnlModMetaData,:frmAdmin:pnlAddMetaData" />
 						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{metaDataBean.metaList}" />
+						<f:selectItems value="#{adminController.metaList}" />
 					</p:selectOneMenu>
 				</f:facet>
 				<p:column sortBy="#{bean.id}" headerText="ID">
-					<p:outputLabel id="lblId" value="#{bean.id}" />
+					<p:outputLabel id="llblId" value="#{bean.id}" />
 				</p:column>
 				<p:column sortBy="#{bean.desc}" headerText="Description">
-					<p:outputLabel id="lblDesc" value="#{bean.desc}" />
+					<p:outputLabel id="llblDesc" value="#{bean.desc}" />
 				</p:column>
 				<p:column>
-					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{metaDataBean.showMetaData}">
-						<f:setPropertyActionListener value="#{bean}" target="#{metaDataBean.bean}" />
+					<p:commandButton id="lviewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminController.showMetaData}">
+						<f:setPropertyActionListener value="#{bean}" target="#{adminController.bean}" />
+						<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
 					</p:commandButton>
 				</p:column>
 				<f:facet name="footer">
-					<p:commandButton id="addButton" value="Add" ajax="false" immediate="true" action="#{metaDataBean.showMetaDataAdd}" rendered="#{metaDataBean.showAddBtn}" />
-					<p:commandButton id="btnCancel" value="Return To Home" ajax="false" action="#{adminBean.redirectHome}" />
+					<p:commandButton id="laddButton" value="Add" ajax="false" immediate="true" action="#{adminController.showMetaDataAdd}" rendered="#{adminController.showAddBtn}" >
+					  <f:setPropertyActionListener value="1" target="#{adminController.toView}" />
+					  </p:commandButton>
+					<p:commandButton id="lbtnICancel" value="Return To Home" ajax="false" action="#{adminController.redirectHome}" >
+					<f:setPropertyActionListener value="1" target="#{adminController.returnView}" />
+					  </p:commandButton>
 				</f:facet>
 			</p:dataTable>
 			<br />
-			<p:panelGrid id="pnlModMetaData" rendered="#{metaDataBean.showModPanel}" columns="2">
+			<p:panelGrid id="lpnlModMetaData" rendered="#{adminController.showModPanel}" columns="2">
 				<p:column>
-					<p:outputLabel id="lblModId" value="ID : " />
+					<p:outputLabel id="llblModId" value="ID : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtModId" value="#{metaDataBean.selId}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="ltxtModId" value="#{adminController.selId}" />
 				</p:column>
 
 				<p:column>
-					<p:outputLabel id="lblModDesc" value="Description : " />
+					<p:outputLabel id="llblModDesc" value="Description : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtModDesc" value="#{metaDataBean.selVal}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="ltxtModDesc" value="#{adminController.selVal}" />
 				</p:column>
 
 				<p:column colspan="2">
-					<p:commandButton id="modSaveButton" value="Update" ajax="false" action="#{metaDataBean.updateMetaData}" />
-					<p:commandButton id="modDelButton" value="Delete" ajax="false" action="#{metaDataBean.deleteMetaData}" />
+					<p:commandButton id="lmodSaveButton" value="Update" ajax="false" action="#{adminController.updateMetaData}" >
+					  <f:setPropertyActionListener value="1" target="#{adminController.toView}" />
+					  </p:commandButton>
+					<p:commandButton id="lmodDelButton" value="Delete" ajax="false" action="#{adminController.deleteMetaData}" >
+					<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
+					  </p:commandButton>
 				</p:column>
 
 			</p:panelGrid>
 			<br />
-			<p:panelGrid id="pnlAddMetaData" rendered="#{metaDataBean.showAddPanel}" columns="2">
+			<p:panelGrid id="lpnlAddMetaData" rendered="#{adminController.showAddPanel}" columns="2">
 				<p:row>
 					<p:column>
-						<p:outputLabel id="lblAddId" value="ID : " />
+						<p:outputLabel id="llblAddId" value="ID : " />
 					</p:column>
 					<p:column>
-						<p:inputText style="width: 100%" autocomplete="false" id="txtAddId" value="#{metaDataBean.selId}" />
+						<p:inputText style="width: 100%" autocomplete="false" id="ltxtAddId" value="#{adminController.selId}" />
 					</p:column>
 				</p:row>
 				<p:row>
 					<p:column>
-						<p:outputLabel id="lblAddDesc" value="Description : " />
+						<p:outputLabel id="llblAddDesc" value="Description : " />
 					</p:column>
 					<p:column>
-						<p:inputText style="width: 100%" autocomplete="false" id="txtAddDesc" value="#{metaDataBean.selVal}" />
+						<p:inputText style="width: 100%" autocomplete="false" id="ltxtAddDesc" value="#{adminController.selVal}" />
 					</p:column>
 				</p:row>
 				<p:row>
 					<p:column colspan="2">
-						<p:commandButton id="addSaveButton" value="Save" ajax="false" action="#{metaDataBean.addMetaData}" />
+						<p:commandButton id="laddSaveButton" value="Save" ajax="false" action="#{adminController.addMetaData}" >
+						<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
+					  </p:commandButton>
 					</p:column>
 				</p:row>
 			</p:panelGrid>
-		</p:panel>
-	</ui:define>
 </ui:composition>

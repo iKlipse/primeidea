@@ -1,0 +1,33 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<p:dataTable id="bdtViewNews" value="#{adminController.viewNewsBeans}" var="news" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No News Found" style="width: 100% !important">
+				<p:column>
+					<f:facet name="header">News ID</f:facet>
+					<p:outputLabel id="btxtNewsId" value="#{news.nId}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Title</f:facet>
+					<p:outputLabel id="bnewsTitle" value="#{news.nTitle}" />
+
+				</p:column>
+				<p:column>
+					<f:facet name="header">Start Date</f:facet>
+					<p:calendar mode="popup" id="bnewsStartDate" value="#{news.nStartDate}" disabled="true" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">End Date</f:facet>
+					<p:calendar mode="popup" id="bnewsEndDate" value="#{news.nEndDate}" disabled="true" />
+				</p:column>
+
+				<p:column>
+					<p:commandButton id="bviewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminController.showEditNews}">
+						<f:setPropertyActionListener value="#{news}" target="#{adminController.newsBean}" />
+						<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+					</p:commandButton>
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton id="bbtnSCancel" value="Return To Home" ajax="false" action="#{adminController.redirectHome}" >
+					  <f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+					</p:commandButton>					  
+				</f:facet>
+			</p:dataTable>
+</ui:composition>

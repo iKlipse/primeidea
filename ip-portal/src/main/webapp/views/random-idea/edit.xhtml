@@ -34,7 +34,8 @@
 			<p:outputLabel id="lblEdtIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:commandButton style="width: 100%" id="btnEdtDownload" value="Download" ajax="false" disabled="#{randomIdeaController.fileAvail}">
+			<p:commandButton style="width: 100%" id="btnEdtDownload" value="Download" ajax="false" disabled="true">
+				<!-- disabled="#{randomIdeaController.fileAvail}" -->
 				<p:fileDownload value="#{randomIdeaController.fileContent}" />
 			</p:commandButton>
 		</p:column>
@@ -48,7 +49,10 @@
 			<p:outputLabel id="lblEdtFuncGrps" value="Idea Groups" />
 		</p:column>
 		<p:column>
-			<p:pickList style="width: 100%" id="plEdtGroupPick" converter="groupConverter" value="#{randomIdeaController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" />
+			<!-- <p:pickList style="width: 100%" id="plEdtGroupPick" converter="groupConverter" value="#{randomIdeaController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" /> -->
+			<p:selectCheckboxMenu id="scmGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{randomIdeaController.selGrpId}">
+				<f:selectItems value="#{randomIdeaController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
+			</p:selectCheckboxMenu>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtCrtdBy" value="Created By : " />

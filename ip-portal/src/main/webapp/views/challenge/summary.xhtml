@@ -17,7 +17,8 @@
 			<p:outputLabel id="lblSumIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:commandButton id="btnSumDownload" value="Download" ajax="false" disabled="#{challengeController.chalFileAvail}">
+			<p:commandButton id="btnSumDownload" value="Download" ajax="false" disabled="true">
+				<!-- disabled="#{challengeController.chalFileAvail}" -->
 				<p:fileDownload value="#{challengeController.chalFileContent}" />
 			</p:commandButton>
 		</p:column>
@@ -33,7 +34,7 @@
 		<p:column>
 			<p:panelGrid columns="2" style="border: 0px !important;">
 				<p:column>
-					<p:commandLink id="lnkSumLikeIdea" action="#{challengeController.likeChallenge}" update="lblSumLikeCnt, :ideaFrm:tgSumLikes">
+					<p:commandLink id="lnkSumLikeIdea" action="#{challengeController.likeChallenge}" update="lblSumLikeCnt, :frmSummaryChal:tgSumLikes">
 						<p:outputLabel id="lblSumLikeCnt" value="#{challengeController.chalLikeCnt}" style="height:25px; width:25px;" />
 						<p:graphicImage id="giSumLike" name="like-128.png" library="images" height="25px" width="25px" />
 					</p:commandLink>
@@ -48,13 +49,13 @@
 			<p:commandButton id="btnSumSolSubmit" value="Submit a Solution" ajax="false" action="#{challengeController.showSubmitSolution}" rendered="#{challengeController.challengeBean.statusId == 4}">
 				<f:param name="chalId" value="#{challengeController.challengeBean.id}" />
 			</p:commandButton>
-				<p:commandButton id="btnEdtCancel" value="Return To View" ajax="false" action="#{challengeController.redirectMain}">
-					<f:setPropertyActionListener value="2" target="#{landingPageController.toView}" />
-					<f:setPropertyActionListener value="2" target="#{challengeController.toView}" />
-				</p:commandButton>
+			<p:commandButton id="btnEdtCancel" value="Return To View" ajax="false" action="#{challengeController.redirectMain}">
+				<f:setPropertyActionListener value="2" target="#{landingPageController.toView}" />
+				<f:setPropertyActionListener value="2" target="#{challengeController.toView}" />
+			</p:commandButton>
 		</f:facet>
 	</p:panelGrid>
-	<p:overlayPanel dynamic="true" for="giSumComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
+	<p:overlayPanel dynamic="true" for="giSumComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true" >
 		<p:panelGrid id="pnlSumChallengeComment" columns="1">
 			<p:column>
 				<p:dataGrid id="dtSumViewComments" widgetVar="dtSumViewComments" value="#{challengeController.chalComments}" var="comment" columns="1" emptyMessage="No Comments Found">
@@ -79,7 +80,7 @@
 			</p:column>
 		</p:panelGrid>
 	</p:overlayPanel>
-	<p:overlayPanel dynamic="true" for="giSumLike" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
+	<p:overlayPanel dynamic="true" for="giSumLike" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true" >
 		<p:panelGrid id="pnlSumChallengeLikes" columns="1">
 			<p:tagCloud id="tgSumLikes" model="#{challengeController.chalLikes}" />
 		</p:panelGrid>
@@ -110,7 +111,8 @@
 						<p:outputLabel id="txtSumICrtdDt" value="#{sol.crtdDt}" escape="false" />
 					</p:column>
 					<p:column>
-						<p:commandButton value="Download" ajax="false" disabled="#{!sol.solImgAvl}">
+						<p:commandButton value="Download" ajax="false" disabled="true">
+							<!--disabled="#{!sol.solImgAvl}"-->
 							<p:fileDownload value="#{sol.solStream}" />
 						</p:commandButton>
 					</p:column>

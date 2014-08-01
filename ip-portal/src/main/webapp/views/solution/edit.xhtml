@@ -49,7 +49,8 @@
 			<p:outputLabel id="lblIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:commandButton id="btnDownload" value="Download" ajax="false" disabled="#{challengeController.solFileAvail}">
+			<p:commandButton id="btnDownload" value="Download" ajax="false" disabled="true">
+				<!-- disabled="#{challengeController.solFileAvail}" -->
 				<p:fileDownload value="#{challengeController.solFileContent}" />
 			</p:commandButton>
 		</p:column>
@@ -61,10 +62,10 @@
 		</p:column>
 		<p:row>
 			<p:column colspan="2">
-				<p:commandButton id="btnSave" value="Save" ajax="false" action="#{challengeController.updateSolution}">
+				<p:commandButton id="btnNSave" value="Save" ajax="false" action="#{challengeController.updateSolution}">
 					<f:setPropertyActionListener value="3" target="#{challengeController.toView}" />
 				</p:commandButton>
-				<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{challengeController.redirectMain}">
+				<p:commandButton id="btnUCancel" value="Return To View" ajax="false" action="#{challengeController.redirectMain}">
 					<f:setPropertyActionListener value="3" target="#{landingPageController.toView}" />
 					<f:setPropertyActionListener value="3" target="#{challengeController.toView}" />
 				</p:commandButton>

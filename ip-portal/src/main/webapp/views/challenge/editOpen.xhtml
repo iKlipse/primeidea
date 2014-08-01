@@ -61,7 +61,8 @@
 			<p:outputLabel id="lblEdtoIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:commandButton id="btnEdtoDownload" value="Download" ajax="false" disabled="#{challengeController.chalFileAvail}">
+			<p:commandButton id="btnEdtoDownload" value="Download" ajax="false" disabled="true">
+				<!-- disabled="#{challengeController.chalFileAvail}" -->
 				<p:fileDownload value="#{challengeController.chalFileContent}" />
 			</p:commandButton>
 		</p:column>
@@ -75,7 +76,10 @@
 			<p:outputLabel id="lblEdtoFuncGrps" value="Challenge Groups" />
 		</p:column>
 		<p:column>
-			<p:pickList style="width: 100%" id="plEdtoGroupPick" converter="groupConverter" value="#{challengeController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" />
+			<!-- <p:pickList style="width: 100%" id="plEdtoGroupPick" converter="groupConverter" value="#{challengeController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" /> -->
+			<p:selectCheckboxMenu id="scmGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{challengeController.selGrpId}">
+				<f:selectItems value="#{challengeController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
+			</p:selectCheckboxMenu>
 		</p:column>
 		<p:row>
 			<p:column colspan="2">

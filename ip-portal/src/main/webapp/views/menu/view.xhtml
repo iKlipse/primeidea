@@ -8,7 +8,7 @@
 						<p:column>
 							<p:commandLink>
 								<p:commandLink actionListener="#{menuController.redirectIdea}">
-									<p:graphicImage library="images" name="idea_hdr.png" style="max-width: 100% !important; height: 100% !important" />
+									<p:graphicImage library="images" name="idea_hdr.png" style="max-width: 100% !important; height: 50% !important" />
 									<f:setPropertyActionListener value="-1" target="#{randomIdeaController.returnView}" />
 								</p:commandLink>
 							</p:commandLink>
@@ -16,34 +16,34 @@
 						<p:column>
 							<p:commandLink>
 								<p:commandLink actionListener="#{menuController.redirectSolution}">
-									<p:graphicImage library="images" name="solution_hdr.png" style="max-width: 100% !important; height: 100% !important" />
+									<p:graphicImage library="images" name="solution_hdr.png" style="max-width: 100% !important; height: 50% !important" />
 									<f:setPropertyActionListener value="-1" target="#{challengeController.returnView}" />
 								</p:commandLink>
 							</p:commandLink>
 						</p:column>
 						<p:column>
 							<p:commandLink actionListener="#{menuController.redirectChallenge}">
-								<p:graphicImage library="images" name="challenge_hdr.png" style="max-width: 100% !important; height: 100% !important" />
+								<p:graphicImage library="images" name="challenge_hdr.png" style="max-width: 100% !important; height: 50% !important" />
 								<f:setPropertyActionListener value="-1" target="#{challengeController.returnView}" />
 							</p:commandLink>
 						</p:column>
 						<p:column>
 							<p:commandLink>
 								<p:commandLink actionListener="#{menuController.redirectRewards}">
-									<p:graphicImage library="images" name="reward_hdr.png" style="max-width: 100% !important; height: 100% !important" />
+									<p:graphicImage library="images" name="reward_hdr.png" style="max-width: 100% !important; height: 50% !important" />
 								</p:commandLink>
 							</p:commandLink>
 						</p:column>
 					</p:panelGrid>
 				</p:column>
 				<p:column width="60%">
-					<p:galleria style="vertical-align:center !important; max-width: 100% !important; height: auto !important" effect="zoom" transitionInterval="5000" var="image" value="#{menuController.images}" autoPlay="true" showFilmstrip="false">
-						<p:graphicImage library="images" name="banner/#{image}" style="max-width: 100% !important; height: auto !important" />
+					<p:galleria style="vertical-align:center !important; max-width: 100% !important; height: 50% !important" effect="zoom" transitionInterval="5000" var="image" value="#{menuController.images}" autoPlay="true" showFilmstrip="false" panelHeight="200">
+						<p:graphicImage library="images" name="banner/#{image}" style="max-width: 100% !important; height: 50% !important" />
 					</p:galleria>
 				</p:column>
 				<p:column width="15%">
 					<p:panelGrid columns="1">
-						<p:graphicImage library="images" name="ip_user/0/WallP9.jpg" style="max-width: 100% !important; height: auto !important" />
+						<p:graphicImage library="images" name="ip_user/0/WallP9.jpg" style="max-width: 100% !important; height: 100% !important" />
 					</p:panelGrid>
 				</p:column>
 			</p:panelGrid>

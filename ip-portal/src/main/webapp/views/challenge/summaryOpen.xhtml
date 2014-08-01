@@ -17,7 +17,8 @@
 			<p:outputLabel id="lblIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:commandButton id="btnSumoDownload" value="Download" ajax="false" disabled="#{challengeController.chalFileAvail}">
+			<p:commandButton id="btnSumoDownload" value="Download" ajax="false" disabled="true">
+				<!-- disabled="#{challengeController.chalFileAvail}" -->
 				<p:fileDownload value="#{challengeController.chalFileContent}" />
 			</p:commandButton>
 		</p:column>
@@ -35,12 +36,12 @@
 				<p:column>
 					<p:commandLink id="lnkSumoLikeIdea" action="#{challengeController.likeChallenge}" update="lblLikeCnt, :frmSummaryOpenChal:tgSumoLikes">
 						<p:outputLabel id="lblLikeCnt" value="#{challengeController.chalLikeCnt}" style="height:25px; width:25px;" />
-						<p:graphicImage id="lnkSumoLike" name="like-128.png" library="images" height="25px" width="25px" />
+						<p:graphicImage id="giSumoLike" name="like-128.png" library="images" height="25px" width="25px" />
 					</p:commandLink>
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblCommentCnt" value="#{challengeController.chalCommentCnt}" style="height:25px; width:25px;" />
-					<p:graphicImage id="lnkSumoComment" name="comment.jpg" library="images" height="25px" width="25px" />
+					<p:graphicImage id="giSumoComment" name="comment.jpg" library="images" height="25px" width="25px" />
 				</p:column>
 			</p:panelGrid>
 		</p:column>
@@ -54,7 +55,7 @@
 			</p:commandButton>
 		</f:facet>
 	</p:panelGrid>
-	<p:overlayPanel dynamic="true" for="lnkSumoComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
+	<p:overlayPanel dynamic="true" for="giSumoComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true" >
 		<p:panelGrid id="pnlSumoChallengeComment" columns="1">
 			<p:column>
 				<p:dataGrid id="dtSumoViewComments" widgetVar="dtSumoViewComments" value="#{challengeController.chalComments}" var="comment" columns="1" emptyMessage="No Comments Found">
@@ -79,7 +80,7 @@
 			</p:column>
 		</p:panelGrid>
 	</p:overlayPanel>
-	<p:overlayPanel dynamic="true" for="lnkSumoLike" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
+	<p:overlayPanel dynamic="true" for="giSumoLike" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true" >
 		<p:panelGrid id="pnlSumoChallengeLikes" columns="1">
 			<p:tagCloud id="tgSumoLikes" model="#{challengeController.chalLikes}" />
 		</p:panelGrid>
@@ -88,7 +89,7 @@
 		<p:scrollPanel style="border: 0px !important;">
 			<p:panel style="border: 0px !important;">
 				<f:facet name="header">
-							Solution By - <p:outputLabel value="#{sol.crtByName}" /> - <p:outputLabel value="#{sol.crtdDt}" />
+					<font size="8px">Solution By - <p:outputLabel value="#{sol.crtByName}" /> - <p:outputLabel value="#{sol.crtdDt}" /></font>
 				</f:facet>
 				<p:panelGrid columns="2" id="pnlSumoSolForChal">
 					<p:column>

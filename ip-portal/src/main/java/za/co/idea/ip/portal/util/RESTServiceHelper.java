@@ -115,13 +115,11 @@ public class RESTServiceHelper {
 		return ret;
 	}
 
-	public static List<IdeaBean> fetchAllIdeasByUser() {
+	public static List<IdeaBean> fetchAllIdeasByUser(long userId) {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
+		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/" + userId);
 		// WebClient fetchIdeaClient =
-		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/"
-		// + ((Long)
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
-		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/0");
+		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/0");
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		fetchIdeaClient.close();
 		for (IdeaMessage ideaMessage : ideas) {

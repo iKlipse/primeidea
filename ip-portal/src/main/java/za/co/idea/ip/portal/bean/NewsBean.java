@@ -8,6 +8,8 @@ public class NewsBean {
 	private Date nEndDate;
 	private String nTitle;
 	private String nContent;
+	private String newsUrl;
+	private boolean nwImgAvail;
 
 	public Long getnId() {
 		return nId;
@@ -48,4 +50,21 @@ public class NewsBean {
 	public void setnContent(String nContent) {
 		this.nContent = nContent;
 	}
+
+	public String getNewsUrl() {
+		return newsUrl;
+	}
+
+	public void setNewsUrl(String newsUrl) {
+		this.newsUrl = newsUrl;
+	}
+
+	public boolean isNwImgAvail() {
+		return nwImgAvail;
+	}
+
+	public void setNwImgAvail(boolean nwImgAvail) {
+		this.nwImgAvail = nwImgAvail;
+	}
+
 }

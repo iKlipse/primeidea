@@ -14,6 +14,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.portlet.PortletContext;
+import javax.portlet.PortletRequest;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -32,6 +33,9 @@ import org.primefaces.model.tagcloud.DefaultTagCloudItem;
 import org.primefaces.model.tagcloud.DefaultTagCloudModel;
 import org.primefaces.model.tagcloud.TagCloudModel;
 
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
+
 import za.co.idea.ip.portal.bean.ChallengeBean;
 import za.co.idea.ip.portal.bean.GroupBean;
 import za.co.idea.ip.portal.bean.ListSelectorBean;
@@ -39,6 +43,7 @@ import za.co.idea.ip.portal.bean.SolutionBean;
 import za.co.idea.ip.portal.bean.TagBean;
 import za.co.idea.ip.portal.bean.UserBean;
 import za.co.idea.ip.portal.util.IdNumberGen;
+import za.co.idea.ip.portal.util.RESTServiceHelper;
 import za.co.idea.ip.ws.bean.AttachmentMessage;
 import za.co.idea.ip.ws.bean.ChallengeMessage;
 import za.co.idea.ip.ws.bean.GroupMessage;
@@ -63,6 +68,7 @@ public class ChallengeController implements Serializable {
 	private List<ListSelectorBean> solutionCats;
 	private List<ListSelectorBean> solutionStatuses;
 	private List<GroupBean> pGrps;
+	private String[] selGrpId;
 	private DualListModel<GroupBean> groupTwinSelect;
 	private TagCloudModel chalLikes;
 	private List<TagBean> chalComments;
@@ -101,6 +107,7 @@ public class ChallengeController implements Serializable {
 	private boolean showCrtSol;
 	private String returnView;
 	private String toView;
+	private long userId;
 	private static final Logger logger = Logger.getLogger(ChallengeController.class);
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -115,6 +122,11 @@ public class ChallengeController implements Serializable {
 
 	public void initializeChalPage() {
 		try {
+			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			User user = (User) request.getAttribute(WebKeys.USER);
+			WebClient client = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+			userId = message.getuId();
 			challengeCats = fetchAllChallengeCat();
 			admUsers = fetchAllUsers();
 			challengeStatuses = fetchAllChallengeStatuses();
@@ -159,6 +171,11 @@ public class ChallengeController implements Serializable {
 
 	public void initializeSolPage() {
 		try {
+			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			User user = (User) request.getAttribute(WebKeys.USER);
+			WebClient client = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+			userId = message.getuId();
 			admUsers = fetchAllUsers();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
@@ -496,7 +513,8 @@ public class ChallengeController implements Serializable {
 			message.setStatusId(1);
 			message.setTag(challengeBean.getTag());
 			message.setTitle(challengeBean.getTitle());
-			message.setGroupIdList(getSelGroupIds());
+			// message.setGroupIdList(getSelGroupIds());
+			message.setGroupIdList(toLongArray(selGrpId));
 			ResponseMessage response = addChallengeClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			addChallengeClient.close();
 			if (response.getStatusCode() == 0) {
@@ -560,7 +578,8 @@ public class ChallengeController implements Serializable {
 			message.setStatusId(challengeBean.getStatusId());
 			message.setTag(challengeBean.getTag());
 			message.setTitle(challengeBean.getTitle());
-			message.setGroupIdList(getSelGroupIds());
+			// message.setGroupIdList(getSelGroupIds());
+			message.setGroupIdList(toLongArray(selGrpId));
 			ResponseMessage response = updateChallengeClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			updateChallengeClient.close();
 			if (response.getStatusCode() == 0) {
@@ -628,6 +647,13 @@ public class ChallengeController implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
+	}
+
+	protected Long[] toLongArray(String[] val) {
+		Long[] ret = new Long[val.length];
+		for (int i = 0; i < val.length; i++)
+			ret[i] = Long.valueOf(val[i]);
+		return ret;
 	}
 
 	public void commentChallenge() {
@@ -1327,11 +1353,9 @@ public class ChallengeController implements Serializable {
 
 	private List<ChallengeBean> fetchAllChallengesByUser() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
+		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/access/" + userId);
 		// WebClient fetchChallengeClient =
-		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/access/"
-		// + ((Long)
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
-		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/access/0");
+		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/access/0");
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
@@ -1355,11 +1379,9 @@ public class ChallengeController implements Serializable {
 
 	public List<ChallengeBean> fetchAllChallengesCreatedByUser() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
+		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/created/" + userId);
 		// WebClient fetchChallengeClient =
-		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/created/"
-		// + ((Long)
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
-		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/created/0");
+		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/created/0");
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
@@ -1383,11 +1405,10 @@ public class ChallengeController implements Serializable {
 
 	private List<ChallengeBean> fetchAllChallengesByStatusIdUserId(Integer status) {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
+		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/status/" + status + "/user/" + userId);
 		// WebClient fetchChallengeClient =
 		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/status/"
-		// + status + "/user/" + ((Long)
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
-		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/status/" + status + "/user/0");
+		// + status + "/user/0");
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
@@ -1437,11 +1458,9 @@ public class ChallengeController implements Serializable {
 
 	private List<SolutionBean> fetchAllSolutionsByUser() {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
+		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/access/" + userId);
 		// WebClient fetchSolutionClient =
-		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/access/"
-		// + ((Long)
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
-		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/access/0");
+		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/access/0");
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
 		fetchSolutionClient.close();
 		for (SolutionMessage solutionMessage : solutions) {
@@ -1467,11 +1486,9 @@ public class ChallengeController implements Serializable {
 
 	public List<SolutionBean> fetchAllSolutionsCreatedByUser() {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
+		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/created/" + userId);
 		// WebClient fetchSolutionClient =
-		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/created/"
-		// + ((Long)
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
-		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/created/0");
+		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/created/0");
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
 		fetchSolutionClient.close();
 		for (SolutionMessage solutionMessage : solutions) {
@@ -1497,11 +1514,10 @@ public class ChallengeController implements Serializable {
 
 	private List<SolutionBean> fetchAllSolutionsByStatusIdUserId(Integer status) {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
+		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/status/" + status + "/user/" + userId);
 		// WebClient fetchSolutionClient =
 		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/status/"
-		// + status + "/user/" + ((Long)
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
-		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/status/" + status + "/user/0");
+		// + status + "/user/0");
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
 		fetchSolutionClient.close();
 		for (SolutionMessage solutionMessage : solutions) {
@@ -1882,7 +1898,7 @@ public class ChallengeController implements Serializable {
 		return bean;
 	}
 
-	private Long[] getSelGroupIds() {
+	protected Long[] getSelGroupIds() {
 		Long[] ret = new Long[groupTwinSelect.getTarget().size()];
 		int i = 0;
 		for (GroupBean bean : groupTwinSelect.getTarget()) {
@@ -2206,6 +2222,14 @@ public class ChallengeController implements Serializable {
 		this.pGrps = pGrps;
 	}
 
+	public String[] getSelGrpId() {
+		return selGrpId;
+	}
+
+	public void setSelGrpId(String[] selGrpId) {
+		this.selGrpId = selGrpId;
+	}
+
 	public void setGroupTwinSelect(DualListModel<GroupBean> groupTwinSelect) {
 		this.groupTwinSelect = groupTwinSelect;
 	}
@@ -2304,6 +2328,14 @@ public class ChallengeController implements Serializable {
 
 	public void setToView(String toView) {
 		this.toView = toView;
+	}
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
 
 }

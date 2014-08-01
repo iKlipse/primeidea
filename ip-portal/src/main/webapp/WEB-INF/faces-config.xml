@@ -2,10 +2,6 @@
 <faces-config version="2.1" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
 	<navigation-rule>
 		<navigation-case>
-			<from-outcome>chalh</from-outcome>
-			<to-view-id>/views/challenge/main.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
 			<from-outcome>chale</from-outcome>
 			<to-view-id>/views/challenge/container/editContainer.xhtml</to-view-id>
 		</navigation-case>
@@ -23,10 +19,6 @@
 		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
-		<navigation-case>
-			<from-outcome>ideah</from-outcome>
-			<to-view-id>/views/random-idea/main.xhtml</to-view-id>
-		</navigation-case>
 		<navigation-case>
 			<from-outcome>ideae</from-outcome>
 			<to-view-id>/views/random-idea/container/editContainer.xhtml</to-view-id>
@@ -46,10 +38,6 @@
 	</navigation-rule>
 	<navigation-rule>
 		<navigation-case>
-			<from-outcome>solh</from-outcome>
-			<to-view-id>/views/solution/main.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
 			<from-outcome>sole</from-outcome>
 			<to-view-id>/views/solution/container/editContainer.xhtml</to-view-id>
 		</navigation-case>
@@ -68,6 +56,38 @@
 	</navigation-rule>
 	<navigation-rule>
 		<navigation-case>
+			<from-outcome>rewardse</from-outcome>
+			<to-view-id>/views/rewards/container/editContainer.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>usere</from-outcome>
+			<to-view-id>/views/admin/container/editUserContainer.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>groupe</from-outcome>
+			<to-view-id>/views/admin/container/editGroupContainer.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>groups</from-outcome>
+			<to-view-id>/views/admin/container/summaryGroupContainer.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admuresz</from-outcome>
+			<to-view-id>/views/admin/container/uploadResContainer.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>fune</from-outcome>
+			<to-view-id>/views/admin/container/editFunctionContainer.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>newse</from-outcome>
+			<to-view-id>/views/news/container/editContainer.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<navigation-case>
 			<from-outcome>lani</from-outcome>
 			<to-view-id>/views/landing-page/view.xhtml</to-view-id>
 		</navigation-case>
@@ -82,6 +102,10 @@
 		<navigation-case>
 			<from-outcome>solv</from-outcome>
 			<to-view-id>/views/solution/main.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>adminv</from-outcome>
+			<to-view-id>/views/admin/view.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<converter>

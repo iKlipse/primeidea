@@ -12,6 +12,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.portlet.PortletRequest;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -29,6 +30,9 @@ import org.primefaces.model.DualListModel;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
+
 import za.co.idea.ip.portal.bean.AllocationBean;
 import za.co.idea.ip.portal.bean.GroupBean;
 import za.co.idea.ip.portal.bean.ListSelectorBean;
@@ -38,6 +42,7 @@ import za.co.idea.ip.portal.bean.RewardsBean;
 import za.co.idea.ip.portal.bean.TagBean;
 import za.co.idea.ip.portal.bean.UserBean;
 import za.co.idea.ip.portal.util.IdNumberGen;
+import za.co.idea.ip.portal.util.RESTServiceHelper;
 import za.co.idea.ip.ws.bean.AllocationMessage;
 import za.co.idea.ip.ws.bean.AttachmentMessage;
 import za.co.idea.ip.ws.bean.GroupMessage;
@@ -127,6 +132,11 @@ public class RewardsController implements Serializable {
 
 	public void showRewardStore() {
 		try {
+			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			User user = (User) request.getAttribute(WebKeys.USER);
+			WebClient client = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+			userId = message.getuId();
 			admUsers = fetchAllUsers();
 			rewardsCat = fetchAllRewardsCat();
 			viewRewardsBeans = fetchAllAvailableRewards();
@@ -762,11 +772,9 @@ public class RewardsController implements Serializable {
 	private List<RewardsBean> fetchAllRewardsByUser() {
 		fetchAllPointsByUser();
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
+		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list/" + userId);
 		// WebClient viewRewardsClient =
-		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list/"
-		// + ((Long)
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
-		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list/0");
+		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list/0");
 		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
 		viewRewardsClient.close();
 		for (RewardsMessage message : rewards) {
@@ -795,11 +803,9 @@ public class RewardsController implements Serializable {
 
 	private List<PointBean> fetchAllPointsByUser() {
 		List<PointBean> ret = new ArrayList<PointBean>();
+		WebClient viewPointClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/points/get/user/" + userId);
 		// WebClient viewPointClient =
-		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/points/get/user/"
-		// + ((Long)
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
-		WebClient viewPointClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/points/get/user/0");
+		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/points/get/user/0");
 		Collection<? extends PointMessage> points = new ArrayList<PointMessage>(viewPointClient.accept(MediaType.APPLICATION_JSON).getCollection(PointMessage.class));
 		viewPointClient.close();
 		totalPoints = 0l;
@@ -849,11 +855,10 @@ public class RewardsController implements Serializable {
 	}
 
 	private boolean isWishlist(Long rwId) {
+		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/getByUser/" + rwId + "/4/4/" + userId);
 		// WebClient viewRewardsClient =
 		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/getByUser/"
-		// + rwId + "/4/4/" + ((Long)
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
-		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/getByUser/" + rwId + "/4/4/0");
+		// + rwId + "/4/4/0");
 		Collection<? extends TagMessage> rewards = new ArrayList<TagMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		return (rewards.size() > 0);
 	}

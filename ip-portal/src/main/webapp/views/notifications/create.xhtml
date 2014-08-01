@@ -1,0 +1,38 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<p:panelGrid columns="2" id="apnlCrtNotif">
+		<p:column>
+			<p:outputLabel id="alblSubject" value="Subject : " />
+		</p:column>
+		<p:column>
+			<p:inputText style="width: 100%" autocomplete="false" id="atxtSubject" value="#{adminController.notificationBean.notifSubject}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="alblBody" value="Body : " />
+		</p:column>
+		<p:column>
+			<p:editor style="width: 100%" id="atxtBody" value="#{adminController.notificationBean.notifBody}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="alblNUpload" value="Upload File : " />
+		</p:column>
+		<p:column>
+			<p:fileUpload style="width: 100%" id="afuNUpload" fileUploadListener="#{adminController.fileUploadHandle}" multiple="false" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="alblFuncGrps" value="Notification Groups" />
+		</p:column>
+		<p:column>
+			<p:pickList style="width: 100%" id="aplGroupPick" converter="groupConverter" value="#{adminController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" />
+		</p:column>
+		<p:row>
+			<p:column colspan="2">
+				<p:commandButton id="abtnCrtISave" value="Save" ajax="false" action="#{adminController.saveNotification}">
+					<f:setPropertyActionListener value="1" target="#{adminController.returnView}" />
+				</p:commandButton>
+				<p:commandButton id="abtnTCancel" value="Return To Home" ajax="false" action="#{adminController.redirectHome}">
+					<f:setPropertyActionListener value="1" target="#{adminController.returnView}" />
+				</p:commandButton>
+			</p:column>
+		</p:row>
+	</p:panelGrid>
+</ui:composition>

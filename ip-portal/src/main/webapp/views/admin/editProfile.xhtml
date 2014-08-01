@@ -1,135 +1,135 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="title">Edit Profile</ui:define>
 	<ui:define name="body">
-		<p:dialog id="dlgFBHelp" widgetVar="dlgFB" resizable="false" dynamic="true" showEffect="explode" hideEffect="explode" position="10,100" appendToBody="true">
+		<p:dialog id="ndlgFBHelp" widgetVar="dlgFB" resizable="false" dynamic="true" showEffect="explode" hideEffect="explode" position="10,100" appendToBody="true">
 			<p:panelGrid columns="2" style="margin-bottom:10px">
-				<p:graphicImage id="giFBHandle" name="fb_help.jpg" library="images" />
+				<p:graphicImage id="ngiFBHandle" name="fb_help.jpg" library="images" />
 			</p:panelGrid>
 		</p:dialog>
-		<p:dialog id="dlgTWHelp" widgetVar="dlgTW" resizable="false" dynamic="true" showEffect="explode" hideEffect="explode" position="10,100" appendToBody="true">
+		<p:dialog id="ndlgTWHelp" widgetVar="dlgTW" resizable="false" dynamic="true" showEffect="explode" hideEffect="explode" position="10,100" appendToBody="true">
 			<p:panelGrid columns="2" style="margin-bottom:10px">
-				<p:graphicImage id="giTWHandle" name="tw_help.jpg" library="images" />
+				<p:graphicImage id="ngiTWHandle" name="tw_help.jpg" library="images" />
 			</p:panelGrid>
 		</p:dialog>
-		<p:panel id="ctrEditUser">
+		<p:panel id="nctrEditUser">
 			<f:facet name="header">
 					Edit Profile
 				</f:facet>
-			<p:panelGrid id="pnlEdtUser" columns="2">
+			<p:panelGrid id="npnlEdtUser" columns="2">
 				<p:column>
-					<p:outputLabel id="lblFName" value="First Name : " />
+					<p:outputLabel id="nlblFName" value="First Name : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtFName" value="#{adminBean.userBean.fName}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="ntxtFName" value="#{adminBean.userBean.fName}" />
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblMName" value="Middle Name : " />
+					<p:outputLabel id="nlblMName" value="Middle Name : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtMName" value="#{adminBean.userBean.mName}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="ntxtMName" value="#{adminBean.userBean.mName}" />
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblLName" value="Last Name : " />
+					<p:outputLabel id="nlblLName" value="Last Name : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtLName" value="#{adminBean.userBean.lName}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="ntxtLName" value="#{adminBean.userBean.lName}" />
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblIdNum" value="ID Number : " />
+					<p:outputLabel id="nlblIdNum" value="ID Number : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" disabled="true" autocomplete="false" id="txtIdNum" value="#{adminBean.userBean.idNum}">
+					<p:inputText style="width: 100%" disabled="true" autocomplete="false" id="ntxtIdNum" value="#{adminBean.userBean.idNum}">
 						<p:ajax listener="#{adminBean.checkAvailabilityIDNumber}" event="blur" update="grlMsg" />
 					</p:inputText>
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblEMail" value="EMail : " />
+					<p:outputLabel id="nlblEMail" value="EMail : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtEUEMail" value="#{adminBean.userBean.eMail}">
+					<p:inputText style="width: 100%" autocomplete="false" id="ntxtEUEMail" value="#{adminBean.userBean.eMail}">
 						<p:ajax listener="#{adminBean.checkAvailabilityEmail}" event="blur" update="grlMsg" />
 					</p:inputText>
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblEmpId" value="Employee ID : " />
+					<p:outputLabel id="nlblEmpId" value="Employee ID : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" disabled="true" autocomplete="false" id="txtEmpId" value="#{adminBean.userBean.employeeId}">
+					<p:inputText style="width: 100%" disabled="true" autocomplete="false" id="ntxtEmpId" value="#{adminBean.userBean.employeeId}">
 						<p:ajax listener="#{adminBean.checkAvailabilityEmployeeID}" event="blur" update="grlMsg" />
 					</p:inputText>
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblContact" value="Contact Number : " />
+					<p:outputLabel id="nlblContact" value="Contact Number : " />
 				</p:column>
 				<p:column>
-					<p:inputMask style="width: 100% !important" id="txtContact" value="#{adminBean.userBean.contact}" mask="+99 999999999" />
+					<p:inputMask style="width: 100% !important" id="ntxtContact" value="#{adminBean.userBean.contact}" mask="+99 999999999" />
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblFBHandle" value="Facebook Handle : " />
+					<p:outputLabel id="nlblFBHandle" value="Facebook Handle : " />
 				</p:column>
 				<p:column>
 					<p:row>
 						<p:column style="width: 90% !important">
-							<p:inputText style="width: 90%" autocomplete="false" id="txtFBHandle" value="#{adminBean.userBean.fbHandle}">
+							<p:inputText style="width: 90%" autocomplete="false" id="ntxtFBHandle" value="#{adminBean.userBean.fbHandle}">
 								<!-- <f:validator validatorId="za.co.idea.web.util.SocialConnectorValidator" /> -->
 								<f:attribute name="function" value="FB" />
 							</p:inputText>
 						</p:column>
 						<p:column style="width: 10% !important">
-							<p:graphicImage id="giFBHelp" name="info.jpg" library="images" height="25px" width="25px" onclick="PF('dlgFB').show();" />
+							<p:graphicImage id="ngiFBHelp" name="info.jpg" library="images" height="25px" width="25px" onclick="PF('dlgFB').show();" />
 						</p:column>
 					</p:row>
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblTWHandle" value="Twitter Handle : " />
+					<p:outputLabel id="nlblTWHandle" value="Twitter Handle : " />
 				</p:column>
 				<p:column>
 					<p:row>
 						<p:column style="width: 90% !important">
-							<p:inputText style="width: 90%" autocomplete="false" id="txtTWHandle" value="#{adminBean.userBean.twHandle}">
+							<p:inputText style="width: 90%" autocomplete="false" id="ntxtTWHandle" value="#{adminBean.userBean.twHandle}">
 								<!-- <f:validator validatorId="za.co.idea.web.util.SocialConnectorValidator" /> -->
 								<f:attribute name="function" value="TW" />
 							</p:inputText>
 						</p:column>
 						<p:column style="width: 10% !important">
-							<p:graphicImage id="giTWHelp" name="info.jpg" library="images" height="25px" width="25px" onclick="PF('dlgTW').show();" />
+							<p:graphicImage id="ngiTWHelp" name="info.jpg" library="images" height="25px" width="25px" onclick="PF('dlgTW').show();" />
 						</p:column>
 					</p:row>
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblSCName" value="Screen Name : " />
+					<p:outputLabel id="nlblSCName" value="Screen Name : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtSCName" value="#{adminBean.userBean.scName}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="ntxtSCName" value="#{adminBean.userBean.scName}" />
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblGroup" value=" Primary Group : " />
+					<p:outputLabel id="nlblGroup" value=" Primary Group : " />
 				</p:column>
 				<p:column>
-				    <p:inputText style="width: 100%" disabled="true" autocomplete="false" id="somPriGroup" value="#{adminBean.userBean.priGroupName}" />					
+				    <p:inputText style="width: 100%" disabled="true" autocomplete="false" id="nsomPriGroup" value="#{adminBean.userBean.priGroupName}" />					
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblActive" value="Active : " />
+					<p:outputLabel id="nlblActive" value="Active : " />
 				</p:column>
 				<p:column>
-				    <p:inputText style="width: 100%" disabled="true" autocomplete="false" id="sbbActive" value="#{adminBean.userBean.isActive}" />
+				    <p:inputText style="width: 100%" disabled="true" autocomplete="false" id="nsbbActive" value="#{adminBean.userBean.isActive}" />
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblSkills" value="Skills : " />
+					<p:outputLabel id="nlblSkills" value="Skills : " />
 				</p:column>
 				<p:column style="width: 100%">
-					<p:editor id="txtSkills" value="#{adminBean.userBean.skills}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+					<p:editor id="ntxtSkills" value="#{adminBean.userBean.skills}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblBio" value="Bio : " />
+					<p:outputLabel id="nlblBio" value="Bio : " />
 				</p:column>
 				<p:column style="width: 100%">
-					<p:editor id="txtBio" value="#{adminBean.userBean.bio}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+					<p:editor id="ntxtBio" value="#{adminBean.userBean.bio}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
 				</p:column>
 				<p:row>
 					<p:column colspan="2" style="align: center;">
-						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{adminBean.updateUserProfile}" />
-						<p:commandButton id="btnCancel" value="Return To Home" ajax="false" action="#{adminBean.redirectHome}" />
+						<p:commandButton id="nbtnFSave" value="Save" ajax="false" action="#{adminBean.updateUserProfile}" />
+						<p:commandButton id="nbtnGCancel" value="Return To Home" ajax="false" action="#{adminBean.redirectHome}" />
 					</p:column>
 				</p:row>
 			</p:panelGrid>

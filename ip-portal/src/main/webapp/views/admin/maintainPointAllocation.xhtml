@@ -1,105 +1,111 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<ui:define name="title">Maintain Point Allocation</ui:define>
-	<ui:define name="body">
-		<p:panel id="ctrPntAlloc">
-			<f:facet name="header">
-					Maintain Point Allocation
-				</f:facet>
-			<p:dataTable id="dtPntAlloc" widgetVar="dtPntAlloc" value="#{rewardsController.allocs}" var="bean" rows="5" paginator="true" paginatorPosition="bottom" emptyMessage="No Point Allocations Found">
+	<p:dataTable id="kdtPntAlloc" widgetVar="dtPntAlloc" value="#{adminController.allocs}" var="bean" rows="5" paginator="true" paginatorPosition="bottom" emptyMessage="No Point Allocations Found">
 				<f:facet name="header">
-					<p:selectOneMenu id="somSelectEntity" value="#{rewardsController.entity}">
-						<p:ajax listener="#{rewardsController.updateStatusList}" update="dtPntAlloc,:ideaFrm:pnlModPntAlloc,:ideaFrm:pnlAddPntAlloc" />
+					<p:selectOneMenu id="ksomSelectEntity" value="#{adminController.entity}">
+						<p:ajax listener="#{adminController.updateStatusList}" update="dtPntAlloc,:ideaFrm:pnlModPntAlloc,:ideaFrm:pnlAddPntAlloc" />
 						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{rewardsController.allocEntityList}" />
+						<f:selectItems value="#{adminController.allocEntityList}" />
 					</p:selectOneMenu>
 				</f:facet>
 				<p:column>
 					<f:facet name="header">Description</f:facet>
-					<p:outputLabel id="lblId" value="#{bean.allocDesc}" />
+					<p:outputLabel id="klblId" value="#{bean.allocDesc}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">Entity Name</f:facet>
-					<p:selectOneMenu id="somSelectEntityName" value="#{rewardsController.entity}">
+					<p:selectOneMenu id="ksomSelectEntityName" value="#{adminController.entity}">
 						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{rewardsController.allocEntityList}" />
+						<f:selectItems value="#{adminController.allocEntityList}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
 					<f:facet name="header">Status</f:facet>
-					<p:selectOneMenu id="somSelectEntityStatus" value="#{bean.allocStatusId}">
+					<p:selectOneMenu id="ksomSelectEntityStatus" value="#{bean.allocStatusId}">
 						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{rewardsController.disStatusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
+						<f:selectItems value="#{adminController.disStatusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
 					<f:facet name="header">Point Value</f:facet>
-					<p:outputLabel id="lblPntVal" value="#{bean.allocVal}" />
+					<p:outputLabel id="klblPntVal" value="#{bean.allocVal}" />
 				</p:column>
-				<p:column rendered="#{accessBean.maintainPointAllocEnabled}">
-					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{rewardsController.showAllocationMod}">
-						<f:setPropertyActionListener value="#{bean}" target="#{rewardsController.allocationBean}" />
+				<p:column>
+					<p:commandButton id="kviewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminController.showAllocationMod}">
+						<f:setPropertyActionListener value="#{bean}" target="#{adminController.allocationBean}" />
 					</p:commandButton>
 				</p:column>
 				<f:facet name="footer">
-					<p:commandButton id="addButton" value="Add" ajax="false" immediate="true" action="#{rewardsController.showAllocationAdd}" rendered="#{rewardsController.showAddBtn}" />
-					<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{rewardsController.showPointAllocation}" />
+					<p:commandButton id="kaddButton" value="Add" ajax="false" immediate="true" action="#{adminController.showAllocationAdd}" rendered="#{adminController.showAddBtn}" >
+					   <f:setPropertyActionListener value="3" target="#{adminController.toView}" />
+					</p:commandButton>
+					<p:commandButton id="kbtnJCancel" value="Return To View" ajax="false" action="#{adminController.showPointAllocation}" >
+					  <f:setPropertyActionListener value="3" target="#{adminController.toView}" />
+					</p:commandButton>
 				</f:facet>
 			</p:dataTable>
-			<p:panelGrid id="pnlAddPntAlloc" rendered="#{rewardsController.showAddPanel}" columns="1">
+			<p:panelGrid id="kpnlAddPntAlloc" rendered="#{adminController.showAddPanel}" columns="1">
 				<p:column>
 					<p:outputLabel value="Description : " />
 				</p:column>
 				<p:column>
-					<p:inputText id="lblAddId" value="#{rewardsController.allocationBean.allocDesc}" />
+					<p:inputText id="klblAddId" value="#{adminController.allocationBean.allocDesc}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel value="Status : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu id="somAddSelectEntityStatus" value="#{rewardsController.allocationBean.allocStatusId}">
+					<p:selectOneMenu id="ksomAddSelectEntityStatus" value="#{adminController.allocationBean.allocStatusId}">
 						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{rewardsController.statusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
+						<f:selectItems value="#{adminController.statusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
 					<p:outputLabel value="Point Value : " />
 				</p:column>
 				<p:column>
-					<p:inputText id="lblAddPntVal" value="#{rewardsController.allocationBean.allocVal}" />
+					<p:inputText id="klblAddPntVal" value="#{adminController.allocationBean.allocVal}" />
 				</p:column>
 				<p:column colspan="2">
-					<p:commandButton id="addSaveButton" value="Save" ajax="false" action="#{rewardsController.saveAllocation}" />
-					<p:commandButton id="addCancelButton" value="Cancel" ajax="false" action="#{rewardsController.cancelAllocation}" />
+					<p:commandButton id="kaddSaveButton" value="Save" ajax="false" action="#{adminController.saveAllocation}" >
+					   <f:setPropertyActionListener value="3" target="#{adminController.toView}" />
+					</p:commandButton>
+					<p:commandButton id="kaddCancelButton" value="Cancel" ajax="false" action="#{adminController.cancelAllocation}" >
+					  <f:setPropertyActionListener value="3" target="#{adminController.toView}" />
+					</p:commandButton>
 				</p:column>
 			</p:panelGrid>
-			<p:panelGrid id="pnlModPntAlloc" rendered="#{rewardsController.showModPanel}" columns="1">
+			<p:panelGrid id="kpnlModPntAlloc" rendered="#{adminController.showModPanel}" columns="1">
 				<p:column>
 					<p:outputLabel value="Description : " />
 				</p:column>
 				<p:column>
-					<p:inputText id="lblModId" value="#{rewardsController.allocationBean.allocDesc}" />
+					<p:inputText id="klblModId" value="#{adminController.allocationBean.allocDesc}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel value="Status : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu id="somModSelectEntityStatus" value="#{rewardsController.allocationBean.allocStatusId}">
+					<p:selectOneMenu id="ksomModSelectEntityStatus" value="#{adminController.allocationBean.allocStatusId}">
 						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{rewardsController.statusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
+						<f:selectItems value="#{adminController.statusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
 					<p:outputLabel value="Point Value : " />
 				</p:column>
 				<p:column>
-					<p:inputText id="lblModPntVal" value="#{rewardsController.allocationBean.allocVal}" />
+					<p:inputText id="klblModPntVal" value="#{adminController.allocationBean.allocVal}" />
 				</p:column>
 				<p:column colspan="2">
-					<p:commandButton id="modSaveButton" value="Update" ajax="false" action="#{rewardsController.updateAllocation}" />
-					<p:commandButton id="modDeleteButton" value="Delete" ajax="false" action="#{rewardsController.deleteAllocation}" />
-					<p:commandButton id="modCancelButton" value="Cancel" ajax="false" action="#{rewardsController.cancelAllocation}" />
+					<p:commandButton id="kmodSaveButton" value="Update" ajax="false" action="#{adminController.updateAllocation}" >
+					   <f:setPropertyActionListener value="3" target="#{adminController.toView}" />
+					</p:commandButton>				
+					<p:commandButton id="kmodDeleteButton" value="Delete" ajax="false" action="#{adminController.deleteAllocation}" >
+					  <f:setPropertyActionListener value="3" target="#{adminController.toView}" />
+					</p:commandButton>
+					<p:commandButton id="kmodCancelButton" value="Cancel" ajax="false" action="#{adminController.cancelAllocation}" >
+					  <f:setPropertyActionListener value="3" target="#{adminController.toView}" />
+					</p:commandButton>
 				</p:column>
 			</p:panelGrid>
-		</p:panel>
-	</ui:define>
 </ui:composition>

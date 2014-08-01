@@ -3,5 +3,108 @@
 <f:view xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 	<h:head />
 	<h:body>
+		<h:form id="frmAdmin" enctype="multipart/form-data">
+			<p:growl id="grlMsg" showDetail="true" showSummary="true" />
+			<p:remoteCommand actionListener="#{adminController.initializePage}" name="onload" autoRun="true" update="pnlUserDet" />
+			<p:panel id="pnlUser" style="border: 0px !important">
+				<p:commandLink value="View Users" actionListener="#{adminController.showViewUsers}" update="pnlUserDet">
+					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+				</p:commandLink>
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="Create User" actionListener="#{adminController.showCreateUser}" update="pnlUserDet">
+					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+				</p:commandLink>
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="Upload" actionListener="#{adminController.showUploadUsers}" update="pnlUserDet">
+					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+				</p:commandLink>
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="Create Group" actionListener="#{adminController.showCreateGroup}" update="pnlUserDet">
+					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+				</p:commandLink>
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="View Groups" actionListener="#{adminController.showViewGroups}" update="pnlUserDet">
+					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+				</p:commandLink>
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="View Functions" actionListener="#{adminController.showViewFunction}" update="pnlUserDet">
+					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+				</p:commandLink>
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="Create News" actionListener="#{adminController.showCreateNews}" update="pnlUserDet">
+					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+				</p:commandLink>
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="View News" actionListener="#{adminController.showViewNews}" update="pnlUserDet">
+					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+				</p:commandLink>
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="Allocate Points" actionListener="#{adminController.showAllocatePoints}" update="pnlUserDet">
+					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+				</p:commandLink>
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="Maintain Point Allocation" actionListener="#{adminController.showPointAllocation}" update="pnlUserDet">
+					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+				</p:commandLink>
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="Maintain MetaData" actionListener="#{metaDataController.showMetadataMaintain}" update="pnlUserDet">
+					<f:setPropertyActionListener value="2" target="#{metaDataController.returnView}" />
+				</p:commandLink>
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="Send Broadcast" actionListener="#{notificationController.showCreateNotification}" update="pnlUserDet">
+					<f:setPropertyActionListener value="2" target="#{notificationController.returnView}" />
+				</p:commandLink>
+			</p:panel>
+			<p:panel id="pnlUserDet" style="border: 0px !important">
+				<p:panel id="ctrViewUsers" style="width: 100% !important" rendered="#{adminController.showViewUser}">
+					<f:facet name="header">View Users</f:facet>
+					<ui:include src="/views/admin/viewUsers.xhtml" />
+				</p:panel>
+				<p:panel id="ctrUser" style="width: 100% !important" rendered="#{adminController.showCreateUser}">
+					<f:facet name="header">Create User</f:facet>
+					<ui:include src="/views/admin/createUser.xhtml" />
+				</p:panel>
+				<p:panel id="ctrUserUpload" style="width: 100% !important" rendered="#{adminController.showUploadUser}">
+					<f:facet name="header">Upload</f:facet>
+					<ui:include src="/views/admin/upload.xhtml" />
+				</p:panel>
+				<p:panel id="ctrGroup" style="width: 100% !important" rendered="#{adminController.showCreateGroup}">
+					<f:facet name="header">Create Group</f:facet>
+					<ui:include src="/views/admin/createGroup.xhtml" />
+				</p:panel>
+				<p:panel id="ctrViewGroups" style="width: 100% !important" rendered="#{adminController.showViewGroups}">
+					<f:facet name="header">View Groups</f:facet>
+					<ui:include src="/views/admin/viewGroups.xhtml" />
+				</p:panel>
+				<p:panel id="ctrViewFunctions" style="width: 100% !important" rendered="#{adminController.showViewFunctions}">
+					<f:facet name="header">View Functions</f:facet>
+					<ui:include src="/views/admin/viewFunction.xhtml" />
+				</p:panel>
+				<p:panel id="ctrNews" style="width: 100% !important" rendered="#{adminController.showCreateNews}">
+					<f:facet name="header">Create News</f:facet>
+					<ui:include src="/views/news/create.xhtml" />
+				</p:panel>
+				<p:panel id="ctrViewNews" style="width: 100% !important" rendered="#{adminController.showViewNews}">
+					<f:facet name="header">View News</f:facet>
+					<ui:include src="/views/news/view.xhtml" />
+				</p:panel>
+				<p:panel id="ctrAllocatePoints" style="width: 100% !important" rendered="#{adminController.showAllocatePoints}">
+					<f:facet name="header">Allocate Points</f:facet>
+					<ui:include src="/views/admin/allocatePoints.xhtml" />
+				</p:panel>
+				<p:panel id="ctrPointAlloc" style="width: 100% !important" rendered="#{adminController.showAllocatedPoints}">
+					<f:facet name="header">Maintain Point Allocation</f:facet>
+					<ui:include src="/views/admin/maintainPointAllocation.xhtml" />
+				</p:panel>
+				<p:panel id="ctrMetaData" style="width: 100% !important" rendered="#{adminController.showMetadataMaintain}">
+					<f:facet name="header">Maintain MetaData</f:facet>
+					<ui:include src="/views/admin/maintainMetaData.xhtml" />
+				</p:panel>
+				<p:panel id="ctrNotification" style="width: 100% !important" rendered="#{adminController.showSendBroadcast}">
+					<f:facet name="header">Send Broadcast</f:facet>
+					<ui:include src="/views/notifications/create.xhtml" />
+				</p:panel>
+			</p:panel>
+		</h:form>
 	</h:body>
 </f:view>

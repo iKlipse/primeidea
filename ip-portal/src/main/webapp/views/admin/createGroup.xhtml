@@ -1,60 +1,56 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<ui:define name="title">Create Group</ui:define>
-	<ui:define name="body">
-		<p:panel id="ctrCrtGroup">
-			<f:facet name="header">
-					Create Group
-				</f:facet>
-			<p:panelGrid columns="2" id="pnlCrtGroup">
+	<p:panelGrid columns="2" id="rpnlCrtGroup">
 				<p:column>
-					<p:outputLabel id="lblGName" value="Group Name : " />
+					<p:outputLabel id="rlblGName" value="Group Name : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtGName" value="#{adminBean.groupBean.gName}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="rtxtGName" value="#{adminController.groupBean.gName}" />
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblEMail" value="EMail : " />
+					<p:outputLabel id="rlblEMail" value="EMail : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtEMail" value="#{adminBean.groupBean.geMail}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="rtxtEMail" value="#{adminController.groupBean.geMail}" />
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblParentGId" value="Parent : " />
+					<p:outputLabel id="rlblParentGId" value="Parent : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu style="width: 100%" id="somPGrpId" value="#{adminBean.groupBean.selPGrp}" filter="true" filterMatchMode="contains">
+					<p:selectOneMenu style="width: 100%" id="rsomPGrpId" value="#{adminController.groupBean.selPGrp}" filter="true" filterMatchMode="contains">
 						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{adminBean.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
+						<f:selectItems value="#{adminController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblProfImage" value="Group Image : " />
+					<p:outputLabel id="rlblProfImage" value="Group Image : " />
 				</p:column>
 				<p:column>
-					<p:fileUpload id="fuCUpload" style="background-color: #55a616;width: 100% !important" fileUploadListener="#{adminBean.fileGroupUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+					<p:fileUpload id="rfuCAUpload" style="background-color: #55a616;width: 100% !important" fileUploadListener="#{adminController.fileGroupUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblAdmUser" value="Admin User : " />
+					<p:outputLabel id="rlblAdmUser" value="Admin User : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu style="width: 100%" id="somAdmUser" value="#{adminBean.groupBean.selAdmUser}">
+					<p:selectOneMenu style="width: 100%" id="rsomAdmUser" value="#{adminController.groupBean.selAdmUser}">
 						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{adminBean.admUsers}" var="a" itemLabel="#{a.priGroupName} - #{a.fName} #{a.lName}" itemValue="#{a.uId}" />
+						<f:selectItems value="#{adminController.admUsers}" var="a" itemLabel="#{a.priGroupName} - #{a.fName} #{a.lName}" itemValue="#{a.uId}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblFuncUsers" value="Group Users" />
+					<p:outputLabel id="rlblFuncUsers" value="Group Users" />
 				</p:column>
 				<p:column>
-					<p:pickList style="width: 100%" id="plUserPick" converter="userConverter" value="#{adminBean.userTwinSelect}" var="user" itemLabel="#{user.priGroupName} - #{user.scName} #{user.lName}" itemValue="#{user.uId}" />
+					<p:pickList style="width: 100%" id="rplUserPick" converter="userConverter" value="#{adminController.userTwinSelect}" var="user" itemLabel="#{user.priGroupName} - #{user.scName} #{user.lName}" itemValue="#{user.uId}" />
 				</p:column>
 				<p:row>
 					<p:column colspan="2">
-						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{adminBean.saveGroup}" />
-						<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{adminBean.showViewGroups}" />
+						<p:commandButton id="rbtnBSave" value="Save" ajax="false" actionListener="#{adminController.saveGroup}" >
+						 <f:setPropertyActionListener value="2" target="#{adminController.toView}" />
+						  </p:commandButton>
+						<p:commandButton id="rbtnCCancel" value="Return To View" ajax="false" actionListener="#{adminController.showViewGroups}" >
+						 <f:setPropertyActionListener value="2" target="#{adminController.toView}" />
+						  </p:commandButton>
 					</p:column>
 				</p:row>
 			</p:panelGrid>
-		</p:panel>
-	</ui:define>
 </ui:composition>

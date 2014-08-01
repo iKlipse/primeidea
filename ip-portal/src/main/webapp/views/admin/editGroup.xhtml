@@ -1,84 +1,80 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<ui:define name="title">Edit Group</ui:define>
-	<ui:define name="body">
-		<p:panel id="ctrEditGroup">
-			<f:facet name="header">
-					Edit Group
-				</f:facet>
-			<p:panelGrid columns="2" id="pnlEdittGroup">
+	<p:growl id="ogrlMsg" showDetail="true" showSummary="true" />	
+			<p:panelGrid columns="2" id="opnlEdittGroup">
 				<p:column>
-					<p:outputLabel id="lblGName" value="Group Name : " />
+					<p:outputLabel id="olblGName" value="Group Name : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtGName" value="#{adminBean.groupBean.gName}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="otxtGName" value="#{adminController.groupBean.gName}" />
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblEMail" value="EMail : " />
+					<p:outputLabel id="olblEMail" value="EMail : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtEMail" value="#{adminBean.groupBean.geMail}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="otxtEMail" value="#{adminController.groupBean.geMail}" />
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblIDownload" value="Download File : " />
+					<p:outputLabel id="olblIDownload" value="Download File : " />
 				</p:column>
 				<p:column>
-					<p:commandButton id="btnDownload" value="Download" ajax="false" disabled="#{adminBean.fileAvail}">
-						<p:fileDownload value="#{adminBean.fileContent}" />
+					<p:commandButton id="obtnDownload" value="Download" ajax="false" disabled="#{adminController.fileAvail}">
+						<p:fileDownload value="#{adminController.fileContent}" />
 					</p:commandButton>
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblParentGId" value="Parent : " />
+					<p:outputLabel id="olblParentGId" value="Parent : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu style="width: 100%" id="somPGrpId" value="#{adminBean.groupBean.selPGrp}" filter="true" filterMatchMode="contains">
+					<p:selectOneMenu style="width: 100%" id="osomPGrpId" value="#{adminController.groupBean.selPGrp}" filter="true" filterMatchMode="contains">
 						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{adminBean.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
+						<f:selectItems value="#{adminController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblProfImage" value="Group Image : " />
+					<p:outputLabel id="olblProfImage" value="Group Image : " />
 				</p:column>
 				<p:column>
-					<p:fileUpload id="fuCUpload" style="background-color: #55a616;width: 100% !important" fileUploadListener="#{adminBean.fileGroupUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+					<p:fileUpload id="ofuCCUpload" style="background-color: #55a616;width: 100% !important" fileUploadListener="#{adminController.fileGroupUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblAdmUser" value="Admin User : " />
+					<p:outputLabel id="olblAdmUser" value="Admin User : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu style="width: 100%" id="somAdmUser" value="#{adminBean.groupBean.selAdmUser}">
+					<p:selectOneMenu style="width: 100%" id="osomAdmUser" value="#{adminController.groupBean.selAdmUser}">
 						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{adminBean.admUsers}" var="a" itemLabel="#{a.priGroupName} - #{a.fName} #{a.lName}" itemValue="#{a.uId}" />
+						<f:selectItems value="#{adminController.admUsers}" var="a" itemLabel="#{a.priGroupName} - #{a.fName} #{a.lName}" itemValue="#{a.uId}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblFuncUsers" value="Group Users" />
+					<p:outputLabel id="olblFuncUsers" value="Group Users" />
 				</p:column>
 				<p:column>
-					<p:pickList style="width: 100%" id="plUserPick" converter="userConverter" value="#{adminBean.userTwinSelect}" var="user" itemLabel="#{user.priGroupName} - #{user.fName} #{user.lName}" itemValue="#{user.uId}" />
+					<p:pickList style="width: 100%" id="oplUserPick" converter="userConverter" value="#{adminController.userTwinSelect}" var="user" itemLabel="#{user.priGroupName} - #{user.fName} #{user.lName}" itemValue="#{user.uId}" />
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblActive" value="Active : " />
+					<p:outputLabel id="olblActive" value="Active : " />
 				</p:column>
 				<p:column>
-					<p:selectBooleanButton style="width: 100%" id="sbbActive" value="#{adminBean.groupBean.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
+					<p:selectBooleanButton style="width: 100%" id="osbbActive" value="#{adminController.groupBean.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblGrpFuncs" value="Assigned Fuctions : " />
+					<p:outputLabel id="olblGrpFuncs" value="Assigned Fuctions : " />
 				</p:column>
 				<p:column>
-					<p:dataTable id="dtViewGrpFunctions" value="#{adminBean.functions}" var="func" paginator="true" paginatorPosition="bottom" rows="10" emptyMessage="No Functions Found for Group">
+					<p:dataTable id="odtViewGrpFunctions" value="#{adminController.functions}" var="func" paginator="true" paginatorPosition="bottom" rows="10" emptyMessage="No Functions Found for Group">
 						<p:column>
-							<p:outputLabel id="txtFuncName" value="#{func.funcName}" />
+							<p:outputLabel id="otxtFuncName" value="#{func.funcName}" />
 						</p:column>
 					</p:dataTable>
 				</p:column>
 				<p:row>
 					<p:column colspan="2">
-						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{adminBean.updateGroup}" />
-						<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{adminBean.showViewGroups}" />
+						<p:commandButton id="obtnESave" value="Save" ajax="false" action="#{adminController.updateGroup}" />
+						<p:commandButton id="obtnFCancel" value="Return To View" ajax="false" action="#{adminController.showViewGroups}" >
+						 <f:setPropertyActionListener value="2" target="#{adminController.toView}" />
+						  </p:commandButton>
 					</p:column>
 				</p:row>
 			</p:panelGrid>
 		</p:panel>
-	</ui:define>
 </ui:composition>

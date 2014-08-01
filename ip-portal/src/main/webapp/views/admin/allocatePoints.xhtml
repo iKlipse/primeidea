@@ -1,55 +1,56 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<ui:define name="title">Allocate Points</ui:define>
-	<ui:define name="body">
-		<p:panel id="pnlPointAlloc" header="Allocate Points">
-			<p:panelGrid id="grdPointAlloc" columns="2">
-				<p:column>
-					<p:outputLabel id="lblEntity" value="Entity : " />
-				</p:column>
-				<p:column>
-					<p:selectOneMenu id="somSelectEntity" value="#{rewardsController.entity}">
-						<p:ajax listener="#{rewardsController.updateEntityChange}" update="somSelectAllocation,:ideaFrm:txtPointVal" />
-						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{rewardsController.allocEntityList}" />
-					</p:selectOneMenu>
-				</p:column>
-				<p:column>
-					<p:outputLabel id="lblALLoc" value="Allocation : " />
-				</p:column>
-				<p:column>
-					<p:selectOneMenu id="somSelectAllocation" value="#{rewardsController.selAllocId}">
-						<p:ajax listener="#{rewardsController.updateAllocationChange}" update="txtPointVal" />
-						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
-						<f:selectItem itemLabel="Custom Allocation" itemValue="0" />
-						<f:selectItems value="#{rewardsController.allocs}" var="a" itemLabel="#{a.allocDesc}" itemValue="#{a.allocId}" />
-					</p:selectOneMenu>
-				</p:column>
-				<p:column>
-					<p:outputLabel id="lblAdmUser" value="Select User : " />
-				</p:column>
-				<p:column>
-					<p:selectOneMenu style="width: 100%" id="somAdmUser" value="#{rewardsController.userId}">
-						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{rewardsController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
-					</p:selectOneMenu>
-				</p:column>
-				<p:column>
-					<p:outputLabel id="lblPointVal" value="Point Value : " />
-				</p:column>
-				<p:column>
-					<p:inputText style="width: 100%" id="txtPointVal" value="#{rewardsController.pointVal}" />
-				</p:column>
-				<p:column>
-					<p:outputLabel id="lblComments" value="Comments : " />
-				</p:column>
-				<p:column>
-					<p:inputText style="width: 100%" id="txtComments" value="#{rewardsController.comments}" />
-				</p:column>
-				<p:column>
-					<p:commandButton id="btnSavePoint" value="Add Points" action="#{rewardsController.savePoints}" ajax="false" />
-					<p:commandButton id="btnCancel" value="Return To Home" ajax="false" action="#{adminBean.redirectHome}" />
-				</p:column>
-			</p:panelGrid>
-		</p:panel>
-	</ui:define>
+	<p:panel id="tpnlPointAlloc" header="Allocate Points">
+		<p:panelGrid id="tgrdPointAlloc" columns="2">
+			<p:column>
+				<p:outputLabel id="tlblEntity" value="Entity : " />
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="tsomSelectEntity" value="#{adminController.entity}">
+					<p:ajax listener="#{adminController.updateEntityChange}" update="somSelectAllocation,:ideaFrm:txtPointVal" />
+					<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{adminController.allocEntityList}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:outputLabel id="tlblALLoc" value="Allocation : " />
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="tsomSelectAllocation" value="#{adminController.selAllocId}">
+					<p:ajax listener="#{adminController.updateAllocationChange}" update="txtPointVal" />
+					<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
+					<f:selectItem itemLabel="Custom Allocation" itemValue="0" />
+					<f:selectItems value="#{adminController.allocs}" var="a" itemLabel="#{a.allocDesc}" itemValue="#{a.allocId}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:outputLabel id="tlblAdmUser" value="Select User : " />
+			</p:column>
+			<p:column>
+				<p:selectOneMenu style="width: 100%" id="tsomAdmUser" value="#{adminController.allocUserId}">
+					<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{adminController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:outputLabel id="tlblPointVal" value="Point Value : " />
+			</p:column>
+			<p:column>
+				<p:inputText style="width: 100%" id="ttxtPointVal" value="#{adminController.pointVal}" />
+			</p:column>
+			<p:column>
+				<p:outputLabel id="tlblComments" value="Comments : " />
+			</p:column>
+			<p:column>
+				<p:inputText style="width: 100%" id="ttxtComments" value="#{adminController.comments}" />
+			</p:column>
+			<p:column>
+				<p:commandButton id="tbtnSavePoint" value="Add Points" actionListener="#{adminController.savePoints}" ajax="false">
+					<f:setPropertyActionListener value="3" target="#{adminController.toView}" />
+				</p:commandButton>
+				<p:commandButton id="tbtnACancel" value="Return To Home" ajax="false" actionListener="#{adminController.redirectHome}">
+					<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
+				</p:commandButton>
+			</p:column>
+		</p:panelGrid>
+	</p:panel>
 </ui:composition>

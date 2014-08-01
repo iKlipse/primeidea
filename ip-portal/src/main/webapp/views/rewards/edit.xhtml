@@ -75,7 +75,8 @@
 			<p:outputLabel id="lblEdIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:commandButton id="btnEdDownload" value="Download" ajax="false" disabled="#{rewardsController.fileAvail}">
+			<p:commandButton id="btnEdDownload" value="Download" ajax="false" disabled="true">
+				<!-- disabled="#{rewardsController.fileAvail}" -->
 				<p:fileDownload value="#{rewardsController.fileContent}" />
 			</p:commandButton>
 		</p:column>
