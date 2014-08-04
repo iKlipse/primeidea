@@ -154,4 +154,133 @@
  <PROCESS-ITEM NAME="rules:#views#rewards#container#editContainer.xhtml"
   PATH="/views/rewards/container/editContainer.xhtml"
   SHAPE="240,2689,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules::4" SHAPE="32,225,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::4" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="admcn::#views#admin#news#create.xhtml"
+    NAME="output" PATH="/views/admin/news/create.xhtml"
+    TARGET="rules:#views#admin#news#create.xhtml" TITLE="admcn" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admvn::#views#admin#news#view.xhtml"
+    NAME="output1" PATH="/views/admin/news/view.xhtml"
+    TARGET="rules:#views#admin#news#view.xhtml" TITLE="admvn" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admen::#views#admin#news#edit.xhtml"
+    NAME="output2" PATH="/views/admin/news/edit.xhtml"
+    TARGET="rules:#views#admin#news#edit.xhtml" TITLE="admen" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admsn::#views#admin#news#summary.xhtml"
+    NAME="output3" PATH="/views/admin/news/summary.xhtml"
+    TARGET="rules:#views#admin#news#summary.xhtml" TITLE="admsn" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="admcno::#views#admin#notification#create.xhtml" NAME="output4"
+    PATH="/views/admin/notification/create.xhtml"
+    TARGET="rules:#views#admin#notification#create.xhtml" TITLE="admcno" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#views#admin#news#create.xhtml"
+  PATH="/views/admin/news/create.xhtml" SHAPE="240,353,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#views#admin#news#summary.xhtml"
+  PATH="/views/admin/news/summary.xhtml" SHAPE="288,353,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#views#admin#news#edit.xhtml"
+  PATH="/views/admin/news/edit.xhtml" SHAPE="288,353,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#views#admin#news#view.xhtml"
+  PATH="/views/admin/news/view.xhtml" SHAPE="288,353,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#views#admin#notification#create.xhtml"
+  PATH="/views/admin/notification/create.xhtml" SHAPE="304,353,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules::5" SHAPE="32,689,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::5" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="admuc::#views#admin#user#create.xhtml"
+    NAME="output" PATH="/views/admin/user/create.xhtml"
+    TARGET="rules:#views#admin#user#create.xhtml" TITLE="admuc" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admuv::#views#admin#user#view.xhtml"
+    NAME="output1" PATH="/views/admin/user/view.xhtml"
+    TARGET="rules:#views#admin#user#view.xhtml" TITLE="admuv" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admue::#views#admin#user#edit.xhtml"
+    NAME="output2" PATH="/views/admin/user/edit.xhtml"
+    TARGET="rules:#views#admin#user#edit.xhtml" TITLE="admue" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admuu::#views#admin#user#upload.xhtml"
+    NAME="output3" PATH="/views/admin/user/upload.xhtml"
+    TARGET="rules:#views#admin#user#upload.xhtml" TITLE="admuu" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admuur::#views#admin#user#uploadRes.xhtml"
+    NAME="output4" PATH="/views/admin/user/uploadRes.xhtml"
+    TARGET="rules:#views#admin#user#uploadRes.xhtml" TITLE="admuur" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#views#admin#user#edit.xhtml"
+  PATH="/views/admin/user/edit.xhtml" SHAPE="272,1697,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#views#admin#user#create.xhtml"
+  PATH="/views/admin/user/create.xhtml" SHAPE="272,929,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#views#admin#user#view.xhtml"
+  PATH="/views/admin/user/view.xhtml" SHAPE="272,1137,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#views#admin#user#upload.xhtml"
+  PATH="/views/admin/user/upload.xhtml" SHAPE="304,929,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#views#admin#user#uploadRes.xhtml"
+  PATH="/views/admin/user/uploadRes.xhtml" SHAPE="304,1169,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules::6" SHAPE="32,2257,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::6" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="admap::#views#admin#misc#allocatePoints.xhtml" NAME="output"
+    PATH="/views/admin/misc/allocatePoints.xhtml"
+    TARGET="rules:#views#admin#misc#allocatePoints.xhtml" TITLE="admap" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="admmm::#views#admin#misc#maintainMetadata.xhtml" NAME="output1"
+    PATH="/views/admin/misc/maintainMetadata.xhtml"
+    TARGET="rules:#views#admin#misc#maintainMetadata.xhtml"
+    TITLE="admmm" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="admmpa::#views#admin#misc#maintainPointAllocation.xhtml"
+    NAME="output2"
+    PATH="/views/admin/misc/maintainPointAllocation.xhtml"
+    TARGET="rules:#views#admin#misc#maintainPointAllocation.xhtml"
+    TITLE="admmpa" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#views#admin#misc#allocatePoints.xhtml"
+  PATH="/views/admin/misc/allocatePoints.xhtml" SHAPE="240,2721,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#views#admin#misc#maintainMetadata.xhtml"
+  PATH="/views/admin/misc/maintainMetadata.xhtml" SHAPE="256,2721,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#views#admin#misc#maintainPointAllocation.xhtml"
+  PATH="/views/admin/misc/maintainPointAllocation.xhtml"
+  SHAPE="272,2721,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules::7" SHAPE="32,3329,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::7" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="admgc::#views#admin#group#create.xhtml"
+    NAME="output" PATH="/views/admin/group/create.xhtml"
+    TARGET="rules:#views#admin#group#create.xhtml" TITLE="admgc" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admge::#views#admin#group#edit.xhtml"
+    NAME="output1" PATH="/views/admin/group/edit.xhtml"
+    TARGET="rules:#views#admin#group#edit.xhtml" TITLE="admge" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admgv::#views#admin#group#view.xhtml"
+    NAME="output2" PATH="/views/admin/group/view.xhtml"
+    TARGET="rules:#views#admin#group#view.xhtml" TITLE="admgv" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admgs::#views#admin#group#summary.xhtml"
+    NAME="output3" PATH="/views/admin/group/summary.xhtml"
+    TARGET="rules:#views#admin#group#summary.xhtml" TITLE="admgs" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#views#admin#group#summary.xhtml"
+  PATH="/views/admin/group/summary.xhtml" SHAPE="288,4113,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#views#admin#group#create.xhtml"
+  PATH="/views/admin/group/create.xhtml" SHAPE="288,3793,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#views#admin#group#edit.xhtml"
+  PATH="/views/admin/group/edit.xhtml" SHAPE="288,4001,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#views#admin#group#view.xhtml"
+  PATH="/views/admin/group/view.xhtml" SHAPE="288,3681,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules::8" SHAPE="32,4769,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::8" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="admfc::#views#admin#function#create.xhtml"
+    NAME="output" PATH="/views/admin/function/create.xhtml"
+    TARGET="rules:#views#admin#function#create.xhtml" TITLE="admfc" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admfe::#views#admin#function#edit.xhtml"
+    NAME="output1" PATH="/views/admin/function/edit.xhtml"
+    TARGET="rules:#views#admin#function#edit.xhtml" TITLE="admfe" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admfv::#views#admin#function#view.xhtml"
+    NAME="output2" PATH="/views/admin/function/view.xhtml"
+    TARGET="rules:#views#admin#function#view.xhtml" TITLE="admfv" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#views#admin#function#view.xhtml"
+  PATH="/views/admin/function/view.xhtml" SHAPE="272,5073,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#views#admin#function#create.xhtml"
+  PATH="/views/admin/function/create.xhtml" SHAPE="272,4785,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#views#admin#function#edit.xhtml"
+  PATH="/views/admin/function/edit.xhtml" SHAPE="272,4961,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>
