@@ -48,9 +48,6 @@
 					<p:commandButton id="tbtnSavePoint" value="Add Points" actionListener="#{adminController.savePoints}" ajax="false">
 						<f:setPropertyActionListener value="3" target="#{adminController.toView}" />
 					</p:commandButton>
-					<p:commandButton id="tbtnACancel" value="Return To Home" ajax="false" actionListener="#{adminController.redirectHome}">
-						<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
-					</p:commandButton>
 				</p:column>
 			</p:panelGrid>
 		</p:panel>

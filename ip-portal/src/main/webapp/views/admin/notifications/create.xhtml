@@ -32,9 +32,6 @@
 				<p:commandButton id="abtnCrtISave" value="Save" ajax="false" action="#{adminController.saveNotification}">
 					<f:setPropertyActionListener value="1" target="#{adminController.returnView}" />
 				</p:commandButton>
-				<p:commandButton id="abtnTCancel" value="Return To Home" ajax="false" action="#{adminController.redirectHome}">
-					<f:setPropertyActionListener value="1" target="#{adminController.returnView}" />
-				</p:commandButton>
 			</p:column>
 		</p:row>
 	</p:panelGrid>
