@@ -141,7 +141,7 @@ public class RandomIdeaController implements Serializable {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -168,7 +168,7 @@ public class RandomIdeaController implements Serializable {
 			showViewIdea = false;
 			showCrtIdea = false;
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -184,7 +184,7 @@ public class RandomIdeaController implements Serializable {
 			showViewIdea = true;
 			showCrtIdea = false;
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -203,7 +203,7 @@ public class RandomIdeaController implements Serializable {
 			showViewIdea = false;
 			showCrtIdea = true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -249,7 +249,7 @@ public class RandomIdeaController implements Serializable {
 				}
 				return "ideae";
 			} catch (Exception e) {
-				e.printStackTrace();
+				
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				fileAvail = true;
@@ -257,7 +257,7 @@ public class RandomIdeaController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			fileAvail = true;
@@ -306,7 +306,7 @@ public class RandomIdeaController implements Serializable {
 				}
 				return "ideaeo";
 			} catch (Exception e) {
-				e.printStackTrace();
+				
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				fileAvail = true;
@@ -314,7 +314,7 @@ public class RandomIdeaController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			fileAvail = true;
@@ -360,7 +360,7 @@ public class RandomIdeaController implements Serializable {
 			}
 			return "ideas";
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform summary request", "System error occurred, cannot perform summary request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			fileAvail = true;
@@ -406,7 +406,7 @@ public class RandomIdeaController implements Serializable {
 			}
 			return "ideaso";
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform summary request", "System error occurred, cannot perform summary request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			fileAvail = true;
@@ -601,7 +601,7 @@ public class RandomIdeaController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create Idea request", "System error occurred, cannot perform create Idea request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -692,7 +692,7 @@ public class RandomIdeaController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update Idea request", "System error occurred, cannot perform update Idea request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -753,7 +753,7 @@ public class RandomIdeaController implements Serializable {
 			this.ideaBean.setContentType(file.getContentType());
 			this.ideaBean.setFileName(file.getFileName());
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform upload request", "System error occurred, cannot perform upload request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}

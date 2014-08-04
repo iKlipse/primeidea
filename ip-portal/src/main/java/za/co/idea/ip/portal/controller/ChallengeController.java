@@ -222,7 +222,7 @@ public class ChallengeController implements Serializable {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -266,7 +266,7 @@ public class ChallengeController implements Serializable {
 			showViewChal = true;
 			showCrtChal = false;
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -284,7 +284,7 @@ public class ChallengeController implements Serializable {
 			showViewChal = false;
 			showCrtChal = true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -332,7 +332,7 @@ public class ChallengeController implements Serializable {
 				}
 				return "chale";
 			} catch (Exception e) {
-				e.printStackTrace();
+				
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform edit request", "System error occurred, cannot perform edit request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				chalFileAvail = true;
@@ -340,7 +340,7 @@ public class ChallengeController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform edit request", "System error occurred, cannot perform edit request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -383,7 +383,7 @@ public class ChallengeController implements Serializable {
 				}
 				return "chaleo";
 			} catch (Exception e) {
-				e.printStackTrace();
+				
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform edit request", "System error occurred, cannot perform edit request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				chalFileAvail = true;
@@ -391,7 +391,7 @@ public class ChallengeController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform edit request", "System error occurred, cannot perform edit request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -436,7 +436,7 @@ public class ChallengeController implements Serializable {
 			}
 			return "chals";
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform summary request", "System error occurred, cannot perform summary request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			chalFileAvail = true;
@@ -482,7 +482,7 @@ public class ChallengeController implements Serializable {
 			}
 			return "chalso";
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform summary request", "System error occurred, cannot perform summary request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			chalFileAvail = true;
@@ -549,7 +549,7 @@ public class ChallengeController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -642,7 +642,7 @@ public class ChallengeController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -714,7 +714,7 @@ public class ChallengeController implements Serializable {
 			showViewSol = false;
 			showCrtSol = true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -730,7 +730,7 @@ public class ChallengeController implements Serializable {
 			solutionBean = new SolutionBean();
 			solutionBean.setChalId(Long.valueOf(reqMap.get("chalId")));
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -748,7 +748,7 @@ public class ChallengeController implements Serializable {
 			showViewSol = true;
 			showCrtSol = false;
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			logger.error("Error in view solution: " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -767,7 +767,7 @@ public class ChallengeController implements Serializable {
 			showViewSol = false;
 			showCrtSol = false;
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -814,7 +814,7 @@ public class ChallengeController implements Serializable {
 				}
 				return "sole";
 			} catch (Exception e) {
-				e.printStackTrace();
+				
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				solFileAvail = false;
@@ -822,7 +822,7 @@ public class ChallengeController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -864,7 +864,7 @@ public class ChallengeController implements Serializable {
 				}
 				return "soleo";
 			} catch (Exception e) {
-				e.printStackTrace();
+				
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				solFileAvail = false;
@@ -872,7 +872,7 @@ public class ChallengeController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -920,7 +920,7 @@ public class ChallengeController implements Serializable {
 			}
 			return "sols";
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			solFileAvail = false;
@@ -970,7 +970,7 @@ public class ChallengeController implements Serializable {
 			}
 			return "solso";
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			solFileAvail = false;
@@ -1062,7 +1062,7 @@ public class ChallengeController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -1151,7 +1151,7 @@ public class ChallengeController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -1594,7 +1594,7 @@ public class ChallengeController implements Serializable {
 			this.challengeBean.setContentType(file.getContentType());
 			this.challengeBean.setFileName(file.getFileName());
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -1607,7 +1607,7 @@ public class ChallengeController implements Serializable {
 			this.solutionBean.setContentType(file.getContentType());
 			this.solutionBean.setFileName(file.getFileName());
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}

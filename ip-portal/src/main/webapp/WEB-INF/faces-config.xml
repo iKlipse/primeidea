@@ -1,5 +1,13 @@
 <?xml version="1.0"?>
 <faces-config version="2.1" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+	<converter>
+		<converter-id>userConverter</converter-id>
+		<converter-class>za.co.idea.ip.portal.util.UserBeanConverter</converter-class>
+	</converter>
+	<converter>
+		<converter-id>groupConverter</converter-id>
+		<converter-class>za.co.idea.ip.portal.util.GroupBeanConverter</converter-class>
+	</converter>
 	<navigation-rule>
 		<navigation-case>
 			<from-outcome>chale</from-outcome>
@@ -60,14 +68,96 @@
 			<to-view-id>/views/rewards/container/editContainer.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	<converter>
-		<converter-id>userConverter</converter-id>
-		<converter-class>za.co.idea.ip.portal.util.UserBeanConverter</converter-class>
-	</converter>
-	<converter>
-		<converter-id>groupConverter</converter-id>
-		<converter-class>za.co.idea.ip.portal.util.GroupBeanConverter</converter-class>
-	</converter>
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>admcn</from-outcome>
+			<to-view-id>/views/admin/news/create.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admvn</from-outcome>
+			<to-view-id>/views/admin/news/view.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admen</from-outcome>
+			<to-view-id>/views/admin/news/edit.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admsn</from-outcome>
+			<to-view-id>/views/admin/news/summary.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admcno</from-outcome>
+			<to-view-id>/views/admin/notification/create.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>admuc</from-outcome>
+			<to-view-id>/views/admin/user/create.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admuv</from-outcome>
+			<to-view-id>/views/admin/user/view.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admue</from-outcome>
+			<to-view-id>/views/admin/user/edit.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admuu</from-outcome>
+			<to-view-id>/views/admin/user/upload.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admuur</from-outcome>
+			<to-view-id>/views/admin/user/uploadRes.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>admap</from-outcome>
+			<to-view-id>/views/admin/misc/allocatePoints.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admmm</from-outcome>
+			<to-view-id>/views/admin/misc/maintainMetadata.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admmpa</from-outcome>
+			<to-view-id>/views/admin/misc/maintainPointAllocation.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>admgc</from-outcome>
+			<to-view-id>/views/admin/group/create.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admge</from-outcome>
+			<to-view-id>/views/admin/group/edit.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admgv</from-outcome>
+			<to-view-id>/views/admin/group/view.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admgs</from-outcome>
+			<to-view-id>/views/admin/group/summary.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>admfc</from-outcome>
+			<to-view-id>/views/admin/function/create.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admfe</from-outcome>
+			<to-view-id>/views/admin/function/edit.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admfv</from-outcome>
+			<to-view-id>/views/admin/function/view.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
 	<application>
 		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
 	</application>

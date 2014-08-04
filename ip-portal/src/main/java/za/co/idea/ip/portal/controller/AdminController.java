@@ -116,17 +116,6 @@ public class AdminController implements Serializable {
 	private boolean resetSec;
 	private boolean fileAvail;
 	private StreamedContent fileContent;
-	private boolean showCreateUser;
-	private boolean showViewUser;
-	private boolean showUploadUser;
-	private boolean showCreateGroup;
-	private boolean showViewGroups;
-	private boolean showViewFunctions;
-	private boolean showCreateNews;
-	private boolean showAllocatePoints;
-	private boolean showAllocatedPoints;
-	private boolean showMetadataMaintain;
-	private boolean showViewNews;
 	private String entity;
 	private String returnView;
 	private String toView;
@@ -157,7 +146,6 @@ public class AdminController implements Serializable {
 	private List<NewsBean> viewNewsBeans;
 	private List<NotificationBean> viewNotifications;
 	private StreamedContent uploadContent;
-	private boolean showCreateNotification;
 	private NotificationBean notificationBean;
 	private String[] selGrpId;
 	private String[] selUserId;
@@ -177,97 +165,8 @@ public class AdminController implements Serializable {
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
 			viewUsers = fetchAllUsers();
-			showViewUser = true;
-			showCreateUser = false;
-			showUploadUser = false;
-			showAddPanel = false;
-			showModPanel = false;
-			showAddBtn = false;
-			showMetadataMaintain = false;
-			showViewNews = false;
-			table = "";
-			beans = null;
-			showMetadataMaintain = false;
-			viewNewsBeans = fetchAllNews();
-			showCreateNews = false;
-			showViewNews = false;
-			showCreateNotification = false;
-			notificationBean = new NotificationBean();
-			pGrps = fetchAllGroups();
-			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
-			showCreateNotification = true;
-			if (toView != null && Integer.valueOf(toView) != -1) {
-				switch (Integer.valueOf(toView)) {
-				case 1:
-					viewUsers = fetchAllUsers();
-					showViewUser = true;
-					showCreateUser = false;
-					showUploadUser = false;
-					showCreateGroup = false;
-					showViewGroups = false;
-					showViewFunctions = false;
-					showCreateNews = false;
-					showAllocatePoints = false;
-					showAllocatedPoints = false;
-					showMetadataMaintain = false;
-					showViewNews = false;
-					showCreateNotification = false;
-					break;
-				case 2:
-					pGrps = viewGroups = fetchAllGroups();
-					admUsers = fetchAllUsers();
-					showViewUser = false;
-					showCreateUser = false;
-					showCreateGroup = false;
-					showCreateNews = false;
-					showCreateGroup = false;
-					showViewGroups = true;
-					showViewFunctions = false;
-					showAllocatePoints = false;
-					showAllocatedPoints = false;
-					showMetadataMaintain = false;
-					showViewNews = false;
-					showCreateNotification = false;
-					break;
-				case 3:
-					this.showAddPanel = false;
-					this.showModPanel = false;
-					this.showAddBtn = false;
-					this.entity = "";
-					this.statusList = new ArrayList<MetaDataBean>();
-					this.disStatusList = new ArrayList<MetaDataBean>();
-					this.allocs = new ArrayList<AllocationBean>();
-					showViewUser = false;
-					showCreateUser = false;
-					showCreateGroup = false;
-					showCreateNews = false;
-					showCreateGroup = false;
-					showViewGroups = false;
-					showViewFunctions = false;
-					showAllocatePoints = false;
-					showAllocatedPoints = true;
-					showMetadataMaintain = false;
-					showViewNews = false;
-					showCreateNotification = false;
-					break;
-				default:
-					viewUsers = fetchAllUsers();
-					showViewUser = true;
-					showCreateUser = false;
-					showUploadUser = false;
-					showCreateGroup = false;
-					showViewGroups = false;
-					showViewFunctions = false;
-					showAllocatePoints = false;
-					showAllocatedPoints = false;
-					showMetadataMaintain = false;
-					showViewNews = false;
-					showCreateNotification = false;
-					break;
-				}
-			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -282,6 +181,362 @@ public class AdminController implements Serializable {
 		default:
 			return "";
 		}
+	}
+
+	public String showCreateNews() {
+		try {
+			logger.debug("Control handled in createCustomClient()");
+			newsBean = new NewsBean();
+			return "admcn";
+		} catch (Exception e) {
+
+			logger.error("Error while displaying show create news form: " + e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news create request", "System error occurred, cannot perform news create request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showViewNews() {
+		try {
+			logger.debug("Control handled in createCustomClient()");
+			viewNewsBeans = fetchAllNews();
+			return "admvn";
+		} catch (Exception e) {
+
+			logger.error("Error while displaying show view news form: " + e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news view request", "System error occurred, cannot perform news view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showEditNews() {
+		try {
+			logger.debug("Control handled in showEditNews() method");
+			logger.info("Sending request to NewsService");
+			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + newsBean.getnId() + "/ip_news");
+			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+			getBlobClient.close();
+			logger.info("After gettin response from NewsService");
+			if (blobId != -999l) {
+				WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+				getBlobNameClient.close();
+				WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				client.header("Content-Type", "application/json");
+				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+				if (attachment != null) {
+					fileAvail = false;
+					WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+					String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+					getBlobTypeClient.close();
+					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
+				} else {
+					fileAvail = true;
+					fileContent = null;
+				}
+			} else {
+				fileAvail = true;
+				fileContent = null;
+			}
+			return "admen";
+		} catch (Exception e) {
+			logger.error("Error while displaying edit news form: " + e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			fileAvail = true;
+			fileContent = null;
+			return "";
+		}
+	}
+
+	public String showSummaryNews() {
+		try {
+			logger.debug("In showSummaryNews method");
+			viewNewsBeans = fetchAllNews();
+			logger.info("News details after fetching data from fetchALLNews(): " + viewNewsBeans);
+			return "admsn";
+		} catch (Exception e) {
+			logger.error("Error while displaying news summary details: " + e.getMessage());
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news view request", "System error occurred, cannot perform news view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showViewGroups() {
+		try {
+			pGrps = viewGroups = fetchAllGroups();
+			admUsers = fetchAllUsers();
+			return "admgv";
+		} catch (Exception e) {
+
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot view groups request", "System error occurred, cannot view groups request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showAllocatePoints() {
+		try {
+			entity = "";
+			admUsers = fetchAllUsers();
+			allocs = new ArrayList<AllocationBean>();
+			return "admap";
+		} catch (Exception e) {
+
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showCreateFunction() {
+		try {
+			pGrps = fetchAllGroups();
+			groupTwinSelect = new DualListModel<GroupBean>(fetchAllGroups(), new ArrayList<GroupBean>());
+			return "admfc";
+		} catch (Exception e) {
+
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showViewFunction() {
+		try {
+			functions = fetchAllFunctions();
+			admUsers = fetchAllUsers();
+			pGrps = fetchAllGroups();
+			return "admfv";
+		} catch (Exception e) {
+
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showCreateGroup() {
+		try {
+			groupBean = new GroupBean();
+			viewGroups = pGrps = fetchAllGroups();
+			admUsers = fetchAllUsersSortByPG();
+			userTwinSelect = new DualListModel<UserBean>(fetchAllUsersSortByPG(), fetchAdminUser());
+			return "admgc";
+		} catch (Exception e) {
+
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform created groups view request", "System error occurred, cannot perform created groups view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showEditGroup() {
+		try {
+			viewGroups = pGrps = fetchAllGroups();
+			admUsers = fetchAllUsersSortByPG();
+			userTwinSelect = initializeSelectedUsers(admUsers);
+			functions = fetchAllFunctionsByGroup();
+			try {
+				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + groupBean.getgId() + "/ip_group");
+				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+				getBlobClient.close();
+				if (blobId != -999l) {
+					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+					getBlobNameClient.close();
+					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					client.header("Content-Type", "application/json");
+					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+					if (attachment != null) {
+						fileAvail = false;
+						WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+						getBlobTypeClient.close();
+						groupBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
+						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
+					} else {
+						fileAvail = true;
+						fileContent = null;
+					}
+				} else {
+					fileAvail = true;
+					fileContent = null;
+				}
+				return "groupe";
+			} catch (Exception e) {
+
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				fileAvail = true;
+				fileContent = null;
+				return "";
+			}
+		} catch (Exception e) {
+
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated groups view request", "System error occurred, cannot perform updated groups view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showSummaryGroup() {
+		try {
+			viewGroups = pGrps = fetchAllGroups();
+			admUsers = fetchAllUsersSortByPG();
+			userTwinSelect = initializeSelectedUsers(admUsers);
+			functions = fetchAllFunctionsByGroup();
+			try {
+				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + groupBean.getgId() + "/ip_group");
+				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+				getBlobClient.close();
+				if (blobId != -999l) {
+					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+					getBlobNameClient.close();
+					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					client.header("Content-Type", "application/json");
+					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+					if (attachment != null) {
+						fileAvail = false;
+						WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+						getBlobTypeClient.close();
+						groupBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
+						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
+					} else {
+						fileAvail = true;
+						fileContent = null;
+					}
+				} else {
+					fileAvail = true;
+					fileContent = null;
+				}
+				return "admgs";
+			} catch (Exception e) {
+
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				fileAvail = true;
+				fileContent = null;
+				return "";
+			}
+		} catch (Exception e) {
+
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated groups view request", "System error occurred, cannot perform updated groups view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showCreateNotification() {
+		try {
+			notificationBean = new NotificationBean();
+			pGrps = fetchAllGroups();
+			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
+			return "admcno";
+		} catch (Exception e) {
+
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showViewUsers() {
+		try {
+			viewUsers = fetchAllUsers();
+			return "admuv";
+		} catch (Exception e) {
+
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform Users View request", "System error occurred, cannot perform Users View request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showUploadUsers() {
+		return "admuu";
+	}
+
+	public String showRPw() {
+		secqList = fetchAllSecQ();
+		return "";
+	}
+
+	public String showEditUser() {
+		try {
+			secqList = fetchAllSecQ();
+			viewGroups = fetchAllGroups();
+			resetPasswd = false;
+			resetSec = false;
+			return "admue";
+		} catch (Exception e) {
+
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated user view request", "System error occurred, cannot perform updated user view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showCreateUser() {
+		try {
+			userBean = new UserBean();
+			secqList = fetchAllSecQ();
+			viewGroups = fetchAllGroups();
+			return "admuc";
+		} catch (Exception e) {
+
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform created user view request", "System error occurred, cannot perform created user view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showPointAllocation() {
+		try {
+			this.showAddPanel = false;
+			this.showModPanel = false;
+			this.showAddBtn = false;
+			this.entity = "";
+			this.statusList = new ArrayList<MetaDataBean>();
+			this.disStatusList = new ArrayList<MetaDataBean>();
+			this.allocs = new ArrayList<AllocationBean>();
+			return "admmpa";
+		} catch (Exception e) {
+
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showEditFunction() {
+		try {
+			pGrps = fetchAllGroups();
+			groupTwinSelect = initializeSelectedGroups(pGrps);
+			return "admfe";
+		} catch (Exception e) {
+
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showMetadataMaintain() {
+		this.showAddPanel = false;
+		this.showModPanel = false;
+		this.showAddBtn = false;
+		this.table = "";
+		this.beans = null;
+		return "admmm";
 	}
 
 	public void login() {
@@ -375,7 +630,7 @@ public class AdminController implements Serializable {
 						showDef = true;
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
+
 					logger.error("Error while login : " + e.getMessage());
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform Login request", "System error occurred, cannot perform Login request");
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -457,320 +712,6 @@ public class AdminController implements Serializable {
 		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 	}
 
-	public void showViewUsers() {
-		try {
-			viewUsers = fetchAllUsers();
-			showViewUser = true;
-			showCreateUser = false;
-			showUploadUser = false;
-			showCreateGroup = false;
-			showViewGroups = false;
-			showViewFunctions = false;
-			showCreateNews = false;
-			showAllocatePoints = false;
-			showAllocatedPoints = false;
-			showMetadataMaintain = false;
-			showViewNews = false;
-			showCreateNotification = false;
-		} catch (Exception e) {
-			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform Users View request", "System error occurred, cannot perform Users View request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		}
-	}
-
-	public void showUploadUsers() {
-		showViewUser = false;
-		showCreateUser = false;
-		showUploadUser = true;
-		showCreateGroup = false;
-		showViewGroups = false;
-		showViewFunctions = false;
-		showCreateNews = false;
-		showAllocatePoints = false;
-		showAllocatedPoints = false;
-		showMetadataMaintain = false;
-		showViewNews = false;
-		showCreateNotification = false;
-	}
-
-	public void showRPw() {
-		secqList = fetchAllSecQ();
-	}
-
-	public void redirectHome() {
-	}
-
-	public String showEditUser() {
-		try {
-			secqList = fetchAllSecQ();
-			viewGroups = fetchAllGroups();
-			resetPasswd = false;
-			resetSec = false;
-			return "usere";
-		} catch (Exception e) {
-			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated user view request", "System error occurred, cannot perform updated user view request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
-		}
-	}
-
-	public void showEditProfile() {
-		try {
-			viewGroups = fetchAllGroups();
-			userBean = (UserBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
-			userBean.setcPw(userBean.getPwd());
-		} catch (Exception e) {
-			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated user profile view request", "System error occurred, cannot perform updated user profile view request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		}
-	}
-
-	public void showCreateUser() {
-		try {
-			userBean = new UserBean();
-			secqList = fetchAllSecQ();
-			viewGroups = fetchAllGroups();
-			showViewUser = false;
-			showCreateUser = true;
-			showUploadUser = false;
-			showCreateGroup = false;
-			showViewGroups = false;
-			showViewFunctions = false;
-			showCreateNews = false;
-			showAllocatePoints = false;
-			showAllocatedPoints = false;
-			showMetadataMaintain = false;
-			showViewNews = false;
-			showCreateNotification = false;
-		} catch (Exception e) {
-			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform created user view request", "System error occurred, cannot perform created user view request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		}
-	}
-
-	public void showViewGroups() {
-		try {
-			pGrps = viewGroups = fetchAllGroups();
-			admUsers = fetchAllUsers();
-			showViewUser = false;
-			showCreateUser = false;
-			showUploadUser = false;
-			showCreateGroup = false;
-			showViewGroups = true;
-			showViewFunctions = false;
-			showCreateNews = false;
-			showAllocatePoints = false;
-			showAllocatedPoints = false;
-			showMetadataMaintain = false;
-			showViewNews = false;
-			showCreateNotification = false;
-		} catch (Exception e) {
-			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot view groups request", "System error occurred, cannot view groups request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		}
-	}
-
-	public void showCreateGroup() {
-		try {
-			groupBean = new GroupBean();
-			viewGroups = pGrps = fetchAllGroups();
-			admUsers = fetchAllUsersSortByPG();
-			userTwinSelect = new DualListModel<UserBean>(fetchAllUsersSortByPG(), fetchAdminUser());
-			showViewUser = false;
-			showCreateUser = false;
-			showUploadUser = false;
-			showCreateGroup = true;
-			showViewGroups = false;
-			showViewFunctions = false;
-			showCreateNews = false;
-			showAllocatePoints = false;
-			showAllocatedPoints = false;
-			showMetadataMaintain = false;
-			showViewNews = false;
-			showCreateNotification = false;
-		} catch (Exception e) {
-			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform created groups view request", "System error occurred, cannot perform created groups view request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		}
-	}
-
-	public String showEditGroup() {
-		try {
-			viewGroups = pGrps = fetchAllGroups();
-			admUsers = fetchAllUsersSortByPG();
-			userTwinSelect = initializeSelectedUsers(admUsers);
-			functions = fetchAllFunctionsByGroup();
-			try {
-				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + groupBean.getgId() + "/ip_group");
-				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-				getBlobClient.close();
-				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
-					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-					client.header("Content-Type", "application/json");
-					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-					if (attachment != null) {
-						fileAvail = false;
-						WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
-						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-						getBlobTypeClient.close();
-						groupBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-					} else {
-						fileAvail = true;
-						fileContent = null;
-					}
-				} else {
-					fileAvail = true;
-					fileContent = null;
-				}
-				return "groupe";
-			} catch (Exception e) {
-				e.printStackTrace();
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				fileAvail = true;
-				fileContent = null;
-				return "";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated groups view request", "System error occurred, cannot perform updated groups view request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
-		}
-	}
-
-	public String showSummaryGroup() {
-		try {
-			viewGroups = pGrps = fetchAllGroups();
-			admUsers = fetchAllUsersSortByPG();
-			userTwinSelect = initializeSelectedUsers(admUsers);
-			functions = fetchAllFunctionsByGroup();
-			try {
-				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + groupBean.getgId() + "/ip_group");
-				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-				getBlobClient.close();
-				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
-					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-					client.header("Content-Type", "application/json");
-					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-					if (attachment != null) {
-						fileAvail = false;
-						WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
-						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-						getBlobTypeClient.close();
-						groupBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-					} else {
-						fileAvail = true;
-						fileContent = null;
-					}
-				} else {
-					fileAvail = true;
-					fileContent = null;
-				}
-				return "groups";
-			} catch (Exception e) {
-				e.printStackTrace();
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				fileAvail = true;
-				fileContent = null;
-				return "";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated groups view request", "System error occurred, cannot perform updated groups view request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
-		}
-	}
-
-	public void showCreateFunction() {
-		try {
-			pGrps = fetchAllGroups();
-			groupTwinSelect = new DualListModel<GroupBean>(fetchAllGroups(), new ArrayList<GroupBean>());
-			showViewUser = false;
-			showCreateUser = false;
-			showUploadUser = false;
-			showCreateGroup = false;
-			showViewGroups = false;
-			showViewFunctions = true;
-			showCreateNews = false;
-			showAllocatePoints = false;
-			showAllocatedPoints = false;
-			showMetadataMaintain = false;
-			showViewNews = false;
-			showCreateNotification = false;
-		} catch (Exception e) {
-			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		}
-	}
-
-	public void showViewFunction() {
-		try {
-			functions = fetchAllFunctions();
-			admUsers = fetchAllUsers();
-			pGrps = fetchAllGroups();
-			showViewUser = false;
-			showCreateUser = false;
-			showUploadUser = false;
-			showCreateGroup = false;
-			showViewGroups = false;
-			showViewFunctions = true;
-			showCreateNews = false;
-			showAllocatePoints = false;
-			showAllocatedPoints = false;
-			showMetadataMaintain = false;
-			showViewNews = false;
-			showCreateNotification = false;
-		} catch (Exception e) {
-			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		}
-	}
-
-	public void showAllocatePoints() {
-		try {
-			entity = "";
-			admUsers = fetchAllUsers();
-			allocs = new ArrayList<AllocationBean>();
-			showViewUser = false;
-			showCreateUser = false;
-			showUploadUser = false;
-			showCreateGroup = false;
-			showViewGroups = false;
-			showViewFunctions = false;
-			showCreateNews = false;
-			showAllocatePoints = true;
-			showAllocatedPoints = false;
-			showMetadataMaintain = false;
-			showViewNews = false;
-			showCreateNotification = false;
-		} catch (Exception e) {
-			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		}
-	}
-
 	public String savePoints() {
 		try {
 			WebClient savePointsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/points/add");
@@ -796,7 +737,7 @@ public class AdminController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform save point request", "System error occurred, cannot perform save point request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -835,34 +776,6 @@ public class AdminController implements Serializable {
 		statusList = new ArrayList<MetaDataBean>();
 		disStatusList = new ArrayList<MetaDataBean>();
 		return "";
-	}
-
-	public void showPointAllocation() {
-		try {
-			this.showAddPanel = false;
-			this.showModPanel = false;
-			this.showAddBtn = false;
-			this.entity = "";
-			this.statusList = new ArrayList<MetaDataBean>();
-			this.disStatusList = new ArrayList<MetaDataBean>();
-			this.allocs = new ArrayList<AllocationBean>();
-			showViewUser = false;
-			showCreateUser = false;
-			showUploadUser = false;
-			showCreateGroup = false;
-			showViewGroups = false;
-			showViewFunctions = false;
-			showCreateNews = false;
-			showAllocatePoints = false;
-			showAllocatedPoints = true;
-			showMetadataMaintain = false;
-			showViewNews = false;
-			showCreateNotification = false;
-		} catch (Exception e) {
-			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		}
 	}
 
 	public void updateEntityChange() {
@@ -906,7 +819,7 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update allocation request", "System error occurred, cannot perform update allocation request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -932,7 +845,7 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update allocation request", "System error occurred, cannot perform update allocation request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 
@@ -984,7 +897,7 @@ public class AdminController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform save allocation request", "System error occurred, cannot perform save allocation request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -1111,19 +1024,6 @@ public class AdminController implements Serializable {
 
 	public void setClaimStatusList(List<MetaDataBean> claimStatusList) {
 		this.claimStatusList = claimStatusList;
-	}
-
-	public String showEditFunction() {
-		try {
-			pGrps = fetchAllGroups();
-			groupTwinSelect = initializeSelectedGroups(pGrps);
-			return "fune";
-		} catch (Exception e) {
-			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
-		}
 	}
 
 	public void checkAvailability() {
@@ -1299,11 +1199,11 @@ public class AdminController implements Serializable {
 				cell0 = row.getCell(0);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			getUploadErrors().add("User creation service call failed due to :: " + e.getMessage() + " row number :: " + i);
-			return "admuresz";
+			return "admuur";
 		}
-		return "admuresz";
+		return "admuur";
 	}
 
 	public String saveUser() {
@@ -1380,7 +1280,8 @@ public class AdminController implements Serializable {
 							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 						}
 						client.close();
-						return redirectMain();
+						viewUsers = fetchAllUsers();
+						return "admuv";
 					} else {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -1389,14 +1290,15 @@ public class AdminController implements Serializable {
 				}
 				FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "User '" + userBean.getfName() + "' created successfully", "User '" + userBean.getfName() + "' created successfully");
 				FacesContext.getCurrentInstance().addMessage(null, successMessage);
-				return redirectMain();
+				viewUsers = fetchAllUsers();
+				return "admuv";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -1557,14 +1459,15 @@ public class AdminController implements Serializable {
 			if (response.getStatusCode() == 0) {
 				FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "User '" + userBean.getfName() + "' updated successfully", "User '" + userBean.getfName() + "' updated successfully");
 				FacesContext.getCurrentInstance().addMessage(null, successMessage);
-				return redirectMain();
+				viewUsers = fetchAllUsers();
+				return "admvu";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update User", "Unable to update User");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -1625,7 +1528,7 @@ public class AdminController implements Serializable {
 
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -1684,14 +1587,15 @@ public class AdminController implements Serializable {
 					}
 					createBlobClient.close();
 				}
-				return redirectMain();
+				viewGroups = fetchAllGroups();
+				return "admgv";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -1722,14 +1626,15 @@ public class AdminController implements Serializable {
 			ResponseMessage response = addFunctionClient.accept(MediaType.APPLICATION_JSON).post(functionMessage, ResponseMessage.class);
 			addFunctionClient.close();
 			if (response.getStatusCode() == 0) {
-				return redirectMain();
+				functions = fetchAllFunctions();
+				return "admfv";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -1812,14 +1717,15 @@ public class AdminController implements Serializable {
 					}
 				}
 				grpImage = null;
-				return redirectMain();
+				viewGroups = fetchAllGroups();
+				return "admgv";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -1845,14 +1751,15 @@ public class AdminController implements Serializable {
 			ResponseMessage response = updateFunctionClient.accept(MediaType.APPLICATION_JSON).put(functionMessage, ResponseMessage.class);
 			updateFunctionClient.close();
 			if (response.getStatusCode() == 0) {
-				return redirectMain();
+				functions = fetchAllFunctions();
+				return "admfv";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -1921,7 +1828,7 @@ public class AdminController implements Serializable {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", "Unable to upload attachment. Please update later");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -2117,6 +2024,53 @@ public class AdminController implements Serializable {
 		return ret;
 	}
 
+	private List<NewsBean> fetchAllNews() {
+		List<NewsBean> ret = new ArrayList<NewsBean>();
+		try {
+			logger.debug("Control handled in fetchAllNews method of NewsController ");
+			WebClient fetchNewsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ns/news/list");
+			Collection<? extends NewsMessage> news = new ArrayList<NewsMessage>(fetchNewsClient.accept(MediaType.APPLICATION_JSON).getCollection(NewsMessage.class));
+			fetchNewsClient.close();
+			logger.info("News data adding to List: ");
+			for (NewsMessage message : news) {
+				NewsBean bean = new NewsBean();
+				bean.setnId(message.getnId());
+				bean.setnContent(message.getContent());
+				bean.setnEndDate(message.getEndDate());
+				bean.setnStartDate(message.getStartDate());
+				bean.setnTitle(message.getnTitle());
+				bean.setNewsUrl(message.getNewsUrl());
+				bean.setNwImgAvail(message.isNwImgAvail());
+				ret.add(bean);
+			}
+		} catch (Exception e) {
+			logger.error("Error in fetching data : " + e.getMessage());
+		}
+		logger.info("News data displaying from List: " + ret);
+		return ret;
+	}
+
+	protected List<NotificationBean> fetchAllNotifications() {
+		List<NotificationBean> ret = new ArrayList<NotificationBean>();
+		WebClient fetchNotifClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/nos/notif/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		Collection<? extends NotificationMessage> notifications = new ArrayList<NotificationMessage>(fetchNotifClient.accept(MediaType.APPLICATION_JSON).getCollection(NotificationMessage.class));
+		fetchNotifClient.close();
+		for (NotificationMessage notificationMessage : notifications) {
+			NotificationBean bean = new NotificationBean();
+			bean.setNotifAttach(notificationMessage.getNotifAttach());
+			bean.setNotifBody(notificationMessage.getNotifBody());
+			bean.setNotifCrtdDate(notificationMessage.getNotifCrtdDate());
+			bean.setNotifEntityId(notificationMessage.getNotifEntityId());
+			bean.setNotifEntityTblName(notificationMessage.getNotifEntityTblName());
+			bean.setNotifId(notificationMessage.getNotifId());
+			bean.setNotifStatus(notificationMessage.getNotifStatus());
+			bean.setNotifSubject(notificationMessage.getNotifSubject());
+			bean.setGroupIdList(getIdsFromArray(notificationMessage.getGroupIdList()));
+			ret.add(bean);
+		}
+		return ret;
+	}
+
 	private List<MetaDataBean> fetchAllSecQ() {
 		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
 		WebClient metaDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/IpSecqList");
@@ -2181,7 +2135,7 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage("fuCUpload", successMessage);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -2198,7 +2152,7 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage("fuCUpload", successMessage);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -2216,7 +2170,7 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage("fuCUpload", successMessage);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			enableUpload = false;
@@ -2235,7 +2189,7 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage("fuCUpload", successMessage);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			enableUpload = false;
@@ -2253,44 +2207,12 @@ public class AdminController implements Serializable {
 		return ret;
 	}
 
-	public void showMetadataMaintain() {
-		this.showAddPanel = false;
-		this.showModPanel = false;
-		this.showAddBtn = false;
-		this.table = "";
-		this.beans = null;
-		showViewUser = false;
-		showCreateUser = false;
-		showUploadUser = false;
-		showCreateGroup = false;
-		showViewGroups = false;
-		showViewFunctions = false;
-		showCreateNews = false;
-		showAllocatePoints = false;
-		showAllocatedPoints = false;
-		showMetadataMaintain = true;
-		showViewNews = false;
-		showCreateNotification = false;
-	}
-
 	public String showMetaData() {
 		this.showAddPanel = false;
 		this.showModPanel = true;
 		selId = bean.getId().toString();
 		selVal = bean.getDesc();
-		showViewUser = false;
-		showCreateUser = false;
-		showUploadUser = false;
-		showCreateGroup = false;
-		showViewGroups = false;
-		showViewFunctions = false;
-		showCreateNews = false;
-		showAllocatePoints = false;
-		showCreateNotification = false;
-		showAllocatedPoints = false;
-		showMetadataMaintain = true;
-		showViewNews = false;
-		return "";
+		return "admmm";
 	}
 
 	public String showMetaDataAdd() {
@@ -2300,18 +2222,6 @@ public class AdminController implements Serializable {
 		this.showAddBtn = false;
 		this.showAddPanel = true;
 		this.showModPanel = false;
-		showViewUser = false;
-		showCreateUser = false;
-		showUploadUser = false;
-		showCreateGroup = false;
-		showViewGroups = false;
-		showViewFunctions = false;
-		showCreateNews = false;
-		showAllocatePoints = false;
-		showAllocatedPoints = false;
-		showMetadataMaintain = true;
-		showViewNews = false;
-		showCreateNotification = false;
 		return "";
 	}
 
@@ -2324,18 +2234,6 @@ public class AdminController implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			this.showAddPanel = false;
 			this.showModPanel = true;
-			showViewUser = false;
-			showCreateUser = false;
-			showUploadUser = false;
-			showCreateGroup = false;
-			showViewGroups = false;
-			showViewFunctions = false;
-			showCreateNews = false;
-			showAllocatePoints = false;
-			showAllocatedPoints = false;
-			showMetadataMaintain = true;
-			showViewNews = false;
-			showCreateNotification = false;
 			return "";
 		}
 		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/modify");
@@ -2347,18 +2245,6 @@ public class AdminController implements Serializable {
 		mDataClient.close();
 		if (response.getStatusCode() == 0) {
 			beans = fetchAllMetadata();
-			showViewUser = false;
-			showCreateUser = false;
-			showUploadUser = false;
-			showCreateGroup = false;
-			showViewGroups = false;
-			showViewFunctions = false;
-			showCreateNews = false;
-			showAllocatePoints = false;
-			showAllocatedPoints = false;
-			showMetadataMaintain = true;
-			showViewNews = false;
-			showCreateNotification = false;
 			return "";
 		} else {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -2371,18 +2257,6 @@ public class AdminController implements Serializable {
 		this.showAddPanel = false;
 		this.showModPanel = false;
 		this.showAddBtn = true;
-		showViewUser = false;
-		showCreateUser = false;
-		showUploadUser = false;
-		showCreateGroup = false;
-		showViewGroups = false;
-		showViewFunctions = false;
-		showCreateNews = false;
-		showAllocatePoints = false;
-		showAllocatedPoints = false;
-		showMetadataMaintain = true;
-		showViewNews = false;
-		showCreateNotification = false;
 		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/delete");
 		MetaDataMessage message = new MetaDataMessage();
 		message.setDesc(selVal);
@@ -2392,7 +2266,7 @@ public class AdminController implements Serializable {
 		mDataClient.close();
 		if (response.getStatusCode() == 0) {
 			beans = fetchAllMetadata();
-			return "mdata";
+			return "admmm";
 		} else {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -2483,110 +2357,6 @@ public class AdminController implements Serializable {
 		return ret;
 	}
 
-	public void showCreateNews() {
-		try {
-			logger.debug("Control handled in createCustomClient()");
-			newsBean = new NewsBean();
-			showViewUser = false;
-			showCreateUser = false;
-			showUploadUser = false;
-			showCreateGroup = false;
-			showViewGroups = false;
-			showViewFunctions = false;
-			showCreateNews = true;
-			showAllocatePoints = false;
-			showAllocatedPoints = false;
-			showMetadataMaintain = false;
-			showViewNews = false;
-			showCreateNotification = false;
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("Error while displaying show create news form: " + e.getMessage());
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news create request", "System error occurred, cannot perform news create request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		}
-	}
-
-	public void showViewNews() {
-		try {
-			logger.debug("Control handled in createCustomClient()");
-			viewNewsBeans = fetchAllNews();
-			showViewUser = false;
-			showCreateUser = false;
-			showUploadUser = false;
-			showCreateGroup = false;
-			showViewGroups = false;
-			showViewFunctions = false;
-			showCreateNews = false;
-			showAllocatePoints = false;
-			showAllocatedPoints = false;
-			showMetadataMaintain = false;
-			showViewNews = true;
-			showCreateNotification = false;
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("Error while displaying show view news form: " + e.getMessage());
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news view request", "System error occurred, cannot perform news view request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		}
-	}
-
-	public String showEditNews() {
-		try {
-			logger.debug("Control handled in showEditNews() method");
-			logger.info("Sending request to NewsService");
-			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + newsBean.getnId() + "/ip_news");
-			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-			getBlobClient.close();
-			logger.info("After gettin response from NewsService");
-			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
-				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-				client.header("Content-Type", "application/json");
-				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-				if (attachment != null) {
-					fileAvail = false;
-					WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
-					String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobTypeClient.close();
-					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-				} else {
-					fileAvail = true;
-					fileContent = null;
-				}
-			} else {
-				fileAvail = true;
-				fileContent = null;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("Error while displaying edit news form: " + e.getMessage());
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			fileAvail = true;
-			fileContent = null;
-		}
-		return "newse";
-	}
-
-	public String showSummaryNews() {
-		try {
-			logger.debug("In showSummaryNews method");
-			viewNewsBeans = fetchAllNews();
-			logger.info("News details after fetching data from fetchALLNews(): " + viewNewsBeans);
-			return "nssc";
-		} catch (Exception e) {
-			logger.error("Error while displaying news summary details: " + e.getMessage());
-			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news view request", "System error occurred, cannot perform news view request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
-		}
-	}
-
 	public String saveNews() {
 		try {
 			logger.debug("Control handled in saveNews method");
@@ -2636,7 +2406,7 @@ public class AdminController implements Serializable {
 			}
 		} catch (Exception e) {
 			logger.error("Error in creating news data : " + e.getMessage());
-			e.printStackTrace();
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news create request", "System error occurred, cannot perform news create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -2717,134 +2487,12 @@ public class AdminController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			logger.error("Error in updating news data : " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
-	}
-
-	private List<NewsBean> fetchAllNews() {
-		List<NewsBean> ret = new ArrayList<NewsBean>();
-		try {
-			logger.debug("Control handled in fetchAllNews method of NewsController ");
-			WebClient fetchNewsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ns/news/list");
-			Collection<? extends NewsMessage> news = new ArrayList<NewsMessage>(fetchNewsClient.accept(MediaType.APPLICATION_JSON).getCollection(NewsMessage.class));
-			fetchNewsClient.close();
-			logger.info("News data adding to List: ");
-			for (NewsMessage message : news) {
-				NewsBean bean = new NewsBean();
-				bean.setnId(message.getnId());
-				bean.setnContent(message.getContent());
-				bean.setnEndDate(message.getEndDate());
-				bean.setnStartDate(message.getStartDate());
-				bean.setnTitle(message.getnTitle());
-				bean.setNewsUrl(message.getNewsUrl());
-				bean.setNwImgAvail(message.isNwImgAvail());
-				ret.add(bean);
-			}
-		} catch (Exception e) {
-			logger.error("Error in fetching data : " + e.getMessage());
-		}
-		logger.info("News data displaying from List: " + ret);
-		return ret;
-	}
-
-	public String showViewNotifications() {
-		try {
-			viewNotifications = fetchAllNotifications();
-			return "notifv";
-		} catch (Exception e) {
-			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
-		}
-	}
-
-	public void showCreateNotification() {
-		try {
-			notificationBean = new NotificationBean();
-			pGrps = fetchAllGroups();
-			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
-			showViewUser = false;
-			showCreateUser = false;
-			showUploadUser = false;
-			showCreateGroup = false;
-			showViewGroups = false;
-			showViewFunctions = false;
-			showCreateNews = false;
-			showAllocatePoints = false;
-			showAllocatedPoints = false;
-			showMetadataMaintain = false;
-			showViewNews = false;
-			showCreateNotification = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		}
-	}
-
-	/*
-	 * public String showEditNotification() { try { pGrps = fetchAllGroups();
-	 * groupTwinSelect = initializeSelectedGroups(pGrps); try { WebClient
-	 * getBlobClient =
-	 * createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" +
-	 * notificationBean.getNotifId() + "/ip_notif"); Long blobId =
-	 * getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-	 * getBlobClient.close(); if (blobId != -999l) { WebClient getBlobNameClient
-	 * = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" +
-	 * blobId); String blobName =
-	 * getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-	 * getBlobNameClient.close(); WebClient client =
-	 * WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" +
-	 * blobId + "/" + blobName, Collections.singletonList(new
-	 * JacksonJsonProvider(new CustomObjectMapper())));
-	 * client.header("Content-Type", "application/json");
-	 * client.header("Accept", MediaType.MULTIPART_FORM_DATA); Attachment
-	 * attachment =
-	 * client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class); if
-	 * (attachment != null) { setFileAvail(false);
-	 * this.setFileName(attachment.getContentDisposition
-	 * ().toString().replace("attachment;filename=", "")); fileContent = new
-	 * DefaultStreamedContent(attachment.getDataHandler().getInputStream()); }
-	 * else { setFileAvail(true); fileContent = null; } } else {
-	 * setFileAvail(true); fileContent = null; } } catch (Exception e) {
-	 * e.printStackTrace(); FacesMessage exceptionMessage = new
-	 * FacesMessage(FacesMessage.SEVERITY_ERROR,
-	 * "System error occurred, cannot perform edit request",
-	 * "System error occurred, cannot perform edit request");
-	 * FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-	 * setFileAvail(true); fileContent = null; } return "notife"; } catch
-	 * (Exception e) { e.printStackTrace(); FacesMessage exceptionMessage = new
-	 * FacesMessage(FacesMessage.SEVERITY_ERROR,
-	 * "System error occurred, cannot perform edit request",
-	 * "System error occurred, cannot perform edit request");
-	 * FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-	 * setFileAvail(true); fileContent = null; return ""; } }
-	 */
-
-	private List<NotificationBean> fetchAllNotifications() {
-		List<NotificationBean> ret = new ArrayList<NotificationBean>();
-		WebClient fetchNotifClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/nos/notif/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
-		Collection<? extends NotificationMessage> notifications = new ArrayList<NotificationMessage>(fetchNotifClient.accept(MediaType.APPLICATION_JSON).getCollection(NotificationMessage.class));
-		fetchNotifClient.close();
-		for (NotificationMessage notificationMessage : notifications) {
-			NotificationBean bean = new NotificationBean();
-			bean.setNotifAttach(notificationMessage.getNotifAttach());
-			bean.setNotifBody(notificationMessage.getNotifBody());
-			bean.setNotifCrtdDate(notificationMessage.getNotifCrtdDate());
-			bean.setNotifEntityId(notificationMessage.getNotifEntityId());
-			bean.setNotifEntityTblName(notificationMessage.getNotifEntityTblName());
-			bean.setNotifId(notificationMessage.getNotifId());
-			bean.setNotifStatus(notificationMessage.getNotifStatus());
-			bean.setNotifSubject(notificationMessage.getNotifSubject());
-			bean.setGroupIdList(getIdsFromArray(notificationMessage.getGroupIdList()));
-			ret.add(bean);
-		}
-		return ret;
 	}
 
 	public String saveNotification() {
@@ -2873,7 +2521,7 @@ public class AdminController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create Idea request", "System error occurred, cannot perform create Idea request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -3217,30 +2865,6 @@ public class AdminController implements Serializable {
 		this.fileContent = fileContent;
 	}
 
-	public boolean isShowCreateUser() {
-		return showCreateUser;
-	}
-
-	public void setShowCreateUser(boolean showCreateUser) {
-		this.showCreateUser = showCreateUser;
-	}
-
-	public boolean isShowCreateGroup() {
-		return showCreateGroup;
-	}
-
-	public void setShowCreateGroup(boolean showCreateGroup) {
-		this.showCreateGroup = showCreateGroup;
-	}
-
-	public boolean isShowCreateNews() {
-		return showCreateNews;
-	}
-
-	public void setShowCreateNews(boolean showCreateNews) {
-		this.showCreateNews = showCreateNews;
-	}
-
 	public String getReturnView() {
 		return returnView;
 	}
@@ -3255,54 +2879,6 @@ public class AdminController implements Serializable {
 
 	public void setToView(String toView) {
 		this.toView = toView;
-	}
-
-	public boolean isShowViewUser() {
-		return showViewUser;
-	}
-
-	public void setShowViewUser(boolean showViewUser) {
-		this.showViewUser = showViewUser;
-	}
-
-	public boolean isShowUploadUser() {
-		return showUploadUser;
-	}
-
-	public void setShowUploadUser(boolean showUploadUser) {
-		this.showUploadUser = showUploadUser;
-	}
-
-	public boolean isShowViewGroups() {
-		return showViewGroups;
-	}
-
-	public void setShowViewGroups(boolean showViewGroups) {
-		this.showViewGroups = showViewGroups;
-	}
-
-	public boolean isShowViewFunctions() {
-		return showViewFunctions;
-	}
-
-	public void setShowViewFunctions(boolean showViewFunctions) {
-		this.showViewFunctions = showViewFunctions;
-	}
-
-	public boolean isShowAllocatePoints() {
-		return showAllocatePoints;
-	}
-
-	public void setShowAllocatePoints(boolean showAllocatePoints) {
-		this.showAllocatePoints = showAllocatePoints;
-	}
-
-	public boolean isShowAllocatedPoints() {
-		return showAllocatedPoints;
-	}
-
-	public void setShowAllocatedPoints(boolean showAllocatedPoints) {
-		this.showAllocatedPoints = showAllocatedPoints;
 	}
 
 	public String getEntity() {
@@ -3419,22 +2995,6 @@ public class AdminController implements Serializable {
 		this.userId = userId;
 	}
 
-	public boolean isShowMetadataMaintain() {
-		return showMetadataMaintain;
-	}
-
-	public void setShowMetadataMaintain(boolean showMetadataMaintain) {
-		this.showMetadataMaintain = showMetadataMaintain;
-	}
-
-	public boolean isShowViewNews() {
-		return showViewNews;
-	}
-
-	public void setShowViewNews(boolean showViewNews) {
-		this.showViewNews = showViewNews;
-	}
-
 	public List<MetaDataBean> getBeans() {
 		return beans;
 	}
@@ -3509,14 +3069,6 @@ public class AdminController implements Serializable {
 
 	public void setUploadContent(StreamedContent uploadContent) {
 		this.uploadContent = uploadContent;
-	}
-
-	public boolean isShowCreateNotification() {
-		return showCreateNotification;
-	}
-
-	public void setShowCreateNotification(boolean showCreateNotification) {
-		this.showCreateNotification = showCreateNotification;
 	}
 
 	public NotificationBean getNotificationBean() {

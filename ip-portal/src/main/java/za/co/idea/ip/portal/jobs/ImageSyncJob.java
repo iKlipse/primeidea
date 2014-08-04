@@ -27,7 +27,7 @@ public class ImageSyncJob extends QuartzJobBean implements StatefulJob {
 			FileUtils.copyDirectory(srcFile, destFile);
 		} catch (IOException e) {
 			logger.error("Error : " + e.getMessage());
-			e.printStackTrace();
+			
 		}
 	}
 

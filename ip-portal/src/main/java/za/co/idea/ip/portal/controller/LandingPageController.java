@@ -101,7 +101,7 @@ public class LandingPageController implements Serializable {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -117,7 +117,7 @@ public class LandingPageController implements Serializable {
 			showChals = false;
 			showSols = false;
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -133,7 +133,7 @@ public class LandingPageController implements Serializable {
 			showChals = true;
 			showSols = false;
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -149,7 +149,7 @@ public class LandingPageController implements Serializable {
 			showChals = false;
 			showSols = true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}

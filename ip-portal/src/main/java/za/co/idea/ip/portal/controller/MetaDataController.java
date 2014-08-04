@@ -71,7 +71,7 @@ public class MetaDataController {
 			}
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}

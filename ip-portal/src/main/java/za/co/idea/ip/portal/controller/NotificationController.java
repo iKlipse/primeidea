@@ -77,7 +77,7 @@ public class NotificationController implements Serializable {
 			}
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -99,7 +99,7 @@ public class NotificationController implements Serializable {
 			viewNotifications = fetchAllNotifications();
 			return "notifv";
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -113,7 +113,7 @@ public class NotificationController implements Serializable {
 			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 			showCreateNotification=true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -144,13 +144,13 @@ public class NotificationController implements Serializable {
 	 * DefaultStreamedContent(attachment.getDataHandler().getInputStream()); }
 	 * else { setFileAvail(true); fileContent = null; } } else {
 	 * setFileAvail(true); fileContent = null; } } catch (Exception e) {
-	 * e.printStackTrace(); FacesMessage exceptionMessage = new
+	 *  FacesMessage exceptionMessage = new
 	 * FacesMessage(FacesMessage.SEVERITY_ERROR,
 	 * "System error occurred, cannot perform edit request",
 	 * "System error occurred, cannot perform edit request");
 	 * FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 	 * setFileAvail(true); fileContent = null; } return "notife"; } catch
-	 * (Exception e) { e.printStackTrace(); FacesMessage exceptionMessage = new
+	 * (Exception e) {  FacesMessage exceptionMessage = new
 	 * FacesMessage(FacesMessage.SEVERITY_ERROR,
 	 * "System error occurred, cannot perform edit request",
 	 * "System error occurred, cannot perform edit request");
@@ -205,7 +205,7 @@ public class NotificationController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create Idea request", "System error occurred, cannot perform create Idea request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -241,7 +241,7 @@ public class NotificationController implements Serializable {
 			this.fileName = file.getFileName();
 			this.contentType = file.getContentType();
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform upload request", "System error occurred, cannot perform upload request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}

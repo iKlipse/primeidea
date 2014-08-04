@@ -89,7 +89,7 @@ public class NewsController implements Serializable {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -113,7 +113,7 @@ public class NewsController implements Serializable {
 			showCreateNews = true;
 			showViewNews = false;
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			logger.error("Error while displaying show create news form: " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news create request", "System error occurred, cannot perform news create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -127,7 +127,7 @@ public class NewsController implements Serializable {
 			showCreateNews = false;
 			showViewNews = true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			logger.error("Error while displaying show view news form: " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news view request", "System error occurred, cannot perform news view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -165,7 +165,7 @@ public class NewsController implements Serializable {
 				fileContent = null;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			logger.error("Error while displaying edit news form: " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -183,7 +183,7 @@ public class NewsController implements Serializable {
 			return "nssc";
 		} catch (Exception e) {
 			logger.error("Error while displaying news summary details: " + e.getMessage());
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news view request", "System error occurred, cannot perform news view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -239,7 +239,7 @@ public class NewsController implements Serializable {
 			}
 		} catch (Exception e) {
 			logger.error("Error in creating news data : " + e.getMessage());
-			e.printStackTrace();
+			
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news create request", "System error occurred, cannot perform news create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -320,7 +320,7 @@ public class NewsController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			logger.error("Error in updating news data : " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -362,7 +362,7 @@ public class NewsController implements Serializable {
 			this.fileName = file.getFileName();
 			this.contentType = file.getContentType();
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			logger.error("Error occured while uploading file : " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
