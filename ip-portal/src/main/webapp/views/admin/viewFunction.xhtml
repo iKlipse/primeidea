@@ -1,23 +1,25 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<p:dataTable id="hdtViewFunctions" value="#{adminController.functions}" var="func" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Functions Found">
-				<p:column filterBy="#{func.funcId}" filterMatchMode="contains">
-					<f:facet name="header">Function ID</f:facet>
-					<p:outputLabel id="htxtFuncId" value="#{func.funcId}" />
-				</p:column>
-				<p:column filterBy="#{func.funcName}" filterMatchMode="contains">
-					<f:facet name="header">Function Name</f:facet>
-					<p:outputLabel id="htxtFuncName" value="#{func.funcName}" />
-				</p:column>
-				<p:column>
-					<p:commandButton id="hviewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminController.showEditFunction}">
-						<f:setPropertyActionListener value="#{func}" target="#{adminController.functionBean}" />
-						<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
-					</p:commandButton>
-				</p:column>
-				<f:facet name="footer">
-					<p:commandButton id="hbtnMCancel" value="Return To Home" ajax="false" action="#{adminController.redirectHome}" >
-					  <f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
-					</p:commandButton>  
-				</f:facet>
-			</p:dataTable>
+<ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="adminBody">
+		<p:dataTable id="hdtViewFunctions" value="#{adminController.functions}" var="func" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Functions Found">
+			<p:column filterBy="#{func.funcId}" filterMatchMode="contains">
+				<f:facet name="header">Function ID</f:facet>
+				<p:outputLabel id="htxtFuncId" value="#{func.funcId}" />
+			</p:column>
+			<p:column filterBy="#{func.funcName}" filterMatchMode="contains">
+				<f:facet name="header">Function Name</f:facet>
+				<p:outputLabel id="htxtFuncName" value="#{func.funcName}" />
+			</p:column>
+			<p:column>
+				<p:commandButton id="hviewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminController.showEditFunction}">
+					<f:setPropertyActionListener value="#{func}" target="#{adminController.functionBean}" />
+					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+				</p:commandButton>
+			</p:column>
+			<f:facet name="footer">
+				<p:commandButton id="hbtnMCancel" value="Return To Home" ajax="false" action="#{adminController.redirectHome}">
+					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+				</p:commandButton>
+			</f:facet>
+		</p:dataTable>
+	</ui:define>
 </ui:composition>

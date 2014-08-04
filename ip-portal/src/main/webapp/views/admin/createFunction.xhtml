@@ -1,26 +1,31 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<p:panelGrid id="spnlCrtFunction" columns="2">
-				<p:column>
-					<p:outputLabel id="slblFuncName" value="Function Name" />
+<ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="adminBody">
+		<p:panelGrid id="spnlCrtFunction" columns="2">
+			<p:column>
+				<p:outputLabel id="slblFuncName" value="Function Name" />
+			</p:column>
+			<p:column>
+				<p:inputText style="width: 100%" autocomplete="false" id="stxtFuncName" value="#{adminController.functionBean.funcName}" />
+			</p:column>
+			<p:column>
+				<p:outputLabel id="slblFuncGrps" value="Function Groups" />
+			</p:column>
+			<p:column>
+				<!-- 	<p:pickList style="width: 100%" id="splGroupPick" converter="groupConverter" value="#{adminController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" /> -->
+				<p:selectCheckboxMenu id="scmGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{adminController.selGrpId}">
+					<f:selectItems value="#{adminController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
+				</p:selectCheckboxMenu>
+			</p:column>
+			<p:row>
+				<p:column colspan="2">
+					<p:commandButton id="sbtnASave" value="Save" ajax="false" actionListener="#{adminController.saveFunction}">
+						<f:setPropertyActionListener value="2" target="#{adminController.toView}" />
+					</p:commandButton>
+					<p:commandButton id="sbtnBCancel" value="Return To View" ajax="false" actionListener="#{adminController.showViewFunction}">
+						<f:setPropertyActionListener value="2" target="#{adminController.toView}" />
+					</p:commandButton>
 				</p:column>
-				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="stxtFuncName" value="#{adminController.functionBean.funcName}" />
-				</p:column>
-				<p:column>
-					<p:outputLabel id="slblFuncGrps" value="Function Groups" />
-				</p:column>
-				<p:column>
-					<p:pickList style="width: 100%" id="splGroupPick" converter="groupConverter" value="#{adminController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" />
-				</p:column>
-				<p:row>
-					<p:column colspan="2">
-						<p:commandButton id="sbtnASave" value="Save" ajax="false" actionListener="#{adminController.saveFunction}" >
-						  <f:setPropertyActionListener value="2" target="#{adminController.toView}" />
-						</p:commandButton>
-						<p:commandButton id="sbtnBCancel" value="Return To View" ajax="false" actionListener="#{adminController.showViewFunction}" >
-						  <f:setPropertyActionListener value="2" target="#{adminController.toView}" />
-						</p:commandButton>
-					</p:column>
-				</p:row>
-			</p:panelGrid>
+			</p:row>
+		</p:panelGrid>
+	</ui:define>
 </ui:composition>

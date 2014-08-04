@@ -2,9 +2,6 @@
 <PROCESS model-entity="JSFProcess">
  <PROCESS-ITEM NAME="rules:" SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules::0" NAME="item" model-entity="JSFProcessItem">
-   <PROCESS-ITEM-OUTPUT ID="chalh::#views#challenge#main.xhtml"
-    NAME="output" PATH="/views/challenge/main.xhtml" SHAPE="-1,16"
-    TARGET="rules:#views#challenge#main.xhtml" TITLE="chalh" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="chale::#views#challenge#container#editContainer.xhtml"
     NAME="output1" PATH="/views/challenge/container/editContainer.xhtml"
@@ -52,9 +49,6 @@
   SHAPE="304,609,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules::1" SHAPE="32,705,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules::1" NAME="item" model-entity="JSFProcessItem">
-   <PROCESS-ITEM-OUTPUT ID="ideah::#views#random-idea#main.xhtml"
-    NAME="output" PATH="/views/random-idea/main.xhtml" SHAPE="-1,16"
-    TARGET="rules:#views#random-idea#main.xhtml" TITLE="ideah" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="ideae::#views#random-idea#container#editContainer.xhtml"
     NAME="output1"
@@ -103,9 +97,6 @@
   SHAPE="304,1297,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules::2" SHAPE="32,1393,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules::2" NAME="item" model-entity="JSFProcessItem">
-   <PROCESS-ITEM-OUTPUT ID="solh::#views#solution#main.xhtml"
-    NAME="output" PATH="/views/solution/main.xhtml" SHAPE="-1,16"
-    TARGET="rules:#views#solution#main.xhtml" TITLE="solh" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="sole::#views#solution#container#editContainer.xhtml"
     NAME="output1" PATH="/views/solution/container/editContainer.xhtml"
@@ -151,28 +142,16 @@
   NAME="rules:#views#solution#container#summaryOpenContainer.xhtml"
   PATH="/views/solution/container/summaryOpenContainer.xhtml"
   SHAPE="304,1985,0,0" model-entity="JSFProcessGroup"/>
- <PROCESS-ITEM NAME="rules:#views#challenge#main.xhtml"
-  PATH="/views/challenge/main.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
- <PROCESS-ITEM NAME="rules:#views#random-idea#main.xhtml"
-  PATH="/views/random-idea/main.xhtml" SHAPE="304,721,0,0" model-entity="JSFProcessGroup"/>
- <PROCESS-ITEM NAME="rules:#views#solution#main.xhtml"
-  PATH="/views/solution/main.xhtml" SHAPE="304,1409,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules::3" SHAPE="32,2081,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules::3" NAME="item" model-entity="JSFProcessItem">
-   <PROCESS-ITEM-OUTPUT ID="lani::#views#landing-page#view.xhtml"
-    NAME="output" PATH="/views/landing-page/view.xhtml" SHAPE="-1,16"
-    TARGET="rules:#views#landing-page#view.xhtml" TITLE="lani" model-entity="JSFProcessItemOutput"/>
-   <PROCESS-ITEM-OUTPUT ID="chalv::#views#challenge#main.xhtml"
-    NAME="output1" PATH="/views/challenge/main.xhtml"
-    TARGET="rules:#views#challenge#main.xhtml" TITLE="chalv" model-entity="JSFProcessItemOutput"/>
-   <PROCESS-ITEM-OUTPUT ID="ideav::#views#random-idea#main.xhtml"
-    NAME="output2" PATH="/views/random-idea/main.xhtml"
-    TARGET="rules:#views#random-idea#main.xhtml" TITLE="ideav" model-entity="JSFProcessItemOutput"/>
-   <PROCESS-ITEM-OUTPUT ID="solv::#views#solution#main.xhtml"
-    NAME="output3" PATH="/views/solution/main.xhtml"
-    TARGET="rules:#views#solution#main.xhtml" TITLE="solv" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="rewardse::#views#rewards#container#editContainer.xhtml"
+    NAME="output" PATH="/views/rewards/container/editContainer.xhtml"
+    TARGET="rules:#views#rewards#container#editContainer.xhtml"
+    TITLE="rewardse" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
- <PROCESS-ITEM NAME="rules:#views#landing-page#view.xhtml"
-  PATH="/views/landing-page/view.xhtml" SHAPE="240,2097,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#views#rewards#container#editContainer.xhtml"
+  PATH="/views/rewards/container/editContainer.xhtml"
+  SHAPE="240,2689,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

@@ -1,48 +1,50 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="adminBody">
 		<p:dataTable id="fdtViewUsers" value="#{adminController.viewUsers}" var="user" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Users Found" style="width: 100% !important">
-				<p:column>
-					<f:facet name="header">First Name</f:facet>
-					<p:outputLabel id="ftxtFName" value="#{user.fName}" />
-				</p:column>
-				<p:column filterBy="#{user.lName}" filterMatchMode="contains">
-					<f:facet name="header">Last Name</f:facet>
-					<p:outputLabel id="ftxtLName" value="#{user.lName}" />
-				</p:column>
-				<p:column filterBy="#{user.idNum}" filterMatchMode="contains">
-					<f:facet name="header">ID Number</f:facet>
-					<p:outputLabel id="ftxtIdNum" value="#{user.idNum}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">EMail</f:facet>
-					<p:outputLabel id="ftxtEMail" value="#{user.eMail}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">Employee ID</f:facet>
-					<p:outputLabel id="ftxtEMPId" value="#{user.employeeId}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">Social</f:facet>
-					<p:commandLink id="flnkFBHanlde" target="new" value="#{user.fbHandle}">
-						<p:graphicImage id="fgiFBHandle" name="fb.jpg" library="images" height="25px" width="25px" />
-					</p:commandLink>
-					<p:commandLink id="flnkTWHanlde" target="new" value="#{user.twHandle}">
-						<p:graphicImage id="fgiTWHandle" name="twitter.jpg" library="images" height="25px" width="25px" />
-					</p:commandLink>
-				</p:column>
-				<p:column>
-					<f:facet name="header">Active</f:facet>
-					<p:selectBooleanButton id="fsbbActive" value="#{user.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" disabled="true" />
-				</p:column>
-				<p:column>
-					<p:commandButton id="fviewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminController.showEditUser}">
-						<f:setPropertyActionListener value="#{user}" target="#{adminController.userBean}" />
-						<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
-					</p:commandButton>
-				</p:column>
-				<f:facet name="footer">
-					<p:commandButton id="fbtnOCancel" value="Return To Home" ajax="false" action="#{adminController.redirectHome}" >
-					   <f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
-					</p:commandButton>
-				</f:facet>
-			</p:dataTable>
+			<p:column>
+				<f:facet name="header">First Name</f:facet>
+				<p:outputLabel id="ftxtFName" value="#{user.fName}" />
+			</p:column>
+			<p:column filterBy="#{user.lName}" filterMatchMode="contains">
+				<f:facet name="header">Last Name</f:facet>
+				<p:outputLabel id="ftxtLName" value="#{user.lName}" />
+			</p:column>
+			<p:column filterBy="#{user.idNum}" filterMatchMode="contains">
+				<f:facet name="header">ID Number</f:facet>
+				<p:outputLabel id="ftxtIdNum" value="#{user.idNum}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">EMail</f:facet>
+				<p:outputLabel id="ftxtEMail" value="#{user.eMail}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">Employee ID</f:facet>
+				<p:outputLabel id="ftxtEMPId" value="#{user.employeeId}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">Social</f:facet>
+				<p:commandLink id="flnkFBHanlde" target="new" value="#{user.fbHandle}">
+					<p:graphicImage id="fgiFBHandle" name="fb.jpg" library="images" height="25px" width="25px" />
+				</p:commandLink>
+				<p:commandLink id="flnkTWHanlde" target="new" value="#{user.twHandle}">
+					<p:graphicImage id="fgiTWHandle" name="twitter.jpg" library="images" height="25px" width="25px" />
+				</p:commandLink>
+			</p:column>
+			<p:column>
+				<f:facet name="header">Active</f:facet>
+				<p:selectBooleanButton id="fsbbActive" value="#{user.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" disabled="true" />
+			</p:column>
+			<p:column>
+				<p:commandButton id="fviewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminController.showEditUser}">
+					<f:setPropertyActionListener value="#{user}" target="#{adminController.userBean}" />
+					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+				</p:commandButton>
+			</p:column>
+			<f:facet name="footer">
+				<p:commandButton id="fbtnOCancel" value="Return To Home" ajax="false" action="#{adminController.redirectHome}">
+					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+				</p:commandButton>
+			</f:facet>
+		</p:dataTable>
+	</ui:define>
 </ui:composition>

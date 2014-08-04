@@ -127,7 +127,6 @@ public class AdminController implements Serializable {
 	private boolean showAllocatedPoints;
 	private boolean showMetadataMaintain;
 	private boolean showViewNews;
-	private boolean showSendBroadcast;
 	private String entity;
 	private String returnView;
 	private String toView;
@@ -160,6 +159,8 @@ public class AdminController implements Serializable {
 	private StreamedContent uploadContent;
 	private boolean showCreateNotification;
 	private NotificationBean notificationBean;
+	private String[] selGrpId;
+	private String[] selUserId;
 
 	private WebClient createCustomClient(String url) {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
@@ -184,13 +185,13 @@ public class AdminController implements Serializable {
 			showAddBtn = false;
 			showMetadataMaintain = false;
 			showViewNews = false;
-			showSendBroadcast = false;
 			table = "";
 			beans = null;
 			showMetadataMaintain = false;
 			viewNewsBeans = fetchAllNews();
 			showCreateNews = false;
-			showViewNews = true;
+			showViewNews = false;
+			showCreateNotification = false;
 			notificationBean = new NotificationBean();
 			pGrps = fetchAllGroups();
 			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
@@ -210,7 +211,7 @@ public class AdminController implements Serializable {
 					showAllocatedPoints = false;
 					showMetadataMaintain = false;
 					showViewNews = false;
-					showSendBroadcast = false;
+					showCreateNotification = false;
 					break;
 				case 2:
 					pGrps = viewGroups = fetchAllGroups();
@@ -226,7 +227,7 @@ public class AdminController implements Serializable {
 					showAllocatedPoints = false;
 					showMetadataMaintain = false;
 					showViewNews = false;
-					showSendBroadcast = false;
+					showCreateNotification = false;
 					break;
 				case 3:
 					this.showAddPanel = false;
@@ -247,7 +248,7 @@ public class AdminController implements Serializable {
 					showAllocatedPoints = true;
 					showMetadataMaintain = false;
 					showViewNews = false;
-					showSendBroadcast = false;
+					showCreateNotification = false;
 					break;
 				default:
 					viewUsers = fetchAllUsers();
@@ -261,7 +262,7 @@ public class AdminController implements Serializable {
 					showAllocatedPoints = false;
 					showMetadataMaintain = false;
 					showViewNews = false;
-					showSendBroadcast = false;
+					showCreateNotification = false;
 					break;
 				}
 			}
@@ -461,13 +462,16 @@ public class AdminController implements Serializable {
 			viewUsers = fetchAllUsers();
 			showViewUser = true;
 			showCreateUser = false;
-			showCreateGroup = false;
-			showCreateNews = false;
+			showUploadUser = false;
 			showCreateGroup = false;
 			showViewGroups = false;
 			showViewFunctions = false;
+			showCreateNews = false;
 			showAllocatePoints = false;
 			showAllocatedPoints = false;
+			showMetadataMaintain = false;
+			showViewNews = false;
+			showCreateNotification = false;
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform Users View request", "System error occurred, cannot perform Users View request");
@@ -476,6 +480,18 @@ public class AdminController implements Serializable {
 	}
 
 	public void showUploadUsers() {
+		showViewUser = false;
+		showCreateUser = false;
+		showUploadUser = true;
+		showCreateGroup = false;
+		showViewGroups = false;
+		showViewFunctions = false;
+		showCreateNews = false;
+		showAllocatePoints = false;
+		showAllocatedPoints = false;
+		showMetadataMaintain = false;
+		showViewNews = false;
+		showCreateNotification = false;
 	}
 
 	public void showRPw() {
@@ -519,13 +535,16 @@ public class AdminController implements Serializable {
 			viewGroups = fetchAllGroups();
 			showViewUser = false;
 			showCreateUser = true;
-			showCreateGroup = false;
-			showCreateNews = false;
+			showUploadUser = false;
 			showCreateGroup = false;
 			showViewGroups = false;
 			showViewFunctions = false;
+			showCreateNews = false;
 			showAllocatePoints = false;
 			showAllocatedPoints = false;
+			showMetadataMaintain = false;
+			showViewNews = false;
+			showCreateNotification = false;
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform created user view request", "System error occurred, cannot perform created user view request");
@@ -539,13 +558,16 @@ public class AdminController implements Serializable {
 			admUsers = fetchAllUsers();
 			showViewUser = false;
 			showCreateUser = false;
-			showCreateGroup = false;
-			showCreateNews = false;
+			showUploadUser = false;
 			showCreateGroup = false;
 			showViewGroups = true;
 			showViewFunctions = false;
+			showCreateNews = false;
 			showAllocatePoints = false;
 			showAllocatedPoints = false;
+			showMetadataMaintain = false;
+			showViewNews = false;
+			showCreateNotification = false;
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot view groups request", "System error occurred, cannot view groups request");
@@ -561,13 +583,16 @@ public class AdminController implements Serializable {
 			userTwinSelect = new DualListModel<UserBean>(fetchAllUsersSortByPG(), fetchAdminUser());
 			showViewUser = false;
 			showCreateUser = false;
+			showUploadUser = false;
 			showCreateGroup = true;
-			showCreateNews = false;
-			showCreateGroup = false;
 			showViewGroups = false;
 			showViewFunctions = false;
+			showCreateNews = false;
 			showAllocatePoints = false;
 			showAllocatedPoints = false;
+			showMetadataMaintain = false;
+			showViewNews = false;
+			showCreateNotification = false;
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform created groups view request", "System error occurred, cannot perform created groups view request");
@@ -688,6 +713,9 @@ public class AdminController implements Serializable {
 			showCreateNews = false;
 			showAllocatePoints = false;
 			showAllocatedPoints = false;
+			showMetadataMaintain = false;
+			showViewNews = false;
+			showCreateNotification = false;
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
@@ -702,13 +730,16 @@ public class AdminController implements Serializable {
 			pGrps = fetchAllGroups();
 			showViewUser = false;
 			showCreateUser = false;
-			showCreateGroup = false;
-			showCreateNews = false;
+			showUploadUser = false;
 			showCreateGroup = false;
 			showViewGroups = false;
 			showViewFunctions = true;
+			showCreateNews = false;
 			showAllocatePoints = false;
 			showAllocatedPoints = false;
+			showMetadataMaintain = false;
+			showViewNews = false;
+			showCreateNotification = false;
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
@@ -723,13 +754,16 @@ public class AdminController implements Serializable {
 			allocs = new ArrayList<AllocationBean>();
 			showViewUser = false;
 			showCreateUser = false;
-			showCreateGroup = false;
-			showCreateNews = false;
+			showUploadUser = false;
 			showCreateGroup = false;
 			showViewGroups = false;
 			showViewFunctions = false;
+			showCreateNews = false;
 			showAllocatePoints = true;
 			showAllocatedPoints = false;
+			showMetadataMaintain = false;
+			showViewNews = false;
+			showCreateNotification = false;
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
@@ -814,13 +848,16 @@ public class AdminController implements Serializable {
 			this.allocs = new ArrayList<AllocationBean>();
 			showViewUser = false;
 			showCreateUser = false;
-			showCreateGroup = false;
-			showCreateNews = false;
+			showUploadUser = false;
 			showCreateGroup = false;
 			showViewGroups = false;
 			showViewFunctions = false;
+			showCreateNews = false;
 			showAllocatePoints = false;
 			showAllocatedPoints = true;
+			showMetadataMaintain = false;
+			showViewNews = false;
+			showCreateNotification = false;
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
@@ -1615,7 +1652,7 @@ public class AdminController implements Serializable {
 			groupMessage.setGeMail(groupBean.getGeMail());
 			groupMessage.setgId(COUNTER.getNextId("IpGroup"));
 			groupMessage.setgName(groupBean.getgName());
-			groupMessage.setUserIdList(getSelUserIds());
+			groupMessage.setUserIdList(toLongArray(selUserId));
 			groupMessage.setIsActive(true);
 			groupMessage.setpGrpId(groupBean.getSelPGrp());
 			ResponseMessage response = addGroupClient.accept(MediaType.APPLICATION_JSON).post(groupMessage, ResponseMessage.class);
@@ -1680,7 +1717,7 @@ public class AdminController implements Serializable {
 			FunctionMessage functionMessage = new FunctionMessage();
 			functionMessage.setFuncId(COUNTER.getNextId("IpFunction"));
 			functionMessage.setFuncName(functionBean.getFuncName());
-			functionMessage.setGroupIdList(getSelGroupIds());
+			functionMessage.setGroupIdList(toLongArray(selGrpId));
 			functionMessage.setCrtdBy(userId);
 			ResponseMessage response = addFunctionClient.accept(MediaType.APPLICATION_JSON).post(functionMessage, ResponseMessage.class);
 			addFunctionClient.close();
@@ -1715,7 +1752,7 @@ public class AdminController implements Serializable {
 			groupMessage.setGeMail(groupBean.getGeMail());
 			groupMessage.setgId(groupBean.getgId());
 			groupMessage.setgName(groupBean.getgName());
-			groupMessage.setUserIdList(getSelUserIds());
+			groupMessage.setUserIdList(toLongArray(selUserId));
 			groupMessage.setIsActive(groupBean.getIsActive());
 			groupMessage.setpGrpId(groupBean.getSelPGrp());
 			ResponseMessage response = updateGroupClient.accept(MediaType.APPLICATION_JSON).put(groupMessage, ResponseMessage.class);
@@ -1804,7 +1841,7 @@ public class AdminController implements Serializable {
 			functionMessage.setFuncId(functionBean.getFuncId());
 			functionMessage.setFuncName(functionBean.getFuncName());
 			functionMessage.setCrtdBy(userId);
-			functionMessage.setGroupIdList(getSelGroupIds());
+			functionMessage.setGroupIdList(toLongArray(selGrpId));
 			ResponseMessage response = updateFunctionClient.accept(MediaType.APPLICATION_JSON).put(functionMessage, ResponseMessage.class);
 			updateFunctionClient.close();
 			if (response.getStatusCode() == 0) {
@@ -1890,26 +1927,26 @@ public class AdminController implements Serializable {
 		}
 	}
 
-	private Long[] getSelUserIds() {
-		Long[] ret = new Long[userTwinSelect.getTarget().size()];
-		int i = 0;
-		for (UserBean bean : userTwinSelect.getTarget()) {
-			ret[i] = bean.getuId();
-			i++;
-		}
-		return ret;
-	}
+	// private Long[] getSelUserIds() {
+	// Long[] ret = new Long[userTwinSelect.getTarget().size()];
+	// int i = 0;
+	// for (UserBean bean : userTwinSelect.getTarget()) {
+	// ret[i] = bean.getuId();
+	// i++;
+	// }
+	// return ret;
+	// }
 
-	private Long[] getSelGroupIds() {
-		Long[] ret = new Long[groupTwinSelect.getTarget().size()];
-		int i = 0;
-		for (GroupBean bean : groupTwinSelect.getTarget()) {
-			ret[i] = bean.getgId();
-			i++;
-		}
-		return ret;
-	}
-
+	// private Long[] getSelGroupIds() {
+	// Long[] ret = new Long[groupTwinSelect.getTarget().size()];
+	// int i = 0;
+	// for (GroupBean bean : groupTwinSelect.getTarget()) {
+	// ret[i] = bean.getgId();
+	// i++;
+	// }
+	// return ret;
+	// }
+	//
 	private List<UserBean> fetchAllUsers() {
 		List<UserBean> ret = new ArrayList<UserBean>();
 		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/list");
@@ -2222,7 +2259,18 @@ public class AdminController implements Serializable {
 		this.showAddBtn = false;
 		this.table = "";
 		this.beans = null;
+		showViewUser = false;
+		showCreateUser = false;
+		showUploadUser = false;
+		showCreateGroup = false;
+		showViewGroups = false;
+		showViewFunctions = false;
+		showCreateNews = false;
+		showAllocatePoints = false;
+		showAllocatedPoints = false;
 		showMetadataMaintain = true;
+		showViewNews = false;
+		showCreateNotification = false;
 	}
 
 	public String showMetaData() {
@@ -2230,7 +2278,18 @@ public class AdminController implements Serializable {
 		this.showModPanel = true;
 		selId = bean.getId().toString();
 		selVal = bean.getDesc();
+		showViewUser = false;
+		showCreateUser = false;
+		showUploadUser = false;
+		showCreateGroup = false;
+		showViewGroups = false;
+		showViewFunctions = false;
+		showCreateNews = false;
+		showAllocatePoints = false;
+		showCreateNotification = false;
+		showAllocatedPoints = false;
 		showMetadataMaintain = true;
+		showViewNews = false;
 		return "";
 	}
 
@@ -2241,7 +2300,18 @@ public class AdminController implements Serializable {
 		this.showAddBtn = false;
 		this.showAddPanel = true;
 		this.showModPanel = false;
+		showViewUser = false;
+		showCreateUser = false;
+		showUploadUser = false;
+		showCreateGroup = false;
+		showViewGroups = false;
+		showViewFunctions = false;
+		showCreateNews = false;
+		showAllocatePoints = false;
+		showAllocatedPoints = false;
 		showMetadataMaintain = true;
+		showViewNews = false;
+		showCreateNotification = false;
 		return "";
 	}
 
@@ -2254,7 +2324,18 @@ public class AdminController implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			this.showAddPanel = false;
 			this.showModPanel = true;
+			showViewUser = false;
+			showCreateUser = false;
+			showUploadUser = false;
+			showCreateGroup = false;
+			showViewGroups = false;
+			showViewFunctions = false;
+			showCreateNews = false;
+			showAllocatePoints = false;
+			showAllocatedPoints = false;
 			showMetadataMaintain = true;
+			showViewNews = false;
+			showCreateNotification = false;
 			return "";
 		}
 		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/modify");
@@ -2266,7 +2347,18 @@ public class AdminController implements Serializable {
 		mDataClient.close();
 		if (response.getStatusCode() == 0) {
 			beans = fetchAllMetadata();
+			showViewUser = false;
+			showCreateUser = false;
+			showUploadUser = false;
+			showCreateGroup = false;
+			showViewGroups = false;
+			showViewFunctions = false;
+			showCreateNews = false;
+			showAllocatePoints = false;
+			showAllocatedPoints = false;
 			showMetadataMaintain = true;
+			showViewNews = false;
+			showCreateNotification = false;
 			return "";
 		} else {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -2279,7 +2371,18 @@ public class AdminController implements Serializable {
 		this.showAddPanel = false;
 		this.showModPanel = false;
 		this.showAddBtn = true;
+		showViewUser = false;
+		showCreateUser = false;
+		showUploadUser = false;
+		showCreateGroup = false;
+		showViewGroups = false;
+		showViewFunctions = false;
+		showCreateNews = false;
+		showAllocatePoints = false;
+		showAllocatedPoints = false;
 		showMetadataMaintain = true;
+		showViewNews = false;
+		showCreateNotification = false;
 		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/delete");
 		MetaDataMessage message = new MetaDataMessage();
 		message.setDesc(selVal);
@@ -2384,8 +2487,18 @@ public class AdminController implements Serializable {
 		try {
 			logger.debug("Control handled in createCustomClient()");
 			newsBean = new NewsBean();
+			showViewUser = false;
+			showCreateUser = false;
+			showUploadUser = false;
+			showCreateGroup = false;
+			showViewGroups = false;
+			showViewFunctions = false;
 			showCreateNews = true;
+			showAllocatePoints = false;
+			showAllocatedPoints = false;
+			showMetadataMaintain = false;
 			showViewNews = false;
+			showCreateNotification = false;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Error while displaying show create news form: " + e.getMessage());
@@ -2398,8 +2511,18 @@ public class AdminController implements Serializable {
 		try {
 			logger.debug("Control handled in createCustomClient()");
 			viewNewsBeans = fetchAllNews();
+			showViewUser = false;
+			showCreateUser = false;
+			showUploadUser = false;
+			showCreateGroup = false;
+			showViewGroups = false;
+			showViewFunctions = false;
 			showCreateNews = false;
+			showAllocatePoints = false;
+			showAllocatedPoints = false;
+			showMetadataMaintain = false;
 			showViewNews = true;
+			showCreateNotification = false;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Error while displaying show view news form: " + e.getMessage());
@@ -2645,6 +2768,17 @@ public class AdminController implements Serializable {
 			notificationBean = new NotificationBean();
 			pGrps = fetchAllGroups();
 			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
+			showViewUser = false;
+			showCreateUser = false;
+			showUploadUser = false;
+			showCreateGroup = false;
+			showViewGroups = false;
+			showViewFunctions = false;
+			showCreateNews = false;
+			showAllocatePoints = false;
+			showAllocatedPoints = false;
+			showMetadataMaintain = false;
+			showViewNews = false;
 			showCreateNotification = true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -2725,7 +2859,7 @@ public class AdminController implements Serializable {
 			if (uploadContent != null) {
 				notifMessage.setNotifAttach(IOUtils.toString(uploadContent.getStream()));
 			}
-			notifMessage.setGroupIdList(getSelGroupIds());
+			notifMessage.setGroupIdList(toLongArray(selGrpId));
 			ResponseMessage response = addClient.accept(MediaType.APPLICATION_JSON).post(notifMessage, ResponseMessage.class);
 			addClient.close();
 			if (response.getStatusCode() == 0) {
@@ -2751,6 +2885,13 @@ public class AdminController implements Serializable {
 		if (ae != null)
 			for (Long id : ae)
 				ret.add(id);
+		return ret;
+	}
+
+	protected Long[] toLongArray(String[] val) {
+		Long[] ret = new Long[val.length];
+		for (int i = 0; i < val.length; i++)
+			ret[i] = Long.valueOf(val[i]);
 		return ret;
 	}
 
@@ -3294,14 +3435,6 @@ public class AdminController implements Serializable {
 		this.showViewNews = showViewNews;
 	}
 
-	public boolean isShowSendBroadcast() {
-		return showSendBroadcast;
-	}
-
-	public void setShowSendBroadcast(boolean showSendBroadcast) {
-		this.showSendBroadcast = showSendBroadcast;
-	}
-
 	public List<MetaDataBean> getBeans() {
 		return beans;
 	}
@@ -3392,6 +3525,22 @@ public class AdminController implements Serializable {
 
 	public void setNotificationBean(NotificationBean notificationBean) {
 		this.notificationBean = notificationBean;
+	}
+
+	public String[] getSelGrpId() {
+		return selGrpId;
+	}
+
+	public void setSelGrpId(String[] selGrpId) {
+		this.selGrpId = selGrpId;
+	}
+
+	public String[] getSelUserId() {
+		return selUserId;
+	}
+
+	public void setSelUserId(String[] selUserId) {
+		this.selUserId = selUserId;
 	}
 
 }

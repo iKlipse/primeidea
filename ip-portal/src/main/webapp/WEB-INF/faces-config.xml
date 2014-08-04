@@ -60,54 +60,6 @@
 			<to-view-id>/views/rewards/container/editContainer.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	<navigation-rule>
-		<navigation-case>
-			<from-outcome>usere</from-outcome>
-			<to-view-id>/views/admin/container/editUserContainer.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>groupe</from-outcome>
-			<to-view-id>/views/admin/container/editGroupContainer.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>groups</from-outcome>
-			<to-view-id>/views/admin/container/summaryGroupContainer.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>admuresz</from-outcome>
-			<to-view-id>/views/admin/container/uploadResContainer.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>fune</from-outcome>
-			<to-view-id>/views/admin/container/editFunctionContainer.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>newse</from-outcome>
-			<to-view-id>/views/news/container/editContainer.xhtml</to-view-id>
-		</navigation-case>
-	</navigation-rule>
-	<navigation-rule>
-		<navigation-case>
-			<from-outcome>lani</from-outcome>
-			<to-view-id>/views/landing-page/view.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>chalv</from-outcome>
-			<to-view-id>/views/challenge/main.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>ideav</from-outcome>
-			<to-view-id>/views/random-idea/main.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>solv</from-outcome>
-			<to-view-id>/views/solution/main.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>adminv</from-outcome>
-			<to-view-id>/views/admin/view.xhtml</to-view-id>
-		</navigation-case>
-	</navigation-rule>
 	<converter>
 		<converter-id>userConverter</converter-id>
 		<converter-class>za.co.idea.ip.portal.util.UserBeanConverter</converter-class>

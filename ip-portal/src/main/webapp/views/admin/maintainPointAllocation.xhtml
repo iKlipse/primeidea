@@ -1,111 +1,113 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<p:dataTable id="kdtPntAlloc" widgetVar="dtPntAlloc" value="#{adminController.allocs}" var="bean" rows="5" paginator="true" paginatorPosition="bottom" emptyMessage="No Point Allocations Found">
-				<f:facet name="header">
-					<p:selectOneMenu id="ksomSelectEntity" value="#{adminController.entity}">
-						<p:ajax listener="#{adminController.updateStatusList}" update="dtPntAlloc,:ideaFrm:pnlModPntAlloc,:ideaFrm:pnlAddPntAlloc" />
-						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{adminController.allocEntityList}" />
-					</p:selectOneMenu>
-				</f:facet>
-				<p:column>
-					<f:facet name="header">Description</f:facet>
-					<p:outputLabel id="klblId" value="#{bean.allocDesc}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">Entity Name</f:facet>
-					<p:selectOneMenu id="ksomSelectEntityName" value="#{adminController.entity}">
-						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{adminController.allocEntityList}" />
-					</p:selectOneMenu>
-				</p:column>
-				<p:column>
-					<f:facet name="header">Status</f:facet>
-					<p:selectOneMenu id="ksomSelectEntityStatus" value="#{bean.allocStatusId}">
-						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{adminController.disStatusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
-					</p:selectOneMenu>
-				</p:column>
-				<p:column>
-					<f:facet name="header">Point Value</f:facet>
-					<p:outputLabel id="klblPntVal" value="#{bean.allocVal}" />
-				</p:column>
-				<p:column>
-					<p:commandButton id="kviewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminController.showAllocationMod}">
-						<f:setPropertyActionListener value="#{bean}" target="#{adminController.allocationBean}" />
-					</p:commandButton>
-				</p:column>
-				<f:facet name="footer">
-					<p:commandButton id="kaddButton" value="Add" ajax="false" immediate="true" action="#{adminController.showAllocationAdd}" rendered="#{adminController.showAddBtn}" >
-					   <f:setPropertyActionListener value="3" target="#{adminController.toView}" />
-					</p:commandButton>
-					<p:commandButton id="kbtnJCancel" value="Return To View" ajax="false" action="#{adminController.showPointAllocation}" >
-					  <f:setPropertyActionListener value="3" target="#{adminController.toView}" />
-					</p:commandButton>
-				</f:facet>
-			</p:dataTable>
-			<p:panelGrid id="kpnlAddPntAlloc" rendered="#{adminController.showAddPanel}" columns="1">
-				<p:column>
-					<p:outputLabel value="Description : " />
-				</p:column>
-				<p:column>
-					<p:inputText id="klblAddId" value="#{adminController.allocationBean.allocDesc}" />
-				</p:column>
-				<p:column>
-					<p:outputLabel value="Status : " />
-				</p:column>
-				<p:column>
-					<p:selectOneMenu id="ksomAddSelectEntityStatus" value="#{adminController.allocationBean.allocStatusId}">
-						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{adminController.statusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
-					</p:selectOneMenu>
-				</p:column>
-				<p:column>
-					<p:outputLabel value="Point Value : " />
-				</p:column>
-				<p:column>
-					<p:inputText id="klblAddPntVal" value="#{adminController.allocationBean.allocVal}" />
-				</p:column>
-				<p:column colspan="2">
-					<p:commandButton id="kaddSaveButton" value="Save" ajax="false" action="#{adminController.saveAllocation}" >
-					   <f:setPropertyActionListener value="3" target="#{adminController.toView}" />
-					</p:commandButton>
-					<p:commandButton id="kaddCancelButton" value="Cancel" ajax="false" action="#{adminController.cancelAllocation}" >
-					  <f:setPropertyActionListener value="3" target="#{adminController.toView}" />
-					</p:commandButton>
-				</p:column>
-			</p:panelGrid>
-			<p:panelGrid id="kpnlModPntAlloc" rendered="#{adminController.showModPanel}" columns="1">
-				<p:column>
-					<p:outputLabel value="Description : " />
-				</p:column>
-				<p:column>
-					<p:inputText id="klblModId" value="#{adminController.allocationBean.allocDesc}" />
-				</p:column>
-				<p:column>
-					<p:outputLabel value="Status : " />
-				</p:column>
-				<p:column>
-					<p:selectOneMenu id="ksomModSelectEntityStatus" value="#{adminController.allocationBean.allocStatusId}">
-						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{adminController.statusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
-					</p:selectOneMenu>
-				</p:column>
-				<p:column>
-					<p:outputLabel value="Point Value : " />
-				</p:column>
-				<p:column>
-					<p:inputText id="klblModPntVal" value="#{adminController.allocationBean.allocVal}" />
-				</p:column>
-				<p:column colspan="2">
-					<p:commandButton id="kmodSaveButton" value="Update" ajax="false" action="#{adminController.updateAllocation}" >
-					   <f:setPropertyActionListener value="3" target="#{adminController.toView}" />
-					</p:commandButton>				
-					<p:commandButton id="kmodDeleteButton" value="Delete" ajax="false" action="#{adminController.deleteAllocation}" >
-					  <f:setPropertyActionListener value="3" target="#{adminController.toView}" />
-					</p:commandButton>
-					<p:commandButton id="kmodCancelButton" value="Cancel" ajax="false" action="#{adminController.cancelAllocation}" >
-					  <f:setPropertyActionListener value="3" target="#{adminController.toView}" />
-					</p:commandButton>
-				</p:column>
-			</p:panelGrid>
+<ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="adminBody">
+		<p:dataTable id="kdtPntAlloc" widgetVar="dtPntAlloc" value="#{adminController.allocs}" var="bean" rows="5" paginator="true" paginatorPosition="bottom" emptyMessage="No Point Allocations Found">
+			<f:facet name="header">
+				<p:selectOneMenu id="ksomSelectEntity" value="#{adminController.entity}">
+					<p:ajax listener="#{adminController.updateStatusList}" update="kdtPntAlloc,:frmAdmin:kpnlModPntAlloc,:frmAdmin:kpnlAddPntAlloc" />
+					<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{adminController.allocEntityList}" />
+				</p:selectOneMenu>
+			</f:facet>
+			<p:column>
+				<f:facet name="header">Description</f:facet>
+				<p:outputLabel id="klblId" value="#{bean.allocDesc}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">Entity Name</f:facet>
+				<p:selectOneMenu id="ksomSelectEntityName" value="#{adminController.entity}">
+					<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{adminController.allocEntityList}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<f:facet name="header">Status</f:facet>
+				<p:selectOneMenu id="ksomSelectEntityStatus" value="#{bean.allocStatusId}">
+					<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{adminController.disStatusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<f:facet name="header">Point Value</f:facet>
+				<p:outputLabel id="klblPntVal" value="#{bean.allocVal}" />
+			</p:column>
+			<p:column>
+				<p:commandButton id="kviewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminController.showAllocationMod}">
+					<f:setPropertyActionListener value="#{bean}" target="#{adminController.allocationBean}" />
+				</p:commandButton>
+			</p:column>
+			<f:facet name="footer">
+				<p:commandButton id="kaddButton" value="Add" ajax="false" immediate="true" action="#{adminController.showAllocationAdd}" rendered="#{adminController.showAddBtn}">
+					<f:setPropertyActionListener value="3" target="#{adminController.toView}" />
+				</p:commandButton>
+				<p:commandButton id="kbtnJCancel" value="Return To View" ajax="false" action="#{adminController.showPointAllocation}">
+					<f:setPropertyActionListener value="3" target="#{adminController.toView}" />
+				</p:commandButton>
+			</f:facet>
+		</p:dataTable>
+		<p:panelGrid id="kpnlAddPntAlloc" rendered="#{adminController.showAddPanel}" columns="1">
+			<p:column>
+				<p:outputLabel value="Description : " />
+			</p:column>
+			<p:column>
+				<p:inputText id="klblAddId" value="#{adminController.allocationBean.allocDesc}" />
+			</p:column>
+			<p:column>
+				<p:outputLabel value="Status : " />
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="ksomAddSelectEntityStatus" value="#{adminController.allocationBean.allocStatusId}">
+					<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{adminController.statusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:outputLabel value="Point Value : " />
+			</p:column>
+			<p:column>
+				<p:inputText id="klblAddPntVal" value="#{adminController.allocationBean.allocVal}" />
+			</p:column>
+			<p:column colspan="2">
+				<p:commandButton id="kaddSaveButton" value="Save" ajax="false" action="#{adminController.saveAllocation}">
+					<f:setPropertyActionListener value="3" target="#{adminController.toView}" />
+				</p:commandButton>
+				<p:commandButton id="kaddCancelButton" value="Cancel" ajax="false" action="#{adminController.cancelAllocation}">
+					<f:setPropertyActionListener value="3" target="#{adminController.toView}" />
+				</p:commandButton>
+			</p:column>
+		</p:panelGrid>
+		<p:panelGrid id="kpnlModPntAlloc" rendered="#{adminController.showModPanel}" columns="1">
+			<p:column>
+				<p:outputLabel value="Description : " />
+			</p:column>
+			<p:column>
+				<p:inputText id="klblModId" value="#{adminController.allocationBean.allocDesc}" />
+			</p:column>
+			<p:column>
+				<p:outputLabel value="Status : " />
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="ksomModSelectEntityStatus" value="#{adminController.allocationBean.allocStatusId}">
+					<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{adminController.statusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:outputLabel value="Point Value : " />
+			</p:column>
+			<p:column>
+				<p:inputText id="klblModPntVal" value="#{adminController.allocationBean.allocVal}" />
+			</p:column>
+			<p:column colspan="2">
+				<p:commandButton id="kmodSaveButton" value="Update" ajax="false" action="#{adminController.updateAllocation}">
+					<f:setPropertyActionListener value="3" target="#{adminController.toView}" />
+				</p:commandButton>
+				<p:commandButton id="kmodDeleteButton" value="Delete" ajax="false" action="#{adminController.deleteAllocation}">
+					<f:setPropertyActionListener value="3" target="#{adminController.toView}" />
+				</p:commandButton>
+				<p:commandButton id="kmodCancelButton" value="Cancel" ajax="false" action="#{adminController.cancelAllocation}">
+					<f:setPropertyActionListener value="3" target="#{adminController.toView}" />
+				</p:commandButton>
+			</p:column>
+		</p:panelGrid>
+	</ui:define>
 </ui:composition>

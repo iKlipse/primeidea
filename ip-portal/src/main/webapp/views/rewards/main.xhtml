@@ -4,7 +4,7 @@
 	<h:head />
 	<h:body>
 		<h:form id="frmRewards" enctype="multipart/form-data">
-			<p:growl id="grlMsg" showDetail="true" showSummary="true" />
+			<p:growl id="frmRewardsMsg" showDetail="true" showSummary="true" autoUpdate="true" />
 			<p:remoteCommand actionListener="#{rewardsController.showRewardStore}" name="onload" autoRun="true" update="pnlRewardDet" />
 			<p:panel id="pnlRewardMenu" style="border: 0px !important">
 				<p:commandLink value="Online Store" actionListener="#{rewardsController.showRewardStore}" update="pnlRewardDet" />

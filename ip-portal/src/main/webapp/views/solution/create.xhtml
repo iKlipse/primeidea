@@ -14,7 +14,7 @@
 		</p:column>
 		<p:column>
 			<p:inputText style="width: 100%" autocomplete="false" id="txtCrtSTitle" value="#{challengeController.solutionBean.title}">
-				<p:ajax listener="#{challengeController.checkTitleAvailability}" event="blur" update="grlMsg" />
+				<p:ajax listener="#{challengeController.checkTitleAvailability}" event="blur" />
 			</p:inputText>
 		</p:column>
 		<p:column>

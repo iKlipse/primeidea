@@ -1,5 +1,6 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<p:panel id="ipnlUploadUsers" header="Upload Users">
+<ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="adminBody">
+		<p:panel id="ipnlUploadUsers" header="Upload Users">
 			<p:column>
 				<p:outputLabel id="ilblCUpload" value="Upload File : " />
 			</p:column>
@@ -8,13 +9,14 @@
 			</p:column>
 			<p:row>
 				<p:column colspan="2">
-					<p:commandButton id="ibtnHSave" value="Save" ajax="false" action="#{adminController.saveUploadUsers}" >
-					  <f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
-					  </p:commandButton>
-					<p:commandButton id="ibtnLCancel" value="Return To View" ajax="false" action="#{adminController.showViewUsers}" >
-					  <f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
-					  </p:commandButton>
+					<p:commandButton id="ibtnHSave" value="Save" ajax="false" action="#{adminController.saveUploadUsers}">
+						<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+					</p:commandButton>
+					<p:commandButton id="ibtnLCancel" value="Return To View" ajax="false" action="#{adminController.showViewUsers}">
+						<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+					</p:commandButton>
 				</p:column>
 			</p:row>
 		</p:panel>
+	</ui:define>
 </ui:composition>

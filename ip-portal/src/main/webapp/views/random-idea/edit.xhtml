@@ -1,12 +1,11 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<p:growl id="grlMsg" showDetail="true" showSummary="true" />
 	<p:panelGrid columns="2" id="pnlEditIdea">
 		<p:column>
 			<p:outputLabel id="lblEdtITitle" value="Title : " />
 		</p:column>
 		<p:column>
 			<p:inputText style="width: 100%" autocomplete="false" id="txtEdtITitle" value="#{randomIdeaController.ideaBean.ideaTitle}">
-				<p:ajax listener="#{randomIdeaController.checkTitleAvailability}" event="blur" update="grlMsg" />
+				<p:ajax listener="#{randomIdeaController.checkTitleAvailability}" event="blur" />
 			</p:inputText>
 		</p:column>
 		<p:column>

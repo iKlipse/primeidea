@@ -1,48 +1,50 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<p:dataTable id="gdtViewGroups" value="#{adminController.viewGroups}" var="grp" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Groups Found" style="width: 100% !important">
-		<p:column filterBy="#{grp.gName}" filterMatchMode="contains" sortBy="#{grp.gName}">
-			<f:facet name="header">Group Name</f:facet>
-			<p:outputLabel id="gtxtGrpName" value="#{grp.gName}" />
-		</p:column>
-		<p:column>
-			<f:facet name="header">Group EMail</f:facet>
-			<p:outputLabel id="gtxtGrpEMail" value="#{grp.geMail}" />
-		</p:column>
-		<p:column>
-			<f:facet name="header">Parent Group</f:facet>
-			<p:selectOneMenu id="gsomPGrpId" value="#{grp.selPGrp}" disabled="true">
-				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-				<f:selectItems value="#{adminController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
-			</p:selectOneMenu>
-		</p:column>
-		<p:column>
-			<f:facet name="header">Admin User</f:facet>
-			<p:selectOneMenu id="gsomAdmUser" value="#{grp.selAdmUser}" disabled="true">
-				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-				<f:selectItems value="#{adminController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
-			</p:selectOneMenu>
-		</p:column>
-		<p:column>
-			<f:facet name="header">Active</f:facet>
-			<p:selectBooleanButton id="gsbbActive" value="#{grp.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" disabled="true" />
-		</p:column>
-		<p:column>
-			<p:commandButton id="gviewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminController.showEditGroup}">
-				<f:setPropertyActionListener value="#{grp}" target="#{adminController.groupBean}" />
-				<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
-			</p:commandButton>
-		</p:column>
-		<p:column>
-			<p:commandButton id="gsummaryButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminController.showSummaryGroup}">
-				<f:setPropertyActionListener value="#{grp}" target="#{adminController.groupBean}" />
-				<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
-			</p:commandButton>
-		</p:column>
-		<f:facet name="footer">
-			<p:commandButton id="gbtnAdd" value="Create Group" ajax="false" action="#{adminController.showCreateGroup}" rendered="#{accessBean.createGroupEnabled}" />
-			<p:commandButton id="gbtnMCancel" value="Return To Home" ajax="false" action="#{adminController.redirectHome}">
-				<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
-			</p:commandButton>
-		</f:facet>
-	</p:dataTable>
+<ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="adminBody">
+		<p:dataTable id="gdtViewGroups" value="#{adminController.viewGroups}" var="grp" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Groups Found" style="width: 100% !important">
+			<p:column filterBy="#{grp.gName}" filterMatchMode="contains" sortBy="#{grp.gName}">
+				<f:facet name="header">Group Name</f:facet>
+				<p:outputLabel id="gtxtGrpName" value="#{grp.gName}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">Group EMail</f:facet>
+				<p:outputLabel id="gtxtGrpEMail" value="#{grp.geMail}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">Parent Group</f:facet>
+				<p:selectOneMenu id="gsomPGrpId" value="#{grp.selPGrp}" disabled="true">
+					<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{adminController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<f:facet name="header">Admin User</f:facet>
+				<p:selectOneMenu id="gsomAdmUser" value="#{grp.selAdmUser}" disabled="true">
+					<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{adminController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<f:facet name="header">Active</f:facet>
+				<p:selectBooleanButton id="gsbbActive" value="#{grp.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" disabled="true" />
+			</p:column>
+			<p:column>
+				<p:commandButton id="gviewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminController.showEditGroup}">
+					<f:setPropertyActionListener value="#{grp}" target="#{adminController.groupBean}" />
+					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+				</p:commandButton>
+			</p:column>
+			<p:column>
+				<p:commandButton id="gsummaryButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminController.showSummaryGroup}">
+					<f:setPropertyActionListener value="#{grp}" target="#{adminController.groupBean}" />
+					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+				</p:commandButton>
+			</p:column>
+			<f:facet name="footer">
+				<p:commandButton id="gbtnAdd" value="Create Group" ajax="false" action="#{adminController.showCreateGroup}" rendered="#{accessBean.createGroupEnabled}" />
+				<p:commandButton id="gbtnMCancel" value="Return To Home" ajax="false" action="#{adminController.redirectHome}">
+					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+				</p:commandButton>
+			</f:facet>
+		</p:dataTable>
+	</ui:define>
 </ui:composition>

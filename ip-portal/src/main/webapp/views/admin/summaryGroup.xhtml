@@ -1,71 +1,76 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<p:panelGrid columns="2" id="jpnlEdittGroup">
-				<p:column>
-					<p:outputLabel id="jlblGName" value="Group Name : " />
-				</p:column>
-				<p:column>
-					<p:outputLabel style="width: 100%" id="jtxtGName" value="#{adminController.groupBean.gName}" />
-				</p:column>
-				<p:column>
-					<p:outputLabel id="jlblEMail" value="EMail : " />
-				</p:column>
-				<p:column>
-					<p:outputLabel style="width: 100%" id="jtxtEMail" value="#{adminController.groupBean.geMail}" />
-				</p:column>
-				<p:column>
-					<p:outputLabel id="jlblIDownload" value="Download File : " />
-				</p:column>
-				<p:column>
-					<p:commandButton id="jbtnDownload" value="Download" ajax="false" disabled="#{adminController.fileAvail}">
-						<p:fileDownload value="#{adminController.fileContent}" />
+<ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="adminBody">
+		<p:panelGrid columns="2" id="jpnlEdittGroup">
+			<p:column>
+				<p:outputLabel id="jlblGName" value="Group Name : " />
+			</p:column>
+			<p:column>
+				<p:outputLabel style="width: 100%" id="jtxtGName" value="#{adminController.groupBean.gName}" />
+			</p:column>
+			<p:column>
+				<p:outputLabel id="jlblEMail" value="EMail : " />
+			</p:column>
+			<p:column>
+				<p:outputLabel style="width: 100%" id="jtxtEMail" value="#{adminController.groupBean.geMail}" />
+			</p:column>
+			<p:column>
+				<p:outputLabel id="jlblIDownload" value="Download File : " />
+			</p:column>
+			<p:column>
+				<p:commandButton id="jbtnDownload" value="Download" ajax="false" disabled="#{adminController.fileAvail}">
+					<p:fileDownload value="#{adminController.fileContent}" />
+				</p:commandButton>
+			</p:column>
+			<p:column>
+				<p:outputLabel id="jlblParentGId" value="Parent : " />
+			</p:column>
+			<p:column>
+				<p:selectOneMenu style="width: 100%" id="jsomPGrpId" value="#{adminController.groupBean.selPGrp}" filter="true" filterMatchMode="contains" disabled="true">
+					<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{adminController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:outputLabel id="jlblAdmUser" value="Admin User : " />
+			</p:column>
+			<p:column>
+				<p:selectOneMenu style="width: 100%" id="jsomAdmUser" value="#{adminController.groupBean.selAdmUser}" disabled="true">
+					<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{adminController.admUsers}" var="a" itemLabel="#{a.priGroupName} - #{a.fName} #{a.lName}" itemValue="#{a.uId}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:outputLabel id="jlblFuncUsers" value="Group Users" />
+			</p:column>
+			<p:column>
+				<!-- <p:pickList style="width: 100%" id="jplUserPick" disabled="true" converter="userConverter" value="#{adminController.userTwinSelect}" var="user" itemLabel="#{user.priGroupName} - #{user.fName} #{user.lName}" itemValue="#{user.uId}" /> -->
+				<p:selectCheckboxMenu id="scmUserList" label="Please Select" filter="true" filterMatchMode="contains" value="#{adminController.selUserId}">
+					<f:selectItems value="#{adminController.admUsers}" var="user" itemLabel="#{user.priGroupName} - #{user.scName} #{user.lName}" itemValue="#{user.uId}" />
+				</p:selectCheckboxMenu>
+			</p:column>
+			<p:column>
+				<p:outputLabel id="jlblActive" value="Active : " />
+			</p:column>
+			<p:column>
+				<p:selectBooleanButton style="width: 100%" id="jsbbActive" disabled="true" value="#{adminController.groupBean.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
+			</p:column>
+			<p:column>
+				<p:outputLabel id="jlblGrpFuncs" value="Assigned Fuctions : " />
+			</p:column>
+			<p:column>
+				<p:dataTable id="jdtViewGrpFunctions" value="#{adminController.functions}" var="func" paginator="true" paginatorPosition="bottom" rows="10" emptyMessage="No Functions Found for Group">
+					<p:column>
+						<p:outputLabel id="jtxtFuncName" value="#{func.funcName}" />
+					</p:column>
+				</p:dataTable>
+			</p:column>
+			<p:row>
+				<p:column colspan="2">
+					<p:commandButton id="jbtnKCancel" value="Return To View" ajax="false" action="#{adminController.showViewGroups}">
+						<f:setPropertyActionListener value="2" target="#{adminController.toView}" />
 					</p:commandButton>
 				</p:column>
-				<p:column>
-					<p:outputLabel id="jlblParentGId" value="Parent : " />
-				</p:column>
-				<p:column>
-					<p:selectOneMenu style="width: 100%" id="jsomPGrpId" value="#{adminController.groupBean.selPGrp}" filter="true" filterMatchMode="contains" disabled="true">
-						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{adminController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
-					</p:selectOneMenu>
-				</p:column>
-				<p:column>
-					<p:outputLabel id="jlblAdmUser" value="Admin User : " />
-				</p:column>
-				<p:column>
-					<p:selectOneMenu style="width: 100%" id="jsomAdmUser" value="#{adminController.groupBean.selAdmUser}" disabled="true">
-						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{adminController.admUsers}" var="a" itemLabel="#{a.priGroupName} - #{a.fName} #{a.lName}" itemValue="#{a.uId}" />
-					</p:selectOneMenu>
-				</p:column>
-				<p:column>
-					<p:outputLabel id="jlblFuncUsers" value="Group Users" />
-				</p:column>
-				<p:column>
-					<p:pickList style="width: 100%" id="jplUserPick" disabled="true" converter="userConverter" value="#{adminController.userTwinSelect}" var="user" itemLabel="#{user.priGroupName} - #{user.fName} #{user.lName}" itemValue="#{user.uId}" />
-				</p:column>
-				<p:column>
-					<p:outputLabel id="jlblActive" value="Active : " />
-				</p:column>
-				<p:column>
-					<p:selectBooleanButton style="width: 100%" id="jsbbActive" disabled="true" value="#{adminController.groupBean.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
-				</p:column>
-				<p:column>
-					<p:outputLabel id="jlblGrpFuncs" value="Assigned Fuctions : " />
-				</p:column>
-				<p:column>
-					<p:dataTable id="jdtViewGrpFunctions" value="#{adminController.functions}" var="func" paginator="true" paginatorPosition="bottom" rows="10" emptyMessage="No Functions Found for Group">
-						<p:column>
-							<p:outputLabel id="jtxtFuncName" value="#{func.funcName}" />
-						</p:column>
-					</p:dataTable>
-				</p:column>
-				<p:row>
-					<p:column colspan="2">
-						<p:commandButton id="jbtnKCancel" value="Return To View" ajax="false" action="#{adminController.showViewGroups}" >
-						   <f:setPropertyActionListener value="2" target="#{adminController.toView}" />
-						</p:commandButton>   
-					</p:column>
-				</p:row>
-			</p:panelGrid>
+			</p:row>
+		</p:panelGrid>
+	</ui:define>
 </ui:composition>

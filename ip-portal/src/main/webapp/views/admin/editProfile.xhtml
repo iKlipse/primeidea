@@ -1,6 +1,5 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<ui:define name="title">Edit Profile</ui:define>
-	<ui:define name="body">
+<ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="adminBody">
 		<p:dialog id="ndlgFBHelp" widgetVar="dlgFB" resizable="false" dynamic="true" showEffect="explode" hideEffect="explode" position="10,100" appendToBody="true">
 			<p:panelGrid columns="2" style="margin-bottom:10px">
 				<p:graphicImage id="ngiFBHandle" name="fb_help.jpg" library="images" />
@@ -39,7 +38,7 @@
 				</p:column>
 				<p:column>
 					<p:inputText style="width: 100%" disabled="true" autocomplete="false" id="ntxtIdNum" value="#{adminBean.userBean.idNum}">
-						<p:ajax listener="#{adminBean.checkAvailabilityIDNumber}" event="blur" update="grlMsg" />
+						<p:ajax listener="#{adminBean.checkAvailabilityIDNumber}" event="blur" />
 					</p:inputText>
 				</p:column>
 				<p:column>
@@ -47,7 +46,7 @@
 				</p:column>
 				<p:column>
 					<p:inputText style="width: 100%" autocomplete="false" id="ntxtEUEMail" value="#{adminBean.userBean.eMail}">
-						<p:ajax listener="#{adminBean.checkAvailabilityEmail}" event="blur" update="grlMsg" />
+						<p:ajax listener="#{adminBean.checkAvailabilityEmail}" event="blur" />
 					</p:inputText>
 				</p:column>
 				<p:column>
@@ -55,7 +54,7 @@
 				</p:column>
 				<p:column>
 					<p:inputText style="width: 100%" disabled="true" autocomplete="false" id="ntxtEmpId" value="#{adminBean.userBean.employeeId}">
-						<p:ajax listener="#{adminBean.checkAvailabilityEmployeeID}" event="blur" update="grlMsg" />
+						<p:ajax listener="#{adminBean.checkAvailabilityEmployeeID}" event="blur" />
 					</p:inputText>
 				</p:column>
 				<p:column>
@@ -106,13 +105,13 @@
 					<p:outputLabel id="nlblGroup" value=" Primary Group : " />
 				</p:column>
 				<p:column>
-				    <p:inputText style="width: 100%" disabled="true" autocomplete="false" id="nsomPriGroup" value="#{adminBean.userBean.priGroupName}" />					
+					<p:inputText style="width: 100%" disabled="true" autocomplete="false" id="nsomPriGroup" value="#{adminBean.userBean.priGroupName}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="nlblActive" value="Active : " />
 				</p:column>
 				<p:column>
-				    <p:inputText style="width: 100%" disabled="true" autocomplete="false" id="nsbbActive" value="#{adminBean.userBean.isActive}" />
+					<p:inputText style="width: 100%" disabled="true" autocomplete="false" id="nsbbActive" value="#{adminBean.userBean.isActive}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="nlblSkills" value="Skills : " />
