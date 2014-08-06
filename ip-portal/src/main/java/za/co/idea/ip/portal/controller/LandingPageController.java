@@ -16,6 +16,7 @@ import javax.portlet.faces.event.EventNavigationResult;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.jaxrs.client.WebClient;
+import org.apache.log4j.Logger;
 
 import za.co.idea.ip.portal.bean.ChallengeBean;
 import za.co.idea.ip.portal.bean.IdeaBean;
@@ -36,6 +37,7 @@ import com.liferay.portal.model.User;
 @SessionScoped
 public class LandingPageController implements Serializable {
 
+	private static final Logger logger = Logger.getLogger(LandingPageController.class);
 	private static final long serialVersionUID = -440824165553001559L;
 	private List<UserBean> admUsers;
 	private List<ListSelectorBean> ideaCats;
@@ -101,7 +103,8 @@ public class LandingPageController implements Serializable {
 			}
 
 		} catch (Exception e) {
-			
+			logger.error(e, e);
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -117,7 +120,8 @@ public class LandingPageController implements Serializable {
 			showChals = false;
 			showSols = false;
 		} catch (Exception e) {
-			
+			logger.error(e, e);
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -133,7 +137,8 @@ public class LandingPageController implements Serializable {
 			showChals = true;
 			showSols = false;
 		} catch (Exception e) {
-			
+			logger.error(e, e);
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -149,7 +154,8 @@ public class LandingPageController implements Serializable {
 			showChals = false;
 			showSols = true;
 		} catch (Exception e) {
-			
+			logger.error(e, e);
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}

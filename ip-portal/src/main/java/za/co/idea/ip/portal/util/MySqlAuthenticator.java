@@ -8,6 +8,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.cxf.jaxrs.client.WebClient;
+import org.apache.log4j.Logger;
 
 import za.co.idea.ip.ws.bean.UserMessage;
 
@@ -18,6 +19,7 @@ import com.liferay.portal.security.auth.Authenticator;
 import com.liferay.portal.service.UserLocalServiceUtil;
 
 public class MySqlAuthenticator implements Authenticator {
+	private static final Logger logger = Logger.getLogger(MySqlAuthenticator.class);
 	private static final int AUTH_BY_EMAIL_ID = 1;
 	private static final int AUTH_BY_SCREEN_NAME = 2;
 	private static final int AUTH_BY_USER_ID = 3;
@@ -67,6 +69,7 @@ public class MySqlAuthenticator implements Authenticator {
 						UserLocalServiceUtil.addUser(user);
 					}
 				} catch (Exception e) {
+					logger.error(e, e);
 
 				}
 				return Authenticator.SUCCESS;

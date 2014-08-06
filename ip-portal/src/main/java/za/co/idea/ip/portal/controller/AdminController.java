@@ -73,9 +73,8 @@ import com.restfb.DefaultWebRequestor;
 public class AdminController implements Serializable {
 
 	private static final long serialVersionUID = 4122782126915399730L;
-
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
-	protected static final Logger logger = Logger.getLogger(AdminController.class);
+	private static final Logger logger = Logger.getLogger(AdminController.class);
 
 	private UserBean userBean;
 	private GroupBean groupBean;
@@ -166,6 +165,7 @@ public class AdminController implements Serializable {
 			userId = message.getuId();
 			viewUsers = fetchAllUsers();
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -189,6 +189,7 @@ public class AdminController implements Serializable {
 			newsBean = new NewsBean();
 			return "admcn";
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			logger.error("Error while displaying show create news form: " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news create request", "System error occurred, cannot perform news create request");
@@ -203,6 +204,7 @@ public class AdminController implements Serializable {
 			viewNewsBeans = fetchAllNews();
 			return "admvn";
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			logger.error("Error while displaying show view news form: " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news view request", "System error occurred, cannot perform news view request");
@@ -243,6 +245,7 @@ public class AdminController implements Serializable {
 			}
 			return "admen";
 		} catch (Exception e) {
+			logger.error(e, e);
 			logger.error("Error while displaying edit news form: " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -259,6 +262,7 @@ public class AdminController implements Serializable {
 			logger.info("News details after fetching data from fetchALLNews(): " + viewNewsBeans);
 			return "admsn";
 		} catch (Exception e) {
+			logger.error(e, e);
 			logger.error("Error while displaying news summary details: " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news view request", "System error occurred, cannot perform news view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -273,6 +277,7 @@ public class AdminController implements Serializable {
 			allocs = new ArrayList<AllocationBean>();
 			return "admap";
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -286,6 +291,7 @@ public class AdminController implements Serializable {
 			groupTwinSelect = new DualListModel<GroupBean>(fetchAllGroups(), new ArrayList<GroupBean>());
 			return "admfc";
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -300,6 +306,7 @@ public class AdminController implements Serializable {
 			pGrps = fetchAllGroups();
 			return "admfv";
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -313,6 +320,7 @@ public class AdminController implements Serializable {
 			admUsers = fetchAllUsers();
 			return "admgv";
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot view groups request", "System error occurred, cannot view groups request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -328,6 +336,7 @@ public class AdminController implements Serializable {
 			userTwinSelect = new DualListModel<UserBean>(fetchAllUsersSortByPG(), fetchAdminUser());
 			return "admgc";
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform created groups view request", "System error occurred, cannot perform created groups view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -370,6 +379,7 @@ public class AdminController implements Serializable {
 				}
 				return "admge";
 			} catch (Exception e) {
+				logger.error(e, e);
 
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -378,6 +388,7 @@ public class AdminController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated groups view request", "System error occurred, cannot perform updated groups view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -420,6 +431,7 @@ public class AdminController implements Serializable {
 				}
 				return "admgs";
 			} catch (Exception e) {
+				logger.error(e, e);
 
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -428,6 +440,7 @@ public class AdminController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated groups view request", "System error occurred, cannot perform updated groups view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -442,6 +455,7 @@ public class AdminController implements Serializable {
 			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 			return "admcno";
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -454,6 +468,7 @@ public class AdminController implements Serializable {
 			viewUsers = fetchAllUsers();
 			return "admuv";
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform Users View request", "System error occurred, cannot perform Users View request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -478,6 +493,7 @@ public class AdminController implements Serializable {
 			resetSec = false;
 			return "admue";
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated user view request", "System error occurred, cannot perform updated user view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -492,6 +508,7 @@ public class AdminController implements Serializable {
 			viewGroups = fetchAllGroups();
 			return "admuc";
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform created user view request", "System error occurred, cannot perform created user view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -510,6 +527,7 @@ public class AdminController implements Serializable {
 			this.allocs = new ArrayList<AllocationBean>();
 			return "admmpa";
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -523,6 +541,7 @@ public class AdminController implements Serializable {
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			return "admfe";
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -630,6 +649,7 @@ public class AdminController implements Serializable {
 						showDef = true;
 					}
 				} catch (Exception e) {
+					logger.error(e, e);
 
 					logger.error("Error while login : " + e.getMessage());
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform Login request", "System error occurred, cannot perform Login request");
@@ -737,6 +757,7 @@ public class AdminController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform save point request", "System error occurred, cannot perform save point request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -819,6 +840,7 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update allocation request", "System error occurred, cannot perform update allocation request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -845,6 +867,7 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update allocation request", "System error occurred, cannot perform update allocation request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -897,6 +920,7 @@ public class AdminController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform save allocation request", "System error occurred, cannot perform save allocation request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -1188,6 +1212,7 @@ public class AdminController implements Serializable {
 						continue;
 					}
 				} catch (Exception e) {
+					logger.error(e, e);
 					getUploadErrors().add("User creation service call failed due to :: " + e.getMessage() + " row number :: " + i);
 					i++;
 					row = sheet.getRow(i);
@@ -1199,6 +1224,7 @@ public class AdminController implements Serializable {
 				cell0 = row.getCell(0);
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			getUploadErrors().add("User creation service call failed due to :: " + e.getMessage() + " row number :: " + i);
 			return "admuur";
@@ -1298,6 +1324,7 @@ public class AdminController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -1467,6 +1494,7 @@ public class AdminController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -1528,6 +1556,7 @@ public class AdminController implements Serializable {
 
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -1595,6 +1624,7 @@ public class AdminController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -1634,6 +1664,7 @@ public class AdminController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -1725,6 +1756,7 @@ public class AdminController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -1759,6 +1791,7 @@ public class AdminController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -1768,7 +1801,6 @@ public class AdminController implements Serializable {
 
 	public void updateImage() {
 		try {
-			Long userId = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId");
 			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + userId + "/ip_user");
 			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 			if (blobId == -999) {
@@ -1828,6 +1860,7 @@ public class AdminController implements Serializable {
 				}
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", "Unable to upload attachment. Please update later");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -2044,6 +2077,7 @@ public class AdminController implements Serializable {
 				ret.add(bean);
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 			logger.error("Error in fetching data : " + e.getMessage());
 		}
 		logger.info("News data displaying from List: " + ret);
@@ -2052,7 +2086,7 @@ public class AdminController implements Serializable {
 
 	protected List<NotificationBean> fetchAllNotifications() {
 		List<NotificationBean> ret = new ArrayList<NotificationBean>();
-		WebClient fetchNotifClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/nos/notif/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		WebClient fetchNotifClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/nos/notif/list/" + userId);
 		Collection<? extends NotificationMessage> notifications = new ArrayList<NotificationMessage>(fetchNotifClient.accept(MediaType.APPLICATION_JSON).getCollection(NotificationMessage.class));
 		fetchNotifClient.close();
 		for (NotificationMessage notificationMessage : notifications) {
@@ -2135,6 +2169,7 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage("fuCUpload", successMessage);
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -2152,6 +2187,7 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage("fuCUpload", successMessage);
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -2170,6 +2206,7 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage("fuCUpload", successMessage);
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -2189,6 +2226,7 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage("fuCUpload", successMessage);
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -2405,6 +2443,7 @@ public class AdminController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 			logger.error("Error in creating news data : " + e.getMessage());
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news create request", "System error occurred, cannot perform news create request");
@@ -2487,6 +2526,7 @@ public class AdminController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			logger.error("Error in updating news data : " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
@@ -2521,6 +2561,7 @@ public class AdminController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create Idea request", "System error occurred, cannot perform create Idea request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);

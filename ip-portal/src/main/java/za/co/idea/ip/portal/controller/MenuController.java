@@ -11,12 +11,15 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.portlet.PortletRequest;
 
+import org.apache.log4j.Logger;
+
 import com.liferay.faces.portal.context.LiferayFacesContext;
 
 @ManagedBean(name = "menuController")
 @SessionScoped
 public class MenuController implements Serializable {
 	private static final long serialVersionUID = -7805375851486801882L;
+	private static final Logger logger = Logger.getLogger(MenuController.class);
 	private List<String> images;
 
 	public List<String> getImages() {
@@ -37,6 +40,7 @@ public class MenuController implements Serializable {
 			String url = new URL(request.getScheme(), request.getServerName(), request.getServerPort(), "/web/ip/challenge").toString();
 			FacesContext.getCurrentInstance().getExternalContext().redirect(url);
 		} catch (Exception e) {
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System Exception Occured During Login", "System Exception Occured During Login");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -48,6 +52,7 @@ public class MenuController implements Serializable {
 			String url = new URL(request.getScheme(), request.getServerName(), request.getServerPort(), "/web/ip/idea").toString();
 			FacesContext.getCurrentInstance().getExternalContext().redirect(url);
 		} catch (Exception e) {
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System Exception Occured During Login", "System Exception Occured During Login");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -59,6 +64,7 @@ public class MenuController implements Serializable {
 			String url = new URL(request.getScheme(), request.getServerName(), request.getServerPort(), "/web/ip/solution").toString();
 			FacesContext.getCurrentInstance().getExternalContext().redirect(url);
 		} catch (Exception e) {
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System Exception Occured During Login", "System Exception Occured During Login");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -70,6 +76,7 @@ public class MenuController implements Serializable {
 			String url = new URL(request.getScheme(), request.getServerName(), request.getServerPort(), "/web/ip/rewards").toString();
 			FacesContext.getCurrentInstance().getExternalContext().redirect(url);
 		} catch (Exception e) {
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System Exception Occured During Login", "System Exception Occured During Login");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}

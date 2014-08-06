@@ -16,8 +16,6 @@ import javax.portlet.PortletRequest;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
@@ -29,9 +27,6 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
-
-import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.model.User;
 
 import za.co.idea.ip.portal.bean.AllocationBean;
 import za.co.idea.ip.portal.bean.GroupBean;
@@ -54,12 +49,15 @@ import za.co.idea.ip.ws.bean.TagMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
 
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
+
 @ManagedBean(name = "rewardsController")
 @SessionScoped
 public class RewardsController implements Serializable {
 
 	private static final long serialVersionUID = -5950221141502328656L;
-	private static final Log LOG = LogFactory.getLog(RewardsController.class);
+	private static final Logger logger = Logger.getLogger(RewardsController.class);
 
 	private RewardsBean rewardsBean;
 	private StreamedContent fileContent;
@@ -99,7 +97,6 @@ public class RewardsController implements Serializable {
 	private boolean showCrtReward;
 	private boolean showViewReward;
 	private boolean showOnlineStore;
-	private static final Logger logger = Logger.getLogger(RewardsController.class);
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
@@ -123,8 +120,9 @@ public class RewardsController implements Serializable {
 			showViewReward = false;
 			showOnlineStore = false;
 		} catch (Exception e) {
+			logger.error(e, e);
 			logger.error("Error while displaying show create reward form : " + e.getMessage());
-			
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create reward request", "System error occurred, cannot perform create reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -144,7 +142,8 @@ public class RewardsController implements Serializable {
 			showViewReward = false;
 			showOnlineStore = true;
 		} catch (Exception e) {
-			
+			logger.error(e, e);
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -159,7 +158,8 @@ public class RewardsController implements Serializable {
 			showViewReward = false;
 			showOnlineStore = true;
 		} catch (Exception e) {
-			
+			logger.error(e, e);
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -174,7 +174,8 @@ public class RewardsController implements Serializable {
 			showViewReward = true;
 			showOnlineStore = false;
 		} catch (Exception e) {
-			
+			logger.error(e, e);
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -187,7 +188,8 @@ public class RewardsController implements Serializable {
 			rewardsBean = new RewardsBean();
 			viewRewardsBeans = fetchAllRewardsByUser();
 		} catch (Exception e) {
-			
+			logger.error(e, e);
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -203,7 +205,8 @@ public class RewardsController implements Serializable {
 			this.disStatusList = new ArrayList<MetaDataBean>();
 			this.allocs = new ArrayList<AllocationBean>();
 		} catch (Exception e) {
-			
+			logger.error(e, e);
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -246,7 +249,8 @@ public class RewardsController implements Serializable {
 			admUsers = fetchAllUsers();
 			allocs = new ArrayList<AllocationBean>();
 		} catch (Exception e) {
-			
+			logger.error(e, e);
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -329,15 +333,17 @@ public class RewardsController implements Serializable {
 					fileContent = null;
 				}
 			} catch (Exception e) {
-				
+				logger.error(e, e);
+
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update reward request", "System error occurred, cannot perform update reward request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				fileAvail = true;
 				fileContent = null;
 			}
 		} catch (Exception e) {
-			
-			LOG.error(e, e);
+			logger.error(e, e);
+
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update reward request", "System error occurred, cannot perform update reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -446,7 +452,8 @@ public class RewardsController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		} catch (Exception e) {
-			
+			logger.error(e, e);
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create Reward request", "System error occurred, cannot perform create Reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -536,7 +543,8 @@ public class RewardsController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		} catch (Exception e) {
-			
+			logger.error(e, e);
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update Reward request", "System error occurred, cannot perform update Reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -562,7 +570,8 @@ public class RewardsController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		} catch (Exception e) {
-			
+			logger.error(e, e);
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform save allocation request", "System error occurred, cannot perform save allocation request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -591,7 +600,8 @@ public class RewardsController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		} catch (Exception e) {
-			
+			logger.error(e, e);
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform save point request", "System error occurred, cannot perform save point request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -617,7 +627,8 @@ public class RewardsController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		} catch (Exception e) {
-			
+			logger.error(e, e);
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update allocation request", "System error occurred, cannot perform update allocation request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -642,7 +653,8 @@ public class RewardsController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		} catch (Exception e) {
-			
+			logger.error(e, e);
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update allocation request", "System error occurred, cannot perform update allocation request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -682,7 +694,7 @@ public class RewardsController implements Serializable {
 		message.setTagId(COUNTER.getNextId("IpTag"));
 		message.setTeId(4);
 		message.setTtId(4);
-		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
+		message.setUserId(userId);
 		message.setDuplicate(false);
 		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 		addTagClient.close();
@@ -698,7 +710,7 @@ public class RewardsController implements Serializable {
 		message.setTagId(COUNTER.getNextId("IpTag"));
 		message.setTeId(4);
 		message.setTtId(4);
-		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
+		message.setUserId(userId);
 		message.setDuplicate(false);
 		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 		addTagClient.close();
@@ -884,7 +896,8 @@ public class RewardsController implements Serializable {
 			this.rewardsBean.setRwFileType(file.getContentType());
 			this.rewardsBean.setRwFileName(file.getFileName());
 		} catch (Exception e) {
-			
+			logger.error(e, e);
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform upload request", "System error occurred, cannot perform upload request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}

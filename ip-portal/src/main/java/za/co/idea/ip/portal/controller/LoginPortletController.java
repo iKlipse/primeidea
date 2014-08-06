@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.cxf.jaxrs.client.WebClient;
+import org.apache.log4j.Logger;
 
 import za.co.idea.ip.portal.bean.UserBean;
 import za.co.idea.ip.portal.util.RESTServiceHelper;
@@ -26,6 +27,7 @@ import com.liferay.faces.portal.context.LiferayFacesContext;
 public class LoginPortletController implements Serializable {
 
 	private static final long serialVersionUID = 1081521351048260552L;
+	private static final Logger logger = Logger.getLogger(LoginPortletController.class);
 	private UserBean userBean;
 
 	public void login() {
@@ -52,6 +54,7 @@ public class LoginPortletController implements Serializable {
 				FacesContext.getCurrentInstance().getExternalContext().redirect(url);
 			}
 		} catch (Exception e) {
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System Exception Occured During Login", "System Exception Occured During Login");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}

@@ -1,5 +1,137 @@
 <?xml version="1.0"?>
 <faces-config version="2.1" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>chale</from-outcome>
+			<to-view-id>/views/challenge/container/editContainer.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>chaleo</from-outcome>
+			<to-view-id>/views/challenge/container/editOpenContainer.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>chals</from-outcome>
+			<to-view-id>/views/challenge/container/summaryContainer.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>chalso</from-outcome>
+			<to-view-id>/views/challenge/container/summaryOpenContainer.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>ideae</from-outcome>
+			<to-view-id>/views/random-idea/container/editContainer.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>ideaeo</from-outcome>
+			<to-view-id>/views/random-idea/container/editOpenContainer.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>ideas</from-outcome>
+			<to-view-id>/views/random-idea/container/summaryContainer.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>ideaso</from-outcome>
+			<to-view-id>/views/random-idea/container/summaryOpenContainer.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>sole</from-outcome>
+			<to-view-id>/views/solution/container/editContainer.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>soleo</from-outcome>
+			<to-view-id>/views/solution/container/editOpenContainer.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>sols</from-outcome>
+			<to-view-id>/views/solution/container/summaryContainer.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>solso</from-outcome>
+			<to-view-id>/views/solution/container/summaryOpenContainer.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>rewardse</from-outcome>
+			<to-view-id>/views/rewards/container/editContainer.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>usere</from-outcome>
+			<to-view-id>/views/admin/container/editUserContainer.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>groupe</from-outcome>
+			<to-view-id>/views/admin/container/editGroupContainer.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>groups</from-outcome>
+			<to-view-id>/views/admin/container/summaryGroupContainer.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admuresz</from-outcome>
+			<to-view-id>/views/admin/container/uploadResContainer.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>fune</from-outcome>
+			<to-view-id>/views/admin/container/editFunctionContainer.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>newse</from-outcome>
+			<to-view-id>/views/news/container/editContainer.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>lani</from-outcome>
+			<to-view-id>/views/landing-page/view.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>chalv</from-outcome>
+			<to-view-id>/views/challenge/main.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>ideav</from-outcome>
+			<to-view-id>/views/random-idea/main.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>solv</from-outcome>
+			<to-view-id>/views/solution/main.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>adminv</from-outcome>
+			<to-view-id>/views/admin/view.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
 	<converter>
 		<converter-id>userConverter</converter-id>
 		<converter-class>za.co.idea.ip.portal.util.UserBeanConverter</converter-class>
@@ -8,156 +140,6 @@
 		<converter-id>groupConverter</converter-id>
 		<converter-class>za.co.idea.ip.portal.util.GroupBeanConverter</converter-class>
 	</converter>
-	<navigation-rule>
-		<navigation-case>
-			<from-outcome>chale</from-outcome>
-			<to-view-id>/views/challenge/container/editContainer.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>chaleo</from-outcome>
-			<to-view-id>/views/challenge/container/editOpenContainer.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>chals</from-outcome>
-			<to-view-id>/views/challenge/container/summaryContainer.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>chalso</from-outcome>
-			<to-view-id>/views/challenge/container/summaryOpenContainer.xhtml</to-view-id>
-		</navigation-case>
-	</navigation-rule>
-	<navigation-rule>
-		<navigation-case>
-			<from-outcome>ideae</from-outcome>
-			<to-view-id>/views/random-idea/container/editContainer.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>ideaeo</from-outcome>
-			<to-view-id>/views/random-idea/container/editOpenContainer.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>ideas</from-outcome>
-			<to-view-id>/views/random-idea/container/summaryContainer.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>ideaso</from-outcome>
-			<to-view-id>/views/random-idea/container/summaryOpenContainer.xhtml</to-view-id>
-		</navigation-case>
-	</navigation-rule>
-	<navigation-rule>
-		<navigation-case>
-			<from-outcome>sole</from-outcome>
-			<to-view-id>/views/solution/container/editContainer.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>soleo</from-outcome>
-			<to-view-id>/views/solution/container/editOpenContainer.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>sols</from-outcome>
-			<to-view-id>/views/solution/container/summaryContainer.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>solso</from-outcome>
-			<to-view-id>/views/solution/container/summaryOpenContainer.xhtml</to-view-id>
-		</navigation-case>
-	</navigation-rule>
-	<navigation-rule>
-		<navigation-case>
-			<from-outcome>rewardse</from-outcome>
-			<to-view-id>/views/rewards/container/editContainer.xhtml</to-view-id>
-		</navigation-case>
-	</navigation-rule>
-	<navigation-rule>
-		<navigation-case>
-			<from-outcome>admcn</from-outcome>
-			<to-view-id>/views/admin/news/create.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>admvn</from-outcome>
-			<to-view-id>/views/admin/news/view.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>admen</from-outcome>
-			<to-view-id>/views/admin/news/edit.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>admsn</from-outcome>
-			<to-view-id>/views/admin/news/summary.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>admcno</from-outcome>
-			<to-view-id>/views/admin/notification/create.xhtml</to-view-id>
-		</navigation-case>
-	</navigation-rule>
-	<navigation-rule>
-		<navigation-case>
-			<from-outcome>admuc</from-outcome>
-			<to-view-id>/views/admin/user/create.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>admuv</from-outcome>
-			<to-view-id>/views/admin/user/view.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>admue</from-outcome>
-			<to-view-id>/views/admin/user/edit.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>admuu</from-outcome>
-			<to-view-id>/views/admin/user/upload.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>admuur</from-outcome>
-			<to-view-id>/views/admin/user/uploadRes.xhtml</to-view-id>
-		</navigation-case>
-	</navigation-rule>
-	<navigation-rule>
-		<navigation-case>
-			<from-outcome>admap</from-outcome>
-			<to-view-id>/views/admin/misc/allocatePoints.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>admmm</from-outcome>
-			<to-view-id>/views/admin/misc/maintainMetaData.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>admmpa</from-outcome>
-			<to-view-id>/views/admin/misc/maintainPointAllocation.xhtml</to-view-id>
-		</navigation-case>
-	</navigation-rule>
-	<navigation-rule>
-		<navigation-case>
-			<from-outcome>admgc</from-outcome>
-			<to-view-id>/views/admin/group/create.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>admge</from-outcome>
-			<to-view-id>/views/admin/group/edit.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>admgv</from-outcome>
-			<to-view-id>/views/admin/group/view.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>admgs</from-outcome>
-			<to-view-id>/views/admin/group/summary.xhtml</to-view-id>
-		</navigation-case>
-	</navigation-rule>
-	<navigation-rule>
-		<navigation-case>
-			<from-outcome>admfc</from-outcome>
-			<to-view-id>/views/admin/function/create.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>admfe</from-outcome>
-			<to-view-id>/views/admin/function/edit.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>admfv</from-outcome>
-			<to-view-id>/views/admin/function/view.xhtml</to-view-id>
-		</navigation-case>
-	</navigation-rule>
 	<application>
 		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
 	</application>

@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.primefaces.event.FileUploadEvent;
@@ -52,6 +53,7 @@ import za.co.idea.ip.ws.util.CustomObjectMapper;
 public class RandomIdeaController implements Serializable {
 
 	private static final long serialVersionUID = 2409570255777650709L;
+	private static final Logger logger = Logger.getLogger(RandomIdeaController.class);
 	private IdeaBean ideaBean;
 	private List<UserBean> admUsers;
 	private List<ListSelectorBean> ideaCats;
@@ -141,7 +143,7 @@ public class RandomIdeaController implements Serializable {
 				}
 			}
 		} catch (Exception e) {
-			
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -168,7 +170,7 @@ public class RandomIdeaController implements Serializable {
 			showViewIdea = false;
 			showCrtIdea = false;
 		} catch (Exception e) {
-			
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -184,7 +186,7 @@ public class RandomIdeaController implements Serializable {
 			showViewIdea = true;
 			showCrtIdea = false;
 		} catch (Exception e) {
-			
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -203,7 +205,7 @@ public class RandomIdeaController implements Serializable {
 			showViewIdea = false;
 			showCrtIdea = true;
 		} catch (Exception e) {
-			
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -213,14 +215,7 @@ public class RandomIdeaController implements Serializable {
 		try {
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			// if (((Long)
-			// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue()
-			// == 0l) {
 			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
-			// } else {
-			// ideaStatuses =
-			// RESTServiceHelper.fetchNextIdeaStatuses(ideaBean.getSetStatusId().intValue());
-			// }
 			pGrps = RESTServiceHelper.fetchAllGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
@@ -249,7 +244,8 @@ public class RandomIdeaController implements Serializable {
 				}
 				return "ideae";
 			} catch (Exception e) {
-				
+				logger.error(e, e);
+
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				fileAvail = true;
@@ -257,7 +253,7 @@ public class RandomIdeaController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			fileAvail = true;
@@ -270,14 +266,7 @@ public class RandomIdeaController implements Serializable {
 		try {
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			// if (((Long)
-			// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue()
-			// == 0l) {
 			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
-			// } else {
-			// ideaStatuses =
-			// RESTServiceHelper.fetchNextIdeaStatuses(ideaBean.getSetStatusId().intValue());
-			// }
 			pGrps = RESTServiceHelper.fetchAllGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
@@ -306,7 +295,8 @@ public class RandomIdeaController implements Serializable {
 				}
 				return "ideaeo";
 			} catch (Exception e) {
-				
+				logger.error(e, e);
+
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				fileAvail = true;
@@ -314,7 +304,8 @@ public class RandomIdeaController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			
+			logger.error(e, e);
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			fileAvail = true;
@@ -360,7 +351,7 @@ public class RandomIdeaController implements Serializable {
 			}
 			return "ideas";
 		} catch (Exception e) {
-			
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform summary request", "System error occurred, cannot perform summary request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			fileAvail = true;
@@ -406,7 +397,7 @@ public class RandomIdeaController implements Serializable {
 			}
 			return "ideaso";
 		} catch (Exception e) {
-			
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform summary request", "System error occurred, cannot perform summary request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			fileAvail = true;
@@ -436,9 +427,7 @@ public class RandomIdeaController implements Serializable {
 		message.setTagId(COUNTER.getNextId("IpTag"));
 		message.setTeId(1);
 		message.setTtId(1);
-		// message.setUserId((Long)
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
-		message.setUserId(0l);
+		message.setUserId(userId);
 		message.setDuplicate(false);
 		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 		addTagClient.close();
@@ -460,9 +449,7 @@ public class RandomIdeaController implements Serializable {
 		message.setTeId(1);
 		message.setTtId(2);
 		message.setDuplicate(true);
-		// message.setUserId((Long)
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
-		message.setUserId(0l);
+		message.setUserId(userId);
 		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 		addTagClient.close();
 		if (response.getStatusCode() != 0)
@@ -484,9 +471,7 @@ public class RandomIdeaController implements Serializable {
 		message.setTeId(1);
 		message.setTtId(3);
 		message.setDuplicate(true);
-		// message.setUserId((Long)
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
-		message.setUserId(0l);
+		message.setUserId(userId);
 		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 		addTagClient.close();
 		if (response.getStatusCode() != 0)
@@ -547,9 +532,7 @@ public class RandomIdeaController implements Serializable {
 			}
 			WebClient addIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/add");
 			IdeaMessage ideaMessage = new IdeaMessage();
-			// ideaMessage.setCrtdById((Long)
-			// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
-			ideaMessage.setCrtdById(0l);
+			ideaMessage.setCrtdById(userId);
 			ideaMessage.setCrtdDate(new Date());
 			ideaMessage.setIdeaBa(ideaBean.getIdeaBa());
 			ideaMessage.setIdeaDesc(ideaBean.getIdeaDesc());
@@ -557,7 +540,6 @@ public class RandomIdeaController implements Serializable {
 			ideaMessage.setIdeaId(COUNTER.getNextId("IpIdea"));
 			ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
-			// ideaMessage.setGroupIdList(getSelGroupIds());
 			ideaMessage.setGroupIdList(toLongArray(selGrpId));
 			if (saveAsOpen) {
 				ideaMessage.setSetStatusId(2l);
@@ -594,6 +576,10 @@ public class RandomIdeaController implements Serializable {
 				}
 				uploadContent = null;
 				saveAsOpen = false;
+				if (ideaMessage.getSetStatusId().longValue() == 2l)
+					showViewOpenIdeas();
+				else
+					showViewIdeas();
 				return redirectMain();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -601,7 +587,7 @@ public class RandomIdeaController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create Idea request", "System error occurred, cannot perform create Idea request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -628,7 +614,6 @@ public class RandomIdeaController implements Serializable {
 			ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
 			ideaMessage.setSetStatusId(ideaBean.getSetStatusId());
-			// ideaMessage.setGroupIdList(getSelGroupIds());
 			ideaMessage.setGroupIdList(toLongArray(selGrpId));
 			ResponseMessage response = updateIdeaClient.accept(MediaType.APPLICATION_JSON).put(ideaMessage, ResponseMessage.class);
 			updateIdeaClient.close();
@@ -685,6 +670,10 @@ public class RandomIdeaController implements Serializable {
 					}
 				}
 				uploadContent = null;
+				if (ideaMessage.getSetStatusId().longValue() == 2l)
+					showViewOpenIdeas();
+				else
+					showViewIdeas();
 				return redirectMain();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -692,7 +681,7 @@ public class RandomIdeaController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update Idea request", "System error occurred, cannot perform update Idea request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -753,7 +742,7 @@ public class RandomIdeaController implements Serializable {
 			this.ideaBean.setContentType(file.getContentType());
 			this.ideaBean.setFileName(file.getFileName());
 		} catch (Exception e) {
-			
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform upload request", "System error occurred, cannot perform upload request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}

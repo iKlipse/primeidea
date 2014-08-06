@@ -1,6 +1,6 @@
 package za.co.idea.ip.portal.controller;
 
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,6 +14,7 @@ import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.jaxrs.client.WebClient;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 
 import za.co.idea.ip.ws.bean.MetaDataMessage;
@@ -24,8 +25,10 @@ import za.co.idea.ip.portal.util.IdNumberGen;
 
 @ManagedBean(name = "metaDataController")
 @SessionScoped
-public class MetaDataController {
+public class MetaDataController implements Serializable {
 
+	private static final long serialVersionUID = 8397485968804102001L;
+	private static final Logger logger = Logger.getLogger(MetaDataController.class);
 	private HashMap<String, String> metaList;
 	private boolean showAddPanel;
 	private boolean showModPanel;
@@ -46,7 +49,7 @@ public class MetaDataController {
 		client.header("Accept", "application/json");
 		return client;
 	}
-	
+
 	public void initializePage() {
 		try {
 			this.showAddPanel = false;
@@ -54,7 +57,7 @@ public class MetaDataController {
 			this.showAddBtn = false;
 			this.table = "";
 			this.beans = null;
-			showMetadataMaintain=true;
+			showMetadataMaintain = true;
 			if (toView != null && Integer.valueOf(toView) != -1) {
 				switch (Integer.valueOf(toView)) {
 				case 1:
@@ -63,20 +66,21 @@ public class MetaDataController {
 					this.showAddBtn = false;
 					this.table = "";
 					this.beans = null;
-					showMetadataMaintain=true;
+					showMetadataMaintain = true;
 					break;
 				default:
 					break;
 				}
 			}
-			
+
 		} catch (Exception e) {
-			
+			logger.error(e, e);
+
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
 	}
-	
+
 	public String redirectMain() {
 		switch (Integer.valueOf(returnView)) {
 		case 1:
@@ -94,7 +98,7 @@ public class MetaDataController {
 		this.showAddBtn = false;
 		this.table = "";
 		this.beans = null;
-		showMetadataMaintain=true;
+		showMetadataMaintain = true;
 	}
 
 	public String showMetaData() {
@@ -102,7 +106,7 @@ public class MetaDataController {
 		this.showModPanel = true;
 		selId = bean.getId().toString();
 		selVal = bean.getDesc();
-		showMetadataMaintain=true;
+		showMetadataMaintain = true;
 		return "";
 	}
 
@@ -113,7 +117,7 @@ public class MetaDataController {
 		this.showAddBtn = false;
 		this.showAddPanel = true;
 		this.showModPanel = false;
-		showMetadataMaintain=true;
+		showMetadataMaintain = true;
 		return "";
 	}
 
@@ -126,7 +130,7 @@ public class MetaDataController {
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			this.showAddPanel = false;
 			this.showModPanel = true;
-			showMetadataMaintain=true;
+			showMetadataMaintain = true;
 			return "";
 		}
 		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/modify");
@@ -138,7 +142,7 @@ public class MetaDataController {
 		mDataClient.close();
 		if (response.getStatusCode() == 0) {
 			beans = fetchAllMetadata();
-			showMetadataMaintain=true;
+			showMetadataMaintain = true;
 			return "";
 		} else {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -151,7 +155,7 @@ public class MetaDataController {
 		this.showAddPanel = false;
 		this.showModPanel = false;
 		this.showAddBtn = true;
-		showMetadataMaintain=true;
+		showMetadataMaintain = true;
 		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/delete");
 		MetaDataMessage message = new MetaDataMessage();
 		message.setDesc(selVal);

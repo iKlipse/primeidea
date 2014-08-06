@@ -23,7 +23,7 @@ public class StartUpImageSyncJob {
 			FileUtils.copyDirectory(srcFile, destFile);
 		} catch (IOException e) {
 			logger.error("Error : " + e.getMessage());
-			
+
 		}
 	}
 }

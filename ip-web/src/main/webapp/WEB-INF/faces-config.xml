@@ -66,6 +66,9 @@
 		<navigation-case>
 			<from-outcome>rpw</from-outcome>
 			<to-view-id>/pages/admin/rPwd.xhtml</to-view-id>
+			<redirect>
+				true
+			</redirect>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>home</from-outcome>
@@ -79,7 +82,7 @@
 			<from-outcome>admeu</from-outcome>
 			<to-view-id>/pages/admin/editUser.xhtml</to-view-id>
 		</navigation-case>
-			<navigation-case>
+		<navigation-case>
 			<from-outcome>upe</from-outcome>
 			<to-view-id>/pages/admin/editProfile.xhtml</to-view-id>
 		</navigation-case>
