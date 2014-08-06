@@ -1,34 +1,28 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<ui:define name="title">View News</ui:define>
-	<ui:define name="body">
-		<p:panel id="cctrViewNews" style="width: 100% !important">
-			<f:facet name="header">
-					News
+<ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="adminBody">
+		<p:dataGrid id="cdgNews" value="#{newsBean.viewNewsBeans}" var="news" columns="1">
+			<p:panel style="border: 0px !important;">
+				<f:facet name="header">
+					<p:outputLabel id="clblNewsDate" value="#{news.nStartDate}" style="float: right !important" />
 				</f:facet>
-			<p:dataGrid id="cdgNews" value="#{newsBean.viewNewsBeans}" var="news" columns="1">
-				<p:panel style="border: 0px !important;">
-					<f:facet name="header">
-						<p:outputLabel id="clblNewsDate" value="#{news.nStartDate}" style="float: right !important" />
-					</f:facet>
-					<p:panelGrid columns="1" id="cpnlNews">
-						<p:column>						    
-							<p:lightBox>
-								<h:outputLink value="../../resources/images/#{news.newsUrl}" title="#{news.nTitle}">
-									<p:graphicImage library="images" name="#{news.newsUrl}" height="150px" width="150px" />
-								</h:outputLink>
-							</p:lightBox>
-						</p:column>
-						<p:column>
-							<h3>
-								<p:outputLabel id="clblITitle" value="#{news.nTitle}" />
-							</h3>
-						</p:column>
-						<p:column>
-							<p:outputLabel id="ctxtIDesc" value="#{news.nContent}" escape="false" />
-						</p:column>
-					</p:panelGrid>
-				</p:panel>
-			</p:dataGrid>
-		</p:panel>
+				<p:panelGrid columns="1" id="cpnlNews">
+					<p:column>
+						<p:lightBox>
+							<h:outputLink value="../../resources/images/#{news.newsUrl}" title="#{news.nTitle}">
+								<p:graphicImage library="images" name="#{news.newsUrl}" height="150px" width="150px" />
+							</h:outputLink>
+						</p:lightBox>
+					</p:column>
+					<p:column>
+						<h3>
+							<p:outputLabel id="clblITitle" value="#{news.nTitle}" />
+						</h3>
+					</p:column>
+					<p:column>
+						<p:outputLabel id="ctxtIDesc" value="#{news.nContent}" escape="false" />
+					</p:column>
+				</p:panelGrid>
+			</p:panel>
+		</p:dataGrid>
 	</ui:define>
 </ui:composition>

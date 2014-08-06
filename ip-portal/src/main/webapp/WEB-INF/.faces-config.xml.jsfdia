@@ -220,9 +220,9 @@
     PATH="/views/admin/misc/allocatePoints.xhtml"
     TARGET="rules:#views#admin#misc#allocatePoints.xhtml" TITLE="admap" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="admmm::#views#admin#misc#maintainMetadata.xhtml" NAME="output1"
-    PATH="/views/admin/misc/maintainMetadata.xhtml"
-    TARGET="rules:#views#admin#misc#maintainMetadata.xhtml"
+    ID="admmm::#views#admin#misc#maintainMetaData.xhtml" NAME="output1"
+    PATH="/views/admin/misc/maintainMetaData.xhtml"
+    TARGET="rules:#views#admin#misc#maintainMetaData.xhtml"
     TITLE="admmm" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="admmpa::#views#admin#misc#maintainPointAllocation.xhtml"
@@ -234,8 +234,6 @@
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#views#admin#misc#allocatePoints.xhtml"
   PATH="/views/admin/misc/allocatePoints.xhtml" SHAPE="240,2721,0,0" model-entity="JSFProcessGroup"/>
- <PROCESS-ITEM NAME="rules:#views#admin#misc#maintainMetadata.xhtml"
-  PATH="/views/admin/misc/maintainMetadata.xhtml" SHAPE="256,2721,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM
   NAME="rules:#views#admin#misc#maintainPointAllocation.xhtml"
   PATH="/views/admin/misc/maintainPointAllocation.xhtml"
@@ -283,4 +281,6 @@
   PATH="/views/admin/function/create.xhtml" SHAPE="272,4785,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#views#admin#function#edit.xhtml"
   PATH="/views/admin/function/edit.xhtml" SHAPE="272,4961,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#views#admin#misc#maintainMetaData.xhtml"
+  PATH="/views/admin/misc/maintainMetaData.xhtml" SHAPE="272,2721,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

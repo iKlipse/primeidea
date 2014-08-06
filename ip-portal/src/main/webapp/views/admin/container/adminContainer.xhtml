@@ -6,45 +6,51 @@
 			<p:panel id="pnlAdmin" style="border: 0px !important" header="Admin Panel">
 				<f:facet name="options">
 					<p:menu style="vertical-align: center !important">
-						<p:menuitem value="View Users" ajax="false" immediate="true" action="#{adminController.showViewUsers}">
-							<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
-						</p:menuitem>
-						<p:menuitem value="Create User" ajax="false" immediate="true" action="#{adminController.showCreateUser}">
-							<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
-						</p:menuitem>
-						<p:menuitem value="Upload" ajax="false" immediate="true" action="#{adminController.showUploadUsers}">
-							<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
-						</p:menuitem>
-						<p:menuitem value="Create Group" ajax="false" immediate="true" action="#{adminController.showCreateGroup}">
-							<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
-						</p:menuitem>
-						<p:menuitem value="View Groups" ajax="false" immediate="true" action="#{adminController.showViewGroups}">
-							<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
-						</p:menuitem>
-						<p:menuitem value="View Functions" ajax="false" immediate="true" action="#{adminController.showViewFunction}">
-							<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
-						</p:menuitem>
-						<p:menuitem value="Create News" ajax="false" immediate="true" action="#{adminController.showCreateNews}">
-							<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
-						</p:menuitem>
-						<p:menuitem value="View News" ajax="false" immediate="true" action="#{adminController.showViewNews}">
-							<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
-						</p:menuitem>
-						<p:menuitem value="Allocate Points" ajax="false" immediate="true" action="#{adminController.showAllocatePoints}">
-							<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
-						</p:menuitem>
-						<p:menuitem value="Maintain Point Allocation" ajax="false" immediate="true" action="#{adminController.showPointAllocation}">
-							<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
-						</p:menuitem>
-						<p:menuitem value="Maintain MetaData" ajax="false" immediate="true" action="#{adminController.showMetadataMaintain}">
-							<f:setPropertyActionListener value="2" target="#{metaDataController.returnView}" />
-						</p:menuitem>
-						<p:menuitem value="Send Broadcast" ajax="false" immediate="true" action="#{adminController.showCreateNotification}">
-							<f:setPropertyActionListener value="2" target="#{notificationController.returnView}" />
-						</p:menuitem>
+						<p:submenu label="Users">
+							<p:menuitem value="View Users" ajax="false" immediate="true" action="#{adminController.showViewUsers}">
+								<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+							</p:menuitem>
+							<p:menuitem value="Create User" ajax="false" immediate="true" action="#{adminController.showCreateUser}">
+								<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+							</p:menuitem>
+							<p:menuitem value="Upload" ajax="false" immediate="true" action="#{adminController.showUploadUsers}">
+								<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+							</p:menuitem>
+						</p:submenu>
+						<p:submenu label="Groups">
+							<p:menuitem value="Create Group" ajax="false" immediate="true" action="#{adminController.showCreateGroup}">
+								<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+							</p:menuitem>
+							<p:menuitem value="View Groups" ajax="false" immediate="true" action="#{adminController.showViewGroups}">
+								<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+							</p:menuitem>
+							<p:menuitem value="View Functions" ajax="false" immediate="true" action="#{adminController.showViewFunction}">
+								<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+							</p:menuitem>
+						</p:submenu>
+						<p:submenu label="Misc">
+							<p:menuitem value="Create News" ajax="false" immediate="true" action="#{adminController.showCreateNews}">
+								<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+							</p:menuitem>
+							<p:menuitem value="View News" ajax="false" immediate="true" action="#{adminController.showViewNews}">
+								<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+							</p:menuitem>
+							<p:menuitem value="Allocate Points" ajax="false" immediate="true" action="#{adminController.showAllocatePoints}">
+								<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+							</p:menuitem>
+							<p:menuitem value="Maintain Point Allocation" ajax="false" immediate="true" action="#{adminController.showPointAllocation}">
+								<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+							</p:menuitem>
+							<p:menuitem value="Maintain MetaData" ajax="false" immediate="true" action="#{adminController.showMetadataMaintain}">
+								<f:setPropertyActionListener value="2" target="#{metaDataController.returnView}" />
+							</p:menuitem>
+							<p:menuitem value="Send Broadcast" ajax="false" immediate="true" action="#{adminController.showCreateNotification}">
+								<f:setPropertyActionListener value="2" target="#{notificationController.returnView}" />
+							</p:menuitem>
+						</p:submenu>
 					</p:menu>
-					<ui:insert name="adminBody" />
 				</f:facet>
+				<ui:insert name="adminBody" />
 			</p:panel>
 		</h:form>
 	</h:body>

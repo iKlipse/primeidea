@@ -266,19 +266,6 @@ public class AdminController implements Serializable {
 		}
 	}
 
-	public String showViewGroups() {
-		try {
-			pGrps = viewGroups = fetchAllGroups();
-			admUsers = fetchAllUsers();
-			return "admgv";
-		} catch (Exception e) {
-
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot view groups request", "System error occurred, cannot view groups request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
-		}
-	}
-
 	public String showAllocatePoints() {
 		try {
 			entity = "";
@@ -315,6 +302,19 @@ public class AdminController implements Serializable {
 		} catch (Exception e) {
 
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showViewGroups() {
+		try {
+			pGrps = viewGroups = fetchAllGroups();
+			admUsers = fetchAllUsers();
+			return "admgv";
+		} catch (Exception e) {
+
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot view groups request", "System error occurred, cannot view groups request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
@@ -368,7 +368,7 @@ public class AdminController implements Serializable {
 					fileAvail = true;
 					fileContent = null;
 				}
-				return "groupe";
+				return "admge";
 			} catch (Exception e) {
 
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");

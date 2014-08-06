@@ -119,7 +119,7 @@
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>admmm</from-outcome>
-			<to-view-id>/views/admin/misc/maintainMetadata.xhtml</to-view-id>
+			<to-view-id>/views/admin/misc/maintainMetaData.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>admmpa</from-outcome>
