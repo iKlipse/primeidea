@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -38,6 +39,7 @@ import za.co.idea.ip.ws.util.CustomObjectMapper;
 public class BuildonController implements Serializable {
 
 	private static final long serialVersionUID = -6184166952920477924L;
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 	private List<TagBean> buildons;
 	private TagBean buildon;
@@ -83,20 +85,20 @@ public class BuildonController implements Serializable {
 		showBuildonComments = false;
 		showBuildonLikes = false;
 		try {
-			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + buildon.getTagId() + "/ip_tag");
+			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + buildon.getTagId() + "/ip_tag");
 			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 			getBlobClient.close();
 			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 				client.header("Content-Type", "application/json");
 				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 				if (attachment != null) {
 					fileAvail = false;
-					WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+					WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
 					String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 					getBlobTypeClient.close();
 					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
@@ -119,7 +121,7 @@ public class BuildonController implements Serializable {
 	}
 
 	public String likeBuildon() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(buildon.getTagId());
 		message.setTagId(COUNTER.getNextId("IpTag"));
@@ -139,7 +141,7 @@ public class BuildonController implements Serializable {
 	}
 
 	public void commentBuildon() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(buildon.getTagId());
 		message.setTagId(COUNTER.getNextId("IpTag"));
@@ -160,7 +162,7 @@ public class BuildonController implements Serializable {
 	}
 
 	public String createBuildOn() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(entityId);
 		message.setTagId(COUNTER.getNextId("IpTag"));
@@ -173,7 +175,7 @@ public class BuildonController implements Serializable {
 		addTagClient.close();
 		if (response.getStatusCode() == 0) {
 			if (image != null) {
-				WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+				WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
 				AttachmentMessage attach = new AttachmentMessage();
 				attach.setBlobContentType(contentType);
 				attach.setBlobEntityId(message.getTagId());
@@ -182,7 +184,7 @@ public class BuildonController implements Serializable {
 				attach.setBlobId(COUNTER.getNextId("IpBlob"));
 				Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
 				if (crtRes.getStatus() == 200) {
-					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + attach.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 					client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 					client.header("Accept", "application/json");
 					Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
@@ -205,7 +207,7 @@ public class BuildonController implements Serializable {
 	}
 
 	private List<TagBean> fetchAllBuildOns() {
-		WebClient fetchIdeaBuildOnsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + entityId + "/" + entityType + "/3");
+		WebClient fetchIdeaBuildOnsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + entityId + "/" + entityType + "/3");
 		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaBuildOnsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchIdeaBuildOnsClient.close();
 		List<TagBean> ret = new ArrayList<TagBean>();
@@ -222,7 +224,7 @@ public class BuildonController implements Serializable {
 
 	private TagCloudModel fetchAllBuildonLikes() {
 		TagCloudModel likes = new DefaultTagCloudModel();
-		WebClient fetchBuildonLikesClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + buildon.getTagId() + "/5/1");
+		WebClient fetchBuildonLikesClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + buildon.getTagId() + "/5/1");
 		Collection<? extends TagMessage> likeList = new ArrayList<TagMessage>(fetchBuildonLikesClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchBuildonLikesClient.close();
 		for (TagMessage tagMessage : likeList)
@@ -231,7 +233,7 @@ public class BuildonController implements Serializable {
 	}
 
 	private List<TagBean> fetchAllBuildonComments() {
-		WebClient fetchBuildonCommentsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + buildon.getTagId() + "/5/2");
+		WebClient fetchBuildonCommentsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + buildon.getTagId() + "/5/2");
 		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchBuildonCommentsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchBuildonCommentsClient.close();
 		List<TagBean> ret = new ArrayList<TagBean>();

@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -54,6 +55,7 @@ public class RandomIdeaController implements Serializable {
 
 	private static final long serialVersionUID = 2409570255777650709L;
 	private static final Logger logger = Logger.getLogger(RandomIdeaController.class);
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
 	private IdeaBean ideaBean;
 	private List<UserBean> admUsers;
 	private List<ListSelectorBean> ideaCats;
@@ -101,7 +103,7 @@ public class RandomIdeaController implements Serializable {
 		try {
 			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 			User user = (User) request.getAttribute(WebKeys.USER);
-			WebClient client = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
 			viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(2, userId);
@@ -226,14 +228,14 @@ public class RandomIdeaController implements Serializable {
 			pGrps = RESTServiceHelper.fetchAllGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
-				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
+				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
 				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 				getBlobClient.close();
 				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 					client.header("Content-Type", "application/json");
 					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
@@ -277,14 +279,14 @@ public class RandomIdeaController implements Serializable {
 			pGrps = RESTServiceHelper.fetchAllGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
-				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
+				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
 				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 				getBlobClient.close();
 				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 					client.header("Content-Type", "application/json");
 					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
@@ -333,14 +335,14 @@ public class RandomIdeaController implements Serializable {
 		showIdeaBuildOns = false;
 		ideaBean.setTaggable(ideaBean.getSetStatusId() != 2);
 		try {
-			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
+			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
 			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 			getBlobClient.close();
 			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 				client.header("Content-Type", "application/json");
 				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
@@ -379,14 +381,14 @@ public class RandomIdeaController implements Serializable {
 		showIdeaBuildOns = false;
 		ideaBean.setTaggable(ideaBean.getSetStatusId() != 2);
 		try {
-			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
+			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
 			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 			getBlobClient.close();
 			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 				client.header("Content-Type", "application/json");
 				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
@@ -428,7 +430,7 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	public void likeIdea() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
 		message.setTagId(COUNTER.getNextId("IpTag"));
@@ -448,7 +450,7 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	public void commentIdea() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
 		message.setTagId(COUNTER.getNextId("IpTag"));
@@ -470,7 +472,7 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	public void buildOnIdea() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
 		message.setTagId(COUNTER.getNextId("IpTag"));
@@ -511,7 +513,7 @@ public class RandomIdeaController implements Serializable {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter Title to Check Availability", "Enter Title to Check Availability");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
-		WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/check/title/" + ideaBean.getIdeaTitle());
+		WebClient checkAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/check/title/" + ideaBean.getIdeaTitle());
 		Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 		checkAvailablityClient.close();
 		titleAvail = avail.booleanValue();
@@ -537,7 +539,7 @@ public class RandomIdeaController implements Serializable {
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
 			}
-			WebClient addIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/add");
+			WebClient addIdeaClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/add");
 			IdeaMessage ideaMessage = new IdeaMessage();
 			ideaMessage.setCrtdById(userId);
 			ideaMessage.setCrtdDate(new Date());
@@ -557,7 +559,7 @@ public class RandomIdeaController implements Serializable {
 			addIdeaClient.close();
 			if (response.getStatusCode() == 0) {
 				if (uploadContent != null) {
-					WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+					WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
 					AttachmentMessage message = new AttachmentMessage();
 					message.setBlobContentType(ideaBean.getContentType());
 					message.setBlobEntityId(ideaMessage.getIdeaId());
@@ -567,7 +569,7 @@ public class RandomIdeaController implements Serializable {
 					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
 					createBlobClient.close();
 					if (crtRes.getStatus() == 200) {
-						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + message.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+						WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + message.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 						client.header("Accept", "application/json");
 						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment;filename=" + ideaBean.getFileName())));
@@ -610,7 +612,7 @@ public class RandomIdeaController implements Serializable {
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
 			}
-			WebClient updateIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/modify");
+			WebClient updateIdeaClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/modify");
 			IdeaMessage ideaMessage = new IdeaMessage();
 			ideaMessage.setCrtdById(ideaBean.getCrtdById());
 			ideaMessage.setCrtdDate(new Date());
@@ -626,10 +628,10 @@ public class RandomIdeaController implements Serializable {
 			updateIdeaClient.close();
 			if (response.getStatusCode() == 0) {
 				if (uploadContent != null) {
-					WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
+					WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
 					Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 					if (blobId == -999) {
-						WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+						WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
 						AttachmentMessage message = new AttachmentMessage();
 						message.setBlobContentType(ideaBean.getContentType());
 						message.setBlobEntityId(ideaBean.getIdeaId());
@@ -638,7 +640,7 @@ public class RandomIdeaController implements Serializable {
 						message.setBlobId(COUNTER.getNextId("IpBlob"));
 						Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
 						if (crtRes.getStatus() == 200) {
-							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + message.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + message.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment;filename=" + ideaBean.getFileName())));
@@ -651,7 +653,7 @@ public class RandomIdeaController implements Serializable {
 							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 						}
 					} else {
-						WebClient updateBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/update");
+						WebClient updateBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/update");
 						AttachmentMessage message = new AttachmentMessage();
 						message.setBlobContentType(ideaBean.getContentType());
 						message.setBlobEntityId(ideaBean.getIdeaId());
@@ -661,7 +663,7 @@ public class RandomIdeaController implements Serializable {
 						Response updRes = updateBlobClient.accept(MediaType.APPLICATION_JSON).put(message);
 						updateBlobClient.close();
 						if (updRes.getStatus() == 200) {
-							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), uploadContent.getStream(), new ContentDisposition("attachment;filename=" + ideaBean.getFileName())));
@@ -704,7 +706,7 @@ public class RandomIdeaController implements Serializable {
 
 	private TagCloudModel fetchAllLikes() {
 		TagCloudModel likes = new DefaultTagCloudModel();
-		WebClient fetchIdeaLikesClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/1");
+		WebClient fetchIdeaLikesClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/1");
 		Collection<? extends TagMessage> likeList = new ArrayList<TagMessage>(fetchIdeaLikesClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchIdeaLikesClient.close();
 		for (TagMessage tagMessage : likeList)
@@ -713,7 +715,7 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	private List<TagBean> fetchAllComments() {
-		WebClient fetchIdeaCommentsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/2");
+		WebClient fetchIdeaCommentsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/2");
 		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaCommentsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchIdeaCommentsClient.close();
 		List<TagBean> ret = new ArrayList<TagBean>();
@@ -728,7 +730,7 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	private List<TagBean> fetchAllBuildOns() {
-		WebClient fetchIdeaBuildOnsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/3");
+		WebClient fetchIdeaBuildOnsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/3");
 		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaBuildOnsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchIdeaBuildOnsClient.close();
 		List<TagBean> ret = new ArrayList<TagBean>();

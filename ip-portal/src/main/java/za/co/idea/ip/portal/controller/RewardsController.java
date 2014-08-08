@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -58,7 +59,7 @@ public class RewardsController implements Serializable {
 
 	private static final long serialVersionUID = -5950221141502328656L;
 	private static final Logger logger = Logger.getLogger(RewardsController.class);
-
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
 	private RewardsBean rewardsBean;
 	private StreamedContent fileContent;
 	private StreamedContent uploadContent;
@@ -131,7 +132,7 @@ public class RewardsController implements Serializable {
 		try {
 			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 			User user = (User) request.getAttribute(WebKeys.USER);
-			WebClient client = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
 			admUsers = fetchAllUsers();
@@ -305,20 +306,20 @@ public class RewardsController implements Serializable {
 			pGrps = fetchAllGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
-				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + rewardsBean.getRwId() + "/ip_rewards");
+				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + rewardsBean.getRwId() + "/ip_rewards");
 				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 				getBlobClient.close();
 				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 					client.header("Content-Type", "application/json");
 					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 					if (attachment != null) {
 						fileAvail = false;
-						WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+						WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
 						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 						getBlobTypeClient.close();
 						rewardsBean.setRwFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
@@ -402,7 +403,7 @@ public class RewardsController implements Serializable {
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
 			}
-			WebClient addRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/add");
+			WebClient addRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/add");
 			RewardsMessage message = new RewardsMessage();
 			message.setrCatId(rewardsBean.getrCatId());
 			message.setRwCrtdDt(new Date());
@@ -421,7 +422,7 @@ public class RewardsController implements Serializable {
 			addRewardsClient.close();
 			if (response.getStatusCode() == 0) {
 				if (uploadContent != null) {
-					WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+					WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
 					AttachmentMessage attach = new AttachmentMessage();
 					attach.setBlobContentType(rewardsBean.getRwFileType());
 					attach.setBlobEntityId(message.getRwId());
@@ -431,7 +432,7 @@ public class RewardsController implements Serializable {
 					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
 					createBlobClient.close();
 					if (crtRes.getStatus() == 200) {
-						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+						WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 						client.header("Accept", "application/json");
 						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment;filename=" + rewardsBean.getRwFileName())));
@@ -467,7 +468,7 @@ public class RewardsController implements Serializable {
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
 			}
-			WebClient updateRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/modify");
+			WebClient updateRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/modify");
 			RewardsMessage message = new RewardsMessage();
 			message.setrCatId(rewardsBean.getrCatId());
 			message.setRwCrtdDt(new Date());
@@ -486,10 +487,10 @@ public class RewardsController implements Serializable {
 			updateRewardsClient.close();
 			if (response.getStatusCode() == 0) {
 				if (uploadContent != null) {
-					WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + rewardsBean.getRwId() + "/ip_rewards");
+					WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + rewardsBean.getRwId() + "/ip_rewards");
 					Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 					if (blobId == -999) {
-						WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+						WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
 						AttachmentMessage attach = new AttachmentMessage();
 						attach.setBlobContentType(rewardsBean.getRwFileType());
 						attach.setBlobEntityId(rewardsBean.getRwId());
@@ -498,7 +499,7 @@ public class RewardsController implements Serializable {
 						attach.setBlobId(COUNTER.getNextId("IpBlob"));
 						Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
 						if (crtRes.getStatus() == 200) {
-							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment;filename=" + rewardsBean.getRwFileName())));
@@ -511,7 +512,7 @@ public class RewardsController implements Serializable {
 							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 						}
 					} else {
-						WebClient updateBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/update");
+						WebClient updateBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/update");
 						AttachmentMessage attach = new AttachmentMessage();
 						attach.setBlobContentType(rewardsBean.getRwFileType());
 						attach.setBlobEntityId(rewardsBean.getRwId());
@@ -521,7 +522,7 @@ public class RewardsController implements Serializable {
 						Response updRes = updateBlobClient.accept(MediaType.APPLICATION_JSON).put(attach);
 						updateBlobClient.close();
 						if (updRes.getStatus() == 200) {
-							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), uploadContent.getStream(), new ContentDisposition("attachment;filename=" + rewardsBean.getRwFileName())));
@@ -551,7 +552,7 @@ public class RewardsController implements Serializable {
 
 	public void saveAllocation() {
 		try {
-			WebClient saveAllocClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/alloc/add");
+			WebClient saveAllocClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/alloc/add");
 			AllocationMessage message = new AllocationMessage();
 			message.setAllocDesc(allocationBean.getAllocDesc());
 			message.setAllocEntity(entity);
@@ -578,7 +579,7 @@ public class RewardsController implements Serializable {
 
 	public void savePoints() {
 		try {
-			WebClient savePointsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/points/add");
+			WebClient savePointsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/points/add");
 			PointMessage message = new PointMessage();
 			message.setAllocId(selAllocId);
 			message.setPointId(COUNTER.getNextId("IpPoints"));
@@ -608,7 +609,7 @@ public class RewardsController implements Serializable {
 
 	public void updateAllocation() {
 		try {
-			WebClient updateAllocClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/alloc/update");
+			WebClient updateAllocClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/alloc/update");
 			AllocationMessage message = new AllocationMessage();
 			message.setAllocDesc(allocationBean.getAllocDesc());
 			message.setAllocEntity(entity);
@@ -635,7 +636,7 @@ public class RewardsController implements Serializable {
 
 	public void deleteAllocation() {
 		try {
-			WebClient updateAllocClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/alloc/delete");
+			WebClient updateAllocClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/alloc/delete");
 			AllocationMessage message = new AllocationMessage();
 			message.setAllocDesc(allocationBean.getAllocDesc());
 			message.setAllocEntity(entity);
@@ -661,7 +662,7 @@ public class RewardsController implements Serializable {
 
 	private List<UserBean> fetchAllUsers() {
 		List<UserBean> ret = new ArrayList<UserBean>();
-		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/list/sort/pg");
+		WebClient viewUsersClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/list/sort/pg");
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
 		viewUsersClient.close();
 		for (UserMessage userMessage : users) {
@@ -687,7 +688,7 @@ public class RewardsController implements Serializable {
 	}
 
 	public void addToWishlist() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(rewardsBean.getRwId());
 		message.setTagId(COUNTER.getNextId("IpTag"));
@@ -703,7 +704,7 @@ public class RewardsController implements Serializable {
 	}
 
 	public void removeFromWishlist() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(rewardsBean.getRwId());
 		message.setTagId(COUNTER.getNextId("IpTag"));
@@ -721,7 +722,7 @@ public class RewardsController implements Serializable {
 	private List<RewardsBean> fetchAllAvailableRewardsByCat() {
 		fetchAllPointsByUser();
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
-		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list/cat/" + selRwCatId);
+		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list/cat/" + selRwCatId);
 		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
 		viewRewardsClient.close();
 		for (RewardsMessage message : rewards) {
@@ -753,7 +754,7 @@ public class RewardsController implements Serializable {
 	private List<RewardsBean> fetchAllRewards() {
 		fetchAllPointsByUser();
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
-		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list");
+		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list");
 		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
 		viewRewardsClient.close();
 		for (RewardsMessage message : rewards) {
@@ -783,9 +784,9 @@ public class RewardsController implements Serializable {
 	private List<RewardsBean> fetchAllRewardsByUser() {
 		fetchAllPointsByUser();
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
-		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list/" + userId);
+		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list/" + userId);
 		// WebClient viewRewardsClient =
-		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list/0");
+		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list/0");
 		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
 		viewRewardsClient.close();
 		for (RewardsMessage message : rewards) {
@@ -814,9 +815,9 @@ public class RewardsController implements Serializable {
 
 	private List<PointBean> fetchAllPointsByUser() {
 		List<PointBean> ret = new ArrayList<PointBean>();
-		WebClient viewPointClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/points/get/user/" + userId);
+		WebClient viewPointClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/points/get/user/" + userId);
 		// WebClient viewPointClient =
-		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/points/get/user/0");
+		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/points/get/user/0");
 		Collection<? extends PointMessage> points = new ArrayList<PointMessage>(viewPointClient.accept(MediaType.APPLICATION_JSON).getCollection(PointMessage.class));
 		viewPointClient.close();
 		totalPoints = 0l;
@@ -837,7 +838,7 @@ public class RewardsController implements Serializable {
 	private List<RewardsBean> fetchAllAvailableRewards() {
 		fetchAllPointsByUser();
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
-		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list/avail");
+		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list/avail");
 		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
 		viewRewardsClient.close();
 		for (RewardsMessage message : rewards) {
@@ -866,9 +867,9 @@ public class RewardsController implements Serializable {
 	}
 
 	private boolean isWishlist(Long rwId) {
-		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/getByUser/" + rwId + "/4/4/" + userId);
+		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/getByUser/" + rwId + "/4/4/" + userId);
 		// WebClient viewRewardsClient =
-		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/getByUser/"
+		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/getByUser/"
 		// + rwId + "/4/4/0");
 		Collection<? extends TagMessage> rewards = new ArrayList<TagMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		return (rewards.size() > 0);
@@ -876,7 +877,7 @@ public class RewardsController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllRewardsCat() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewRewardsSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/cat/list");
+		WebClient viewRewardsSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/cat/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewRewardsSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewRewardsSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -904,7 +905,7 @@ public class RewardsController implements Serializable {
 
 	private List<MetaDataBean> fetchAllNonAllocStatus() {
 		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/non/" + entity);
+		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/non/" + entity);
 		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		mDataClient.close();
 		for (MetaDataMessage message : messages) {
@@ -919,7 +920,7 @@ public class RewardsController implements Serializable {
 
 	private List<AllocationBean> fetchAllAllocationsByEntity() {
 		List<AllocationBean> ret = new ArrayList<AllocationBean>();
-		WebClient allocCLient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/alloc/list/" + entity);
+		WebClient allocCLient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/alloc/list/" + entity);
 		Collection<? extends AllocationMessage> messages = new ArrayList<AllocationMessage>(allocCLient.accept(MediaType.APPLICATION_JSON).getCollection(AllocationMessage.class));
 		for (AllocationMessage message : messages) {
 			AllocationBean bean = new AllocationBean();
@@ -935,7 +936,7 @@ public class RewardsController implements Serializable {
 
 	private List<GroupBean> fetchAllGroups() {
 		List<GroupBean> ret = new ArrayList<GroupBean>();
-		WebClient viewGroupsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/list");
+		WebClient viewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/list");
 		Collection<? extends GroupMessage> groups = new ArrayList<GroupMessage>(viewGroupsClient.accept(MediaType.APPLICATION_JSON).getCollection(GroupMessage.class));
 		viewGroupsClient.close();
 		for (GroupMessage groupMessage : groups) {
@@ -972,7 +973,7 @@ public class RewardsController implements Serializable {
 
 	private GroupBean getGroupById(Long pGrpId) {
 		GroupBean bean = new GroupBean();
-		WebClient groupByIdClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/get/" + pGrpId);
+		WebClient groupByIdClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/get/" + pGrpId);
 		GroupMessage groupMessage = groupByIdClient.accept(MediaType.APPLICATION_JSON).get(GroupMessage.class);
 		groupByIdClient.close();
 		bean.setgId(groupMessage.getgId());
@@ -1167,7 +1168,7 @@ public class RewardsController implements Serializable {
 
 	public List<MetaDataBean> getChalStatusList() {
 		chalStatusList = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/ip_challenge_status");
+		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/ip_challenge_status");
 		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		mDataClient.close();
 		for (MetaDataMessage message : messages) {
@@ -1186,7 +1187,7 @@ public class RewardsController implements Serializable {
 
 	public List<MetaDataBean> getClaimStatusList() {
 		claimStatusList = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/ip_claim_status");
+		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/ip_claim_status");
 		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		mDataClient.close();
 		for (MetaDataMessage message : messages) {
@@ -1201,7 +1202,7 @@ public class RewardsController implements Serializable {
 
 	private List<MetaDataBean> fetchAllStatusList() {
 		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/" + entity);
+		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/" + entity);
 		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		mDataClient.close();
 		for (MetaDataMessage message : messages) {
@@ -1220,7 +1221,7 @@ public class RewardsController implements Serializable {
 
 	public List<MetaDataBean> getIdeaStatusList() {
 		ideaStatusList = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/ip_idea_status");
+		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/ip_idea_status");
 		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		mDataClient.close();
 		for (MetaDataMessage message : messages) {
@@ -1239,7 +1240,7 @@ public class RewardsController implements Serializable {
 
 	public List<MetaDataBean> getSolStatusList() {
 		solStatusList = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/ip_solution_status");
+		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/ip_solution_status");
 		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		mDataClient.close();
 		for (MetaDataMessage message : messages) {

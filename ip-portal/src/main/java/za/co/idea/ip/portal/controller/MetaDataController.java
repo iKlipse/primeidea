@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -29,6 +30,7 @@ public class MetaDataController implements Serializable {
 
 	private static final long serialVersionUID = 8397485968804102001L;
 	private static final Logger logger = Logger.getLogger(MetaDataController.class);
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
 	private HashMap<String, String> metaList;
 	private boolean showAddPanel;
 	private boolean showModPanel;
@@ -133,7 +135,7 @@ public class MetaDataController implements Serializable {
 			showMetadataMaintain = true;
 			return "";
 		}
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/modify");
+		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/modify");
 		MetaDataMessage message = new MetaDataMessage();
 		message.setDesc(selVal);
 		message.setId(Integer.valueOf(selId));
@@ -156,7 +158,7 @@ public class MetaDataController implements Serializable {
 		this.showModPanel = false;
 		this.showAddBtn = true;
 		showMetadataMaintain = true;
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/delete");
+		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/delete");
 		MetaDataMessage message = new MetaDataMessage();
 		message.setDesc(selVal);
 		message.setId(Integer.valueOf(selId));
@@ -184,7 +186,7 @@ public class MetaDataController implements Serializable {
 			this.showModPanel = false;
 			return "";
 		}
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/add");
+		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/add");
 		MetaDataMessage message = new MetaDataMessage();
 		message.setDesc(selVal);
 		message.setId(Integer.valueOf(selId));
@@ -217,7 +219,7 @@ public class MetaDataController implements Serializable {
 
 	private List<MetaDataBean> fetchAllMetadata() {
 		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/" + table);
+		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/" + table);
 		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		mDataClient.close();
 		for (MetaDataMessage message : messages) {

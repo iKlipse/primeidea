@@ -3,6 +3,7 @@ package za.co.idea.ip.portal.controller;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -28,6 +29,7 @@ public class LoginPortletController implements Serializable {
 
 	private static final long serialVersionUID = 1081521351048260552L;
 	private static final Logger logger = Logger.getLogger(LoginPortletController.class);
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
 	private UserBean userBean;
 
 	public void login() {
@@ -39,7 +41,7 @@ public class LoginPortletController implements Serializable {
 			}
 		}
 		try {
-			WebClient loginClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/login/" + userBean.getScName() + "/" + Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd())));
+			WebClient loginClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/login/" + userBean.getScName() + "/" + Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd())));
 			UserMessage userMessage = loginClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			loginClient.close();
 			if (userMessage != null && userMessage.getuId() != null && userMessage.getuId() == -999l) {

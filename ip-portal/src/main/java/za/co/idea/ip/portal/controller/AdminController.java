@@ -160,7 +160,7 @@ public class AdminController implements Serializable {
 		try {
 			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 			User user = (User) request.getAttribute(WebKeys.USER);
-			WebClient client = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
 			viewUsers = fetchAllUsers();
@@ -175,12 +175,12 @@ public class AdminController implements Serializable {
 		try {
 			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 			User user = (User) request.getAttribute(WebKeys.USER);
-			WebClient client = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
 			loggedScrName = message.getScName();
 			if (message.getGroupId() != null) {
-				WebClient hClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/hierarchy/" + message.getGroupId());
+				WebClient hClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/hierarchy/" + message.getGroupId());
 				hierarchy = hClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 				hClient.close();
 			} else {
@@ -188,23 +188,23 @@ public class AdminController implements Serializable {
 			}
 			try {
 				logger.info("Before image displaying");
-				WebClient docIdClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + message.getuId() + "/ip_user");
+				WebClient docIdClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + message.getuId() + "/ip_user");
 				Long blobId = docIdClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 				docIdClient.close();
 				logger.info("After getting response from service /ds/doc/getId: " + message.getuId() + " --blobId---" + blobId);
 				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 					getBlobNameClient.close();
 					logger.info("blob name: " + blobName);
-					WebClient downloadClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					WebClient downloadClient = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 					downloadClient.header("Content-Type", "application/json");
 					downloadClient.header("Accept", MediaType.MULTIPART_FORM_DATA);
 					Attachment attachment = downloadClient.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 					logger.info("After getting attachment");
 					if (attachment != null) {
 						logger.info("Before getting blob content type");
-						WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+						WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
 						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 						getBlobTypeClient.close();
 						logger.info("blob type: " + blobType);
@@ -278,21 +278,21 @@ public class AdminController implements Serializable {
 		try {
 			logger.debug("Control handled in showEditNews() method");
 			logger.info("Sending request to NewsService");
-			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + newsBean.getnId() + "/ip_news");
+			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + newsBean.getnId() + "/ip_news");
 			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 			getBlobClient.close();
 			logger.info("After gettin response from NewsService");
 			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 				client.header("Content-Type", "application/json");
 				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 				if (attachment != null) {
 					fileAvail = false;
-					WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+					WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
 					String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 					getBlobTypeClient.close();
 					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
@@ -412,20 +412,20 @@ public class AdminController implements Serializable {
 			userTwinSelect = initializeSelectedUsers(admUsers);
 			functions = fetchAllFunctionsByGroup();
 			try {
-				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + groupBean.getgId() + "/ip_group");
+				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + groupBean.getgId() + "/ip_group");
 				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 				getBlobClient.close();
 				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 					client.header("Content-Type", "application/json");
 					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 					if (attachment != null) {
 						fileAvail = false;
-						WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+						WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
 						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 						getBlobTypeClient.close();
 						groupBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
@@ -464,20 +464,20 @@ public class AdminController implements Serializable {
 			userTwinSelect = initializeSelectedUsers(admUsers);
 			functions = fetchAllFunctionsByGroup();
 			try {
-				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + groupBean.getgId() + "/ip_group");
+				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + groupBean.getgId() + "/ip_group");
 				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 				getBlobClient.close();
 				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 					client.header("Content-Type", "application/json");
 					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 					if (attachment != null) {
 						fileAvail = false;
-						WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+						WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
 						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 						getBlobTypeClient.close();
 						groupBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
@@ -626,7 +626,7 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		} else {
-			WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/login/" + userBean.getScName() + "/" + Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())));
+			WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/login/" + userBean.getScName() + "/" + Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())));
 			UserMessage userMessage = loginClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			loginClient.close();
 			if (userMessage != null && userMessage.getuId() != null && userMessage.getuId() == -999l) {
@@ -658,7 +658,7 @@ public class AdminController implements Serializable {
 				loggedScrName = userMessage.getScName();
 				secqList = fetchAllSecQ();
 				if (userMessage.getGroupId() != null) {
-					WebClient hClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/hierarchy/" + userMessage.getGroupId());
+					WebClient hClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/hierarchy/" + userMessage.getGroupId());
 					hierarchy = hClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 					hClient.close();
 				} else {
@@ -668,23 +668,23 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userId", bean.getuId());
 				try {
 					logger.info("Before image displaying");
-					WebClient docIdClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + userMessage.getuId() + "/ip_user");
+					WebClient docIdClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + userMessage.getuId() + "/ip_user");
 					Long blobId = docIdClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 					docIdClient.close();
 					logger.info("After getting response from service /ds/doc/getId: " + userMessage.getuId() + " --blobId---" + blobId);
 					if (blobId != -999l) {
-						WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+						WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 						String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 						getBlobNameClient.close();
 						logger.info("blob name: " + blobName);
-						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+						WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 						client.header("Content-Type", "application/json");
 						client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 						Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 						logger.info("After getting attachment");
 						if (attachment != null) {
 							logger.info("Before getting blob content type");
-							WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+							WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
 							String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 							getBlobTypeClient.close();
 							logger.info("blob type: " + blobType);
@@ -715,7 +715,7 @@ public class AdminController implements Serializable {
 	}
 
 	public void verifyLogin() {
-		WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/verify/" + userBean.getScName());
+		WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + userBean.getScName());
 		UserMessage userMessage = loginClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 		loginClient.close();
 		if (userMessage == null) {
@@ -738,7 +738,7 @@ public class AdminController implements Serializable {
 			}
 		} else {
 			if (Base64.encodeBase64URLSafeString(DigestUtils.md5(secA.getBytes())).equalsIgnoreCase(userBean.getSecA())) {
-				WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/rpw/");
+				WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rpw/");
 				ResponseMessage response = loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())) }, ResponseMessage.class);
 				loginClient.close();
 				if (response.getStatusCode() == 0) {
@@ -762,13 +762,13 @@ public class AdminController implements Serializable {
 		if (secQ == null || secQ.length() == 0) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Question is Mandatory", "Security Question is Mandatory");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-//			RequestContext.getCurrentInstance().openDialog("dlgSecUpdate");
+			// RequestContext.getCurrentInstance().openDialog("dlgSecUpdate");
 		} else if (secA == null || secA.length() == 0) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Answer is Mandatory", "Security Answer is Mandatory");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-//			RequestContext.getCurrentInstance().openDialog("dlgSecUpdate");
+			// RequestContext.getCurrentInstance().openDialog("dlgSecUpdate");
 		} else {
-			WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/rsec");
+			WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rsec");
 			ResponseMessage response = loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), secQ.toString(), secA }, ResponseMessage.class);
 			loginClient.close();
 			this.userBean.setSecA(secA);
@@ -776,7 +776,7 @@ public class AdminController implements Serializable {
 			if (response.getStatusCode() != 0) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusCode() + " :: " + response.getStatusDesc(), response.getStatusCode() + " :: " + response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-//				RequestContext.getCurrentInstance().closeDialog("dlgSecUpdate");
+				// RequestContext.getCurrentInstance().closeDialog("dlgSecUpdate");
 			}
 		}
 	}
@@ -787,7 +787,7 @@ public class AdminController implements Serializable {
 
 	public String savePoints() {
 		try {
-			WebClient savePointsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/points/add");
+			WebClient savePointsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/points/add");
 			PointMessage message = new PointMessage();
 			message.setAllocId(selAllocId);
 			message.setPointId(COUNTER.getNextId("IpPoints"));
@@ -875,7 +875,7 @@ public class AdminController implements Serializable {
 
 	public String updateAllocation() {
 		try {
-			WebClient updateAllocClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/alloc/update");
+			WebClient updateAllocClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/alloc/update");
 			AllocationMessage message = new AllocationMessage();
 			message.setAllocDesc(allocationBean.getAllocDesc());
 			message.setAllocEntity(entity);
@@ -903,7 +903,7 @@ public class AdminController implements Serializable {
 
 	public String deleteAllocation() {
 		try {
-			WebClient updateAllocClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/alloc/delete");
+			WebClient updateAllocClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/alloc/delete");
 			AllocationMessage message = new AllocationMessage();
 			message.setAllocDesc(allocationBean.getAllocDesc());
 			message.setAllocEntity(entity);
@@ -953,7 +953,7 @@ public class AdminController implements Serializable {
 
 	public String saveAllocation() {
 		try {
-			WebClient saveAllocClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/alloc/add");
+			WebClient saveAllocClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/alloc/add");
 			AllocationMessage message = new AllocationMessage();
 			message.setAllocDesc(allocationBean.getAllocDesc());
 			message.setAllocEntity(entity);
@@ -983,7 +983,7 @@ public class AdminController implements Serializable {
 
 	private List<MetaDataBean> fetchAllNonAllocStatus() {
 		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/non/" + entity);
+		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/non/" + entity);
 		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		mDataClient.close();
 		for (MetaDataMessage message : messages) {
@@ -998,7 +998,7 @@ public class AdminController implements Serializable {
 
 	private List<AllocationBean> fetchAllAllocationsByEntity() {
 		List<AllocationBean> ret = new ArrayList<AllocationBean>();
-		WebClient allocCLient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/alloc/list/" + entity);
+		WebClient allocCLient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/alloc/list/" + entity);
 		Collection<? extends AllocationMessage> messages = new ArrayList<AllocationMessage>(allocCLient.accept(MediaType.APPLICATION_JSON).getCollection(AllocationMessage.class));
 		for (AllocationMessage message : messages) {
 			AllocationBean bean = new AllocationBean();
@@ -1014,7 +1014,7 @@ public class AdminController implements Serializable {
 
 	private List<MetaDataBean> fetchAllStatusList() {
 		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/" + entity);
+		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/" + entity);
 		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		mDataClient.close();
 		for (MetaDataMessage message : messages) {
@@ -1029,7 +1029,7 @@ public class AdminController implements Serializable {
 
 	public List<MetaDataBean> getIdeaStatusList() {
 		ideaStatusList = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/ip_idea_status");
+		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/ip_idea_status");
 		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		mDataClient.close();
 		for (MetaDataMessage message : messages) {
@@ -1048,7 +1048,7 @@ public class AdminController implements Serializable {
 
 	public List<MetaDataBean> getSolStatusList() {
 		solStatusList = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/ip_solution_status");
+		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/ip_solution_status");
 		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		mDataClient.close();
 		for (MetaDataMessage message : messages) {
@@ -1067,7 +1067,7 @@ public class AdminController implements Serializable {
 
 	public List<MetaDataBean> getChalStatusList() {
 		chalStatusList = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/ip_challenge_status");
+		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/ip_challenge_status");
 		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		mDataClient.close();
 		for (MetaDataMessage message : messages) {
@@ -1086,7 +1086,7 @@ public class AdminController implements Serializable {
 
 	public List<MetaDataBean> getClaimStatusList() {
 		claimStatusList = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/ip_claim_status");
+		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/ip_claim_status");
 		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		mDataClient.close();
 		for (MetaDataMessage message : messages) {
@@ -1108,7 +1108,7 @@ public class AdminController implements Serializable {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter Screen Name to Check Availability", "Enter Screen Name to Check Availability");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
-		WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/screenName/" + userBean.getScName());
+		WebClient checkAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/check/screenName/" + userBean.getScName());
 		Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 		checkAvailablityClient.close();
 		available = avail.booleanValue();
@@ -1125,7 +1125,7 @@ public class AdminController implements Serializable {
 		if (userBean.geteMail() == null || userBean.geteMail().length() == 0) {
 
 		} else {
-			WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/email/" + userBean.geteMail());
+			WebClient checkAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/check/email/" + userBean.geteMail());
 			Boolean availE = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 			checkAvailablityClient.close();
 			availableEmail = availE.booleanValue();
@@ -1140,7 +1140,7 @@ public class AdminController implements Serializable {
 		if (userBean.getIdNum() == null || userBean.getIdNum() == 0) {
 
 		} else {
-			WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/idNumber/" + userBean.getIdNum());
+			WebClient checkAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/check/idNumber/" + userBean.getIdNum());
 			Boolean availID = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 			checkAvailablityClient.close();
 			availableID = availID.booleanValue();
@@ -1155,7 +1155,7 @@ public class AdminController implements Serializable {
 		if (userBean.getEmployeeId() == null || userBean.getEmployeeId().length() == 0) {
 
 		} else {
-			WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/employeeId/" + userBean.getEmployeeId());
+			WebClient checkAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/check/employeeId/" + userBean.getEmployeeId());
 			Boolean availEmpID = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 			checkAvailablityClient.close();
 			availableEmpID = availEmpID.booleanValue();
@@ -1193,7 +1193,7 @@ public class AdminController implements Serializable {
 					bean.setSecA("Johannesburg");
 					bean.setScName(bean.getlName().toLowerCase() + row.getCell(2).getStringCellValue().toLowerCase());
 					if (bean.geteMail() != null && bean.geteMail().length() != 0) {
-						WebClient checkEAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/email/" + bean.geteMail());
+						WebClient checkEAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/check/email/" + bean.geteMail());
 						Boolean availE = checkEAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 						checkEAvailablityClient.close();
 						if (availE) {
@@ -1205,7 +1205,7 @@ public class AdminController implements Serializable {
 						}
 					}
 					if (bean.getIdNum() != null) {
-						WebClient checkIAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/idNumber/" + bean.getIdNum());
+						WebClient checkIAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/check/idNumber/" + bean.getIdNum());
 						Boolean availID = checkIAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 						checkIAvailablityClient.close();
 						if (availID) {
@@ -1223,7 +1223,7 @@ public class AdminController implements Serializable {
 						continue;
 					}
 					if (bean.getEmployeeId() != null && bean.getEmployeeId().length() != 0) {
-						WebClient checkEIAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/employeeId/" + bean.getEmployeeId());
+						WebClient checkEIAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/check/employeeId/" + bean.getEmployeeId());
 						Boolean availEmpID = checkEIAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 						checkEIAvailablityClient.close();
 						if (availEmpID) {
@@ -1234,12 +1234,12 @@ public class AdminController implements Serializable {
 							continue;
 						}
 					}
-					WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/screenName/" + bean.getScName());
+					WebClient checkAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/check/screenName/" + bean.getScName());
 					Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 					checkAvailablityClient.close();
 					if (avail)
 						bean.setScName(bean.getScName() + i);
-					WebClient addUserClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/add");
+					WebClient addUserClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/add");
 					UserMessage msg = new UserMessage();
 					msg.setContact(bean.getContact());
 					msg.seteMail(bean.geteMail());
@@ -1315,7 +1315,7 @@ public class AdminController implements Serializable {
 				}
 				return "";
 			}
-			WebClient addUserClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/add");
+			WebClient addUserClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/add");
 			UserMessage bean = new UserMessage();
 			bean.setBio(userBean.getBio());
 			bean.setContact(userBean.getContact());
@@ -1341,7 +1341,7 @@ public class AdminController implements Serializable {
 			addUserClient.close();
 			if (response.getStatusCode() == 0) {
 				if (image != null) {
-					WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+					WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
 					AttachmentMessage message = new AttachmentMessage();
 					message.setBlobContentType(contentType);
 					message.setBlobEntityId(bean.getuId());
@@ -1350,7 +1350,7 @@ public class AdminController implements Serializable {
 					message.setBlobId(COUNTER.getNextId("IpBlob"));
 					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
 					if (crtRes.getStatus() == 200) {
-						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + message.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+						WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + message.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 						client.header("Accept", "application/json");
 						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
@@ -1502,7 +1502,7 @@ public class AdminController implements Serializable {
 				}
 				return "";
 			}
-			WebClient updateUserClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/modify");
+			WebClient updateUserClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/modify");
 			UserMessage bean = new UserMessage();
 			bean.setBio(userBean.getBio());
 			bean.setContact(userBean.getContact());
@@ -1525,13 +1525,13 @@ public class AdminController implements Serializable {
 			ResponseMessage response = updateUserClient.accept(MediaType.APPLICATION_JSON).put(bean, ResponseMessage.class);
 			updateUserClient.close();
 			if (resetPasswd) {
-				WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/rpw/");
+				WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rpw/");
 				loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5("Passw123".getBytes())) }, ResponseMessage.class);
 				loginClient.close();
 				resetPasswd = false;
 			}
 			if (resetSec) {
-				WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/rsec");
+				WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rsec");
 				loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), "4", "Johannesburg" }, ResponseMessage.class);
 				loginClient.close();
 				resetSec = false;
@@ -1564,7 +1564,7 @@ public class AdminController implements Serializable {
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
 			} else {
-				WebClient updateUserClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/modify");
+				WebClient updateUserClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/modify");
 				UserMessage bean = new UserMessage();
 				bean.setBio(userBean.getBio());
 				bean.setContact(userBean.getContact());
@@ -1587,13 +1587,13 @@ public class AdminController implements Serializable {
 				ResponseMessage response = updateUserClient.accept(MediaType.APPLICATION_JSON).put(bean, ResponseMessage.class);
 				updateUserClient.close();
 				if (resetPasswd) {
-					WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/rpw/");
+					WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rpw/");
 					loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5("Passw123".getBytes())) }, ResponseMessage.class);
 					loginClient.close();
 					resetPasswd = false;
 				}
 				if (resetSec) {
-					WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/rsec");
+					WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rsec");
 					loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), "4", "Johannesburg" }, ResponseMessage.class);
 					loginClient.close();
 					resetSec = false;
@@ -1631,7 +1631,7 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
-			WebClient addGroupClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/add");
+			WebClient addGroupClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/add");
 			GroupMessage groupMessage = new GroupMessage();
 			groupMessage.setAdmUserId(groupBean.getSelAdmUser());
 			groupMessage.setGeMail(groupBean.getGeMail());
@@ -1644,7 +1644,7 @@ public class AdminController implements Serializable {
 			addGroupClient.close();
 			if (response.getStatusCode() == 0) {
 				if (grpImage != null) {
-					WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+					WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
 					AttachmentMessage message = new AttachmentMessage();
 					message.setBlobContentType(grpContentType);
 					message.setBlobEntityId(groupBean.getgId());
@@ -1653,7 +1653,7 @@ public class AdminController implements Serializable {
 					message.setBlobId(COUNTER.getNextId("IpBlob"));
 					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
 					if (crtRes.getStatus() == 200) {
-						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + message.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+						WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + message.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 						client.header("Accept", "application/json");
 						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), grpImage.getStream(), new ContentDisposition("attachment;filename=" + grpFileName)));
@@ -1700,7 +1700,7 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
-			WebClient addFunctionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/func/add");
+			WebClient addFunctionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/func/add");
 			FunctionMessage functionMessage = new FunctionMessage();
 			functionMessage.setFuncId(COUNTER.getNextId("IpFunction"));
 			functionMessage.setFuncName(functionBean.getFuncName());
@@ -1735,7 +1735,7 @@ public class AdminController implements Serializable {
 				}
 				return "";
 			}
-			WebClient updateGroupClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/modify");
+			WebClient updateGroupClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/modify");
 			GroupMessage groupMessage = new GroupMessage();
 			groupMessage.setAdmUserId(groupBean.getSelAdmUser());
 			groupMessage.setGeMail(groupBean.getGeMail());
@@ -1748,10 +1748,10 @@ public class AdminController implements Serializable {
 			updateGroupClient.close();
 			if (response.getStatusCode() == 0) {
 				if (grpImage != null) {
-					WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + groupBean.getgId() + "/ip_group");
+					WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + groupBean.getgId() + "/ip_group");
 					Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 					if (blobId == -999) {
-						WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+						WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
 						AttachmentMessage message = new AttachmentMessage();
 						message.setBlobContentType(grpContentType);
 						message.setBlobEntityId(groupBean.getgId());
@@ -1760,7 +1760,7 @@ public class AdminController implements Serializable {
 						message.setBlobId(COUNTER.getNextId("IpBlob"));
 						Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
 						if (crtRes.getStatus() == 200) {
-							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + message.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + message.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), grpImage.getStream(), new ContentDisposition("attachment;filename=" + grpFileName)));
@@ -1775,7 +1775,7 @@ public class AdminController implements Serializable {
 						}
 						createBlobClient.close();
 					} else {
-						WebClient updateBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/update");
+						WebClient updateBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/update");
 						AttachmentMessage attach = new AttachmentMessage();
 						attach.setBlobContentType(grpContentType);
 						attach.setBlobEntityId(groupBean.getgId());
@@ -1785,7 +1785,7 @@ public class AdminController implements Serializable {
 						Response updRes = updateBlobClient.accept(MediaType.APPLICATION_JSON).put(attach);
 						updateBlobClient.close();
 						if (updRes.getStatus() == 200) {
-							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), grpImage.getStream(), new ContentDisposition("attachment;filename=" + grpFileName)));
@@ -1827,7 +1827,7 @@ public class AdminController implements Serializable {
 				}
 				return "";
 			}
-			WebClient updateFunctionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/func/modify");
+			WebClient updateFunctionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/func/modify");
 			FunctionMessage functionMessage = new FunctionMessage();
 			functionMessage.setFuncId(functionBean.getFuncId());
 			functionMessage.setFuncName(functionBean.getFuncName());
@@ -1854,10 +1854,10 @@ public class AdminController implements Serializable {
 
 	public void updateImage() {
 		try {
-			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + userId + "/ip_user");
+			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + userId + "/ip_user");
 			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 			if (blobId == -999) {
-				WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+				WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
 				AttachmentMessage message = new AttachmentMessage();
 				message.setBlobContentType(uploadContentType);
 				message.setBlobEntityId(userId);
@@ -1867,7 +1867,7 @@ public class AdminController implements Serializable {
 				blobId = message.getBlobId();
 				Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
 				if (crtRes.getStatus() == 200) {
-					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 					client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 					client.header("Accept", "application/json");
 					Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), uploadImage.getStream(), new ContentDisposition("attachment;filename=" + fileName)));
@@ -1884,7 +1884,7 @@ public class AdminController implements Serializable {
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
 			} else {
-				WebClient updateBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/update");
+				WebClient updateBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/update");
 				AttachmentMessage message = new AttachmentMessage();
 				message.setBlobContentType(uploadContentType);
 				message.setBlobEntityId(userId);
@@ -1894,7 +1894,7 @@ public class AdminController implements Serializable {
 				blobId = message.getBlobId();
 				Response updRes = updateBlobClient.accept(MediaType.APPLICATION_JSON).put(message);
 				if (updRes.getStatus() == 200) {
-					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 					client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 					client.header("Accept", "application/json");
 					Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), uploadImage.getStream(), new ContentDisposition("attachment;filename=" + uploadFileName)));
@@ -1942,7 +1942,7 @@ public class AdminController implements Serializable {
 	//
 	private List<UserBean> fetchAllUsers() {
 		List<UserBean> ret = new ArrayList<UserBean>();
-		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/list");
+		WebClient viewUsersClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/list");
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
 		viewUsersClient.close();
 		for (UserMessage userMessage : users) {
@@ -1972,7 +1972,7 @@ public class AdminController implements Serializable {
 
 	private List<UserBean> fetchAllUsersSortByPG() {
 		List<UserBean> ret = new ArrayList<UserBean>();
-		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/list/sort/pg");
+		WebClient viewUsersClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/list/sort/pg");
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
 		viewUsersClient.close();
 		for (UserMessage userMessage : users) {
@@ -2001,7 +2001,7 @@ public class AdminController implements Serializable {
 
 	private List<UserBean> fetchAdminUser() {
 		List<UserBean> ret = new ArrayList<UserBean>();
-		WebClient userByIdClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/get/" + 0l);
+		WebClient userByIdClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/get/" + 0l);
 		UserMessage userMessage = userByIdClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 		userByIdClient.close();
 		UserBean bean = new UserBean();
@@ -2054,7 +2054,7 @@ public class AdminController implements Serializable {
 
 	private List<GroupBean> fetchAllGroups() {
 		List<GroupBean> ret = new ArrayList<GroupBean>();
-		WebClient viewGroupsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/list");
+		WebClient viewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/list");
 		Collection<? extends GroupMessage> groups = new ArrayList<GroupMessage>(viewGroupsClient.accept(MediaType.APPLICATION_JSON).getCollection(GroupMessage.class));
 		viewGroupsClient.close();
 		for (GroupMessage groupMessage : groups) {
@@ -2076,7 +2076,7 @@ public class AdminController implements Serializable {
 
 	private List<FunctionBean> fetchAllFunctions() {
 		List<FunctionBean> ret = new ArrayList<FunctionBean>();
-		WebClient viewFunctionsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/func/list");
+		WebClient viewFunctionsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/func/list");
 		Collection<? extends FunctionMessage> functions = new ArrayList<FunctionMessage>(viewFunctionsClient.accept(MediaType.APPLICATION_JSON).getCollection(FunctionMessage.class));
 		viewFunctionsClient.close();
 		for (FunctionMessage functionMessage : functions) {
@@ -2094,7 +2094,7 @@ public class AdminController implements Serializable {
 
 	private List<FunctionBean> fetchAllFunctionsByGroup() {
 		List<FunctionBean> ret = new ArrayList<FunctionBean>();
-		WebClient viewFunctionsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/func/group/list/" + groupBean.getgId());
+		WebClient viewFunctionsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/func/group/list/" + groupBean.getgId());
 		Collection<? extends FunctionMessage> functions = new ArrayList<FunctionMessage>(viewFunctionsClient.accept(MediaType.APPLICATION_JSON).getCollection(FunctionMessage.class));
 		viewFunctionsClient.close();
 		for (FunctionMessage functionMessage : functions) {
@@ -2114,7 +2114,7 @@ public class AdminController implements Serializable {
 		List<NewsBean> ret = new ArrayList<NewsBean>();
 		try {
 			logger.debug("Control handled in fetchAllNews method of NewsController ");
-			WebClient fetchNewsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ns/news/list");
+			WebClient fetchNewsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ns/news/list");
 			Collection<? extends NewsMessage> news = new ArrayList<NewsMessage>(fetchNewsClient.accept(MediaType.APPLICATION_JSON).getCollection(NewsMessage.class));
 			fetchNewsClient.close();
 			logger.info("News data adding to List: ");
@@ -2139,7 +2139,7 @@ public class AdminController implements Serializable {
 
 	protected List<NotificationBean> fetchAllNotifications() {
 		List<NotificationBean> ret = new ArrayList<NotificationBean>();
-		WebClient fetchNotifClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/nos/notif/list/" + userId);
+		WebClient fetchNotifClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/nos/notif/list/" + userId);
 		Collection<? extends NotificationMessage> notifications = new ArrayList<NotificationMessage>(fetchNotifClient.accept(MediaType.APPLICATION_JSON).getCollection(NotificationMessage.class));
 		fetchNotifClient.close();
 		for (NotificationMessage notificationMessage : notifications) {
@@ -2160,7 +2160,7 @@ public class AdminController implements Serializable {
 
 	private List<MetaDataBean> fetchAllSecQ() {
 		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
-		WebClient metaDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/IpSecqList");
+		WebClient metaDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/IpSecqList");
 		Collection<? extends MetaDataMessage> metaDatas = new ArrayList<MetaDataMessage>(metaDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		metaDataClient.close();
 		for (MetaDataMessage metaDataMessage : metaDatas) {
@@ -2175,7 +2175,7 @@ public class AdminController implements Serializable {
 
 	private GroupBean getGroupById(Long pGrpId) {
 		GroupBean bean = new GroupBean();
-		WebClient groupByIdClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/get/" + pGrpId);
+		WebClient groupByIdClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/get/" + pGrpId);
 		GroupMessage groupMessage = groupByIdClient.accept(MediaType.APPLICATION_JSON).get(GroupMessage.class);
 		groupByIdClient.close();
 		bean.setgId(groupMessage.getgId());
@@ -2189,7 +2189,7 @@ public class AdminController implements Serializable {
 
 	private UserBean getUserById(Long id) {
 		UserBean bean = new UserBean();
-		WebClient userByIdClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/get/" + id);
+		WebClient userByIdClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/get/" + id);
 		UserMessage userMessage = userByIdClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 		userByIdClient.close();
 		bean.setBio(userMessage.getBio());
@@ -2327,7 +2327,7 @@ public class AdminController implements Serializable {
 			this.showModPanel = true;
 			return "";
 		}
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/modify");
+		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/modify");
 		MetaDataMessage message = new MetaDataMessage();
 		message.setDesc(selVal);
 		message.setId(Integer.valueOf(selId));
@@ -2348,7 +2348,7 @@ public class AdminController implements Serializable {
 		this.showAddPanel = false;
 		this.showModPanel = false;
 		this.showAddBtn = true;
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/delete");
+		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/delete");
 		MetaDataMessage message = new MetaDataMessage();
 		message.setDesc(selVal);
 		message.setId(Integer.valueOf(selId));
@@ -2376,7 +2376,7 @@ public class AdminController implements Serializable {
 			this.showModPanel = false;
 			return "";
 		}
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/add");
+		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/add");
 		MetaDataMessage message = new MetaDataMessage();
 		message.setDesc(selVal);
 		message.setId(Integer.valueOf(selId));
@@ -2409,7 +2409,7 @@ public class AdminController implements Serializable {
 
 	private List<MetaDataBean> fetchAllMetadata() {
 		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/" + table);
+		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/" + table);
 		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		mDataClient.close();
 		for (MetaDataMessage message : messages) {
@@ -2451,7 +2451,7 @@ public class AdminController implements Serializable {
 	public String saveNews() {
 		try {
 			logger.debug("Control handled in saveNews method");
-			WebClient addNewsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ns/news/add");
+			WebClient addNewsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ns/news/add");
 			NewsMessage message = new NewsMessage();
 			message.setnTitle(newsBean.getnTitle());
 			message.setContent(newsBean.getnContent());
@@ -2464,7 +2464,7 @@ public class AdminController implements Serializable {
 			if (response.getStatusCode() == 0) {
 				if (image != null) {
 					logger.info("Before adding file content details");
-					WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+					WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
 					AttachmentMessage attach = new AttachmentMessage();
 					attach.setBlobContentType(contentType);
 					attach.setBlobEntityId(message.getnId());
@@ -2474,7 +2474,7 @@ public class AdminController implements Serializable {
 					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
 					logger.info("Reponse code of file attachment - " + crtRes.getStatus());
 					if (crtRes.getStatus() == 200) {
-						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + attach.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+						WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 						client.header("Accept", "application/json");
 						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
@@ -2508,7 +2508,7 @@ public class AdminController implements Serializable {
 	public String updateNews() {
 		try {
 			logger.debug("Control handled in updateNews()");
-			WebClient updateNewsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ns/news/modify");
+			WebClient updateNewsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ns/news/modify");
 			NewsMessage message = new NewsMessage();
 			message.setnId(newsBean.getnId());
 			message.setnTitle(newsBean.getnTitle());
@@ -2519,10 +2519,10 @@ public class AdminController implements Serializable {
 			updateNewsClient.close();
 			if (response.getStatusCode() == 0) {
 				if (image != null) {
-					WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + newsBean.getnId() + "/ip_news");
+					WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + newsBean.getnId() + "/ip_news");
 					Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 					if (blobId == -999) {
-						WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+						WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
 						AttachmentMessage attach = new AttachmentMessage();
 						attach.setBlobContentType(contentType);
 						attach.setBlobEntityId(newsBean.getnId());
@@ -2531,7 +2531,7 @@ public class AdminController implements Serializable {
 						attach.setBlobId(COUNTER.getNextId("IpBlob"));
 						Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
 						if (crtRes.getStatus() == 200) {
-							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + attach.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
@@ -2546,7 +2546,7 @@ public class AdminController implements Serializable {
 						}
 						createBlobClient.close();
 					} else {
-						WebClient updateBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/update");
+						WebClient updateBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/update");
 						AttachmentMessage attach = new AttachmentMessage();
 						attach.setBlobContentType(contentType);
 						attach.setBlobEntityId(newsBean.getnId());
@@ -2556,7 +2556,7 @@ public class AdminController implements Serializable {
 						Response updRes = updateBlobClient.accept(MediaType.APPLICATION_JSON).put(attach);
 						updateBlobClient.close();
 						if (updRes.getStatus() == 200) {
-							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), image.getStream(), new ContentDisposition("attachment;filename=" + fileName)));
@@ -2590,7 +2590,7 @@ public class AdminController implements Serializable {
 
 	public String saveNotification() {
 		try {
-			WebClient addClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/nos/notif/add");
+			WebClient addClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/nos/notif/add");
 			NotificationMessage notifMessage = new NotificationMessage();
 			notifMessage.setNotifCrtdDate(new Date().toString());
 			notifMessage.setNotifId(java.util.UUID.randomUUID().toString());

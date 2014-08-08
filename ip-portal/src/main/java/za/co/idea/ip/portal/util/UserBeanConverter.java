@@ -1,6 +1,7 @@
 package za.co.idea.ip.portal.util;
 
 import java.util.Collections;
+import java.util.ResourceBundle;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -16,6 +17,7 @@ import za.co.idea.ip.ws.util.CustomObjectMapper;
 
 public class UserBeanConverter implements Converter {
 
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
 		return getUserById(Long.valueOf(arg2));
 	}
@@ -33,7 +35,7 @@ public class UserBeanConverter implements Converter {
 
 	private UserBean getUserById(Long id) {
 		UserBean bean = new UserBean();
-		WebClient userByIdClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/get/" + id);
+		WebClient userByIdClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/get/" + id);
 		UserMessage userMessage = userByIdClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 		userByIdClient.close();
 		bean.setBio(userMessage.getBio());

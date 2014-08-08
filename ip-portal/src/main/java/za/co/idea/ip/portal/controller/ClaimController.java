@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -37,6 +38,7 @@ import za.co.idea.ip.ws.util.CustomObjectMapper;
 public class ClaimController implements Serializable {
 
 	private static final long serialVersionUID = 1568895653520394971L;
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
 	private ClaimBean claimBean;
 	private StreamedContent fileContent;
 	private List<ClaimBean> viewClaimBeans;
@@ -155,7 +157,7 @@ public class ClaimController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
-			WebClient addClaimClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cls/claim/add");
+			WebClient addClaimClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cls/claim/add");
 			ClaimMessage message = new ClaimMessage();
 			message.setClaimCrtdDt(new Date());
 			message.setClaimDesc(claimBean.getClaimDesc());
@@ -182,7 +184,7 @@ public class ClaimController implements Serializable {
 
 	public String updateClaim() {
 		try {
-			WebClient updateClaimClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cls/claim/modify");
+			WebClient updateClaimClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cls/claim/modify");
 			ClaimMessage message = new ClaimMessage();
 			message.setClaimCrtdDt(claimBean.getClaimCrtdDt());
 			message.setClaimDesc(claimBean.getClaimDesc());
@@ -210,7 +212,7 @@ public class ClaimController implements Serializable {
 
 	private List<UserBean> fetchAllUsers() {
 		List<UserBean> ret = new ArrayList<UserBean>();
-		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/list/sort/pg");
+		WebClient viewUsersClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/list/sort/pg");
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
 		viewUsersClient.close();
 		for (UserMessage userMessage : users) {
@@ -237,7 +239,7 @@ public class ClaimController implements Serializable {
 
 	private List<ClaimBean> fetchAllClaims() {
 		List<ClaimBean> ret = new ArrayList<ClaimBean>();
-		WebClient fetchClaimClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cls/claim/list");
+		WebClient fetchClaimClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cls/claim/list");
 		Collection<? extends ClaimMessage> claims = new ArrayList<ClaimMessage>(fetchClaimClient.accept(MediaType.APPLICATION_JSON).getCollection(ClaimMessage.class));
 		fetchClaimClient.close();
 		for (ClaimMessage message : claims) {
@@ -256,7 +258,7 @@ public class ClaimController implements Serializable {
 
 	private List<ClaimBean> fetchAllClaimsByUser() {
 		List<ClaimBean> ret = new ArrayList<ClaimBean>();
-		WebClient fetchClaimClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cls/claim/list/user/" + (userId).longValue());
+		WebClient fetchClaimClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cls/claim/list/user/" + (userId).longValue());
 		Collection<? extends ClaimMessage> claims = new ArrayList<ClaimMessage>(fetchClaimClient.accept(MediaType.APPLICATION_JSON).getCollection(ClaimMessage.class));
 		fetchClaimClient.close();
 		for (ClaimMessage message : claims) {
@@ -275,7 +277,7 @@ public class ClaimController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllClaimStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewClaimSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cls/claim/status/list");
+		WebClient viewClaimSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cls/claim/status/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewClaimSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewClaimSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -289,7 +291,7 @@ public class ClaimController implements Serializable {
 
 	private List<ListSelectorBean> fetchNextClaimStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewClaimSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cls/claim/status/list/" + claimBean.getcStatusId());
+		WebClient viewClaimSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cls/claim/status/list/" + claimBean.getcStatusId());
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewClaimSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewClaimSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -303,7 +305,7 @@ public class ClaimController implements Serializable {
 
 	private List<RewardsBean> fetchAllRewards() {
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
-		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list");
+		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list");
 		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
 		viewRewardsClient.close();
 		for (RewardsMessage message : rewards) {
@@ -327,7 +329,7 @@ public class ClaimController implements Serializable {
 
 	private List<RewardsBean> fetchAllAvailableRewards() {
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
-		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list/avail");
+		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list/avail");
 		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
 		viewRewardsClient.close();
 		for (RewardsMessage message : rewards) {
@@ -351,7 +353,7 @@ public class ClaimController implements Serializable {
 
 	private List<PointBean> fetchAllPointsByUser() {
 		List<PointBean> ret = new ArrayList<PointBean>();
-		WebClient viewPointClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/points/get/user/" + userId);
+		WebClient viewPointClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/points/get/user/" + userId);
 		Collection<? extends PointMessage> points = new ArrayList<PointMessage>(viewPointClient.accept(MediaType.APPLICATION_JSON).getCollection(PointMessage.class));
 		viewPointClient.close();
 		totalPoints = 0l;

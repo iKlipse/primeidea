@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -59,6 +60,7 @@ import com.liferay.portal.model.User;
 public class ChallengeController implements Serializable {
 	private static final long serialVersionUID = -4791485398536884291L;
 	private static final Logger logger = Logger.getLogger(ChallengeController.class);
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
 	private ChallengeBean challengeBean;
 	private SolutionBean solutionBean;
 	private List<ChallengeBean> viewChallenges;
@@ -124,7 +126,7 @@ public class ChallengeController implements Serializable {
 		try {
 			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 			User user = (User) request.getAttribute(WebKeys.USER);
-			WebClient client = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
 			challengeCats = fetchAllChallengeCat();
@@ -174,7 +176,7 @@ public class ChallengeController implements Serializable {
 		try {
 			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 			User user = (User) request.getAttribute(WebKeys.USER);
-			WebClient client = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
 			admUsers = fetchAllUsers();
@@ -307,20 +309,20 @@ public class ChallengeController implements Serializable {
 			pGrps = fetchAllGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
-				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
+				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
 				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 				getBlobClient.close();
 				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 					client.header("Content-Type", "application/json");
 					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 					if (attachment != null) {
 						chalFileAvail = false;
-						WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+						WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
 						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 						getBlobTypeClient.close();
 						challengeBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
@@ -360,20 +362,20 @@ public class ChallengeController implements Serializable {
 			pGrps = fetchAllGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
-				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
+				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
 				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 				getBlobClient.close();
 				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 					client.header("Content-Type", "application/json");
 					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 					if (attachment != null) {
 						chalFileAvail = false;
-						WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+						WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
 						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 						getBlobTypeClient.close();
 						challengeBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
@@ -415,20 +417,20 @@ public class ChallengeController implements Serializable {
 		showChallengeLikes = false;
 		viewSolutions = fetchAllSolutionsByChal();
 		try {
-			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
+			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
 			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 			getBlobClient.close();
 			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 				client.header("Content-Type", "application/json");
 				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 				if (attachment != null) {
 					chalFileAvail = false;
-					WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+					WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
 					String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 					getBlobTypeClient.close();
 					challengeBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
@@ -462,20 +464,20 @@ public class ChallengeController implements Serializable {
 		showChallengeLikes = false;
 		viewSolutions = fetchAllSolutionsByChal();
 		try {
-			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
+			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
 			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 			getBlobClient.close();
 			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 				client.header("Content-Type", "application/json");
 				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 				if (attachment != null) {
 					chalFileAvail = false;
-					WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+					WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
 					String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 					getBlobTypeClient.close();
 					challengeBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
@@ -509,7 +511,7 @@ public class ChallengeController implements Serializable {
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
 			}
-			WebClient addChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/add");
+			WebClient addChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/add");
 			ChallengeMessage message = new ChallengeMessage();
 			message.setCatId(challengeBean.getCatId());
 			message.setCrtdById(userId);
@@ -528,7 +530,7 @@ public class ChallengeController implements Serializable {
 			addChallengeClient.close();
 			if (response.getStatusCode() == 0) {
 				if (chalUploadContent != null) {
-					WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+					WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
 					AttachmentMessage attach = new AttachmentMessage();
 					attach.setBlobContentType(challengeBean.getContentType());
 					attach.setBlobEntityId(message.getId());
@@ -537,7 +539,7 @@ public class ChallengeController implements Serializable {
 					attach.setBlobId(COUNTER.getNextId("IpBlob"));
 					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
 					if (crtRes.getStatus() == 200) {
-						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+						WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 						client.header("Accept", "application/json");
 						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), chalUploadContent.getStream(), new ContentDisposition("attachment;filename=" + challengeBean.getFileName())));
@@ -575,7 +577,7 @@ public class ChallengeController implements Serializable {
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
 			}
-			WebClient updateChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/modify");
+			WebClient updateChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/modify");
 			ChallengeMessage message = new ChallengeMessage();
 			message.setCatId(challengeBean.getCatId());
 			message.setCrtdById(userId);
@@ -594,10 +596,10 @@ public class ChallengeController implements Serializable {
 			updateChallengeClient.close();
 			if (response.getStatusCode() == 0) {
 				if (chalUploadContent != null) {
-					WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
+					WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
 					Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 					if (blobId == -999) {
-						WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+						WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
 						AttachmentMessage attach = new AttachmentMessage();
 						attach.setBlobContentType(challengeBean.getContentType());
 						attach.setBlobEntityId(challengeBean.getId());
@@ -606,7 +608,7 @@ public class ChallengeController implements Serializable {
 						attach.setBlobId(COUNTER.getNextId("IpBlob"));
 						Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
 						if (crtRes.getStatus() == 200) {
-							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), chalUploadContent.getStream(), new ContentDisposition("attachment;filename=" + challengeBean.getFileName())));
@@ -619,7 +621,7 @@ public class ChallengeController implements Serializable {
 							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 						}
 					} else {
-						WebClient updateBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/update");
+						WebClient updateBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/update");
 						AttachmentMessage attach = new AttachmentMessage();
 						attach.setBlobContentType(challengeBean.getContentType());
 						attach.setBlobEntityId(challengeBean.getId());
@@ -629,7 +631,7 @@ public class ChallengeController implements Serializable {
 						Response updRes = updateBlobClient.accept(MediaType.APPLICATION_JSON).put(attach);
 						updateBlobClient.close();
 						if (updRes.getStatus() == 200) {
-							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), chalUploadContent.getStream(), new ContentDisposition("attachment;filename=" + challengeBean.getFileName())));
@@ -668,7 +670,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	public void commentChallenge() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(challengeBean.getId());
 		message.setTagId(COUNTER.getNextId("IpTag"));
@@ -689,7 +691,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	public void likeChallenge() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(challengeBean.getId());
 		message.setTagId(COUNTER.getNextId("IpTag"));
@@ -797,20 +799,20 @@ public class ChallengeController implements Serializable {
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
 			try {
-				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
+				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
 				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 				getBlobClient.close();
 				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 					client.header("Content-Type", "application/json");
 					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 					if (attachment != null) {
 						solFileAvail = false;
-						WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+						WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
 						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 						getBlobTypeClient.close();
 						solutionBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
@@ -849,20 +851,20 @@ public class ChallengeController implements Serializable {
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchNextSolutionStatuses();
 			try {
-				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
+				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
 				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 				getBlobClient.close();
 				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 					client.header("Content-Type", "application/json");
 					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 					if (attachment != null) {
 						solFileAvail = false;
-						WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+						WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
 						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 						getBlobTypeClient.close();
 						solutionBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
@@ -907,20 +909,20 @@ public class ChallengeController implements Serializable {
 		showSolutionLikes = false;
 		solutionBean.setTaggable(solutionBean.getStatusId() != 2);
 		try {
-			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
+			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
 			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 			getBlobClient.close();
 			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 				client.header("Content-Type", "application/json");
 				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 				if (attachment != null) {
 					solFileAvail = false;
-					WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+					WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
 					String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 					getBlobTypeClient.close();
 					solutionBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
@@ -958,20 +960,20 @@ public class ChallengeController implements Serializable {
 		showSolutionLikes = false;
 		solutionBean.setTaggable(solutionBean.getStatusId() != 2);
 		try {
-			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
+			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
 			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 			getBlobClient.close();
 			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 				client.header("Content-Type", "application/json");
 				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 				if (attachment != null) {
 					solFileAvail = false;
-					WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+					WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
 					String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 					getBlobTypeClient.close();
 					solutionBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
@@ -1001,7 +1003,7 @@ public class ChallengeController implements Serializable {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter Title to Check Availability", "Enter Title to Check Availability");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
-		WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/check/title/" + solutionBean.getTitle());
+		WebClient checkAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/check/title/" + solutionBean.getTitle());
 		Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 		checkAvailablityClient.close();
 		titleAvail = avail.booleanValue();
@@ -1027,7 +1029,7 @@ public class ChallengeController implements Serializable {
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
 			}
-			WebClient addSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/add");
+			WebClient addSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/add");
 			SolutionMessage message = new SolutionMessage();
 			message.setCatId(solutionBean.getCatId());
 			message.setChalId(solutionBean.getChalId());
@@ -1046,7 +1048,7 @@ public class ChallengeController implements Serializable {
 			addSolutionClient.close();
 			if (response.getStatusCode() == 0) {
 				if (solUploadContent != null) {
-					WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+					WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
 					AttachmentMessage attach = new AttachmentMessage();
 					attach.setBlobContentType(solutionBean.getContentType());
 					attach.setBlobEntityId(message.getId());
@@ -1056,7 +1058,7 @@ public class ChallengeController implements Serializable {
 					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
 					createBlobClient.close();
 					if (crtRes.getStatus() == 200) {
-						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+						WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 						client.header("Accept", "application/json");
 						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), solUploadContent.getStream(), new ContentDisposition("attachment;filename=" + solutionBean.getFileName())));
@@ -1096,7 +1098,7 @@ public class ChallengeController implements Serializable {
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
 			}
-			WebClient updateSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/modify");
+			WebClient updateSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/modify");
 			SolutionMessage message = new SolutionMessage();
 			message.setCatId(solutionBean.getCatId());
 			message.setChalId(solutionBean.getChalId());
@@ -1111,10 +1113,10 @@ public class ChallengeController implements Serializable {
 			updateSolutionClient.close();
 			if (response.getStatusCode() == 0) {
 				if (solUploadContent != null) {
-					WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
+					WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
 					Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 					if (blobId == -999) {
-						WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+						WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
 						AttachmentMessage attach = new AttachmentMessage();
 						attach.setBlobContentType(solutionBean.getContentType());
 						attach.setBlobEntityId(solutionBean.getId());
@@ -1123,7 +1125,7 @@ public class ChallengeController implements Serializable {
 						attach.setBlobId(COUNTER.getNextId("IpBlob"));
 						Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
 						if (crtRes.getStatus() == 200) {
-							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), solUploadContent.getStream(), new ContentDisposition("attachment;filename=" + solutionBean.getFileName())));
@@ -1136,7 +1138,7 @@ public class ChallengeController implements Serializable {
 							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 						}
 					} else {
-						WebClient updateBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/update");
+						WebClient updateBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/update");
 						AttachmentMessage attach = new AttachmentMessage();
 						attach.setBlobContentType(solutionBean.getContentType());
 						attach.setBlobEntityId(solutionBean.getId());
@@ -1146,7 +1148,7 @@ public class ChallengeController implements Serializable {
 						Response updRes = updateBlobClient.accept(MediaType.APPLICATION_JSON).put(attach);
 						updateBlobClient.close();
 						if (updRes.getStatus() == 200) {
-							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), solUploadContent.getStream(), new ContentDisposition("attachment;filename=" + solutionBean.getFileName())));
@@ -1178,7 +1180,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	public void likeSolution() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		logger.info("In likeSolution()----Solution ID: " + solutionBean.getId());
 		message.setEntityId(solutionBean.getId());
@@ -1202,7 +1204,7 @@ public class ChallengeController implements Serializable {
 		Map<String, String> reqMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		Long chalId = Long.valueOf(reqMap.get("chalId"));
 		logger.info("challenge id ==" + chalId);
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		logger.info("Solution ID: " + solutionBean.getId());
 		message.setEntityId(solutionBean.getId());
@@ -1222,7 +1224,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	public void commentSolution() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(solutionBean.getId());
 		message.setTagId(COUNTER.getNextId("IpTag"));
@@ -1243,7 +1245,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	public void buildOnSolution() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(solutionBean.getId());
 		message.setTagId(COUNTER.getNextId("IpTag"));
@@ -1271,7 +1273,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	private List<TagBean> fetchAllBuildOns() {
-		WebClient fetchIdeaBuildOnsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + solutionBean.getId() + "/3/3");
+		WebClient fetchIdeaBuildOnsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + solutionBean.getId() + "/3/3");
 		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaBuildOnsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchIdeaBuildOnsClient.close();
 		List<TagBean> ret = new ArrayList<TagBean>();
@@ -1286,7 +1288,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	private List<TagBean> fetchAllBuildOnsById(Long solId) {
-		WebClient fetchIdeaBuildOnsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + solId + "/3/3");
+		WebClient fetchIdeaBuildOnsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + solId + "/3/3");
 		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaBuildOnsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchIdeaBuildOnsClient.close();
 		List<TagBean> ret = new ArrayList<TagBean>();
@@ -1302,7 +1304,7 @@ public class ChallengeController implements Serializable {
 
 	protected List<ChallengeBean> fetchAllChallenges() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
-		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list");
+		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list");
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
@@ -1326,7 +1328,7 @@ public class ChallengeController implements Serializable {
 
 	protected ChallengeBean fetchChallengeById(Long chalId) {
 		logger.debug("Control handled in fecthChallengeById() ");
-		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/get/" + chalId);
+		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/get/" + chalId);
 		ChallengeMessage challengeMessage = fetchChallengeClient.accept(MediaType.APPLICATION_JSON).get(ChallengeMessage.class);
 		fetchChallengeClient.close();
 		ChallengeBean bean = new ChallengeBean();
@@ -1348,7 +1350,7 @@ public class ChallengeController implements Serializable {
 
 	private List<ChallengeBean> fetchAllAvailableChallenges() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
-		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list//status/4");
+		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list//status/4");
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
@@ -1372,9 +1374,9 @@ public class ChallengeController implements Serializable {
 
 	private List<ChallengeBean> fetchAllChallengesByUser() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
-		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/access/" + userId);
+		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/user/access/" + userId);
 		// WebClient fetchChallengeClient =
-		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/access/0");
+		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/user/access/0");
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
@@ -1398,9 +1400,9 @@ public class ChallengeController implements Serializable {
 
 	public List<ChallengeBean> fetchAllChallengesCreatedByUser() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
-		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/created/" + userId);
+		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/user/created/" + userId);
 		// WebClient fetchChallengeClient =
-		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/created/0");
+		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/user/created/0");
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
@@ -1424,9 +1426,9 @@ public class ChallengeController implements Serializable {
 
 	private List<ChallengeBean> fetchAllChallengesByStatusIdUserId(Integer status) {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
-		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/status/" + status + "/user/" + userId);
+		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/status/" + status + "/user/" + userId);
 		// WebClient fetchChallengeClient =
-		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/status/"
+		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/status/"
 		// + status + "/user/0");
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
@@ -1451,7 +1453,7 @@ public class ChallengeController implements Serializable {
 
 	protected List<SolutionBean> fetchAllSolutions() {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
-		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list");
+		WebClient fetchSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list");
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
 		fetchSolutionClient.close();
 		for (SolutionMessage solutionMessage : solutions) {
@@ -1477,9 +1479,9 @@ public class ChallengeController implements Serializable {
 
 	private List<SolutionBean> fetchAllSolutionsByUser() {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
-		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/access/" + userId);
+		WebClient fetchSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/user/access/" + userId);
 		// WebClient fetchSolutionClient =
-		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/access/0");
+		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/user/access/0");
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
 		fetchSolutionClient.close();
 		for (SolutionMessage solutionMessage : solutions) {
@@ -1505,9 +1507,9 @@ public class ChallengeController implements Serializable {
 
 	public List<SolutionBean> fetchAllSolutionsCreatedByUser() {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
-		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/created/" + userId);
+		WebClient fetchSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/user/created/" + userId);
 		// WebClient fetchSolutionClient =
-		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/created/0");
+		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/user/created/0");
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
 		fetchSolutionClient.close();
 		for (SolutionMessage solutionMessage : solutions) {
@@ -1533,9 +1535,9 @@ public class ChallengeController implements Serializable {
 
 	private List<SolutionBean> fetchAllSolutionsByStatusIdUserId(Integer status) {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
-		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/status/" + status + "/user/" + userId);
+		WebClient fetchSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/status/" + status + "/user/" + userId);
 		// WebClient fetchSolutionClient =
-		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/status/"
+		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/status/"
 		// + status + "/user/0");
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
 		fetchSolutionClient.close();
@@ -1564,7 +1566,7 @@ public class ChallengeController implements Serializable {
 		logger.debug("Control handled in fetchAllSolutionsByChal method ");
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
 		try {
-			WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/chal/" + challengeBean.getId());
+			WebClient fetchSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/chal/" + challengeBean.getId());
 			Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
 			fetchSolutionClient.close();
 			logger.info("Before getting all solutions in controller");
@@ -1637,7 +1639,7 @@ public class ChallengeController implements Serializable {
 
 	private TagCloudModel fetchAllChalLikes() {
 		TagCloudModel likes = new DefaultTagCloudModel();
-		WebClient fetchChallengeLikesClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + challengeBean.getId() + "/2/1");
+		WebClient fetchChallengeLikesClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + challengeBean.getId() + "/2/1");
 		Collection<? extends TagMessage> likeList = new ArrayList<TagMessage>(fetchChallengeLikesClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchChallengeLikesClient.close();
 		for (TagMessage tagMessage : likeList)
@@ -1646,7 +1648,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	private List<TagBean> fetchAllChalComments() {
-		WebClient fetchChallengeCommentsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + challengeBean.getId() + "/2/2");
+		WebClient fetchChallengeCommentsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + challengeBean.getId() + "/2/2");
 		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchChallengeCommentsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchChallengeCommentsClient.close();
 		List<TagBean> ret = new ArrayList<TagBean>();
@@ -1662,7 +1664,7 @@ public class ChallengeController implements Serializable {
 
 	private TagCloudModel fetchAllSolLikes() {
 		TagCloudModel likes = new DefaultTagCloudModel();
-		WebClient fetchSolutionLikesClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + solutionBean.getId() + "/3/1");
+		WebClient fetchSolutionLikesClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + solutionBean.getId() + "/3/1");
 		Collection<? extends TagMessage> likeList = new ArrayList<TagMessage>(fetchSolutionLikesClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchSolutionLikesClient.close();
 		for (TagMessage tagMessage : likeList)
@@ -1672,7 +1674,7 @@ public class ChallengeController implements Serializable {
 
 	private TagCloudModel fetchAllSolLikeById(Long solId) {
 		TagCloudModel likes = new DefaultTagCloudModel();
-		WebClient fetchSolutionLikesClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + solId + "/3/1");
+		WebClient fetchSolutionLikesClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + solId + "/3/1");
 		Collection<? extends TagMessage> likeList = new ArrayList<TagMessage>(fetchSolutionLikesClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchSolutionLikesClient.close();
 		for (TagMessage tagMessage : likeList)
@@ -1681,7 +1683,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	private List<TagBean> fetchAllSolComments() {
-		WebClient fetchSolutionCommentsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + solutionBean.getId() + "/3/2");
+		WebClient fetchSolutionCommentsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + solutionBean.getId() + "/3/2");
 		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchSolutionCommentsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchSolutionCommentsClient.close();
 		List<TagBean> ret = new ArrayList<TagBean>();
@@ -1696,7 +1698,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	private List<TagBean> fetchAllSolCommentsById(Long solId) {
-		WebClient fetchSolutionCommentsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + solId + "/3/2");
+		WebClient fetchSolutionCommentsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + solId + "/3/2");
 		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchSolutionCommentsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchSolutionCommentsClient.close();
 		List<TagBean> ret = new ArrayList<TagBean>();
@@ -1712,7 +1714,7 @@ public class ChallengeController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllChallengeStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewChallengeSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/status/list");
+		WebClient viewChallengeSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/status/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewChallengeSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -1726,7 +1728,7 @@ public class ChallengeController implements Serializable {
 
 	private List<ListSelectorBean> fetchNextChallengeStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewChallengeSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/status/list/" + challengeBean.getStatusId());
+		WebClient viewChallengeSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/status/list/" + challengeBean.getStatusId());
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewChallengeSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -1740,7 +1742,7 @@ public class ChallengeController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllChallengeCat() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewChallengeSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/cat/list");
+		WebClient viewChallengeSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/cat/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewChallengeSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -1754,7 +1756,7 @@ public class ChallengeController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllSolutionStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewSolutionSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/status/list");
+		WebClient viewSolutionSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/status/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewSolutionSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -1768,7 +1770,7 @@ public class ChallengeController implements Serializable {
 
 	private List<ListSelectorBean> fetchNextSolutionStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewSolutionSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/status/list/" + solutionBean.getStatusId());
+		WebClient viewSolutionSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/status/list/" + solutionBean.getStatusId());
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewSolutionSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -1782,7 +1784,7 @@ public class ChallengeController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllSolutionCat() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewSolutionSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/cat/list");
+		WebClient viewSolutionSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/cat/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewSolutionSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -1796,7 +1798,7 @@ public class ChallengeController implements Serializable {
 
 	private List<UserBean> fetchAllUsers() {
 		List<UserBean> ret = new ArrayList<UserBean>();
-		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/list/sort/pg");
+		WebClient viewUsersClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/list/sort/pg");
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
 		viewUsersClient.close();
 		for (UserMessage userMessage : users) {
@@ -1871,7 +1873,7 @@ public class ChallengeController implements Serializable {
 
 	private List<GroupBean> fetchAllGroups() {
 		List<GroupBean> ret = new ArrayList<GroupBean>();
-		WebClient viewGroupsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/list");
+		WebClient viewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/list");
 		Collection<? extends GroupMessage> groups = new ArrayList<GroupMessage>(viewGroupsClient.accept(MediaType.APPLICATION_JSON).getCollection(GroupMessage.class));
 		viewGroupsClient.close();
 		for (GroupMessage groupMessage : groups) {
@@ -1908,7 +1910,7 @@ public class ChallengeController implements Serializable {
 
 	private GroupBean getGroupById(Long pGrpId) {
 		GroupBean bean = new GroupBean();
-		WebClient groupByIdClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/get/" + pGrpId);
+		WebClient groupByIdClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/get/" + pGrpId);
 		GroupMessage groupMessage = groupByIdClient.accept(MediaType.APPLICATION_JSON).get(GroupMessage.class);
 		groupByIdClient.close();
 		bean.setgId(groupMessage.getgId());

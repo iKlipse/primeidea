@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -38,6 +39,7 @@ public class NewsController implements Serializable {
 	private static final long serialVersionUID = 8898258487836934087L;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 	private static final Logger logger = Logger.getLogger(NewsController.class);
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
 	private NewsBean newsBean;
 	private StreamedContent image;
 	private String fileName;
@@ -136,21 +138,21 @@ public class NewsController implements Serializable {
 		try {
 			logger.debug("Control handled in showEditNews() method");
 			logger.info("Sending request to NewsService");
-			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + newsBean.getnId() + "/ip_news");
+			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + newsBean.getnId() + "/ip_news");
 			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 			getBlobClient.close();
 			logger.info("After gettin response from NewsService");
 			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 				client.header("Content-Type", "application/json");
 				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 				if (attachment != null) {
 					fileAvail = false;
-					WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+					WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
 					String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 					getBlobTypeClient.close();
 					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
@@ -189,7 +191,7 @@ public class NewsController implements Serializable {
 	public String saveNews() {
 		try {
 			logger.debug("Control handled in saveNews method");
-			WebClient addNewsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ns/news/add");
+			WebClient addNewsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ns/news/add");
 			NewsMessage message = new NewsMessage();
 			message.setnTitle(newsBean.getnTitle());
 			message.setContent(newsBean.getnContent());
@@ -202,7 +204,7 @@ public class NewsController implements Serializable {
 			if (response.getStatusCode() == 0) {
 				if (image != null) {
 					logger.info("Before adding file content details");
-					WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+					WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
 					AttachmentMessage attach = new AttachmentMessage();
 					attach.setBlobContentType(contentType);
 					attach.setBlobEntityId(message.getnId());
@@ -212,7 +214,7 @@ public class NewsController implements Serializable {
 					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
 					logger.info("Reponse code of file attachment - " + crtRes.getStatus());
 					if (crtRes.getStatus() == 200) {
-						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + attach.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+						WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 						client.header("Accept", "application/json");
 						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
@@ -244,7 +246,7 @@ public class NewsController implements Serializable {
 	public String updateNews() {
 		try {
 			logger.debug("Control handled in updateNews()");
-			WebClient updateNewsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ns/news/modify");
+			WebClient updateNewsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ns/news/modify");
 			NewsMessage message = new NewsMessage();
 			message.setnId(newsBean.getnId());
 			message.setnTitle(newsBean.getnTitle());
@@ -255,10 +257,10 @@ public class NewsController implements Serializable {
 			updateNewsClient.close();
 			if (response.getStatusCode() == 0) {
 				if (image != null) {
-					WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + newsBean.getnId() + "/ip_news");
+					WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + newsBean.getnId() + "/ip_news");
 					Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 					if (blobId == -999) {
-						WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+						WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
 						AttachmentMessage attach = new AttachmentMessage();
 						attach.setBlobContentType(contentType);
 						attach.setBlobEntityId(newsBean.getnId());
@@ -267,7 +269,7 @@ public class NewsController implements Serializable {
 						attach.setBlobId(COUNTER.getNextId("IpBlob"));
 						Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
 						if (crtRes.getStatus() == 200) {
-							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + attach.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
@@ -282,7 +284,7 @@ public class NewsController implements Serializable {
 						}
 						createBlobClient.close();
 					} else {
-						WebClient updateBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/update");
+						WebClient updateBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/update");
 						AttachmentMessage attach = new AttachmentMessage();
 						attach.setBlobContentType(contentType);
 						attach.setBlobEntityId(newsBean.getnId());
@@ -292,7 +294,7 @@ public class NewsController implements Serializable {
 						Response updRes = updateBlobClient.accept(MediaType.APPLICATION_JSON).put(attach);
 						updateBlobClient.close();
 						if (updRes.getStatus() == 200) {
-							WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), image.getStream(), new ContentDisposition("attachment;filename=" + fileName)));
@@ -326,7 +328,7 @@ public class NewsController implements Serializable {
 		List<NewsBean> ret = new ArrayList<NewsBean>();
 		try {
 			logger.debug("Control handled in fetchAllNews method of NewsController ");
-			WebClient fetchNewsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ns/news/list");
+			WebClient fetchNewsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ns/news/list");
 			Collection<? extends NewsMessage> news = new ArrayList<NewsMessage>(fetchNewsClient.accept(MediaType.APPLICATION_JSON).getCollection(NewsMessage.class));
 			fetchNewsClient.close();
 			logger.info("News data adding to List: ");

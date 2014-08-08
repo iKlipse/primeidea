@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -36,6 +37,7 @@ public class LandingPageController implements Serializable {
 
 	private static final Logger logger = Logger.getLogger(LandingPageController.class);
 	private static final long serialVersionUID = -440824165553001559L;
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
 	private List<UserBean> admUsers;
 	private List<ListSelectorBean> ideaCats;
 	private List<ListSelectorBean> ideaStatuses;
@@ -59,7 +61,7 @@ public class LandingPageController implements Serializable {
 		try {
 			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 			User user = (User) request.getAttribute(WebKeys.USER);
-			WebClient client = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
 			admUsers = RESTServiceHelper.fetchAllUsers();
@@ -159,9 +161,9 @@ public class LandingPageController implements Serializable {
 
 	private List<ChallengeBean> fetchAllChallengesByUser() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
-		WebClient fetchChallengeClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/access/" + userId);
+		WebClient fetchChallengeClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/user/access/" + userId);
 		// WebClient fetchChallengeClient =
-		// RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/user/access/0");
+		// RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/user/access/0");
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
@@ -185,9 +187,9 @@ public class LandingPageController implements Serializable {
 
 	private List<SolutionBean> fetchAllSolutionsByUser() {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
-		WebClient fetchSolutionClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/access/" + userId);
+		WebClient fetchSolutionClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/user/access/" + userId);
 		// WebClient fetchSolutionClient =
-		// RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/user/access/0");
+		// RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/user/access/0");
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
 		fetchSolutionClient.close();
 		for (SolutionMessage solutionMessage : solutions) {
@@ -209,7 +211,7 @@ public class LandingPageController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllIdeaCat() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewIdeaSelectClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/cat/list");
+		WebClient viewIdeaSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/cat/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewIdeaSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewIdeaSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -223,7 +225,7 @@ public class LandingPageController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllChallengeCat() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewChallengeSelectClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/cat/list");
+		WebClient viewChallengeSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/cat/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewChallengeSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -237,7 +239,7 @@ public class LandingPageController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllSolutionCat() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewSolutionSelectClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/cat/list");
+		WebClient viewSolutionSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/cat/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewSolutionSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -251,7 +253,7 @@ public class LandingPageController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllIdeaStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewIdeaSelectClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/status/list");
+		WebClient viewIdeaSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/status/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewIdeaSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewIdeaSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -265,7 +267,7 @@ public class LandingPageController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllChallengeStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewChallengeSelectClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/status/list");
+		WebClient viewChallengeSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/status/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewChallengeSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -279,7 +281,7 @@ public class LandingPageController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllSolutionStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewSolutionSelectClient = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/status/list");
+		WebClient viewSolutionSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/status/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewSolutionSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {

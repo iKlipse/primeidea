@@ -1,6 +1,7 @@
 package za.co.idea.ip.portal.util;
 
 import java.util.Collections;
+import java.util.ResourceBundle;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -15,6 +16,8 @@ import za.co.idea.ip.ws.bean.GroupMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
 
 public class GroupBeanConverter implements Converter {
+
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
 
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
 		return getGroupById(Long.valueOf(arg2));
@@ -33,7 +36,7 @@ public class GroupBeanConverter implements Converter {
 
 	private GroupBean getGroupById(Long pGrpId) {
 		GroupBean bean = new GroupBean();
-		WebClient groupByIdClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/get/" + pGrpId);
+		WebClient groupByIdClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/get/" + pGrpId);
 		GroupMessage groupMessage = groupByIdClient.accept(MediaType.APPLICATION_JSON).get(GroupMessage.class);
 		groupByIdClient.close();
 		bean.setgId(groupMessage.getgId());

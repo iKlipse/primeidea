@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -35,6 +36,7 @@ public class NotificationController implements Serializable {
 
 	private static final long serialVersionUID = 4208051043571552191L;
 	private static final Logger logger = Logger.getLogger(NotificationController.class);
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
 	private NotificationBean notificationBean;
 	private DualListModel<GroupBean> groupTwinSelect;
 	private List<NotificationBean> viewNotifications;
@@ -125,15 +127,15 @@ public class NotificationController implements Serializable {
 	 * public String showEditNotification() { try { pGrps = fetchAllGroups();
 	 * groupTwinSelect = initializeSelectedGroups(pGrps); try { WebClient
 	 * getBlobClient =
-	 * createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" +
+	 * createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" +
 	 * notificationBean.getNotifId() + "/ip_notif"); Long blobId =
 	 * getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 	 * getBlobClient.close(); if (blobId != -999l) { WebClient getBlobNameClient
-	 * = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" +
+	 * = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" +
 	 * blobId); String blobName =
 	 * getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
 	 * getBlobNameClient.close(); WebClient client =
-	 * WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" +
+	 * WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" +
 	 * blobId + "/" + blobName, Collections.singletonList(new
 	 * JacksonJsonProvider(new CustomObjectMapper())));
 	 * client.header("Content-Type", "application/json");
@@ -162,7 +164,7 @@ public class NotificationController implements Serializable {
 
 	private List<NotificationBean> fetchAllNotifications() {
 		List<NotificationBean> ret = new ArrayList<NotificationBean>();
-		WebClient fetchNotifClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/nos/notif/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		WebClient fetchNotifClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/nos/notif/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
 		Collection<? extends NotificationMessage> notifications = new ArrayList<NotificationMessage>(fetchNotifClient.accept(MediaType.APPLICATION_JSON).getCollection(NotificationMessage.class));
 		fetchNotifClient.close();
 		for (NotificationMessage notificationMessage : notifications) {
@@ -183,7 +185,7 @@ public class NotificationController implements Serializable {
 
 	public String saveNotification() {
 		try {
-			WebClient addClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/nos/notif/add");
+			WebClient addClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/nos/notif/add");
 			NotificationMessage notifMessage = new NotificationMessage();
 			notifMessage.setNotifCrtdDate(new Date().toString());
 			notifMessage.setNotifId(java.util.UUID.randomUUID().toString());
@@ -217,7 +219,7 @@ public class NotificationController implements Serializable {
 
 	private List<GroupBean> fetchAllGroups() {
 		List<GroupBean> ret = new ArrayList<GroupBean>();
-		WebClient viewGroupsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/list");
+		WebClient viewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/list");
 		Collection<? extends GroupMessage> groups = new ArrayList<GroupMessage>(viewGroupsClient.accept(MediaType.APPLICATION_JSON).getCollection(GroupMessage.class));
 		viewGroupsClient.close();
 		for (GroupMessage groupMessage : groups) {
