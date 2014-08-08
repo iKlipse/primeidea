@@ -9,10 +9,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.portlet.Event;
 import javax.portlet.PortletRequest;
-import javax.portlet.faces.BridgeEventHandler;
-import javax.portlet.faces.event.EventNavigationResult;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.jaxrs.client.WebClient;
@@ -121,7 +118,6 @@ public class LandingPageController implements Serializable {
 			showSols = false;
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -463,14 +459,5 @@ public class LandingPageController implements Serializable {
 
 	public void setToView(String toView) {
 		this.toView = toView;
-	}
-
-	public class LoginBridgeEventHandler implements BridgeEventHandler {
-
-		@Override
-		public EventNavigationResult handleEvent(FacesContext arg0, Event arg1) {
-			return null;
-		}
-
 	}
 }

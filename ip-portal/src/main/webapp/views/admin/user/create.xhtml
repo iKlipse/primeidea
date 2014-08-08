@@ -1,6 +1,6 @@
 <ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="adminBody">
-		<p:panelGrid id="qpnlCrtUser" columns="2">
+		<p:panelGrid id="qpnlCrtUser" columns="2" style="width: 100%">
 			<p:column>
 				<p:outputLabel id="qlblFName" value="First Name : " />
 			</p:column>
@@ -25,7 +25,7 @@
 			</p:column>
 			<p:column>
 				<p:inputText style="width: 100%" autocomplete="false" id="qtxtIdNum" value="#{adminController.userBean.idNum}">
-					<p:ajax listener="#{adminController.checkAvailabilityIDNumber}" event="blur" />
+					<p:ajax listener="#{adminController.checkAvailabilityIDNumber}" event="blur" update="frmAdminMsg" />
 				</p:inputText>
 			</p:column>
 
@@ -149,10 +149,10 @@
 			</p:column>
 			<p:row>
 				<p:column colspan="2" style="align: center;">
-					<p:commandButton id="qbtnCSave" value="Save" ajax="false" actionListener="#{adminController.saveUser}">
+					<p:commandButton id="qbtnCSave" value="Save" ajax="false" action="#{adminController.saveUser}">
 						<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
 					</p:commandButton>
-					<p:commandButton id="qbtnDCancel" value="Return To View" ajax="false" actionListener="#{adminController.showViewUsers}">
+					<p:commandButton id="qbtnDCancel" value="Return To View" ajax="false" action="#{adminController.showViewUsers}">
 						<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
 					</p:commandButton>
 				</p:column>

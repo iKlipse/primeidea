@@ -1,6 +1,6 @@
 <ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="adminBody">
-		<p:panelGrid id="mpnlEdtUser" columns="2">
+		<p:panelGrid id="mpnlEdtUser" columns="2" style="width: 100%">
 			<p:column>
 				<p:outputLabel id="mlblFName" value="First Name : " />
 			</p:column>
@@ -136,6 +136,7 @@
 					<p:commandButton id="mbtnHCancel" value="Return To View" ajax="false" action="#{adminController.showViewUsers}">
 						<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
 					</p:commandButton>
+				</p:column>
 			</p:row>
 		</p:panelGrid>
 	</ui:define>

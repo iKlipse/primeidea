@@ -118,8 +118,6 @@ public class RESTServiceHelper {
 	public static List<IdeaBean> fetchAllIdeasByUser(long userId) {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
 		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/" + userId);
-		// WebClient fetchIdeaClient =
-		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/access/0");
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		fetchIdeaClient.close();
 		for (IdeaMessage ideaMessage : ideas) {
@@ -138,13 +136,9 @@ public class RESTServiceHelper {
 		return ret;
 	}
 
-	public static List<IdeaBean> fetchAllIdeasCreatedByUser() {
+	public static List<IdeaBean> fetchAllIdeasCreatedByUser(long userId) {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
-		// WebClient fetchIdeaClient =
-		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/created/"
-		// + ((Long)
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
-		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/created/0");
+		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/user/created/" + userId);
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		fetchIdeaClient.close();
 		for (IdeaMessage ideaMessage : ideas) {
@@ -184,13 +178,9 @@ public class RESTServiceHelper {
 		return ret;
 	}
 
-	public static List<IdeaBean> fetchAllIdeasByStatusIdUserId(Integer status) {
+	public static List<IdeaBean> fetchAllIdeasByStatusIdUserId(Integer status, long userId) {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
-		// WebClient fetchIdeaClient =
-		// createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/status/"
-		// + status + "/user/" + ((Long)
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
-		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/status/" + status + "/user/0");
+		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list/status/" + status + "/user/" + userId);
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		fetchIdeaClient.close();
 		for (IdeaMessage ideaMessage : ideas) {

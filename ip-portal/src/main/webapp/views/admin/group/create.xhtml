@@ -48,10 +48,10 @@
 			</p:column>
 			<p:row>
 				<p:column colspan="2">
-					<p:commandButton id="rbtnBSave" value="Save" ajax="false" actionListener="#{adminController.saveGroup}">
+					<p:commandButton id="rbtnBSave" value="Save" ajax="false" action="#{adminController.saveGroup}">
 						<f:setPropertyActionListener value="2" target="#{adminController.toView}" />
 					</p:commandButton>
-					<p:commandButton id="rbtnCCancel" value="Return To View" ajax="false" actionListener="#{adminController.showViewGroups}">
+					<p:commandButton id="rbtnCCancel" value="Return To View" ajax="false" action="#{adminController.showViewGroups}">
 						<f:setPropertyActionListener value="2" target="#{adminController.toView}" />
 					</p:commandButton>
 				</p:column>

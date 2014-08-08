@@ -11,5 +11,8 @@
 		<portlet id="Solution"></portlet>
 		<portlet id="Rewards"></portlet>
 		<portlet id="Admin"></portlet>
+		<portlet id="img-scroller"></portlet>
+		<portlet id="person-profile"></portlet>
+		<portlet id="media-portlet"></portlet>
 	</category>
 </display>

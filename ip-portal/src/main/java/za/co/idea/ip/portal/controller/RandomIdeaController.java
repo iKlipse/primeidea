@@ -30,9 +30,6 @@ import org.primefaces.model.tagcloud.DefaultTagCloudItem;
 import org.primefaces.model.tagcloud.DefaultTagCloudModel;
 import org.primefaces.model.tagcloud.TagCloudModel;
 
-import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.model.User;
-
 import za.co.idea.ip.portal.bean.GroupBean;
 import za.co.idea.ip.portal.bean.IdeaBean;
 import za.co.idea.ip.portal.bean.ListSelectorBean;
@@ -47,6 +44,9 @@ import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.TagMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
+
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
 
 @ManagedBean(name = "randomIdeaController")
 @SessionScoped
@@ -104,7 +104,7 @@ public class RandomIdeaController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
-			viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(2);
+			viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(2, userId);
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
@@ -114,7 +114,7 @@ public class RandomIdeaController implements Serializable {
 			if (toView != null && Integer.valueOf(toView) != -1) {
 				switch (Integer.valueOf(toView)) {
 				case 1:
-					viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(2);
+					viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(2, userId);
 					showViewOpenIdea = true;
 					showViewIdea = false;
 					showCrtIdea = false;
@@ -135,7 +135,7 @@ public class RandomIdeaController implements Serializable {
 					showCrtIdea = true;
 					break;
 				default:
-					viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(2);
+					viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(2, userId);
 					showViewOpenIdea = false;
 					showViewIdea = true;
 					showCrtIdea = false;
@@ -162,17 +162,19 @@ public class RandomIdeaController implements Serializable {
 
 	public void showViewOpenIdeas() {
 		try {
-			viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(2);
+			viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(2, userId);
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
 			showViewOpenIdea = true;
 			showViewIdea = false;
 			showCrtIdea = false;
+//			return "ideav";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+//			return "";
 		}
 	}
 
@@ -185,10 +187,12 @@ public class RandomIdeaController implements Serializable {
 			showViewOpenIdea = false;
 			showViewIdea = true;
 			showCrtIdea = false;
+//			return "ideav";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+//			return "";
 		}
 	}
 
@@ -200,14 +204,17 @@ public class RandomIdeaController implements Serializable {
 			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
 			ideaBean = new IdeaBean();
 			pGrps = RESTServiceHelper.fetchAllGroups();
+			selGrpId = null;
 			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 			showViewOpenIdea = false;
 			showViewIdea = false;
 			showCrtIdea = true;
+//			return "ideav";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+//			return "";
 		}
 	}
 
@@ -502,7 +509,7 @@ public class RandomIdeaController implements Serializable {
 	public void checkTitleAvailability() {
 		if (ideaBean.getIdeaTitle() == null || ideaBean.getIdeaTitle().length() == 0) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter Title to Check Availability", "Enter Title to Check Availability");
-			FacesContext.getCurrentInstance().addMessage("txtITitle", exceptionMessage);
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
 		WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/check/title/" + ideaBean.getIdeaTitle());
 		Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
@@ -510,10 +517,10 @@ public class RandomIdeaController implements Serializable {
 		titleAvail = avail.booleanValue();
 		if (titleAvail) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
-			FacesContext.getCurrentInstance().addMessage("txtITitle", exceptionMessage);
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		} else {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Title Available", "Title Available");
-			FacesContext.getCurrentInstance().addMessage("txtITitle", exceptionMessage);
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
 	}
 

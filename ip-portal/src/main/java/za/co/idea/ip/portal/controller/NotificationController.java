@@ -22,12 +22,12 @@ import org.primefaces.model.DualListModel;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
+import za.co.idea.ip.portal.bean.GroupBean;
+import za.co.idea.ip.portal.bean.NotificationBean;
 import za.co.idea.ip.ws.bean.GroupMessage;
 import za.co.idea.ip.ws.bean.NotificationMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
-import za.co.idea.ip.portal.bean.GroupBean;
-import za.co.idea.ip.portal.bean.NotificationBean;
 
 @ManagedBean(name = "notificationController")
 @SessionScoped

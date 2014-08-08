@@ -68,6 +68,30 @@
 		<footer-portlet-javascript></footer-portlet-javascript>
 		<css-class-wrapper></css-class-wrapper>
 	</portlet>
+	<portlet>
+		<portlet-name>img-scroller</portlet-name>
+		<icon></icon>
+		<requires-namespaced-parameters>false</requires-namespaced-parameters>
+		<header-portlet-css></header-portlet-css>
+		<footer-portlet-javascript></footer-portlet-javascript>
+		<css-class-wrapper></css-class-wrapper>
+	</portlet>
+	<portlet>
+		<portlet-name>person-profile</portlet-name>
+		<icon></icon>
+		<requires-namespaced-parameters>false</requires-namespaced-parameters>
+		<header-portlet-css></header-portlet-css>
+		<footer-portlet-javascript></footer-portlet-javascript>
+		<css-class-wrapper></css-class-wrapper>
+	</portlet>
+	<portlet>
+		<portlet-name>media-portlet</portlet-name>
+		<icon></icon>
+		<requires-namespaced-parameters>false</requires-namespaced-parameters>
+		<header-portlet-css></header-portlet-css>
+		<footer-portlet-javascript></footer-portlet-javascript>
+		<css-class-wrapper></css-class-wrapper>
+	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

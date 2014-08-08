@@ -33,9 +33,6 @@ import org.primefaces.model.tagcloud.DefaultTagCloudItem;
 import org.primefaces.model.tagcloud.DefaultTagCloudModel;
 import org.primefaces.model.tagcloud.TagCloudModel;
 
-import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.model.User;
-
 import za.co.idea.ip.portal.bean.ChallengeBean;
 import za.co.idea.ip.portal.bean.GroupBean;
 import za.co.idea.ip.portal.bean.ListSelectorBean;
@@ -53,6 +50,9 @@ import za.co.idea.ip.ws.bean.SolutionMessage;
 import za.co.idea.ip.ws.bean.TagMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
+
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
 
 @ManagedBean(name = "challengeController")
 @SessionScoped
@@ -224,7 +224,6 @@ public class ChallengeController implements Serializable {
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -243,7 +242,7 @@ public class ChallengeController implements Serializable {
 		}
 	}
 
-	public void showPublishedChallenges() {
+	public String showPublishedChallenges() {
 		try {
 			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
 			challengeCats = fetchAllChallengeCat();
@@ -252,14 +251,16 @@ public class ChallengeController implements Serializable {
 			showPubChal = true;
 			showViewChal = false;
 			showCrtChal = false;
+			return "chalv";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
 		}
 	}
 
-	public void showViewChallenges() {
+	public String showViewChallenges() {
 		try {
 			viewChallenges = fetchAllChallengesByUser();
 			challengeCats = fetchAllChallengeCat();
@@ -268,15 +269,16 @@ public class ChallengeController implements Serializable {
 			showPubChal = false;
 			showViewChal = true;
 			showCrtChal = false;
+			return "chalv";
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
 		}
 	}
 
-	public void showCreateChallenges() {
+	public String showCreateChallenges() {
 		try {
 			admUsers = fetchAllUsers();
 			challengeCats = fetchAllChallengeCat();
@@ -284,14 +286,16 @@ public class ChallengeController implements Serializable {
 			pGrps = fetchAllGroups();
 			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 			challengeBean = new ChallengeBean();
+			selGrpId = null;
 			showPubChal = false;
 			showViewChal = false;
 			showCrtChal = true;
+			return "chalv";
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
 		}
 	}
 
@@ -709,22 +713,24 @@ public class ChallengeController implements Serializable {
 		showChallengeLikes = false;
 	}
 
-	public void showCreateSolution() {
+	public String showCreateSolution() {
 		try {
 			admUsers = fetchAllUsers();
 			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
 			solutionBean = new SolutionBean();
+			selGrpId = null;
 			saveAsOpen = false;
 			showPubSol = false;
 			showViewSol = false;
 			showCrtSol = true;
+			return "solv";
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
 		}
 	}
 
@@ -739,13 +745,12 @@ public class ChallengeController implements Serializable {
 			solutionBean.setChalId(Long.valueOf(reqMap.get("chalId")));
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
 	}
 
-	public void showViewSolution() {
+	public String showViewSolution() {
 		try {
 			admUsers = fetchAllUsers();
 			viewChallenges = fetchAllChallengesByUser();
@@ -756,16 +761,16 @@ public class ChallengeController implements Serializable {
 			showPubSol = false;
 			showViewSol = true;
 			showCrtSol = false;
+			return "solv";
 		} catch (Exception e) {
 			logger.error(e, e);
-
-			logger.error("Error in view solution: " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
 		}
 	}
 
-	public void showViewOpenSolution() {
+	public String showViewOpenSolution() {
 		try {
 			admUsers = fetchAllUsers();
 			viewChallenges = fetchAllChallengesByUser();
@@ -776,11 +781,12 @@ public class ChallengeController implements Serializable {
 			showPubSol = true;
 			showViewSol = false;
 			showCrtSol = false;
+			return "solv";
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
 		}
 	}
 
@@ -993,7 +999,7 @@ public class ChallengeController implements Serializable {
 	public void checkTitleAvailability() {
 		if (solutionBean.getTitle() == null || solutionBean.getTitle().length() == 0) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter Title to Check Availability", "Enter Title to Check Availability");
-			FacesContext.getCurrentInstance().addMessage("txtITitle", exceptionMessage);
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
 		WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/check/title/" + solutionBean.getTitle());
 		Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
@@ -1001,10 +1007,10 @@ public class ChallengeController implements Serializable {
 		titleAvail = avail.booleanValue();
 		if (titleAvail) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
-			FacesContext.getCurrentInstance().addMessage("txtITitle", exceptionMessage);
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		} else {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Title Available", "Title Available");
-			FacesContext.getCurrentInstance().addMessage("txtITitle", exceptionMessage);
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
 	}
 

@@ -24,20 +24,17 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
+import za.co.idea.ip.portal.bean.NewsBean;
+import za.co.idea.ip.portal.util.IdNumberGen;
 import za.co.idea.ip.ws.bean.AttachmentMessage;
 import za.co.idea.ip.ws.bean.NewsMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
-import za.co.idea.ip.portal.bean.NewsBean;
-import za.co.idea.ip.portal.util.IdNumberGen;
 
 @ManagedBean(name = "newsController")
 @SessionScoped
 public class NewsController implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 8898258487836934087L;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 	private static final Logger logger = Logger.getLogger(NewsController.class);

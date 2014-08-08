@@ -31,10 +31,11 @@
 						<p:graphicImage library="images" name="star.jpg" height="30px" width="30px" rendered="#{!rewards.rwTaggable}" />
 						<f:setPropertyActionListener value="#{rewards}" target="#{rewardsController.rewardsBean}" />
 					</p:commandLink>
-					<p:commandButton id="btnStrClaim" value="C" ajax="false" action="#{claimBean.showClaimReward}" rendered="#{rewards.rwClaimable}">
+					<p:commandButton id="btnStrClaim" value="C" ajax="false" action="#{claimController.showClaimReward}" rendered="#{rewards.rwClaimable}">
 						<f:param name="rewardsId" id="rewardsId" value="#{rewards.rwId}" />
 						<f:param name="rwQuantity" id="rwQuantity" value="#{rewards.rwQuantity}" />
 						<f:param name="rwValue" id="rwValue" value="#{rewards.rwValue}" />
+						<f:param name="clmUId" id="clmUId" value="#{rewardsController.userId}" />
 					</p:commandButton>
 				</p:column>
 			</p:panelGrid>

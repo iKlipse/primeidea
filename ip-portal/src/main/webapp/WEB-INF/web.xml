@@ -27,7 +27,7 @@
 	</context-param>
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
-		<param-value>primedia-green</param-value>
+		<param-value>primedia-blue</param-value>
 	</context-param>
 	<filter>
 		<filter-name>SetCharacterEncodingFilter</filter-name>

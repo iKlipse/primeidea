@@ -17,11 +17,11 @@ import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 
+import za.co.idea.ip.portal.bean.MetaDataBean;
+import za.co.idea.ip.portal.util.IdNumberGen;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
-import za.co.idea.ip.portal.bean.MetaDataBean;
-import za.co.idea.ip.portal.util.IdNumberGen;
 
 @ManagedBean(name = "metaDataController")
 @SessionScoped

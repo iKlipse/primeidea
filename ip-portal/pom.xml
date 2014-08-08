@@ -109,7 +109,7 @@
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>5.0</version>
+			<version>4.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.primefaces.themes</groupId>
@@ -119,7 +119,7 @@
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces-mobile</artifactId>
-			<version>0.9.4</version>
+			<version>0.9.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.primefaces.extensions</groupId>

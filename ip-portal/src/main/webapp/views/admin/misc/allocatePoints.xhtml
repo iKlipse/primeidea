@@ -45,7 +45,7 @@
 					<p:inputText style="width: 100%" id="ttxtComments" value="#{adminController.comments}" />
 				</p:column>
 				<p:column>
-					<p:commandButton id="tbtnSavePoint" value="Add Points" actionListener="#{adminController.savePoints}" ajax="false">
+					<p:commandButton id="tbtnSavePoint" value="Add Points" action="#{adminController.savePoints}" ajax="false">
 						<f:setPropertyActionListener value="3" target="#{adminController.toView}" />
 					</p:commandButton>
 				</p:column>

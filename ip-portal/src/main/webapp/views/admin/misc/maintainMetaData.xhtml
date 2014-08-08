@@ -3,7 +3,7 @@
 		<p:dataTable id="ldtMetaData" widgetVar="dtMetaData" value="#{adminController.beans}" var="bean" rows="10" paginator="true" paginatorPosition="bottom" emptyMessage="No MetaData Found">
 			<f:facet name="header">
 				<p:selectOneMenu id="lsomSelectMeta" value="#{adminController.table}">
-					<p:ajax listener="#{adminController.changeMetaData}" update="ldtMetaData,:frmAdmin:lpnlModMetaData,:frmAdmin:lpnlAddMetaData" />
+					<p:ajax listener="#{adminController.changeMetaData}"  update="ldtMetaData,:frmAdmin:lpnlModMetaData,:frmAdmin:lpnlAddMetaData" />
 					<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
 					<f:selectItems value="#{adminController.metaList}" />
 				</p:selectOneMenu>

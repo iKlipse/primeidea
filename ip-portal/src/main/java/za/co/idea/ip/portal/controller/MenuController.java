@@ -34,6 +34,10 @@ public class MenuController implements Serializable {
 		this.images = images;
 	}
 
+	public void initializeImages() {
+
+	}
+
 	public void redirectChallenge() {
 		try {
 			PortletRequest request = LiferayFacesContext.getInstance().getPortletRequest();

@@ -36,7 +36,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DualListModel;
@@ -146,6 +145,7 @@ public class AdminController implements Serializable {
 	private List<NotificationBean> viewNotifications;
 	private StreamedContent uploadContent;
 	private NotificationBean notificationBean;
+	private Date lastLoginDt;
 	private String[] selGrpId;
 	private String[] selUserId;
 
@@ -166,7 +166,70 @@ public class AdminController implements Serializable {
 			viewUsers = fetchAllUsers();
 		} catch (Exception e) {
 			logger.error(e, e);
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+	}
 
+	public void initializeProfilePage() {
+		try {
+			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			User user = (User) request.getAttribute(WebKeys.USER);
+			WebClient client = RESTServiceHelper.createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+			userId = message.getuId();
+			loggedScrName = message.getScName();
+			if (message.getGroupId() != null) {
+				WebClient hClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/hierarchy/" + message.getGroupId());
+				hierarchy = hClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+				hClient.close();
+			} else {
+				hierarchy = "assign primary group";
+			}
+			try {
+				logger.info("Before image displaying");
+				WebClient docIdClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + message.getuId() + "/ip_user");
+				Long blobId = docIdClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+				docIdClient.close();
+				logger.info("After getting response from service /ds/doc/getId: " + message.getuId() + " --blobId---" + blobId);
+				if (blobId != -999l) {
+					WebClient getBlobNameClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getName/" + blobId);
+					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+					getBlobNameClient.close();
+					logger.info("blob name: " + blobName);
+					WebClient downloadClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					downloadClient.header("Content-Type", "application/json");
+					downloadClient.header("Accept", MediaType.MULTIPART_FORM_DATA);
+					Attachment attachment = downloadClient.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+					logger.info("After getting attachment");
+					if (attachment != null) {
+						logger.info("Before getting blob content type");
+						WebClient getBlobTypeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getContentType/" + blobId);
+						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+						getBlobTypeClient.close();
+						logger.info("blob type: " + blobType);
+						this.image = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
+						logger.info("After setting streamed content to image");
+						show = true;
+						showDef = false;
+					} else {
+						show = false;
+						showDef = true;
+					}
+					client.close();
+				} else {
+					show = false;
+					showDef = true;
+				}
+			} catch (Exception e) {
+				logger.error(e, e);
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform Login request", "System error occurred, cannot perform Login request");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				show = false;
+				showDef = true;
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -205,8 +268,6 @@ public class AdminController implements Serializable {
 			return "admvn";
 		} catch (Exception e) {
 			logger.error(e, e);
-
-			logger.error("Error while displaying show view news form: " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news view request", "System error occurred, cannot perform news view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -494,7 +555,6 @@ public class AdminController implements Serializable {
 			return "admue";
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated user view request", "System error occurred, cannot perform updated user view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -604,13 +664,6 @@ public class AdminController implements Serializable {
 				} else {
 					hierarchy = "assign primary group";
 				}
-				/*
-				 * AccessController controller = new
-				 * AccessController(bean.getuId());
-				 * FacesContext.getCurrentInstance
-				 * ().getExternalContext().getSessionMap().put("accessBean",
-				 * controller);
-				 */
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", bean);
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userId", bean.getuId());
 				try {
@@ -708,12 +761,12 @@ public class AdminController implements Serializable {
 	public void resetSecurity() {
 		if (secQ == null || secQ.length() == 0) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Question is Mandatory", "Security Question is Mandatory");
-			FacesContext.getCurrentInstance().addMessage("txtSCName", exceptionMessage);
-			RequestContext.getCurrentInstance().openDialog("dlgSecUpdate");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+//			RequestContext.getCurrentInstance().openDialog("dlgSecUpdate");
 		} else if (secA == null || secA.length() == 0) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Answer is Mandatory", "Security Answer is Mandatory");
-			FacesContext.getCurrentInstance().addMessage("txtSCName", exceptionMessage);
-			RequestContext.getCurrentInstance().openDialog("dlgSecUpdate");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+//			RequestContext.getCurrentInstance().openDialog("dlgSecUpdate");
 		} else {
 			WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/rsec");
 			ResponseMessage response = loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), secQ.toString(), secA }, ResponseMessage.class);
@@ -723,7 +776,7 @@ public class AdminController implements Serializable {
 			if (response.getStatusCode() != 0) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusCode() + " :: " + response.getStatusDesc(), response.getStatusCode() + " :: " + response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				RequestContext.getCurrentInstance().closeDialog("dlgSecUpdate");
+//				RequestContext.getCurrentInstance().closeDialog("dlgSecUpdate");
 			}
 		}
 	}
@@ -1053,7 +1106,7 @@ public class AdminController implements Serializable {
 	public void checkAvailability() {
 		if (userBean.getScName() == null || userBean.getScName().length() == 0) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter Screen Name to Check Availability", "Enter Screen Name to Check Availability");
-			FacesContext.getCurrentInstance().addMessage("txtSCName", exceptionMessage);
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
 		WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/screenName/" + userBean.getScName());
 		Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
@@ -1061,10 +1114,10 @@ public class AdminController implements Serializable {
 		available = avail.booleanValue();
 		if (available) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Screen Name Not Available", "Screen Name Not Available");
-			FacesContext.getCurrentInstance().addMessage("txtSCName", exceptionMessage);
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		} else {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Screen Name Available", "Screen Name Available");
-			FacesContext.getCurrentInstance().addMessage("txtSCName", exceptionMessage);
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
 	}
 
@@ -1078,7 +1131,7 @@ public class AdminController implements Serializable {
 			availableEmail = availE.booleanValue();
 			if (availableEmail) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email already exists", "Email already exists");
-				FacesContext.getCurrentInstance().addMessage("txtEMail", exceptionMessage);
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		}
 	}
@@ -1093,7 +1146,7 @@ public class AdminController implements Serializable {
 			availableID = availID.booleanValue();
 			if (availableID) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ID Number already exists", "ID Number already exists");
-				FacesContext.getCurrentInstance().addMessage("txtIdNum", exceptionMessage);
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		}
 	}
@@ -1108,7 +1161,7 @@ public class AdminController implements Serializable {
 			availableEmpID = availEmpID.booleanValue();
 			if (availableEmpID) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Employee ID already exists", "Employee ID already exists");
-				FacesContext.getCurrentInstance().addMessage("txtEmpId", exceptionMessage);
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		}
 	}
@@ -2166,7 +2219,7 @@ public class AdminController implements Serializable {
 			this.contentType = file.getContentType();
 			if (file != null) {
 				FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Profile Image has been uploaded successfully", "Profile Image has been uploaded successfully");
-				FacesContext.getCurrentInstance().addMessage("fuCUpload", successMessage);
+				FacesContext.getCurrentInstance().addMessage(null, successMessage);
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -2184,7 +2237,7 @@ public class AdminController implements Serializable {
 			this.grpContentType = file.getContentType();
 			if (file != null) {
 				FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Group Image has been uploaded successfully", "Group Image has been uploaded successfully");
-				FacesContext.getCurrentInstance().addMessage("fuCUpload", successMessage);
+				FacesContext.getCurrentInstance().addMessage(null, successMessage);
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -2203,7 +2256,7 @@ public class AdminController implements Serializable {
 			enableUpload = true;
 			if (file != null) {
 				FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "File has been uploaded successfully", "File has been uploaded successfully");
-				FacesContext.getCurrentInstance().addMessage("fuCUpload", successMessage);
+				FacesContext.getCurrentInstance().addMessage(null, successMessage);
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -2223,7 +2276,7 @@ public class AdminController implements Serializable {
 			enableUpload = true;
 			if (file != null) {
 				FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "File has been uploaded successfully", "File has been uploaded successfully");
-				FacesContext.getCurrentInstance().addMessage("fuCUpload", successMessage);
+				FacesContext.getCurrentInstance().addMessage(null, successMessage);
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -3134,6 +3187,14 @@ public class AdminController implements Serializable {
 
 	public void setSelUserId(String[] selUserId) {
 		this.selUserId = selUserId;
+	}
+
+	public Date getLastLoginDt() {
+		return lastLoginDt;
+	}
+
+	public void setLastLoginDt(Date lastLoginDt) {
+		this.lastLoginDt = lastLoginDt;
 	}
 
 }
