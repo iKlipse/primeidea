@@ -803,7 +803,7 @@ public class AdminController implements Serializable {
 				comments = null;
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucessfully added points", "Sucessfully added points");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				return redirectMain();
+				return "";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform save point request", "System error occurred, cannot perform save point request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -2489,7 +2489,8 @@ public class AdminController implements Serializable {
 					}
 					createBlobClient.close();
 				}
-				return redirectMain();
+				viewNewsBeans = fetchAllNews();
+				return "admvn";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -2572,7 +2573,8 @@ public class AdminController implements Serializable {
 					}
 				}
 				image = null;
-				return redirectMain();
+				viewNewsBeans = fetchAllNews();
+				return "admvn";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -2607,7 +2609,7 @@ public class AdminController implements Serializable {
 				uploadContent = null;
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Notification Successfully generated", "Notification Successfully generated");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				return redirectMain();
+				return "";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -3058,6 +3060,8 @@ public class AdminController implements Serializable {
 	}
 
 	public List<MetaDataBean> getDisStatusList() {
+		if (disStatusList == null)
+			disStatusList = new ArrayList<MetaDataBean>();
 		return disStatusList;
 	}
 
@@ -3066,6 +3070,13 @@ public class AdminController implements Serializable {
 	}
 
 	public HashMap<String, String> getAllocEntityList() {
+		if (allocEntityList == null) {
+			allocEntityList = new HashMap<String, String>();
+			allocEntityList.put("Solution", "ip_solution_status");
+			allocEntityList.put("Challenge", "ip_challenge_status");
+			allocEntityList.put("Idea", "ip_idea_status");
+			allocEntityList.put("Claim", "ip_claim_status");
+		}
 		return allocEntityList;
 	}
 
