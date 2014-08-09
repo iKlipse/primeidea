@@ -181,7 +181,6 @@ public class IpNotifDAO extends BaseHibernateDAO {
 			List results = queryObject.list();
 			transaction.commit();
 			session.close();
-
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
@@ -203,7 +202,6 @@ public class IpNotifDAO extends BaseHibernateDAO {
 			IpNotif result = (IpNotif) session.merge(detachedInstance);
 			transaction.commit();
 			session.close();
-
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
