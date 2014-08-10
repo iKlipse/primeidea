@@ -1,4 +1,4 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<p:panelGrid columns="2" id="pnlSummaryOpenSolution">
 		<p:column>
 			<p:outputLabel id="lblITitle" value="Title : " />
@@ -82,7 +82,7 @@
 				<p:tooltip for="dtViewComments" value="Tags disabled as solution not in open status" rendered="#{challengeController.solutionBean.taggable}" />
 			</p:column>
 			<p:column rendered="#{!challengeBean.solutionBean.taggable}">
-				<p:editor id="edComment" value="#{challengeController.commentText}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+				<p:editor id="edComment" value="#{challengeController.commentText}"  />
 			</p:column>
 			<p:column rendered="#{!challengeBean.solutionBean.taggable}">
 				<p:commandButton id="btnSubmitComment" value="Post" actionListener="#{challengeController.commentSolution}" />

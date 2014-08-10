@@ -24,7 +24,7 @@ public class MenuController implements Serializable {
 
 	public List<String> getImages() {
 		images = new ArrayList<String>();
-		for (int i = 1; i <= 8; i++) {
+		for (int i = 1; i <= 4; i++) {
 			images.add(i + ".jpg");
 		}
 		return images;

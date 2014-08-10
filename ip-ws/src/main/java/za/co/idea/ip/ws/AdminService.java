@@ -15,12 +15,14 @@ import javax.ws.rs.Produces;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.bean.IpFuncGroup;
 import za.co.idea.ip.orm.bean.IpFunction;
 import za.co.idea.ip.orm.bean.IpGroup;
 import za.co.idea.ip.orm.bean.IpGroupUser;
 import za.co.idea.ip.orm.bean.IpLogin;
 import za.co.idea.ip.orm.bean.IpUser;
+import za.co.idea.ip.orm.dao.IpBlobDAO;
 import za.co.idea.ip.orm.dao.IpFuncGroupDAO;
 import za.co.idea.ip.orm.dao.IpFunctionDAO;
 import za.co.idea.ip.orm.dao.IpGroupDAO;
@@ -32,6 +34,7 @@ import za.co.idea.ip.ws.bean.FunctionMessage;
 import za.co.idea.ip.ws.bean.GroupMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
+import za.co.idea.ip.ws.bean.UserStatisticsMessage;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Path(value = "/as")
@@ -43,6 +46,7 @@ public class AdminService {
 	private IpNativeSQLDAO ipNativeSQLDAO;
 	private IpGroupUserDAO ipGroupUserDAO;
 	private IpFuncGroupDAO ipFuncGroupDAO;
+	private IpBlobDAO ipBlobDAO;
 
 	@POST
 	@Path("/group/add")
@@ -741,6 +745,12 @@ public class AdminService {
 				user.setLastLoginDt(ipLogin.getLoginLastDt());
 				ipLogin.setLoginLastDt(new Timestamp(System.currentTimeMillis()));
 				ipLoginDAO.merge(ipLogin);
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipUser.getUserId(), "ip_user");
+				if (blob != null) {
+					user.setImgPath("ip_user/" + ipUser.getUserId() + "/" + blob.getBlobName());
+					user.setImgAvail(true);
+				} else
+					user.setImgAvail(false);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -775,6 +785,30 @@ public class AdminService {
 			e.printStackTrace();
 		}
 		return user;
+	}
+
+	@GET
+	@Path("/user/stats/{userId}")
+	@Produces("application/json")
+	public UserStatisticsMessage getDetailsByUserId(@PathParam("userId") Long id) {
+		UserStatisticsMessage userStats = new UserStatisticsMessage();
+		try {
+			Long solCount = ipUserDAO.findSolutionCount(id);
+			Long chalCount = ipUserDAO.findChallengeCount(id);
+			Long whishListCount = ipUserDAO.findWhishlistCount(id);
+			Long ideasCount = ipUserDAO.findIdeasCount(id);
+			Long totalCount = solCount + chalCount + whishListCount + ideasCount;
+
+			userStats.setUserId(id);
+			userStats.setChallengesCount(chalCount);
+			userStats.setIdeasCount(ideasCount);
+			userStats.setSolutionsCount(solCount);
+			userStats.setWhishListCount(whishListCount);
+			userStats.setTotalCount(totalCount);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return userStats;
 	}
 
 	public IpGroupDAO getIpGroupDAO() {
@@ -831,5 +865,13 @@ public class AdminService {
 
 	public void setIpFuncGroupDAO(IpFuncGroupDAO ipFuncGroupDAO) {
 		this.ipFuncGroupDAO = ipFuncGroupDAO;
+	}
+
+	public IpBlobDAO getIpBlobDAO() {
+		return ipBlobDAO;
+	}
+
+	public void setIpBlobDAO(IpBlobDAO ipBlobDAO) {
+		this.ipBlobDAO = ipBlobDAO;
 	}
 }

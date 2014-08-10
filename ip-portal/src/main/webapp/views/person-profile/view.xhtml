@@ -1,27 +1,42 @@
 <f:view xmlns="http://www.w3.org/1999/xhtml" xmlns:aui="http://alloy.liferay.com/tld/aui" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 	<h:head />
-	<h:body style="background-color:grey !important">
+	<h:body>
 		<h:form id="frmProfile" enctype="multipart/form-data">
 			<p:remoteCommand actionListener="#{adminController.initializeProfilePage}" name="onload" autoRun="true" update="pnlProfImg" />
-			<p:panelGrid id="pnlProfImg" columns="1">
-				<f:facet name="header">
-					<p:outputLabel id="lblLoggedScrNm" value="#{adminController.loggedScrName}" />'s Profile
-				</f:facet>
-				<p:column>
-					<p:graphicImage style="float: right !important;" id="imgAvatar" value="#{adminController.image}" alt="Upload Image" height="100px" width="100px" rendered="#{adminController.show}" />
-					<p:graphicImage style="float: right !important;" id="imgAvatarDefault" name="profile.jpg" library="images" height="100px" width="100px" rendered="#{adminController.showDef}" />
-				</p:column>
-				<p:column>
-					<p:outputLabel style="float: Left !important;" id="lblGrpHText" value="Group Hierarchy :" />
-					<p:outputLabel style="float: right !important;" id="lblGrpH" value="#{adminController.hierarchy}" />
-				</p:column>
-				<p:column>
-					<p:outputLabel style="float: Left !important;" id="lblLastLoginText" value="Last Login :" />
-					<p:outputLabel style="float: right !important;" id="lblLastLogin" value="#{adminController.lastLoginDt}">
-						<f:convertDateTime pattern="dd.MM.yyyy HH:mm" />
-					</p:outputLabel>
-				</p:column>
-			</p:panelGrid>
+			<p:panel id="pnlProfImg" style="border: 0px !important; width: 100% !important; height: 100% !important;" header="#{adminController.loggedScrName}">
+				<p:panelGrid id="pnlGrdProfImg" columns="1">
+					<p:column>
+						<p:outputLabel id="loggedInUser" value="#{adminController.loggedScrName}" />
+					</p:column>
+					<p:column>
+						<p:graphicImage style="float: right !important;" id="imgAvatar" name="#{adminController.imgPath}" library="images" height="75px" width="75px" rendered="#{adminController.imgAvail}" />
+						<p:graphicImage style="float: right !important;" id="imgAvatarDefault" name="profile.jpg" library="images" height="75px" width="75px" rendered="#{adminController.imgAvail}" />
+					</p:column>
+					<p:column>
+						<p:outputLabel style="float: Left !important;" id="lblGrpHText" value="Group Hierarchy :" />
+						<p:outputLabel style="float: right !important;" id="lblGrpH" value="#{adminController.hierarchy}" />
+					</p:column>
+					<p:column>
+						<p:panelGrid id="pnlStats" style="width: 100% !important" columns="5">
+							<p:column>
+								<p:outputLabel value="#{adminController.statsBean.totalCount}" />
+							</p:column>
+							<p:column>
+								<p:outputLabel value="#{adminController.statsBean.ideasCount}" />
+							</p:column>
+							<p:column>
+								<p:outputLabel value="#{adminController.statsBean.challengesCount}" />
+							</p:column>
+							<p:column>
+								<p:outputLabel value="#{adminController.statsBean.solutionsCount}" />
+							</p:column>
+							<p:column>
+								<p:outputLabel value="#{adminController.statsBean.whishListCount}" />
+							</p:column>
+						</p:panelGrid>
+					</p:column>
+				</p:panelGrid>
+			</p:panel>
 		</h:form>
 	</h:body>
 </f:view>

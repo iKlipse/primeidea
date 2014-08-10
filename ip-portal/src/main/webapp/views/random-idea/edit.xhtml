@@ -1,4 +1,4 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<p:panelGrid columns="2" id="pnlEditIdea">
 		<p:column>
 			<p:outputLabel id="lblEdtITitle" value="Title : " />
@@ -21,7 +21,7 @@
 			<p:outputLabel id="lblEdtIDesc" value="Description : " />
 		</p:column>
 		<p:column>
-			<p:editor style="width: 100%" id="txtEdtIDesc" value="#{randomIdeaController.ideaBean.ideaDesc}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+			<p:editor style="width: 100%" id="txtEdtIDesc" value="#{randomIdeaController.ideaBean.ideaDesc}"  />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtITag" value="Keywords to Describe Your Idea : " />

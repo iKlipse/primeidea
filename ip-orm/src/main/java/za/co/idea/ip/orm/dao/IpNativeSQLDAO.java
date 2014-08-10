@@ -21,13 +21,13 @@ public class IpNativeSQLDAO extends BaseHibernateDAO {
 			if (res != null && res.size() > 0)
 				ret = Long.valueOf(res.get(0).toString());
 			transaction.commit();
-			session.close();
+			
 
 		} catch (Exception e) {
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw new RuntimeException(e);
 		}

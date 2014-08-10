@@ -10,6 +10,7 @@
 		<property name="ipNativeSQLDAO" ref="IpNativeSQLDAO" />
 		<property name="ipGroupUserDAO" ref="IpGroupUserDAO" />
 		<property name="ipFuncGroupDAO" ref="IpFuncGroupDAO" />
+		<property name="ipBlobDAO" ref="IpBlobDAO" />
 	</bean>
 	<bean id="ideaService" class="za.co.idea.ip.ws.IdeaService">
 		<property name="ipIdeaCatDAO" ref="IpIdeaCatDAO" />
@@ -118,7 +119,7 @@
 				<entry key="sender" value-ref="mailSender" />
 			</map>
 		</property>
-	</bean>	
+	</bean>
 	<bean id="ChallengeExpiryJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="ChallengeExpiryJob" />
 		<property name="cronExpression" value="0 0/10 * * * ?" />
@@ -130,13 +131,11 @@
 	<bean id="UserNotificationsJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="UserNotificationsJob" />
 		<property name="cronExpression" value="0 0 12 ? * TUE *" />
-	</bean>	
+	</bean>
 	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<ref bean="ChallengeExpiryJobTrigger" />
-				<ref bean="NotificationEmailJobTrigger" />
-				<ref bean="UserNotificationsJobTrigger" />				
+				<!-- <ref bean="ChallengeExpiryJobTrigger" /> <ref bean="NotificationEmailJobTrigger" /> <ref bean="UserNotificationsJobTrigger" /> -->
 			</list>
 		</property>
 	</bean>

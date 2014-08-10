@@ -18,7 +18,6 @@ public class ImageSyncJob extends QuartzJobBean implements StatefulJob {
 	private static final Logger logger = Logger.getLogger(ImageSyncJob.class);
 
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
-		logger.debug("control handled in executeInternal() method");
 		WebApplicationContext wac = ContextLoader.getCurrentWebApplicationContext();
 		File file = new File(wac.getServletContext().getRealPath("/resources/images"));
 		File srcFile = new File(BUNDLE.getString("base.dir"));

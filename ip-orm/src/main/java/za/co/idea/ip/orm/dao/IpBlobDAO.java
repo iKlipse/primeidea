@@ -40,15 +40,15 @@ public class IpBlobDAO extends BaseHibernateDAO {
 		try {
 			session.save(transientInstance);
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -61,15 +61,15 @@ public class IpBlobDAO extends BaseHibernateDAO {
 		try {
 			session.delete(persistentInstance);
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -82,15 +82,15 @@ public class IpBlobDAO extends BaseHibernateDAO {
 		try {
 			IpBlob instance = (IpBlob) session.get("za.co.idea.ip.orm.bean.IpBlob", id);
 			transaction.commit();
-			session.close();
+			
 
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -103,7 +103,7 @@ public class IpBlobDAO extends BaseHibernateDAO {
 		try {
 			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpBlob").add(Example.create(instance)).list();
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
@@ -111,8 +111,8 @@ public class IpBlobDAO extends BaseHibernateDAO {
 			log.error("find by example failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -128,15 +128,15 @@ public class IpBlobDAO extends BaseHibernateDAO {
 			queryObject.setParameter(0, value);
 			List results = queryObject.list();
 			transaction.commit();
-			session.close();
+			
 
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -175,15 +175,15 @@ public class IpBlobDAO extends BaseHibernateDAO {
 			Query queryObject = session.createQuery(queryString);
 			List results = queryObject.list();
 			transaction.commit();
-			session.close();
+			
 
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -196,7 +196,7 @@ public class IpBlobDAO extends BaseHibernateDAO {
 		try {
 			IpBlob result = (IpBlob) session.merge(detachedInstance);
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("merge successful");
 			return result;
@@ -204,8 +204,8 @@ public class IpBlobDAO extends BaseHibernateDAO {
 			log.error("merge failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -218,15 +218,15 @@ public class IpBlobDAO extends BaseHibernateDAO {
 		try {
 			session.saveOrUpdate(instance);
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -245,15 +245,15 @@ public class IpBlobDAO extends BaseHibernateDAO {
 			if (obj != null && obj.size() > 0)
 				ret = (Long) obj.get(0);
 			transaction.commit();
-			session.close();
+			
 
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -272,15 +272,15 @@ public class IpBlobDAO extends BaseHibernateDAO {
 			if (obj != null && obj.size() > 0)
 				ret = (IpBlob) obj.get(0);
 			transaction.commit();
-			session.close();
+			
 
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}

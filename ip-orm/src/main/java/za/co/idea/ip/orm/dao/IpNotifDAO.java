@@ -41,15 +41,15 @@ public class IpNotifDAO extends BaseHibernateDAO {
 		try {
 			session.save(transientInstance);
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -62,15 +62,15 @@ public class IpNotifDAO extends BaseHibernateDAO {
 		try {
 			session.delete(persistentInstance);
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -83,15 +83,15 @@ public class IpNotifDAO extends BaseHibernateDAO {
 		try {
 			IpNotif instance = (IpNotif) session.get("za.co.idea.ip.orm.bean.IpNotif", id);
 			transaction.commit();
-			session.close();
+			
 
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -104,7 +104,7 @@ public class IpNotifDAO extends BaseHibernateDAO {
 		try {
 			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpNotif").add(Example.create(instance)).list();
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
@@ -112,8 +112,8 @@ public class IpNotifDAO extends BaseHibernateDAO {
 			log.error("find by example failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -129,15 +129,15 @@ public class IpNotifDAO extends BaseHibernateDAO {
 			queryObject.setParameter(0, value);
 			List results = queryObject.list();
 			transaction.commit();
-			session.close();
+			
 
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -180,14 +180,14 @@ public class IpNotifDAO extends BaseHibernateDAO {
 			Query queryObject = session.createQuery(queryString);
 			List results = queryObject.list();
 			transaction.commit();
-			session.close();
+			
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -201,15 +201,15 @@ public class IpNotifDAO extends BaseHibernateDAO {
 		try {
 			IpNotif result = (IpNotif) session.merge(detachedInstance);
 			transaction.commit();
-			session.close();
+			
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -222,15 +222,15 @@ public class IpNotifDAO extends BaseHibernateDAO {
 		try {
 			session.saveOrUpdate(instance);
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -245,14 +245,14 @@ public class IpNotifDAO extends BaseHibernateDAO {
 			query.setString("id", id);
 			query.executeUpdate();
 			transaction.commit();
-			session.close();
+			
 
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 			throw re;
 		}
 	}

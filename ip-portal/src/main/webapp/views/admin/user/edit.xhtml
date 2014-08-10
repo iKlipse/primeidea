@@ -1,4 +1,4 @@
-<ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="adminBody">
 		<p:panelGrid id="mpnlEdtUser" columns="2" style="width: 100%">
 			<p:column>
@@ -106,27 +106,27 @@
 				<p:outputLabel id="mlblRsetPasswd" value="Reset Password : " />
 			</p:column>
 			<p:column>
-				<pe:tooltip for="msbbRsetPasswd" value="If Selected Password will be reset to Passw123" />
+				<p:tooltip for="msbbRsetPasswd" value="If Selected Password will be reset to Passw123" />
 				<p:selectBooleanButton id="msbbRsetPasswd" value="#{adminController.resetPasswd}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="mlblResetSec" value="Reset Security : " />
 			</p:column>
 			<p:column>
-				<pe:tooltip for="msbbResetSec" value="If Selected Security Question will be reset to Home Town and Answer will be reset to Johannesburg" />
+				<p:tooltip for="msbbResetSec" value="If Selected Security Question will be reset to Home Town and Answer will be reset to Johannesburg" />
 				<p:selectBooleanButton id="msbbResetSec" value="#{adminController.resetSec}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="mlblSkills" value="Skills : " />
 			</p:column>
 			<p:column style="width: 100%">
-				<p:editor id="mtxtSkills" value="#{adminController.userBean.skills}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+				<p:editor id="mtxtSkills" value="#{adminController.userBean.skills}"  />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="mlblBio" value="Bio : " />
 			</p:column>
 			<p:column style="width: 100%">
-				<p:editor id="mtxtBio" value="#{adminController.userBean.bio}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+				<p:editor id="mtxtBio" value="#{adminController.userBean.bio}"  />
 			</p:column>
 			<p:row>
 				<p:column colspan="2" style="align: center;">

@@ -5,10 +5,8 @@
 	<portlet>
 		<portlet-name>login-portlet</portlet-name>
 		<icon></icon>
-		<requires-namespaced-parameters>
-			false
-		</requires-namespaced-parameters>
-		<header-portlet-css></header-portlet-css>
+		<requires-namespaced-parameters>false</requires-namespaced-parameters>
+		<header-portlet-css>/css/ip-portal.css</header-portlet-css>
 		<footer-portlet-javascript></footer-portlet-javascript>
 		<css-class-wrapper></css-class-wrapper>
 	</portlet>
@@ -16,7 +14,7 @@
 		<portlet-name>landing-page</portlet-name>
 		<icon></icon>
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>
-		<header-portlet-css></header-portlet-css>
+		<header-portlet-css>/css/ip-portal.css</header-portlet-css>
 		<footer-portlet-javascript></footer-portlet-javascript>
 		<css-class-wrapper></css-class-wrapper>
 	</portlet>
@@ -24,7 +22,7 @@
 		<portlet-name>random-idea</portlet-name>
 		<icon></icon>
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>
-		<header-portlet-css></header-portlet-css>
+		<header-portlet-css>/css/ip-portal.css</header-portlet-css>
 		<footer-portlet-javascript></footer-portlet-javascript>
 		<css-class-wrapper>random-idea-portlet</css-class-wrapper>
 	</portlet>
@@ -32,7 +30,7 @@
 		<portlet-name>menu</portlet-name>
 		<icon></icon>
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>
-		<header-portlet-css></header-portlet-css>
+		<header-portlet-css>/css/ip-portal.css</header-portlet-css>
 		<footer-portlet-javascript></footer-portlet-javascript>
 		<css-class-wrapper></css-class-wrapper>
 	</portlet>
@@ -40,7 +38,7 @@
 		<portlet-name>challenge</portlet-name>
 		<icon></icon>
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>
-		<header-portlet-css></header-portlet-css>
+		<header-portlet-css>/css/ip-portal.css</header-portlet-css>
 		<footer-portlet-javascript></footer-portlet-javascript>
 		<css-class-wrapper></css-class-wrapper>
 	</portlet>
@@ -48,7 +46,7 @@
 		<portlet-name>Solution</portlet-name>
 		<icon></icon>
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>
-		<header-portlet-css></header-portlet-css>
+		<header-portlet-css>/css/ip-portal.css</header-portlet-css>
 		<footer-portlet-javascript></footer-portlet-javascript>
 		<css-class-wrapper></css-class-wrapper>
 	</portlet>
@@ -56,7 +54,7 @@
 		<portlet-name>Rewards</portlet-name>
 		<icon></icon>
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>
-		<header-portlet-css></header-portlet-css>
+		<header-portlet-css>/css/ip-portal.css</header-portlet-css>
 		<footer-portlet-javascript></footer-portlet-javascript>
 		<css-class-wrapper></css-class-wrapper>
 	</portlet>
@@ -64,7 +62,7 @@
 		<portlet-name>Admin</portlet-name>
 		<icon></icon>
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>
-		<header-portlet-css></header-portlet-css>
+		<header-portlet-css>/css/ip-portal.css</header-portlet-css>
 		<footer-portlet-javascript></footer-portlet-javascript>
 		<css-class-wrapper></css-class-wrapper>
 	</portlet>
@@ -72,7 +70,7 @@
 		<portlet-name>img-scroller</portlet-name>
 		<icon></icon>
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>
-		<header-portlet-css></header-portlet-css>
+		<header-portlet-css>/css/ip-portal.css</header-portlet-css>
 		<footer-portlet-javascript></footer-portlet-javascript>
 		<css-class-wrapper></css-class-wrapper>
 	</portlet>
@@ -80,7 +78,7 @@
 		<portlet-name>person-profile</portlet-name>
 		<icon></icon>
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>
-		<header-portlet-css></header-portlet-css>
+		<header-portlet-css>/css/ip-portal.css</header-portlet-css>
 		<footer-portlet-javascript></footer-portlet-javascript>
 		<css-class-wrapper></css-class-wrapper>
 	</portlet>
@@ -88,7 +86,7 @@
 		<portlet-name>media-portlet</portlet-name>
 		<icon></icon>
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>
-		<header-portlet-css></header-portlet-css>
+		<header-portlet-css>/css/ip-portal.css</header-portlet-css>
 		<footer-portlet-javascript></footer-portlet-javascript>
 		<css-class-wrapper></css-class-wrapper>
 	</portlet>

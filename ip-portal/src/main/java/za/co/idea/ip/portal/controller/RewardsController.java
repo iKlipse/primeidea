@@ -299,7 +299,7 @@ public class RewardsController implements Serializable {
 		this.showModPanel = false;
 	}
 
-	public void showEditReward() {
+	public String showEditReward() {
 		try {
 			admUsers = fetchAllUsers();
 			rewardsCat = fetchAllRewardsCat();
@@ -332,20 +332,20 @@ public class RewardsController implements Serializable {
 					fileAvail = true;
 					fileContent = null;
 				}
+				return "rwe";
 			} catch (Exception e) {
 				logger.error(e, e);
-
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update reward request", "System error occurred, cannot perform update reward request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				fileAvail = true;
 				fileContent = null;
+				return "";
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
-
-			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update reward request", "System error occurred, cannot perform update reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
 		}
 	}
 
@@ -744,7 +744,6 @@ public class RewardsController implements Serializable {
 			bean.setRwUrl(message.getRwUrl());
 			bean.setRwTaggable(isWishlist(message.getRwId()));
 			bean.setRwClaimable(totalPoints >= message.getRwValue() && message.getRwQuantity() > 0);
-			logger.info("-----in whishlist ----" + bean.isRwTaggable());
 			ret.add(bean);
 		}
 		return ret;
@@ -786,7 +785,8 @@ public class RewardsController implements Serializable {
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
 		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list/" + userId);
 		// WebClient viewRewardsClient =
-		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list/0");
+		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" +
+		// BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list/0");
 		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
 		viewRewardsClient.close();
 		for (RewardsMessage message : rewards) {
@@ -817,7 +817,8 @@ public class RewardsController implements Serializable {
 		List<PointBean> ret = new ArrayList<PointBean>();
 		WebClient viewPointClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/points/get/user/" + userId);
 		// WebClient viewPointClient =
-		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/points/get/user/0");
+		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" +
+		// BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/points/get/user/0");
 		Collection<? extends PointMessage> points = new ArrayList<PointMessage>(viewPointClient.accept(MediaType.APPLICATION_JSON).getCollection(PointMessage.class));
 		viewPointClient.close();
 		totalPoints = 0l;
@@ -860,7 +861,6 @@ public class RewardsController implements Serializable {
 			bean.setRwUrl(message.getRwUrl());
 			bean.setRwClaimable(totalPoints >= message.getRwValue() && message.getRwQuantity() > 0);
 			bean.setRwTaggable(isWishlist(message.getRwId()));
-			logger.info("id ----+" + bean.getRwTitle() + "---------" + bean.isRwTaggable());
 			ret.add(bean);
 		}
 		return ret;
@@ -868,9 +868,6 @@ public class RewardsController implements Serializable {
 
 	private boolean isWishlist(Long rwId) {
 		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/getByUser/" + rwId + "/4/4/" + userId);
-		// WebClient viewRewardsClient =
-		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/getByUser/"
-		// + rwId + "/4/4/0");
 		Collection<? extends TagMessage> rewards = new ArrayList<TagMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		return (rewards.size() > 0);
 	}

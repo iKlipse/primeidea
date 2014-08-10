@@ -156,7 +156,6 @@ public class SolutionService {
 	@Produces("application/json")
 	public <T extends SolutionMessage> List<T> listSolutionByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
-		logger.debug("Control handled in listSolutionByUser() of /solution/list/user/access/{id} service ");
 		try {
 			logger.info("User Id :"+id);
 			List solutions = ipSolutionDAO.findByUserId(id);

@@ -35,15 +35,15 @@ public class IpSolutionStatusDAO extends BaseHibernateDAO {
 		try {
 			session.save(transientInstance);
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -56,15 +56,15 @@ public class IpSolutionStatusDAO extends BaseHibernateDAO {
 		try {
 			session.delete(persistentInstance);
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -77,15 +77,15 @@ public class IpSolutionStatusDAO extends BaseHibernateDAO {
 		try {
 			IpSolutionStatus instance = (IpSolutionStatus) session.get("za.co.idea.ip.orm.bean.IpSolutionStatus", id);
 			transaction.commit();
-			session.close();
+			
 
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -99,15 +99,15 @@ public class IpSolutionStatusDAO extends BaseHibernateDAO {
 			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpSolutionStatus").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			transaction.commit();
-			session.close();
+			
 
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -123,15 +123,15 @@ public class IpSolutionStatusDAO extends BaseHibernateDAO {
 			queryObject.setParameter(0, value);
 			List results = queryObject.list();
 			transaction.commit();
-			session.close();
+			
 
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -150,15 +150,15 @@ public class IpSolutionStatusDAO extends BaseHibernateDAO {
 			Query queryObject = session.createQuery(queryString);
 			List results = queryObject.list();
 			transaction.commit();
-			session.close();
+			
 
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -171,7 +171,7 @@ public class IpSolutionStatusDAO extends BaseHibernateDAO {
 		try {
 			IpSolutionStatus result = (IpSolutionStatus) session.merge(detachedInstance);
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("merge successful");
 			return result;
@@ -179,8 +179,8 @@ public class IpSolutionStatusDAO extends BaseHibernateDAO {
 			log.error("merge failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -193,15 +193,15 @@ public class IpSolutionStatusDAO extends BaseHibernateDAO {
 		try {
 			session.saveOrUpdate(instance);
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -216,15 +216,15 @@ public class IpSolutionStatusDAO extends BaseHibernateDAO {
 			query.setLong("curr", curr);
 			List ret = query.list();
 			transaction.commit();
-			session.close();
+			
 
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -238,15 +238,15 @@ public class IpSolutionStatusDAO extends BaseHibernateDAO {
 			Query query = session.getNamedQuery("getNonAllocSolStatus");
 			List ret = query.list();
 			transaction.commit();
-			session.close();
+			
 
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}

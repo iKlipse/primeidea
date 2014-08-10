@@ -36,15 +36,15 @@ public class IpPointsDAO extends BaseHibernateDAO {
 		try {
 			session.save(transientInstance);
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -57,15 +57,15 @@ public class IpPointsDAO extends BaseHibernateDAO {
 		try {
 			session.delete(persistentInstance);
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -78,15 +78,15 @@ public class IpPointsDAO extends BaseHibernateDAO {
 		try {
 			IpPoints instance = (IpPoints) session.get("za.co.idea.ip.orm.bean.IpPoints", id);
 			transaction.commit();
-			session.close();
+			
 
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -100,15 +100,15 @@ public class IpPointsDAO extends BaseHibernateDAO {
 			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpPoints").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			transaction.commit();
-			session.close();
+			
 
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -124,15 +124,15 @@ public class IpPointsDAO extends BaseHibernateDAO {
 			queryObject.setParameter(0, value);
 			List results = queryObject.list();
 			transaction.commit();
-			session.close();
+			
 
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -151,15 +151,15 @@ public class IpPointsDAO extends BaseHibernateDAO {
 			Query queryObject = session.createQuery(queryString);
 			List results = queryObject.list();
 			transaction.commit();
-			session.close();
+			
 
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -173,15 +173,15 @@ public class IpPointsDAO extends BaseHibernateDAO {
 			IpPoints result = (IpPoints) session.merge(detachedInstance);
 			log.debug("merge successful");
 			transaction.commit();
-			session.close();
+			
 
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -194,15 +194,15 @@ public class IpPointsDAO extends BaseHibernateDAO {
 		try {
 			session.saveOrUpdate(instance);
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}

@@ -49,6 +49,7 @@ import za.co.idea.ip.portal.bean.MetaDataBean;
 import za.co.idea.ip.portal.bean.NewsBean;
 import za.co.idea.ip.portal.bean.NotificationBean;
 import za.co.idea.ip.portal.bean.UserBean;
+import za.co.idea.ip.portal.bean.UserStatisticsBean;
 import za.co.idea.ip.portal.util.IdNumberGen;
 import za.co.idea.ip.portal.util.RESTServiceHelper;
 import za.co.idea.ip.ws.bean.AllocationMessage;
@@ -61,6 +62,7 @@ import za.co.idea.ip.ws.bean.NotificationMessage;
 import za.co.idea.ip.ws.bean.PointMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
+import za.co.idea.ip.ws.bean.UserStatisticsMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
 
 import com.liferay.portal.kernel.util.WebKeys;
@@ -148,6 +150,9 @@ public class AdminController implements Serializable {
 	private Date lastLoginDt;
 	private String[] selGrpId;
 	private String[] selUserId;
+	private UserStatisticsBean statsBean;
+	private String imgPath;
+	private boolean imgAvail;
 
 	private WebClient createCustomClient(String url) {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
@@ -179,6 +184,8 @@ public class AdminController implements Serializable {
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
 			loggedScrName = message.getScName();
+			imgPath = message.getImgPath();
+			imgAvail = message.isImgAvail();
 			if (message.getGroupId() != null) {
 				WebClient hClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/hierarchy/" + message.getGroupId());
 				hierarchy = hClient.accept(MediaType.APPLICATION_JSON).get(String.class);
@@ -186,48 +193,16 @@ public class AdminController implements Serializable {
 			} else {
 				hierarchy = "assign primary group";
 			}
-			try {
-				logger.info("Before image displaying");
-				WebClient docIdClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + message.getuId() + "/ip_user");
-				Long blobId = docIdClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-				docIdClient.close();
-				logger.info("After getting response from service /ds/doc/getId: " + message.getuId() + " --blobId---" + blobId);
-				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobNameClient.close();
-					logger.info("blob name: " + blobName);
-					WebClient downloadClient = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-					downloadClient.header("Content-Type", "application/json");
-					downloadClient.header("Accept", MediaType.MULTIPART_FORM_DATA);
-					Attachment attachment = downloadClient.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-					logger.info("After getting attachment");
-					if (attachment != null) {
-						logger.info("Before getting blob content type");
-						WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
-						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-						getBlobTypeClient.close();
-						logger.info("blob type: " + blobType);
-						this.image = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-						logger.info("After setting streamed content to image");
-						show = true;
-						showDef = false;
-					} else {
-						show = false;
-						showDef = true;
-					}
-					client.close();
-				} else {
-					show = false;
-					showDef = true;
-				}
-			} catch (Exception e) {
-				logger.error(e, e);
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform Login request", "System error occurred, cannot perform Login request");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				show = false;
-				showDef = true;
-			}
+			WebClient statsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/stats/" + message.getuId());
+			UserStatisticsMessage statsMsg = statsClient.accept(MediaType.APPLICATION_JSON).get(UserStatisticsMessage.class);
+			statsBean = new UserStatisticsBean();
+			statsBean.setChallengesCount(statsMsg.getChallengesCount());
+			statsBean.setIdeasCount(statsMsg.getIdeasCount());
+			statsBean.setSolutionsCount(statsMsg.getSolutionsCount());
+			statsBean.setTotalCount(statsMsg.getTotalCount());
+			statsBean.setUserId(statsMsg.getUserId());
+			statsBean.setWhishListCount(statsMsg.getWhishListCount());
+			statsClient.close();
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
@@ -248,13 +223,10 @@ public class AdminController implements Serializable {
 
 	public String showCreateNews() {
 		try {
-			logger.debug("Control handled in createCustomClient()");
 			newsBean = new NewsBean();
 			return "admcn";
 		} catch (Exception e) {
 			logger.error(e, e);
-
-			logger.error("Error while displaying show create news form: " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news create request", "System error occurred, cannot perform news create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -263,7 +235,6 @@ public class AdminController implements Serializable {
 
 	public String showViewNews() {
 		try {
-			logger.debug("Control handled in createCustomClient()");
 			viewNewsBeans = fetchAllNews();
 			return "admvn";
 		} catch (Exception e) {
@@ -276,12 +247,9 @@ public class AdminController implements Serializable {
 
 	public String showEditNews() {
 		try {
-			logger.debug("Control handled in showEditNews() method");
-			logger.info("Sending request to NewsService");
 			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + newsBean.getnId() + "/ip_news");
 			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 			getBlobClient.close();
-			logger.info("After gettin response from NewsService");
 			if (blobId != -999l) {
 				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
 				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
@@ -307,7 +275,6 @@ public class AdminController implements Serializable {
 			return "admen";
 		} catch (Exception e) {
 			logger.error(e, e);
-			logger.error("Error while displaying edit news form: " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			fileAvail = true;
@@ -318,13 +285,10 @@ public class AdminController implements Serializable {
 
 	public String showSummaryNews() {
 		try {
-			logger.debug("In showSummaryNews method");
 			viewNewsBeans = fetchAllNews();
-			logger.info("News details after fetching data from fetchALLNews(): " + viewNewsBeans);
 			return "admsn";
 		} catch (Exception e) {
 			logger.error(e, e);
-			logger.error("Error while displaying news summary details: " + e.getMessage());
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform news view request", "System error occurred, cannot perform news view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -339,7 +303,6 @@ public class AdminController implements Serializable {
 			return "admap";
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -353,7 +316,6 @@ public class AdminController implements Serializable {
 			return "admfc";
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -368,7 +330,6 @@ public class AdminController implements Serializable {
 			return "admfv";
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -382,7 +343,6 @@ public class AdminController implements Serializable {
 			return "admgv";
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot view groups request", "System error occurred, cannot view groups request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -398,7 +358,6 @@ public class AdminController implements Serializable {
 			return "admgc";
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform created groups view request", "System error occurred, cannot perform created groups view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -441,7 +400,6 @@ public class AdminController implements Serializable {
 				return "admge";
 			} catch (Exception e) {
 				logger.error(e, e);
-
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				fileAvail = true;
@@ -450,7 +408,6 @@ public class AdminController implements Serializable {
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated groups view request", "System error occurred, cannot perform updated groups view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -493,7 +450,6 @@ public class AdminController implements Serializable {
 				return "admgs";
 			} catch (Exception e) {
 				logger.error(e, e);
-
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				fileAvail = true;
@@ -502,7 +458,6 @@ public class AdminController implements Serializable {
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated groups view request", "System error occurred, cannot perform updated groups view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -517,7 +472,6 @@ public class AdminController implements Serializable {
 			return "admcno";
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -530,7 +484,6 @@ public class AdminController implements Serializable {
 			return "admuv";
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform Users View request", "System error occurred, cannot perform Users View request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -569,7 +522,6 @@ public class AdminController implements Serializable {
 			return "admuc";
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform created user view request", "System error occurred, cannot perform created user view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -588,7 +540,6 @@ public class AdminController implements Serializable {
 			return "admmpa";
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -602,7 +553,6 @@ public class AdminController implements Serializable {
 			return "admfe";
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -616,102 +566,6 @@ public class AdminController implements Serializable {
 		this.table = "";
 		this.beans = null;
 		return "admmm";
-	}
-
-	public void login() {
-		ArrayList<String> errors = validateLogin();
-		if (errors != null && errors.size() > 0) {
-			for (String error : errors) {
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			}
-		} else {
-			WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/login/" + userBean.getScName() + "/" + Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())));
-			UserMessage userMessage = loginClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
-			loginClient.close();
-			if (userMessage != null && userMessage.getuId() != null && userMessage.getuId() == -999l) {
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "User Profile De-Activated. Please contact Admin.", "User Profile De-Activated. Please contact Admin.");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			} else if (userMessage == null || userMessage.getuId() == null || userMessage.getScName() == null) {
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid User Name Password", "Invalid User Name Password");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			} else {
-				UserBean bean = new UserBean();
-				bean.setBio(userMessage.getBio());
-				bean.setContact(userMessage.getContact());
-				bean.seteMail(userMessage.geteMail());
-				bean.setFbHandle(userMessage.getFbHandle());
-				bean.setfName(userMessage.getfName());
-				bean.setIdNum(userMessage.getIdNum());
-				bean.setIsActive(userMessage.getIsActive());
-				bean.setlName(userMessage.getlName());
-				bean.setmName(userMessage.getmName());
-				bean.setPwd(userMessage.getPwd());
-				bean.setScName(userMessage.getScName());
-				bean.setSkills(userMessage.getSkills());
-				bean.setTwHandle(userMessage.getTwHandle());
-				bean.setIsActive(userMessage.getIsActive());
-				bean.setuId(userMessage.getuId());
-				bean.setLastLoginDt(userMessage.getLastLoginDt());
-				bean.setGroupId(userMessage.getGroupId());
-				bean.setPriGroupName(userMessage.getPriGroupName());
-				loggedScrName = userMessage.getScName();
-				secqList = fetchAllSecQ();
-				if (userMessage.getGroupId() != null) {
-					WebClient hClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/hierarchy/" + userMessage.getGroupId());
-					hierarchy = hClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					hClient.close();
-				} else {
-					hierarchy = "assign primary group";
-				}
-				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", bean);
-				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userId", bean.getuId());
-				try {
-					logger.info("Before image displaying");
-					WebClient docIdClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + userMessage.getuId() + "/ip_user");
-					Long blobId = docIdClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-					docIdClient.close();
-					logger.info("After getting response from service /ds/doc/getId: " + userMessage.getuId() + " --blobId---" + blobId);
-					if (blobId != -999l) {
-						WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-						String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-						getBlobNameClient.close();
-						logger.info("blob name: " + blobName);
-						WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-						client.header("Content-Type", "application/json");
-						client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-						Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-						logger.info("After getting attachment");
-						if (attachment != null) {
-							logger.info("Before getting blob content type");
-							WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
-							String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-							getBlobTypeClient.close();
-							logger.info("blob type: " + blobType);
-							this.image = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-							logger.info("After setting streamed content to image");
-							show = true;
-							showDef = false;
-						} else {
-							show = false;
-							showDef = true;
-						}
-						client.close();
-					} else {
-						show = false;
-						showDef = true;
-					}
-				} catch (Exception e) {
-					logger.error(e, e);
-
-					logger.error("Error while login : " + e.getMessage());
-					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform Login request", "System error occurred, cannot perform Login request");
-					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-					show = false;
-					showDef = true;
-				}
-			}
-		}
 	}
 
 	public void verifyLogin() {
@@ -811,7 +665,6 @@ public class AdminController implements Serializable {
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform save point request", "System error occurred, cannot perform save point request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -1455,7 +1308,7 @@ public class AdminController implements Serializable {
 		return ret;
 	}
 
-	private ArrayList<String> validateLogin() {
+	protected ArrayList<String> validateLogin() {
 		ArrayList<String> ret = new ArrayList<String>();
 		if (userBean.getScName() == null || userBean.getScName().length() == 0) {
 			ret.add("User Name is Mandatory");
@@ -2113,11 +1966,9 @@ public class AdminController implements Serializable {
 	private List<NewsBean> fetchAllNews() {
 		List<NewsBean> ret = new ArrayList<NewsBean>();
 		try {
-			logger.debug("Control handled in fetchAllNews method of NewsController ");
 			WebClient fetchNewsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ns/news/list");
 			Collection<? extends NewsMessage> news = new ArrayList<NewsMessage>(fetchNewsClient.accept(MediaType.APPLICATION_JSON).getCollection(NewsMessage.class));
 			fetchNewsClient.close();
-			logger.info("News data adding to List: ");
 			for (NewsMessage message : news) {
 				NewsBean bean = new NewsBean();
 				bean.setnId(message.getnId());
@@ -2450,7 +2301,6 @@ public class AdminController implements Serializable {
 
 	public String saveNews() {
 		try {
-			logger.debug("Control handled in saveNews method");
 			WebClient addNewsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ns/news/add");
 			NewsMessage message = new NewsMessage();
 			message.setnTitle(newsBean.getnTitle());
@@ -2460,7 +2310,6 @@ public class AdminController implements Serializable {
 			message.setEndDate(newsBean.getnEndDate());
 			ResponseMessage response = addNewsClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			addNewsClient.close();
-			logger.info("dispalying response of save news action : " + response.getStatusCode());
 			if (response.getStatusCode() == 0) {
 				if (image != null) {
 					logger.info("Before adding file content details");
@@ -2508,7 +2357,6 @@ public class AdminController implements Serializable {
 
 	public String updateNews() {
 		try {
-			logger.debug("Control handled in updateNews()");
 			WebClient updateNewsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ns/news/modify");
 			NewsMessage message = new NewsMessage();
 			message.setnId(newsBean.getnId());
@@ -2832,6 +2680,8 @@ public class AdminController implements Serializable {
 	}
 
 	public List<MetaDataBean> getSecqList() {
+		if (secqList == null)
+			secqList = new ArrayList<MetaDataBean>();
 		return secqList;
 	}
 
@@ -3206,6 +3056,30 @@ public class AdminController implements Serializable {
 
 	public void setLastLoginDt(Date lastLoginDt) {
 		this.lastLoginDt = lastLoginDt;
+	}
+
+	public UserStatisticsBean getStatsBean() {
+		return statsBean;
+	}
+
+	public void setStatsBean(UserStatisticsBean statsBean) {
+		this.statsBean = statsBean;
+	}
+
+	public String getImgPath() {
+		return imgPath;
+	}
+
+	public void setImgPath(String imgPath) {
+		this.imgPath = imgPath;
+	}
+
+	public boolean isImgAvail() {
+		return imgAvail;
+	}
+
+	public void setImgAvail(boolean imgAvail) {
+		this.imgAvail = imgAvail;
 	}
 
 }

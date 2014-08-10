@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:" SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::0" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="login::#pages#admin#login.xhtml"
+    NAME="output" PATH="/pages/admin/login.xhtml"
+    TARGET="rules:#pages#admin#login.xhtml" TITLE="login" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="rpw::#pages#admin#rPwd.xhtml" NAME="output1"
+    PATH="/pages/admin/rPwd.xhtml"
+    TARGET="rules:#pages#admin#rPwd.xhtml" TITLE="rpw" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="home::#pages#home.xhtml" NAME="output2"
+    PATH="/pages/home.xhtml" TARGET="rules:#pages#home.xhtml"
+    TITLE="home" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admcu::#pages#admin#createUser.xhtml"
+    NAME="output3" PATH="/pages/admin/createUser.xhtml"
+    TARGET="rules:#pages#admin#createUser.xhtml" TITLE="admcu" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admeu::#pages#admin#editUser.xhtml"
+    NAME="output4" PATH="/pages/admin/editUser.xhtml"
+    TARGET="rules:#pages#admin#editUser.xhtml" TITLE="admeu" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="upe::#pages#admin#editProfile.xhtml"
+    NAME="output5" PATH="/pages/admin/editProfile.xhtml"
+    TARGET="rules:#pages#admin#editProfile.xhtml" TITLE="upe" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admvu::#pages#admin#viewUsers.xhtml"
+    NAME="output6" PATH="/pages/admin/viewUsers.xhtml"
+    TARGET="rules:#pages#admin#viewUsers.xhtml" TITLE="admvu" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admuu::#pages#admin#upload.xhtml"
+    NAME="output7" PATH="/pages/admin/upload.xhtml"
+    TARGET="rules:#pages#admin#upload.xhtml" TITLE="admuu" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admuresz::#pages#admin#uploadRes.xhtml"
+    NAME="output8" PATH="/pages/admin/uploadRes.xhtml"
+    TARGET="rules:#pages#admin#uploadRes.xhtml" TITLE="admuresz" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admcg::#pages#admin#createGroup.xhtml"
+    NAME="output9" PATH="/pages/admin/createGroup.xhtml"
+    TARGET="rules:#pages#admin#createGroup.xhtml" TITLE="admcg" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admeg::#pages#admin#editGroup.xhtml"
+    NAME="output10" PATH="/pages/admin/editGroup.xhtml"
+    TARGET="rules:#pages#admin#editGroup.xhtml" TITLE="admeg" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admsg::#pages#admin#summaryGroup.xhtml"
+    NAME="output11" PATH="/pages/admin/summaryGroup.xhtml"
+    TARGET="rules:#pages#admin#summaryGroup.xhtml" TITLE="admsg" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admvg::#pages#admin#viewGroups.xhtml"
+    NAME="output12" PATH="/pages/admin/viewGroups.xhtml"
+    TARGET="rules:#pages#admin#viewGroups.xhtml" TITLE="admvg" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admcf::#pages#admin#createFunction.xhtml"
+    NAME="output13" PATH="/pages/admin/createFunction.xhtml"
+    TARGET="rules:#pages#admin#createFunction.xhtml" TITLE="admcf" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admef::#pages#admin#editFunction.xhtml"
+    NAME="output14" PATH="/pages/admin/editFunction.xhtml"
+    TARGET="rules:#pages#admin#editFunction.xhtml" TITLE="admef" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admvf::#pages#admin#viewFunction.xhtml"
+    NAME="output15" PATH="/pages/admin/viewFunction.xhtml"
+    TARGET="rules:#pages#admin#viewFunction.xhtml" TITLE="admvf" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="mdata::#pages#admin#maintainMetaData.xhtml"
+    NAME="output16" PATH="/pages/admin/maintainMetaData.xhtml"
+    TARGET="rules:#pages#admin#maintainMetaData.xhtml" TITLE="mdata" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="ideaci::#pages#idea#create.xhtml"
+    NAME="output17" PATH="/pages/idea/create.xhtml"
+    TARGET="rules:#pages#idea#create.xhtml" TITLE="ideaci" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="ideaei::#pages#idea#edit.xhtml"
+    NAME="output18" PATH="/pages/idea/edit.xhtml"
+    TARGET="rules:#pages#idea#edit.xhtml" TITLE="ideaei" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="ideaeoi::#pages#idea#editOpen.xhtml"
+    NAME="output19" PATH="/pages/idea/editOpen.xhtml"
+    TARGET="rules:#pages#idea#editOpen.xhtml" TITLE="ideaeoi" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="ideavi::#pages#idea#view.xhtml"
+    NAME="output20" PATH="/pages/idea/view.xhtml"
+    TARGET="rules:#pages#idea#view.xhtml" TITLE="ideavi" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="ideavoi::#pages#idea#viewOpen.xhtml"
+    NAME="output21" PATH="/pages/idea/viewOpen.xhtml"
+    TARGET="rules:#pages#idea#viewOpen.xhtml" TITLE="ideavoi" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="ideasi::#pages#idea#summary.xhtml"
+    NAME="output22" PATH="/pages/idea/summary.xhtml"
+    TARGET="rules:#pages#idea#summary.xhtml" TITLE="ideasi" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="ideasoi::#pages#idea#summaryOpen.xhtml"
+    NAME="output23" PATH="/pages/idea/summaryOpen.xhtml"
+    TARGET="rules:#pages#idea#summaryOpen.xhtml" TITLE="ideasoi" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="ideaui::#pages#user#ideas.xhtml"
+    NAME="output24" PATH="/pages/user/ideas.xhtml"
+    TARGET="rules:#pages#user#ideas.xhtml" TITLE="ideaui" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="chalcc::#pages#challenge#create.xhtml"
+    NAME="output25" PATH="/pages/challenge/create.xhtml"
+    TARGET="rules:#pages#challenge#create.xhtml" TITLE="chalcc" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="chalec::#pages#challenge#edit.xhtml"
+    NAME="output26" PATH="/pages/challenge/edit.xhtml"
+    TARGET="rules:#pages#challenge#edit.xhtml" TITLE="chalec" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="chaleoc::#pages#challenge#editOpen.xhtml"
+    NAME="output27" PATH="/pages/challenge/editOpen.xhtml"
+    TARGET="rules:#pages#challenge#editOpen.xhtml" TITLE="chaleoc" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="chalvc::#pages#challenge#view.xhtml"
+    NAME="output28" PATH="/pages/challenge/view.xhtml"
+    TARGET="rules:#pages#challenge#view.xhtml" TITLE="chalvc" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="chalvoc::#pages#challenge#viewOpen.xhtml"
+    NAME="output29" PATH="/pages/challenge/viewOpen.xhtml"
+    TARGET="rules:#pages#challenge#viewOpen.xhtml" TITLE="chalvoc" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="chalsc::#pages#challenge#summary.xhtml"
+    NAME="output30" PATH="/pages/challenge/summary.xhtml"
+    TARGET="rules:#pages#challenge#summary.xhtml" TITLE="chalsc" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="chalsoc::#pages#challenge#summaryOpen.xhtml"
+    NAME="output31" PATH="/pages/challenge/summaryOpen.xhtml"
+    TARGET="rules:#pages#challenge#summaryOpen.xhtml" TITLE="chalsoc" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="chaluc::#pages#user#challenges.xhtml"
+    NAME="output32" PATH="/pages/user/challenges.xhtml"
+    TARGET="rules:#pages#user#challenges.xhtml" TITLE="chaluc" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="solcs::#pages#solution#create.xhtml"
+    NAME="output33" PATH="/pages/solution/create.xhtml"
+    TARGET="rules:#pages#solution#create.xhtml" TITLE="solcs" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="soles::#pages#solution#edit.xhtml"
+    NAME="output34" PATH="/pages/solution/edit.xhtml"
+    TARGET="rules:#pages#solution#edit.xhtml" TITLE="soles" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="soleos::#pages#solution#editOpen.xhtml"
+    NAME="output35" PATH="/pages/solution/editOpen.xhtml"
+    TARGET="rules:#pages#solution#editOpen.xhtml" TITLE="soleos" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="solvs::#pages#solution#view.xhtml"
+    NAME="output36" PATH="/pages/solution/view.xhtml"
+    TARGET="rules:#pages#solution#view.xhtml" TITLE="solvs" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="solvos::#pages#solution#viewOpen.xhtml"
+    NAME="output37" PATH="/pages/solution/viewOpen.xhtml"
+    TARGET="rules:#pages#solution#viewOpen.xhtml" TITLE="solvos" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="solss::#pages#solution#summary.xhtml"
+    NAME="output38" PATH="/pages/solution/summary.xhtml"
+    TARGET="rules:#pages#solution#summary.xhtml" TITLE="solss" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="solsos::#pages#solution#summaryOpen.xhtml"
+    NAME="output39" PATH="/pages/solution/summaryOpen.xhtml"
+    TARGET="rules:#pages#solution#summaryOpen.xhtml" TITLE="solsos" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="solus::#pages#user#solutions.xhtml"
+    NAME="output40" PATH="/pages/user/solutions.xhtml"
+    TARGET="rules:#pages#user#solutions.xhtml" TITLE="solus" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="rwcr::#pages#rewards#create.xhtml"
+    NAME="output41" PATH="/pages/rewards/create.xhtml"
+    TARGET="rules:#pages#rewards#create.xhtml" TITLE="rwcr" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="rwer::#pages#rewards#edit.xhtml"
+    NAME="output42" PATH="/pages/rewards/edit.xhtml"
+    TARGET="rules:#pages#rewards#edit.xhtml" TITLE="rwer" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="rwsr::#pages#rewards#store.xhtml"
+    NAME="output43" PATH="/pages/rewards/store.xhtml"
+    TARGET="rules:#pages#rewards#store.xhtml" TITLE="rwsr" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="rwvr::#pages#rewards#view.xhtml"
+    NAME="output44" PATH="/pages/rewards/view.xhtml"
+    TARGET="rules:#pages#rewards#view.xhtml" TITLE="rwvr" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="rwur::#pages#user#wishlist.xhtml"
+    NAME="output45" PATH="/pages/user/wishlist.xhtml"
+    TARGET="rules:#pages#user#wishlist.xhtml" TITLE="rwur" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="rwpa::#pages#rewards#maintainPointAllocation.xhtml"
+    NAME="output46" PATH="/pages/rewards/maintainPointAllocation.xhtml"
+    TARGET="rules:#pages#rewards#maintainPointAllocation.xhtml"
+    TITLE="rwpa" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="rwap::#pages#admin#allocatePoints.xhtml"
+    NAME="output47" PATH="/pages/admin/allocatePoints.xhtml"
+    TARGET="rules:#pages#admin#allocatePoints.xhtml" TITLE="rwap" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="rwpp::#pages#user#points.xhtml"
+    NAME="output48" PATH="/pages/user/points.xhtml"
+    TARGET="rules:#pages#user#points.xhtml" TITLE="rwpp" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="clmcc::#pages#claim#create.xhtml"
+    NAME="output49" PATH="/pages/claim/create.xhtml"
+    TARGET="rules:#pages#claim#create.xhtml" TITLE="clmcc" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="clmec::#pages#claim#edit.xhtml"
+    NAME="output50" PATH="/pages/claim/edit.xhtml"
+    TARGET="rules:#pages#claim#edit.xhtml" TITLE="clmec" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="clmvc::#pages#claim#view.xhtml"
+    NAME="output51" PATH="/pages/claim/view.xhtml"
+    TARGET="rules:#pages#claim#view.xhtml" TITLE="clmvc" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="clmuc::#pages#user#claims.xhtml"
+    NAME="output52" PATH="/pages/user/claims.xhtml"
+    TARGET="rules:#pages#user#claims.xhtml" TITLE="clmuc" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="bovw::#pages#tag#create.xhtml"
+    NAME="output53" PATH="/pages/tag/create.xhtml"
+    TARGET="rules:#pages#tag#create.xhtml" TITLE="bovw" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="bosw::#pages#tag#summary.xhtml"
+    NAME="output54" PATH="/pages/tag/summary.xhtml"
+    TARGET="rules:#pages#tag#summary.xhtml" TITLE="bosw" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules::1" SHAPE="32,3985,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::1" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="nscc::#pages#news#create.xhtml"
+    NAME="output" PATH="/pages/news/create.xhtml"
+    TARGET="rules:#pages#news#create.xhtml" TITLE="nscc" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="nsec::#pages#news#edit.xhtml" NAME="output1"
+    PATH="/pages/news/edit.xhtml" TARGET="rules:#pages#news#edit.xhtml"
+    TITLE="nsec" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="nsvc::#pages#news#view.xhtml" NAME="output2"
+    PATH="/pages/news/view.xhtml" TARGET="rules:#pages#news#view.xhtml"
+    TITLE="nsvc" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="nssc::#pages#news#summary.xhtml"
+    NAME="output3" PATH="/pages/news/summary.xhtml"
+    TARGET="rules:#pages#news#summary.xhtml" TITLE="nssc" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="notifc::#pages#notifications#create.xhtml"
+    NAME="output4" PATH="/pages/notifications/create.xhtml"
+    TARGET="rules:#pages#notifications#create.xhtml" TITLE="notifc" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#idea#create.xhtml"
+  PATH="/pages/idea/create.xhtml" SHAPE="304,3665,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#home.xhtml" PATH="/pages/home.xhtml"
+  SHAPE="304,1985,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#admin#login.xhtml"
+  PATH="/pages/admin/login.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#admin#viewGroups.xhtml"
+  PATH="/pages/admin/viewGroups.xhtml" SHAPE="304,3105,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#solution#summaryOpen.xhtml"
+  PATH="/pages/solution/summaryOpen.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#challenge#viewOpen.xhtml"
+  PATH="/pages/challenge/viewOpen.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#idea#summary.xhtml"
+  PATH="/pages/idea/summary.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#idea#summaryOpen.xhtml"
+  PATH="/pages/idea/summaryOpen.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#user#points.xhtml"
+  PATH="/pages/user/points.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#admin#allocatePoints.xhtml"
+  PATH="/pages/admin/allocatePoints.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#admin#editFunction.xhtml"
+  PATH="/pages/admin/editFunction.xhtml" SHAPE="304,3329,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#challenge#create.xhtml"
+  PATH="/pages/challenge/create.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#news#summary.xhtml"
+  PATH="/pages/news/summary.xhtml" SHAPE="304,4465,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#challenge#edit.xhtml"
+  PATH="/pages/challenge/edit.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#admin#viewUsers.xhtml"
+  PATH="/pages/admin/viewUsers.xhtml" SHAPE="304,2433,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#admin#maintainMetaData.xhtml"
+  PATH="/pages/admin/maintainMetaData.xhtml" SHAPE="304,3553,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#tag#summary.xhtml"
+  PATH="/pages/tag/summary.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#user#claims.xhtml"
+  PATH="/pages/user/claims.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#claim#view.xhtml"
+  PATH="/pages/claim/view.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#admin#upload.xhtml"
+  PATH="/pages/admin/upload.xhtml" SHAPE="304,2545,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#idea#view.xhtml"
+  PATH="/pages/idea/view.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#news#view.xhtml"
+  PATH="/pages/news/view.xhtml" SHAPE="304,4353,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#notifications#create.xhtml"
+  PATH="/pages/notifications/create.xhtml" SHAPE="304,4577,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#admin#editGroup.xhtml"
+  PATH="/pages/admin/editGroup.xhtml" SHAPE="304,2881,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#admin#createUser.xhtml"
+  PATH="/pages/admin/createUser.xhtml" SHAPE="304,2097,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#user#challenges.xhtml"
+  PATH="/pages/user/challenges.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#admin#createFunction.xhtml"
+  PATH="/pages/admin/createFunction.xhtml" SHAPE="304,3217,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#solution#view.xhtml"
+  PATH="/pages/solution/view.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#challenge#summaryOpen.xhtml"
+  PATH="/pages/challenge/summaryOpen.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#rewards#maintainPointAllocation.xhtml"
+  PATH="/pages/rewards/maintainPointAllocation.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#user#solutions.xhtml"
+  PATH="/pages/user/solutions.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#rewards#edit.xhtml"
+  PATH="/pages/rewards/edit.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#admin#uploadRes.xhtml"
+  PATH="/pages/admin/uploadRes.xhtml" SHAPE="304,2657,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#admin#summaryGroup.xhtml"
+  PATH="/pages/admin/summaryGroup.xhtml" SHAPE="304,2993,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#admin#createGroup.xhtml"
+  PATH="/pages/admin/createGroup.xhtml" SHAPE="304,2769,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#news#create.xhtml"
+  PATH="/pages/news/create.xhtml" SHAPE="304,4001,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#challenge#editOpen.xhtml"
+  PATH="/pages/challenge/editOpen.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#user#ideas.xhtml"
+  PATH="/pages/user/ideas.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#solution#create.xhtml"
+  PATH="/pages/solution/create.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#admin#viewFunction.xhtml"
+  PATH="/pages/admin/viewFunction.xhtml" SHAPE="304,3441,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#tag#create.xhtml"
+  PATH="/pages/tag/create.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#solution#summary.xhtml"
+  PATH="/pages/solution/summary.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#challenge#view.xhtml"
+  PATH="/pages/challenge/view.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#idea#viewOpen.xhtml"
+  PATH="/pages/idea/viewOpen.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#claim#edit.xhtml"
+  PATH="/pages/claim/edit.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#rewards#store.xhtml"
+  PATH="/pages/rewards/store.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#admin#editProfile.xhtml"
+  PATH="/pages/admin/editProfile.xhtml" SHAPE="304,2321,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#idea#edit.xhtml"
+  PATH="/pages/idea/edit.xhtml" SHAPE="304,3777,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#idea#editOpen.xhtml"
+  PATH="/pages/idea/editOpen.xhtml" SHAPE="304,3889,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#user#wishlist.xhtml"
+  PATH="/pages/user/wishlist.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#rewards#create.xhtml"
+  PATH="/pages/rewards/create.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#challenge#summary.xhtml"
+  PATH="/pages/challenge/summary.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#news#edit.xhtml"
+  PATH="/pages/news/edit.xhtml" SHAPE="304,4241,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#solution#edit.xhtml"
+  PATH="/pages/solution/edit.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#solution#editOpen.xhtml"
+  PATH="/pages/solution/editOpen.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#solution#viewOpen.xhtml"
+  PATH="/pages/solution/viewOpen.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#claim#create.xhtml"
+  PATH="/pages/claim/create.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#rewards#view.xhtml"
+  PATH="/pages/rewards/view.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#admin#rPwd.xhtml"
+  PATH="/pages/admin/rPwd.xhtml" SHAPE="304,1873,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#admin#editUser.xhtml"
+  PATH="/pages/admin/editUser.xhtml" SHAPE="304,2209,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>

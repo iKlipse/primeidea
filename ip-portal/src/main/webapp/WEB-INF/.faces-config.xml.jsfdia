@@ -152,10 +152,10 @@
  <PROCESS-ITEM NAME="rules::4" SHAPE="32,225,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules::4" NAME="item" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT
-    ID="rewardse::#views#rewards#container#editContainer.xhtml"
-    NAME="output" PATH="/views/rewards/container/editContainer.xhtml"
+    ID="rwe::#views#rewards#container#editContainer.xhtml" NAME="output"
+    PATH="/views/rewards/container/editContainer.xhtml"
     TARGET="rules:#views#rewards#container#editContainer.xhtml"
-    TITLE="rewardse" model-entity="JSFProcessItemOutput"/>
+    TITLE="rwe" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules::5" SHAPE="32,689,0,0" model-entity="JSFProcessGroup">

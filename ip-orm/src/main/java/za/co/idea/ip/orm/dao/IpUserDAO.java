@@ -47,15 +47,15 @@ public class IpUserDAO extends BaseHibernateDAO {
 		try {
 			session.save(transientInstance);
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -68,15 +68,15 @@ public class IpUserDAO extends BaseHibernateDAO {
 		try {
 			session.delete(persistentInstance);
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -89,15 +89,15 @@ public class IpUserDAO extends BaseHibernateDAO {
 		try {
 			IpUser instance = (IpUser) session.get("za.co.idea.ip.orm.bean.IpUser", id);
 			transaction.commit();
-			session.close();
+			
 
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -111,15 +111,15 @@ public class IpUserDAO extends BaseHibernateDAO {
 			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpUser").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			transaction.commit();
-			session.close();
+			
 
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -135,15 +135,15 @@ public class IpUserDAO extends BaseHibernateDAO {
 			queryObject.setParameter(0, value);
 			List results = queryObject.list();
 			transaction.commit();
-			session.close();
+			
 
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -210,15 +210,15 @@ public class IpUserDAO extends BaseHibernateDAO {
 			Query queryObject = session.createQuery(queryString);
 			List results = queryObject.list();
 			transaction.commit();
-			session.close();
+			
 
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -232,15 +232,15 @@ public class IpUserDAO extends BaseHibernateDAO {
 			IpUser result = (IpUser) session.merge(detachedInstance);
 			log.debug("merge successful");
 			transaction.commit();
-			session.close();
+			
 
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -253,15 +253,15 @@ public class IpUserDAO extends BaseHibernateDAO {
 		try {
 			session.saveOrUpdate(instance);
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -281,4 +281,67 @@ public class IpUserDAO extends BaseHibernateDAO {
 		}
 	}
 
+	public Long findSolutionCount(Long userId) {
+		Long solCount = 0l;
+		log.debug("Fetching Solution coutn for user by Query :: getSolCountByUserId");
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("getSolCountByUserId");
+			query.setLong("id", userId);
+			List sol = query.list();
+			if (sol != null && sol.size() > 0)
+				solCount = Long.valueOf(sol.get(0).toString());
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+		}
+		return solCount;
+	}
+
+	public Long findChallengeCount(Long userId) {
+		Long chalCount = 0l;
+		log.debug("Fetching Challenge count for user by Query :: getChalCountByUserId");
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("getChalCountByUserId");
+			query.setLong("id", userId);
+			List chal = query.list();
+			if (chal != null && chal.size() > 0)
+				chalCount = Long.valueOf(chal.get(0).toString());
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+		}
+		return chalCount;
+	}
+
+	public Long findIdeasCount(Long userId) {
+		Long ideaCount = 0l;
+		log.debug("Fetching Ideas count for user by Query :: getIdeasCountByUserId");
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("getIdeasCountByUserId");
+			query.setLong("id", userId);
+			List idea = query.list();
+			if (idea != null && idea.size() > 0)
+				ideaCount = Long.valueOf(idea.get(0).toString());
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+		}
+		return ideaCount;
+	}
+
+	public Long findWhishlistCount(Long userId) {
+		Long whishListCount = 0l;
+		log.debug("Fetching WhishList count for user by Query :: getWhishListCountByUserId");
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("getWhishListCountByUserId");
+			query.setLong("id", userId);
+			List whishList = query.list();
+			if (whishList != null && whishList.size() > 0)
+				whishListCount = Long.valueOf(whishList.get(0).toString());
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+		}
+		return whishListCount;
+	}
 }

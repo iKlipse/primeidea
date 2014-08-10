@@ -35,15 +35,15 @@ public class IpRewardsCatDAO extends BaseHibernateDAO {
 		try {
 			session.save(transientInstance);
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -56,15 +56,15 @@ public class IpRewardsCatDAO extends BaseHibernateDAO {
 		try {
 			session.delete(persistentInstance);
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -77,15 +77,15 @@ public class IpRewardsCatDAO extends BaseHibernateDAO {
 		try {
 			IpRewardsCat instance = (IpRewardsCat) session.get("za.co.idea.ip.orm.bean.IpRewardsCat", id);
 			transaction.commit();
-			session.close();
+			
 
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -98,7 +98,7 @@ public class IpRewardsCatDAO extends BaseHibernateDAO {
 		try {
 			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpRewardsCat").add(Example.create(instance)).list();
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
@@ -106,8 +106,8 @@ public class IpRewardsCatDAO extends BaseHibernateDAO {
 			log.error("find by example failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -123,15 +123,15 @@ public class IpRewardsCatDAO extends BaseHibernateDAO {
 			queryObject.setParameter(0, value);
 			List results = queryObject.list();
 			transaction.commit();
-			session.close();
+			
 
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -150,15 +150,15 @@ public class IpRewardsCatDAO extends BaseHibernateDAO {
 			Query queryObject = session.createQuery(queryString);
 			List results = queryObject.list();
 			transaction.commit();
-			session.close();
+			
 
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -172,15 +172,15 @@ public class IpRewardsCatDAO extends BaseHibernateDAO {
 			IpRewardsCat result = (IpRewardsCat) session.merge(detachedInstance);
 			log.debug("merge successful");
 			transaction.commit();
-			session.close();
+			
 
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -193,15 +193,15 @@ public class IpRewardsCatDAO extends BaseHibernateDAO {
 		try {
 			session.saveOrUpdate(instance);
 			transaction.commit();
-			session.close();
+			
 
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
@@ -215,15 +215,15 @@ public class IpRewardsCatDAO extends BaseHibernateDAO {
 			Query query = session.getNamedQuery("checkRwDependency");
 			List ret = query.list();
 			transaction.commit();
-			session.close();
+			
 
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("checking category", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			if (session.isOpen())
-				session.close();
+			
+				
 
 			throw re;
 		}
