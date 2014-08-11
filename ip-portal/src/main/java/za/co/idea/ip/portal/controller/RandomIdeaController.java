@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -100,7 +99,6 @@ public class RandomIdeaController implements Serializable {
 		return client;
 	}
 
-	@PostConstruct
 	public void initializePage() {
 		try {
 			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -903,6 +901,8 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	public String getCommentText() {
+		if (commentText == null)
+			commentText = "";
 		return commentText;
 	}
 
@@ -911,6 +911,8 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	public String getBuildOnText() {
+		if (buildOnText == null)
+			buildOnText = "";
 		return buildOnText;
 	}
 
@@ -919,6 +921,8 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	public String getLikeCnt() {
+		if (likeCnt == null)
+			likeCnt = "";
 		return likeCnt;
 	}
 
@@ -927,6 +931,8 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	public String getCommentCnt() {
+		if (commentCnt == null)
+			commentCnt = "";
 		return commentCnt;
 	}
 
@@ -935,6 +941,8 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	public String getBuildOnCnt() {
+		if (buildOnCnt == null)
+			buildOnCnt = "";
 		return buildOnCnt;
 	}
 
@@ -951,6 +959,8 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	public DualListModel<GroupBean> getGroupTwinSelect() {
+		if (groupTwinSelect == null)
+			groupTwinSelect = new DualListModel<GroupBean>();
 		return groupTwinSelect;
 	}
 
@@ -959,6 +969,8 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	public List<GroupBean> getpGrps() {
+		if (pGrps == null)
+			pGrps = new ArrayList<GroupBean>();
 		return pGrps;
 	}
 
@@ -967,6 +979,8 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	public String[] getSelGrpId() {
+		if (selGrpId == null)
+			selGrpId = new String[] {};
 		return selGrpId;
 	}
 
@@ -1023,6 +1037,9 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	public String getReturnView() {
+		if (returnView == null) {
+			returnView = "";
+		}
 		return returnView;
 	}
 
@@ -1031,6 +1048,8 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	public String getToView() {
+		if (toView == null)
+			toView = "";
 		return toView;
 	}
 

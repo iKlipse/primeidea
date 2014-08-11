@@ -11,10 +11,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.bean.IpIdea;
 import za.co.idea.ip.orm.bean.IpIdeaCat;
 import za.co.idea.ip.orm.bean.IpIdeaGroup;
 import za.co.idea.ip.orm.bean.IpIdeaStatus;
+import za.co.idea.ip.orm.dao.IpBlobDAO;
 import za.co.idea.ip.orm.dao.IpGroupDAO;
 import za.co.idea.ip.orm.dao.IpIdeaCatDAO;
 import za.co.idea.ip.orm.dao.IpIdeaDAO;
@@ -36,6 +38,7 @@ public class IdeaService {
 	private IpIdeaGroupDAO ipIdeaGroupDAO;
 	private IpNativeSQLDAO ipNativeSQLDAO;
 	private IpGroupDAO ipGroupDAO;
+	private IpBlobDAO ipBlobDAO;
 
 	@GET
 	@Path("/idea/check/title/{title}")
@@ -256,7 +259,12 @@ public class IdeaService {
 					}
 					idea.setGroupIdList(grps);
 				}
-
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipIdea.getIpUser().getUserId(), "ip_user");
+				if (blob != null) {
+					idea.setCrtByImgAvail(true);
+					idea.setCrtByImgPath("ip_user/" + ipIdea.getIpUser().getUserId() + "/" + blob.getBlobName());
+				} else
+					idea.setCrtByImgAvail(false);
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -297,6 +305,12 @@ public class IdeaService {
 					}
 					idea.setGroupIdList(grps);
 				}
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipIdea.getIpUser().getUserId(), "ip_user");
+				if (blob != null) {
+					idea.setCrtByImgAvail(true);
+					idea.setCrtByImgPath("ip_user/" + ipIdea.getIpUser().getUserId() + "/" + blob.getBlobName());
+				} else
+					idea.setCrtByImgAvail(false);
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -337,6 +351,12 @@ public class IdeaService {
 					}
 					idea.setGroupIdList(grps);
 				}
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipIdea.getIpUser().getUserId(), "ip_user");
+				if (blob != null) {
+					idea.setCrtByImgAvail(true);
+					idea.setCrtByImgPath("ip_user/" + ipIdea.getIpUser().getUserId() + "/" + blob.getBlobName());
+				} else
+					idea.setCrtByImgAvail(false);
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -377,6 +397,12 @@ public class IdeaService {
 					}
 					idea.setGroupIdList(grps);
 				}
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipIdea.getIpUser().getUserId(), "ip_user");
+				if (blob != null) {
+					idea.setCrtByImgAvail(true);
+					idea.setCrtByImgPath("ip_user/" + ipIdea.getIpUser().getUserId() + "/" + blob.getBlobName());
+				} else
+					idea.setCrtByImgAvail(false);
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -417,6 +443,12 @@ public class IdeaService {
 					}
 					idea.setGroupIdList(grps);
 				}
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipIdea.getIpUser().getUserId(), "ip_user");
+				if (blob != null) {
+					idea.setCrtByImgAvail(true);
+					idea.setCrtByImgPath("ip_user/" + ipIdea.getIpUser().getUserId() + "/" + blob.getBlobName());
+				} else
+					idea.setCrtByImgAvail(false);
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -505,5 +537,13 @@ public class IdeaService {
 
 	public void setIpGroupDAO(IpGroupDAO ipGroupDAO) {
 		this.ipGroupDAO = ipGroupDAO;
+	}
+
+	public IpBlobDAO getIpBlobDAO() {
+		return ipBlobDAO;
+	}
+
+	public void setIpBlobDAO(IpBlobDAO ipBlobDAO) {
+		this.ipBlobDAO = ipBlobDAO;
 	}
 }

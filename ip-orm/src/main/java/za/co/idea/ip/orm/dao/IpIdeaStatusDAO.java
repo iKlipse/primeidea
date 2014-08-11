@@ -35,15 +35,12 @@ public class IpIdeaStatusDAO extends BaseHibernateDAO {
 		try {
 			session.save(transientInstance);
 			transaction.commit();
-			
 
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			
-				
 
 			throw re;
 		}
@@ -56,15 +53,12 @@ public class IpIdeaStatusDAO extends BaseHibernateDAO {
 		try {
 			session.delete(persistentInstance);
 			transaction.commit();
-			
 
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			
-				
 
 			throw re;
 		}
@@ -77,15 +71,12 @@ public class IpIdeaStatusDAO extends BaseHibernateDAO {
 		try {
 			IpIdeaStatus instance = (IpIdeaStatus) session.get("za.co.idea.ip.orm.bean.IpIdeaStatus", id);
 			transaction.commit();
-			
 
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			
-				
 
 			throw re;
 		}
@@ -98,7 +89,6 @@ public class IpIdeaStatusDAO extends BaseHibernateDAO {
 		try {
 			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpIdeaStatus").add(Example.create(instance)).list();
 			transaction.commit();
-			
 
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
@@ -106,8 +96,6 @@ public class IpIdeaStatusDAO extends BaseHibernateDAO {
 			log.error("find by example failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			
-				
 
 			throw re;
 		}
@@ -123,7 +111,6 @@ public class IpIdeaStatusDAO extends BaseHibernateDAO {
 			queryObject.setParameter(0, value);
 			List results = queryObject.list();
 			transaction.commit();
-			
 
 			return results;
 
@@ -131,8 +118,6 @@ public class IpIdeaStatusDAO extends BaseHibernateDAO {
 			log.error("find by property name failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			
-				
 
 			throw re;
 		}
@@ -151,16 +136,11 @@ public class IpIdeaStatusDAO extends BaseHibernateDAO {
 			Query queryObject = session.createQuery(queryString);
 			List results = queryObject.list();
 			transaction.commit();
-			
-
 			return results;
-
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			
-				
 
 			throw re;
 		}
@@ -173,7 +153,6 @@ public class IpIdeaStatusDAO extends BaseHibernateDAO {
 		try {
 			IpIdeaStatus result = (IpIdeaStatus) session.merge(detachedInstance);
 			transaction.commit();
-			
 
 			log.debug("merge successful");
 			return result;
@@ -181,8 +160,6 @@ public class IpIdeaStatusDAO extends BaseHibernateDAO {
 			log.error("merge failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			
-				
 
 			throw re;
 		}
@@ -195,15 +172,12 @@ public class IpIdeaStatusDAO extends BaseHibernateDAO {
 		try {
 			session.saveOrUpdate(instance);
 			transaction.commit();
-			
 
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			
-				
 
 			throw re;
 		}
@@ -218,15 +192,12 @@ public class IpIdeaStatusDAO extends BaseHibernateDAO {
 			query.setLong("curr", curr);
 			List ret = query.list();
 			transaction.commit();
-			
 
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			
-				
 
 			throw re;
 		}
@@ -240,15 +211,12 @@ public class IpIdeaStatusDAO extends BaseHibernateDAO {
 			Query query = session.getNamedQuery("getNonAllocIdeaStatus");
 			List ret = query.list();
 			transaction.commit();
-			
 
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			if (transaction.isActive())
 				transaction.rollback();
-			
-				
 
 			throw re;
 		}

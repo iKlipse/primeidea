@@ -19,6 +19,8 @@ public class SolutionBean implements Serializable {
 	private String blob;
 	private Date crtdDt;
 	private Long crtdById;
+	private boolean crtByImgAvail;
+	private String crtByImgPath;
 	private String contentType;
 	private String fileName;
 	private String crtByName;
@@ -109,6 +111,22 @@ public class SolutionBean implements Serializable {
 
 	public void setCrtdById(Long crtdById) {
 		this.crtdById = crtdById;
+	}
+
+	public boolean isCrtByImgAvail() {
+		return crtByImgAvail;
+	}
+
+	public void setCrtByImgAvail(boolean crtByImgAvail) {
+		this.crtByImgAvail = crtByImgAvail;
+	}
+
+	public String getCrtByImgPath() {
+		return crtByImgPath;
+	}
+
+	public void setCrtByImgPath(String crtByImgPath) {
+		this.crtByImgPath = crtByImgPath;
 	}
 
 	public String getContentType() {

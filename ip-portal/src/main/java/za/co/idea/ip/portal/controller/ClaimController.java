@@ -372,6 +372,8 @@ public class ClaimController implements Serializable {
 	}
 
 	public ClaimBean getClaimBean() {
+		if(claimBean == null)
+			claimBean = new ClaimBean();
 		return claimBean;
 	}
 
@@ -388,6 +390,8 @@ public class ClaimController implements Serializable {
 	}
 
 	public List<ClaimBean> getViewClaimBeans() {
+		if(viewClaimBeans == null)
+			viewClaimBeans = new ArrayList<ClaimBean>();
 		return viewClaimBeans;
 	}
 
@@ -396,6 +400,8 @@ public class ClaimController implements Serializable {
 	}
 
 	public List<ListSelectorBean> getClaimStatus() {
+		if(claimStatus == null)
+			claimStatus = new ArrayList<ListSelectorBean>();
 		return claimStatus;
 	}
 
@@ -404,6 +410,8 @@ public class ClaimController implements Serializable {
 	}
 
 	public List<UserBean> getAdmUsers() {
+		if(admUsers == null)
+			admUsers = new ArrayList<UserBean>();
 		return admUsers;
 	}
 
@@ -412,6 +420,8 @@ public class ClaimController implements Serializable {
 	}
 
 	public List<RewardsBean> getViewRewardsBeans() {
+		if(viewRewardsBeans == null)
+			viewRewardsBeans = new ArrayList<RewardsBean>();
 		return viewRewardsBeans;
 	}
 
@@ -428,6 +438,8 @@ public class ClaimController implements Serializable {
 	}
 
 	public String getSelRwId() {
+		if(selRwId == null)
+			selRwId = "";
 		return selRwId;
 	}
 

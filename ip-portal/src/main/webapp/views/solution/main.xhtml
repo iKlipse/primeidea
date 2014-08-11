@@ -5,6 +5,7 @@
 	<h:body>
 		<h:form id="frmSolCtrlr" enctype="multipart/form-data">
 			<p:growl life="5000" id="frmSolCtrlrMsg" showDetail="true" showSummary="true" autoUpdate="true" />
+			<p:remoteCommand actionListener="#{challengeController.initializeSolPage}" name="onload" autoRun="true" update="pnlSolDet" />
 			<p:panel id="pnlSolMenu" style="border: 0px !important">
 				<p:commandLink value="View Open Solutions" action="#{challengeController.showViewOpenSolution}" update="pnlSolDet">
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />

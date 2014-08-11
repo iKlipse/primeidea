@@ -13,15 +13,32 @@
 					</p:menuitem>
 				</p:menu>
 			</f:facet>
-			<f:facet name="header" style="vertical-align: center !important; height:100% !important; align-text: left !important">
-				<p:selectOneMenu value="#{idea.crtdById}">
-					<f:selectItems value="#{landingPageController.admUsers}" var="a" itemLabel="#{a.scName} - #{a.fName} - #{a.lName}" itemValue="#{a.uId}" />
-				</p:selectOneMenu>
-			</f:facet>
-			<b><p:outputLabel value="#{idea.ideaTitle}" /></b>
-			<p>
-				<p:outputLabel value="#{idea.ideaDesc}" escape="false" />
-			</p>
+			<p:panelGrid styleClass="noBorder" columns="3">
+				<p:row>
+					<p:column width="20%">
+						<p:graphicImage style="float: right !important;" id="imgAvatar" name="#{idea.crtByImgPath}" library="images" height="75px" width="75px" rendered="#{idea.crtByImgAvail}" />
+						<p:graphicImage style="float: right !important;" id="imgAvatarDefault" name="profile.jpg" library="images" height="75px" width="75px" rendered="#{!idea.crtByImgAvail}" />
+					</p:column>
+					<p:column width="40%">
+						<p:outputLabel value="#{idea.crtdByName}" style="font-weight: bold !important; text-align: left !important" />
+					</p:column>
+					<p:column width="40%">
+						<p:outputLabel value="#{idea.crtdDate}" style="text-align: left !important">
+							<f:convertDateTime pattern="yyyy.MM.dd 'at' HH:mm:ss z" />
+						</p:outputLabel>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:outputLabel value="#{idea.ideaTitle}" style="font-weight: bold !important; text-align: left !important; font-size: 1.2em !important" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:outputLabel value="#{idea.ideaDesc}" escape="false" style="text-align: left !important" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
 		</p:panel>
 	</p:dataGrid>
 </ui:composition>

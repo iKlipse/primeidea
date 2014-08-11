@@ -20,6 +20,8 @@ public class IdeaBean implements Serializable {
 	private String fileName;
 	private Long crtdById;
 	private String crtdByName;
+	private boolean crtByImgAvail;
+	private String crtByImgPath;
 	private Date crtdDate;
 	private List<Long> groupIdList;
 	private boolean taggable;
@@ -118,6 +120,22 @@ public class IdeaBean implements Serializable {
 
 	public void setCrtdByName(String crtdByName) {
 		this.crtdByName = crtdByName;
+	}
+
+	public boolean isCrtByImgAvail() {
+		return crtByImgAvail;
+	}
+
+	public void setCrtByImgAvail(boolean crtByImgAvail) {
+		this.crtByImgAvail = crtByImgAvail;
+	}
+
+	public String getCrtByImgPath() {
+		return crtByImgPath;
+	}
+
+	public void setCrtByImgPath(String crtByImgPath) {
+		this.crtByImgPath = crtByImgPath;
 	}
 
 	public Date getCrtdDate() {

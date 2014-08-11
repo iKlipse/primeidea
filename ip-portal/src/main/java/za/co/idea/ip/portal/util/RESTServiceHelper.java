@@ -113,6 +113,9 @@ public class RESTServiceHelper {
 			bean.setSelCatId(ideaMessage.getSelCatId());
 			bean.setSetStatusId(ideaMessage.getSetStatusId());
 			bean.setGroupIdList(getIdsFromArray(ideaMessage.getGroupIdList()));
+			bean.setCrtByImgAvail(ideaMessage.isCrtByImgAvail());
+			bean.setCrtByImgPath(ideaMessage.getCrtByImgPath());
+			bean.setCrtdByName(ideaMessage.getCrtdByName());
 			ret.add(bean);
 		}
 		return ret;
@@ -134,6 +137,9 @@ public class RESTServiceHelper {
 			bean.setSelCatId(ideaMessage.getSelCatId());
 			bean.setSetStatusId(ideaMessage.getSetStatusId());
 			bean.setGroupIdList(getIdsFromArray(ideaMessage.getGroupIdList()));
+			bean.setCrtByImgAvail(ideaMessage.isCrtByImgAvail());
+			bean.setCrtByImgPath(ideaMessage.getCrtByImgPath());
+			bean.setCrtdByName(ideaMessage.getCrtdByName());
 			ret.add(bean);
 		}
 		return ret;
@@ -155,6 +161,9 @@ public class RESTServiceHelper {
 			bean.setSelCatId(ideaMessage.getSelCatId());
 			bean.setSetStatusId(ideaMessage.getSetStatusId());
 			bean.setGroupIdList(getIdsFromArray(ideaMessage.getGroupIdList()));
+			bean.setCrtByImgAvail(ideaMessage.isCrtByImgAvail());
+			bean.setCrtByImgPath(ideaMessage.getCrtByImgPath());
+			bean.setCrtdByName(ideaMessage.getCrtdByName());
 			ret.add(bean);
 		}
 		return ret;
@@ -176,6 +185,9 @@ public class RESTServiceHelper {
 			bean.setSelCatId(ideaMessage.getSelCatId());
 			bean.setSetStatusId(ideaMessage.getSetStatusId());
 			bean.setGroupIdList(getIdsFromArray(ideaMessage.getGroupIdList()));
+			bean.setCrtByImgAvail(ideaMessage.isCrtByImgAvail());
+			bean.setCrtByImgPath(ideaMessage.getCrtByImgPath());
+			bean.setCrtdByName(ideaMessage.getCrtdByName());
 			ret.add(bean);
 		}
 		return ret;
@@ -197,6 +209,9 @@ public class RESTServiceHelper {
 			bean.setSelCatId(ideaMessage.getSelCatId());
 			bean.setSetStatusId(ideaMessage.getSetStatusId());
 			bean.setGroupIdList(getIdsFromArray(ideaMessage.getGroupIdList()));
+			bean.setCrtByImgAvail(ideaMessage.isCrtByImgAvail());
+			bean.setCrtByImgPath(ideaMessage.getCrtByImgPath());
+			bean.setCrtdByName(ideaMessage.getCrtdByName());
 			ret.add(bean);
 		}
 		return ret;

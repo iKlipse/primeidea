@@ -162,6 +162,21 @@ public class AdminController implements Serializable {
 		return client;
 	}
 
+	public void initializePage() {
+		try {
+			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			User user = (User) request.getAttribute(WebKeys.USER);
+			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+			userId = message.getuId();
+			viewUsers = fetchAllUsers();
+		} catch (Exception e) {
+			logger.error(e, e);
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+	}
+
 	@PostConstruct
 	public void initializeProfilePage() {
 		try {
@@ -2564,6 +2579,8 @@ public class AdminController implements Serializable {
 	}
 
 	public String getSecA() {
+		if (secA == null)
+			secA = "";
 		return secA;
 	}
 
@@ -2580,6 +2597,8 @@ public class AdminController implements Serializable {
 	}
 
 	public String getUploadSrc() {
+		if (uploadSrc == null)
+			uploadSrc = "";
 		return uploadSrc;
 	}
 
@@ -2612,6 +2631,8 @@ public class AdminController implements Serializable {
 	}
 
 	public String getSecQ() {
+		if (secQ == null)
+			secQ = "";
 		return secQ;
 	}
 
@@ -2620,6 +2641,8 @@ public class AdminController implements Serializable {
 	}
 
 	public String getFileName() {
+		if (fileName == null)
+			fileName = "";
 		return fileName;
 	}
 
@@ -2628,6 +2651,8 @@ public class AdminController implements Serializable {
 	}
 
 	public String getContentType() {
+		if (contentType == null)
+			contentType = "";
 		return contentType;
 	}
 
@@ -2636,6 +2661,8 @@ public class AdminController implements Serializable {
 	}
 
 	public String getLoggedScrName() {
+		if (loggedScrName == null)
+			loggedScrName = "";
 		return loggedScrName;
 	}
 
@@ -2648,10 +2675,14 @@ public class AdminController implements Serializable {
 	}
 
 	public String getUploadFileName() {
+		if (uploadFileName == null)
+			uploadFileName = "";
 		return uploadFileName;
 	}
 
 	public String getUploadContentType() {
+		if (uploadContentType == null)
+			uploadContentType = "";
 		return uploadContentType;
 	}
 
@@ -2678,10 +2709,16 @@ public class AdminController implements Serializable {
 	}
 
 	public DualListModel<UserBean> getUserTwinSelect() {
+		if (userTwinSelect == null) {
+			userTwinSelect = new DualListModel<UserBean>();
+		}
 		return userTwinSelect;
 	}
 
 	public DualListModel<GroupBean> getGroupTwinSelect() {
+		if (groupTwinSelect == null) {
+			groupTwinSelect = new DualListModel<GroupBean>();
+		}
 		return groupTwinSelect;
 	}
 
@@ -2734,6 +2771,8 @@ public class AdminController implements Serializable {
 	}
 
 	public String getGrpFileName() {
+		if (grpFileName == null)
+			grpFileName = "";
 		return grpFileName;
 	}
 
@@ -2742,6 +2781,8 @@ public class AdminController implements Serializable {
 	}
 
 	public String getGrpContentType() {
+		if (grpContentType == null)
+			grpContentType = "";
 		return grpContentType;
 	}
 
@@ -2750,6 +2791,8 @@ public class AdminController implements Serializable {
 	}
 
 	public String getHierarchy() {
+		if (hierarchy == null)
+			hierarchy = "";
 		return hierarchy;
 	}
 
@@ -2800,6 +2843,8 @@ public class AdminController implements Serializable {
 	}
 
 	public String getReturnView() {
+		if (returnView == null)
+			returnView = "";
 		return returnView;
 	}
 
@@ -2808,6 +2853,8 @@ public class AdminController implements Serializable {
 	}
 
 	public String getToView() {
+		if (toView == null)
+			toView = "";
 		return toView;
 	}
 
@@ -2816,6 +2863,8 @@ public class AdminController implements Serializable {
 	}
 
 	public String getEntity() {
+		if (entity == null)
+			entity = "";
 		return entity;
 	}
 
@@ -2824,6 +2873,8 @@ public class AdminController implements Serializable {
 	}
 
 	public List<AllocationBean> getAllocs() {
+		if (allocs == null)
+			allocs = new ArrayList<AllocationBean>();
 		return allocs;
 	}
 
@@ -2832,6 +2883,8 @@ public class AdminController implements Serializable {
 	}
 
 	public AllocationBean getAllocationBean() {
+		if (allocationBean == null)
+			allocationBean = new AllocationBean();
 		return allocationBean;
 	}
 
@@ -2856,6 +2909,8 @@ public class AdminController implements Serializable {
 	}
 
 	public String getComments() {
+		if (comments == null)
+			comments = "";
 		return comments;
 	}
 
@@ -2939,6 +2994,8 @@ public class AdminController implements Serializable {
 	}
 
 	public List<MetaDataBean> getBeans() {
+		if (beans == null)
+			beans = new ArrayList<MetaDataBean>();
 		return beans;
 	}
 
@@ -2947,6 +3004,8 @@ public class AdminController implements Serializable {
 	}
 
 	public MetaDataBean getBean() {
+		if (bean == null)
+			bean = new MetaDataBean();
 		return bean;
 	}
 
@@ -2955,6 +3014,8 @@ public class AdminController implements Serializable {
 	}
 
 	public String getTable() {
+		if (table == null)
+			table = "";
 		return table;
 	}
 
@@ -2963,6 +3024,8 @@ public class AdminController implements Serializable {
 	}
 
 	public String getSelId() {
+		if (selId == null)
+			selId = "";
 		return selId;
 	}
 
@@ -2971,6 +3034,8 @@ public class AdminController implements Serializable {
 	}
 
 	public String getSelVal() {
+		if (selVal == null)
+			selVal = "";
 		return selVal;
 	}
 
@@ -2983,6 +3048,8 @@ public class AdminController implements Serializable {
 	}
 
 	public NewsBean getNewsBean() {
+		if (newsBean == null)
+			newsBean = new NewsBean();
 		return newsBean;
 	}
 
@@ -2991,6 +3058,8 @@ public class AdminController implements Serializable {
 	}
 
 	public List<NewsBean> getViewNewsBeans() {
+		if (viewNewsBeans == null)
+			viewNewsBeans = new ArrayList<NewsBean>();
 		return viewNewsBeans;
 	}
 
@@ -2999,6 +3068,8 @@ public class AdminController implements Serializable {
 	}
 
 	public List<NotificationBean> getViewNotifications() {
+		if (viewNotifications == null)
+			viewNotifications = new ArrayList<NotificationBean>();
 		return viewNotifications;
 	}
 
@@ -3015,6 +3086,8 @@ public class AdminController implements Serializable {
 	}
 
 	public NotificationBean getNotificationBean() {
+		if (notificationBean == null)
+			notificationBean = new NotificationBean();
 		return notificationBean;
 	}
 
@@ -3023,6 +3096,8 @@ public class AdminController implements Serializable {
 	}
 
 	public String[] getSelGrpId() {
+		if (selGrpId == null)
+			selGrpId = new String[] {};
 		return selGrpId;
 	}
 
@@ -3031,6 +3106,8 @@ public class AdminController implements Serializable {
 	}
 
 	public String[] getSelUserId() {
+		if (selUserId == null)
+			selUserId = new String[] {};
 		return selUserId;
 	}
 
@@ -3039,6 +3116,8 @@ public class AdminController implements Serializable {
 	}
 
 	public Date getLastLoginDt() {
+		if (lastLoginDt == null)
+			lastLoginDt = new Date();
 		return lastLoginDt;
 	}
 
@@ -3047,6 +3126,8 @@ public class AdminController implements Serializable {
 	}
 
 	public UserStatisticsBean getStatsBean() {
+		if (statsBean == null)
+			statsBean = new UserStatisticsBean();
 		return statsBean;
 	}
 
@@ -3069,5 +3150,4 @@ public class AdminController implements Serializable {
 	public void setImgAvail(boolean imgAvail) {
 		this.imgAvail = imgAvail;
 	}
-
 }

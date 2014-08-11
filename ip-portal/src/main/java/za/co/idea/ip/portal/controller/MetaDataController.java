@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -53,7 +52,6 @@ public class MetaDataController implements Serializable {
 		return client;
 	}
 
-	@PostConstruct
 	public void initializePage() {
 		try {
 			this.showAddPanel = false;
@@ -304,6 +302,8 @@ public class MetaDataController implements Serializable {
 	}
 
 	public String getTable() {
+		if (table == null)
+			table = "";
 		return table;
 	}
 
@@ -312,10 +312,14 @@ public class MetaDataController implements Serializable {
 	}
 
 	public String getSelId() {
+		if (selId == null)
+			selId = "";
 		return selId;
 	}
 
 	public String getSelVal() {
+		if (selVal == null)
+			selVal = "";
 		return selVal;
 	}
 
@@ -336,6 +340,8 @@ public class MetaDataController implements Serializable {
 	}
 
 	public String getReturnView() {
+		if (returnView == null)
+			returnView = "";
 		return returnView;
 	}
 
@@ -344,6 +350,8 @@ public class MetaDataController implements Serializable {
 	}
 
 	public String getToView() {
+		if (toView == null)
+			toView = "";
 		return toView;
 	}
 

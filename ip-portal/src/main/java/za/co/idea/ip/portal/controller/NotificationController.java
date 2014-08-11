@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -63,7 +62,6 @@ public class NotificationController implements Serializable {
 		return client;
 	}
 
-	@PostConstruct
 	public void initializePage() {
 		try {
 			notificationBean = new NotificationBean();

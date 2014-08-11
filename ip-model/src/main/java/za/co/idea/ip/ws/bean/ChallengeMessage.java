@@ -18,6 +18,8 @@ public class ChallengeMessage {
 	private Date crtdDt;
 	private Long crtdById;
 	private String crtdByName;
+	private boolean crtByImgAvail;
+	private String crtByImgPath;
 	private Long[] groupIdList;
 
 	public Long getId() {
@@ -114,6 +116,22 @@ public class ChallengeMessage {
 
 	public void setCrtdByName(String crtdByName) {
 		this.crtdByName = crtdByName;
+	}
+
+	public boolean isCrtByImgAvail() {
+		return crtByImgAvail;
+	}
+
+	public void setCrtByImgAvail(boolean crtByImgAvail) {
+		this.crtByImgAvail = crtByImgAvail;
+	}
+
+	public String getCrtByImgPath() {
+		return crtByImgPath;
+	}
+
+	public void setCrtByImgPath(String crtByImgPath) {
+		this.crtByImgPath = crtByImgPath;
 	}
 
 	public Long[] getGroupIdList() {

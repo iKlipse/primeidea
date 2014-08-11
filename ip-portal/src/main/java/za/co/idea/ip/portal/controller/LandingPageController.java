@@ -164,8 +164,6 @@ public class LandingPageController implements Serializable {
 	private List<ChallengeBean> fetchAllChallengesByUser() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
 		WebClient fetchChallengeClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/user/access/" + userId);
-		// WebClient fetchChallengeClient =
-		// RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/user/access/0");
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
@@ -182,6 +180,9 @@ public class LandingPageController implements Serializable {
 			bean.setTag(challengeMessage.getTag());
 			bean.setTitle(challengeMessage.getTitle());
 			bean.setGroupIdList(FacesContextHelper.getIdsFromArray(challengeMessage.getGroupIdList()));
+			bean.setCrtByImgAvail(challengeMessage.isCrtByImgAvail());
+			bean.setCrtByImgPath(challengeMessage.getCrtByImgPath());
+			bean.setCrtdByName(challengeMessage.getCrtdByName());
 			ret.add(bean);
 		}
 		return ret;
@@ -190,8 +191,6 @@ public class LandingPageController implements Serializable {
 	private List<SolutionBean> fetchAllSolutionsByUser() {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
 		WebClient fetchSolutionClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/user/access/" + userId);
-		// WebClient fetchSolutionClient =
-		// RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/user/access/0");
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
 		fetchSolutionClient.close();
 		for (SolutionMessage solutionMessage : solutions) {
@@ -206,6 +205,8 @@ public class LandingPageController implements Serializable {
 			bean.setStatusId(solutionMessage.getStatusId());
 			bean.setTags(solutionMessage.getTags());
 			bean.setTitle(solutionMessage.getTitle());
+			bean.setCrtByImgAvail(solutionMessage.isCrtByImgAvail());
+			bean.setCrtByImgPath(solutionMessage.getCrtByImgPath());
 			ret.add(bean);
 		}
 		return ret;
@@ -458,10 +459,13 @@ public class LandingPageController implements Serializable {
 	}
 
 	public String getToView() {
+		if (toView == null)
+			toView = "";
 		return toView;
 	}
 
 	public void setToView(String toView) {
 		this.toView = toView;
 	}
+
 }

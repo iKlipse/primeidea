@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -123,7 +122,6 @@ public class ChallengeController implements Serializable {
 		return client;
 	}
 
-	@PostConstruct
 	public void initializeChalPage() {
 		try {
 			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -174,7 +172,6 @@ public class ChallengeController implements Serializable {
 		}
 	}
 
-	@PostConstruct
 	public void initializeSolPage() {
 		try {
 			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -188,9 +185,9 @@ public class ChallengeController implements Serializable {
 			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
 			solutionBean = new SolutionBean();
 			saveAsOpen = false;
-			showPubSol = false;
+			showPubSol = true;
 			showViewSol = false;
-			showCrtSol = true;
+			showCrtSol = false;
 			if (toView != null && Integer.valueOf(toView) != -1) {
 				switch (Integer.valueOf(toView)) {
 				case 1:
@@ -2004,6 +2001,8 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String getCommentText() {
+		if(commentText == null)
+			commentText = new String();
 		return commentText;
 	}
 
@@ -2080,6 +2079,8 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String getChalLikeCnt() {
+		if(chalLikeCnt == null)
+			chalLikeCnt = "";
 		return chalLikeCnt;
 	}
 
@@ -2088,6 +2089,8 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String getChalCommentCnt() {
+		if(chalCommentCnt == null)
+			chalCommentCnt = "";
 		return chalCommentCnt;
 	}
 
@@ -2096,6 +2099,8 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String getSolLikeCnt() {
+		if(solLikeCnt == null)
+			solLikeCnt = "";
 		return solLikeCnt;
 	}
 
@@ -2104,6 +2109,8 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String getSolCommentCnt() {
+		if(solCommentCnt == null)
+			solCommentCnt = "";
 		return solCommentCnt;
 	}
 
@@ -2216,10 +2223,14 @@ public class ChallengeController implements Serializable {
 	}
 
 	public List<TagBean> getBuildOns() {
+		if(buildOns == null)
+			buildOns = new ArrayList<TagBean>();
 		return buildOns;
 	}
 
 	public String getBuildOnText() {
+		if(buildOnText == null)
+			buildOnText = "";
 		return buildOnText;
 	}
 
@@ -2228,6 +2239,8 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String getBuildOnCnt() {
+		if(buildOnCnt == null) 
+			buildOnCnt = "";
 		return buildOnCnt;
 	}
 
@@ -2248,10 +2261,14 @@ public class ChallengeController implements Serializable {
 	}
 
 	public List<GroupBean> getpGrps() {
+		if(pGrps == null)
+			pGrps = new ArrayList<GroupBean>();
 		return pGrps;
 	}
 
 	public DualListModel<GroupBean> getGroupTwinSelect() {
+		if(groupTwinSelect == null)
+			groupTwinSelect = new DualListModel<GroupBean>();
 		return groupTwinSelect;
 	}
 
@@ -2260,6 +2277,8 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String[] getSelGrpId() {
+		if(selGrpId == null)
+			selGrpId = new String[] {};
 		return selGrpId;
 	}
 
@@ -2352,6 +2371,8 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String getReturnView() {
+		if(returnView == null)
+			returnView = "";
 		return returnView;
 	}
 
@@ -2360,6 +2381,8 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String getToView() {
+		if(toView == null)
+			toView = "";
 		return toView;
 	}
 
@@ -2374,5 +2397,4 @@ public class ChallengeController implements Serializable {
 	public void setUserId(long userId) {
 		this.userId = userId;
 	}
-
 }

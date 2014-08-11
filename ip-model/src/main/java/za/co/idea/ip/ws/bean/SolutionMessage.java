@@ -16,6 +16,8 @@ public class SolutionMessage {
 	private Date crtdDt;
 	private Long crtdById;
 	private String crtByName;
+	private boolean crtByImgAvail;
+	private String crtByImgPath;
 	private boolean solImgAvl;
 	private String solImg;
     private String contentType;
@@ -100,6 +102,22 @@ public class SolutionMessage {
 
 	public void setCrtByName(String crtByName) {
 		this.crtByName = crtByName;
+	}
+
+	public boolean isCrtByImgAvail() {
+		return crtByImgAvail;
+	}
+
+	public void setCrtByImgAvail(boolean crtByImgAvail) {
+		this.crtByImgAvail = crtByImgAvail;
+	}
+
+	public String getCrtByImgPath() {
+		return crtByImgPath;
+	}
+
+	public void setCrtByImgPath(String crtByImgPath) {
+		this.crtByImgPath = crtByImgPath;
 	}
 
 	public boolean isSolImgAvl() {

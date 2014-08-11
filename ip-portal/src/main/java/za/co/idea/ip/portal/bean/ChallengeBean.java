@@ -20,6 +20,8 @@ public class ChallengeBean implements Serializable {
 	private Date crtdDt;
 	private Long crtdById;
 	private String crtdByName;
+ 	private boolean crtByImgAvail;
+	private String crtByImgPath;
 	private String contentType;
 	private String fileName;
 	private List<Long> groupIdList;
@@ -126,6 +128,22 @@ public class ChallengeBean implements Serializable {
 
 	public void setCrtdByName(String crtdByName) {
 		this.crtdByName = crtdByName;
+	}
+
+	public boolean isCrtByImgAvail() {
+		return crtByImgAvail;
+	}
+
+	public void setCrtByImgAvail(boolean crtByImgAvail) {
+		this.crtByImgAvail = crtByImgAvail;
+	}
+
+	public String getCrtByImgPath() {
+		return crtByImgPath;
+	}
+
+	public void setCrtByImgPath(String crtByImgPath) {
+		this.crtByImgPath = crtByImgPath;
 	}
 
 	public String getContentType() {

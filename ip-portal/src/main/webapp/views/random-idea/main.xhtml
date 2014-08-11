@@ -5,6 +5,7 @@
 	<h:body>
 		<h:form id="frmRandomIdea" enctype="multipart/form-data">
 			<p:growl life="5000" id="frmRandomIdeaMsg" showDetail="true" showSummary="true" autoUpdate="true" />
+			<p:remoteCommand actionListener="#{randomIdeaController.initializePage}" name="onload" autoRun="true" update="pnlIdeaDet" />
 			<p:panel id="pnlIdeaMenu" style="border: 0px !important">
 				<p:commandLink value="View Open Ideas" actionListener="#{randomIdeaController.showViewOpenIdeas}" update="pnlIdeaDet">
 					<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />

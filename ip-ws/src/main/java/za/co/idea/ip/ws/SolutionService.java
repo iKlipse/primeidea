@@ -128,7 +128,7 @@ public class SolutionService {
 				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
 				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setCrtByName(ipUserDAO.findById(ipSolution.getIpUser().getUserId()).getUserFName());
+				solution.setCrtByName(ipSolution.getIpUser().getUserFName() + " " + ipSolution.getIpUser().getUserLName());
 				solution.setCrtdDt(ipSolution.getSolCrtdDt());
 				solution.setDesc(ipSolution.getSolDesc());
 				solution.setId(ipSolution.getSolId());
@@ -143,6 +143,12 @@ public class SolutionService {
 				} else {
 					solution.setSolImgAvl(false);
 				}
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
+				if (blob != null) {
+					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
+					solution.setCrtByImgAvail(true);
+				} else
+					solution.setCrtByImgAvail(false);
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -156,8 +162,9 @@ public class SolutionService {
 	@Produces("application/json")
 	public <T extends SolutionMessage> List<T> listSolutionByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
+		logger.debug("Control handled in listSolutionByUser() of /solution/list/user/access/{id} service ");
 		try {
-			logger.info("User Id :"+id);
+			logger.info("User Id :" + id);
 			List solutions = ipSolutionDAO.findByUserId(id);
 			for (Object object : solutions) {
 				IpSolution ipSolution = (IpSolution) object;
@@ -166,7 +173,7 @@ public class SolutionService {
 				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
 				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setCrtByName(ipUserDAO.findById(ipSolution.getIpUser().getUserId()).getUserFName());
+				solution.setCrtByName(ipSolution.getIpUser().getUserFName() + " " + ipSolution.getIpUser().getUserLName());
 				solution.setCrtdDt(ipSolution.getSolCrtdDt());
 				solution.setDesc(ipSolution.getSolDesc());
 				solution.setId(ipSolution.getSolId());
@@ -180,11 +187,17 @@ public class SolutionService {
 					solution.setContentType(ipBlob.getBlobContentType());
 				} else {
 					solution.setSolImgAvl(false);
-				}				
+				}
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
+				if (blob != null) {
+					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
+					solution.setCrtByImgAvail(true);
+				} else
+					solution.setCrtByImgAvail(false);
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
-			logger.error("Error in service : "+e.getMessage());
+			logger.error("Error in service : " + e.getMessage());
 			e.printStackTrace();
 		}
 		return ret;
@@ -204,7 +217,7 @@ public class SolutionService {
 				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
 				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setCrtByName(ipUserDAO.findById(ipSolution.getIpUser().getUserId()).getUserFName());
+				solution.setCrtByName(ipSolution.getIpUser().getUserFName() + " " + ipSolution.getIpUser().getUserLName());
 				solution.setCrtdDt(ipSolution.getSolCrtdDt());
 				solution.setDesc(ipSolution.getSolDesc());
 				solution.setId(ipSolution.getSolId());
@@ -219,6 +232,12 @@ public class SolutionService {
 				} else {
 					solution.setSolImgAvl(false);
 				}
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
+				if (blob != null) {
+					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
+					solution.setCrtByImgAvail(true);
+				} else
+					solution.setCrtByImgAvail(false);
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -241,7 +260,7 @@ public class SolutionService {
 				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
 				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setCrtByName(ipUserDAO.findById(ipSolution.getIpUser().getUserId()).getUserFName());
+				solution.setCrtByName(ipSolution.getIpUser().getUserFName() + " " + ipSolution.getIpUser().getUserLName());
 				solution.setCrtdDt(ipSolution.getSolCrtdDt());
 				solution.setDesc(ipSolution.getSolDesc());
 				solution.setId(ipSolution.getSolId());
@@ -256,7 +275,12 @@ public class SolutionService {
 				} else {
 					solution.setSolImgAvl(false);
 				}
-				
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
+				if (blob != null) {
+					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
+					solution.setCrtByImgAvail(true);
+				} else
+					solution.setCrtByImgAvail(false);
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -279,7 +303,7 @@ public class SolutionService {
 				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
 				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setCrtByName(ipUserDAO.findById(ipSolution.getIpUser().getUserId()).getUserFName());
+				solution.setCrtByName(ipSolution.getIpUser().getUserFName() + " " + ipSolution.getIpUser().getUserLName());
 				solution.setCrtdDt(ipSolution.getSolCrtdDt());
 				solution.setDesc(ipSolution.getSolDesc());
 				solution.setId(ipSolution.getSolId());
@@ -294,6 +318,12 @@ public class SolutionService {
 				} else {
 					solution.setSolImgAvl(false);
 				}
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
+				if (blob != null) {
+					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
+					solution.setCrtByImgAvail(true);
+				} else
+					solution.setCrtByImgAvail(false);
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -316,7 +346,7 @@ public class SolutionService {
 				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
 				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setCrtByName(ipUserDAO.findById(ipSolution.getIpUser().getUserId()).getUserFName());
+				solution.setCrtByName(ipSolution.getIpUser().getUserFName() + " " + ipSolution.getIpUser().getUserLName());
 				solution.setCrtdDt(ipSolution.getSolCrtdDt());
 				solution.setDesc(ipSolution.getSolDesc());
 				solution.setId(ipSolution.getSolId());
@@ -331,6 +361,12 @@ public class SolutionService {
 				} else {
 					solution.setSolImgAvl(false);
 				}
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
+				if (blob != null) {
+					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
+					solution.setCrtByImgAvail(true);
+				} else
+					solution.setCrtByImgAvail(false);
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -445,6 +481,12 @@ public class SolutionService {
 			solution.setId(ipSolution.getSolId());
 			solution.setTags(ipSolution.getSolTags());
 			solution.setTitle(ipSolution.getSolTitle());
+			IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
+			if (blob != null) {
+				solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
+				solution.setCrtByImgAvail(true);
+			} else
+				solution.setCrtByImgAvail(false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

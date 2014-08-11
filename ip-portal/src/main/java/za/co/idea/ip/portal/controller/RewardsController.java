@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -129,7 +128,6 @@ public class RewardsController implements Serializable {
 		}
 	}
 
-	@PostConstruct
 	public void showRewardStore() {
 		try {
 			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -985,6 +983,8 @@ public class RewardsController implements Serializable {
 	}
 
 	public RewardsBean getRewardsBean() {
+		if (rewardsBean == null)
+			rewardsBean = new RewardsBean();
 		return rewardsBean;
 	}
 
@@ -1001,6 +1001,8 @@ public class RewardsController implements Serializable {
 	}
 
 	public List<RewardsBean> getViewRewardsBeans() {
+		if (viewRewardsBeans == null)
+			viewRewardsBeans = new ArrayList<RewardsBean>();
 		return viewRewardsBeans;
 	}
 
@@ -1009,6 +1011,8 @@ public class RewardsController implements Serializable {
 	}
 
 	public List<ListSelectorBean> getRewardsCat() {
+		if (rewardsCat == null)
+			rewardsCat = new ArrayList<ListSelectorBean>();
 		return rewardsCat;
 	}
 
@@ -1017,6 +1021,8 @@ public class RewardsController implements Serializable {
 	}
 
 	public List<UserBean> getAdmUsers() {
+		if (admUsers == null)
+			admUsers = new ArrayList<UserBean>();
 		return admUsers;
 	}
 
@@ -1025,6 +1031,8 @@ public class RewardsController implements Serializable {
 	}
 
 	public List<TagBean> getRewardsWishlist() {
+		if (rewardsWishlist == null)
+			rewardsWishlist = new ArrayList<TagBean>();
 		return rewardsWishlist;
 	}
 
@@ -1033,6 +1041,8 @@ public class RewardsController implements Serializable {
 	}
 
 	public String getRewardsWishlistCnt() {
+		if (rewardsWishlistCnt == null)
+			rewardsWishlistCnt = "";
 		return rewardsWishlistCnt;
 	}
 
@@ -1090,6 +1100,8 @@ public class RewardsController implements Serializable {
 	}
 
 	public String getEntity() {
+		if (entity == null)
+			entity = "";
 		return entity;
 	}
 
@@ -1142,6 +1154,8 @@ public class RewardsController implements Serializable {
 	}
 
 	public String getAllocId() {
+		if (allocId == null)
+			allocId = "";
 		return allocId;
 	}
 
@@ -1150,10 +1164,14 @@ public class RewardsController implements Serializable {
 	}
 
 	public List<GroupBean> getpGrps() {
+		if (pGrps == null)
+			pGrps = new ArrayList<GroupBean>();
 		return pGrps;
 	}
 
 	public DualListModel<GroupBean> getGroupTwinSelect() {
+		if (groupTwinSelect == null)
+			groupTwinSelect = new DualListModel<GroupBean>();
 		return groupTwinSelect;
 	}
 
@@ -1257,6 +1275,8 @@ public class RewardsController implements Serializable {
 	}
 
 	public List<MetaDataBean> getDisStatusList() {
+		if (disStatusList == null)
+			disStatusList = new ArrayList<MetaDataBean>();
 		return disStatusList;
 	}
 
@@ -1289,6 +1309,8 @@ public class RewardsController implements Serializable {
 	}
 
 	public String getComments() {
+		if (comments == null)
+			comments = "";
 		return comments;
 	}
 
@@ -1297,6 +1319,8 @@ public class RewardsController implements Serializable {
 	}
 
 	public List<PointBean> getPointBeans() {
+		if (pointBeans == null)
+			pointBeans = new ArrayList<PointBean>();
 		return pointBeans;
 	}
 
@@ -1305,6 +1329,8 @@ public class RewardsController implements Serializable {
 	}
 
 	public PointBean getPointBean() {
+		if (pointBean == null)
+			pointBean = new PointBean();
 		return pointBean;
 	}
 

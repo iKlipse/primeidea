@@ -79,8 +79,6 @@ public class IpGroupDAO extends BaseHibernateDAO {
 		try {
 			IpGroup instance = (IpGroup) session.get("za.co.idea.ip.orm.bean.IpGroup", id);
 			transaction.commit();
-			
-
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);

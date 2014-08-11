@@ -76,7 +76,7 @@ public class BuildonController implements Serializable {
 		commentText = "";
 		return "bovw";
 	}
-	
+
 	public String showSummaryBuildon() {
 		buildonLikes = fetchAllBuildonLikes();
 		buildonComments = fetchAllBuildonComments();
@@ -305,6 +305,8 @@ public class BuildonController implements Serializable {
 	}
 
 	public List<TagBean> getBuildonComments() {
+		if (buildonComments == null)
+			buildonComments = new ArrayList<TagBean>();
 		return buildonComments;
 	}
 
@@ -313,6 +315,8 @@ public class BuildonController implements Serializable {
 	}
 
 	public String getBuildonLikeCnt() {
+		if (buildonLikeCnt == null)
+			buildonLikeCnt = "";
 		return buildonLikeCnt;
 	}
 
@@ -321,6 +325,8 @@ public class BuildonController implements Serializable {
 	}
 
 	public String getBuildonCommentCnt() {
+		if (buildonCommentCnt == null)
+			buildonCommentCnt = "";
 		return buildonCommentCnt;
 	}
 
@@ -345,6 +351,8 @@ public class BuildonController implements Serializable {
 	}
 
 	public String getCommentText() {
+		if (commentText == null)
+			commentText = "";
 		return commentText;
 	}
 
@@ -361,6 +369,8 @@ public class BuildonController implements Serializable {
 	}
 
 	public String getFileName() {
+		if (fileName == null)
+			fileName = "";
 		return fileName;
 	}
 
@@ -369,6 +379,8 @@ public class BuildonController implements Serializable {
 	}
 
 	public String getContentType() {
+		if (contentType == null)
+			contentType = "";
 		return contentType;
 	}
 

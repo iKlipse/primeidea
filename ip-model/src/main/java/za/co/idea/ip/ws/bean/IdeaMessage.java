@@ -16,6 +16,8 @@ public class IdeaMessage {
 	private String ideaTag;
 	private Long crtdById;
 	private String crtdByName;
+	private boolean crtByImgAvail;
+	private String crtByImgPath;
 	private Date crtdDate;
 	private Long[] groupIdList;
 
@@ -89,6 +91,22 @@ public class IdeaMessage {
 
 	public void setCrtdByName(String crtdByName) {
 		this.crtdByName = crtdByName;
+	}
+
+	public boolean isCrtByImgAvail() {
+		return crtByImgAvail;
+	}
+
+	public void setCrtByImgAvail(boolean crtByImgAvail) {
+		this.crtByImgAvail = crtByImgAvail;
+	}
+
+	public String getCrtByImgPath() {
+		return crtByImgPath;
+	}
+
+	public void setCrtByImgPath(String crtByImgPath) {
+		this.crtByImgPath = crtByImgPath;
 	}
 
 	public Date getCrtdDate() {

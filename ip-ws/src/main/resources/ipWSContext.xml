@@ -20,6 +20,7 @@
 		<property name="ipIdeaGroupDAO" ref="IpIdeaGroupDAO" />
 		<property name="ipGroupDAO" ref="IpGroupDAO" />
 		<property name="ipNativeSQLDAO" ref="IpNativeSQLDAO" />
+		<property name="ipBlobDAO" ref="IpBlobDAO" />
 	</bean>
 	<bean id="tagService" class="za.co.idea.ip.ws.TagService">
 		<property name="ipChallengeDAO" ref="IpChallengeDAO" />
@@ -38,6 +39,7 @@
 		<property name="ipGroupDAO" ref="IpGroupDAO" />
 		<property name="ipNativeSQLDAO" ref="IpNativeSQLDAO" />
 		<property name="ipChallengeGroupDAO" ref="IpChallengeGroupDAO" />
+		<property name="ipBlobDAO" ref="IpBlobDAO" />
 	</bean>
 	<bean id="solutionService" class="za.co.idea.ip.ws.SolutionService">
 		<property name="ipSolutionCatDAO" ref="IpSolutionCatDAO" />
