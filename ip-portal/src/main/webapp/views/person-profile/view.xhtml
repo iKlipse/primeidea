@@ -14,19 +14,19 @@
 					</p:column>
 					<p:column>
 						<p:panelGrid id="pnlStats" style="width: 100% !important" columns="5" styleClass="numberbox">
-							<p:column>
+							<p:column headerText="Tot">
 								<p:outputLabel value="#{adminController.statsBean.totalCount}" />
 							</p:column>
-							<p:column>
+							<p:column headerText="Idea">
 								<p:outputLabel value="#{adminController.statsBean.ideasCount}" />
 							</p:column>
-							<p:column>
+							<p:column headerText="Chal">
 								<p:outputLabel value="#{adminController.statsBean.challengesCount}" />
 							</p:column>
-							<p:column>
+							<p:column headerText="Sol">
 								<p:outputLabel value="#{adminController.statsBean.solutionsCount}" />
 							</p:column>
-							<p:column>
+							<p:column headerText="Wish">
 								<p:outputLabel value="#{adminController.statsBean.whishListCount}" />
 							</p:column>
 						</p:panelGrid>

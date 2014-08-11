@@ -21,6 +21,11 @@
 	border: none !important;
 }
 
+.noBackground {
+	border: none !important;
+	background-color: white !important;
+}
+
 .numberbox tr, .numberbox td {
 	border-color: white !important;
 	border-style: solid !important;

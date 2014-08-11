@@ -4,24 +4,21 @@
 	<h:body>
 		<h:form id="frmHome" enctype="multipart/form-data">
 			<p:growl life="5000" id="frmHomeMsg" showDetail="true" showSummary="true" autoUpdate="true" />
-			<p:panel id="pnlLPMenu" style="border: 0px !important">
+			<p:panel id="pnlLPMenu" style="border-width: 0px !important; border-style: solid !important">
 				<p:commandLink value="My Ideas" actionListener="#{landingPageController.changeIdea}" update="pnlLPDet" />
 				<p:graphicImage name="separator.png" library="images" />
 				<p:commandLink value="My Challenges" actionListener="#{landingPageController.changeChallenge}" update="pnlLPDet" />
 				<p:graphicImage name="separator.png" library="images" />
 				<p:commandLink value="My Solutions" actionListener="#{landingPageController.changeSolution}" update="pnlLPDet" />
 			</p:panel>
-			<p:panel id="pnlLPDet" style="border: 0px !important">
+			<p:panel id="pnlLPDet" style="border-width: 0px !important; border-style: solid !important">
 				<p:panel id="ctrMyIdeas" style="width: 100% !important" rendered="#{landingPageController.showIdeas}">
-					<f:facet name="header">My Ideas</f:facet>
 					<ui:include src="/views/landing-page/ideas.xhtml" />
 				</p:panel>
 				<p:panel id="ctrMyChallenges" style="width: 100% !important" rendered="#{landingPageController.showChals}">
-					<f:facet name="header">My Challenges</f:facet>
 					<ui:include src="/views/landing-page/challenges.xhtml" />
 				</p:panel>
 				<p:panel id="ctrMySolutions" style="width: 100% !important" rendered="#{landingPageController.showSols}">
-					<f:facet name="header">My Solutions</f:facet>
 					<ui:include src="/views/landing-page/solutions.xhtml" />
 				</p:panel>
 			</p:panel>
