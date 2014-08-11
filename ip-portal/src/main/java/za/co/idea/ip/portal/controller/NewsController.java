@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -64,6 +65,7 @@ public class NewsController implements Serializable {
 		return client;
 	}
 
+	@PostConstruct
 	public void initializePage() {
 		try {
 			viewNewsBeans = fetchAllNews();

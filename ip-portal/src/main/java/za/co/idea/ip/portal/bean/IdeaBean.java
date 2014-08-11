@@ -19,6 +19,7 @@ public class IdeaBean implements Serializable {
 	private String contentType;
 	private String fileName;
 	private Long crtdById;
+	private String crtdByName;
 	private Date crtdDate;
 	private List<Long> groupIdList;
 	private boolean taggable;
@@ -109,6 +110,14 @@ public class IdeaBean implements Serializable {
 
 	public void setCrtdById(Long crtdById) {
 		this.crtdById = crtdById;
+	}
+
+	public String getCrtdByName() {
+		return crtdByName;
+	}
+
+	public void setCrtdByName(String crtdByName) {
+		this.crtdByName = crtdByName;
 	}
 
 	public Date getCrtdDate() {

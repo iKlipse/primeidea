@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -62,6 +63,7 @@ public class NotificationController implements Serializable {
 		return client;
 	}
 
+	@PostConstruct
 	public void initializePage() {
 		try {
 			notificationBean = new NotificationBean();
@@ -126,21 +128,23 @@ public class NotificationController implements Serializable {
 	/*
 	 * public String showEditNotification() { try { pGrps = fetchAllGroups();
 	 * groupTwinSelect = initializeSelectedGroups(pGrps); try { WebClient
-	 * getBlobClient =
-	 * createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" +
-	 * notificationBean.getNotifId() + "/ip_notif"); Long blobId =
+	 * getBlobClient = createCustomClient("http://" +
+	 * BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") +
+	 * "/ip-ws/ip/ds/doc/getId/" + notificationBean.getNotifId() + "/ip_notif");
+	 * Long blobId =
 	 * getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
 	 * getBlobClient.close(); if (blobId != -999l) { WebClient getBlobNameClient
-	 * = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" +
-	 * blobId); String blobName =
+	 * = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" +
+	 * BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
+	 * String blobName =
 	 * getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-	 * getBlobNameClient.close(); WebClient client =
-	 * WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" +
-	 * blobId + "/" + blobName, Collections.singletonList(new
-	 * JacksonJsonProvider(new CustomObjectMapper())));
-	 * client.header("Content-Type", "application/json");
-	 * client.header("Accept", MediaType.MULTIPART_FORM_DATA); Attachment
-	 * attachment =
+	 * getBlobNameClient.close(); WebClient client = WebClient.create("http://"
+	 * + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") +
+	 * "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName,
+	 * Collections.singletonList(new JacksonJsonProvider(new
+	 * CustomObjectMapper()))); client.header("Content-Type",
+	 * "application/json"); client.header("Accept",
+	 * MediaType.MULTIPART_FORM_DATA); Attachment attachment =
 	 * client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class); if
 	 * (attachment != null) { setFileAvail(false);
 	 * this.setFileName(attachment.getContentDisposition

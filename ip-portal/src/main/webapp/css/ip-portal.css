@@ -1,99 +1,31 @@
-.wrapLine {
-	word-wrap: break-word !Important;
+.ui-selectonemenu-label {
+	width: 100% !important;
 }
 
-.ui-datatable {
-	color: #072B77;
-	background: #072B77;
-	border-color: #072B77;
-	border-width: 1px;
-	background: white;
+.ui-selectcheckboxmenu-label {
+	width: 100% !important;
+	font-size: 1em !important;
+	font-weight: 12 px;
 }
 
-.ui-datatable-even {
-	color: #072B77;
-	background: white;
-	border-color: #072B77;
+.ui-carousel-header {
+	margin: 0px 1px;
+	height: 0px;
+	overflow: hidden;
+	padding: 7px 10px 8px;
+	display: none !important;
+	border: 0;
 }
 
-.ui-datatable-odd {
-	color: #072B77;
-	background: white;
-	border-color: #072B77;
+.noBorder tr, .noBorder td {
+	border: none !important;
 }
 
-.ui-datatable-data {
-	background: #072B77
-}
-
-.ui-datatable-header {
-	color: white;
-	background: #072B77;
-	border-color: white;
-	border-width: 2px;
-}
-
-.ui-state-default {
-	color: white;
-	background: #072B77;
-	border-color: #072B77;
-	border-width: 2px;
-}
-
-.ui-panel {
-	color: #072B77;
-	background: white;
-	border-color: #072B77;
-	border-width: 2px;
-}
-
-.ui-panel-titlebar {
-	color: white;
-	background: #072B77;
-	border-color: #072B77;
-	border-width: 2px;
-}
-
-.ui-panel-grid {
-	color: #072B77;
-	background: white;
-	border-color: #072B77;
-	border-width: 2px;
-}
-
-.ui-panel-grid-titlebar {
-	color: white;
-	background: #072B77;
-	border-color: #072B77;
-	border-width: 2px;
-}
-
-.ui-chkbox {
-	color: #072B77;
-	background: white;
-	border-color: #072B77;
-	border-width: 2px;
-}
-
-.ui-datatable-header .ui-state-default {
-	color: white;
-	background: #072B77;
-	border-color: white;
-	border-width: 2px;
-}
-
-.ui-state-hover a, .ui-state-hover a:hover, .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited, .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
-	color: #ffffff;
-	background: #072B77;
-	border-color: #072B77;
-}
-
-.ui-column-filter, .ui-inputfield, .ui-inputtext {
-	color: #072B77;
-	background: #ffffff;
-	border-color: #072B77;
-}
-
-.ui-icon, .ui-sortable-column-icon {
-	background-color: white;
+.numberbox tr, .numberbox td {
+	border-color: white !important;
+	border-style: solid !important;
+	border-width: 2px !important;
+	background-color: grey !important;
+	color: white !important;
+	text-align: center;
 }

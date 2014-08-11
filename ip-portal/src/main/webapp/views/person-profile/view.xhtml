@@ -2,22 +2,18 @@
 	<h:head />
 	<h:body>
 		<h:form id="frmProfile" enctype="multipart/form-data">
-			<p:remoteCommand actionListener="#{adminController.initializeProfilePage}" name="onload" autoRun="true" update="pnlProfImg" />
 			<p:panel id="pnlProfImg" style="border: 0px !important; width: 100% !important; height: 100% !important;" header="#{adminController.loggedScrName}">
-				<p:panelGrid id="pnlGrdProfImg" columns="1">
-					<p:column>
-						<p:outputLabel id="loggedInUser" value="#{adminController.loggedScrName}" />
-					</p:column>
+				<p:panelGrid id="pnlGrdProfImg" columns="1" styleClass="noBorder">
 					<p:column>
 						<p:graphicImage style="float: right !important;" id="imgAvatar" name="#{adminController.imgPath}" library="images" height="75px" width="75px" rendered="#{adminController.imgAvail}" />
-						<p:graphicImage style="float: right !important;" id="imgAvatarDefault" name="profile.jpg" library="images" height="75px" width="75px" rendered="#{adminController.imgAvail}" />
+						<p:graphicImage style="float: right !important;" id="imgAvatarDefault" name="profile.jpg" library="images" height="75px" width="75px" rendered="#{!adminController.imgAvail}" />
 					</p:column>
 					<p:column>
 						<p:outputLabel style="float: Left !important;" id="lblGrpHText" value="Group Hierarchy :" />
 						<p:outputLabel style="float: right !important;" id="lblGrpH" value="#{adminController.hierarchy}" />
 					</p:column>
 					<p:column>
-						<p:panelGrid id="pnlStats" style="width: 100% !important" columns="5">
+						<p:panelGrid id="pnlStats" style="width: 100% !important" columns="5" styleClass="numberbox">
 							<p:column>
 								<p:outputLabel value="#{adminController.statsBean.totalCount}" />
 							</p:column>

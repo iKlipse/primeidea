@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -99,6 +100,7 @@ public class RandomIdeaController implements Serializable {
 		return client;
 	}
 
+	@PostConstruct
 	public void initializePage() {
 		try {
 			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -171,12 +173,12 @@ public class RandomIdeaController implements Serializable {
 			showViewOpenIdea = true;
 			showViewIdea = false;
 			showCrtIdea = false;
-//			return "ideav";
+			// return "ideav";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-//			return "";
+			// return "";
 		}
 	}
 
@@ -189,12 +191,12 @@ public class RandomIdeaController implements Serializable {
 			showViewOpenIdea = false;
 			showViewIdea = true;
 			showCrtIdea = false;
-//			return "ideav";
+			// return "ideav";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-//			return "";
+			// return "";
 		}
 	}
 
@@ -211,12 +213,12 @@ public class RandomIdeaController implements Serializable {
 			showViewOpenIdea = false;
 			showViewIdea = false;
 			showCrtIdea = true;
-//			return "ideav";
+			// return "ideav";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-//			return "";
+			// return "";
 		}
 	}
 

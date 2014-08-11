@@ -15,6 +15,7 @@ public class IdeaMessage {
 	private String ideaBa;
 	private String ideaTag;
 	private Long crtdById;
+	private String crtdByName;
 	private Date crtdDate;
 	private Long[] groupIdList;
 
@@ -80,6 +81,14 @@ public class IdeaMessage {
 
 	public void setCrtdById(Long crtdById) {
 		this.crtdById = crtdById;
+	}
+
+	public String getCrtdByName() {
+		return crtdByName;
+	}
+
+	public void setCrtdByName(String crtdByName) {
+		this.crtdByName = crtdByName;
 	}
 
 	public Date getCrtdDate() {

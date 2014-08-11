@@ -2,10 +2,9 @@
 	<h:head />
 	<h:body>
 		<h:form id="frmImgScroll" enctype="multipart/form-data">
-			<p:remoteCommand actionListener="#{menuController.initializeImages}" name="onload" autoRun="true" update="imgScroller" />
-			<p:galleria id="imgScroller" style="vertical-align:center !important; max-width: 100% !important; height: auto !important" effect="zoom" transitionInterval="5000" var="image" value="#{menuController.images}" autoPlay="true" showFilmstrip="false" panelHeight="200">
-				<p:graphicImage library="images" name="banner/#{image}" style="max-width: 100% !important; height: auto !important" />
-			</p:galleria>
+			<p:carousel id="imgScroller" style="width: 100% !important" autoPlayInterval="5000" var="image" value="#{menuController.images}" numVisible="1" circular="true">
+				<p:graphicImage library="images" name="banner/#{image}" style="width: 100% !important; height: auto !important" />
+			</p:carousel>
 		</h:form>
 	</h:body>
 </f:view>

@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -161,21 +162,7 @@ public class AdminController implements Serializable {
 		return client;
 	}
 
-	public void initializePage() {
-		try {
-			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-			User user = (User) request.getAttribute(WebKeys.USER);
-			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
-			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
-			userId = message.getuId();
-			viewUsers = fetchAllUsers();
-		} catch (Exception e) {
-			logger.error(e, e);
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		}
-	}
-
+	@PostConstruct
 	public void initializeProfilePage() {
 		try {
 			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -203,6 +190,7 @@ public class AdminController implements Serializable {
 			statsBean.setUserId(statsMsg.getUserId());
 			statsBean.setWhishListCount(statsMsg.getWhishListCount());
 			statsClient.close();
+			logger.info(loggedScrName + " :: " + imgPath + " :: " + imgAvail + " :: " + hierarchy);
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");

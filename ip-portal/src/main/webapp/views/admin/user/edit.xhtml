@@ -24,7 +24,7 @@
 			</p:column>
 			<p:column>
 				<p:inputText style="width: 100%" autocomplete="false" id="mtxtIdNum" value="#{adminController.userBean.idNum}">
-					<p:ajax listener="#{adminController.checkAvailabilityIDNumber}" event="blur" />
+					<p:ajax listener="#{adminController.checkAvailabilityIDNumber}" event="blur" update="frmAdminMsg" />
 				</p:inputText>
 			</p:column>
 			<p:column>
@@ -32,7 +32,7 @@
 			</p:column>
 			<p:column>
 				<p:inputText style="width: 100%" autocomplete="false" id="mtxtEUEMail" value="#{adminController.userBean.eMail}">
-					<p:ajax listener="#{adminController.checkAvailabilityEmail}" event="blur" />
+					<p:ajax listener="#{adminController.checkAvailabilityEmail}" event="blur" update="frmAdminMsg" />
 				</p:inputText>
 			</p:column>
 			<p:column>
@@ -40,7 +40,7 @@
 			</p:column>
 			<p:column>
 				<p:inputText style="width: 100%" autocomplete="false" id="mtxtEmpId" value="#{adminController.userBean.employeeId}">
-					<p:ajax listener="#{adminController.checkAvailabilityEmployeeID}" event="blur" />
+					<p:ajax listener="#{adminController.checkAvailabilityEmployeeID}" event="blur" update="frmAdminMsg" />
 				</p:inputText>
 			</p:column>
 			<p:column>
@@ -85,7 +85,9 @@
 				<p:outputLabel id="mlblSCName" value="Screen Name : " />
 			</p:column>
 			<p:column>
-				<p:inputText style="width: 100%" autocomplete="false" id="mtxtSCName" value="#{adminController.userBean.scName}" />
+				<p:inputText style="width: 100%" autocomplete="false" id="mtxtSCName" value="#{adminController.userBean.scName}">
+					<p:ajax listener="#{adminController.checkAvailability}" event="blur" update="frmAdminMsg" />
+				</p:inputText>
 			</p:column>
 			<p:column>
 				<p:outputLabel id="mlblGroup" value=" Primary Group : " />
@@ -120,13 +122,13 @@
 				<p:outputLabel id="mlblSkills" value="Skills : " />
 			</p:column>
 			<p:column style="width: 100%">
-				<p:editor id="mtxtSkills" value="#{adminController.userBean.skills}"  />
+				<p:editor id="mtxtSkills" value="#{adminController.userBean.skills}" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="mlblBio" value="Bio : " />
 			</p:column>
 			<p:column style="width: 100%">
-				<p:editor id="mtxtBio" value="#{adminController.userBean.bio}"  />
+				<p:editor id="mtxtBio" value="#{adminController.userBean.bio}" />
 			</p:column>
 			<p:row>
 				<p:column colspan="2" style="align: center;">

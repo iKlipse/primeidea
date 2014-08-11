@@ -779,8 +779,14 @@ public class AdminService {
 			user.setLastLoginDt(ipLogin.getLoginLastDt());
 			user.setSecA(ipLogin.getLoginSecA());
 			user.setSecQ(ipLogin.getLoginSecQ());
-			ipLogin.setLoginLastDt(new Timestamp(System.currentTimeMillis()));
-			ipLoginDAO.merge(ipLogin);
+			if (ipUser.getIpGroup() != null)
+				user.setGroupId(ipUser.getIpGroup().getGroupId());
+			IpBlob blob = ipBlobDAO.getBlobByEntity(ipUser.getUserId(), "ip_user");
+			if (blob != null) {
+				user.setImgPath("ip_user/" + ipUser.getUserId() + "/" + blob.getBlobName());
+				user.setImgAvail(true);
+			} else
+				user.setImgAvail(false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -798,7 +804,6 @@ public class AdminService {
 			Long whishListCount = ipUserDAO.findWhishlistCount(id);
 			Long ideasCount = ipUserDAO.findIdeasCount(id);
 			Long totalCount = solCount + chalCount + whishListCount + ideasCount;
-
 			userStats.setUserId(id);
 			userStats.setChallengesCount(chalCount);
 			userStats.setIdeasCount(ideasCount);

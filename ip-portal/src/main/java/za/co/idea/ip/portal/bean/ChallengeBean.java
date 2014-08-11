@@ -19,6 +19,7 @@ public class ChallengeBean implements Serializable {
 	private String blob;
 	private Date crtdDt;
 	private Long crtdById;
+	private String crtdByName;
 	private String contentType;
 	private String fileName;
 	private List<Long> groupIdList;
@@ -117,6 +118,14 @@ public class ChallengeBean implements Serializable {
 
 	public void setCrtdById(Long crtdById) {
 		this.crtdById = crtdById;
+	}
+
+	public String getCrtdByName() {
+		return crtdByName;
+	}
+
+	public void setCrtdByName(String crtdByName) {
+		this.crtdByName = crtdByName;
 	}
 
 	public String getContentType() {
