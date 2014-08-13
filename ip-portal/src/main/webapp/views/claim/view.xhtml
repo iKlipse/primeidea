@@ -4,7 +4,7 @@
 			<f:facet name="header">
 					View Claim
 				</f:facet>
-			<p:dataTable id="dtViewClaims" value="#{claimBean.viewClaimBeans}" var="claim" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Claims Found" style="width: 100% !important">
+			<p:dataTable id="dtViewClaims" value="#{claimController.viewClaimBeans}" var="claim" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Claims Found" style="width: 100% !important">
 				<p:column filterBy="#{claim.claimDesc}" filterMatchMode="contains">
 					<f:facet name="header">Claim Desc</f:facet>
 					<p:outputLabel id="txtClaimId" value="#{claim.claimDesc}" />
@@ -12,7 +12,7 @@
 				<p:column>
 					<f:facet name="header">Status</f:facet>
 					<p:selectOneMenu id="somIStatus" value="#{claim.cStatusId}" disabled="true">
-						<f:selectItems value="#{claimBean.claimStatus}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
+						<f:selectItems value="#{claimController.claimStatus}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
@@ -22,12 +22,12 @@
 				<p:column>
 					<f:facet name="header">Created By</f:facet>
 					<p:selectOneMenu id="somACrtdBy" value="#{claim.userId}" disabled="true">
-						<f:selectItems value="#{claimBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
+						<f:selectItems value="#{claimController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column rendered="#{accessBean.editClaimEnabled}">
-					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{claimBean.showEditClaim}">
-						<f:setPropertyActionListener value="#{claim}" target="#{claimBean.claimBean}" />
+					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{claimController.showEditClaim}">
+						<f:setPropertyActionListener value="#{claim}" target="#{claimController.claimBean}" />
 					</p:commandButton>
 				</p:column>
 				<f:facet name="footer">

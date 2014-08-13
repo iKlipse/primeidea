@@ -15,6 +15,10 @@
 					<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />
 				</p:commandLink>
 				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="View Review Ideas" actionListener="#{randomIdeaController.showViewReviewIdeas}" update="pnlIdeaDet">
+					<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />
+				</p:commandLink>
+				<p:graphicImage name="separator.png" library="images" />
 				<p:commandLink value="Create Idea" actionListener="#{randomIdeaController.showCreateIdea}" update="pnlIdeaDet">
 					<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />
 				</p:commandLink>
@@ -27,6 +31,10 @@
 				<p:panel id="ctrViewOpenIdeas" style="width: 100% !important" rendered="#{randomIdeaController.showViewOpenIdea}">
 					<f:facet name="header">View Open Ideas</f:facet>
 					<ui:include src="/views/random-idea/viewOpen.xhtml" />
+				</p:panel>
+				<p:panel id="ctrViewReviewIdeas" style="width: 100% !important" rendered="#{randomIdeaController.showViewReviewIdea}">
+					<f:facet name="header">View Review Ideas</f:facet>
+					<ui:include src="/views/random-idea/viewReview.xhtml" />
 				</p:panel>
 				<p:panel id="ctrCreateIdeas" style="width: 100% !important" rendered="#{randomIdeaController.showCrtIdea}">
 					<f:facet name="header">Create Ideas</f:facet>

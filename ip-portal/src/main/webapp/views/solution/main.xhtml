@@ -11,6 +11,10 @@
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 				</p:commandLink>
 				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="View Review Solutions" action="#{challengeController.showViewReviewSolution}" update="pnlSolDet">
+					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
+				</p:commandLink>
+				<p:graphicImage name="separator.png" library="images" />
 				<p:commandLink value="View Solutions" action="#{challengeController.showViewSolution}" update="pnlSolDet">
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 				</p:commandLink>
@@ -23,6 +27,10 @@
 				<p:panel id="ctrVwPSolutions" style="width: 100% !important" rendered="#{challengeController.showPubSol}">
 					<f:facet name="header">View Open Solutions</f:facet>
 					<ui:include src="/views/solution/viewOpen.xhtml" />
+				</p:panel>
+				<p:panel id="ctrVwReviewSolutions" style="width: 100% !important" rendered="#{challengeController.showReviewSol}">
+					<f:facet name="header">View Solutions</f:facet>
+					<ui:include src="/views/solution/viewReview.xhtml" />
 				</p:panel>
 				<p:panel id="ctrVwSolutions" style="width: 100% !important" rendered="#{challengeController.showViewSol}">
 					<f:facet name="header">View Solutions</f:facet>

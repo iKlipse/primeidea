@@ -49,6 +49,7 @@ public class NotificationController implements Serializable {
 	private boolean showCreateNotification;
 	private String returnView;
 	private String toView;
+	private Long userId;
 
 	// private static final IdNumberGen COUNTER = new IdNumberGen();
 
@@ -166,7 +167,7 @@ public class NotificationController implements Serializable {
 
 	private List<NotificationBean> fetchAllNotifications() {
 		List<NotificationBean> ret = new ArrayList<NotificationBean>();
-		WebClient fetchNotifClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/nos/notif/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		WebClient fetchNotifClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/nos/notif/list/" + userId);
 		Collection<? extends NotificationMessage> notifications = new ArrayList<NotificationMessage>(fetchNotifClient.accept(MediaType.APPLICATION_JSON).getCollection(NotificationMessage.class));
 		fetchNotifClient.close();
 		for (NotificationMessage notificationMessage : notifications) {
@@ -367,6 +368,14 @@ public class NotificationController implements Serializable {
 
 	public void setToView(String toView) {
 		this.toView = toView;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 }

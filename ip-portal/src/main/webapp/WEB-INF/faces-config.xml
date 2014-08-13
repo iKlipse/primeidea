@@ -43,6 +43,14 @@
 			<from-outcome>chalso</from-outcome>
 			<to-view-id>/views/challenge/container/summaryOpenContainer.xhtml</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>chaler</from-outcome>
+			<to-view-id>/views/challenge/container/editReviewContainer.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>chalsr</from-outcome>
+			<to-view-id>/views/challenge/container/summaryReviewContainer.xhtml</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
 		<navigation-case>
@@ -61,6 +69,14 @@
 			<from-outcome>ideaso</from-outcome>
 			<to-view-id>/views/random-idea/container/summaryOpenContainer.xhtml</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>ideaer</from-outcome>
+			<to-view-id>/views/random-idea/container/editReviewContainer.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>ideasr</from-outcome>
+			<to-view-id>/views/random-idea/container/summaryReviewContainer.xhtml</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
 		<navigation-case>
@@ -78,6 +94,14 @@
 		<navigation-case>
 			<from-outcome>solso</from-outcome>
 			<to-view-id>/views/solution/container/summaryOpenContainer.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>solsr</from-outcome>
+			<to-view-id>/views/solution/container/summaryReviewContainer.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>soler</from-outcome>
+			<to-view-id>/views/solution/container/editReviewContainer.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
@@ -179,11 +203,29 @@
 	<navigation-rule>
 		<navigation-case>
 			<from-outcome>bovw</from-outcome>
-			<to-view-id>/views/tag/create</to-view-id>
+			<to-view-id>/views/tag/create.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>bosw</from-outcome>
 			<to-view-id>/views/tag/summary.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>clmcc</from-outcome>
+			<to-view-id>/views/claim/create.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>clmvc</from-outcome>
+			<to-view-id>/views/claim/view.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>clmec</from-outcome>
+			<to-view-id>/views/claim/edit.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>clmuc</from-outcome>
+			<to-view-id>/views/claim/view.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<application>

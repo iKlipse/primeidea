@@ -1,0 +1,75 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+	<p:panelGrid columns="2" id="pnlEditOpenSolution">
+		<p:column>
+			<p:outputLabel id="lblSrChal" value="Challenges : " />
+		</p:column>
+		<p:column>
+			<p:selectOneMenu style="width: 100%" id="somSrChal" value="#{challengeController.solutionBean.chalId}">
+				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+				<f:selectItems value="#{challengeController.viewChallenges}" var="schal" itemLabel="#{schal.title}" itemValue="#{schal.id}" />
+			</p:selectOneMenu>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblSrTitle" value="Title : " />
+		</p:column>
+		<p:column>
+			<p:inputText style="width: 100%" autocomplete="false" id="txtSrTitle" value="#{challengeController.solutionBean.title}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblSrCat" value="Category : " />
+		</p:column>
+		<p:column>
+			<p:selectOneMenu style="width: 100%" id="somSrCat" value="#{challengeController.solutionBean.catId}">
+				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+				<f:selectItems value="#{challengeController.solutionCats}" var="scat" itemLabel="#{scat.desc}" itemValue="#{scat.id}" />
+			</p:selectOneMenu>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblSrStatus" value="Status : " />
+		</p:column>
+		<p:column>
+			<p:selectOneMenu style="width: 100%" id="somSrStatus" value="#{challengeController.solutionBean.statusId}">
+				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+				<f:selectItems value="#{challengeController.solutionStatuses}" var="scat" itemLabel="#{scat.desc}" itemValue="#{scat.id}" />
+			</p:selectOneMenu>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblSrDesc" value="Description : " />
+		</p:column>
+		<p:column>
+			<p:editor style="width: 100%" id="txtSrDesc" value="#{challengeController.solutionBean.desc}"  />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblSrTag" value="Keywords to Describe Your Solution : " />
+		</p:column>
+		<p:column>
+			<p:inputText style="width: 100%" autocomplete="false" id="txtSrTag" value="#{challengeController.solutionBean.tags}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblrIDownload" value="Download File : " />
+		</p:column>
+		<p:column>
+			<p:commandButton id="btnDownload" value="Download" ajax="false" disabled="true">
+				<!-- disabled="#{challengeController.solFileAvail}" -->
+				<p:fileDownload value="#{challengeController.solFileContent}" />
+			</p:commandButton>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblSrUpload" value="Upload File : " />
+		</p:column>
+		<p:column>
+			<p:fileUpload style="width: 100%" id="fuSrUpload" fileUploadListener="#{challengeController.solFileUploadHandle}" multiple="false" />
+		</p:column>
+		<p:row>
+			<p:column colspan="2">
+				<p:commandButton id="btnrSave" value="Save" ajax="false" action="#{challengeController.updateSolution}">
+					<f:setPropertyActionListener value="4" target="#{challengeController.toView}" />
+				</p:commandButton>
+				<p:commandButton id="btnVrCancel" value="Return To View" ajax="false" action="#{challengeController.redirectMain}">
+					<f:setPropertyActionListener value="3" target="#{landingPageController.toView}" />
+					<f:setPropertyActionListener value="4" target="#{challengeController.toView}" />
+				</p:commandButton>
+			</p:column>
+		</p:row>
+	</p:panelGrid>
+</ui:composition>

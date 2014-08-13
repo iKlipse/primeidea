@@ -35,14 +35,14 @@ public class IpGroupUserDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			session.save(transientInstance);
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -56,14 +56,14 @@ public class IpGroupUserDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			session.delete(persistentInstance);
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -77,14 +77,14 @@ public class IpGroupUserDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			IpGroupUser instance = (IpGroupUser) session.get("za.co.idea.ip.orm.bean.IpGroupUser", id);
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -98,7 +98,7 @@ public class IpGroupUserDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpGroupUser").add(Example.create(instance)).list();
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			log.debug("find by example successful, result size: " + results.size());
@@ -106,7 +106,7 @@ public class IpGroupUserDAO extends BaseHibernateDAO {
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -123,7 +123,7 @@ public class IpGroupUserDAO extends BaseHibernateDAO {
 			Query queryObject = session.createQuery(queryString);
 			queryObject.setParameter(0, value);
 			List results = queryObject.list();
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			return results;
@@ -131,7 +131,7 @@ public class IpGroupUserDAO extends BaseHibernateDAO {
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -147,7 +147,7 @@ public class IpGroupUserDAO extends BaseHibernateDAO {
 			String queryString = "from IpGroupUser";
 			Query queryObject = session.createQuery(queryString);
 			List results = queryObject.list();
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			return results;
@@ -155,7 +155,7 @@ public class IpGroupUserDAO extends BaseHibernateDAO {
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -169,7 +169,7 @@ public class IpGroupUserDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			IpGroupUser result = (IpGroupUser) session.merge(detachedInstance);
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			log.debug("merge successful");
@@ -177,7 +177,7 @@ public class IpGroupUserDAO extends BaseHibernateDAO {
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -191,14 +191,14 @@ public class IpGroupUserDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			session.saveOrUpdate(instance);
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -214,13 +214,13 @@ public class IpGroupUserDAO extends BaseHibernateDAO {
 			Query query = session.getNamedQuery("deleteGUByGroupId");
 			query.setLong("id", id);
 			query.executeUpdate();
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -241,14 +241,14 @@ public class IpGroupUserDAO extends BaseHibernateDAO {
 				Hibernate.initialize(gu.getIpGroup());
 				Hibernate.initialize(gu.getIpUser());
 			}
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -269,14 +269,14 @@ public class IpGroupUserDAO extends BaseHibernateDAO {
 				Hibernate.initialize(gu.getIpGroup());
 				Hibernate.initialize(gu.getIpUser());
 			}
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 

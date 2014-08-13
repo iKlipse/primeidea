@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -58,7 +57,6 @@ public class LandingPageController implements Serializable {
 	private boolean showSols;
 	private String toView;
 
-	@PostConstruct
 	public void initializePage() {
 		try {
 			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();

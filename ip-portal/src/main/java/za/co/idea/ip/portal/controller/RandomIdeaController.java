@@ -84,6 +84,7 @@ public class RandomIdeaController implements Serializable {
 	private boolean showViewOpenIdea;
 	private boolean showViewIdea;
 	private boolean showCrtIdea;
+	private boolean showViewReviewIdea;
 	private String returnView;
 	private String toView;
 	private long userId;
@@ -113,6 +114,7 @@ public class RandomIdeaController implements Serializable {
 			showViewOpenIdea = false;
 			showViewIdea = true;
 			showCrtIdea = false;
+			showViewReviewIdea = false;
 			if (toView != null && Integer.valueOf(toView) != -1) {
 				switch (Integer.valueOf(toView)) {
 				case 1:
@@ -120,12 +122,14 @@ public class RandomIdeaController implements Serializable {
 					showViewOpenIdea = true;
 					showViewIdea = false;
 					showCrtIdea = false;
+					showViewReviewIdea = false;
 					break;
 				case 2:
 					viewIdeas = RESTServiceHelper.fetchAllIdeasByUser(userId);
 					showViewOpenIdea = false;
 					showViewIdea = true;
 					showCrtIdea = false;
+					showViewReviewIdea = false;
 					break;
 				case 3:
 					saveAsOpen = false;
@@ -135,12 +139,24 @@ public class RandomIdeaController implements Serializable {
 					showViewOpenIdea = false;
 					showViewIdea = false;
 					showCrtIdea = true;
+					showViewReviewIdea = false;
+					break;
+				case 4:
+					saveAsOpen = false;
+					ideaBean = new IdeaBean();
+					pGrps = RESTServiceHelper.fetchAllGroups();
+					groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
+					showViewOpenIdea = false;
+					showViewIdea = false;
+					showCrtIdea = false;
+					showViewReviewIdea = true;
 					break;
 				default:
 					viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(2, userId);
 					showViewOpenIdea = false;
 					showViewIdea = true;
 					showCrtIdea = false;
+					showViewReviewIdea = false;
 					break;
 				}
 			}
@@ -171,7 +187,26 @@ public class RandomIdeaController implements Serializable {
 			showViewOpenIdea = true;
 			showViewIdea = false;
 			showCrtIdea = false;
+			showViewReviewIdea = false;
 			// return "ideav";
+		} catch (Exception e) {
+			logger.error(e, e);
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			// return "";
+		}
+	}
+
+	public void showViewReviewIdeas() {
+		try {
+			viewIdeas = RESTServiceHelper.fetchAllReviewIdeasByUserId(userId);
+			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
+			admUsers = RESTServiceHelper.fetchAllUsers();
+			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
+			showViewOpenIdea = false;
+			showViewIdea = false;
+			showCrtIdea = false;
+			showViewReviewIdea = true;
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
@@ -189,6 +224,7 @@ public class RandomIdeaController implements Serializable {
 			showViewOpenIdea = false;
 			showViewIdea = true;
 			showCrtIdea = false;
+			showViewReviewIdea = false;
 			// return "ideav";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -211,6 +247,7 @@ public class RandomIdeaController implements Serializable {
 			showViewOpenIdea = false;
 			showViewIdea = false;
 			showCrtIdea = true;
+			showViewReviewIdea = false;
 			// return "ideav";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -224,7 +261,11 @@ public class RandomIdeaController implements Serializable {
 		try {
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
+			if (userId == 0l) {
+				ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
+			} else {
+				ideaStatuses = RESTServiceHelper.fetchNextIdeaStatuses(ideaBean.getSetStatusId());
+			}
 			pGrps = RESTServiceHelper.fetchAllGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
@@ -271,11 +312,72 @@ public class RandomIdeaController implements Serializable {
 		}
 	}
 
+	public String showEditReviewIdea() {
+		try {
+			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
+			admUsers = RESTServiceHelper.fetchAllUsers();
+			ideaStatuses = RESTServiceHelper.fetchAllReviewIdeaStatuses();
+			pGrps = RESTServiceHelper.fetchAllGroups();
+			groupTwinSelect = initializeSelectedGroups(pGrps);
+			if (userId == 0l) {
+				ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
+			} else {
+				ideaStatuses = RESTServiceHelper.fetchAllReviewIdeaStatuses();
+			}
+			try {
+				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
+				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+				getBlobClient.close();
+				if (blobId != -999l) {
+					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
+					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+					getBlobNameClient.close();
+					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					client.header("Content-Type", "application/json");
+					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+					if (attachment != null) {
+						fileAvail = false;
+						ideaBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
+						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+					} else {
+						fileAvail = true;
+						fileContent = null;
+					}
+				} else {
+					fileAvail = true;
+					fileContent = null;
+				}
+				return "ideaer";
+			} catch (Exception e) {
+				logger.error(e, e);
+
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				fileAvail = true;
+				fileContent = null;
+				return "";
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
+
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			fileAvail = true;
+			fileContent = null;
+			return "";
+		}
+	}
+
 	public String showEditOpenIdea() {
 		try {
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
+			if (userId == 0l) {
+				ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
+			} else {
+				ideaStatuses = RESTServiceHelper.fetchNextIdeaStatuses(ideaBean.getSetStatusId());
+			}
 			pGrps = RESTServiceHelper.fetchAllGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
@@ -359,6 +461,52 @@ public class RandomIdeaController implements Serializable {
 				fileContent = null;
 			}
 			return "ideas";
+		} catch (Exception e) {
+			logger.error(e, e);
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform summary request", "System error occurred, cannot perform summary request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			fileAvail = true;
+			fileContent = null;
+			return "";
+		}
+	}
+
+	public String showSummaryReviewIdea() {
+		likes = fetchAllLikes();
+		comments = fetchAllComments();
+		buildOns = fetchAllBuildOns();
+		likeCnt = "(" + likes.getTags().size() + ")	";
+		commentCnt = "(" + comments.size() + ")	";
+		buildOnCnt = "(" + buildOns.size() + ")	";
+		showIdeaComments = false;
+		showIdeaLikes = false;
+		showIdeaBuildOns = false;
+		ideaBean.setTaggable(ideaBean.getSetStatusId() != 2);
+		try {
+			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
+			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+			getBlobClient.close();
+			if (blobId != -999l) {
+				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
+				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
+				getBlobNameClient.close();
+				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				client.header("Content-Type", "application/json");
+				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+				if (attachment != null) {
+					fileAvail = false;
+					ideaBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
+					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+				} else {
+					fileAvail = true;
+					fileContent = null;
+				}
+			} else {
+				fileAvail = true;
+				fileContent = null;
+			}
+			return "ideasr";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform summary request", "System error occurred, cannot perform summary request");
@@ -1063,5 +1211,13 @@ public class RandomIdeaController implements Serializable {
 
 	public void setUserId(long userId) {
 		this.userId = userId;
+	}
+
+	public boolean isShowViewReviewIdea() {
+		return showViewReviewIdea;
+	}
+
+	public void setShowViewReviewIdea(boolean showViewReviewIdea) {
+		this.showViewReviewIdea = showViewReviewIdea;
 	}
 }

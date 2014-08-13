@@ -26,6 +26,56 @@
 	background-color: white !important;
 }
 
+.ui-panel {
+	background-color: white !important;
+	border-weight: 0px !important;
+	border-color: white !important;
+	border-style: solid !important;
+}
+
+.ui-datagrid {
+	background-color: white !important;
+	border-weight: 0px !important;
+	border-color: white !important;
+	border-style: solid !important;
+}
+
+.ui-panelgrid {
+	background-color: white !important;
+	border-weight: 0px !important;
+	border-color: white !important;
+	border-style: solid !important;
+}
+
+.ui-panel-titlebar {
+	background-color: white !important;
+	border-width: 0px !important;
+	border-color: white !important;
+	border-style: solid !important;
+	height: 30px !important;
+}
+
+.ui-panelgrid-header {
+	background-color: white !important;
+	border-width: 0px !important;
+	border-color: white !important;
+	border-style: solid !important;
+}
+
+.ui-panel-content {
+	background-color: white !important;
+	border-width: 0px !important;
+	border-color: white !important;
+	border-style: solid !important;
+}
+
+.ui-panel-title {
+	background-color: white !important;
+	border-width: 0px !important;
+	border-color: white !important;
+	border-style: solid !important;
+}
+
 .numberbox tr, .numberbox td {
 	border-color: white !important;
 	border-style: solid !important;

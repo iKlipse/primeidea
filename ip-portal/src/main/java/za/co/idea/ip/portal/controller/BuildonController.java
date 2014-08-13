@@ -58,6 +58,7 @@ public class BuildonController implements Serializable {
 	private StreamedContent fileContent;
 	private boolean taggable;
 	private boolean fileAvail;
+	private Long userId;
 
 	private WebClient createCustomClient(String url) {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
@@ -127,7 +128,7 @@ public class BuildonController implements Serializable {
 		message.setTagId(COUNTER.getNextId("IpTag"));
 		message.setTeId(5);
 		message.setTtId(1);
-		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
+		message.setUserId(userId);
 		message.setDuplicate(false);
 		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 		addTagClient.close();
@@ -149,7 +150,7 @@ public class BuildonController implements Serializable {
 		message.setTeId(5);
 		message.setTtId(2);
 		message.setDuplicate(true);
-		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
+		message.setUserId(userId);
 		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 		addTagClient.close();
 		if (response.getStatusCode() != 0)
@@ -170,7 +171,7 @@ public class BuildonController implements Serializable {
 		message.setTeId(entityType);
 		message.setTtId(3);
 		message.setDuplicate(true);
-		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
+		message.setUserId(userId);
 		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 		addTagClient.close();
 		if (response.getStatusCode() == 0) {
@@ -410,6 +411,14 @@ public class BuildonController implements Serializable {
 
 	public void setTaggable(boolean taggable) {
 		this.taggable = taggable;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 }

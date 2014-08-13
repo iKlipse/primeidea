@@ -14,5 +14,6 @@
 		<portlet id="img-scroller"></portlet>
 		<portlet id="person-profile"></portlet>
 		<portlet id="media-portlet"></portlet>
+		<portlet id="news"></portlet>
 	</category>
 </display>

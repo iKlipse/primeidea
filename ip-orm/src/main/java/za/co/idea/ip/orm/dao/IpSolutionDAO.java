@@ -37,14 +37,14 @@ public class IpSolutionDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			session.save(transientInstance);
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -58,14 +58,14 @@ public class IpSolutionDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			session.delete(persistentInstance);
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -79,14 +79,14 @@ public class IpSolutionDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			IpSolution instance = (IpSolution) session.get("za.co.idea.ip.orm.bean.IpSolution", id);
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -101,14 +101,14 @@ public class IpSolutionDAO extends BaseHibernateDAO {
 		try {
 			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpSolution").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -125,14 +125,14 @@ public class IpSolutionDAO extends BaseHibernateDAO {
 			Query queryObject = session.createQuery(queryString);
 			queryObject.setParameter(0, value);
 			List results = queryObject.list();
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -160,14 +160,14 @@ public class IpSolutionDAO extends BaseHibernateDAO {
 			String queryString = "from IpSolution";
 			Query queryObject = session.createQuery(queryString);
 			List results = queryObject.list();
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -182,14 +182,14 @@ public class IpSolutionDAO extends BaseHibernateDAO {
 		try {
 			IpSolution result = (IpSolution) session.merge(detachedInstance);
 			log.debug("merge successful");
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -203,14 +203,14 @@ public class IpSolutionDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			session.saveOrUpdate(instance);
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 

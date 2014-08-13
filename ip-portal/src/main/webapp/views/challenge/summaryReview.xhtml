@@ -1,0 +1,116 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+	<p:panelGrid columns="2" id="pnlSummaryReviewChallenge">
+		<p:column>
+			<p:outputLabel id="lblITitle" value="Title : " />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="txtSumrITitle" value="#{challengeController.challengeBean.title}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblIDesc" value="Description : " />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="txtSumrIDesc" value="#{challengeController.challengeBean.desc}" escape="false" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblIDownload" value="Download File : " />
+		</p:column>
+		<p:column>
+			<p:commandButton id="btnSumrDownload" value="Download" ajax="false" disabled="true">
+				<!-- disabled="#{challengeController.chalFileAvail}" -->
+				<p:fileDownload value="#{challengeController.chalFileContent}" />
+			</p:commandButton>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblITag" value="Keywords to Describe Your Challenge : " />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="txtSumrITag" value="#{challengeController.challengeBean.tag}" escape="false" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblISocial" value="Social : " />
+		</p:column>
+		<p:column>
+			<p:panelGrid columns="2" style="border: 0px !important;">
+				<p:column>
+					<p:commandLink id="lnkSumrLikeIdea" action="#{challengeController.likeChallenge}" update="lblLikeCnt, :frmSummaryReviewChal:tgSumrLikes">
+						<p:outputLabel id="lblLikeCnt" value="#{challengeController.chalLikeCnt}" style="height:25px; width:25px;" />
+						<p:graphicImage id="giSumrLike" name="like-128.png" library="images" height="25px" width="25px" />
+					</p:commandLink>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblCommentCnt" value="#{challengeController.chalCommentCnt}" style="height:25px; width:25px;" />
+					<p:graphicImage id="giSumrComment" name="comment.jpg" library="images" height="25px" width="25px" />
+				</p:column>
+			</p:panelGrid>
+		</p:column>
+		<f:facet name="footer">
+			<p:commandButton id="btnSumrSolSubmit" value="Submit a Solution" ajax="false" action="#{challengeController.showSubmitSolution}" rendered="#{challengeController.challengeBean.statusId == 4}">
+				<f:param name="chalId" value="#{challengeController.challengeBean.id}" />
+			</p:commandButton>
+			<p:commandButton id="btnEdtoCancel" value="Return To View" ajax="false" action="#{challengeController.redirectMain}">
+				<f:setPropertyActionListener value="2" target="#{landingPageController.toView}" />
+				<f:setPropertyActionListener value="4" target="#{challengeController.toView}" />
+			</p:commandButton>
+		</f:facet>
+	</p:panelGrid>
+	<p:overlayPanel dynamic="true" for="giSumrComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true" >
+		<p:panelGrid id="pnlSumrChallengeComment" columns="1">
+			<p:column>
+				<p:dataGrid id="dtSumrViewComments" widgetVar="dtSumrViewComments" value="#{challengeController.chalComments}" var="comment" columns="1" emptyMessage="No Comments Found">
+					<p:panel style="border: 0px !important;">
+						<f:facet name="header">
+							<p:outputLabel style="float: left !important" value="#{comment.usrScreenName}" />
+						</f:facet>
+						<f:facet name="footer">
+							<p:outputLabel style="float: right !important" value="#{comment.tagDate}" />
+						</f:facet>
+						<p:column>
+							<p:outputLabel value="#{comment.tagText}" />
+						</p:column>
+					</p:panel>
+				</p:dataGrid>
+			</p:column>
+			<p:column>
+				<p:editor id="edSumrComment" value="#{challengeController.commentText}"  />
+			</p:column>
+			<p:column>
+				<p:commandButton id="btnSumrSubmitComment" value="Post" actionListener="#{challengeController.commentChallenge}" update="dtSumrViewComments" />
+			</p:column>
+		</p:panelGrid>
+	</p:overlayPanel>
+	<p:overlayPanel dynamic="true" for="giSumrLike" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true" >
+		<p:panelGrid id="pnlSumrChallengeLikes" columns="1">
+			<p:tagCloud id="tgSumrLikes" model="#{challengeController.chalLikes}" />
+		</p:panelGrid>
+	</p:overlayPanel>
+	<p:dataGrid id="dgSumrSolForChal" value="#{challengeController.viewSolutions}" var="sol" columns="1">
+		<p:scrollPanel style="border: 0px !important;">
+			<p:panel style="border: 0px !important;">
+				<f:facet name="header">
+					<font size="8px">Solution By - <p:outputLabel value="#{sol.crtByName}" /> - <p:outputLabel value="#{sol.crtdDt}" /></font>
+				</f:facet>
+				<p:panelGrid columns="2" id="pnlSumrSolForChal">
+					<p:column>
+						<p:outputLabel id="lblISolTitle" value="Title : " />
+					</p:column>
+					<p:column>
+						<p:outputLabel id="txtSumrISolTitle" value="#{sol.title}" escape="false" />
+					</p:column>
+					<p:column>
+						<p:outputLabel id="lblIDesc" value="Description : " />
+					</p:column>
+					<p:column>
+						<p:outputLabel id="txtSumrIDesc" value="#{sol.desc}" escape="false" />
+					</p:column>
+					<p:column>
+						<p:outputLabel id="lblICrtdDt" value="Created Date : " />
+					</p:column>
+					<p:column>
+						<p:outputLabel id="txtSumrICrtdDt" value="#{sol.crtdDt}" escape="false" />
+					</p:column>
+				</p:panelGrid>
+			</p:panel>
+		</p:scrollPanel>
+	</p:dataGrid>
+</ui:composition>

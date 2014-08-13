@@ -1,0 +1,95 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+	<p:panelGrid columns="2" id="pnlEdtRChallenge">
+		<p:column>
+			<p:outputLabel id="lblEdtrCTitle" value="Title : " />
+		</p:column>
+		<p:column>
+			<p:inputText style="width: 100%" autocomplete="false" id="txtEdtrCTitle" value="#{challengeController.challengeBean.title}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblEdtrCCat" value="Category : " />
+		</p:column>
+		<p:column>
+			<p:selectOneMenu style="width: 100%" id="somEdtrCCat" value="#{challengeController.challengeBean.catId}" filter="true" filterMatchMode="contains">
+				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+				<f:selectItems value="#{challengeController.challengeCats}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
+			</p:selectOneMenu>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblEdtrCStatus" value="Status : " />
+		</p:column>
+		<p:column>
+			<p:selectOneMenu style="width: 100%" id="somEdtrCStatus" value="#{challengeController.challengeBean.statusId}">
+				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+				<f:selectItems value="#{challengeController.challengeStatuses}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
+			</p:selectOneMenu>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblEdtrCDesc" value="Description : " />
+		</p:column>
+		<p:column>
+			<p:editor style="width: 100%" id="txtEdtrCDesc" value="#{challengeController.challengeBean.desc}"  />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblEdtrCHoverText" value="Hover Text : " />
+		</p:column>
+		<p:column>
+			<p:inputText style="width: 100%" autocomplete="false" id="txtEdtrCHoverText" value="#{challengeController.challengeBean.hoverText}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblEdtrCLaunchDt" value="Launch Date : " />
+		</p:column>
+		<p:column>
+			<p:calendar style="width: 100%" mode="popup" showOn="button" id="txtEdtrCLaunchDt" value="#{challengeController.challengeBean.launchDt}" pattern="yyyy/MM/dd HH:mm">
+				<p:ajax event="blur" update="txtEdtRCExpiryDt" />
+			</p:calendar>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblEdtrCExpiryDt" value="Expiry Date : " />
+		</p:column>
+		<p:column>
+			<p:calendar style="width: 100%" mode="popup" showOn="button" id="txtEdtRCExpiryDt" value="#{challengeController.challengeBean.exprDt}" pattern="yyyy/MM/dd HH:mm" mindate="#{challengeController.challengeBean.launchDt}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblEdtrCTag" value="Keywords to Describe Your Challenge : " />
+		</p:column>
+		<p:column>
+			<p:inputText style="width: 100%" autocomplete="false" id="txtEdtrCTag" value="#{challengeController.challengeBean.tag}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblEdtrIDownload" value="Download File : " />
+		</p:column>
+		<p:column>
+			<p:commandButton id="btnEdtrDownload" value="Download" ajax="false" disabled="true">
+				<!-- disabled="#{challengeController.chalFileAvail}" -->
+				<p:fileDownload value="#{challengeController.chalFileContent}" />
+			</p:commandButton>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblEdtrCUpload" value="Upload File : " />
+		</p:column>
+		<p:column>
+			<p:fileUpload style="width: 100%" id="fuEdtrCUpload" fileUploadListener="#{challengeController.chalFileUploadHandle}" multiple="false" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblEdtrFuncGrps" value="Challenge Groups" />
+		</p:column>
+		<p:column>
+			<!-- <p:pickList style="width: 100%" id="plEdtrGroupPick" converter="groupConverter" value="#{challengeController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" /> -->
+			<p:selectCheckboxMenu id="scmGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{challengeController.selGrpId}">
+				<f:selectItems value="#{challengeController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
+			</p:selectCheckboxMenu>
+		</p:column>
+		<p:row>
+			<p:column colspan="2">
+				<p:commandButton id="btnEdtrSave" value="Save" ajax="false" action="#{challengeController.updateChallenge}">
+					<f:setPropertyActionListener value="4" target="#{challengeController.toView}" />
+				</p:commandButton>
+				<p:commandButton id="btnEdtrCancel" value="Return To View" ajax="false" action="#{challengeController.redirectMain}">
+					<f:setPropertyActionListener value="2" target="#{landingPageController.toView}" />
+					<f:setPropertyActionListener value="4" target="#{challengeController.toView}" />
+				</p:commandButton>
+			</p:column>
+		</p:row>
+	</p:panelGrid>
+</ui:composition>

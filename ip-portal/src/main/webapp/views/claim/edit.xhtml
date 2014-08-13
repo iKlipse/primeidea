@@ -9,36 +9,36 @@
 					<p:outputLabel id="lblCRw" value="Reward : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu style="width: 100%" id="somCRw" value="#{claimBean.claimBean.rewardsId}">
+					<p:selectOneMenu style="width: 100%" id="somCRw" value="#{claimController.claimBean.rewardsId}">
 						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{claimBean.viewRewardsBeans}" var="ccat" itemLabel="#{ccat.rwTitle}" itemValue="#{ccat.rwId}" />
+						<f:selectItems value="#{claimController.viewRewardsBeans}" var="ccat" itemLabel="#{ccat.rwTitle}" itemValue="#{ccat.rwId}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblCDesc" value="Special Notes : " />
 				</p:column>
 				<p:column>
-					<p:inputTextarea style="width: 100%" rows="4" cols="40" autocomplete="false" id="txtCTitle" value="#{claimBean.claimBean.claimDesc}" />
+					<p:inputTextarea style="width: 100%" rows="4" cols="40" autocomplete="false" id="txtCTitle" value="#{claimController.claimBean.claimDesc}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblCComment" value="Comment : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtCComment" value="#{claimBean.claimBean.claimComment}" />
+					<p:inputText style="width: 100%" autocomplete="false" id="txtCComment" value="#{claimController.claimBean.claimComment}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblCStatus" value="Status : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu style="width: 100%" id="somCStatus" value="#{claimBean.claimBean.cStatusId}">
+					<p:selectOneMenu style="width: 100%" id="somCStatus" value="#{claimController.claimBean.cStatusId}">
 						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-						<f:selectItems value="#{claimBean.claimStatus}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
+						<f:selectItems value="#{claimController.claimStatus}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:row>
 					<p:column colspan="2">
-						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{claimBean.updateClaim}" />
-						<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{claimBean.showViewClaim}" />
+						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{claimController.updateClaim}" />
+						<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{claimController.showViewClaim}" />
 					</p:column>
 				</p:row>
 			</p:panelGrid>

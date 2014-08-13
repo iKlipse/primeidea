@@ -64,7 +64,7 @@
 					<p:tooltip for="dtViewComments" value="Tags disabled as item not in open status" rendered="#{buildonController.taggable}" />
 				</p:column>
 				<p:column rendered="#{!buildonBean.taggable}">
-					<p:editor id="edComment" value="#{buildonController.commentText}"  />
+					<p:editor id="edComment" value="#{buildonController.commentText}" />
 				</p:column>
 				<p:column rendered="#{!buildonBean.taggable}">
 					<p:commandButton id="btnSubmitComment" value="Post" actionListener="#{buildonController.commentBuildon}" update="dtViewComments" />

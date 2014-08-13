@@ -11,10 +11,12 @@ import javax.ws.rs.core.MediaType;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 
+import za.co.idea.ip.portal.bean.ChallengeBean;
 import za.co.idea.ip.portal.bean.GroupBean;
 import za.co.idea.ip.portal.bean.IdeaBean;
 import za.co.idea.ip.portal.bean.ListSelectorBean;
 import za.co.idea.ip.portal.bean.UserBean;
+import za.co.idea.ip.ws.bean.ChallengeMessage;
 import za.co.idea.ip.ws.bean.GroupMessage;
 import za.co.idea.ip.ws.bean.IdeaMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
@@ -193,6 +195,27 @@ public class RESTServiceHelper {
 		return ret;
 	}
 
+	public static List<IdeaBean> fetchAllReviewIdeasByUserId(long userId) {
+		List<IdeaBean> ret = new ArrayList<IdeaBean>();
+		WebClient fetchIdeaClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/list/reviewStatus/user/" + userId);
+		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
+		fetchIdeaClient.close();
+		for (IdeaMessage ideaMessage : ideas) {
+			IdeaBean bean = new IdeaBean();
+			bean.setCrtdById(ideaMessage.getCrtdById());
+			bean.setCrtdDate(ideaMessage.getCrtdDate());
+			bean.setIdeaDesc(ideaMessage.getIdeaDesc());
+			bean.setIdeaTag(ideaMessage.getIdeaTag());
+			bean.setIdeaId(ideaMessage.getIdeaId());
+			bean.setIdeaTitle(ideaMessage.getIdeaTitle());
+			bean.setSelCatId(ideaMessage.getSelCatId());
+			bean.setSetStatusId(ideaMessage.getSetStatusId());
+			bean.setGroupIdList(getIdsFromArray(ideaMessage.getGroupIdList()));
+			ret.add(bean);
+		}
+		return ret;
+	}
+
 	public static List<IdeaBean> fetchAllIdeasByStatusIdUserId(Integer status, long userId) {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
 		WebClient fetchIdeaClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/list/status/" + status + "/user/" + userId);
@@ -231,7 +254,20 @@ public class RESTServiceHelper {
 		return ret;
 	}
 
-	public static List<ListSelectorBean> fetchNextIdeaStatuses(Integer status) {
+	public static List<ListSelectorBean> fetchAllReviewIdeaStatuses() {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		ListSelectorBean bean = new ListSelectorBean();
+		bean.setId(5);
+		bean.setDesc("Approved");
+		ret.add(bean);
+		bean = new ListSelectorBean();
+		bean.setId(8);
+		bean.setDesc("Closed");
+		ret.add(bean);
+		return ret;
+	}
+
+	public static List<ListSelectorBean> fetchNextIdeaStatuses(Long status) {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewIdeaSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/status/list/" + status);
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewIdeaSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
@@ -267,4 +303,54 @@ public class RESTServiceHelper {
 		return ret;
 	}
 
+	public static List<ChallengeBean> fetchAllReviewChallengesByUser(Long userId) {
+		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
+		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/reviewStatus/" + userId);
+		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
+		fetchChallengeClient.close();
+		for (ChallengeMessage challengeMessage : challenges) {
+			ChallengeBean bean = new ChallengeBean();
+			bean.setCatId(challengeMessage.getCatId());
+			bean.setCrtdById(challengeMessage.getCrtdById());
+			bean.setCrtdDt(challengeMessage.getCrtdDt());
+			bean.setDesc(challengeMessage.getDesc());
+			bean.setExprDt(challengeMessage.getExprDt());
+			bean.setHoverText(challengeMessage.getHoverText());
+			bean.setId(challengeMessage.getId());
+			bean.setLaunchDt(challengeMessage.getLaunchDt());
+			bean.setStatusId(challengeMessage.getStatusId());
+			bean.setTag(challengeMessage.getTag());
+			bean.setTitle(challengeMessage.getTitle());
+			bean.setGroupIdList(getIdsFromArray(challengeMessage.getGroupIdList()));
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<ListSelectorBean> fetchAllReviewChallengeNextStatuses() {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		ListSelectorBean bean = new ListSelectorBean();
+		bean.setId(3);
+		bean.setDesc("Approve");
+		ret.add(bean);
+		bean = new ListSelectorBean();
+		bean.setId(6);
+		bean.setDesc("Reject");
+		ret.add(bean);
+		return ret;
+	}
+
+	public static List<ListSelectorBean> fetchAllReviewSolutionStatuses() {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		ListSelectorBean bean = new ListSelectorBean();
+		bean.setId(5);
+		bean.setDesc("Approved");
+		ret.add(bean);
+
+		bean = new ListSelectorBean();
+		bean.setId(8);
+		bean.setDesc("Closed");
+		ret.add(bean);
+		return ret;
+	}
 }

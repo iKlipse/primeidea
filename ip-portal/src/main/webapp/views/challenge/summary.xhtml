@@ -135,6 +135,7 @@
 							</p:column>
 							<p:column>
 								<p:commandLink id="lnkSumBuildonSolution" action="#{buildonController.showBuildon}">
+									<f:setPropertyActionListener value="#{challengeController.userId}" target="#{buildonController.userId}" />
 									<f:setPropertyActionListener value="#{sol}" target="#{challengeController.solutionBean}" />
 									<f:param name="solutionBeanBuild" id="solutionBeanBuild" value="#{sol}" />
 									<f:param name="solutionChallenge" id="solutionChallenge" value="#{challengeController.challengeBean}" />

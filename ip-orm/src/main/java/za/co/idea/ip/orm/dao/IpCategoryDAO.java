@@ -34,14 +34,14 @@ public class IpCategoryDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			session.save(transientInstance);
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -55,14 +55,14 @@ public class IpCategoryDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			session.delete(persistentInstance);
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -76,14 +76,14 @@ public class IpCategoryDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			IpCategory instance = (IpCategory) session.get("za.co.idea.ip.orm.bean.IpCategory", id);
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -98,14 +98,14 @@ public class IpCategoryDAO extends BaseHibernateDAO {
 		try {
 			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpCategory").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -122,7 +122,7 @@ public class IpCategoryDAO extends BaseHibernateDAO {
 			Query queryObject = session.createQuery(queryString);
 			queryObject.setParameter(0, value);
 			List results = queryObject.list();
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			return results;
@@ -130,7 +130,7 @@ public class IpCategoryDAO extends BaseHibernateDAO {
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -150,7 +150,7 @@ public class IpCategoryDAO extends BaseHibernateDAO {
 			String queryString = "from IpCategory";
 			Query queryObject = session.createQuery(queryString);
 			List results = queryObject.list();
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			return results;
@@ -158,7 +158,7 @@ public class IpCategoryDAO extends BaseHibernateDAO {
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -173,14 +173,14 @@ public class IpCategoryDAO extends BaseHibernateDAO {
 		try {
 			IpCategory result = (IpCategory) session.merge(detachedInstance);
 			log.debug("merge successful");
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -194,14 +194,14 @@ public class IpCategoryDAO extends BaseHibernateDAO {
 		Transaction transaction = session.beginTransaction();
 		try {
 			session.saveOrUpdate(instance);
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
@@ -217,14 +217,14 @@ public class IpCategoryDAO extends BaseHibernateDAO {
 			Query query = session.getNamedQuery("checkDependency");
 			query.setLong("id", catId);
 			List ret = query.list();
-			transaction.commit();
+			transaction.commit();session.close();
 			
 
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("checking category", re);
 			if (transaction.isActive())
-				transaction.rollback();
+				transaction.rollback();session.close();
 			
 				
 
