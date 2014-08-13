@@ -1,3 +1,31 @@
+.ui-selectonemenu-label {
+	width: 100% !important;
+}
+
+.ui-selectcheckboxmenu-label {
+	width: 100% !important;
+	font-size: 1em !important;
+	font-weight: 12 px;
+}
+
+.ui-carousel-header {
+	margin: 0px 1px;
+	height: 0px;
+	overflow: hidden;
+	padding: 7px 10px 8px;
+	display: none !important;
+	border: 0;
+}
+
+.noBorder tr, .noBorder td {
+	border: none !important;
+}
+
+.noBackground {
+	border: none !important;
+	background-color: white !important;
+}
+
 /** Liferay Support **/
 .aui .ui-helper-hidden {
 	display: none;

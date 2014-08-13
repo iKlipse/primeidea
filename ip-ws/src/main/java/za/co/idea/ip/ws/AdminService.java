@@ -3,6 +3,8 @@ package za.co.idea.ip.ws;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -14,6 +16,7 @@ import javax.ws.rs.Produces;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.log4j.Logger;
 
 import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.bean.IpFuncGroup;
@@ -39,6 +42,7 @@ import za.co.idea.ip.ws.bean.UserStatisticsMessage;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Path(value = "/as")
 public class AdminService {
+	private static final Logger logger = Logger.getLogger(AdminService.class);
 	private IpGroupDAO ipGroupDAO;
 	private IpUserDAO ipUserDAO;
 	private IpLoginDAO ipLoginDAO;
@@ -814,6 +818,55 @@ public class AdminService {
 			e.printStackTrace();
 		}
 		return userStats;
+	}
+
+	@GET
+	@Path("/user/stats/topList")
+	@Produces("application/json")
+	public <T extends GroupMessage> List<T> getTopCountsUser() {
+		Set<UserStatisticsMessage> userStatsSet = new TreeSet<UserStatisticsMessage>();
+		List<T> usersStatsList = new ArrayList<T>();
+		logger.info("Control handle din getTopCountsUser of service /user/stats/topList ");
+		try {
+			List users = ipUserDAO.findAll();
+			logger.info("Users list : " + users);
+			for (Object object : users) {
+				IpUser ipUser = (IpUser) object;
+				logger.info("Getting count details for user : " + ipUser.getUserId());
+				Long solCount = ipUserDAO.findSolutionCount(ipUser.getUserId());
+				Long chalCount = ipUserDAO.findChallengeCount(ipUser.getUserId());
+				Long whishListCount = ipUserDAO.findWhishlistCount(ipUser.getUserId());
+				Long ideasCount = ipUserDAO.findIdeasCount(ipUser.getUserId());
+				Long totalCount = solCount + chalCount + whishListCount + ideasCount;
+				logger.info("User :" + ipUser.getUserId() + "-- total counts: " + totalCount);
+				UserStatisticsMessage userStats = new UserStatisticsMessage();
+				userStats.setUserId(ipUser.getUserId());
+				userStats.setChallengesCount(chalCount);
+				userStats.setIdeasCount(ideasCount);
+				userStats.setSolutionsCount(solCount);
+				userStats.setWhishListCount(whishListCount);
+				userStats.setTotalCount(totalCount);
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipUser.getUserId(), "ip_user");
+				if (blob != null) {
+					userStats.setImgPath("ip_user/" + ipUser.getUserId() + "/" + blob.getBlobName());
+					userStats.setImgAvail(true);
+				} else {
+					userStats.setImgAvail(false);
+				}
+				userStatsSet.add(userStats);
+			}
+			int i = 0;
+			for (Object object : userStatsSet) {
+				i++;
+				if (i <= 5) {
+					usersStatsList.add((T) object);
+				}
+			}
+
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		return usersStatsList;
 	}
 
 	public IpGroupDAO getIpGroupDAO() {

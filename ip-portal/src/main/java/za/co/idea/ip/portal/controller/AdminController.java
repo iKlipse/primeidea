@@ -211,21 +211,6 @@ public class AdminController implements Serializable {
 			} else {
 				hierarchy = "assign primary group";
 			}
-
-		} catch (Exception e) {
-			logger.error(e, e);
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		}
-	}
-
-	public void initializeLeaderBoard() {
-		try {
-			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-			User user = (User) request.getAttribute(WebKeys.USER);
-			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
-			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
-
 			WebClient statsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/stats/" + message.getuId());
 			UserStatisticsMessage statsMsg = statsClient.accept(MediaType.APPLICATION_JSON).get(UserStatisticsMessage.class);
 			statsBean = new UserStatisticsBean();
@@ -237,7 +222,15 @@ public class AdminController implements Serializable {
 			statsBean.setWhishListCount(statsMsg.getWhishListCount());
 			statsClient.close();
 			logger.info(loggedScrName + " :: " + imgPath + " :: " + imgAvail + " :: " + hierarchy);
+		} catch (Exception e) {
+			logger.error(e, e);
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+	}
 
+	public void initializeLeaderBoard() {
+		try {
 			WebClient statsListClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/stats/topList");
 			Collection<? extends UserStatisticsMessage> messages = new ArrayList<UserStatisticsMessage>(statsListClient.accept(MediaType.APPLICATION_JSON).getCollection(UserStatisticsMessage.class));
 			statsListClient.close();
