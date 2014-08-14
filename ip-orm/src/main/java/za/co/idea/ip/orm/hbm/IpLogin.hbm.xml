@@ -35,6 +35,10 @@
 		select login.* from ip_login login where login.login_name=:login
 		<return alias="login" class="za.co.idea.ip.orm.bean.IpLogin" />
 	</sql-query>
+	<sql-query name="fetchLoginById">
+		select login.* from ip_login login where login.login_user_id=:login
+		<return alias="login" class="za.co.idea.ip.orm.bean.IpLogin" />
+	</sql-query>
 	<sql-query name="updatePassword">
 		update ip_login set login_pwd=:pwd where login_name=:login
 	</sql-query>

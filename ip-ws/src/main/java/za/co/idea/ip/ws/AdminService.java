@@ -463,8 +463,7 @@ public class AdminService {
 			if (user.getTwHandle() != null && user.getTwHandle().length() > 0)
 				ipUser.setUserTwHandle(user.getTwHandle());
 			ipUserDAO.merge(ipUser);
-			IpLogin ipLogin = new IpLogin();
-			ipLogin.setIpUser(ipUser);
+			IpLogin ipLogin = ipLoginDAO.fetchLoginById(ipUser.getUserId());
 			ipLogin.setLoginName(ipUser.getUserScreenName());
 			ipLoginDAO.merge(ipLogin);
 			ResponseMessage message = new ResponseMessage();

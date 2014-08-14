@@ -9,6 +9,8 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<properties>
 		<liferay.version>6.2.1</liferay.version>
+		<liferay.faces.version>3.2.4-ga5</liferay.faces.version>
+		<faces.version>2.1.26</faces.version>
 		<liferay.maven.plugin.version>6.2.1</liferay.maven.plugin.version>
 		<liferay.auto.deploy.dir>C:\Java\liferay\portal-tcat\deploy</liferay.auto.deploy.dir>
 		<liferay.app.server.deploy.dir>C:\Java\liferay\portal-tcat\tomcat-7.0.42\webapps</liferay.app.server.deploy.dir>
@@ -31,12 +33,12 @@
 		<dependency>
 			<groupId>com.liferay.faces</groupId>
 			<artifactId>liferay-faces-bridge-impl</artifactId>
-			<version>3.2.4-ga5</version>
+			<version>${liferay.faces.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.liferay.faces</groupId>
 			<artifactId>liferay-faces-portal</artifactId>
-			<version>3.2.4-ga5</version>
+			<version>${liferay.faces.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.liferay.portal</groupId>
@@ -59,12 +61,12 @@
 		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-api</artifactId>
-			<version>2.1.21</version>
+			<version>${faces.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-impl</artifactId>
-			<version>2.1.21</version>
+			<version>${faces.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.el</groupId>
@@ -109,12 +111,17 @@
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>3.5</version>
+			<version>5.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces-mobile</artifactId>
-			<version>0.9.3</version>
+			<version>0.9.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.primefaces.themes</groupId>
+			<artifactId>all-themes</artifactId>
+			<version>1.0.10</version>
 		</dependency>
 		<dependency>
 			<groupId>el-api</groupId>
