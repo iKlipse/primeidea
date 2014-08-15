@@ -1,3 +1,12 @@
+.viewGrid  tr, .viewGrid td {
+	border: none;
+}
+
+.viewGrid {
+	border: none;
+	vertical-align: top;
+}
+
 .ui-selectonemenu-label {
 	width: 100% !important;
 }

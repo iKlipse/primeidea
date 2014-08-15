@@ -49,4 +49,8 @@
 		select idea.* from ip_idea idea where idea.idea_user_id=:id and idea.idea_status=:sid union select idea.* from ip_idea idea, ip_group_user igu, ip_idea_group iig where igu.gu_usr_id=:id and igu.gu_grp_id=iig.ig_grp_id and iig.ig_idea_id=idea.idea_id and idea.idea_status=:sid union select idea.* from ip_idea idea where idea.idea_id not in (select iig.ig_idea_id from ip_idea_group iig) and idea.idea_status=:sid
 		<return alias="idea" class="za.co.idea.ip.orm.bean.IpIdea" />
 	</sql-query>
+	<sql-query name="getReviewsIdeasByUser">
+		select idea.* from ip_idea idea where idea.idea_status=3 and idea_id in (SELECT ig_idea_id FROM lpdb.ip_idea_group where ig_grp_id in (SELECT gu_grp_id FROM lpdb.ip_group_user where gu_usr_id=:id and gu_grp_id in (SELECT fg_grp_id FROM lpdb.ip_func_group where fg_func_id=18)))
+		<return alias="idea" class="za.co.idea.ip.orm.bean.IpIdea" />
+	</sql-query>
 </hibernate-mapping>

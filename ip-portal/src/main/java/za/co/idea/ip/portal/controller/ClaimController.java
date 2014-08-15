@@ -86,7 +86,6 @@ public class ClaimController implements Serializable {
 			fetchAllPointsByUser();
 			claimBean = new ClaimBean();
 			this.selRwId = reqMap.get("rewardsId") + "^" + reqMap.get("rwQuantity") + "^" + reqMap.get("rwValue");
-			userId = Long.valueOf(reqMap.get("clmUId").toString());
 			return "clmcc";
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -468,6 +468,47 @@ public class IdeaService {
 	}
 
 	@GET
+	@Path("/idea/list/reviewStatus/user/{id}")
+	@Produces("application/json")
+	public <T extends IdeaMessage> List<T> listReviewIdeasByUser(@PathParam("id") Long id) {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List ideas = ipIdeaDAO.findReviewIdeasByUserId(id);
+			for (Object object : ideas) {
+				IpIdea ipIdea = (IpIdea) object;
+				IdeaMessage idea = new IdeaMessage();
+				idea.setIdeaId(ipIdea.getIdeaId());
+				idea.setIdeaBa(ipIdea.getIdeaBa());
+				idea.setCrtdDate(ipIdea.getIdeaDate());
+				idea.setIdeaDesc(ipIdea.getIdeaDesc());
+				idea.setIdeaTag(ipIdea.getIdeaTag());
+				idea.setIdeaTitle(ipIdea.getIdeaTitle());
+				if (ipIdea.getIpIdeaCat() != null)
+					idea.setSelCatId(ipIdea.getIpIdeaCat().getIcId().longValue());
+				if (ipIdea.getIpIdeaStatus() != null)
+					idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
+				if (ipIdea.getIpUser() != null)
+					idea.setCrtdById(ipIdea.getIpUser().getUserId());
+				idea.setCrtdByName(ipIdea.getIpUser().getUserFName() + " " + ipIdea.getIpUser().getUserLName());
+				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
+				if (val != null) {
+					Long[] grps = new Long[val.size()];
+					int i = 0;
+					for (Object obj : val) {
+						grps[i] = ((IpIdeaGroup) obj).getIpGroup().getGroupId();
+						i++;
+					}
+					idea.setGroupIdList(grps);
+				}
+				ret.add((T) idea);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@GET
 	@Path("/idea/get/{id}")
 	@Produces("application/json")
 	public IdeaMessage getIdea(@PathParam("id") Long id) {

@@ -220,7 +220,7 @@ public class ChallengeController implements Serializable {
 					viewChallenges = RESTServiceHelper.fetchAllReviewChallengesByUser(userId);
 					challengeCats = fetchAllChallengeCat();
 					admUsers = fetchAllUsers();
-					challengeStatuses = fetchAllChallengeStatuses();
+					challengeStatuses = RESTServiceHelper.fetchAllReviewChallengeNextStatuses();
 					showPubChal = false;
 					showViewChal = false;
 					showCrtChal = false;
@@ -318,10 +318,10 @@ public class ChallengeController implements Serializable {
 
 	public String showReviewChallenges() {
 		try {
-			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
+			viewChallenges = RESTServiceHelper.fetchAllReviewChallengesByUser(userId);
 			challengeCats = fetchAllChallengeCat();
 			admUsers = fetchAllUsers();
-			challengeStatuses = fetchAllChallengeStatuses();
+			challengeStatuses = RESTServiceHelper.fetchAllReviewChallengeNextStatuses();
 			showPubChal = false;
 			showReviewChal = true;
 			showViewChal = false;
@@ -597,6 +597,7 @@ public class ChallengeController implements Serializable {
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
+				return "";
 			}
 			WebClient addChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/add");
 			ChallengeMessage message = new ChallengeMessage();
@@ -710,6 +711,7 @@ public class ChallengeController implements Serializable {
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
+				return "";
 			}
 			WebClient updateChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/modify");
 			ChallengeMessage message = new ChallengeMessage();
@@ -1279,6 +1281,7 @@ public class ChallengeController implements Serializable {
 			if (titleAvail) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
 			}
 			List<String> errors = validateSolution();
 			if (errors.size() > 0) {
@@ -1286,6 +1289,7 @@ public class ChallengeController implements Serializable {
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
+				return "";
 			}
 			WebClient addSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/add");
 			SolutionMessage message = new SolutionMessage();
@@ -1355,6 +1359,7 @@ public class ChallengeController implements Serializable {
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
+				return "";
 			}
 			WebClient updateSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/modify");
 			SolutionMessage message = new SolutionMessage();

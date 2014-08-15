@@ -464,7 +464,7 @@ public class AdminService {
 				ipUser.setUserTwHandle(user.getTwHandle());
 			ipUserDAO.merge(ipUser);
 			IpLogin ipLogin = ipLoginDAO.fetchLoginById(ipUser.getUserId());
-			ipLogin.setLoginName(ipUser.getUserScreenName());
+			ipLogin.setLoginName(user.getScName());
 			ipLoginDAO.merge(ipLogin);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);

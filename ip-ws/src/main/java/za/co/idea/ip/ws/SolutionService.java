@@ -376,6 +376,43 @@ public class SolutionService {
 	}
 
 	@GET
+	@Path("/solution/list/reviewStatus/{id}")
+	@Produces("application/json")
+	public <T extends SolutionMessage> List<T> listReviewSolutionsByUserId(@PathParam("id") Long id) {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List solutions = ipSolutionDAO.findReviewSolByserId(id);
+			for (Object object : solutions) {
+				IpSolution ipSolution = (IpSolution) object;
+				SolutionMessage solution = new SolutionMessage();
+				solution.setChalId(ipSolution.getIpChallenge().getChalId());
+				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
+				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
+				solution.setCrtdById(ipSolution.getIpUser().getUserId());
+				solution.setCrtByName(ipUserDAO.findById(ipSolution.getIpUser().getUserId()).getUserFName() + " " + ipUserDAO.findById(ipSolution.getIpUser().getUserId()).getUserLName());
+				solution.setCrtdDt(ipSolution.getSolCrtdDt());
+				solution.setDesc(ipSolution.getSolDesc());
+				solution.setId(ipSolution.getSolId());
+				solution.setTags(ipSolution.getSolTags());
+				solution.setTitle(ipSolution.getSolTitle());
+				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
+				if (ipBlob != null) {
+					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
+					solution.setSolImgAvl(true);
+					solution.setFileName(ipBlob.getBlobName());
+					solution.setContentType(ipBlob.getBlobContentType());
+				} else {
+					solution.setSolImgAvl(false);
+				}
+				ret.add((T) solution);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@GET
 	@Path("/solution/cat/list")
 	@Produces("application/json")
 	public <T extends MetaDataMessage> List<T> listSolutionCat() {

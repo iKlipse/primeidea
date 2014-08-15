@@ -142,10 +142,8 @@ public class RandomIdeaController implements Serializable {
 					showViewReviewIdea = false;
 					break;
 				case 4:
-					saveAsOpen = false;
-					ideaBean = new IdeaBean();
-					pGrps = RESTServiceHelper.fetchAllGroups();
-					groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
+					viewIdeas = RESTServiceHelper.fetchAllReviewIdeasByUserId(userId);
+					ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
 					showViewOpenIdea = false;
 					showViewIdea = false;
 					showCrtIdea = false;
@@ -202,6 +200,7 @@ public class RandomIdeaController implements Serializable {
 			viewIdeas = RESTServiceHelper.fetchAllReviewIdeasByUserId(userId);
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
+			viewIdeas = RESTServiceHelper.fetchAllReviewIdeasByUserId(userId);
 			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
 			showViewOpenIdea = false;
 			showViewIdea = false;
@@ -679,6 +678,7 @@ public class RandomIdeaController implements Serializable {
 			if (titleAvail) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
 			}
 			List<String> errors = validateIdea();
 			if (errors.size() > 0) {
@@ -686,6 +686,7 @@ public class RandomIdeaController implements Serializable {
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
+				return "";
 			}
 			WebClient addIdeaClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/add");
 			IdeaMessage ideaMessage = new IdeaMessage();
@@ -759,6 +760,7 @@ public class RandomIdeaController implements Serializable {
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
+				return "";
 			}
 			WebClient updateIdeaClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/modify");
 			IdeaMessage ideaMessage = new IdeaMessage();

@@ -332,7 +332,7 @@ public class RewardsController implements Serializable {
 					fileAvail = true;
 					fileContent = null;
 				}
-				return "rwe";
+				return "rwer";
 			} catch (Exception e) {
 				logger.error(e, e);
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update reward request", "System error occurred, cannot perform update reward request");
@@ -394,7 +394,7 @@ public class RewardsController implements Serializable {
 
 	}
 
-	public void saveRewards() {
+	public String saveRewards() {
 		try {
 			List<String> errors = validateRewards();
 			if (errors.size() > 0) {
@@ -402,6 +402,7 @@ public class RewardsController implements Serializable {
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
+				return "";
 			}
 			WebClient addRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/add");
 			RewardsMessage message = new RewardsMessage();
@@ -447,19 +448,22 @@ public class RewardsController implements Serializable {
 					}
 				}
 				uploadContent = null;
+				viewRewardsBeans = fetchAllRewards();
+				return "rwvr";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create Reward request", "System error occurred, cannot perform create Reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
 		}
 	}
 
-	public void updateRewards() {
+	public String updateRewards() {
 		try {
 			List<String> errors = validateRewards();
 			if (errors.size() > 0) {
@@ -467,6 +471,7 @@ public class RewardsController implements Serializable {
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
+				return "";
 			}
 			WebClient updateRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/modify");
 			RewardsMessage message = new RewardsMessage();
@@ -538,15 +543,18 @@ public class RewardsController implements Serializable {
 					}
 				}
 				uploadContent = null;
+				viewRewardsBeans = fetchAllRewards();
+				return "rwvr";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update Reward request", "System error occurred, cannot perform update Reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
 		}
 	}
 

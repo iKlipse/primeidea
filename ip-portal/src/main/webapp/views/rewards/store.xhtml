@@ -35,13 +35,10 @@
 						<f:param name="rewardsId" id="rewardsId" value="#{rewards.rwId}" />
 						<f:param name="rwQuantity" id="rwQuantity" value="#{rewards.rwQuantity}" />
 						<f:param name="rwValue" id="rwValue" value="#{rewards.rwValue}" />
-						<f:param name="clmUId" id="clmUId" value="#{rewardsController.userId}" />
+						<f:setPropertyActionListener value="#{rewardsController.userId}" target="#{claimController.userId}" />
 					</p:commandButton>
 				</p:column>
 			</p:panelGrid>
 		</p:panel>
-		<f:facet name="footer">
-			<p:commandButton id="btnStrCancel" value="Return To Home" ajax="false" action="#{adminBean.redirectHome}" />
-		</f:facet>
 	</p:dataGrid>
 </ui:composition>

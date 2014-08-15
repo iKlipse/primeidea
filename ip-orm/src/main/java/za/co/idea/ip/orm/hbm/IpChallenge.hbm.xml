@@ -70,4 +70,7 @@
 	<sql-query name="updateStatusOnExpiry">
 		update ip_challenge set chal_status=7 where current_timestamp > chal_expiry_dt
 	</sql-query>
+	<sql-query name="getReviewChallengesByUser">
+		select chal.* from ip_challenge chal where chal.chal_status=2 and chal_id in (SELECT cg_chal_id FROM lpdb.ip_challenge_group where cg_group_id in (SELECT gu_grp_id FROM lpdb.ip_group_user where gu_usr_id=:id and gu_grp_id in (SELECT fg_grp_id FROM lpdb.ip_func_group where fg_func_id=8)))
+	</sql-query>
 </hibernate-mapping>

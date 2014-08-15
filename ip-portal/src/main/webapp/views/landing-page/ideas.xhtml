@@ -1,37 +1,53 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
-	<p:dataGrid id="dgViewIdeas" style="width: 100% !important" value="#{landingPageController.viewIdeas}" var="idea" paginator="true" paginatorPosition="bottom" columns="1" rows="5" emptyMessage="No Ideas Found">
-		<p:panel style="width: 100% !important;">
-			<f:facet name="header" style="vertical-align: middle !important; height:100% !important; align-text: left !important">
-				<p:panelGrid columns="4" style="width: 100% !important">
-					<p:column>
-						<p:graphicImage id="imgAvatar" name="#{idea.crtByImgPath}" library="images" height="25px" width="25px" rendered="#{idea.crtByImgAvail}" />
-						<p:graphicImage id="imgAvatarDefault" name="profile.jpg" library="images" height="25px" width="25px" rendered="#{!idea.crtByImgAvail}" />
-					</p:column>
-					<p:column>
-						<p:outputLabel value="#{idea.crtdByName}" style="font-weight: bold !important; text-align: left !important" />
-					</p:column>
-					<p:column>
-						<p:outputLabel value="#{idea.crtdDate}" style="text-align: left !important">
-							<f:convertDateTime pattern="yyyy.MM.dd 'at' HH:mm:ss z" />
-						</p:outputLabel>
-					</p:column>
-					<p:column>
-						<p:menuButton style="vertical-align: middle !important; float: right !important" iconPos="right" value="">
-							<p:menuitem value="Edit" ajax="false" immediate="true" action="#{randomIdeaController.showEditIdea}">
-								<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
-								<f:setPropertyActionListener value="1" target="#{randomIdeaController.returnView}" />
-							</p:menuitem>
-							<p:menuitem value="Summary" ajax="false" immediate="true" action="#{randomIdeaController.showSummaryIdea}">
-								<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
-								<f:setPropertyActionListener value="1" target="#{randomIdeaController.returnView}" />
-							</p:menuitem>
-						</p:menuButton>
-					</p:column>
-				</p:panelGrid>
-			</f:facet>
-			<p:outputLabel value="#{idea.ideaTitle}" style="font-weight: bold !important; text-align: left !important; font-size: 1.2em !important" />
-			<br />
-			<p:outputLabel value="#{idea.ideaDesc}" escape="false" style="text-align: left !important" />
+	<p:dataGrid id="dgViewIdeas" style="width: 100% !important; border: none !important;" value="#{landingPageController.viewIdeas}" var="idea" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="5,10,15" columns="1" rows="5" emptyMessage="No Ideas Found">
+		<p:panel header="" style="text-align:center; width: 100% !important; border: none;">
+			<h:panelGrid columns="2" style="width: 100% !important; border: none; " styleClass="viewGrid">
+				<p:column style="vertical-align: top !important;">
+					<p:graphicImage style="vertical-align: top !important;" id="imgAvatar" name="#{idea.crtByImgPath}" library="images" height="25px" width="25px" />
+					<p:graphicImage style="vertical-align: top !important;" id="imgAvatarDefault" name="profile.jpg" library="images" height="25px" width="25px" rendered="#{!idea.crtByImgAvail}" />
+				</p:column>
+				<p:column>
+					<h:panelGrid columns="1" style="width: 100% !important; border: solid 1px lightgray !important">
+						<p:column>
+							<h:panelGrid columns="2" style="width: 100% !important;  border: none !important" styleClass="viewGrid">
+								<p:column>
+									<h:panelGrid columns="3" style="width: 100% !important; border: none !important;" styleClass="viewGrid">
+										<p:column>
+											<p:outputLabel value="#{idea.crtdByName}" style="font-weight: bold !important; text-align: left !important" />
+
+										</p:column>
+										<p:column>
+											<p:outputLabel value="#{idea.crtdDate}" style="text-align: left !important; font-size: 10px; color: gray;">
+												<f:convertDateTime pattern="yyyy.MM.dd 'at' HH:mm:ss z" />
+											</p:outputLabel>
+										</p:column>
+										<p:column>
+											<p:menuButton style="vertical-align: middle !important; float: right !important" iconPos="right" value="">
+												<p:menuitem value="Edit" ajax="false" immediate="true" action="#{randomIdeaController.showEditIdea}">
+													<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
+													<f:setPropertyActionListener value="1" target="#{randomIdeaController.returnView}" />
+												</p:menuitem>
+												<p:menuitem value="Summary" ajax="false" immediate="true" action="#{randomIdeaController.showSummaryIdea}">
+													<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
+													<f:setPropertyActionListener value="1" target="#{randomIdeaController.returnView}" />
+												</p:menuitem>
+											</p:menuButton>
+										</p:column>
+									</h:panelGrid>
+								</p:column>
+							</h:panelGrid>
+							<h:panelGrid columns="1" style="width: 100% !important; border: none !important;" styleClass="viewGrid">
+								<p:column>
+									<p:outputLabel value="#{idea.ideaTitle}" style="font-weight: bold !important; text-align: left !important; font-size: 1.2em !important" />
+								</p:column>
+								<p:column>
+									<p:outputLabel value="#{idea.ideaDesc}" escape="false" style="text-align: left !important" />
+								</p:column>
+							</h:panelGrid>
+						</p:column>
+					</h:panelGrid>
+				</p:column>
+			</h:panelGrid>
 		</p:panel>
 	</p:dataGrid>
 </ui:composition>

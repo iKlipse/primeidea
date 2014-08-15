@@ -86,7 +86,7 @@
 				<p:editor id="edComment" value="#{challengeController.commentText}" />
 			</p:column>
 			<p:column rendered="#{!challengeBean.solutionBean.taggable}">
-				<p:commandButton id="btnSubmitComment" value="Post" actionListener="#{challengeController.commentSolution}" />
+				<p:commandButton id="btnSubmitComment" value="Post" actionListener="#{challengeController.commentSolution}" update="dtViewComments" />
 			</p:column>
 		</p:panelGrid>
 	</p:overlayPanel>
