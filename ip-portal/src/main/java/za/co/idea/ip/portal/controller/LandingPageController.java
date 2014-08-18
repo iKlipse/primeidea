@@ -2,7 +2,6 @@ package za.co.idea.ip.portal.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -18,15 +17,15 @@ import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.log4j.Logger;
 
 import za.co.idea.ip.portal.bean.ChallengeBean;
+import za.co.idea.ip.portal.bean.ClaimBean;
 import za.co.idea.ip.portal.bean.IdeaBean;
 import za.co.idea.ip.portal.bean.ListSelectorBean;
+import za.co.idea.ip.portal.bean.PointBean;
+import za.co.idea.ip.portal.bean.RewardsBean;
 import za.co.idea.ip.portal.bean.SolutionBean;
 import za.co.idea.ip.portal.bean.UserBean;
-import za.co.idea.ip.portal.util.FacesContextHelper;
 import za.co.idea.ip.portal.util.RESTServiceHelper;
-import za.co.idea.ip.ws.bean.ChallengeMessage;
-import za.co.idea.ip.ws.bean.MetaDataMessage;
-import za.co.idea.ip.ws.bean.SolutionMessage;
+import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 
 import com.liferay.portal.kernel.util.WebKeys;
@@ -56,7 +55,18 @@ public class LandingPageController implements Serializable {
 	private boolean showIdeas;
 	private boolean showChals;
 	private boolean showSols;
+	private boolean showWishlist;
+	private boolean showPoints;
+	private boolean showClaims;
 	private String toView;
+	private List<ListSelectorBean> rewardsCat;
+	private RewardsBean rewardsBean;
+	private List<RewardsBean> viewRewardsBeans;
+	private List<ListSelectorBean> claimStatus;
+	private List<ClaimBean> viewClaimBeans;
+	private ClaimBean claimBean;
+	private List<PointBean> pointBeans;
+	private Long totalPoints;
 
 	@PostConstruct
 	public void initializePage() {
@@ -68,14 +78,21 @@ public class LandingPageController implements Serializable {
 			userId = message.getuId();
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			viewIdeas = RESTServiceHelper.fetchAllIdeasByUser(userId);
-			ideaCats = fetchAllIdeaCat();
-			ideaStatuses = fetchAllIdeaStatuses();
-			viewChallenges = fetchAllChallengesByUser();
-			challengeCats = fetchAllChallengeCat();
-			challengeStatuses = fetchAllChallengeStatuses();
-			viewSolutions = fetchAllSolutionsByUser();
-			solutionCats = fetchAllSolutionCat();
-			solutionStatuses = fetchAllSolutionStatuses();
+			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
+			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
+			viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
+			challengeCats = RESTServiceHelper.fetchAllChallengeCat();
+			challengeStatuses = RESTServiceHelper.fetchAllChallengeStatuses();
+			viewSolutions = RESTServiceHelper.fetchAllSolutionsByUser(userId);
+			solutionCats = RESTServiceHelper.fetchAllSolutionCat();
+			solutionStatuses = RESTServiceHelper.fetchAllSolutionStatuses();
+			claimStatus = RESTServiceHelper.fetchAllClaimStatuses();
+			viewClaimBeans = RESTServiceHelper.fetchAllClaimsByUser(userId);
+			viewRewardsBeans = RESTServiceHelper.fetchAllRewards();
+			pointBeans = RESTServiceHelper.fetchAllPointsByUser(userId);
+			totalPoints = calculateTotal(pointBeans);
+			rewardsCat = RESTServiceHelper.fetchAllRewardsCat();
+			viewRewardsBeans = RESTServiceHelper.fetchAllRewardsByUser(userId, totalPoints);
 			showIdeas = true;
 			showChals = false;
 			showSols = false;
@@ -85,21 +102,51 @@ public class LandingPageController implements Serializable {
 					showIdeas = true;
 					showChals = false;
 					showSols = false;
+					showWishlist = false;
+					showClaims = false;
+					showPoints = false;
 					break;
 				case 2:
 					showIdeas = false;
 					showChals = true;
 					showSols = false;
+					showWishlist = false;
+					showClaims = false;
+					showPoints = false;
 					break;
 				case 3:
 					showIdeas = false;
 					showChals = false;
 					showSols = true;
+					showWishlist = false;
+					showClaims = false;
+					showPoints = false;
 					break;
-				default:
-					showIdeas = true;
+				case 4:
+					rewardsBean = new RewardsBean();
+					showIdeas = false;
 					showChals = false;
 					showSols = false;
+					showWishlist = true;
+					showClaims = false;
+					showPoints = false;
+					break;
+				case 5:
+					showIdeas = false;
+					showChals = false;
+					showSols = false;
+					showWishlist = false;
+					showClaims = true;
+					showPoints = false;
+					break;
+				case 6:
+					showIdeas = false;
+					showChals = false;
+					showSols = false;
+					showWishlist = false;
+					showClaims = false;
+					showPoints = true;
+					break;
 				}
 			}
 
@@ -111,15 +158,25 @@ public class LandingPageController implements Serializable {
 		}
 	}
 
+	private Long calculateTotal(List<PointBean> pntBeans) {
+		Long ret = 0l;
+		for (PointBean pointBean : pntBeans)
+			ret += pointBean.getPointValue();
+		return ret;
+	}
+
 	public void changeIdea() {
 		try {
 			viewIdeas = RESTServiceHelper.fetchAllIdeasByUser(userId);
-			ideaCats = fetchAllIdeaCat();
+			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			ideaStatuses = fetchAllIdeaStatuses();
+			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
 			showIdeas = true;
 			showChals = false;
 			showSols = false;
+			showWishlist = false;
+			showClaims = false;
+			showPoints = false;
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
@@ -129,13 +186,16 @@ public class LandingPageController implements Serializable {
 
 	public void changeChallenge() {
 		try {
-			viewChallenges = fetchAllChallengesByUser();
-			challengeCats = fetchAllChallengeCat();
+			viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
+			challengeCats = RESTServiceHelper.fetchAllChallengeCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			challengeStatuses = fetchAllChallengeStatuses();
+			challengeStatuses = RESTServiceHelper.fetchAllChallengeStatuses();
 			showIdeas = false;
 			showChals = true;
 			showSols = false;
+			showWishlist = false;
+			showClaims = false;
+			showPoints = false;
 		} catch (Exception e) {
 			logger.error(e, e);
 
@@ -146,13 +206,16 @@ public class LandingPageController implements Serializable {
 
 	public void changeSolution() {
 		try {
-			viewSolutions = fetchAllSolutionsByUser();
-			solutionCats = fetchAllSolutionCat();
+			viewSolutions = RESTServiceHelper.fetchAllSolutionsByUser(userId);
+			solutionCats = RESTServiceHelper.fetchAllSolutionCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			solutionStatuses = fetchAllSolutionStatuses();
+			solutionStatuses = RESTServiceHelper.fetchAllSolutionStatuses();
 			showIdeas = false;
 			showChals = false;
 			showSols = true;
+			showWishlist = false;
+			showClaims = false;
+			showPoints = false;
 		} catch (Exception e) {
 			logger.error(e, e);
 
@@ -161,139 +224,62 @@ public class LandingPageController implements Serializable {
 		}
 	}
 
-	private List<ChallengeBean> fetchAllChallengesByUser() {
-		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
-		WebClient fetchChallengeClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/user/access/" + userId);
-		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
-		fetchChallengeClient.close();
-		for (ChallengeMessage challengeMessage : challenges) {
-			ChallengeBean bean = new ChallengeBean();
-			bean.setCatId(challengeMessage.getCatId());
-			bean.setCrtdById(challengeMessage.getCrtdById());
-			bean.setCrtdDt(challengeMessage.getCrtdDt());
-			bean.setDesc(challengeMessage.getDesc());
-			bean.setExprDt(challengeMessage.getExprDt());
-			bean.setHoverText(challengeMessage.getHoverText());
-			bean.setId(challengeMessage.getId());
-			bean.setLaunchDt(challengeMessage.getLaunchDt());
-			bean.setStatusId(challengeMessage.getStatusId());
-			bean.setTag(challengeMessage.getTag());
-			bean.setTitle(challengeMessage.getTitle());
-			bean.setGroupIdList(FacesContextHelper.getIdsFromArray(challengeMessage.getGroupIdList()));
-			bean.setCrtByImgAvail(challengeMessage.isCrtByImgAvail());
-			bean.setCrtByImgPath(challengeMessage.getCrtByImgPath());
-			bean.setCrtdByName(challengeMessage.getCrtdByName());
-			ret.add(bean);
+	public void showWishList() {
+		try {
+			admUsers = RESTServiceHelper.fetchAllUsers();
+			rewardsCat = RESTServiceHelper.fetchAllRewardsCat();
+			rewardsBean = new RewardsBean();
+			viewRewardsBeans = RESTServiceHelper.fetchAllRewardsByUser(userId, totalPoints);
+			showIdeas = false;
+			showChals = false;
+			showSols = false;
+			showWishlist = true;
+			showClaims = false;
+			showPoints = false;
+		} catch (Exception e) {
+			logger.error(e, e);
+
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
-		return ret;
 	}
 
-	private List<SolutionBean> fetchAllSolutionsByUser() {
-		List<SolutionBean> ret = new ArrayList<SolutionBean>();
-		WebClient fetchSolutionClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/user/access/" + userId);
-		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
-		fetchSolutionClient.close();
-		for (SolutionMessage solutionMessage : solutions) {
-			SolutionBean bean = new SolutionBean();
-			bean.setChalId(solutionMessage.getChalId());
-			bean.setCatId(solutionMessage.getCatId());
-			bean.setCrtdById(solutionMessage.getCrtdById());
-			bean.setCrtByName(solutionMessage.getCrtByName());
-			bean.setCrtdDt(solutionMessage.getCrtdDt());
-			bean.setDesc(solutionMessage.getDesc());
-			bean.setId(solutionMessage.getId());
-			bean.setStatusId(solutionMessage.getStatusId());
-			bean.setTags(solutionMessage.getTags());
-			bean.setTitle(solutionMessage.getTitle());
-			bean.setCrtByImgAvail(solutionMessage.isCrtByImgAvail());
-			bean.setCrtByImgPath(solutionMessage.getCrtByImgPath());
-			ret.add(bean);
+	public void showViewClaimByUser() {
+		try {
+			claimBean = new ClaimBean();
+			admUsers = RESTServiceHelper.fetchAllUsers();
+			claimStatus = RESTServiceHelper.fetchAllClaimStatuses();
+			viewClaimBeans = RESTServiceHelper.fetchAllClaimsByUser(userId);
+			viewRewardsBeans = RESTServiceHelper.fetchAllRewards();
+			showIdeas = false;
+			showChals = false;
+			showSols = false;
+			showWishlist = false;
+			showClaims = true;
+			showPoints = false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
-		return ret;
 	}
 
-	private List<ListSelectorBean> fetchAllIdeaCat() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewIdeaSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/cat/list");
-		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewIdeaSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		viewIdeaSelectClient.close();
-		for (MetaDataMessage metaDataMessage : md) {
-			ListSelectorBean bean = new ListSelectorBean();
-			bean.setId(metaDataMessage.getId());
-			bean.setDesc(metaDataMessage.getDesc());
-			ret.add(bean);
-		}
-		return ret;
+	public void showPointProfile() {
+		pointBeans = RESTServiceHelper.fetchAllPointsByUser(userId);
+		totalPoints = calculateTotal(pointBeans);
+		showIdeas = false;
+		showChals = false;
+		showSols = false;
+		showWishlist = false;
+		showClaims = false;
+		showPoints = true;
 	}
 
-	private List<ListSelectorBean> fetchAllChallengeCat() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewChallengeSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/cat/list");
-		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		viewChallengeSelectClient.close();
-		for (MetaDataMessage metaDataMessage : md) {
-			ListSelectorBean bean = new ListSelectorBean();
-			bean.setId(metaDataMessage.getId());
-			bean.setDesc(metaDataMessage.getDesc());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<ListSelectorBean> fetchAllSolutionCat() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewSolutionSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/cat/list");
-		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		viewSolutionSelectClient.close();
-		for (MetaDataMessage metaDataMessage : md) {
-			ListSelectorBean bean = new ListSelectorBean();
-			bean.setId(metaDataMessage.getId());
-			bean.setDesc(metaDataMessage.getDesc());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<ListSelectorBean> fetchAllIdeaStatuses() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewIdeaSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/status/list");
-		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewIdeaSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		viewIdeaSelectClient.close();
-		for (MetaDataMessage metaDataMessage : md) {
-			ListSelectorBean bean = new ListSelectorBean();
-			bean.setId(metaDataMessage.getId());
-			bean.setDesc(metaDataMessage.getDesc());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<ListSelectorBean> fetchAllChallengeStatuses() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewChallengeSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/status/list");
-		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		viewChallengeSelectClient.close();
-		for (MetaDataMessage metaDataMessage : md) {
-			ListSelectorBean bean = new ListSelectorBean();
-			bean.setId(metaDataMessage.getId());
-			bean.setDesc(metaDataMessage.getDesc());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<ListSelectorBean> fetchAllSolutionStatuses() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewSolutionSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/status/list");
-		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		viewSolutionSelectClient.close();
-		for (MetaDataMessage metaDataMessage : md) {
-			ListSelectorBean bean = new ListSelectorBean();
-			bean.setId(metaDataMessage.getId());
-			bean.setDesc(metaDataMessage.getDesc());
-			ret.add(bean);
-		}
-		return ret;
+	public void modifyWishlist() {
+		ResponseMessage response = RESTServiceHelper.modifyTag(rewardsBean.getRwId(), userId);
+		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
+		viewRewardsBeans = RESTServiceHelper.fetchAllRewardsByUser(userId, totalPoints);
 	}
 
 	public List<UserBean> getAdmUsers() {
@@ -466,6 +452,94 @@ public class LandingPageController implements Serializable {
 
 	public void setToView(String toView) {
 		this.toView = toView;
+	}
+
+	public boolean isShowWishlist() {
+		return showWishlist;
+	}
+
+	public void setShowWishlist(boolean showWishlist) {
+		this.showWishlist = showWishlist;
+	}
+
+	public boolean isShowPoints() {
+		return showPoints;
+	}
+
+	public void setShowPoints(boolean showPoints) {
+		this.showPoints = showPoints;
+	}
+
+	public boolean isShowClaims() {
+		return showClaims;
+	}
+
+	public void setShowClaims(boolean showClaims) {
+		this.showClaims = showClaims;
+	}
+
+	public List<ListSelectorBean> getRewardsCat() {
+		return rewardsCat;
+	}
+
+	public void setRewardsCat(List<ListSelectorBean> rewardsCat) {
+		this.rewardsCat = rewardsCat;
+	}
+
+	public RewardsBean getRewardsBean() {
+		return rewardsBean;
+	}
+
+	public void setRewardsBean(RewardsBean rewardsBean) {
+		this.rewardsBean = rewardsBean;
+	}
+
+	public List<RewardsBean> getViewRewardsBeans() {
+		return viewRewardsBeans;
+	}
+
+	public void setViewRewardsBeans(List<RewardsBean> viewRewardsBeans) {
+		this.viewRewardsBeans = viewRewardsBeans;
+	}
+
+	public List<ListSelectorBean> getClaimStatus() {
+		return claimStatus;
+	}
+
+	public void setClaimStatus(List<ListSelectorBean> claimStatus) {
+		this.claimStatus = claimStatus;
+	}
+
+	public List<ClaimBean> getViewClaimBeans() {
+		return viewClaimBeans;
+	}
+
+	public void setViewClaimBeans(List<ClaimBean> viewClaimBeans) {
+		this.viewClaimBeans = viewClaimBeans;
+	}
+
+	public ClaimBean getClaimBean() {
+		return claimBean;
+	}
+
+	public void setClaimBean(ClaimBean claimBean) {
+		this.claimBean = claimBean;
+	}
+
+	public List<PointBean> getPointBeans() {
+		return pointBeans;
+	}
+
+	public void setPointBeans(List<PointBean> pointBeans) {
+		this.pointBeans = pointBeans;
+	}
+
+	public Long getTotalPoints() {
+		return totalPoints;
+	}
+
+	public void setTotalPoints(Long totalPoints) {
+		this.totalPoints = totalPoints;
 	}
 
 }

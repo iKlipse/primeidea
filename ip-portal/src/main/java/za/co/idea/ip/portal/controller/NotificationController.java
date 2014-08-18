@@ -69,15 +69,6 @@ public class NotificationController implements Serializable {
 			pGrps = fetchAllGroups();
 			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 			showCreateNotification = true;
-			if (toView != null && Integer.valueOf(toView) != -1) {
-				switch (Integer.valueOf(toView)) {
-				case 1:
-					break;
-				default:
-					break;
-				}
-			}
-
 		} catch (Exception e) {
 			logger.error(e, e);
 

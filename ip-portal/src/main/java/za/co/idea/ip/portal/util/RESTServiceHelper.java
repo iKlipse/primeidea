@@ -12,19 +12,30 @@ import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 
 import za.co.idea.ip.portal.bean.ChallengeBean;
+import za.co.idea.ip.portal.bean.ClaimBean;
 import za.co.idea.ip.portal.bean.GroupBean;
 import za.co.idea.ip.portal.bean.IdeaBean;
 import za.co.idea.ip.portal.bean.ListSelectorBean;
+import za.co.idea.ip.portal.bean.PointBean;
+import za.co.idea.ip.portal.bean.RewardsBean;
+import za.co.idea.ip.portal.bean.SolutionBean;
 import za.co.idea.ip.portal.bean.UserBean;
 import za.co.idea.ip.ws.bean.ChallengeMessage;
+import za.co.idea.ip.ws.bean.ClaimMessage;
 import za.co.idea.ip.ws.bean.GroupMessage;
 import za.co.idea.ip.ws.bean.IdeaMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
+import za.co.idea.ip.ws.bean.PointMessage;
+import za.co.idea.ip.ws.bean.ResponseMessage;
+import za.co.idea.ip.ws.bean.RewardsMessage;
+import za.co.idea.ip.ws.bean.SolutionMessage;
+import za.co.idea.ip.ws.bean.TagMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
 
 public class RESTServiceHelper {
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
+	private static final IdNumberGen COUNTER = new IdNumberGen();
 
 	public static WebClient createCustomClient(String url) {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
@@ -352,5 +363,251 @@ public class RESTServiceHelper {
 		bean.setDesc("Closed");
 		ret.add(bean);
 		return ret;
+	}
+
+	public static List<RewardsBean> fetchAllRewardsByUser(Long userId, long totalPoints) {
+		fetchAllPointsByUser(userId);
+		List<RewardsBean> ret = new ArrayList<RewardsBean>();
+		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list/" + userId);
+		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
+		viewRewardsClient.close();
+		for (RewardsMessage message : rewards) {
+			RewardsBean bean = new RewardsBean();
+			bean.setrCatId(message.getrCatId());
+			bean.setRwCrtdDt(message.getRwCrtdDt());
+			bean.setRwDesc(message.getRwDesc());
+			bean.setRwExpiryDt(message.getRwExpiryDt());
+			bean.setRwHoverText(message.getRwHoverText());
+			bean.setRwId(message.getRwId());
+			bean.setRwLaunchDt(message.getRwLaunchDt());
+			bean.setRwStockCodeNum(message.getRwStockCodeNum());
+			bean.setRwTag(message.getRwTag());
+			bean.setRwTitle(message.getRwTitle());
+			bean.setRwValue(message.getRwValue());
+			bean.setRwPrice(message.getRwPrice());
+			bean.setRwQuantity(message.getRwQuantity());
+			bean.setRwImgAvail(message.isRwImgAvail());
+			bean.setRwUrl(message.getRwUrl());
+			bean.setRwTaggable(isWishlist(message.getRwId(), userId));
+			bean.setRwClaimable(totalPoints >= message.getRwValue() && message.getRwQuantity() > 0);
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<PointBean> fetchAllPointsByUser(Long userId) {
+		List<PointBean> ret = new ArrayList<PointBean>();
+		WebClient viewPointClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/points/get/user/" + userId);
+		Collection<? extends PointMessage> points = new ArrayList<PointMessage>(viewPointClient.accept(MediaType.APPLICATION_JSON).getCollection(PointMessage.class));
+		viewPointClient.close();
+		for (PointMessage message : points) {
+			PointBean bean = new PointBean();
+			bean.setAllocId(message.getAllocId());
+			bean.setComments(message.getComments());
+			bean.setEntityId(message.getEntityId());
+			bean.setPointId(message.getPointId());
+			bean.setPointValue(message.getPointValue());
+			bean.setUserId(message.getUserId());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<ListSelectorBean> fetchAllRewardsCat() {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		WebClient viewRewardsSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/cat/list");
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewRewardsSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewRewardsSelectClient.close();
+		for (MetaDataMessage metaDataMessage : md) {
+			ListSelectorBean bean = new ListSelectorBean();
+			bean.setId(metaDataMessage.getId());
+			bean.setDesc(metaDataMessage.getDesc());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<ClaimBean> fetchAllClaimsByUser(Long userId) {
+		List<ClaimBean> ret = new ArrayList<ClaimBean>();
+		WebClient fetchClaimClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cls/claim/list/user/" + (userId).longValue());
+		Collection<? extends ClaimMessage> claims = new ArrayList<ClaimMessage>(fetchClaimClient.accept(MediaType.APPLICATION_JSON).getCollection(ClaimMessage.class));
+		fetchClaimClient.close();
+		for (ClaimMessage message : claims) {
+			ClaimBean bean = new ClaimBean();
+			bean.setClaimCrtdDt(message.getClaimCrtdDt());
+			bean.setClaimDesc(message.getClaimDesc());
+			bean.setClaimId(message.getClaimId());
+			bean.setcStatusId(message.getcStatusId());
+			bean.setRewardsId(message.getRewardsId());
+			bean.setUserId(message.getUserId());
+			bean.setClaimComment(message.getClaimComment());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<RewardsBean> fetchAllRewards() {
+		List<RewardsBean> ret = new ArrayList<RewardsBean>();
+		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list");
+		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
+		viewRewardsClient.close();
+		for (RewardsMessage message : rewards) {
+			RewardsBean bean = new RewardsBean();
+			bean.setrCatId(message.getrCatId());
+			bean.setRwCrtdDt(message.getRwCrtdDt());
+			bean.setRwDesc(message.getRwDesc());
+			bean.setRwExpiryDt(message.getRwExpiryDt());
+			bean.setRwHoverText(message.getRwHoverText());
+			bean.setRwId(message.getRwId());
+			bean.setRwLaunchDt(message.getRwLaunchDt());
+			bean.setRwStockCodeNum(message.getRwStockCodeNum());
+			bean.setRwTag(message.getRwTag());
+			bean.setRwTitle(message.getRwTitle());
+			bean.setRwValue(message.getRwValue());
+			bean.setRwQuantity(message.getRwQuantity());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static boolean isWishlist(Long rwId, Long userId) {
+		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/getByUser/" + rwId + "/4/4/" + userId);
+		Collection<? extends TagMessage> rewards = new ArrayList<TagMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
+		return (rewards.size() > 0);
+	}
+
+	public static List<ListSelectorBean> fetchAllClaimStatuses() {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		WebClient viewClaimSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cls/claim/status/list");
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewClaimSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewClaimSelectClient.close();
+		for (MetaDataMessage metaDataMessage : md) {
+			ListSelectorBean bean = new ListSelectorBean();
+			bean.setId(metaDataMessage.getId());
+			bean.setDesc(metaDataMessage.getDesc());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<ChallengeBean> fetchAllChallengesByUser(Long userId) {
+		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
+		WebClient fetchChallengeClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/user/access/" + userId);
+		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
+		fetchChallengeClient.close();
+		for (ChallengeMessage challengeMessage : challenges) {
+			ChallengeBean bean = new ChallengeBean();
+			bean.setCatId(challengeMessage.getCatId());
+			bean.setCrtdById(challengeMessage.getCrtdById());
+			bean.setCrtdDt(challengeMessage.getCrtdDt());
+			bean.setDesc(challengeMessage.getDesc());
+			bean.setExprDt(challengeMessage.getExprDt());
+			bean.setHoverText(challengeMessage.getHoverText());
+			bean.setId(challengeMessage.getId());
+			bean.setLaunchDt(challengeMessage.getLaunchDt());
+			bean.setStatusId(challengeMessage.getStatusId());
+			bean.setTag(challengeMessage.getTag());
+			bean.setTitle(challengeMessage.getTitle());
+			bean.setGroupIdList(FacesContextHelper.getIdsFromArray(challengeMessage.getGroupIdList()));
+			bean.setCrtByImgAvail(challengeMessage.isCrtByImgAvail());
+			bean.setCrtByImgPath(challengeMessage.getCrtByImgPath());
+			bean.setCrtdByName(challengeMessage.getCrtdByName());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<SolutionBean> fetchAllSolutionsByUser(Long userId) {
+		List<SolutionBean> ret = new ArrayList<SolutionBean>();
+		WebClient fetchSolutionClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/user/access/" + userId);
+		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
+		fetchSolutionClient.close();
+		for (SolutionMessage solutionMessage : solutions) {
+			SolutionBean bean = new SolutionBean();
+			bean.setChalId(solutionMessage.getChalId());
+			bean.setCatId(solutionMessage.getCatId());
+			bean.setCrtdById(solutionMessage.getCrtdById());
+			bean.setCrtByName(solutionMessage.getCrtByName());
+			bean.setCrtdDt(solutionMessage.getCrtdDt());
+			bean.setDesc(solutionMessage.getDesc());
+			bean.setId(solutionMessage.getId());
+			bean.setStatusId(solutionMessage.getStatusId());
+			bean.setTags(solutionMessage.getTags());
+			bean.setTitle(solutionMessage.getTitle());
+			bean.setCrtByImgAvail(solutionMessage.isCrtByImgAvail());
+			bean.setCrtByImgPath(solutionMessage.getCrtByImgPath());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<ListSelectorBean> fetchAllChallengeCat() {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		WebClient viewChallengeSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/cat/list");
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewChallengeSelectClient.close();
+		for (MetaDataMessage metaDataMessage : md) {
+			ListSelectorBean bean = new ListSelectorBean();
+			bean.setId(metaDataMessage.getId());
+			bean.setDesc(metaDataMessage.getDesc());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<ListSelectorBean> fetchAllSolutionCat() {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		WebClient viewSolutionSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/cat/list");
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewSolutionSelectClient.close();
+		for (MetaDataMessage metaDataMessage : md) {
+			ListSelectorBean bean = new ListSelectorBean();
+			bean.setId(metaDataMessage.getId());
+			bean.setDesc(metaDataMessage.getDesc());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<ListSelectorBean> fetchAllChallengeStatuses() {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		WebClient viewChallengeSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/status/list");
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewChallengeSelectClient.close();
+		for (MetaDataMessage metaDataMessage : md) {
+			ListSelectorBean bean = new ListSelectorBean();
+			bean.setId(metaDataMessage.getId());
+			bean.setDesc(metaDataMessage.getDesc());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<ListSelectorBean> fetchAllSolutionStatuses() {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		WebClient viewSolutionSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/status/list");
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewSolutionSelectClient.close();
+		for (MetaDataMessage metaDataMessage : md) {
+			ListSelectorBean bean = new ListSelectorBean();
+			bean.setId(metaDataMessage.getId());
+			bean.setDesc(metaDataMessage.getDesc());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static ResponseMessage modifyTag(Long entityId, Long userId) {
+		WebClient addTagClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/add");
+		TagMessage message = new TagMessage();
+		message.setEntityId(entityId);
+		message.setTagId(COUNTER.getNextId("IpTag"));
+		message.setTeId(4);
+		message.setTtId(4);
+		message.setUserId(userId);
+		message.setDuplicate(false);
+		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+		addTagClient.close();
+		return response;
 	}
 }

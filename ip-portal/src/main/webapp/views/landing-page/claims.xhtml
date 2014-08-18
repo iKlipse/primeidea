@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+	<p:dataTable id="dtViewClaims" style="width: 100% !important" value="#{landingPageController.viewClaimBeans}" var="claim" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Claims Found">
+		<p:column>
+			<f:facet name="header">Status</f:facet>
+			<p:selectOneMenu id="somIStatus" value="#{claim.cStatusId}">
+				<f:selectItems value="#{landingPageController.claimStatus}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
+			</p:selectOneMenu>
+		</p:column>
+		<p:column>
+			<f:facet name="header">Created Date</f:facet>
+			<p:calendar mode="popup" id="calLaunchDT" value="#{claim.claimCrtdDt}" disabled="true" />
+		</p:column>
+		<p:column>
+			<f:facet name="header">Created By</f:facet>
+			<p:selectOneMenu id="somACrtdBy" value="#{claim.userId}" disabled="true">
+				<f:selectItems value="#{landingPageController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
+			</p:selectOneMenu>
+		</p:column>
+		<p:column>
+			<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{claimController.showEditClaim}">
+				<f:setPropertyActionListener value="#{claim}" target="#{claimController.claimBean}" />
+				<f:setPropertyActionListener value="1" target="#{claimController.returnView}" />
+			</p:commandButton>
+		</p:column>
+	</p:dataTable>
+</ui:composition>

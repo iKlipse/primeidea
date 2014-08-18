@@ -822,7 +822,7 @@ public class AdminService {
 	@GET
 	@Path("/user/stats/topList")
 	@Produces("application/json")
-	public <T extends GroupMessage> List<T> getTopCountsUser() {
+	public <T extends UserStatisticsMessage> List<T> getTopCountsUser() {
 		Set<UserStatisticsMessage> userStatsSet = new TreeSet<UserStatisticsMessage>();
 		List<T> usersStatsList = new ArrayList<T>();
 		logger.info("Control handle din getTopCountsUser of service /user/stats/topList ");
@@ -852,10 +852,12 @@ public class AdminService {
 				} else {
 					userStats.setImgAvail(false);
 				}
+				logger.info("Before");
 				userStatsSet.add(userStats);
+				logger.info("After");
 			}
 			int i = 0;
-			for (Object object : userStatsSet) {
+			for (UserStatisticsMessage object : userStatsSet) {
 				i++;
 				if (i <= 5) {
 					usersStatsList.add((T) object);

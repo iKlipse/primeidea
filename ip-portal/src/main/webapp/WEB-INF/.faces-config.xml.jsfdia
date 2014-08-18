@@ -188,10 +188,13 @@
  <PROCESS-ITEM NAME="rules::4" SHAPE="32,225,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules::4" NAME="item" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT
-    ID="rwe::#views#rewards#container#editContainer.xhtml" NAME="output"
-    PATH="/views/rewards/container/editContainer.xhtml"
+    ID="rwer::#views#rewards#container#editContainer.xhtml"
+    NAME="output" PATH="/views/rewards/container/editContainer.xhtml"
     TARGET="rules:#views#rewards#container#editContainer.xhtml"
-    TITLE="rwe" model-entity="JSFProcessItemOutput"/>
+    TITLE="rwer" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="rwvr::#views#rewards#view.xhtml"
+    NAME="output1" PATH="/views/rewards/view.xhtml"
+    TARGET="rules:#views#rewards#view.xhtml" TITLE="rwvr" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules::5" SHAPE="32,689,0,0" model-entity="JSFProcessGroup">
@@ -391,4 +394,6 @@
   NAME="rules:#views#random-idea#container#editReviewContainer.xhtml"
   PATH="/views/random-idea/container/editReviewContainer.xhtml"
   SHAPE="304,2465,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#views#rewards#view.xhtml"
+  PATH="/views/rewards/view.xhtml" SHAPE="256,353,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

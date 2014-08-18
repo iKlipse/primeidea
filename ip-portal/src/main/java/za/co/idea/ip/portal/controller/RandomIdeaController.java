@@ -143,18 +143,11 @@ public class RandomIdeaController implements Serializable {
 					break;
 				case 4:
 					viewIdeas = RESTServiceHelper.fetchAllReviewIdeasByUserId(userId);
-					ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
+					ideaStatuses = RESTServiceHelper.fetchAllReviewIdeaStatuses();
 					showViewOpenIdea = false;
 					showViewIdea = false;
 					showCrtIdea = false;
 					showViewReviewIdea = true;
-					break;
-				default:
-					viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(2, userId);
-					showViewOpenIdea = false;
-					showViewIdea = true;
-					showCrtIdea = false;
-					showViewReviewIdea = false;
 					break;
 				}
 			}

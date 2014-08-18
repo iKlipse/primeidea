@@ -11,6 +11,12 @@
 				<p:commandLink value="My Challenges" actionListener="#{landingPageController.changeChallenge}" update="pnlLPDet" />
 				<p:graphicImage name="separator.png" library="images" />
 				<p:commandLink value="My Solutions" actionListener="#{landingPageController.changeSolution}" update="pnlLPDet" />
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="My Wishlist" actionListener="#{landingPageController.showWishList}" update="pnlLPDet" />
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="My Claims" actionListener="#{landingPageController.showViewClaimByUser}" update="pnlLPDet" />
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="My Points" actionListener="#{landingPageController.showPointProfile}" update="pnlLPDet" />
 			</p:panel>
 			<p:panel id="pnlLPDet">
 				<p:panel id="ctrMyIdeas" style="width: 100% !important" rendered="#{landingPageController.showIdeas}">
@@ -21,6 +27,15 @@
 				</p:panel>
 				<p:panel id="ctrMySolutions" style="width: 100% !important" rendered="#{landingPageController.showSols}">
 					<ui:include src="/views/landing-page/solutions.xhtml" />
+				</p:panel>
+				<p:panel id="ctrMyWishlist" style="width: 100% !important" rendered="#{landingPageController.showWishlist}">
+					<ui:include src="/views/landing-page/wishlist.xhtml" />
+				</p:panel>
+				<p:panel id="ctrMyClaims" style="width: 100% !important" rendered="#{landingPageController.showClaims}">
+					<ui:include src="/views/landing-page/claims.xhtml" />
+				</p:panel>
+				<p:panel id="ctrMyPoints" style="width: 100% !important" rendered="#{landingPageController.showPoints}">
+					<ui:include src="/views/landing-page/points.xhtml" />
 				</p:panel>
 			</p:panel>
 		</h:form>

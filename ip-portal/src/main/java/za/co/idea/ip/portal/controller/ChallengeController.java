@@ -133,7 +133,6 @@ public class ChallengeController implements Serializable {
 			userId = message.getuId();
 			challengeCats = fetchAllChallengeCat();
 			admUsers = fetchAllUsers();
-			challengeStatuses = fetchAllChallengeStatuses();
 			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
 			showPubChal = true;
 			showViewChal = false;
@@ -142,29 +141,38 @@ public class ChallengeController implements Serializable {
 				switch (Integer.valueOf(toView)) {
 				case 1:
 					viewChallenges = fetchAllChallengesByStatusIdUserId(4);
+					challengeStatuses = fetchAllChallengeStatuses();
 					showPubChal = true;
 					showViewChal = false;
 					showCrtChal = false;
+					showReviewChal = false;
 					break;
 				case 2:
 					viewChallenges = fetchAllChallengesByUser();
+					challengeStatuses = fetchAllChallengeStatuses();
 					showPubChal = false;
 					showViewChal = true;
 					showCrtChal = false;
+					showReviewChal = false;
 					break;
 				case 3:
 					pGrps = fetchAllGroups();
+					challengeStatuses = fetchAllChallengeStatuses();
 					groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 					challengeBean = new ChallengeBean();
 					showPubChal = false;
 					showViewChal = false;
 					showCrtChal = true;
+					showReviewChal = false;
 					break;
-				default:
-					viewChallenges = fetchAllChallengesByStatusIdUserId(4);
-					showPubChal = true;
+				case 4:
+					viewChallenges = RESTServiceHelper.fetchAllReviewChallengesByUser(userId);
+					challengeStatuses = RESTServiceHelper.fetchAllReviewChallengeNextStatuses();
+					showPubChal = false;
 					showViewChal = false;
 					showCrtChal = false;
+					showReviewChal = true;
+					break;
 				}
 			}
 		} catch (Exception e) {
@@ -199,6 +207,7 @@ public class ChallengeController implements Serializable {
 					showPubSol = false;
 					showViewSol = false;
 					showCrtSol = true;
+					showReviewSol = false;
 					break;
 				case 2:
 					solutionBean = new SolutionBean();
@@ -207,6 +216,7 @@ public class ChallengeController implements Serializable {
 					showPubSol = true;
 					showViewSol = false;
 					showCrtSol = false;
+					showReviewSol = false;
 					break;
 				case 3:
 					solutionBean = new SolutionBean();
@@ -215,24 +225,16 @@ public class ChallengeController implements Serializable {
 					showPubSol = false;
 					showViewSol = true;
 					showCrtSol = false;
+					showReviewSol = false;
 					break;
 				case 4:
-					viewChallenges = RESTServiceHelper.fetchAllReviewChallengesByUser(userId);
-					challengeCats = fetchAllChallengeCat();
-					admUsers = fetchAllUsers();
-					challengeStatuses = RESTServiceHelper.fetchAllReviewChallengeNextStatuses();
-					showPubChal = false;
-					showViewChal = false;
-					showCrtChal = false;
-					showReviewSol = true;
-					break;
-				default:
-					viewChallenges = fetchAllChallengesByStatusIdUserId(4);
 					solutionBean = new SolutionBean();
-					saveAsOpen = false;
+					viewChallenges = fetchAllChallengesByUser();
+					viewSolutions = fetchAllSolutionsByStatusIdUserId(2);
 					showPubSol = false;
 					showViewSol = false;
-					showCrtSol = true;
+					showCrtSol = false;
+					showReviewSol = true;
 					break;
 				}
 			}

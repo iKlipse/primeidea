@@ -1,0 +1,16 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<p:dataTable id="dtViewPoints" value="#{landingPageController.pointBeans}" var="point" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Points Found" style="width: 100% !important">
+		<f:facet name="header">
+			<p:outputLabel id="ttlPntsHeader" value="Total Points : " />
+			<p:outputLabel id="ttlPnts" value="#{landingPageController.totalPoints}" />
+		</f:facet>
+		<p:column>
+			<f:facet name="header">Comments</f:facet>
+			<p:outputLabel id="txtComments" value="#{point.comments}" />
+		</p:column>
+		<p:column>
+			<f:facet name="header">Point Value</f:facet>
+			<p:outputLabel id="txtPointVal" value="#{point.pointValue}" />
+		</p:column>
+	</p:dataTable>
+</ui:composition>

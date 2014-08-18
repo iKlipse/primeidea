@@ -3,7 +3,7 @@ package za.co.idea.ip.ws.bean;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "userStatisticsMessage")
-public class UserStatisticsMessage {
+public class UserStatisticsMessage implements Comparable<UserStatisticsMessage> {
 
 	private Long userId;
 	private Long challengesCount;
@@ -76,6 +76,15 @@ public class UserStatisticsMessage {
 
 	public void setImgAvail(boolean imgAvail) {
 		this.imgAvail = imgAvail;
+	}
+
+	public int compareTo(UserStatisticsMessage o) {
+		if (this.getTotalCount() > o.getTotalCount())
+			return -1;
+		else if (this.getTotalCount() < o.getTotalCount())
+			return 1;
+		else
+			return 0;
 	}
 
 }

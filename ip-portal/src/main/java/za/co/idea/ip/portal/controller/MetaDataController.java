@@ -70,8 +70,6 @@ public class MetaDataController implements Serializable {
 					this.beans = null;
 					showMetadataMaintain = true;
 					break;
-				default:
-					break;
 				}
 			}
 

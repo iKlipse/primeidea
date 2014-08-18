@@ -60,6 +60,7 @@ public class RewardsController implements Serializable {
 	private static final long serialVersionUID = -5950221141502328656L;
 	private static final Logger logger = Logger.getLogger(RewardsController.class);
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
+	private static final IdNumberGen COUNTER = new IdNumberGen();
 	private RewardsBean rewardsBean;
 	private StreamedContent fileContent;
 	private StreamedContent uploadContent;
@@ -86,7 +87,6 @@ public class RewardsController implements Serializable {
 	private boolean showRewardsWishlist;
 	private HashMap<String, String> allocEntityList;
 	private String entity;
-	private static final IdNumberGen COUNTER = new IdNumberGen();
 	private boolean showAddPanel;
 	private boolean showModPanel;
 	private boolean showAddBtn;

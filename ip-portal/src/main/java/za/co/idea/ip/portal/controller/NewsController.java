@@ -79,11 +79,6 @@ public class NewsController implements Serializable {
 				case 2:
 					showCreateNews = true;
 					showViewNews = false;
-				default:
-					viewNewsBeans = fetchAllNews();
-					showCreateNews = false;
-					showViewNews = true;
-					break;
 				}
 			}
 

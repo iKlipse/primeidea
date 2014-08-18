@@ -48,6 +48,7 @@ public class ClaimController implements Serializable {
 	private Long totalPoints;
 	private String selRwId;
 	private Long userId;
+	private String returnView;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -58,6 +59,17 @@ public class ClaimController implements Serializable {
 		client.header("Content-Type", "application/json");
 		client.header("Accept", "application/json");
 		return client;
+	}
+	
+	public String redirectMain() {
+		switch (Integer.valueOf(returnView)) {
+		case 1:
+			return "lani";
+		case 2:
+			return "clmvc";
+		default:
+			return "";
+		}
 	}
 
 	public String showCreateClaim() {
@@ -452,5 +464,13 @@ public class ClaimController implements Serializable {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public String getReturnView() {
+		return returnView;
+	}
+
+	public void setReturnView(String returnView) {
+		this.returnView = returnView;
 	}
 }
