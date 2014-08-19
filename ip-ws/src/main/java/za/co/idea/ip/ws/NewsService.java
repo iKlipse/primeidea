@@ -37,25 +37,25 @@ public class NewsService {
 			logger.debug("Control handled in createNews() of service ns/news/add call ");
 			IpNews ipNews = new IpNews();
 			ipNews.setNewsId(news.getnId());
-			ipNews.setnTitle(news.getnTitle());
-			ipNews.setnStartDate(news.getStartDate());
-			ipNews.setnEndDate(news.getEndDate());
-			ipNews.setnContent(news.getContent());
+			ipNews.setNewsTitle(news.getnTitle());
+			ipNews.setNewsStartDate(news.getStartDate());
+			ipNews.setNewsEndDate(news.getEndDate());
+			ipNews.setNewsContent(news.getContent());
 			logger.info("Before saving news details");
 			ipNewsDAO.save(ipNews);
 			logger.info("After saving new details");
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
-			logger.info("Before returning the response from service : "+message);
+			logger.info("Before returning the response from service : " + message);
 			return message;
 		} catch (Exception e) {
-			logger.error("Error in create news : "+e.getMessage());
+			logger.error("Error in create news : " + e.getMessage());
 			e.printStackTrace();
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
-			logger.info("Before returning the response from service : "+message);
+			logger.info("Before returning the response from service : " + message);
 			return message;
 		}
 	}
@@ -69,25 +69,25 @@ public class NewsService {
 			logger.debug("Control handled in updateNews() of service ns/news/modify call ");
 			IpNews ipNews = new IpNews();
 			ipNews.setNewsId(news.getnId());
-			ipNews.setnTitle(news.getnTitle());
-			ipNews.setnStartDate(news.getStartDate());
-			ipNews.setnEndDate(news.getEndDate());
-			ipNews.setnContent(news.getContent());
-			logger.info("Before updating news details for new id : "+news.getnId());
+			ipNews.setNewsTitle(news.getnTitle());
+			ipNews.setNewsStartDate(news.getStartDate());
+			ipNews.setNewsEndDate(news.getEndDate());
+			ipNews.setNewsContent(news.getContent());
+			logger.info("Before updating news details for new id : " + news.getnId());
 			ipNewsDAO.merge(ipNews);
 			logger.info("News details are updated success fully");
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
-			logger.info("Before returning the response from service : "+message);
+			logger.info("Before returning the response from service : " + message);
 			return message;
 		} catch (Exception e) {
-			logger.error("Error in update news : "+e.getMessage());
+			logger.error("Error in update news : " + e.getMessage());
 			e.printStackTrace();
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
-			logger.info("Before returning the response from service : "+message);
+			logger.info("Before returning the response from service : " + message);
 			return message;
 		}
 	}
@@ -104,27 +104,27 @@ public class NewsService {
 			for (Object object : vals) {
 				IpNews news = (IpNews) object;
 				NewsMessage message = new NewsMessage();
-				logger.info("Retrieved news ID: "+news.getNewsId()+", Title: "+news.getnTitle());
+				logger.info("Retrieved news ID: " + news.getNewsId() + ", Title: " + news.getNewsTitle());
 				message.setnId(news.getNewsId());
-				message.setContent(news.getnContent());
-				message.setStartDate(news.getnStartDate());
-				message.setEndDate(news.getnEndDate());
-				message.setnTitle(news.getnTitle());
+				message.setContent(news.getNewsContent());
+				message.setStartDate(news.getNewsStartDate());
+				message.setEndDate(news.getNewsEndDate());
+				message.setnTitle(news.getNewsTitle());
 				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(news.getNewsId(), "ip_news");
 				if (ipBlob != null) {
-					logger.info(" News attachment URL : "+"ip_news/" + news.getNewsId() + "/" + ipBlob.getBlobName());
+					logger.info(" News attachment URL : " + "ip_news/" + news.getNewsId() + "/" + ipBlob.getBlobName());
 					message.setNewsUrl("ip_news/" + news.getNewsId() + "/" + ipBlob.getBlobName());
 					message.setNwImgAvail(true);
 				} else {
 					message.setNwImgAvail(false);
-				}				
+				}
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
-			logger.error("Error while getting news : "+e.getMessage());
+			logger.error("Error while getting news : " + e.getMessage());
 			e.printStackTrace();
 		}
-		logger.info("Before returning news data response from service : "+ret);
+		logger.info("Before returning news data response from service : " + ret);
 		return ret;
 	}
 
@@ -138,21 +138,21 @@ public class NewsService {
 			IpNews news = ipNewsDAO.findById(id);
 			logger.info("After retrieving news details based on Id from IpNewsDAO  ");
 			message.setnId(news.getNewsId());
-			logger.info("Retrieved news : "+news.getnTitle()+" based on Id : "+news.getNewsId());
-			message.setContent(news.getnContent());
-			message.setStartDate(news.getnStartDate());
-			message.setEndDate(news.getnEndDate());
-			message.setnTitle(news.getnTitle());
+			logger.info("Retrieved news : " + news.getNewsTitle() + " based on Id : " + news.getNewsId());
+			message.setContent(news.getNewsContent());
+			message.setStartDate(news.getNewsStartDate());
+			message.setEndDate(news.getNewsEndDate());
+			message.setnTitle(news.getNewsTitle());
 			IpBlob ipBlob = ipBlobDAO.getBlobByEntity(news.getNewsId(), "ip_news");
 			if (ipBlob != null) {
-				logger.info(" News attachment URL : "+"ip_news/" + news.getNewsId() + "/" + ipBlob.getBlobName());
+				logger.info(" News attachment URL : " + "ip_news/" + news.getNewsId() + "/" + ipBlob.getBlobName());
 				message.setNewsUrl("ip_news/" + news.getNewsId() + "/" + ipBlob.getBlobName());
 				message.setNwImgAvail(true);
 			} else {
 				message.setNwImgAvail(false);
 			}
 		} catch (Exception e) {
-			logger.error("Error while news based on news id  : "+e.getMessage());
+			logger.error("Error while news based on news id  : " + e.getMessage());
 			e.printStackTrace();
 		}
 		return message;

@@ -3,12 +3,12 @@ package za.co.idea.ip.orm.dao;
 import java.util.List;
 
 import org.hibernate.Hibernate;
+import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import za.co.idea.ip.orm.bean.IpRewards;
 
@@ -23,8 +23,8 @@ import za.co.idea.ip.orm.bean.IpRewards;
  * @see za.co.idea.ip.orm.bean.IpRewards
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("rawtypes")
-public class IpRewardsDAO extends BaseHibernateDAO {
+@SuppressWarnings({ "rawtypes" })
+public class IpRewardsDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory.getLogger(IpRewardsDAO.class);
 	// property constants
 	public static final String RW_TITLE = "rwTitle";
@@ -33,136 +33,65 @@ public class IpRewardsDAO extends BaseHibernateDAO {
 	public static final String RW_STOCK_CODE_NUM = "rwStockCodeNum";
 	public static final String RW_HOVER_TEXT = "rwHoverText";
 	public static final String RW_TAG = "rwTag";
+	public static final String RW_PRICE = "rwPrice";
+	public static final String RW_QUANTITY = "rwQuantity";
+
+	protected void initDao() {
+		// do nothing
+	}
 
 	public void save(IpRewards transientInstance) {
 		log.debug("saving IpRewards instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.save(transientInstance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public void delete(IpRewards persistentInstance) {
 		log.debug("deleting IpRewards instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.delete(persistentInstance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public IpRewards findById(java.lang.Long id) {
 		log.debug("getting IpRewards instance with id: " + id);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			IpRewards instance = (IpRewards) session.get("za.co.idea.ip.orm.bean.IpRewards", id);
-			transaction.commit();session.close();
-			
-
+			IpRewards instance = (IpRewards) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpRewards", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findByExample(IpRewards instance) {
 		log.debug("finding IpRewards instance by example");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpRewards").add(Example.create(instance)).list();
+			List results = getHibernateTemplate().findByExample(instance);
 			log.debug("find by example successful, result size: " + results.size());
-			transaction.commit();session.close();
-			
-
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
-			throw re;
-		}
-	}
-
-	public List findByCatId(Integer id) {
-		log.debug("Fetching Rewards by Category Id :: getRewardsByCatId");
-		Session session = getSession();
-		try {
-			String namedQuery = "getRewardsByAvail";
-			Query query = session.getNamedQuery(namedQuery);
-			if (id != 0) {
-				namedQuery = "getRewardsByCatId";
-				query = session.getNamedQuery(namedQuery);
-				query.setLong("id", id);
-			}
-			List ret = query.list();
-			for (Object object : ret) {
-				IpRewards rw = (IpRewards) object;
-				Hibernate.initialize(rw.getIpRewardsCat());
-			}
-			
-			return ret;
-		} catch (RuntimeException re) {
-			log.error("attach failed", re);
 			throw re;
 		}
 	}
 
 	public List findByProperty(String propertyName, Object value) {
 		log.debug("finding IpRewards instance with property: " + propertyName + ", value: " + value);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpRewards as model where model." + propertyName + "= ?";
-			Query queryObject = session.createQuery(queryString);
-			queryObject.setParameter(0, value);
-			List results = queryObject.list();
-			transaction.commit();session.close();
-			
-
-			return results;
+			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
@@ -191,83 +120,68 @@ public class IpRewardsDAO extends BaseHibernateDAO {
 		return findByProperty(RW_TAG, rwTag);
 	}
 
+	public List findByRwPrice(Object rwPrice) {
+		return findByProperty(RW_PRICE, rwPrice);
+	}
+
+	public List findByRwQuantity(Object rwQuantity) {
+		return findByProperty(RW_QUANTITY, rwQuantity);
+	}
+
 	public List findAll() {
 		log.debug("finding all IpRewards instances");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpRewards";
-			Query queryObject = session.createQuery(queryString);
-			List results = queryObject.list();
-			transaction.commit();session.close();
-			
-
-			return results;
+			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public IpRewards merge(IpRewards detachedInstance) {
 		log.debug("merging IpRewards instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			IpRewards result = (IpRewards) session.merge(detachedInstance);
+			IpRewards result = (IpRewards) getHibernateTemplate().merge(detachedInstance);
 			log.debug("merge successful");
-			transaction.commit();session.close();
-			
-
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public void attachDirty(IpRewards instance) {
 		log.debug("attaching dirty IpRewards instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.saveOrUpdate(instance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
+			throw re;
+		}
+	}
 
+	public void attachClean(IpRewards instance) {
+		log.debug("attaching clean IpRewards instance");
+		try {
+			getHibernateTemplate().lock(instance, LockMode.NONE);
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
 			throw re;
 		}
 	}
 
 	public List findByAvail() {
 		log.debug("Fetching Challenge by Query :: getRewardsByAvail");
-		Session session = getSession();
 		try {
-			Query query = session.getNamedQuery("getRewardsByAvail");
+			Query query = getSession().getNamedQuery("getRewardsByAvail");
 			List ret = query.list();
 			for (Object object : ret) {
 				IpRewards rw = (IpRewards) object;
 				Hibernate.initialize(rw.getIpRewardsCat());
 			}
-
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -277,16 +191,35 @@ public class IpRewardsDAO extends BaseHibernateDAO {
 
 	public List findByUserId(Long id) {
 		log.debug("Fetching Challenge by Query :: getRewardsByUser");
-		Session session = getSession();
 		try {
-			Query query = session.getNamedQuery("getRewardsByUser");
+			Query query = getSession().getNamedQuery("getRewardsByUser");
 			query.setLong("id", id);
 			List ret = query.list();
 			for (Object object : ret) {
 				IpRewards rw = (IpRewards) object;
 				Hibernate.initialize(rw.getIpRewardsCat());
 			}
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
 
+	public static IpRewardsDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (IpRewardsDAO) ctx.getBean("IpRewardsDAO");
+	}
+
+	public List findByCatId(Integer id) {
+		log.debug("Fetching Rewards by Query :: getRewardsByCatId");
+		try {
+			Query query = getSession().getNamedQuery("getRewardsByCatId");
+			query.setLong("id", id);
+			List ret = query.list();
+			for (Object object : ret) {
+				IpRewards rw = (IpRewards) object;
+				Hibernate.initialize(rw.getIpRewardsCat());
+			}
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);

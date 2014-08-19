@@ -25,6 +25,7 @@
 						<f:param name="rewardsId" id="rewardsId" value="#{rewards.rwId}" />
 						<f:param name="rwQuantity" id="rwQuantity" value="#{rewards.rwQuantity}" />
 						<f:param name="rwValue" id="rwValue" value="#{rewards.rwValue}" />
+						<f:setPropertyActionListener value="#{landingPageController.userId}" target="#{claimController.userId}" />
 					</p:commandButton>
 				</p:column>
 			</p:panelGrid>

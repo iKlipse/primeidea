@@ -8,6 +8,9 @@ public class IpIdeaGroup implements java.io.Serializable {
 
 	// Fields
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = -9093634632757238855L;
 	private Long igId;
 	private IpIdea ipIdea;

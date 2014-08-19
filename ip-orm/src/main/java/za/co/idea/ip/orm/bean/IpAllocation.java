@@ -15,7 +15,7 @@ public class IpAllocation implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6204940908807135390L;
+	private static final long serialVersionUID = -6072770805067338655L;
 	private Integer allocId;
 	private String allocDesc;
 	private Integer allocVal;
@@ -35,7 +35,7 @@ public class IpAllocation implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpAllocation(Integer allocId, String allocDesc, String allocEntity, Integer allocStatusId, Integer allocVal, Set ipPointses) {
+	public IpAllocation(Integer allocId, String allocDesc, Integer allocVal, String allocEntity, Integer allocStatusId, Set ipPointses) {
 		this.allocId = allocId;
 		this.allocDesc = allocDesc;
 		this.allocVal = allocVal;
@@ -70,28 +70,28 @@ public class IpAllocation implements java.io.Serializable {
 		this.allocVal = allocVal;
 	}
 
-	public Set getIpPointses() {
-		return this.ipPointses;
-	}
-
-	public void setIpPointses(Set ipPointses) {
-		this.ipPointses = ipPointses;
-	}
-
 	public String getAllocEntity() {
-		return allocEntity;
-	}
-
-	public Integer getAllocStatusId() {
-		return allocStatusId;
+		return this.allocEntity;
 	}
 
 	public void setAllocEntity(String allocEntity) {
 		this.allocEntity = allocEntity;
 	}
 
+	public Integer getAllocStatusId() {
+		return this.allocStatusId;
+	}
+
 	public void setAllocStatusId(Integer allocStatusId) {
 		this.allocStatusId = allocStatusId;
+	}
+
+	public Set getIpPointses() {
+		return this.ipPointses;
+	}
+
+	public void setIpPointses(Set ipPointses) {
+		this.ipPointses = ipPointses;
 	}
 
 }

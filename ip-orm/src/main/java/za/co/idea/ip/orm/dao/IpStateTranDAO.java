@@ -2,12 +2,11 @@ package za.co.idea.ip.orm.dao;
 
 import java.util.List;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Example;
+import org.hibernate.LockMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import za.co.idea.ip.orm.bean.IpStateTran;
 
@@ -22,119 +21,71 @@ import za.co.idea.ip.orm.bean.IpStateTran;
  * @see za.co.idea.ip.orm.bean.IpStateTran
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("rawtypes")
-public class IpStateTranDAO extends BaseHibernateDAO {
+@SuppressWarnings({ "rawtypes" })
+public class IpStateTranDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory.getLogger(IpStateTranDAO.class);
 	// property constants
 	public static final String TRAN_ENTITY = "tranEntity";
 	public static final String TRAN_CURR_STATE = "tranCurrState";
 	public static final String TRAN_NEXT_STATE = "tranNextState";
+	public static final String TRAN_IS_UI = "tranIsUi";
+
+	protected void initDao() {
+		// do nothing
+	}
 
 	public void save(IpStateTran transientInstance) {
 		log.debug("saving IpStateTran instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.save(transientInstance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public void delete(IpStateTran persistentInstance) {
 		log.debug("deleting IpStateTran instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.delete(persistentInstance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public IpStateTran findById(java.lang.Integer id) {
 		log.debug("getting IpStateTran instance with id: " + id);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			IpStateTran instance = (IpStateTran) session.get("za.co.idea.ip.orm.bean.IpStateTran", id);
-			transaction.commit();session.close();
-			
-
+			IpStateTran instance = (IpStateTran) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpStateTran", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findByExample(IpStateTran instance) {
 		log.debug("finding IpStateTran instance by example");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpStateTran").add(Example.create(instance)).list();
+			List results = getHibernateTemplate().findByExample(instance);
 			log.debug("find by example successful, result size: " + results.size());
-			transaction.commit();session.close();
-			
-
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findByProperty(String propertyName, Object value) {
 		log.debug("finding IpStateTran instance with property: " + propertyName + ", value: " + value);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpStateTran as model where model." + propertyName + "= ?";
-			Query queryObject = session.createQuery(queryString);
-			queryObject.setParameter(0, value);
-			List results = queryObject.list();
-			transaction.commit();session.close();
-			
-
-			return results;
+			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
@@ -151,69 +102,56 @@ public class IpStateTranDAO extends BaseHibernateDAO {
 		return findByProperty(TRAN_NEXT_STATE, tranNextState);
 	}
 
+	public List findByTranIsUi(Object tranIsUi) {
+		return findByProperty(TRAN_IS_UI, tranIsUi);
+	}
+
 	public List findAll() {
 		log.debug("finding all IpStateTran instances");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpStateTran";
-			Query queryObject = session.createQuery(queryString);
-			List results = queryObject.list();
-			transaction.commit();session.close();
-			
-
-			return results;
+			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public IpStateTran merge(IpStateTran detachedInstance) {
 		log.debug("merging IpStateTran instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			IpStateTran result = (IpStateTran) session.merge(detachedInstance);
+			IpStateTran result = (IpStateTran) getHibernateTemplate().merge(detachedInstance);
 			log.debug("merge successful");
-			transaction.commit();session.close();
-			
-
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public void attachDirty(IpStateTran instance) {
 		log.debug("attaching dirty IpStateTran instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.saveOrUpdate(instance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
+	}
+
+	public void attachClean(IpStateTran instance) {
+		log.debug("attaching clean IpStateTran instance");
+		try {
+			getHibernateTemplate().lock(instance, LockMode.NONE);
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	public static IpStateTranDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (IpStateTranDAO) ctx.getBean("IpStateTranDAO");
 	}
 }

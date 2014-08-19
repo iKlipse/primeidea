@@ -19,7 +19,8 @@
 		</set>
 	</class>
 	<sql-query name="checkRwDependency">
-		select cat.* from ip_rewards_cat cat where cat.rc_id in (select distinct rw_cat from ip_rewards)
+		select cat.* from ip_rewards_cat cat where cat.rc_id in (select
+		distinct rw_cat from ip_rewards)
 		<return alias="cat" class="za.co.idea.ip.orm.bean.IpRewardsCat" />
 	</sql-query>
 </hibernate-mapping>

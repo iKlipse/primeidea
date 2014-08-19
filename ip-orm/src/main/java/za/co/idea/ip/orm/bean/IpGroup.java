@@ -15,19 +15,21 @@ public class IpGroup implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6552701529342423236L;
+	private static final long serialVersionUID = -2098764774664380317L;
 	private Long groupId;
 	private IpUser ipUser;
 	private IpGroup ipGroup;
 	private String groupName;
 	private String groupStatus;
 	private String groupEmail;
+	private String groupIsCore;
+	private Set ipUsers = new HashSet(0);
+	private Set ipIdeaGroups = new HashSet(0);
 	private Set ipGroupUsers = new HashSet(0);
 	private Set ipFuncGroups = new HashSet(0);
 	private Set ipRewardsGroups = new HashSet(0);
 	private Set ipGroups = new HashSet(0);
 	private Set ipChallengeGroups = new HashSet(0);
-	private Set ipUsers = new HashSet(0);
 
 	// Constructors
 
@@ -42,19 +44,21 @@ public class IpGroup implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpGroup(Long groupId, IpUser ipUser, IpGroup ipGroup, String groupName, String groupStatus, String groupEmail, Set ipGroupUsers, Set ipFuncGroups, Set ipRewardsGroups, Set ipGroups, Set ipChallengeGroups, Set ipUsers) {
+	public IpGroup(Long groupId, IpUser ipUser, IpGroup ipGroup, String groupName, String groupStatus, String groupEmail, String groupIsCore, Set ipUsers, Set ipIdeaGroups, Set ipGroupUsers, Set ipFuncGroups, Set ipRewardsGroups, Set ipGroups, Set ipChallengeGroups) {
 		this.groupId = groupId;
 		this.ipUser = ipUser;
 		this.ipGroup = ipGroup;
 		this.groupName = groupName;
 		this.groupStatus = groupStatus;
 		this.groupEmail = groupEmail;
+		this.groupIsCore = groupIsCore;
+		this.ipUsers = ipUsers;
+		this.ipIdeaGroups = ipIdeaGroups;
 		this.ipGroupUsers = ipGroupUsers;
 		this.ipFuncGroups = ipFuncGroups;
 		this.ipRewardsGroups = ipRewardsGroups;
 		this.ipGroups = ipGroups;
 		this.ipChallengeGroups = ipChallengeGroups;
-		this.setIpUsers(ipUsers);
 	}
 
 	// Property accessors
@@ -107,6 +111,30 @@ public class IpGroup implements java.io.Serializable {
 		this.groupEmail = groupEmail;
 	}
 
+	public String getGroupIsCore() {
+		return this.groupIsCore;
+	}
+
+	public void setGroupIsCore(String groupIsCore) {
+		this.groupIsCore = groupIsCore;
+	}
+
+	public Set getIpUsers() {
+		return this.ipUsers;
+	}
+
+	public void setIpUsers(Set ipUsers) {
+		this.ipUsers = ipUsers;
+	}
+
+	public Set getIpIdeaGroups() {
+		return this.ipIdeaGroups;
+	}
+
+	public void setIpIdeaGroups(Set ipIdeaGroups) {
+		this.ipIdeaGroups = ipIdeaGroups;
+	}
+
 	public Set getIpGroupUsers() {
 		return this.ipGroupUsers;
 	}
@@ -145,14 +173,6 @@ public class IpGroup implements java.io.Serializable {
 
 	public void setIpChallengeGroups(Set ipChallengeGroups) {
 		this.ipChallengeGroups = ipChallengeGroups;
-	}
-
-	public Set getIpUsers() {
-		return ipUsers;
-	}
-
-	public void setIpUsers(Set ipUsers) {
-		this.ipUsers = ipUsers;
 	}
 
 }

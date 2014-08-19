@@ -19,11 +19,16 @@
 		</set>
 	</class>
 	<sql-query name="getNextSolStatus">
-		select iis.* from ip_solution_status iis where (iis.ss_id=:curr or iis.ss_id in (select st.tran_next_state from ip_state_tran st where st.tran_curr_state=:curr and lower(st.tran_entity)='ip_solution_status'))
+		select iis.* from ip_solution_status iis where (iis.ss_id=:curr or
+		iis.ss_id in (select st.tran_next_state from ip_state_tran st where
+		st.tran_curr_state=:curr and
+		lower(st.tran_entity)='ip_solution_status'))
 		<return alias="iis" class="za.co.idea.ip.orm.bean.IpSolutionStatus" />
 	</sql-query>
 	<sql-query name="getNonAllocSolStatus">
-		select iis.* from ip_solution_status iis where iis.ss_id not in (select ia.alloc_status_id from ip_allocation ia where lower(ia.alloc_entity)='ip_solution_status')
+		select iis.* from ip_solution_status iis where iis.ss_id not in
+		(select ia.alloc_status_id from ip_allocation ia where
+		lower(ia.alloc_entity)='ip_solution_status')
 		<return alias="iis" class="za.co.idea.ip.orm.bean.IpSolutionStatus" />
 	</sql-query>
 </hibernate-mapping>

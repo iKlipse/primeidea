@@ -11,10 +11,10 @@
 				<p:outputLabel id="slblFuncGrps" value="Function Groups" />
 			</p:column>
 			<p:column>
-				<!-- 	<p:pickList style="width: 100%" id="splGroupPick" converter="groupConverter" value="#{adminController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" /> -->
-				<p:selectCheckboxMenu id="scmGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{adminController.selGrpId}">
+				<p:pickList style="width: 100%" id="splGroupPick" converter="groupConverter" value="#{adminController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" />
+				<!-- 	<p:selectCheckboxMenu id="scmGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{adminController.selGrpId}">
 					<f:selectItems value="#{adminController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
-				</p:selectCheckboxMenu>
+				</p:selectCheckboxMenu> -->
 			</p:column>
 			<p:row>
 				<p:column colspan="2">

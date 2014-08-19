@@ -14,7 +14,7 @@
 		<property name="blobContentType" type="java.lang.String">
 			<column name="blob_content_type" length="999" />
 		</property>
-		<property name="blobContent" type="java.sql.Blob">
+		<property name="blobContent" type="java.lang.String">
 			<column name="blob_content" />
 		</property>
 		<property name="blobEntityId" type="java.lang.Long">
@@ -28,11 +28,13 @@
 		</property>
 	</class>
 	<sql-query name="getBlobByEntity">
-		select ib.* from ip_blob ib where ib.blob_entity_id=:id and lower(ib.blob_entity_tbl_nm)=lower(:tblNm)
+		select ib.* from ip_blob ib where ib.blob_entity_id=:id and
+		lower(ib.blob_entity_tbl_nm)=lower(:tblNm)
 		<return alias="ib" class="za.co.idea.ip.orm.bean.IpBlob" />
 	</sql-query>
 	<sql-query name="getBlobIdByEntity">
-		select ib.blob_id as blobId from ip_blob ib where ib.blob_entity_id=:id and lower(ib.blob_entity_tbl_nm)=lower(:tblNm)
+		select ib.blob_id as blobId from ip_blob ib where
+		ib.blob_entity_id=:id and lower(ib.blob_entity_tbl_nm)=lower(:tblNm)
 		<return-scalar column="blobId" type="java.lang.Long" />
 	</sql-query>
 </hibernate-mapping>

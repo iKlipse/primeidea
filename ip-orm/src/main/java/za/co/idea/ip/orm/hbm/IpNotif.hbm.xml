@@ -30,7 +30,7 @@
 			<column name="notif_crtd_date" length="45" />
 		</property>
 		<property name="notifList" type="java.lang.String">
-			<column name="notif_list" length="65535" />
+			<column name="notif_list" />
 		</property>
 	</class>
 	<sql-query name="deleteNotifById">

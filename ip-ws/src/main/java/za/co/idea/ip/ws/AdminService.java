@@ -1,6 +1,6 @@
 package za.co.idea.ip.ws;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -32,6 +32,7 @@ import za.co.idea.ip.orm.dao.IpGroupDAO;
 import za.co.idea.ip.orm.dao.IpGroupUserDAO;
 import za.co.idea.ip.orm.dao.IpLoginDAO;
 import za.co.idea.ip.orm.dao.IpNativeSQLDAO;
+import za.co.idea.ip.orm.dao.IpSecqListDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
 import za.co.idea.ip.ws.bean.FunctionMessage;
 import za.co.idea.ip.ws.bean.GroupMessage;
@@ -51,6 +52,7 @@ public class AdminService {
 	private IpGroupUserDAO ipGroupUserDAO;
 	private IpFuncGroupDAO ipFuncGroupDAO;
 	private IpBlobDAO ipBlobDAO;
+	private IpSecqListDAO ipSecqListDAO;
 
 	@POST
 	@Path("/group/add")
@@ -327,7 +329,7 @@ public class AdminService {
 			ipUser.setUserLName(user.getlName());
 			ipUser.setUserScreenName(user.getScName());
 			ipUser.setUserSkills(user.getSkills());
-			ipUser.setuserEmployeeId(user.getEmployeeId());
+			ipUser.setUserEmployeeId(user.getEmployeeId());
 			ipUser.setUserStatus(((user.getIsActive() != null && user.getIsActive()) ? "y" : "n"));
 			if (user.getGroupId() != null)
 				ipUser.setIpGroup(ipGroupDAO.findById(user.getGroupId()));
@@ -345,7 +347,7 @@ public class AdminService {
 			ipLogin.setIpUser(ipUser);
 			ipLogin.setLoginName(ipUser.getUserScreenName());
 			ipLogin.setLoginId(user.getuId());
-			ipLogin.setLoginSecQ(user.getSecQ());
+			ipLogin.setIpSecqList(ipSecqListDAO.findById(user.getSecQ()));
 			ipLogin.setLoginSecA(Base64.encodeBase64URLSafeString(DigestUtils.md5(user.getSecA().getBytes())));
 			ipLogin.setLoginPwd(Base64.encodeBase64URLSafeString(DigestUtils.md5(user.getPwd().getBytes())));
 			try {
@@ -377,7 +379,7 @@ public class AdminService {
 			IpFunction ipFunction = new IpFunction();
 			ipFunction.setFuncId(function.getFuncId());
 			ipFunction.setFuncName(function.getFuncName());
-			ipFunction.setFuncCrtdDt(new Timestamp(System.currentTimeMillis()));
+			ipFunction.setFuncCrtdDt(new Date(System.currentTimeMillis()));
 			ipFunction.setIpUser(ipUserDAO.findById(function.getCrtdBy()));
 			ipFunction.setFuncIsCore("n");
 			ipFunctionDAO.save(ipFunction);
@@ -410,7 +412,7 @@ public class AdminService {
 			IpFunction ipFunction = new IpFunction();
 			ipFunction.setFuncId(function.getFuncId());
 			ipFunction.setFuncName(function.getFuncName());
-			ipFunction.setFuncCrtdDt(new Timestamp(System.currentTimeMillis()));
+			ipFunction.setFuncCrtdDt(new Date(System.currentTimeMillis()));
 			ipFunction.setIpUser(ipUserDAO.findById(function.getCrtdBy()));
 			ipFunction.setFuncIsCore("y");
 			ipFunctionDAO.merge(ipFunction);
@@ -450,7 +452,7 @@ public class AdminService {
 			ipUser.setUserLName(user.getlName());
 			ipUser.setUserScreenName(user.getScName());
 			ipUser.setUserSkills(user.getSkills());
-			ipUser.setuserEmployeeId(user.getEmployeeId());
+			ipUser.setUserEmployeeId(user.getEmployeeId());
 			ipUser.setUserStatus(((user.getIsActive() != null && user.getIsActive()) ? "y" : "n"));
 			if (user.getGroupId() != null)
 				ipUser.setIpGroup(ipGroupDAO.findById(user.getGroupId()));
@@ -498,7 +500,7 @@ public class AdminService {
 				user.setScName(ipUser.getUserScreenName());
 				user.setSkills(ipUser.getUserSkills());
 				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
-				user.setEmployeeId(ipUser.getuserEmployeeId());
+				user.setEmployeeId(ipUser.getUserEmployeeId());
 				if (ipUser.getIpGroup() != null) {
 					user.setGroupId(ipUser.getIpGroup().getGroupId());
 					user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
@@ -538,7 +540,7 @@ public class AdminService {
 				user.setScName(ipUser.getUserScreenName());
 				user.setSkills(ipUser.getUserSkills());
 				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
-				user.setEmployeeId(ipUser.getuserEmployeeId());
+				user.setEmployeeId(ipUser.getUserEmployeeId());
 				if (ipUser.getIpGroup() != null) {
 					user.setGroupId(ipUser.getIpGroup().getGroupId());
 					user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
@@ -574,7 +576,7 @@ public class AdminService {
 			user.setlName(ipUser.getUserLName());
 			user.setScName(ipUser.getUserScreenName());
 			user.setSkills(ipUser.getUserSkills());
-			user.setEmployeeId(ipUser.getuserEmployeeId());
+			user.setEmployeeId(ipUser.getUserEmployeeId());
 			user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
 			if (ipUser.getIpGroup() != null) {
 				user.setGroupId(ipUser.getIpGroup().getGroupId());
@@ -746,7 +748,7 @@ public class AdminService {
 				if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
 					user.setTwHandle(ipUser.getUserTwHandle());
 				user.setLastLoginDt(ipLogin.getLoginLastDt());
-				ipLogin.setLoginLastDt(new Timestamp(System.currentTimeMillis()));
+				ipLogin.setLoginLastDt(new Date(System.currentTimeMillis()));
 				ipLoginDAO.merge(ipLogin);
 				IpBlob blob = ipBlobDAO.getBlobByEntity(ipUser.getUserId(), "ip_user");
 				if (blob != null) {
@@ -781,7 +783,7 @@ public class AdminService {
 			user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
 			user.setLastLoginDt(ipLogin.getLoginLastDt());
 			user.setSecA(ipLogin.getLoginSecA());
-			user.setSecQ(ipLogin.getLoginSecQ());
+			user.setSecQ(ipLogin.getIpSecqList().getIslId());
 			if (ipUser.getIpGroup() != null)
 				user.setGroupId(ipUser.getIpGroup().getGroupId());
 			IpBlob blob = ipBlobDAO.getBlobByEntity(ipUser.getUserId(), "ip_user");
@@ -831,7 +833,6 @@ public class AdminService {
 			logger.info("Users list : " + users);
 			for (Object object : users) {
 				IpUser ipUser = (IpUser) object;
-				logger.info("Getting count details for user : " + ipUser.getUserId());
 				Long solCount = ipUserDAO.findSolutionCount(ipUser.getUserId());
 				Long chalCount = ipUserDAO.findChallengeCount(ipUser.getUserId());
 				Long whishListCount = ipUserDAO.findWhishlistCount(ipUser.getUserId());
@@ -852,9 +853,7 @@ public class AdminService {
 				} else {
 					userStats.setImgAvail(false);
 				}
-				logger.info("Before");
 				userStatsSet.add(userStats);
-				logger.info("After");
 			}
 			int i = 0;
 			for (UserStatisticsMessage object : userStatsSet) {
@@ -932,5 +931,13 @@ public class AdminService {
 
 	public void setIpBlobDAO(IpBlobDAO ipBlobDAO) {
 		this.ipBlobDAO = ipBlobDAO;
+	}
+
+	public IpSecqListDAO getIpSecqListDAO() {
+		return ipSecqListDAO;
+	}
+
+	public void setIpSecqListDAO(IpSecqListDAO ipSecqListDAO) {
+		this.ipSecqListDAO = ipSecqListDAO;
 	}
 }

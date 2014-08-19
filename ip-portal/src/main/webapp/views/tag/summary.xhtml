@@ -57,14 +57,14 @@
 								<p:outputLabel style="float: right !important" value="#{comment.tagDate}" />
 							</f:facet>
 							<p:column>
-								<p:outputLabel value="#{comment.tagText}" />
+								<p:outputLabel value="#{comment.tagText}" escape="false"/>
 							</p:column>
 						</p:panel>
 					</p:dataGrid>
 					<p:tooltip for="dtViewComments" value="Tags disabled as item not in open status" rendered="#{buildonController.taggable}" />
 				</p:column>
 				<p:column rendered="#{!buildonBean.taggable}">
-					<p:editor id="edComment" value="#{buildonController.commentText}" />
+					<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="edComment" value="#{buildonController.commentText}" />
 				</p:column>
 				<p:column rendered="#{!buildonBean.taggable}">
 					<p:commandButton id="btnSubmitComment" value="Post" actionListener="#{buildonController.commentBuildon}" update="dtViewComments" />

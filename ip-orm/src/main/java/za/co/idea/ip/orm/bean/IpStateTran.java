@@ -8,11 +8,15 @@ public class IpStateTran implements java.io.Serializable {
 
 	// Fields
 
-	private static final long serialVersionUID = -3375781700090567124L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4882306508930605189L;
 	private Integer tranId;
 	private String tranEntity;
 	private Integer tranCurrState;
 	private Integer tranNextState;
+	private String tranIsUi;
 
 	// Constructors
 
@@ -21,10 +25,11 @@ public class IpStateTran implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpStateTran(String tranEntity, Integer tranCurrState, Integer tranNextState) {
+	public IpStateTran(String tranEntity, Integer tranCurrState, Integer tranNextState, String tranIsUi) {
 		this.tranEntity = tranEntity;
 		this.tranCurrState = tranCurrState;
 		this.tranNextState = tranNextState;
+		this.tranIsUi = tranIsUi;
 	}
 
 	// Property accessors
@@ -59,6 +64,14 @@ public class IpStateTran implements java.io.Serializable {
 
 	public void setTranNextState(Integer tranNextState) {
 		this.tranNextState = tranNextState;
+	}
+
+	public String getTranIsUi() {
+		return this.tranIsUi;
+	}
+
+	public void setTranIsUi(String tranIsUi) {
+		this.tranIsUi = tranIsUi;
 	}
 
 }

@@ -2,12 +2,12 @@ package za.co.idea.ip.orm.dao;
 
 import java.util.List;
 
+import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import za.co.idea.ip.orm.bean.IpClaimStatus;
 
@@ -22,118 +22,68 @@ import za.co.idea.ip.orm.bean.IpClaimStatus;
  * @see za.co.idea.ip.orm.bean.IpClaimStatus
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("rawtypes")
-public class IpClaimStatusDAO extends BaseHibernateDAO {
+@SuppressWarnings({ "rawtypes" })
+public class IpClaimStatusDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory.getLogger(IpClaimStatusDAO.class);
 	// property constants
 	public static final String CS_DESC = "csDesc";
 
+	protected void initDao() {
+		// do nothing
+	}
+
 	public void save(IpClaimStatus transientInstance) {
 		log.debug("saving IpClaimStatus instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.save(transientInstance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public void delete(IpClaimStatus persistentInstance) {
 		log.debug("deleting IpClaimStatus instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.delete(persistentInstance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public IpClaimStatus findById(java.lang.Integer id) {
 		log.debug("getting IpClaimStatus instance with id: " + id);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			IpClaimStatus instance = (IpClaimStatus) session.get("za.co.idea.ip.orm.bean.IpClaimStatus", id);
-			transaction.commit();session.close();
-			
-
+			IpClaimStatus instance = (IpClaimStatus) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpClaimStatus", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findByExample(IpClaimStatus instance) {
 		log.debug("finding IpClaimStatus instance by example");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpClaimStatus").add(Example.create(instance)).list();
-			transaction.commit();session.close();
-			
-
+			List results = getHibernateTemplate().findByExample(instance);
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findByProperty(String propertyName, Object value) {
 		log.debug("finding IpClaimStatus instance with property: " + propertyName + ", value: " + value);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpClaimStatus as model where model." + propertyName + "= ?";
-			Query queryObject = session.createQuery(queryString);
-			queryObject.setParameter(0, value);
-			List results = queryObject.list();
-			transaction.commit();session.close();
-			
-
-			return results;
-
+			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
@@ -144,114 +94,75 @@ public class IpClaimStatusDAO extends BaseHibernateDAO {
 
 	public List findAll() {
 		log.debug("finding all IpClaimStatus instances");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpClaimStatus";
-			Query queryObject = session.createQuery(queryString);
-			List results = queryObject.list();
-			transaction.commit();session.close();
-			
-
-			return results;
-
+			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public IpClaimStatus merge(IpClaimStatus detachedInstance) {
 		log.debug("merging IpClaimStatus instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			IpClaimStatus result = (IpClaimStatus) session.merge(detachedInstance);
+			IpClaimStatus result = (IpClaimStatus) getHibernateTemplate().merge(detachedInstance);
 			log.debug("merge successful");
-			transaction.commit();session.close();
-			
-
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public void attachDirty(IpClaimStatus instance) {
 		log.debug("attaching dirty IpClaimStatus instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.saveOrUpdate(instance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
+			throw re;
+		}
+	}
 
+	public void attachClean(IpClaimStatus instance) {
+		log.debug("attaching clean IpClaimStatus instance");
+		try {
+			getHibernateTemplate().lock(instance, LockMode.NONE);
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
 			throw re;
 		}
 	}
 
 	public List findNext(Integer curr) {
 		log.debug("finding Next IpClaimStatus instances");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			Query query = session.getNamedQuery("getNextClmStatus");
+			Query query = getSession().getNamedQuery("getNextClmStatus");
 			query.setLong("curr", curr);
 			List ret = query.list();
-			transaction.commit();session.close();
-			
-
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findAllNonAlloc() {
 		log.debug("finding all IpClaimStatus instances");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			Query query = session.getNamedQuery("getNonAllocClaimStatus");
+			Query query = getSession().getNamedQuery("getNonAllocClaimStatus");
 			List ret = query.list();
-			transaction.commit();session.close();
-			
-
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
+	public static IpClaimStatusDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (IpClaimStatusDAO) ctx.getBean("IpClaimStatusDAO");
+	}
 }

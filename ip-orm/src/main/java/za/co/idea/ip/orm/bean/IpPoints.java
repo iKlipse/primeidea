@@ -11,7 +11,7 @@ public class IpPoints implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6456518924772050061L;
+	private static final long serialVersionUID = 4877949694625004644L;
 	private Long pointId;
 	private IpAllocation ipAllocation;
 	private IpUser ipUser;
@@ -26,17 +26,18 @@ public class IpPoints implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpPoints(Long pointId, Integer pointValue) {
+	public IpPoints(Long pointId) {
 		this.pointId = pointId;
-		this.pointValue = pointValue;
 	}
 
 	/** full constructor */
-	public IpPoints(Long pointId, IpAllocation ipAllocation, IpUser ipUser, Integer pointValue) {
+	public IpPoints(Long pointId, IpAllocation ipAllocation, IpUser ipUser, Integer pointValue, String comments, Long entityId) {
 		this.pointId = pointId;
 		this.ipAllocation = ipAllocation;
 		this.ipUser = ipUser;
 		this.pointValue = pointValue;
+		this.comments = comments;
+		this.entityId = entityId;
 	}
 
 	// Property accessors
@@ -66,7 +67,7 @@ public class IpPoints implements java.io.Serializable {
 	}
 
 	public Integer getPointValue() {
-		return pointValue;
+		return this.pointValue;
 	}
 
 	public void setPointValue(Integer pointValue) {
@@ -74,7 +75,7 @@ public class IpPoints implements java.io.Serializable {
 	}
 
 	public String getComments() {
-		return comments;
+		return this.comments;
 	}
 
 	public void setComments(String comments) {
@@ -82,7 +83,7 @@ public class IpPoints implements java.io.Serializable {
 	}
 
 	public Long getEntityId() {
-		return entityId;
+		return this.entityId;
 	}
 
 	public void setEntityId(Long entityId) {

@@ -8,8 +8,13 @@
 			<column name="login_id" />
 			<generator class="assigned" />
 		</id>
-		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser" fetch="select" lazy="proxy">
+		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser"
+			fetch="select">
 			<column name="login_user_id" not-null="true" unique="true" />
+		</many-to-one>
+		<many-to-one name="ipSecqList" class="za.co.idea.ip.orm.bean.IpSecqList"
+			fetch="select">
+			<column name="login_sec_q" not-null="true" />
 		</many-to-one>
 		<property name="loginName" type="java.lang.String">
 			<column name="login_name" length="65535" not-null="true" />
@@ -20,15 +25,14 @@
 		<property name="loginLastDt" type="java.sql.Timestamp">
 			<column name="login_last_dt" length="19" />
 		</property>
-		<property name="loginSecQ" type="java.lang.Integer">
-			<column name="login_sec_q" not-null="true" />
-		</property>
 		<property name="loginSecA" type="java.lang.String">
 			<column name="login_sec_a" length="450" not-null="true" />
 		</property>
 	</class>
 	<sql-query name="verifyLogin">
-		select login.* from ip_login login, ip_user iu where iu.user_id=login.login_user_id and login.login_name=:login and login.login_pwd=:pwd
+		select login.* from ip_login login, ip_user iu where
+		iu.user_id=login.login_user_id and login.login_name=:login and
+		login.login_pwd=:pwd
 		<return alias="login" class="za.co.idea.ip.orm.bean.IpLogin" />
 	</sql-query>
 	<sql-query name="fetchLogin">
@@ -40,9 +44,11 @@
 		<return alias="login" class="za.co.idea.ip.orm.bean.IpLogin" />
 	</sql-query>
 	<sql-query name="updatePassword">
-		update ip_login set login_pwd=:pwd where login_name=:login
+		update ip_login set login_pwd=:pwd where
+		login_name=:login
 	</sql-query>
 	<sql-query name="updateSecurity">
-		update ip_login set login_sec_q=:secq, login_sec_a=:seca where login_name=:login
+		update ip_login set login_sec_q=:secq,
+		login_sec_a=:seca where login_name=:login
 	</sql-query>
 </hibernate-mapping>

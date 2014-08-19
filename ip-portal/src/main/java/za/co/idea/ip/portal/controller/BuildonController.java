@@ -59,6 +59,7 @@ public class BuildonController implements Serializable {
 	private boolean taggable;
 	private boolean fileAvail;
 	private Long userId;
+	private String returnView;
 
 	private WebClient createCustomClient(String url) {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
@@ -76,6 +77,25 @@ public class BuildonController implements Serializable {
 		buildon = new TagBean();
 		commentText = "";
 		return "bovw";
+	}
+
+	public String redirectView() {
+		switch (Integer.valueOf(returnView)) {
+		case 1:
+			return "ideas";
+		case 2:
+			return "ideaso";
+		case 3:
+			return "ideasr";
+		case 4:
+			return "sols";
+		case 5:
+			return "solso";
+		case 6:
+			return "solsr";
+		default:
+			return "";
+		}
 	}
 
 	public String showSummaryBuildon() {
@@ -419,6 +439,14 @@ public class BuildonController implements Serializable {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public String getReturnView() {
+		return returnView;
+	}
+
+	public void setReturnView(String returnView) {
+		this.returnView = returnView;
 	}
 
 }

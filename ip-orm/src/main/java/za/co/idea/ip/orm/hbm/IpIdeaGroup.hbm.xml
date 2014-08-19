@@ -8,15 +8,18 @@
 			<column name="ig_id" />
 			<generator class="assigned" />
 		</id>
-		<many-to-one name="ipIdea" class="za.co.idea.ip.orm.bean.IpIdea" fetch="select">
+		<many-to-one name="ipIdea" class="za.co.idea.ip.orm.bean.IpIdea"
+			fetch="select">
 			<column name="ig_idea_id" />
 		</many-to-one>
-		<many-to-one name="ipGroup" class="za.co.idea.ip.orm.bean.IpGroup" fetch="select">
+		<many-to-one name="ipGroup" class="za.co.idea.ip.orm.bean.IpGroup"
+			fetch="select">
 			<column name="ig_grp_id" />
 		</many-to-one>
 	</class>
 	<sql-query name="deleteIGByIdeaId">
-		delete from ip_idea_group where ig_idea_id=:id
+		delete from ip_idea_group where
+		ig_idea_id=:id
 	</sql-query>
 	<sql-query name="fetchIGByIdeaId">
 		select fg.* from ip_idea_group fg where fg.ig_idea_id=:id

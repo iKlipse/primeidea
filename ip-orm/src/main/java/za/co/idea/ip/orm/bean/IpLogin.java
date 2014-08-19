@@ -1,6 +1,6 @@
 package za.co.idea.ip.orm.bean;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * IpLogin entity. @author MyEclipse Persistence Tools
@@ -9,13 +9,17 @@ import java.sql.Timestamp;
 public class IpLogin implements java.io.Serializable {
 
 	// Fields
-	private static final long serialVersionUID = -8779292447681305257L;
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -413850731547950827L;
 	private Long loginId;
 	private IpUser ipUser;
+	private IpSecqList ipSecqList;
 	private String loginName;
 	private String loginPwd;
-	private Timestamp loginLastDt;
-	private Integer loginSecQ;
+	private Date loginLastDt;
 	private String loginSecA;
 
 	// Constructors
@@ -25,23 +29,23 @@ public class IpLogin implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpLogin(Long loginId, IpUser ipUser, String loginName, String loginPwd, Integer loginSecQ, String loginSecA) {
+	public IpLogin(Long loginId, IpUser ipUser, IpSecqList ipSecqList, String loginName, String loginPwd, String loginSecA) {
 		this.loginId = loginId;
 		this.ipUser = ipUser;
+		this.ipSecqList = ipSecqList;
 		this.loginName = loginName;
 		this.loginPwd = loginPwd;
-		this.loginSecQ = loginSecQ;
 		this.loginSecA = loginSecA;
 	}
 
 	/** full constructor */
-	public IpLogin(Long loginId, IpUser ipUser, String loginName, String loginPwd, Timestamp loginLastDt, Integer loginSecQ, String loginSecA) {
+	public IpLogin(Long loginId, IpUser ipUser, IpSecqList ipSecqList, String loginName, String loginPwd, Date loginLastDt, String loginSecA) {
 		this.loginId = loginId;
 		this.ipUser = ipUser;
+		this.ipSecqList = ipSecqList;
 		this.loginName = loginName;
 		this.loginPwd = loginPwd;
 		this.loginLastDt = loginLastDt;
-		this.loginSecQ = loginSecQ;
 		this.loginSecA = loginSecA;
 	}
 
@@ -63,6 +67,14 @@ public class IpLogin implements java.io.Serializable {
 		this.ipUser = ipUser;
 	}
 
+	public IpSecqList getIpSecqList() {
+		return this.ipSecqList;
+	}
+
+	public void setIpSecqList(IpSecqList ipSecqList) {
+		this.ipSecqList = ipSecqList;
+	}
+
 	public String getLoginName() {
 		return this.loginName;
 	}
@@ -79,20 +91,12 @@ public class IpLogin implements java.io.Serializable {
 		this.loginPwd = loginPwd;
 	}
 
-	public Timestamp getLoginLastDt() {
+	public Date getLoginLastDt() {
 		return this.loginLastDt;
 	}
 
-	public void setLoginLastDt(Timestamp loginLastDt) {
+	public void setLoginLastDt(Date loginLastDt) {
 		this.loginLastDt = loginLastDt;
-	}
-
-	public Integer getLoginSecQ() {
-		return this.loginSecQ;
-	}
-
-	public void setLoginSecQ(Integer loginSecQ) {
-		this.loginSecQ = loginSecQ;
 	}
 
 	public String getLoginSecA() {

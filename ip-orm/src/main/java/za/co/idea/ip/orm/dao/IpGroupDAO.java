@@ -2,12 +2,12 @@ package za.co.idea.ip.orm.dao;
 
 import java.util.List;
 
+import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import za.co.idea.ip.orm.bean.IpGroup;
 
@@ -22,118 +22,71 @@ import za.co.idea.ip.orm.bean.IpGroup;
  * @see za.co.idea.ip.orm.bean.IpGroup
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("rawtypes")
-public class IpGroupDAO extends BaseHibernateDAO {
+@SuppressWarnings({ "rawtypes" })
+public class IpGroupDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory.getLogger(IpGroupDAO.class);
 	// property constants
 	public static final String GROUP_NAME = "groupName";
 	public static final String GROUP_STATUS = "groupStatus";
 	public static final String GROUP_EMAIL = "groupEmail";
+	public static final String GROUP_IS_CORE = "groupIsCore";
+
+	protected void initDao() {
+		// do nothing
+	}
 
 	public void save(IpGroup transientInstance) {
 		log.debug("saving IpGroup instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.save(transientInstance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public void delete(IpGroup persistentInstance) {
 		log.debug("deleting IpGroup instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.delete(persistentInstance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public IpGroup findById(java.lang.Long id) {
 		log.debug("getting IpGroup instance with id: " + id);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			IpGroup instance = (IpGroup) session.get("za.co.idea.ip.orm.bean.IpGroup", id);
-			transaction.commit();session.close();
+			IpGroup instance = (IpGroup) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpGroup", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findByExample(IpGroup instance) {
 		log.debug("finding IpGroup instance by example");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpGroup").add(Example.create(instance)).list();
+			List results = getHibernateTemplate().findByExample(instance);
 			log.debug("find by example successful, result size: " + results.size());
-			transaction.commit();session.close();
-			
-
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findByProperty(String propertyName, Object value) {
 		log.debug("finding IpGroup instance with property: " + propertyName + ", value: " + value);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpGroup as model where model." + propertyName + "= ?";
-			Query queryObject = session.createQuery(queryString);
-			queryObject.setParameter(0, value);
-			List results = queryObject.list();
-			transaction.commit();session.close();
-			
-
-			return results;
-
+			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
@@ -150,91 +103,67 @@ public class IpGroupDAO extends BaseHibernateDAO {
 		return findByProperty(GROUP_EMAIL, groupEmail);
 	}
 
+	public List findByGroupIsCore(Object groupIsCore) {
+		return findByProperty(GROUP_IS_CORE, groupIsCore);
+	}
+
 	public List findAll() {
 		log.debug("finding all IpGroup instances");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpGroup";
-			Query queryObject = session.createQuery(queryString);
-			List results = queryObject.list();
-			transaction.commit();session.close();
-			
-
-			return results;
+			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public IpGroup merge(IpGroup detachedInstance) {
 		log.debug("merging IpGroup instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			IpGroup result = (IpGroup) session.merge(detachedInstance);
+			IpGroup result = (IpGroup) getHibernateTemplate().merge(detachedInstance);
 			log.debug("merge successful");
-			transaction.commit();session.close();
-			
-
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public void attachDirty(IpGroup instance) {
 		log.debug("attaching dirty IpGroup instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.saveOrUpdate(instance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
+			throw re;
+		}
+	}
 
+	public void attachClean(IpGroup instance) {
+		log.debug("attaching clean IpGroup instance");
+		try {
+			getHibernateTemplate().lock(instance, LockMode.NONE);
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
 			throw re;
 		}
 	}
 
 	public String getGroupHierarchy(Long grpId) {
 		log.debug("Fetching Group By Query :: fetchGroupHierarchy");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			Query query = session.createSQLQuery("select calc_grp_path_in(" + grpId + ") from dual");
+			Query query = getSession().createSQLQuery("select calc_grp_path_in(" + grpId + ") from dual");
 			List ret = query.list();
-			transaction.commit();session.close();
-			
-
 			return (ret != null && ret.get(0) != null) ? ret.get(0).toString() : "";
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
+	}
+	public static IpGroupDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (IpGroupDAO) ctx.getBean("IpGroupDAO");
 	}
 }

@@ -47,6 +47,7 @@
 				<p:column>
 					<p:commandLink id="lnkBuildonIdea" action="#{buildonController.showBuildon}">
 						<f:setPropertyActionListener value="#{randomIdeaController.userId}" target="#{buildonController.userId}" />
+						<f:setPropertyActionListener value="2" target="#{buildonController.returnView}" />
 						<f:param name="entityId" id="entityId" value="#{randomIdeaController.ideaBean.ideaId}" />
 						<f:param name="entityType" id="entityType" value="1" />
 						<f:param name="taggable" id="taggable" value="#{randomIdeaController.ideaBean.taggable}" />
@@ -76,17 +77,17 @@
 							<p:outputLabel style="float: right !important" value="#{comment.tagDate}" />
 						</f:facet>
 						<p:column>
-							<p:outputLabel value="#{comment.tagText}" />
+							<p:outputLabel value="#{comment.tagText}" escape="false"/>
 						</p:column>
 					</p:panel>
 				</p:dataGrid>
 				<p:tooltip for="dtViewComments" value="Tags disabled as idea not in open status" rendered="#{randomIdeaController.ideaBean.taggable}" />
 			</p:column>
 			<p:column rendered="#{!ideaBean.ideaBean.taggable}">
-				<p:editor id="edComment" value="#{randomIdeaController.commentText}" height="100" />
+				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="edComment" value="#{randomIdeaController.commentText}" height="100" />
 			</p:column>
 			<p:column rendered="#{!ideaBean.ideaBean.taggable}">
-				<p:commandButton id="btnSubmitComment" value="Post" update="dtViewComments" actionListener="#{randomIdeaController.commentIdea}" />
+				<p:commandButton id="btnSubmitComment" value="Post" update="dtViewComments, :frmSummaryOpenIdea:lblSumoCommentCnt" actionListener="#{randomIdeaController.commentIdea}" />
 			</p:column>
 		</p:panelGrid>
 	</p:overlayPanel>

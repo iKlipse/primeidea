@@ -1,7 +1,5 @@
 package za.co.idea.ip.orm.bean;
 
-import java.sql.Blob;
-
 /**
  * IpBlob entity. @author MyEclipse Persistence Tools
  */
@@ -10,11 +8,14 @@ public class IpBlob implements java.io.Serializable {
 
 	// Fields
 
-	private static final long serialVersionUID = 7784214388286520032L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6542507118716443541L;
 	private Long blobId;
 	private String blobName;
 	private String blobContentType;
-	private Blob blobContent;
+	private String blobContent;
 	private Long blobEntityId;
 	private String blobEntityTblNm;
 	private Long blobSize;
@@ -31,7 +32,7 @@ public class IpBlob implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpBlob(Long blobId, String blobName, String blobContentType, Blob blobContent, Long blobEntityId, String blobEntityTblNm, Long blobSize) {
+	public IpBlob(Long blobId, String blobName, String blobContentType, String blobContent, Long blobEntityId, String blobEntityTblNm, Long blobSize) {
 		this.blobId = blobId;
 		this.blobName = blobName;
 		this.blobContentType = blobContentType;
@@ -67,11 +68,11 @@ public class IpBlob implements java.io.Serializable {
 		this.blobContentType = blobContentType;
 	}
 
-	public Blob getBlobContent() {
+	public String getBlobContent() {
 		return this.blobContent;
 	}
 
-	public void setBlobContent(Blob blobContent) {
+	public void setBlobContent(String blobContent) {
 		this.blobContent = blobContent;
 	}
 
@@ -92,7 +93,7 @@ public class IpBlob implements java.io.Serializable {
 	}
 
 	public Long getBlobSize() {
-		return blobSize;
+		return this.blobSize;
 	}
 
 	public void setBlobSize(Long blobSize) {

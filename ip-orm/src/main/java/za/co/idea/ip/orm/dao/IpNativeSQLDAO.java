@@ -6,28 +6,28 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.persister.entity.AbstractEntityPersister;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 @SuppressWarnings("rawtypes")
-public class IpNativeSQLDAO extends BaseHibernateDAO {
+public class IpNativeSQLDAO extends HibernateDaoSupport {
 	public Long getNextId(Class clazz) {
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		Long ret = -1l;
 		try {
-			AbstractEntityPersister persister = (AbstractEntityPersister) getFactory().getSessionFactory().getClassMetadata(clazz);
+			AbstractEntityPersister persister = (AbstractEntityPersister) getSessionFactory().getClassMetadata(clazz);
 			String sql = "select ifnull(max(" + persister.getIdentifierColumnNames()[0] + "),0)+1 from " + persister.getTableName();
 			SQLQuery query = session.createSQLQuery(sql);
 			List res = query.list();
 			if (res != null && res.size() > 0)
 				ret = Long.valueOf(res.get(0).toString());
-			transaction.commit();session.close();
-			
+			transaction.commit();
+			session.close();
 
 		} catch (Exception e) {
 			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
+				transaction.rollback();
+			session.close();
 
 			throw new RuntimeException(e);
 		}

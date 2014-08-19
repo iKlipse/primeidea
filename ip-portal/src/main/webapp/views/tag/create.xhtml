@@ -21,7 +21,7 @@
 				<p:tooltip for="dtViewBuildOns" value="Tags disabled as Item not in open status" rendered="#{buildonController.taggable}" />
 			</p:column>
 			<p:column rendered="#{!buildonBean.taggable}">
-				<p:editor id="edBuildOn" value="#{buildonController.buildon.tagText}" />
+				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="edBuildOn" value="#{buildonController.buildon.tagText}" />
 			</p:column>
 			<p:column rendered="#{!buildonBean.taggable}">
 				<p:outputLabel id="lblProfImage" value="Attachments : " />
@@ -29,8 +29,7 @@
 			</p:column>
 			<p:column>
 				<p:commandButton id="btnSubmitBuildOn" value="Post" action="#{buildonController.createBuildOn}" ajax="false" rendered="#{!buildonBean.taggable}" />
-				<p:commandButton id="btnRedirectIdeaSummary" value="Return To Idea" action="#{ideaController.showSummaryIdea}" ajax="false" rendered="#{buildonController.entityType==1}" />
-				<p:commandButton id="btnRedirectSolutionSummary" value="Return To Solution" action="#{challengeController.showSummarySolution}" ajax="false" rendered="#{buildonController.entityType==3}" />
+				<p:commandButton id="btnRedirectSummary" value="Return To View" action="#{buildonController.redirectView}" ajax="false" />
 			</p:column>
 		</p:panelGrid>
 	</ui:define>

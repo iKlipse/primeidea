@@ -2,12 +2,12 @@ package za.co.idea.ip.orm.dao;
 
 import java.util.List;
 
+import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import za.co.idea.ip.orm.bean.IpCategory;
 
@@ -19,216 +19,138 @@ import za.co.idea.ip.orm.bean.IpCategory;
  * methods provides additional information for how to configure it for the
  * desired type of transaction control.
  * 
- * @see za.co.idea.ip.orm.dao.IpCategoryDAO
+ * @see za.co.idea.ip.orm.bean.IpCategory
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("rawtypes")
-public class IpCategoryDAO extends BaseHibernateDAO {
+@SuppressWarnings({ "rawtypes" })
+public class IpCategoryDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory.getLogger(IpCategoryDAO.class);
 	// property constants
-	public static final String CATEGORY_DESC = "categoryDesc";
+	public static final String CAT_DESC = "catDesc";
+
+	protected void initDao() {
+		// do nothing
+	}
 
 	public void save(IpCategory transientInstance) {
 		log.debug("saving IpCategory instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.save(transientInstance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public void delete(IpCategory persistentInstance) {
 		log.debug("deleting IpCategory instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.delete(persistentInstance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public IpCategory findById(java.lang.Integer id) {
 		log.debug("getting IpCategory instance with id: " + id);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			IpCategory instance = (IpCategory) session.get("za.co.idea.ip.orm.bean.IpCategory", id);
-			transaction.commit();session.close();
-			
-
+			IpCategory instance = (IpCategory) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpCategory", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findByExample(IpCategory instance) {
 		log.debug("finding IpCategory instance by example");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpCategory").add(Example.create(instance)).list();
+			List results = getHibernateTemplate().findByExample(instance);
 			log.debug("find by example successful, result size: " + results.size());
-			transaction.commit();session.close();
-			
-
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findByProperty(String propertyName, Object value) {
 		log.debug("finding IpCategory instance with property: " + propertyName + ", value: " + value);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpCategory as model where model." + propertyName + "= ?";
-			Query queryObject = session.createQuery(queryString);
-			queryObject.setParameter(0, value);
-			List results = queryObject.list();
-			transaction.commit();session.close();
-			
-
-			return results;
-
+			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
-	public List findByCcDesc(Object catDesc) {
-		return findByProperty(CATEGORY_DESC, catDesc);
+	public List findByCatDesc(Object catDesc) {
+		return findByProperty(CAT_DESC, catDesc);
 	}
 
 	public List findAll() {
 		log.debug("finding all IpCategory instances");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpCategory";
-			Query queryObject = session.createQuery(queryString);
-			List results = queryObject.list();
-			transaction.commit();session.close();
-			
-
-			return results;
-
+			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public IpCategory merge(IpCategory detachedInstance) {
 		log.debug("merging IpCategory instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			IpCategory result = (IpCategory) session.merge(detachedInstance);
+			IpCategory result = (IpCategory) getHibernateTemplate().merge(detachedInstance);
 			log.debug("merge successful");
-			transaction.commit();session.close();
-			
-
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public void attachDirty(IpCategory instance) {
 		log.debug("attaching dirty IpCategory instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.saveOrUpdate(instance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
+			throw re;
+		}
+	}
 
+	public void attachClean(IpCategory instance) {
+		log.debug("attaching clean IpCategory instance");
+		try {
+			getHibernateTemplate().lock(instance, LockMode.NONE);
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
 			throw re;
 		}
 	}
 
 	public List listDependentCat(Long catId) {
 		log.debug("checking category dependency");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			Query query = session.getNamedQuery("checkDependency");
+			Query query = getSession().getNamedQuery("checkDependency");
 			query.setLong("id", catId);
 			List ret = query.list();
-			transaction.commit();session.close();
-			
-
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("checking category", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
+	}
+
+	public static IpCategoryDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (IpCategoryDAO) ctx.getBean("IpCategoryDAO");
 	}
 }

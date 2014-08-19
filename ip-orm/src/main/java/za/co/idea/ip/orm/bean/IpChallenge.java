@@ -16,7 +16,7 @@ public class IpChallenge implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -4320312728640281892L;
+	private static final long serialVersionUID = 2769562955707363322L;
 	private Long chalId;
 	private IpChallengeStatus ipChallengeStatus;
 	private IpChallengeCat ipChallengeCat;
@@ -28,8 +28,8 @@ public class IpChallenge implements java.io.Serializable {
 	private Date chalExpiryDt;
 	private String chalTags;
 	private Date chalCrtdDt;
-	private Set ipChallengeGroups = new HashSet(0);
 	private Set ipSolutions = new HashSet(0);
+	private Set ipChallengeGroups = new HashSet(0);
 
 	// Constructors
 
@@ -51,7 +51,7 @@ public class IpChallenge implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpChallenge(Long chalId, IpChallengeStatus ipChallengeStatus, IpChallengeCat ipChallengeCat, IpUser ipUser, String chalTitle, String chalDesc, String chalHoverTxt, Date chalLaunchDt, Date chalExpiryDt, String chalTags, Date chalCrtdDt, Set ipChallengeGroups, Set ipSolutions) {
+	public IpChallenge(Long chalId, IpChallengeStatus ipChallengeStatus, IpChallengeCat ipChallengeCat, IpUser ipUser, String chalTitle, String chalDesc, String chalHoverTxt, Date chalLaunchDt, Date chalExpiryDt, String chalTags, Date chalCrtdDt, Set ipSolutions, Set ipChallengeGroups) {
 		this.chalId = chalId;
 		this.ipChallengeStatus = ipChallengeStatus;
 		this.ipChallengeCat = ipChallengeCat;
@@ -63,8 +63,8 @@ public class IpChallenge implements java.io.Serializable {
 		this.chalExpiryDt = chalExpiryDt;
 		this.chalTags = chalTags;
 		this.chalCrtdDt = chalCrtdDt;
-		this.ipChallengeGroups = ipChallengeGroups;
 		this.ipSolutions = ipSolutions;
+		this.ipChallengeGroups = ipChallengeGroups;
 	}
 
 	// Property accessors
@@ -157,20 +157,20 @@ public class IpChallenge implements java.io.Serializable {
 		this.chalCrtdDt = chalCrtdDt;
 	}
 
-	public Set getIpChallengeGroups() {
-		return this.ipChallengeGroups;
-	}
-
-	public void setIpChallengeGroups(Set ipChallengeGroups) {
-		this.ipChallengeGroups = ipChallengeGroups;
-	}
-
 	public Set getIpSolutions() {
 		return this.ipSolutions;
 	}
 
 	public void setIpSolutions(Set ipSolutions) {
 		this.ipSolutions = ipSolutions;
+	}
+
+	public Set getIpChallengeGroups() {
+		return this.ipChallengeGroups;
+	}
+
+	public void setIpChallengeGroups(Set ipChallengeGroups) {
+		this.ipChallengeGroups = ipChallengeGroups;
 	}
 
 }

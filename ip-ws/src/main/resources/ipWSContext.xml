@@ -11,6 +11,7 @@
 		<property name="ipGroupUserDAO" ref="IpGroupUserDAO" />
 		<property name="ipFuncGroupDAO" ref="IpFuncGroupDAO" />
 		<property name="ipBlobDAO" ref="IpBlobDAO" />
+		<property name="ipSecqListDAO" ref="IpSecqListDAO" />
 	</bean>
 	<bean id="ideaService" class="za.co.idea.ip.ws.IdeaService">
 		<property name="ipIdeaCatDAO" ref="IpIdeaCatDAO" />

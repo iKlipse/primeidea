@@ -11,7 +11,7 @@ public class IpNotif implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 686535022550394274L;
+	private static final long serialVersionUID = -7903303376692793911L;
 	private String notifId;
 	private Long notifEntityId;
 	private String notifEntityTblName;
@@ -89,7 +89,7 @@ public class IpNotif implements java.io.Serializable {
 	}
 
 	public String getNotifAttach() {
-		return notifAttach;
+		return this.notifAttach;
 	}
 
 	public void setNotifAttach(String notifAttach) {
@@ -113,7 +113,7 @@ public class IpNotif implements java.io.Serializable {
 	}
 
 	public String getNotifList() {
-		return notifList;
+		return this.notifList;
 	}
 
 	public void setNotifList(String notifList) {

@@ -13,7 +13,7 @@ public class IpSolution implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3744868475222553664L;
+	private static final long serialVersionUID = -1491859618781054463L;
 	private Long solId;
 	private IpSolutionStatus ipSolutionStatus;
 	private IpSolutionCat ipSolutionCat;
@@ -127,4 +127,5 @@ public class IpSolution implements java.io.Serializable {
 	public void setSolCrtdDt(Date solCrtdDt) {
 		this.solCrtdDt = solCrtdDt;
 	}
+
 }

@@ -80,6 +80,10 @@
 	</navigation-rule>
 	<navigation-rule>
 		<navigation-case>
+			<from-outcome>solc</from-outcome>
+			<to-view-id>/views/solution/container/createContainer.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>sole</from-outcome>
 			<to-view-id>/views/solution/container/editContainer.xhtml</to-view-id>
 		</navigation-case>

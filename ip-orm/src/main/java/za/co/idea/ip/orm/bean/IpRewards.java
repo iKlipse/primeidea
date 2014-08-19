@@ -16,7 +16,7 @@ public class IpRewards implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6833158177169162762L;
+	private static final long serialVersionUID = -1505845607910378840L;
 	private Long rwId;
 	private IpRewardsCat ipRewardsCat;
 	private String rwTitle;
@@ -40,7 +40,7 @@ public class IpRewards implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpRewards(Long rwId, IpRewardsCat ipRewardsCat, String rwTitle, String rwDesc, Integer rwValue, String rwStockCodeNum, Date rwLaunchDt, Date rwExpiryDt, Date rwCrtdDt, Double rwPrice, Long rwQuantity) {
+	public IpRewards(Long rwId, IpRewardsCat ipRewardsCat, String rwTitle, String rwDesc, Integer rwValue, String rwStockCodeNum, Date rwLaunchDt, Date rwExpiryDt, Date rwCrtdDt) {
 		this.rwId = rwId;
 		this.ipRewardsCat = ipRewardsCat;
 		this.rwTitle = rwTitle;
@@ -50,8 +50,6 @@ public class IpRewards implements java.io.Serializable {
 		this.rwLaunchDt = rwLaunchDt;
 		this.rwExpiryDt = rwExpiryDt;
 		this.rwCrtdDt = rwCrtdDt;
-		this.rwPrice = rwPrice;
-		this.rwQuantity = rwQuantity;
 	}
 
 	/** full constructor */
@@ -163,6 +161,22 @@ public class IpRewards implements java.io.Serializable {
 		this.rwCrtdDt = rwCrtdDt;
 	}
 
+	public Double getRwPrice() {
+		return this.rwPrice;
+	}
+
+	public void setRwPrice(Double rwPrice) {
+		this.rwPrice = rwPrice;
+	}
+
+	public Long getRwQuantity() {
+		return this.rwQuantity;
+	}
+
+	public void setRwQuantity(Long rwQuantity) {
+		this.rwQuantity = rwQuantity;
+	}
+
 	public Set getIpRewardsGroups() {
 		return this.ipRewardsGroups;
 	}
@@ -177,22 +191,6 @@ public class IpRewards implements java.io.Serializable {
 
 	public void setIpClaims(Set ipClaims) {
 		this.ipClaims = ipClaims;
-	}
-
-	public Double getRwPrice() {
-		return rwPrice;
-	}
-
-	public void setRwPrice(Double rwPrice) {
-		this.rwPrice = rwPrice;
-	}
-
-	public Long getRwQuantity() {
-		return rwQuantity;
-	}
-
-	public void setRwQuantity(Long rwQuantity) {
-		this.rwQuantity = rwQuantity;
 	}
 
 }

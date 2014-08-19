@@ -8,7 +8,8 @@
 			<column name="func_id" />
 			<generator class="assigned" />
 		</id>
-		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser" fetch="select" lazy="proxy">
+		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser"
+			fetch="select">
 			<column name="func_crtd_by" />
 		</many-to-one>
 		<property name="funcName" type="java.lang.String">
@@ -36,7 +37,10 @@
 		<return alias="func" class="za.co.idea.ip.orm.bean.IpFunction" />
 	</sql-query>
 	<sql-query name="getFunctionByUserId">
-		select func.func_name from ip_function func, ip_func_group grp, ip_group_user igu where igu.gu_usr_id=:id and igu.gu_grp_id=grp.fg_grp_id and grp.fg_func_id=func.func_id and func.func_is_core in ('y','Y')
+		select func.func_name from ip_function func, ip_func_group grp,
+		ip_group_user igu where igu.gu_usr_id=:id and
+		igu.gu_grp_id=grp.fg_grp_id and grp.fg_func_id=func.func_id and
+		func.func_is_core in ('y','Y')
 		<return-scalar column="func_name" type="java.lang.String" />
 	</sql-query>
 </hibernate-mapping>

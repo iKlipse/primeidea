@@ -28,11 +28,13 @@
 		</set>
 	</class>
 	<sql-query name="getAllocationByEntity">
-		select alloc.* from ip_allocation alloc where alloc.alloc_entity=:entity
+		select alloc.* from ip_allocation alloc where
+		alloc.alloc_entity=:entity
 		<return alias="alloc" class="za.co.idea.ip.orm.bean.IpAllocation" />
 	</sql-query>
 	<sql-query name="getUsedAllocation">
-		select alloc.* from ip_allocation alloc, ip_points pnt where alloc.alloc_entity=:entity and alloc.alloc_id=pnt.alloc_id
+		select alloc.* from ip_allocation alloc, ip_points pnt where
+		alloc.alloc_entity=:entity and alloc.alloc_id=pnt.alloc_id
 		<return alias="alloc" class="za.co.idea.ip.orm.bean.IpAllocation" />
 	</sql-query>
 </hibernate-mapping>

@@ -1,6 +1,6 @@
 package za.co.idea.ip.orm.bean;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,7 +21,7 @@ public class IpFunction implements java.io.Serializable {
 	private IpUser ipUser;
 	private String funcName;
 	private String funcIsCore;
-	private Timestamp funcCrtdDt;
+	private Date funcCrtdDt;
 	private Set ipFuncGroups = new HashSet(0);
 
 	// Constructors
@@ -38,7 +38,7 @@ public class IpFunction implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpFunction(Long funcId, IpUser ipUser, String funcName, String funcIsCore, Timestamp funcCrtdDt, Set ipFuncGroups) {
+	public IpFunction(Long funcId, IpUser ipUser, String funcName, String funcIsCore, Date funcCrtdDt, Set ipFuncGroups) {
 		this.funcId = funcId;
 		this.ipUser = ipUser;
 		this.funcName = funcName;
@@ -81,11 +81,11 @@ public class IpFunction implements java.io.Serializable {
 		this.funcIsCore = funcIsCore;
 	}
 
-	public Timestamp getFuncCrtdDt() {
+	public Date getFuncCrtdDt() {
 		return this.funcCrtdDt;
 	}
 
-	public void setFuncCrtdDt(Timestamp funcCrtdDt) {
+	public void setFuncCrtdDt(Date funcCrtdDt) {
 		this.funcCrtdDt = funcCrtdDt;
 	}
 

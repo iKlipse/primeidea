@@ -8,23 +8,26 @@
 			<column name="chal_id" />
 			<generator class="assigned" />
 		</id>
-		<many-to-one name="ipChallengeStatus" class="za.co.idea.ip.orm.bean.IpChallengeStatus" fetch="select" lazy="proxy">
+		<many-to-one name="ipChallengeStatus"
+			class="za.co.idea.ip.orm.bean.IpChallengeStatus" fetch="select">
 			<column name="chal_status" not-null="true" />
 		</many-to-one>
-		<many-to-one name="ipChallengeCat" class="za.co.idea.ip.orm.bean.IpChallengeCat" fetch="select" lazy="proxy">
+		<many-to-one name="ipChallengeCat" class="za.co.idea.ip.orm.bean.IpChallengeCat"
+			fetch="select">
 			<column name="chal_cat" not-null="true" />
 		</many-to-one>
-		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser" fetch="select" lazy="proxy">
+		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser"
+			fetch="select">
 			<column name="chal_crtd_by" not-null="true" />
 		</many-to-one>
 		<property name="chalTitle" type="java.lang.String">
 			<column name="chal_title" length="100" not-null="true" />
 		</property>
 		<property name="chalDesc" type="java.lang.String">
-			<column name="chal_desc" length="1000" not-null="true" />
+			<column name="chal_desc" length="65535" not-null="true" />
 		</property>
 		<property name="chalHoverTxt" type="java.lang.String">
-			<column name="chal_hover_txt" length="500" />
+			<column name="chal_hover_txt" length="65535" />
 		</property>
 		<property name="chalLaunchDt" type="java.sql.Timestamp">
 			<column name="chal_launch_dt" length="19" not-null="true" />
@@ -33,22 +36,22 @@
 			<column name="chal_expiry_dt" length="19" not-null="true" />
 		</property>
 		<property name="chalTags" type="java.lang.String">
-			<column name="chal_tags" length="500" />
+			<column name="chal_tags" length="65535" />
 		</property>
 		<property name="chalCrtdDt" type="java.sql.Timestamp">
 			<column name="chal_crtd_dt" length="19" not-null="true" />
 		</property>
-		<set name="ipChallengeGroups" inverse="true">
-			<key>
-				<column name="cg_chal_id" />
-			</key>
-			<one-to-many class="za.co.idea.ip.orm.bean.IpChallengeGroup" />
-		</set>
 		<set name="ipSolutions" inverse="true">
 			<key>
 				<column name="sol_chal_id" not-null="true" />
 			</key>
 			<one-to-many class="za.co.idea.ip.orm.bean.IpSolution" />
+		</set>
+		<set name="ipChallengeGroups" inverse="true">
+			<key>
+				<column name="cg_chal_id" />
+			</key>
+			<one-to-many class="za.co.idea.ip.orm.bean.IpChallengeGroup" />
 		</set>
 	</class>
 	<sql-query name="getChallengeCreatedByUser">
@@ -56,11 +59,22 @@
 		<return alias="chal" class="za.co.idea.ip.orm.bean.IpChallenge" />
 	</sql-query>
 	<sql-query name="getChallengeByUser">
-		select chal.* from ip_challenge chal where chal.chal_crtd_by=:id union select chal.* from ip_challenge chal,ip_challenge_group icg, ip_group_user igu where igu.gu_usr_id=:id and igu.gu_grp_id=icg.cg_group_id and icg.cg_chal_id=chal.chal_id union select chal.* from ip_challenge chal where chal.chal_id not in (select icg.cg_chal_id from ip_challenge_group icg)
+		select chal.* from ip_challenge chal where chal.chal_crtd_by=:id union
+		select chal.* from ip_challenge chal,ip_challenge_group icg,
+		ip_group_user igu where igu.gu_usr_id=:id and
+		igu.gu_grp_id=icg.cg_group_id and icg.cg_chal_id=chal.chal_id union
+		select chal.* from ip_challenge chal where chal.chal_id not in (select
+		icg.cg_chal_id from ip_challenge_group icg)
 		<return alias="chal" class="za.co.idea.ip.orm.bean.IpChallenge" />
 	</sql-query>
 	<sql-query name="getChallengeByStatusUser">
-		select chal.* from ip_challenge chal where chal.chal_crtd_by=:id and chal.chal_status=:sid union select chal.* from ip_challenge chal,ip_challenge_group icg, ip_group_user igu where igu.gu_usr_id=:id and igu.gu_grp_id=icg.cg_group_id and icg.cg_chal_id=chal.chal_id and chal.chal_status=:sid union select chal.* from ip_challenge chal where chal.chal_id not in (select icg.cg_chal_id from ip_challenge_group icg) and chal.chal_status=:sid
+		select chal.* from ip_challenge chal where chal.chal_crtd_by=:id and
+		chal.chal_status=:sid union select chal.* from ip_challenge
+		chal,ip_challenge_group icg, ip_group_user igu where igu.gu_usr_id=:id
+		and igu.gu_grp_id=icg.cg_group_id and icg.cg_chal_id=chal.chal_id and
+		chal.chal_status=:sid union select chal.* from ip_challenge chal where
+		chal.chal_id not in (select icg.cg_chal_id from ip_challenge_group
+		icg) and chal.chal_status=:sid
 		<return alias="chal" class="za.co.idea.ip.orm.bean.IpChallenge" />
 	</sql-query>
 	<sql-query name="getChallengeByStatus">
@@ -68,9 +82,14 @@
 		<return alias="chal" class="za.co.idea.ip.orm.bean.IpChallenge" />
 	</sql-query>
 	<sql-query name="updateStatusOnExpiry">
-		update ip_challenge set chal_status=7 where current_timestamp > chal_expiry_dt
+		update ip_challenge set chal_status=7 where
+		current_timestamp > chal_expiry_dt
 	</sql-query>
 	<sql-query name="getReviewChallengesByUser">
-		select chal.* from ip_challenge chal where chal.chal_status=2 and chal_id in (SELECT cg_chal_id FROM lpdb.ip_challenge_group where cg_group_id in (SELECT gu_grp_id FROM lpdb.ip_group_user where gu_usr_id=:id and gu_grp_id in (SELECT fg_grp_id FROM lpdb.ip_func_group where fg_func_id=8)))
+		select chal.* from ip_challenge chal where
+		chal.chal_status=2 and chal_id in (SELECT cg_chal_id FROM
+		lpdb.ip_challenge_group where cg_group_id in (SELECT gu_grp_id FROM
+		lpdb.ip_group_user where gu_usr_id=:id and gu_grp_id in (SELECT
+		fg_grp_id FROM lpdb.ip_func_group where fg_func_id=8)))
 	</sql-query>
 </hibernate-mapping>

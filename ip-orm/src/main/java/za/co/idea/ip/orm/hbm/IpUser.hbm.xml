@@ -8,7 +8,8 @@
 			<column name="user_id" />
 			<generator class="assigned" />
 		</id>
-		<many-to-one name="ipGroup" class="za.co.idea.ip.orm.bean.IpGroup" fetch="select" lazy="proxy">
+		<many-to-one name="ipGroup" class="za.co.idea.ip.orm.bean.IpGroup"
+			fetch="select">
 			<column name="pri_grp_id" />
 		</many-to-one>
 		<property name="userFName" type="java.lang.String">
@@ -24,7 +25,8 @@
 			<column name="user_id_num" />
 		</property>
 		<property name="userScreenName" type="java.lang.String">
-			<column name="user_screen_name" length="50" not-null="true" unique="true" />
+			<column name="user_screen_name" length="50" not-null="true"
+				unique="true" />
 		</property>
 		<property name="userEmail" type="java.lang.String">
 			<column name="user_email" length="65535" />
@@ -112,26 +114,32 @@
 		</set>
 	</class>
 	<sql-query name="updateImage">
-		update ip_user set user_avatar=:avatar where user_id=:id
+		update ip_user set user_avatar=:avatar where
+		user_id=:id
 	</sql-query>
 	<sql-query name="sortListByPrimaryGrp">
-		select iu.* from ip_user iu, ip_group ig where iu.pri_grp_id=ig.group_id order by ig.group_name
+		select iu.* from ip_user iu, ip_group ig where
+		iu.pri_grp_id=ig.group_id order by ig.group_name
 		<return alias="iu" class="za.co.idea.ip.orm.bean.IpUser" />
 	</sql-query>
 	<sql-query name="getSolCountByUserId">
-		select count(*) as solCount from ip_solution sol where sol.sol_crtd_by=:id
+		select count(*) as solCount from ip_solution sol where
+		sol.sol_crtd_by=:id
 		<return-scalar column="solCount" type="java.lang.Long" />
 	</sql-query>
 	<sql-query name="getChalCountByUserId">
-		select count(*) as chalCount from ip_challenge chal where chal.chal_crtd_by=:id
+		select count(*) as chalCount from ip_challenge chal where
+		chal.chal_crtd_by=:id
 		<return-scalar column="chalCount" type="java.lang.Long" />
 	</sql-query>
 	<sql-query name="getIdeasCountByUserId">
-		select count(*) as ideaCount from ip_idea idea where idea.idea_user_id=:id
+		select count(*) as ideaCount from ip_idea idea where
+		idea.idea_user_id=:id
 		<return-scalar column="ideaCount" type="java.lang.Long" />
 	</sql-query>
 	<sql-query name="getWhishListCountByUserId">
-		select count(*) as whishListCount from ip_tag t where t.tag_user_id=:id and t.tag_entity_type=4 and t.tag_type=4
+		select count(*) as whishListCount from ip_tag t where
+		t.tag_user_id=:id and t.tag_entity_type=4 and t.tag_type=4
 		<return-scalar column="whishListCount" type="java.lang.Long" />
 	</sql-query>
 </hibernate-mapping>

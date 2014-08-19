@@ -2,12 +2,11 @@ package za.co.idea.ip.orm.dao;
 
 import java.util.List;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Example;
+import org.hibernate.LockMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import za.co.idea.ip.orm.bean.IpSecqList;
 
@@ -22,117 +21,68 @@ import za.co.idea.ip.orm.bean.IpSecqList;
  * @see za.co.idea.ip.orm.bean.IpSecqList
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("rawtypes")
-public class IpSecqListDAO extends BaseHibernateDAO {
+@SuppressWarnings({ "rawtypes" })
+public class IpSecqListDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory.getLogger(IpSecqListDAO.class);
 	// property constants
 	public static final String ISL_DESC = "islDesc";
 
+	protected void initDao() {
+		// do nothing
+	}
+
 	public void save(IpSecqList transientInstance) {
 		log.debug("saving IpSecqList instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.save(transientInstance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public void delete(IpSecqList persistentInstance) {
 		log.debug("deleting IpSecqList instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.delete(persistentInstance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public IpSecqList findById(java.lang.Integer id) {
 		log.debug("getting IpSecqList instance with id: " + id);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			IpSecqList instance = (IpSecqList) session.get("za.co.idea.ip.orm.bean.IpSecqList", id);
-			transaction.commit();session.close();
-			
-
+			IpSecqList instance = (IpSecqList) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpSecqList", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findByExample(IpSecqList instance) {
 		log.debug("finding IpSecqList instance by example");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpSecqList").add(Example.create(instance)).list();
+			List results = getHibernateTemplate().findByExample(instance);
 			log.debug("find by example successful, result size: " + results.size());
-			transaction.commit();session.close();
-			
-
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findByProperty(String propertyName, Object value) {
 		log.debug("finding IpSecqList instance with property: " + propertyName + ", value: " + value);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpSecqList as model where model." + propertyName + "= ?";
-			Query queryObject = session.createQuery(queryString);
-			queryObject.setParameter(0, value);
-			List results = queryObject.list();
-			transaction.commit();session.close();
-			
-
-			return results;
+			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
@@ -143,66 +93,50 @@ public class IpSecqListDAO extends BaseHibernateDAO {
 
 	public List findAll() {
 		log.debug("finding all IpSecqList instances");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			String queryString = "from IpSecqList isl order by isl.islDesc asc";
-			Query queryObject = session.createQuery(queryString);
-			List results = queryObject.list();
-			transaction.commit();session.close();
-			
-			return results;
+			String queryString = "from IpSecqList";
+			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public IpSecqList merge(IpSecqList detachedInstance) {
 		log.debug("merging IpSecqList instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			IpSecqList result = (IpSecqList) session.merge(detachedInstance);
-			transaction.commit();session.close();
-			
-
+			IpSecqList result = (IpSecqList) getHibernateTemplate().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public void attachDirty(IpSecqList instance) {
 		log.debug("attaching dirty IpSecqList instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.saveOrUpdate(instance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
+	}
+
+	public void attachClean(IpSecqList instance) {
+		log.debug("attaching clean IpSecqList instance");
+		try {
+			getHibernateTemplate().lock(instance, LockMode.NONE);
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	public static IpSecqListDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (IpSecqListDAO) ctx.getBean("IpSecqListDAO");
 	}
 }

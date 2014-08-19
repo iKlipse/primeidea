@@ -117,8 +117,8 @@ public class MetaDataService {
 			}
 		} else if (mData.getTable().equalsIgnoreCase("IpCategory")) {
 			IpCategory cat = new IpCategory();
-			cat.setCategoryDesc(mData.getDesc());
-			cat.setCategoryId(mData.getId());
+			cat.setCatDesc(mData.getDesc());
+			cat.setCatId(mData.getId());
 			try {
 				ipCategoryDAO.save(cat);
 				success = true;
@@ -210,8 +210,8 @@ public class MetaDataService {
 			}
 		} else if (mData.getTable().equalsIgnoreCase("IpCategory")) {
 			IpCategory cat = new IpCategory();
-			cat.setCategoryDesc(mData.getDesc());
-			cat.setCategoryId(mData.getId());
+			cat.setCatDesc(mData.getDesc());
+			cat.setCatId(mData.getId());
 			try {
 				ipCategoryDAO.merge(cat);
 				success = true;
@@ -314,8 +314,8 @@ public class MetaDataService {
 				msg = "Entities Dependant on Category";
 			} else {
 				IpCategory cat = new IpCategory();
-				cat.setCategoryDesc(mData.getDesc());
-				cat.setCategoryId(mData.getId());
+				cat.setCatDesc(mData.getDesc());
+				cat.setCatId(mData.getId());
 				try {
 					ipCategoryDAO.delete(cat);
 					success = true;
@@ -443,8 +443,8 @@ public class MetaDataService {
 				for (Object object : vals) {
 					MetaDataMessage message = new MetaDataMessage();
 					IpCategory cat = (IpCategory) object;
-					message.setDesc(cat.getCategoryDesc());
-					message.setId(cat.getCategoryId());
+					message.setDesc(cat.getCatDesc());
+					message.setId(cat.getCatId());
 					message.setTable("ip_category");
 					ret.add((T) message);
 				}

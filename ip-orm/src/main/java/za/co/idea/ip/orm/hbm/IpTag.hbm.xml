@@ -8,31 +8,37 @@
 			<column name="tag_id" />
 			<generator class="assigned" />
 		</id>
-		<many-to-one class="za.co.idea.ip.orm.bean.IpUser" fetch="select" name="ipUser">
+		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser"
+			fetch="select">
 			<column name="tag_user_id" />
 		</many-to-one>
-		<many-to-one class="za.co.idea.ip.orm.bean.IpTagEntityType" fetch="select" name="ipTagEntityType">
+		<many-to-one name="ipTagEntityType" class="za.co.idea.ip.orm.bean.IpTagEntityType"
+			fetch="select">
 			<column name="tag_entity_type" />
 		</many-to-one>
-		<many-to-one class="za.co.idea.ip.orm.bean.IpTagType" fetch="select" name="ipTagType">
+		<many-to-one name="ipTagType" class="za.co.idea.ip.orm.bean.IpTagType"
+			fetch="select">
 			<column name="tag_type" />
 		</many-to-one>
-		<property generated="never" lazy="false" name="tagEntityId" type="java.lang.Long">
+		<property name="tagEntityId" type="java.lang.Long">
 			<column name="tag_entity_id" />
 		</property>
-		<property generated="never" lazy="false" name="tagText" type="java.lang.String">
-			<column length="1000" name="tag_text" />
+		<property name="tagText" type="java.lang.String">
+			<column name="tag_text" length="65535" />
 		</property>
-		<property generated="never" lazy="false" name="tagDate" type="java.sql.Timestamp">
-			<column length="19" name="tag_date" />
+		<property name="tagDate" type="java.sql.Timestamp">
+			<column name="tag_date" length="19" />
 		</property>
 	</class>
 	<sql-query name="getTagByFilterA">
-		select tag.* from ip_tag tag where tag.tag_type=:ttId and tag.tag_entity_type=:teId and tag.tag_entity_id=:entityId
+		select tag.* from ip_tag tag where tag.tag_type=:ttId and
+		tag.tag_entity_type=:teId and tag.tag_entity_id=:entityId
 		<return alias="tag" class="za.co.idea.ip.orm.bean.IpTag" />
 	</sql-query>
 	<sql-query name="getTagByFilterB">
-		select tag.* from ip_tag tag where tag.tag_type=:ttId and tag.tag_entity_type=:teId and tag.tag_entity_id=:entityId and tag.tag_user_id=:userId
+		select tag.* from ip_tag tag where tag.tag_type=:ttId and
+		tag.tag_entity_type=:teId and tag.tag_entity_id=:entityId and
+		tag.tag_user_id=:userId
 		<return alias="tag" class="za.co.idea.ip.orm.bean.IpTag" />
 	</sql-query>
 </hibernate-mapping>

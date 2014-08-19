@@ -146,10 +146,10 @@
  <PROCESS-ITEM NAME="rules::3" SHAPE="32,2081,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules::3" NAME="item" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT
-    ID="sole::#views#solution#container#editContainer.xhtml"
-    NAME="output" PATH="/views/solution/container/editContainer.xhtml"
-    TARGET="rules:#views#solution#container#editContainer.xhtml"
-    TITLE="sole" model-entity="JSFProcessItemOutput"/>
+    ID="solc::#views#solution#container#createContainer.xhtml"
+    NAME="output" PATH="/views/solution/container/createContainer.xhtml"
+    TARGET="rules:#views#solution#container#createContainer.xhtml"
+    TITLE="solc" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="soleo::#views#solution#container#editOpenContainer.xhtml"
     NAME="output1"
@@ -396,4 +396,8 @@
   SHAPE="304,2465,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#views#rewards#view.xhtml"
   PATH="/views/rewards/view.xhtml" SHAPE="256,353,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#views#solution#container#createContainer.xhtml"
+  PATH="/views/solution/container/createContainer.xhtml"
+  SHAPE="304,3857,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

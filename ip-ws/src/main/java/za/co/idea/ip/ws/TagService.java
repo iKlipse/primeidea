@@ -1,6 +1,6 @@
 package za.co.idea.ip.ws;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,7 +112,7 @@ public class TagService {
 				ipTag.setTagEntityId(tag.getEntityId());
 				ipTag.setTagId(tag.getTagId());
 				ipTag.setTagText(tag.getTagText());
-				ipTag.setTagDate(new Timestamp(System.currentTimeMillis()));
+				ipTag.setTagDate(new Date(System.currentTimeMillis()));
 				ipTagDAO.save(ipTag);
 				ResponseMessage message = new ResponseMessage();
 				message.setStatusCode(0);

@@ -13,14 +13,14 @@ public class IpClaim implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4079307383770566338L;
+	private static final long serialVersionUID = -1958395720465147276L;
 	private Long claimId;
 	private IpUser ipUser;
 	private IpClaimStatus ipClaimStatus;
 	private IpRewards ipRewards;
 	private String claimDesc;
-	private String claimComment;
 	private Date claimCrtdDt;
+	private String claimComment;
 
 	// Constructors
 
@@ -34,14 +34,14 @@ public class IpClaim implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpClaim(Long claimId, IpUser ipUser, IpClaimStatus ipClaimStatus, IpRewards ipRewards, String claimDesc, String claimComment, Date claimCrtdDt) {
+	public IpClaim(Long claimId, IpUser ipUser, IpClaimStatus ipClaimStatus, IpRewards ipRewards, String claimDesc, Date claimCrtdDt, String claimComment) {
 		this.claimId = claimId;
 		this.ipUser = ipUser;
 		this.ipClaimStatus = ipClaimStatus;
 		this.ipRewards = ipRewards;
 		this.claimDesc = claimDesc;
-		this.claimComment = claimComment;
 		this.claimCrtdDt = claimCrtdDt;
+		this.claimComment = claimComment;
 	}
 
 	// Property accessors
@@ -95,7 +95,7 @@ public class IpClaim implements java.io.Serializable {
 	}
 
 	public String getClaimComment() {
-		return claimComment;
+		return this.claimComment;
 	}
 
 	public void setClaimComment(String claimComment) {

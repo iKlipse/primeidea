@@ -107,14 +107,6 @@ public class RandomIdeaController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
-			viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(2, userId);
-			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
-			admUsers = RESTServiceHelper.fetchAllUsers();
-			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
-			showViewOpenIdea = false;
-			showViewIdea = true;
-			showCrtIdea = false;
-			showViewReviewIdea = false;
 			if (toView != null && Integer.valueOf(toView) != -1) {
 				switch (Integer.valueOf(toView)) {
 				case 1:
@@ -150,6 +142,15 @@ public class RandomIdeaController implements Serializable {
 					showViewReviewIdea = true;
 					break;
 				}
+			} else {
+				viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(2, userId);
+				ideaCats = RESTServiceHelper.fetchAllIdeaCat();
+				admUsers = RESTServiceHelper.fetchAllUsers();
+				ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
+				showViewOpenIdea = false;
+				showViewIdea = true;
+				showCrtIdea = false;
+				showViewReviewIdea = false;
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -557,6 +558,7 @@ public class RandomIdeaController implements Serializable {
 
 	public void showCommentIdea() {
 		comments = fetchAllComments();
+		commentText = "";
 		showIdeaComments = true;
 		showIdeaLikes = false;
 		showIdeaBuildOns = false;
@@ -841,9 +843,11 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	protected Long[] toLongArray(String[] val) {
+		logger.info("Input Count :: " + val.length);
 		Long[] ret = new Long[val.length];
 		for (int i = 0; i < val.length; i++)
 			ret[i] = Long.valueOf(val[i]);
+		logger.info("Output Count :: " + ret.length);
 		return ret;
 	}
 

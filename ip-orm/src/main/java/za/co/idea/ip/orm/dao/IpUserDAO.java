@@ -2,12 +2,12 @@ package za.co.idea.ip.orm.dao;
 
 import java.util.List;
 
+import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import za.co.idea.ip.orm.bean.IpUser;
 
@@ -22,8 +22,8 @@ import za.co.idea.ip.orm.bean.IpUser;
  * @see za.co.idea.ip.orm.bean.IpUser
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("rawtypes")
-public class IpUserDAO extends BaseHibernateDAO {
+@SuppressWarnings({ "rawtypes" })
+public class IpUserDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory.getLogger(IpUserDAO.class);
 	// property constants
 	public static final String USER_FNAME = "userFName";
@@ -38,113 +38,64 @@ public class IpUserDAO extends BaseHibernateDAO {
 	public static final String USER_FB_HANDLE = "userFbHandle";
 	public static final String USER_TW_HANDLE = "userTwHandle";
 	public static final String USER_STATUS = "userStatus";
-	public static final String USER_EMPLOYEEID = "userEmployeeId";
+	public static final String USER_EMPLOYEE_ID = "userEmployeeId";
+
+	protected void initDao() {
+		// do nothing
+	}
 
 	public void save(IpUser transientInstance) {
 		log.debug("saving IpUser instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.save(transientInstance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public void delete(IpUser persistentInstance) {
 		log.debug("deleting IpUser instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.delete(persistentInstance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public IpUser findById(java.lang.Long id) {
 		log.debug("getting IpUser instance with id: " + id);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			IpUser instance = (IpUser) session.get("za.co.idea.ip.orm.bean.IpUser", id);
-			transaction.commit();session.close();
-			
-
+			IpUser instance = (IpUser) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpUser", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findByExample(IpUser instance) {
 		log.debug("finding IpUser instance by example");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpUser").add(Example.create(instance)).list();
+			List results = getHibernateTemplate().findByExample(instance);
 			log.debug("find by example successful, result size: " + results.size());
-			transaction.commit();session.close();
-			
-
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findByProperty(String propertyName, Object value) {
 		log.debug("finding IpUser instance with property: " + propertyName + ", value: " + value);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpUser as model where model." + propertyName + "= ?";
-			Query queryObject = session.createQuery(queryString);
-			queryObject.setParameter(0, value);
-			List results = queryObject.list();
-			transaction.commit();session.close();
-			
-
-			return results;
+			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
@@ -198,80 +149,58 @@ public class IpUserDAO extends BaseHibernateDAO {
 	}
 
 	public List findByUserEmployeeId(Object userEmployeeId) {
-		return findByProperty(USER_EMPLOYEEID, userEmployeeId);
+		return findByProperty(USER_EMPLOYEE_ID, userEmployeeId);
 	}
 
 	public List findAll() {
 		log.debug("finding all IpUser instances");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpUser";
-			Query queryObject = session.createQuery(queryString);
-			List results = queryObject.list();
-			transaction.commit();session.close();
-			
-
-			return results;
+			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public IpUser merge(IpUser detachedInstance) {
 		log.debug("merging IpUser instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			IpUser result = (IpUser) session.merge(detachedInstance);
+			IpUser result = (IpUser) getHibernateTemplate().merge(detachedInstance);
 			log.debug("merge successful");
-			transaction.commit();session.close();
-			
-
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public void attachDirty(IpUser instance) {
 		log.debug("attaching dirty IpUser instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.saveOrUpdate(instance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
+			throw re;
+		}
+	}
 
+	public void attachClean(IpUser instance) {
+		log.debug("attaching clean IpUser instance");
+		try {
+			getHibernateTemplate().lock(instance, LockMode.NONE);
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
 			throw re;
 		}
 	}
 
 	public List fetchSortByPrimaryGroup() {
 		log.debug("Fetching User by Query :: sortListByPrimaryGrp");
-		Session session = getSession();
 		try {
-			Query query = session.getNamedQuery("sortListByPrimaryGrp");
+			Query query = getSession().getNamedQuery("sortListByPrimaryGrp");
 			List ret = query.list();
 
 			return ret;
@@ -284,9 +213,8 @@ public class IpUserDAO extends BaseHibernateDAO {
 	public Long findSolutionCount(Long userId) {
 		Long solCount = 0l;
 		log.debug("Fetching Solution coutn for user by Query :: getSolCountByUserId");
-		Session session = getSession();
 		try {
-			Query query = session.getNamedQuery("getSolCountByUserId");
+			Query query = getSession().getNamedQuery("getSolCountByUserId");
 			query.setLong("id", userId);
 			List sol = query.list();
 			if (sol != null && sol.size() > 0)
@@ -300,9 +228,8 @@ public class IpUserDAO extends BaseHibernateDAO {
 	public Long findChallengeCount(Long userId) {
 		Long chalCount = 0l;
 		log.debug("Fetching Challenge count for user by Query :: getChalCountByUserId");
-		Session session = getSession();
 		try {
-			Query query = session.getNamedQuery("getChalCountByUserId");
+			Query query = getSession().getNamedQuery("getChalCountByUserId");
 			query.setLong("id", userId);
 			List chal = query.list();
 			if (chal != null && chal.size() > 0)
@@ -316,9 +243,8 @@ public class IpUserDAO extends BaseHibernateDAO {
 	public Long findIdeasCount(Long userId) {
 		Long ideaCount = 0l;
 		log.debug("Fetching Ideas count for user by Query :: getIdeasCountByUserId");
-		Session session = getSession();
 		try {
-			Query query = session.getNamedQuery("getIdeasCountByUserId");
+			Query query = getSession().getNamedQuery("getIdeasCountByUserId");
 			query.setLong("id", userId);
 			List idea = query.list();
 			if (idea != null && idea.size() > 0)
@@ -332,9 +258,8 @@ public class IpUserDAO extends BaseHibernateDAO {
 	public Long findWhishlistCount(Long userId) {
 		Long whishListCount = 0l;
 		log.debug("Fetching WhishList count for user by Query :: getWhishListCountByUserId");
-		Session session = getSession();
 		try {
-			Query query = session.getNamedQuery("getWhishListCountByUserId");
+			Query query = getSession().getNamedQuery("getWhishListCountByUserId");
 			query.setLong("id", userId);
 			List whishList = query.list();
 			if (whishList != null && whishList.size() > 0)
@@ -343,5 +268,9 @@ public class IpUserDAO extends BaseHibernateDAO {
 			log.error("attach failed", re);
 		}
 		return whishListCount;
+	}
+
+	public static IpUserDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (IpUserDAO) ctx.getBean("IpUserDAO");
 	}
 }

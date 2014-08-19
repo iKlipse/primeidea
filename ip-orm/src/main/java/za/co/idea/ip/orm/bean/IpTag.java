@@ -1,6 +1,6 @@
 package za.co.idea.ip.orm.bean;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * IpTag entity. @author MyEclipse Persistence Tools
@@ -13,14 +13,14 @@ public class IpTag implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 7062420850700464640L;
+	private static final long serialVersionUID = 4145821326117322916L;
 	private Long tagId;
 	private IpUser ipUser;
 	private IpTagEntityType ipTagEntityType;
 	private IpTagType ipTagType;
 	private Long tagEntityId;
 	private String tagText;
-	private Timestamp tagDate;
+	private Date tagDate;
 
 	// Constructors
 
@@ -29,15 +29,12 @@ public class IpTag implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpTag(Long tagId, IpTagEntityType ipTagEntityType, IpTagType ipTagType, Long tagEntityId) {
+	public IpTag(Long tagId) {
 		this.tagId = tagId;
-		this.ipTagEntityType = ipTagEntityType;
-		this.ipTagType = ipTagType;
-		this.tagEntityId = tagEntityId;
 	}
 
 	/** full constructor */
-	public IpTag(Long tagId, IpUser ipUser, IpTagEntityType ipTagEntityType, IpTagType ipTagType, Long tagEntityId, String tagText, Timestamp tagDate) {
+	public IpTag(Long tagId, IpUser ipUser, IpTagEntityType ipTagEntityType, IpTagType ipTagType, Long tagEntityId, String tagText, Date tagDate) {
 		this.tagId = tagId;
 		this.ipUser = ipUser;
 		this.ipTagEntityType = ipTagEntityType;
@@ -97,11 +94,11 @@ public class IpTag implements java.io.Serializable {
 		this.tagText = tagText;
 	}
 
-	public Timestamp getTagDate() {
-		return tagDate;
+	public Date getTagDate() {
+		return this.tagDate;
 	}
 
-	public void setTagDate(Timestamp tagDate) {
+	public void setTagDate(Date tagDate) {
 		this.tagDate = tagDate;
 	}
 

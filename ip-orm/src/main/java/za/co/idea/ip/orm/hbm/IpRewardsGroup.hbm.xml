@@ -8,15 +8,18 @@
 			<column name="rg_id" />
 			<generator class="assigned" />
 		</id>
-		<many-to-one name="ipRewards" class="za.co.idea.ip.orm.bean.IpRewards" fetch="select" lazy="proxy">
+		<many-to-one name="ipRewards" class="za.co.idea.ip.orm.bean.IpRewards"
+			fetch="select">
 			<column name="rg_rewards_id" />
 		</many-to-one>
-		<many-to-one name="ipGroup" class="za.co.idea.ip.orm.bean.IpGroup" fetch="select" lazy="proxy">
+		<many-to-one name="ipGroup" class="za.co.idea.ip.orm.bean.IpGroup"
+			fetch="select">
 			<column name="rg_group_id" />
 		</many-to-one>
 	</class>
 	<sql-query name="deleteRGByRwId">
-		delete from ip_rewards_group where rg_rewards_id=:id
+		delete from ip_rewards_group where
+		rg_rewards_id=:id
 	</sql-query>
 	<sql-query name="fetchRGByRwId">
 		select fg.* from ip_rewards_group fg where fg.rg_rewards_id=:id

@@ -1,11 +1,14 @@
 package za.co.idea.ip.orm.bean;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * IpIdea entity. @author MyEclipse Persistence Tools
  */
 
+@SuppressWarnings("rawtypes")
 public class IpIdea implements java.io.Serializable {
 
 	// Fields
@@ -13,7 +16,7 @@ public class IpIdea implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -7253727646617779214L;
+	private static final long serialVersionUID = 7941230595289352567L;
 	private Long ideaId;
 	private IpIdeaStatus ipIdeaStatus;
 	private IpUser ipUser;
@@ -23,6 +26,7 @@ public class IpIdea implements java.io.Serializable {
 	private String ideaBa;
 	private Date ideaDate;
 	private String ideaTag;
+	private Set ipIdeaGroups = new HashSet(0);
 
 	// Constructors
 
@@ -30,8 +34,19 @@ public class IpIdea implements java.io.Serializable {
 	public IpIdea() {
 	}
 
+	/** minimal constructor */
+	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, String ideaTitle, String ideaDesc, Date ideaDate, String ideaTag) {
+		this.ideaId = ideaId;
+		this.ipIdeaStatus = ipIdeaStatus;
+		this.ipUser = ipUser;
+		this.ideaTitle = ideaTitle;
+		this.ideaDesc = ideaDesc;
+		this.ideaDate = ideaDate;
+		this.ideaTag = ideaTag;
+	}
+
 	/** full constructor */
-	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc, String ideaBa, Date ideaDate, String ideaTag) {
+	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc, String ideaBa, Date ideaDate, String ideaTag, Set ipIdeaGroups) {
 		this.ideaId = ideaId;
 		this.ipIdeaStatus = ipIdeaStatus;
 		this.ipUser = ipUser;
@@ -41,6 +56,7 @@ public class IpIdea implements java.io.Serializable {
 		this.ideaBa = ideaBa;
 		this.ideaDate = ideaDate;
 		this.ideaTag = ideaTag;
+		this.ipIdeaGroups = ipIdeaGroups;
 	}
 
 	// Property accessors
@@ -115,6 +131,14 @@ public class IpIdea implements java.io.Serializable {
 
 	public void setIdeaTag(String ideaTag) {
 		this.ideaTag = ideaTag;
+	}
+
+	public Set getIpIdeaGroups() {
+		return this.ipIdeaGroups;
+	}
+
+	public void setIpIdeaGroups(Set ipIdeaGroups) {
+		this.ipIdeaGroups = ipIdeaGroups;
 	}
 
 }

@@ -11,6 +11,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.apache.log4j.Logger;
+
 import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.bean.IpIdea;
 import za.co.idea.ip.orm.bean.IpIdeaCat;
@@ -31,6 +33,7 @@ import za.co.idea.ip.ws.bean.ResponseMessage;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Path(value = "/is")
 public class IdeaService {
+	private static final Logger logger = Logger.getLogger(IdeaService.class);
 	private IpIdeaDAO ipIdeaDAO;
 	private IpIdeaCatDAO ipIdeaCatDAO;
 	private IpIdeaStatusDAO ipIdeaStatusDAO;
@@ -168,13 +171,14 @@ public class IdeaService {
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
 			if (idea.getGroupIdList() != null && idea.getGroupIdList().length > 0)
-				for (Long gId : idea.getGroupIdList()) {
-					IpIdeaGroup ipIdeaGroup = new IpIdeaGroup();
-					ipIdeaGroup.setIgId(ipNativeSQLDAO.getNextId(IpIdeaGroup.class));
-					ipIdeaGroup.setIpIdea(ipIdea);
-					ipIdeaGroup.setIpGroup(ipGroupDAO.findById(gId));
-					ipIdeaGroupDAO.save(ipIdeaGroup);
-				}
+				logger.info("Received Groups :: " + idea.getGroupIdList().length);
+			for (Long gId : idea.getGroupIdList()) {
+				IpIdeaGroup ipIdeaGroup = new IpIdeaGroup();
+				ipIdeaGroup.setIgId(ipNativeSQLDAO.getNextId(IpIdeaGroup.class));
+				ipIdeaGroup.setIpIdea(ipIdea);
+				ipIdeaGroup.setIpGroup(ipGroupDAO.findById(gId));
+				ipIdeaGroupDAO.save(ipIdeaGroup);
+			}
 			return message;
 		} catch (Exception e) {
 			e.printStackTrace();

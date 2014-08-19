@@ -8,10 +8,12 @@
 			<column name="point_id" />
 			<generator class="assigned" />
 		</id>
-		<many-to-one name="ipAllocation" class="za.co.idea.ip.orm.bean.IpAllocation" fetch="select" lazy="proxy">
+		<many-to-one name="ipAllocation" class="za.co.idea.ip.orm.bean.IpAllocation"
+			fetch="select">
 			<column name="alloc_id" />
 		</many-to-one>
-		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser" fetch="select" lazy="proxy">
+		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser"
+			fetch="select">
 			<column name="user_id" />
 		</many-to-one>
 		<property name="pointValue" type="java.lang.Integer">
@@ -21,7 +23,7 @@
 			<column name="comments" length="450" />
 		</property>
 		<property name="entityId" type="java.lang.Long">
-			<column name="entity_id"/>
+			<column name="entity_id" />
 		</property>
 	</class>
 	<sql-query name="getPointsByUser">

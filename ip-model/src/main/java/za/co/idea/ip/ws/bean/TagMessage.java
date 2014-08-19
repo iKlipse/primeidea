@@ -1,6 +1,6 @@
 package za.co.idea.ip.ws.bean;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -14,7 +14,7 @@ public class TagMessage {
 	private Long entityId;
 	private Long userId;
 	private Long tagId;
-	private Timestamp tagDate;
+	private Date tagDate;
 	private boolean duplicate;
 
 	public String getUsrScreenName() {
@@ -89,11 +89,11 @@ public class TagMessage {
 		this.duplicate = duplicate;
 	}
 
-	public Timestamp getTagDate() {
+	public Date getTagDate() {
 		return tagDate;
 	}
 
-	public void setTagDate(Timestamp tagDate) {
+	public void setTagDate(Date tagDate) {
 		this.tagDate = tagDate;
 	}
 }

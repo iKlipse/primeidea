@@ -66,16 +66,16 @@
 							<p:outputLabel style="float: right !important" value="#{comment.tagDate}" />
 						</f:facet>
 						<p:column>
-							<p:outputLabel value="#{comment.tagText}" />
+							<p:outputLabel value="#{comment.tagText}" escape="false"/>
 						</p:column>
 					</p:panel>
 				</p:dataGrid>
 			</p:column>
 			<p:column>
-				<p:editor id="edSumrComment" value="#{challengeController.commentText}"  />
+				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="edSumrComment" value="#{challengeController.commentText}"  />
 			</p:column>
 			<p:column>
-				<p:commandButton id="btnSumrSubmitComment" value="Post" actionListener="#{challengeController.commentChallenge}" update="dtSumrViewComments" />
+				<p:commandButton id="btnSumrSubmitComment" value="Post" actionListener="#{challengeController.commentChallenge}" update="dtSumrViewComments, :frmSummaryReviewChal:lblCommentCnt" />
 			</p:column>
 		</p:panelGrid>
 	</p:overlayPanel>

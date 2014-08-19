@@ -2,12 +2,12 @@ package za.co.idea.ip.orm.dao;
 
 import java.util.List;
 
+import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import za.co.idea.ip.orm.bean.IpBlob;
 
@@ -22,8 +22,8 @@ import za.co.idea.ip.orm.bean.IpBlob;
  * @see za.co.idea.ip.orm.bean.IpBlob
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("rawtypes")
-public class IpBlobDAO extends BaseHibernateDAO {
+@SuppressWarnings({ "rawtypes" })
+public class IpBlobDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory.getLogger(IpBlobDAO.class);
 	// property constants
 	public static final String BLOB_NAME = "blobName";
@@ -33,111 +33,62 @@ public class IpBlobDAO extends BaseHibernateDAO {
 	public static final String BLOB_ENTITY_TBL_NM = "blobEntityTblNm";
 	public static final String BLOB_SIZE = "blobSize";
 
+	protected void initDao() {
+		// do nothing
+	}
+
 	public void save(IpBlob transientInstance) {
 		log.debug("saving IpBlob instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.save(transientInstance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public void delete(IpBlob persistentInstance) {
 		log.debug("deleting IpBlob instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.delete(persistentInstance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public IpBlob findById(java.lang.Long id) {
 		log.debug("getting IpBlob instance with id: " + id);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			IpBlob instance = (IpBlob) session.get("za.co.idea.ip.orm.bean.IpBlob", id);
-			transaction.commit();session.close();
-			
-
+			IpBlob instance = (IpBlob) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpBlob", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findByExample(IpBlob instance) {
 		log.debug("finding IpBlob instance by example");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpBlob").add(Example.create(instance)).list();
-			transaction.commit();session.close();
-			
-
+			List results = getHibernateTemplate().findByExample(instance);
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findByProperty(String propertyName, Object value) {
 		log.debug("finding IpBlob instance with property: " + propertyName + ", value: " + value);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpBlob as model where model." + propertyName + "= ?";
-			Query queryObject = session.createQuery(queryString);
-			queryObject.setParameter(0, value);
-			List results = queryObject.list();
-			transaction.commit();session.close();
-			
-
-			return results;
+			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
@@ -168,121 +119,84 @@ public class IpBlobDAO extends BaseHibernateDAO {
 
 	public List findAll() {
 		log.debug("finding all IpBlob instances");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpBlob";
-			Query queryObject = session.createQuery(queryString);
-			List results = queryObject.list();
-			transaction.commit();session.close();
-			
-
-			return results;
+			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public IpBlob merge(IpBlob detachedInstance) {
 		log.debug("merging IpBlob instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			IpBlob result = (IpBlob) session.merge(detachedInstance);
-			transaction.commit();session.close();
-			
-
+			IpBlob result = (IpBlob) getHibernateTemplate().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public void attachDirty(IpBlob instance) {
 		log.debug("attaching dirty IpBlob instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.saveOrUpdate(instance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
+			throw re;
+		}
+	}
 
+	public void attachClean(IpBlob instance) {
+		log.debug("attaching clean IpBlob instance");
+		try {
+			getHibernateTemplate().lock(instance, LockMode.NONE);
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
 			throw re;
 		}
 	}
 
 	public Long getBlobIdByEntity(long id, String tblNm) {
 		log.debug("finding all blobs by entity id");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			Query query = session.getNamedQuery("getBlobIdByEntity");
+			Query query = getSession().getNamedQuery("getBlobIdByEntity");
 			query.setLong("id", id);
 			query.setString("tblNm", tblNm);
 			Long ret = -999l;
 			List obj = query.list();
 			if (obj != null && obj.size() > 0)
 				ret = (Long) obj.get(0);
-			transaction.commit();session.close();
-			
-
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public IpBlob getBlobByEntity(long id, String tblNm) {
 		log.debug("finding all blobs by entity id");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			Query query = session.getNamedQuery("getBlobByEntity");
+			Query query = getSession().getNamedQuery("getBlobByEntity");
 			query.setLong("id", id);
 			query.setString("tblNm", tblNm);
 			IpBlob ret = null;
 			List obj = query.list();
 			if (obj != null && obj.size() > 0)
 				ret = (IpBlob) obj.get(0);
-			transaction.commit();session.close();
-			
-
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
+	}
+
+	public static IpBlobDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (IpBlobDAO) ctx.getBean("IpBlobDAO");
 	}
 }

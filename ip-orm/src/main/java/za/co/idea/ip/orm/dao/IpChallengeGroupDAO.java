@@ -3,12 +3,12 @@ package za.co.idea.ip.orm.dao;
 import java.util.List;
 
 import org.hibernate.Hibernate;
+import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import za.co.idea.ip.orm.bean.IpChallengeGroup;
 
@@ -23,216 +23,133 @@ import za.co.idea.ip.orm.bean.IpChallengeGroup;
  * @see za.co.idea.ip.orm.bean.IpChallengeGroup
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("rawtypes")
-public class IpChallengeGroupDAO extends BaseHibernateDAO {
+@SuppressWarnings({ "rawtypes" })
+public class IpChallengeGroupDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory.getLogger(IpChallengeGroupDAO.class);
 
 	// property constants
 
+	protected void initDao() {
+		// do nothing
+	}
+
 	public void save(IpChallengeGroup transientInstance) {
 		log.debug("saving IpChallengeGroup instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.save(transientInstance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public void delete(IpChallengeGroup persistentInstance) {
 		log.debug("deleting IpChallengeGroup instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.delete(persistentInstance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public IpChallengeGroup findById(java.lang.Long id) {
 		log.debug("getting IpChallengeGroup instance with id: " + id);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			IpChallengeGroup instance = (IpChallengeGroup) session.get("za.co.idea.ip.orm.bean.IpChallengeGroup", id);
-			transaction.commit();session.close();
-			
-
+			IpChallengeGroup instance = (IpChallengeGroup) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpChallengeGroup", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findByExample(IpChallengeGroup instance) {
 		log.debug("finding IpChallengeGroup instance by example");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpChallengeGroup").add(Example.create(instance)).list();
+			List results = getHibernateTemplate().findByExample(instance);
 			log.debug("find by example successful, result size: " + results.size());
-			transaction.commit();session.close();
-			
-
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findByProperty(String propertyName, Object value) {
 		log.debug("finding IpChallengeGroup instance with property: " + propertyName + ", value: " + value);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpChallengeGroup as model where model." + propertyName + "= ?";
-			Query queryObject = session.createQuery(queryString);
-			queryObject.setParameter(0, value);
-			List results = queryObject.list();
-			transaction.commit();session.close();
-			
-
-			return results;
-
+			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findAll() {
 		log.debug("finding all IpChallengeGroup instances");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpChallengeGroup";
-			Query queryObject = session.createQuery(queryString);
-			List results = queryObject.list();
-			transaction.commit();session.close();
-			
-
-			return results;
-
+			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public IpChallengeGroup merge(IpChallengeGroup detachedInstance) {
 		log.debug("merging IpChallengeGroup instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			IpChallengeGroup result = (IpChallengeGroup) session.merge(detachedInstance);
+			IpChallengeGroup result = (IpChallengeGroup) getHibernateTemplate().merge(detachedInstance);
 			log.debug("merge successful");
-			transaction.commit();session.close();
-			
-
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public void attachDirty(IpChallengeGroup instance) {
 		log.debug("attaching dirty IpChallengeGroup instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.saveOrUpdate(instance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
+			throw re;
+		}
+	}
 
+	public void attachClean(IpChallengeGroup instance) {
+		log.debug("attaching clean IpChallengeGroup instance");
+		try {
+			getHibernateTemplate().lock(instance, LockMode.NONE);
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
 			throw re;
 		}
 	}
 
 	public void deleteByChallengeId(Long id) {
 		log.debug("Deleting Challenge Groups By Id : " + id);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			Query query = session.getNamedQuery("deleteCGByChalId");
+			Query query = getSession().getNamedQuery("deleteCGByChalId");
 			query.setLong("id", id);
 			query.executeUpdate();
-			transaction.commit();session.close();
-			
-
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
 			throw re;
 		}
 	}
 
 	public List fetchByChallengeId(Long id) {
 		log.debug("Fetching Group Users By Id : " + id);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			Query query = session.getNamedQuery("fetchCGByChalId");
+			Query query = getSession().getNamedQuery("fetchCGByChalId");
 			query.setLong("id", id);
 			List ret = query.list();
 			for (Object object : ret) {
@@ -240,26 +157,17 @@ public class IpChallengeGroupDAO extends BaseHibernateDAO {
 				Hibernate.initialize(fg.getIpGroup());
 				Hibernate.initialize(fg.getIpChallenge());
 			}
-			transaction.commit();session.close();
-			
-
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
 			throw re;
 		}
 	}
 
 	public List fetchByGroupId(Long id) {
 		log.debug("Fetching Group Users By Id : " + id);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			Query query = session.getNamedQuery("fetchCGByGroupId");
+			Query query = getSession().getNamedQuery("fetchCGByGroupId");
 			query.setLong("id", id);
 			List ret = query.list();
 			for (Object object : ret) {
@@ -267,17 +175,14 @@ public class IpChallengeGroupDAO extends BaseHibernateDAO {
 				Hibernate.initialize(fg.getIpGroup());
 				Hibernate.initialize(fg.getIpChallenge());
 			}
-			transaction.commit();session.close();
-			
-
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
 			throw re;
 		}
+	}
+
+	public static IpChallengeGroupDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (IpChallengeGroupDAO) ctx.getBean("IpChallengeGroupDAO");
 	}
 }

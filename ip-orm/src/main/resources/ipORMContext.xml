@@ -1,17 +1,11 @@
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop" xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
-	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-		<property name="jndiName" value="java:/jdbc/ipdb" />
-		<property name="lookupOnStartup" value="false" />
-		<property name="cache" value="true" />
-		<property name="proxyInterface" value="javax.sql.DataSource" />
-	</bean>
-	<bean id="dataSource_jndi" class="org.apache.commons.dbcp2.BasicDataSource">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/lpdb?useUnicode=yes&amp;characterEncoding=UTF-8&amp;relaxAutoCommit=true" />
-		<property name="username" value="root" />
-		<property name="password" value="Pa%5W0Rd" />
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="url" value="jdbc:mysql://localhost:3306/lpdb"></property>
+		<property name="username" value="root"></property>
+		<property name="password" value="Pa%5W0Rd"></property>
 	</bean>
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
 		<property name="dataSource">
@@ -19,233 +13,263 @@
 		</property>
 		<property name="hibernateProperties">
 			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-				<prop key="hibernate.show_sql">false</prop>
-				<prop key="hibernate.current_session_context_class">thread</prop>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
 			</props>
 		</property>
 		<property name="mappingResources">
 			<list>
-				<value>za/co/idea/ip/orm/hbm/IpAllocation.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpChallengeCat.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpChallenge.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpChallengeGroup.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpChallengeStatus.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpClaim.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpClaimStatus.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpConfig.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpFunction.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpFuncGroup.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpGroupUser.hbm.xml</value>
+				<value>
+					za/co/idea/ip/orm/hbm/IpChallengeStatus.hbm.xml
+				</value>
 				<value>za/co/idea/ip/orm/hbm/IpGroup.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpIdea.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpIdeaCat.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpIdeaGroup.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpIdeaStatus.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpLogin.hbm.xml</value>
+				<value>
+					za/co/idea/ip/orm/hbm/IpClaimStatus.hbm.xml
+				</value>
+				<value>za/co/idea/ip/orm/hbm/IpClaim.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpPoints.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpRewards.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpRewardsCat.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpRewardsGroup.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpSolution.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpSolutionCat.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpSolutionStatus.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpTag.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpTagEntityType.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpTagType.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpUser.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpBlob.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpSecqList.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpCategory.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpNews.hbm.xml</value>
+				<value>
+					za/co/idea/ip/orm/hbm/IpIdeaGroup.hbm.xml
+				</value>
 				<value>za/co/idea/ip/orm/hbm/IpNotif.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpNotifGroup.hbm.xml</value>
+				<value>
+					za/co/idea/ip/orm/hbm/IpIdeaStatus.hbm.xml
+				</value>
+				<value>za/co/idea/ip/orm/hbm/IpIdeaCat.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpTagType.hbm.xml</value>
+				<value>
+					za/co/idea/ip/orm/hbm/IpNotifGroup.hbm.xml
+				</value>
+				<value>za/co/idea/ip/orm/hbm/IpBlob.hbm.xml</value>
+				<value>
+					za/co/idea/ip/orm/hbm/IpChallengeCat.hbm.xml
+				</value>
+				<value>
+					za/co/idea/ip/orm/hbm/IpTagEntityType.hbm.xml
+				</value>
+				<value>za/co/idea/ip/orm/hbm/IpSecqList.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpConfig.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpRewards.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpLogin.hbm.xml</value>
+				<value>
+					za/co/idea/ip/orm/hbm/IpSolutionCat.hbm.xml
+				</value>
+				<value>za/co/idea/ip/orm/hbm/IpCategory.hbm.xml</value>
+				<value>
+					za/co/idea/ip/orm/hbm/IpRewardsCat.hbm.xml
+				</value>
+				<value>
+					za/co/idea/ip/orm/hbm/IpFuncGroup.hbm.xml
+				</value>
+				<value>
+					za/co/idea/ip/orm/hbm/IpSolutionStatus.hbm.xml
+				</value>
+				<value>
+					za/co/idea/ip/orm/hbm/IpChallengeGroup.hbm.xml
+				</value>
+				<value>za/co/idea/ip/orm/hbm/IpTag.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpFunction.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpIdea.hbm.xml</value>
+				<value>
+					za/co/idea/ip/orm/hbm/IpGroupUser.hbm.xml
+				</value>
+				<value>
+					za/co/idea/ip/orm/hbm/IpAllocation.hbm.xml
+				</value>
+				<value>za/co/idea/ip/orm/hbm/IpNews.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpSolution.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpUser.hbm.xml</value>
+				<value>
+					za/co/idea/ip/orm/hbm/IpRewardsGroup.hbm.xml
+				</value>
+				<value>
+					za/co/idea/ip/orm/hbm/IpChallenge.hbm.xml
+				</value>
+				<value>
+					za/co/idea/ip/orm/hbm/IpStateTran.hbm.xml
+				</value>
 			</list>
 		</property>
 	</bean>
-	<bean id="factory" class="za.co.idea.ip.orm.util.HibernateSessionFactory">
+	<bean id="IpChallengeStatusDAO" class="za.co.idea.ip.orm.dao.IpChallengeStatusDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpGroupDAO" class="za.co.idea.ip.orm.dao.IpGroupDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpClaimStatusDAO" class="za.co.idea.ip.orm.dao.IpClaimStatusDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpClaimDAO" class="za.co.idea.ip.orm.dao.IpClaimDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpPointsDAO" class="za.co.idea.ip.orm.dao.IpPointsDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpIdeaGroupDAO" class="za.co.idea.ip.orm.dao.IpIdeaGroupDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpNotifDAO" class="za.co.idea.ip.orm.dao.IpNotifDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpIdeaStatusDAO" class="za.co.idea.ip.orm.dao.IpIdeaStatusDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpIdeaCatDAO" class="za.co.idea.ip.orm.dao.IpIdeaCatDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpTagTypeDAO" class="za.co.idea.ip.orm.dao.IpTagTypeDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpNotifGroupDAO" class="za.co.idea.ip.orm.dao.IpNotifGroupDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
 	<bean id="IpBlobDAO" class="za.co.idea.ip.orm.dao.IpBlobDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpNativeSQLDAO" class="za.co.idea.ip.orm.dao.IpNativeSQLDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpChallengeStatusDAO" class="za.co.idea.ip.orm.dao.IpChallengeStatusDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpConfigDAO" class="za.co.idea.ip.orm.dao.IpConfigDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpGroupDAO" class="za.co.idea.ip.orm.dao.IpGroupDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpRewardsDAO" class="za.co.idea.ip.orm.dao.IpRewardsDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpClaimStatusDAO" class="za.co.idea.ip.orm.dao.IpClaimStatusDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpClaimDAO" class="za.co.idea.ip.orm.dao.IpClaimDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpPointsDAO" class="za.co.idea.ip.orm.dao.IpPointsDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpIdeaStatusDAO" class="za.co.idea.ip.orm.dao.IpIdeaStatusDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpLoginDAO" class="za.co.idea.ip.orm.dao.IpLoginDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpSolutionStatusDAO" class="za.co.idea.ip.orm.dao.IpSolutionStatusDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpIdeaCatDAO" class="za.co.idea.ip.orm.dao.IpIdeaCatDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpTagTypeDAO" class="za.co.idea.ip.orm.dao.IpTagTypeDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpTagDAO" class="za.co.idea.ip.orm.dao.IpTagDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpFunctionDAO" class="za.co.idea.ip.orm.dao.IpFunctionDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpFuncGroupDAO" class="za.co.idea.ip.orm.dao.IpFuncGroupDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpGroupUserDAO" class="za.co.idea.ip.orm.dao.IpGroupUserDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpIdeaDAO" class="za.co.idea.ip.orm.dao.IpIdeaDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpAllocationDAO" class="za.co.idea.ip.orm.dao.IpAllocationDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpSolutionDAO" class="za.co.idea.ip.orm.dao.IpSolutionDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpUserDAO" class="za.co.idea.ip.orm.dao.IpUserDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpTagEntityTypeDAO" class="za.co.idea.ip.orm.dao.IpTagEntityTypeDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpChallengeDAO" class="za.co.idea.ip.orm.dao.IpChallengeDAO">
-		<property name="factory">
-			<ref bean="factory" />
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
 		</property>
 	</bean>
 	<bean id="IpChallengeCatDAO" class="za.co.idea.ip.orm.dao.IpChallengeCatDAO">
-		<property name="factory">
-			<ref bean="factory" />
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="IpSolutionCatDAO" class="za.co.idea.ip.orm.dao.IpSolutionCatDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpRewardsCatDAO" class="za.co.idea.ip.orm.dao.IpRewardsCatDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpChallengeGroupDAO" class="za.co.idea.ip.orm.dao.IpChallengeGroupDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpIdeaGroupDAO" class="za.co.idea.ip.orm.dao.IpIdeaGroupDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpRewardsGroupDAO" class="za.co.idea.ip.orm.dao.IpRewardsGroupDAO">
-		<property name="factory">
-			<ref bean="factory" />
-		</property>
-	</bean>
-	<bean id="IpKeysDAO" class="za.co.idea.ip.orm.dao.IpKeysDAO">
-		<property name="factory">
-			<ref bean="factory" />
+	<bean id="IpTagEntityTypeDAO" class="za.co.idea.ip.orm.dao.IpTagEntityTypeDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
 		</property>
 	</bean>
 	<bean id="IpSecqListDAO" class="za.co.idea.ip.orm.dao.IpSecqListDAO">
-		<property name="factory">
-			<ref bean="factory" />
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpConfigDAO" class="za.co.idea.ip.orm.dao.IpConfigDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpRewardsDAO" class="za.co.idea.ip.orm.dao.IpRewardsDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpLoginDAO" class="za.co.idea.ip.orm.dao.IpLoginDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpSolutionCatDAO" class="za.co.idea.ip.orm.dao.IpSolutionCatDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
 		</property>
 	</bean>
 	<bean id="IpCategoryDAO" class="za.co.idea.ip.orm.dao.IpCategoryDAO">
-		<property name="factory">
-			<ref bean="factory" />
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpRewardsCatDAO" class="za.co.idea.ip.orm.dao.IpRewardsCatDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpFuncGroupDAO" class="za.co.idea.ip.orm.dao.IpFuncGroupDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpSolutionStatusDAO" class="za.co.idea.ip.orm.dao.IpSolutionStatusDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpChallengeGroupDAO" class="za.co.idea.ip.orm.dao.IpChallengeGroupDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpTagDAO" class="za.co.idea.ip.orm.dao.IpTagDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpFunctionDAO" class="za.co.idea.ip.orm.dao.IpFunctionDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpIdeaDAO" class="za.co.idea.ip.orm.dao.IpIdeaDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpGroupUserDAO" class="za.co.idea.ip.orm.dao.IpGroupUserDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpAllocationDAO" class="za.co.idea.ip.orm.dao.IpAllocationDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
 		</property>
 	</bean>
 	<bean id="IpNewsDAO" class="za.co.idea.ip.orm.dao.IpNewsDAO">
-		<property name="factory">
-			<ref bean="factory" />
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="IpNotifDAO" class="za.co.idea.ip.orm.dao.IpNotifDAO">
-		<property name="factory">
-			<ref bean="factory" />
+	<bean id="IpSolutionDAO" class="za.co.idea.ip.orm.dao.IpSolutionDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="IpNotifGroupDAO" class="za.co.idea.ip.orm.dao.IpNotifGroupDAO">
-		<property name="factory">
-			<ref bean="factory" />
+	<bean id="IpUserDAO" class="za.co.idea.ip.orm.dao.IpUserDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpRewardsGroupDAO" class="za.co.idea.ip.orm.dao.IpRewardsGroupDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpChallengeDAO" class="za.co.idea.ip.orm.dao.IpChallengeDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpStateTranDAO" class="za.co.idea.ip.orm.dao.IpStateTranDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpNativeSQLDAO" class="za.co.idea.ip.orm.dao.IpNativeSQLDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
 		</property>
 	</bean>
 </beans>

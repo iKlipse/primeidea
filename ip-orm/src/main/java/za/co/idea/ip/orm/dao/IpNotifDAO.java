@@ -2,12 +2,12 @@ package za.co.idea.ip.orm.dao;
 
 import java.util.List;
 
+import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import za.co.idea.ip.orm.bean.IpNotif;
 
@@ -22,123 +22,75 @@ import za.co.idea.ip.orm.bean.IpNotif;
  * @see za.co.idea.ip.orm.bean.IpNotif
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("rawtypes")
-public class IpNotifDAO extends BaseHibernateDAO {
+@SuppressWarnings({ "rawtypes" })
+public class IpNotifDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory.getLogger(IpNotifDAO.class);
 	// property constants
 	public static final String NOTIF_ENTITY_ID = "notifEntityId";
 	public static final String NOTIF_ENTITY_TBL_NAME = "notifEntityTblName";
 	public static final String NOTIF_SUBJECT = "notifSubject";
 	public static final String NOTIF_BODY = "notifBody";
-	public static final String NOTIF_ATTACH_ID = "notifAttachId";
+	public static final String NOTIF_ATTACH = "notifAttach";
 	public static final String NOTIF_STATUS = "notifStatus";
 	public static final String NOTIF_CRTD_DATE = "notifCrtdDate";
+	public static final String NOTIF_LIST = "notifList";
+
+	protected void initDao() {
+		// do nothing
+	}
 
 	public void save(IpNotif transientInstance) {
 		log.debug("saving IpNotif instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.save(transientInstance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public void delete(IpNotif persistentInstance) {
 		log.debug("deleting IpNotif instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.delete(persistentInstance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public IpNotif findById(java.lang.String id) {
 		log.debug("getting IpNotif instance with id: " + id);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			IpNotif instance = (IpNotif) session.get("za.co.idea.ip.orm.bean.IpNotif", id);
-			transaction.commit();session.close();
-			
-
+			IpNotif instance = (IpNotif) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpNotif", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findByExample(IpNotif instance) {
 		log.debug("finding IpNotif instance by example");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpNotif").add(Example.create(instance)).list();
-			transaction.commit();session.close();
-			
-
+			List results = getHibernateTemplate().findByExample(instance);
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public List findByProperty(String propertyName, Object value) {
 		log.debug("finding IpNotif instance with property: " + propertyName + ", value: " + value);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpNotif as model where model." + propertyName + "= ?";
-			Query queryObject = session.createQuery(queryString);
-			queryObject.setParameter(0, value);
-			List results = queryObject.list();
-			transaction.commit();session.close();
-			
-
-			return results;
+			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
@@ -159,8 +111,8 @@ public class IpNotifDAO extends BaseHibernateDAO {
 		return findByProperty(NOTIF_BODY, notifBody);
 	}
 
-	public List findByNotifAttachId(Object notifAttachId) {
-		return findByProperty(NOTIF_ATTACH_ID, notifAttachId);
+	public List findByNotifAttach(Object notifAttach) {
+		return findByProperty(NOTIF_ATTACH, notifAttach);
 	}
 
 	public List findByNotifStatus(Object notifStatus) {
@@ -171,90 +123,68 @@ public class IpNotifDAO extends BaseHibernateDAO {
 		return findByProperty(NOTIF_CRTD_DATE, notifCrtdDate);
 	}
 
+	public List findByNotifList(Object notifList) {
+		return findByProperty(NOTIF_LIST, notifList);
+	}
+
 	public List findAll() {
 		log.debug("finding all IpNotif instances");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpNotif";
-			Query queryObject = session.createQuery(queryString);
-			List results = queryObject.list();
-			transaction.commit();session.close();
-			
-			return results;
+			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
-
 	}
 
 	public IpNotif merge(IpNotif detachedInstance) {
 		log.debug("merging IpNotif instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			IpNotif result = (IpNotif) session.merge(detachedInstance);
-			transaction.commit();session.close();
-			
+			IpNotif result = (IpNotif) getHibernateTemplate().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
-
 			throw re;
 		}
 	}
 
 	public void attachDirty(IpNotif instance) {
 		log.debug("attaching dirty IpNotif instance");
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			session.saveOrUpdate(instance);
-			transaction.commit();session.close();
-			
-
+			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
+			throw re;
+		}
+	}
 
+	public void attachClean(IpNotif instance) {
+		log.debug("attaching clean IpNotif instance");
+		try {
+			getHibernateTemplate().lock(instance, LockMode.NONE);
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
 			throw re;
 		}
 	}
 
 	public void deleteByNotifId(String id) {
 		log.debug("Deleting Notification By Notif Id : " + id);
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
 		try {
-			Query query = session.getNamedQuery("deleteNotifById");
+			Query query = getSession().getNamedQuery("deleteNotifById");
 			query.setString("id", id);
 			query.executeUpdate();
-			transaction.commit();session.close();
-			
-
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
-			if (transaction.isActive())
-				transaction.rollback();session.close();
-			
-				
 			throw re;
 		}
 	}
 
+	public static IpNotifDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (IpNotifDAO) ctx.getBean("IpNotifDAO");
+	}
 }

@@ -1,7 +1,7 @@
 package za.co.idea.ip.portal.bean;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 public class TagBean implements Serializable {
 	private static final long serialVersionUID = 3679231894527770044L;
@@ -13,7 +13,7 @@ public class TagBean implements Serializable {
 	private Long entityId;
 	private Long userId;
 	private Long tagId;
-	private Timestamp tagDate;
+	private Date tagDate;
 	private boolean duplicate;
 
 	public String getUsrScreenName() {
@@ -88,11 +88,11 @@ public class TagBean implements Serializable {
 		this.duplicate = duplicate;
 	}
 
-	public Timestamp getTagDate() {
+	public Date getTagDate() {
 		return tagDate;
 	}
 
-	public void setTagDate(Timestamp tagDate) {
+	public void setTagDate(Date tagDate) {
 		this.tagDate = tagDate;
 	}
 }

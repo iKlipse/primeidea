@@ -16,7 +16,8 @@
 		</property>
 	</class>
 	<sql-query name="deleteNGByNotifId">
-		delete from ip_notif_group where ing_notif_id=:id
+		delete from ip_notif_group where
+		ing_notif_id=:id
 	</sql-query>
 	<sql-query name="fetchNGByNotifId">
 		select ng.* from ip_notif_group ng where ng.ing_notif_id=:id
