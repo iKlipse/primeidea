@@ -10,6 +10,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import za.co.idea.ip.orm.bean.IpNotif;
 import za.co.idea.ip.orm.bean.IpNotifGroup;
 import za.co.idea.ip.orm.dao.IpNativeSQLDAO;
@@ -30,6 +33,7 @@ public class NotificationService {
 	@Path("/notif/add")
 	@Consumes("application/json")
 	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public ResponseMessage createNotification(NotificationMessage notif) {
 		try {
 			IpNotif ipNotif = new IpNotif();
@@ -69,6 +73,7 @@ public class NotificationService {
 	@Path("/notif/delete")
 	@Consumes("application/json")
 	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public ResponseMessage deleteNotification(NotificationMessage notif) {
 		try {
 			IpNotif ipNotif = new IpNotif();
@@ -98,6 +103,7 @@ public class NotificationService {
 	@GET
 	@Path("/notif/list")
 	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public <T extends NotificationMessage> List<T> listIdea() {
 		List<T> ret = new ArrayList<T>();
 		try {

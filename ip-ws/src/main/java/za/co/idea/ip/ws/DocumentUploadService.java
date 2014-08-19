@@ -20,6 +20,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
 import org.apache.log4j.Logger;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.dao.IpBlobDAO;
@@ -34,8 +36,9 @@ public class DocumentUploadService {
 
 	@POST
 	@Path("/doc/upload/{blobId}")
-	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional(propagation = Propagation.REQUIRED)
 	public Response doUpload(final Attachment stream, @PathParam("blobId") Long blobId) {
 		try {
 			IpBlob blob = ipBlobDAO.findById(blobId);
@@ -70,9 +73,10 @@ public class DocumentUploadService {
 	}
 
 	@GET
+	@Path("/doc/download/{blobId}/{name}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.MULTIPART_FORM_DATA)
-	@Path("/doc/download/{blobId}/{name}")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public Attachment doDownload(@PathParam("blobId") Long blobId, @PathParam("name") String name) {
 		try {
 			IpBlob blob = ipBlobDAO.findById(blobId);
@@ -90,18 +94,11 @@ public class DocumentUploadService {
 		}
 	}
 
-	public IpBlobDAO getIpBlobDAO() {
-		return ipBlobDAO;
-	}
-
-	public void setIpBlobDAO(IpBlobDAO ipBlobDAO) {
-		this.ipBlobDAO = ipBlobDAO;
-	}
-
 	@PUT
+	@Path("/doc/update")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/doc/update")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public Response updateDocument(AttachmentMessage message) {
 		try {
 			IpBlob blob = new IpBlob();
@@ -118,9 +115,10 @@ public class DocumentUploadService {
 	}
 
 	@POST
+	@Path("/doc/create")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/doc/create")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public Response createDocument(AttachmentMessage message) {
 		try {
 			IpBlob blob = new IpBlob();
@@ -137,9 +135,10 @@ public class DocumentUploadService {
 	}
 
 	@GET
+	@Path("/doc/getId/{entityId}/{entityTblNm}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/doc/getId/{entityId}/{entityTblNm}")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public Long getId(@PathParam("entityId") Long entityId, @PathParam("entityTblNm") String entityTblNm) {
 		Long ret = -999l;
 		IpBlob blob = ipBlobDAO.getBlobByEntity(entityId, entityTblNm);
@@ -149,9 +148,9 @@ public class DocumentUploadService {
 	}
 
 	@GET
+	@Path("/doc/getName/{blobId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/doc/getName/{blobId}")
 	public String getName(@PathParam("blobId") Long blobId) {
 		String ret = "";
 		IpBlob blob = ipBlobDAO.findById(blobId);
@@ -159,27 +158,34 @@ public class DocumentUploadService {
 			ret = blob.getBlobName();
 		return ret;
 	}
-	
 
 	@GET
+	@Path("/doc/getContentType/{blobId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/doc/getContentType/{blobId}")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public String getMimeType(@PathParam("blobId") Long blobId) {
-		String mimeType="";
+		String mimeType = "";
 		try {
 			logger.info("in try block of getMimeTpe() of service /doc/getContentType/{blobId}");
 			IpBlob blob = ipBlobDAO.findById(blobId);
 			if (blob != null)
-				mimeType=blob.getBlobContentType();
-			logger.info("blob type in service : "+mimeType);
+				mimeType = blob.getBlobContentType();
+			logger.info("blob type in service : " + mimeType);
 			return mimeType;
-			
+
 		} catch (Exception e) {
-			logger.error("Error in contetype service :"+e.getMessage());
+			logger.error("Error in contetype service :" + e.getMessage());
 			e.printStackTrace();
 			return mimeType;
 		}
 	}
 
+	public IpBlobDAO getIpBlobDAO() {
+		return ipBlobDAO;
+	}
+
+	public void setIpBlobDAO(IpBlobDAO ipBlobDAO) {
+		this.ipBlobDAO = ipBlobDAO;
+	}
 }

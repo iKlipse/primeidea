@@ -12,6 +12,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.apache.log4j.Logger;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.bean.IpIdea;
@@ -46,6 +48,7 @@ public class IdeaService {
 	@GET
 	@Path("/idea/check/title/{title}")
 	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public Boolean checkTitle(@PathParam("title") String ideaTitle) {
 		try {
 			List ideasByTitle = ipIdeaDAO.findByIdeaTitle(ideaTitle);
@@ -80,6 +83,7 @@ public class IdeaService {
 	@GET
 	@Path("/idea/status/list")
 	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public <T extends MetaDataMessage> List<T> listIdeaStatus() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -100,6 +104,7 @@ public class IdeaService {
 	@GET
 	@Path("/idea/status/list/{curr}")
 	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public <T extends MetaDataMessage> List<T> listNextIdeaStatus(@PathParam("curr") Integer curr) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -120,6 +125,7 @@ public class IdeaService {
 	@GET
 	@Path("/idea/cat/get/{id}")
 	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public MetaDataMessage getIdeaCatById(@PathParam("id") Integer id) {
 		MetaDataMessage message = new MetaDataMessage();
 		try {
@@ -193,6 +199,7 @@ public class IdeaService {
 	@Path("/idea/modify")
 	@Consumes("application/json")
 	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public ResponseMessage updateIdea(IdeaMessage idea) {
 		IpIdea ipIdea = new IpIdea();
 		ipIdea.setIdeaId(idea.getIdeaId());
@@ -234,6 +241,7 @@ public class IdeaService {
 	@GET
 	@Path("/idea/list")
 	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public <T extends IdeaMessage> List<T> listIdea() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -282,6 +290,7 @@ public class IdeaService {
 	@GET
 	@Path("/idea/list/user/access/{id}")
 	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public <T extends IdeaMessage> List<T> listIdeaByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -330,6 +339,7 @@ public class IdeaService {
 	@GET
 	@Path("/idea/list/user/created/{id}")
 	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public <T extends IdeaMessage> List<T> listIdeaCreatedByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -378,6 +388,7 @@ public class IdeaService {
 	@GET
 	@Path("/idea/list/status/{id}")
 	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public <T extends IdeaMessage> List<T> listIdeaByStatus(@PathParam("id") Integer id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -426,6 +437,7 @@ public class IdeaService {
 	@GET
 	@Path("/idea/list/status/{sid}/user/{id}")
 	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public <T extends IdeaMessage> List<T> listIdeaByStatusUser(@PathParam("sid") Integer sid, @PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -474,6 +486,7 @@ public class IdeaService {
 	@GET
 	@Path("/idea/list/reviewStatus/user/{id}")
 	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public <T extends IdeaMessage> List<T> listReviewIdeasByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -515,6 +528,7 @@ public class IdeaService {
 	@GET
 	@Path("/idea/get/{id}")
 	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public IdeaMessage getIdea(@PathParam("id") Long id) {
 		IdeaMessage idea = new IdeaMessage();
 		try {

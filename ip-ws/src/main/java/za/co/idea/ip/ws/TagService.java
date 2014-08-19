@@ -11,6 +11,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import za.co.idea.ip.orm.bean.IpTag;
 import za.co.idea.ip.orm.dao.IpChallengeDAO;
 import za.co.idea.ip.orm.dao.IpIdeaDAO;
@@ -36,6 +39,7 @@ public class TagService {
 	@GET
 	@Path("/tag/get/{entityId}/{teId}/{ttId}")
 	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public <T extends TagMessage> List<T> getTag(@PathParam("entityId") Long entityId, @PathParam("teId") Integer teId, @PathParam("ttId") Integer ttId) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -62,6 +66,7 @@ public class TagService {
 	@GET
 	@Path("/tag/getByUser/{entityId}/{teId}/{ttId}/{userId}")
 	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public <T extends TagMessage> List<T> getTagByUser(@PathParam("entityId") Long entityId, @PathParam("teId") Integer teId, @PathParam("ttId") Integer ttId, @PathParam("userId") Long userId) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -89,6 +94,7 @@ public class TagService {
 	@Path("/tag/add")
 	@Consumes("application/json")
 	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public ResponseMessage createTag(TagMessage tag) {
 		try {
 			List tags = ipTagDAO.getTagByFilterB(tag.getEntityId(), tag.getTeId(), tag.getTtId(), tag.getUserId());
@@ -132,6 +138,7 @@ public class TagService {
 	@Path("/tag/del")
 	@Consumes("application/json")
 	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
 	public ResponseMessage deleteTag(Long tagId) {
 		try {
 			ipTagDAO.delete(ipTagDAO.findById(tagId));
