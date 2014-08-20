@@ -54,67 +54,70 @@
 	background-color: white !important;
 }
 
-/** Liferay Support **/
-.aui .ui-helper-hidden {
-	display: none;
+.viewGrid  tr, .viewGrid td {
+	border: none;
 }
 
-/*Autocomplete*/
-.aui .ui-helper-reset {
-	margin: 0;
+.viewGrid {
+	border: none;
+	vertical-align: top;
 }
 
-/*Menubar*/
-.aui .ui-widget-content .ui-widget a {
-	color: #4f4f4f;
+.ui-panel {
+	background-color: white !important;
+	border-weight: 0px !important;
+	border-color: white !important;
+	border-style: solid !important;
 }
 
-/*SelectOneMenu*/
-.aui .ui-selectonemenu .ui-widget {
-	font-size: 1.1em;
+.ui-datagrid {
+	background-color: white !important;
+	border-weight: 0px !important;
+	border-color: white !important;
+	border-style: solid !important;
 }
 
-.aui .ui-selectonemenu-label .ui-inputfield {
-	color: #313131;
+.ui-panelgrid {
+	background-color: white !important;
+	border-weight: 0px !important;
+	border-color: white !important;
+	border-style: solid !important;
 }
 
-.aui .ui-selectonemenu-label {
-	margin-bottom: 0px;
+.ui-panel-titlebar {
+	background-color: white !important;
+	border-width: 0px !important;
+	border-color: white !important;
+	border-style: solid !important;
+	height: 30px !important;
 }
 
-/*Spinner*/
-.aui .ui-spinner .ui-corner-all {
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
+.ui-panelgrid-header {
+	background-color: white !important;
+	border-width: 0px !important;
+	border-color: white !important;
+	border-style: solid !important;
 }
 
-.aui .ui-spinner .ui-inputfield {
-	-moz-box-shadow: inset 0 2px 2px #8f8f8f;
-	-webkit-box-shadow: inset 0 2px 2px #8f8f8f;
-	box-shadow: inset 0 2px 2px #8f8f8f;
-	color: #313131;
-	margin: 0;
-	padding: 4px;
-	font-weight: normal;
+.ui-panel-content {
+	background-color: white !important;
+	border-width: 0px !important;
+	border-color: white !important;
+	border-style: solid !important;
 }
 
-.aui .ui-spinner .ui-spinner-input {
-	vertical-align: middle;
-	padding-right: 20px;
+.ui-panel-title {
+	background-color: white !important;
+	border-width: 0px !important;
+	border-color: white !important;
+	border-style: solid !important;
 }
 
-.aui .ui-widget input {
-	font-size: 1em;
-}
-
-.aui .ui-spinner .ui-inputfield.ui-state-focus {
-	-moz-box-shadow: 0px 0px 5px #85b2cb, inset 0 2px 2px #8f8f8f;
-	-webkit-box-shadow: 0px 0px 5px #85b2cb, inset 0 2px 2px #8f8f8f;
-	box-shadow: 0px 0px 5px #85b2cb, inset 0 2px 2px #8f8f8f;
-}
-
-/*Tabs*/
-.aui .ui-tabs .ui-state-default a {
-	color: #4f4f4f;
+.numberbox tr, .numberbox td {
+	border-color: white !important;
+	border-style: solid !important;
+	border-width: 2px !important;
+	background-color: grey !important;
+	color: white !important;
+	text-align: center;
 }

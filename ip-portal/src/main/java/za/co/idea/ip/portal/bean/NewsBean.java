@@ -1,8 +1,11 @@
 package za.co.idea.ip.portal.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class NewsBean {
+public class NewsBean implements Serializable  {
+
+	private static final long serialVersionUID = 4972233633168449553L;
 	private Long nId;
 	private String nTitle;
 	private String nContent;

@@ -1,6 +1,9 @@
 package za.co.idea.ip.portal.bean;
 
-public class PointBean {
+import java.io.Serializable;
+
+public class PointBean implements Serializable {
+	private static final long serialVersionUID = 6011887684010931471L;
 	private Long userId;
 	private Integer allocId;
 	private Integer pointValue;

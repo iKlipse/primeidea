@@ -54,7 +54,7 @@
 			</p:commandButton>
 		</f:facet>
 	</p:panelGrid>
-	<p:overlayPanel dynamic="true" for="giSumoComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true" >
+	<p:overlayPanel dynamic="true" for="giSumoComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
 		<p:panelGrid id="pnlSumoChallengeComment" columns="1">
 			<p:column>
 				<p:dataGrid id="dtSumoViewComments" widgetVar="dtSumoViewComments" value="#{challengeController.chalComments}" var="comment" columns="1" emptyMessage="No Comments Found">
@@ -66,20 +66,20 @@
 							<p:outputLabel style="float: right !important" value="#{comment.tagDate}" />
 						</f:facet>
 						<p:column>
-							<p:outputLabel value="#{comment.tagText}" escape="false"/>
+							<p:outputLabel value="#{comment.tagText}" escape="false" />
 						</p:column>
 					</p:panel>
 				</p:dataGrid>
 			</p:column>
 			<p:column>
-				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="edSumoComment" value="#{challengeController.commentText}"  />
+				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="edSumoComment" value="#{challengeController.commentText}" />
 			</p:column>
 			<p:column>
 				<p:commandButton id="btnSumoSubmitComment" value="Post" actionListener="#{challengeController.commentChallenge}" update="dtSumoViewComments, :frmSummaryOpenChal:lblCommentCnt" />
 			</p:column>
 		</p:panelGrid>
 	</p:overlayPanel>
-	<p:overlayPanel dynamic="true" for="giSumoLike" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true" >
+	<p:overlayPanel dynamic="true" for="giSumoLike" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
 		<p:panelGrid id="pnlSumoChallengeLikes" columns="1">
 			<p:tagCloud id="tgSumoLikes" model="#{challengeController.chalLikes}" />
 		</p:panelGrid>
@@ -88,7 +88,7 @@
 		<p:scrollPanel style="border: 0px !important;">
 			<p:panel style="border: 0px !important;">
 				<f:facet name="header">
-					<font size="8px">Solution By - <p:outputLabel value="#{sol.crtByName}" /> - <p:outputLabel value="#{sol.crtdDt}" /></font>
+					Solution By - <p:outputLabel value="#{sol.crtByName}" /> - <p:outputLabel value="#{sol.crtdDt}" />
 				</f:facet>
 				<p:panelGrid columns="2" id="pnlSumoSolForChal">
 					<p:column>

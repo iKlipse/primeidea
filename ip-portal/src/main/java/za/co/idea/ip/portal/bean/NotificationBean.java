@@ -5,9 +5,6 @@ import java.util.List;
 
 public class NotificationBean implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3504001051490637639L;
 	private String notifId;
 	private Long notifEntityId;

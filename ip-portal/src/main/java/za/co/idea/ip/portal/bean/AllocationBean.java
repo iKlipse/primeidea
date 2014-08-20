@@ -1,6 +1,10 @@
 package za.co.idea.ip.portal.bean;
 
-public class AllocationBean {
+import java.io.Serializable;
+
+public class AllocationBean implements Serializable {
+
+	private static final long serialVersionUID = -660908810088957902L;
 	private Integer allocId;
 	private String allocDesc;
 	private Integer allocVal;

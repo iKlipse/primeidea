@@ -51,6 +51,10 @@
 			<from-outcome>chalsr</from-outcome>
 			<to-view-id>/views/challenge/container/summaryReviewContainer.xhtml</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>chalss</from-outcome>
+			<to-view-id>/views/challenge/container/submitSolContainer.xhtml</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
 		<navigation-case>

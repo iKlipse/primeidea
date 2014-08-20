@@ -54,7 +54,7 @@
 			</p:commandButton>
 		</f:facet>
 	</p:panelGrid>
-	<p:overlayPanel dynamic="true" for="giSumComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true" >
+	<p:overlayPanel dynamic="true" for="giSumComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
 		<p:panelGrid id="pnlSumChallengeComment" columns="1">
 			<p:column>
 				<p:dataGrid id="dtSumViewComments" widgetVar="dtSumViewComments" value="#{challengeController.chalComments}" var="comment" columns="1" emptyMessage="No Comments Found">
@@ -66,91 +66,55 @@
 							<p:outputLabel style="float: right !important" value="#{comment.tagDate}" />
 						</f:facet>
 						<p:column>
-							<p:outputLabel value="#{comment.tagText}" escape="false"/>
+							<p:outputLabel value="#{comment.tagText}" escape="false" />
 						</p:column>
 					</p:panel>
 				</p:dataGrid>
 			</p:column>
 			<p:column>
-				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="edSumComment" value="#{challengeController.commentText}"  />
+				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="edSumComment" value="#{challengeController.commentText}" />
 			</p:column>
 			<p:column>
 				<p:commandButton id="btnSumSubmitComment" value="Post" actionListener="#{challengeController.commentChallenge}" update="dtSumViewComments, :frmSummaryChal:lblSumCommentCnt" />
 			</p:column>
 		</p:panelGrid>
 	</p:overlayPanel>
-	<p:overlayPanel dynamic="true" for="giSumLike" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true" >
+	<p:overlayPanel dynamic="true" for="giSumLike" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
 		<p:panelGrid id="pnlSumChallengeLikes" columns="1">
 			<p:tagCloud id="tgSumLikes" model="#{challengeController.chalLikes}" />
 		</p:panelGrid>
 	</p:overlayPanel>
-	<p:dataGrid id="dgSumSolForChal" value="#{challengeController.viewSolutions}" var="sol" columns="1">
-		<p:scrollPanel style="border: 0px !important;">
-			<p:panel style="border: 0px !important;">
-				<f:facet name="header">
-							Solution By - <p:outputLabel value="#{sol.crtByName}" /> - <p:outputLabel value="#{sol.crtdDt}" />
-				</f:facet>
-				<p:panelGrid columns="2" id="pnlSumSolForChal">
-					<p:column>
-						<p:outputLabel id="lblSumISolTitle" value="Title : " />
-					</p:column>
-					<p:column>
-						<p:outputLabel id="txtSumISolTitle" value="#{sol.title}" escape="false" />
-					</p:column>
-					<p:column>
-						<p:outputLabel id="lblSumIDesc" value="Description : " />
-					</p:column>
-					<p:column>
-						<p:outputLabel id="txtSumIDesc" value="#{sol.desc}" escape="false" />
-					</p:column>
-					<p:column>
-						<p:outputLabel id="lblSumICrtdDt" value="Created Date : " />
-					</p:column>
-					<p:column>
-						<p:outputLabel id="txtSumICrtdDt" value="#{sol.crtdDt}" escape="false" />
-					</p:column>
-					<p:column>
-						<p:commandButton value="Download" ajax="false" disabled="true">
-							<!--disabled="#{!sol.solImgAvl}"-->
-							<p:fileDownload value="#{sol.solStream}" />
-						</p:commandButton>
-					</p:column>
-					<p:column></p:column>
-					<p:column>
-						<p:panelGrid columns="3" style="border: 0px !important;">
-							<p:column>
-								<p:commandLink id="lnkSumLikeSolution" action="#{challengeController.likeSolutionFromChalSummary}" update="lblSumLikeCnt, :frmSummaryChal:tgSumLikes" disabled="#{sol.taggable}">
-									<f:setPropertyActionListener value="#{sol}" target="#{challengeController.solutionBean}" />
-									<f:param name="chalId" value="#{challengeController.challengeBean.id}" />
-									<p:outputLabel id="lblSumLikeCnt" value="#{sol.solLikeCnt}" style="height:25px; width:25px;" />
-									<p:graphicImage id="giSumLike" name="like-128.png" library="images" height="25px" width="25px" />
-									<p:tooltip for="giSumLike" value="Tags disabled as solution not in open status" rendered="#{sol.taggable}" />
-								</p:commandLink>
-							</p:column>
-							<p:column>
-								<f:param name="solutionBeanComment" id="solutionBeanComment" value="#{sol}" target="#{challengeController.solutionBean}" />
-								<p:outputLabel id="lblSumCommentCnt" value="#{sol.solCommentCnt}" style="height:25px; width:25px;" />
-								<p:graphicImage id="giSumComment" name="comment.jpg" library="images" height="25px" width="25px" />
-								<p:tooltip for="giSumComment" value="Tags disabled as solution not in open status" rendered="#{sol.taggable}" />
-							</p:column>
-							<p:column>
-								<p:commandLink id="lnkSumBuildonSolution" action="#{buildonController.showBuildon}">
-									<f:setPropertyActionListener value="#{challengeController.userId}" target="#{buildonController.userId}" />
-									<f:setPropertyActionListener value="#{sol}" target="#{challengeController.solutionBean}" />
-									<f:param name="solutionBeanBuild" id="solutionBeanBuild" value="#{sol}" />
-									<f:param name="solutionChallenge" id="solutionChallenge" value="#{challengeController.challengeBean}" />
-									<f:param name="entityId" id="entityId" value="#{sol.id}" />
-									<f:param name="entityType" id="entityType" value="3" />
-									<f:param name="taggable" id="taggable" value="#{sol.taggable}" />
-									<p:outputLabel id="lblSumBuildOnCnt" value="#{sol.buildOnCnt}" style="height:25px; width:25px;" />
-									<p:graphicImage id="giSumBuildOn" name="lego.png" library="images" height="25px" width="25px" />
-									<p:tooltip for="giSumBuildOn" value="Tags disabled as solution not in open status" rendered="#{sol.taggable}" />
-								</p:commandLink>
-							</p:column>
-						</p:panelGrid>
-					</p:column>
-				</p:panelGrid>
-			</p:panel>
-		</p:scrollPanel>
+	<p:dataGrid id="dgSumSolForChal" value="#{challengeController.viewSolutions}" var="sol" columns="1" rowIndexVar="solRId">
+		<p:panel style="border: 0px !important;">
+			<f:facet name="header">
+					Solution By - <p:outputLabel value="#{sol.crtByName}" /> - <p:outputLabel value="#{sol.crtdDt}" />
+			</f:facet>
+			<p:panelGrid columns="2" id="pnlSumSolForChal">
+				<p:column>
+					<p:outputLabel id="lblSumISolTitle" value="Title : " />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="txtSumISolTitle" value="#{sol.title}" escape="false" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblSumIDesc" value="Description : " />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="txtSumIDesc" value="#{sol.desc}" escape="false" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblSumICrtdDt" value="Created Date : " />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="txtSumICrtdDt" value="#{sol.crtdDt}" escape="false" />
+				</p:column>
+				<p:column>
+					<p:commandButton value="Download" ajax="false" disabled="true">
+						<!--disabled="#{!sol.solImgAvl}"-->
+						<p:fileDownload value="#{sol.solStream}" />
+					</p:commandButton>
+				</p:column>
+			</p:panelGrid>
+		</p:panel>
 	</p:dataGrid>
 </ui:composition>

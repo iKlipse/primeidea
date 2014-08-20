@@ -69,6 +69,12 @@
     PATH="/views/challenge/container/summaryReviewContainer.xhtml"
     TARGET="rules:#views#challenge#container#summaryReviewContainer.xhtml"
     TITLE="chalsr" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="chalss::#views#challenge#container#submitSolContainer.xhtml"
+    NAME="output6"
+    PATH="/views/challenge/container/submitSolContainer.xhtml"
+    TARGET="rules:#views#challenge#container#submitSolContainer.xhtml"
+    TITLE="chalss" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM
@@ -156,11 +162,11 @@
     TARGET="rules:#views#solution#container#editContainer.xhtml"
     TITLE="sole" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="sols::#views#solution#container#summaryContainer.xhtml"
+    ID="soleo::#views#solution#container#editOpenContainer.xhtml"
     NAME="output2"
-    PATH="/views/solution/container/summaryContainer.xhtml"
-    TARGET="rules:#views#solution#container#summaryContainer.xhtml"
-    TITLE="sols" model-entity="JSFProcessItemOutput"/>
+    PATH="/views/solution/container/editOpenContainer.xhtml"
+    TARGET="rules:#views#solution#container#editOpenContainer.xhtml"
+    TITLE="soleo" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="solso::#views#solution#container#summaryOpenContainer.xhtml"
     NAME="output3"
@@ -399,4 +405,8 @@
   NAME="rules:#views#solution#container#createContainer.xhtml"
   PATH="/views/solution/container/createContainer.xhtml"
   SHAPE="304,3857,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#views#challenge#container#submitSolContainer.xhtml"
+  PATH="/views/challenge/container/submitSolContainer.xhtml"
+  SHAPE="304,1697,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

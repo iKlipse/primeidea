@@ -693,7 +693,7 @@ public class ChallengeController implements Serializable {
 					}
 				}
 				chalUploadContent = null;
-				return redirectMain();
+				return showViewChallenges();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -788,7 +788,7 @@ public class ChallengeController implements Serializable {
 					}
 				}
 				chalUploadContent = null;
-				return redirectMain();
+				return showViewChallenges();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -868,6 +868,7 @@ public class ChallengeController implements Serializable {
 			showPubSol = false;
 			showViewSol = false;
 			showCrtSol = true;
+			showReviewSol = false;
 			return "solv";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -886,7 +887,8 @@ public class ChallengeController implements Serializable {
 			solutionStatuses = fetchAllSolutionStatuses();
 			solutionBean = new SolutionBean();
 			solutionBean.setChalId(Long.valueOf(reqMap.get("chalId")));
-			return "";
+			saveAsOpen = false;
+			return "chalss";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
@@ -906,6 +908,7 @@ public class ChallengeController implements Serializable {
 			showPubSol = false;
 			showViewSol = true;
 			showCrtSol = false;
+			showReviewSol = false;
 			return "solv";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -926,6 +929,7 @@ public class ChallengeController implements Serializable {
 			showPubSol = true;
 			showViewSol = false;
 			showCrtSol = false;
+			showReviewSol = false;
 			return "solv";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -1346,7 +1350,11 @@ public class ChallengeController implements Serializable {
 				}
 				solUploadContent = null;
 				saveAsOpen = false;
-				return redirectMain();
+				if (saveAsOpen) {
+					return showViewOpenSolution();
+				} else {
+					return showViewSolution();
+				}
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -1354,7 +1362,6 @@ public class ChallengeController implements Serializable {
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -1437,7 +1444,7 @@ public class ChallengeController implements Serializable {
 					}
 				}
 				solUploadContent = null;
-				return redirectMain();
+				return showViewSolution();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
