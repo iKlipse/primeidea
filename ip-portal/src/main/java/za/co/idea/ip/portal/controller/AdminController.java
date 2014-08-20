@@ -1247,6 +1247,7 @@ public class AdminController implements Serializable {
 					message.setBlobName(fileName);
 					message.setBlobId(COUNTER.getNextId("IpBlob"));
 					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
+					createBlobClient.close();
 					if (crtRes.getStatus() == 200) {
 						WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + message.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
@@ -1257,16 +1258,11 @@ public class AdminController implements Serializable {
 							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 						}
 						client.close();
-						viewUsers = fetchAllUsers();
-						return "admuv";
 					} else {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
-					createBlobClient.close();
 				}
-				FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "User '" + userBean.getfName() + "' created successfully", "User '" + userBean.getfName() + "' created successfully");
-				FacesContext.getCurrentInstance().addMessage(null, successMessage);
 				viewUsers = fetchAllUsers();
 				return "admuv";
 			} else {
@@ -1438,7 +1434,7 @@ public class AdminController implements Serializable {
 				FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "User '" + userBean.getfName() + "' updated successfully", "User '" + userBean.getfName() + "' updated successfully");
 				FacesContext.getCurrentInstance().addMessage(null, successMessage);
 				viewUsers = fetchAllUsers();
-				return "admvu";
+				return "admuv";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update User", "Unable to update User");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -1446,7 +1442,6 @@ public class AdminController implements Serializable {
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -1662,11 +1657,11 @@ public class AdminController implements Serializable {
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 							client.header("Accept", "application/json");
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), grpImage.getStream(), new ContentDisposition("attachment;filename=" + grpFileName)));
+							client.close();
 							if (docRes.getStatus() != 200) {
 								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
 								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 							}
-							client.close();
 						} else {
 							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
 							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -2018,8 +2013,8 @@ public class AdminController implements Serializable {
 				NewsBean bean = new NewsBean();
 				bean.setnId(message.getnId());
 				bean.setnContent(message.getContent());
-				bean.setnEndDate(message.getEndDate());
-				bean.setnStartDate(message.getStartDate());
+				bean.setEndDate(message.getEndDate());
+				bean.setStartDate(message.getStartDate());
 				bean.setnTitle(message.getnTitle());
 				bean.setNewsUrl(message.getNewsUrl());
 				bean.setNwImgAvail(message.isNwImgAvail());
@@ -2351,8 +2346,8 @@ public class AdminController implements Serializable {
 			message.setnTitle(newsBean.getnTitle());
 			message.setContent(newsBean.getnContent());
 			message.setnId(COUNTER.getNextId("IpNews"));
-			message.setStartDate(newsBean.getnStartDate());
-			message.setEndDate(newsBean.getnEndDate());
+			message.setStartDate(newsBean.getStartDate());
+			message.setEndDate(newsBean.getEndDate());
 			ResponseMessage response = addNewsClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			addNewsClient.close();
 			if (response.getStatusCode() == 0) {
@@ -2407,8 +2402,8 @@ public class AdminController implements Serializable {
 			message.setnId(newsBean.getnId());
 			message.setnTitle(newsBean.getnTitle());
 			message.setContent(newsBean.getnContent());
-			message.setStartDate(newsBean.getnStartDate());
-			message.setEndDate(newsBean.getnEndDate());
+			message.setStartDate(newsBean.getStartDate());
+			message.setEndDate(newsBean.getEndDate());
 			ResponseMessage response = updateNewsClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			updateNewsClient.close();
 			if (response.getStatusCode() == 0) {
@@ -2510,7 +2505,6 @@ public class AdminController implements Serializable {
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create Idea request", "System error occurred, cannot perform create Idea request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";

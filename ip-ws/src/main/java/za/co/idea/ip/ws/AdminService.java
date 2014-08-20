@@ -60,7 +60,7 @@ public class AdminService {
 	@Path("/group/add")
 	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional(propagation = Propagation.NESTED)
 	public ResponseMessage createGroup(GroupMessage group) {
 		IpGroup ipGroup = new IpGroup();
 		ipGroup.setGroupId(group.getgId());
@@ -73,12 +73,15 @@ public class AdminService {
 			ipGroup.setIpUser(ipUserDAO.findById(group.getAdmUserId()));
 		try {
 			ipGroupDAO.save(ipGroup);
+			Long[] ids = ipNativeSQLDAO.getNextIds(IpGroupUser.class, group.getUserIdList().length);
+			int i = 0;
 			for (Long userId : group.getUserIdList()) {
 				IpGroupUser ipGroupUser = new IpGroupUser();
 				ipGroupUser.setIpGroup(ipGroup);
 				ipGroupUser.setIpUser(ipUserDAO.findById(userId));
-				ipGroupUser.setGuId(ipNativeSQLDAO.getNextId(IpGroupUser.class));
+				ipGroupUser.setGuId(ids[i]);
 				ipGroupUserDAO.save(ipGroupUser);
+				i++;
 			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
@@ -111,12 +114,15 @@ public class AdminService {
 		try {
 			ipGroupDAO.merge(ipGroup);
 			ipGroupUserDAO.deleteByGroupId(ipGroup.getGroupId());
+			Long[] ids = ipNativeSQLDAO.getNextIds(IpGroupUser.class, group.getUserIdList().length);
+			int i = 0;
 			for (Long userId : group.getUserIdList()) {
 				IpGroupUser ipGroupUser = new IpGroupUser();
 				ipGroupUser.setIpGroup(ipGroup);
 				ipGroupUser.setIpUser(ipUserDAO.findById(userId));
-				ipGroupUser.setGuId(ipNativeSQLDAO.getNextId(IpGroupUser.class));
+				ipGroupUser.setGuId(ids[i]);
 				ipGroupUserDAO.save(ipGroupUser);
+				i++;
 			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
@@ -396,12 +402,15 @@ public class AdminService {
 			ipFunction.setIpUser(ipUserDAO.findById(function.getCrtdBy()));
 			ipFunction.setFuncIsCore("n");
 			ipFunctionDAO.save(ipFunction);
+			Long[] ids = ipNativeSQLDAO.getNextIds(IpFuncGroup.class, function.getGroupIdList().length);
+			int i = 0;
 			for (Long gId : function.getGroupIdList()) {
 				IpFuncGroup ipFuncGroup = new IpFuncGroup();
-				ipFuncGroup.setFgId(ipNativeSQLDAO.getNextId(IpFuncGroup.class));
+				ipFuncGroup.setFgId(ids[i]);
 				ipFuncGroup.setIpFunction(ipFunction);
 				ipFuncGroup.setIpGroup(ipGroupDAO.findById(gId));
 				ipFuncGroupDAO.save(ipFuncGroup);
+				i++;
 			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
@@ -431,12 +440,15 @@ public class AdminService {
 			ipFunction.setFuncIsCore("y");
 			ipFunctionDAO.merge(ipFunction);
 			ipFuncGroupDAO.deleteByFunctionId(ipFunction.getFuncId());
+			Long[] ids = ipNativeSQLDAO.getNextIds(IpFuncGroup.class, function.getGroupIdList().length);
+			int i = 0;
 			for (Long gId : function.getGroupIdList()) {
 				IpFuncGroup ipFuncGroup = new IpFuncGroup();
-				ipFuncGroup.setFgId(ipNativeSQLDAO.getNextId(IpFuncGroup.class));
+				ipFuncGroup.setFgId(ids[i]);
 				ipFuncGroup.setIpFunction(ipFunction);
 				ipFuncGroup.setIpGroup(ipGroupDAO.findById(gId));
 				ipFuncGroupDAO.save(ipFuncGroup);
+				i++;
 			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
@@ -867,7 +879,6 @@ public class AdminService {
 				Long whishListCount = ipUserDAO.findWhishlistCount(ipUser.getUserId());
 				Long ideasCount = ipUserDAO.findIdeasCount(ipUser.getUserId());
 				Long totalCount = solCount + chalCount + whishListCount + ideasCount;
-				logger.info("User :" + ipUser.getUserId() + "-- total counts: " + totalCount);
 				UserStatisticsMessage userStats = new UserStatisticsMessage();
 				userStats.setUserId(ipUser.getUserId());
 				userStats.setChallengesCount(chalCount);

@@ -191,8 +191,8 @@ public class NewsController implements Serializable {
 			message.setnTitle(newsBean.getnTitle());
 			message.setContent(newsBean.getnContent());
 			message.setnId(COUNTER.getNextId("IpNews"));
-			message.setStartDate(newsBean.getnStartDate());
-			message.setEndDate(newsBean.getnEndDate());
+			message.setStartDate(newsBean.getStartDate());
+			message.setEndDate(newsBean.getEndDate());
 			ResponseMessage response = addNewsClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			addNewsClient.close();
 			logger.info("dispalying response of save news action : " + response.getStatusCode());
@@ -246,8 +246,8 @@ public class NewsController implements Serializable {
 			message.setnId(newsBean.getnId());
 			message.setnTitle(newsBean.getnTitle());
 			message.setContent(newsBean.getnContent());
-			message.setStartDate(newsBean.getnStartDate());
-			message.setEndDate(newsBean.getnEndDate());
+			message.setStartDate(newsBean.getStartDate());
+			message.setEndDate(newsBean.getEndDate());
 			ResponseMessage response = updateNewsClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			updateNewsClient.close();
 			if (response.getStatusCode() == 0) {
@@ -331,8 +331,8 @@ public class NewsController implements Serializable {
 				NewsBean bean = new NewsBean();
 				bean.setnId(message.getnId());
 				bean.setnContent(message.getContent());
-				bean.setnEndDate(message.getEndDate());
-				bean.setnStartDate(message.getStartDate());
+				bean.setEndDate(message.getEndDate());
+				bean.setStartDate(message.getStartDate());
 				bean.setnTitle(message.getnTitle());
 				bean.setNewsUrl(message.getNewsUrl());
 				bean.setNwImgAvail(message.isNwImgAvail());

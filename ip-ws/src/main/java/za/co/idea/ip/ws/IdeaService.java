@@ -55,7 +55,7 @@ public class IdeaService {
 			Boolean ret = (ideasByTitle != null && ideasByTitle.size() > 0);
 			return ret;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			return false;
 		}
 	}
@@ -75,7 +75,7 @@ public class IdeaService {
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -96,7 +96,7 @@ public class IdeaService {
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -117,7 +117,7 @@ public class IdeaService {
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -133,7 +133,7 @@ public class IdeaService {
 			message.setId(cat.getIcId());
 			message.setDesc(cat.getIcDesc());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return message;
 	}
@@ -148,7 +148,7 @@ public class IdeaService {
 			message.setId(status.getIsId());
 			message.setDesc(status.getIsDesc());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return message;
 	}
@@ -176,18 +176,19 @@ public class IdeaService {
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
-			if (idea.getGroupIdList() != null && idea.getGroupIdList().length > 0)
-				logger.info("Received Groups :: " + idea.getGroupIdList().length);
+			Long[] ids = ipNativeSQLDAO.getNextIds(IpIdeaGroup.class, idea.getGroupIdList().length);
+			int i = 0;
 			for (Long gId : idea.getGroupIdList()) {
 				IpIdeaGroup ipIdeaGroup = new IpIdeaGroup();
-				ipIdeaGroup.setIgId(ipNativeSQLDAO.getNextId(IpIdeaGroup.class));
+				ipIdeaGroup.setIgId(ids[i]);
 				ipIdeaGroup.setIpIdea(ipIdea);
 				ipIdeaGroup.setIpGroup(ipGroupDAO.findById(gId));
 				ipIdeaGroupDAO.save(ipIdeaGroup);
+				i++;
 			}
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -220,17 +221,19 @@ public class IdeaService {
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
 			ipIdeaGroupDAO.deleteByIdeaId(idea.getIdeaId());
-			if (idea.getGroupIdList() != null && idea.getGroupIdList().length > 0)
-				for (Long gId : idea.getGroupIdList()) {
-					IpIdeaGroup ipIdeaGroup = new IpIdeaGroup();
-					ipIdeaGroup.setIgId(ipNativeSQLDAO.getNextId(IpIdeaGroup.class));
-					ipIdeaGroup.setIpIdea(ipIdea);
-					ipIdeaGroup.setIpGroup(ipGroupDAO.findById(gId));
-					ipIdeaGroupDAO.save(ipIdeaGroup);
-				}
+			Long[] ids = ipNativeSQLDAO.getNextIds(IpIdeaGroup.class, idea.getGroupIdList().length);
+			int i = 0;
+			for (Long gId : idea.getGroupIdList()) {
+				IpIdeaGroup ipIdeaGroup = new IpIdeaGroup();
+				ipIdeaGroup.setIgId(ids[i]);
+				ipIdeaGroup.setIpIdea(ipIdea);
+				ipIdeaGroup.setIpGroup(ipGroupDAO.findById(gId));
+				ipIdeaGroupDAO.save(ipIdeaGroup);
+				i++;
+			}
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -282,7 +285,7 @@ public class IdeaService {
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -331,7 +334,7 @@ public class IdeaService {
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -380,7 +383,7 @@ public class IdeaService {
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -429,7 +432,7 @@ public class IdeaService {
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -478,7 +481,7 @@ public class IdeaService {
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -520,7 +523,7 @@ public class IdeaService {
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -549,7 +552,7 @@ public class IdeaService {
 				idea.setCrtdByName(ipIdea.getIpUser().getUserFName() + " " + ipIdea.getIpUser().getUserLName());
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return idea;
 	}

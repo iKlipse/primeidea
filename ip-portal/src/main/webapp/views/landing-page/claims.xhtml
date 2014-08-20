@@ -16,11 +16,5 @@
 				<f:selectItems value="#{landingPageController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
 			</p:selectOneMenu>
 		</p:column>
-		<p:column>
-			<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{claimController.showEditClaim}">
-				<f:setPropertyActionListener value="#{claim}" target="#{claimController.claimBean}" />
-				<f:setPropertyActionListener value="1" target="#{claimController.returnView}" />
-			</p:commandButton>
-		</p:column>
 	</p:dataTable>
 </ui:composition>

@@ -11,7 +11,7 @@
 				<p:outputLabel id="elblNSDt" value="Start Date : " />
 			</p:column>
 			<p:column>
-				<p:calendar mode="popup" showOn="button" id="etxtStartDate" value="#{adminController.newsBean.nStartDate}" pattern="yyyy/MM/dd HH:mm">
+				<p:calendar style="width: 100%" mode="popup" showOn="button" id="etxtStartDate" value="#{adminController.newsBean.startDate}" pattern="yyyy/MM/dd HH:mm">
 					<p:ajax event="blur" update="etxtEndDate" />
 				</p:calendar>
 			</p:column>
@@ -19,13 +19,13 @@
 				<p:outputLabel id="elblNEDt" value="End Date : " />
 			</p:column>
 			<p:column>
-				<p:calendar mode="popup" showOn="button" id="etxtEndDate" value="#{adminController.newsBean.nEndDate}" pattern="yyyy/MM/dd HH:mm" mindate="#{adminController.newsBean.nStartDate}" />
+				<p:calendar style="width: 100%"  mode="popup" showOn="button" id="etxtEndDate" value="#{adminController.newsBean.endDate}" pattern="yyyy/MM/dd HH:mm" mindate="#{adminController.newsBean.startDate}" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="elblnContent" value="Content : " />
 			</p:column>
 			<p:column style="width: 100%">
-				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="etxtContent" value="#{adminController.newsBean.nContent}"  />
+				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="etxtContent" value="#{adminController.newsBean.nContent}" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="elblProfImage" value="News Files : " />

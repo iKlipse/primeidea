@@ -60,7 +60,7 @@ public class ClaimController implements Serializable {
 		client.header("Accept", "application/json");
 		return client;
 	}
-	
+
 	public String redirectMain() {
 		switch (Integer.valueOf(returnView)) {
 		case 1:
@@ -203,7 +203,7 @@ public class ClaimController implements Serializable {
 			message.setcStatusId(claimBean.getcStatusId());
 			message.setClaimComment(claimBean.getClaimComment());
 			message.setRewardsId(claimBean.getRewardsId());
-			message.setUserId(userId);
+			message.setUserId(claimBean.getUserId());
 			ResponseMessage response = updateClaimClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			updateClaimClient.close();
 			if (response.getStatusCode() == 0) {
@@ -383,7 +383,7 @@ public class ClaimController implements Serializable {
 	}
 
 	public ClaimBean getClaimBean() {
-		if(claimBean == null)
+		if (claimBean == null)
 			claimBean = new ClaimBean();
 		return claimBean;
 	}
@@ -401,7 +401,7 @@ public class ClaimController implements Serializable {
 	}
 
 	public List<ClaimBean> getViewClaimBeans() {
-		if(viewClaimBeans == null)
+		if (viewClaimBeans == null)
 			viewClaimBeans = new ArrayList<ClaimBean>();
 		return viewClaimBeans;
 	}
@@ -411,7 +411,7 @@ public class ClaimController implements Serializable {
 	}
 
 	public List<ListSelectorBean> getClaimStatus() {
-		if(claimStatus == null)
+		if (claimStatus == null)
 			claimStatus = new ArrayList<ListSelectorBean>();
 		return claimStatus;
 	}
@@ -421,7 +421,7 @@ public class ClaimController implements Serializable {
 	}
 
 	public List<UserBean> getAdmUsers() {
-		if(admUsers == null)
+		if (admUsers == null)
 			admUsers = new ArrayList<UserBean>();
 		return admUsers;
 	}
@@ -431,7 +431,7 @@ public class ClaimController implements Serializable {
 	}
 
 	public List<RewardsBean> getViewRewardsBeans() {
-		if(viewRewardsBeans == null)
+		if (viewRewardsBeans == null)
 			viewRewardsBeans = new ArrayList<RewardsBean>();
 		return viewRewardsBeans;
 	}
@@ -449,7 +449,7 @@ public class ClaimController implements Serializable {
 	}
 
 	public String getSelRwId() {
-		if(selRwId == null)
+		if (selRwId == null)
 			selRwId = "";
 		return selRwId;
 	}

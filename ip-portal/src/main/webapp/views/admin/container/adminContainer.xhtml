@@ -29,6 +29,9 @@
 							</p:menuitem>
 						</p:submenu>
 						<p:submenu label="Misc">
+							<p:menuitem value="View Claims" ajax="false" immediate="true" action="#{claimController.showViewClaim}">
+								<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+							</p:menuitem>
 							<p:menuitem value="Create News" ajax="false" immediate="true" action="#{adminController.showCreateNews}">
 								<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
 							</p:menuitem>

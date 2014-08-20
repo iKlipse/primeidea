@@ -151,11 +151,10 @@
     TARGET="rules:#views#solution#container#createContainer.xhtml"
     TITLE="solc" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="soleo::#views#solution#container#editOpenContainer.xhtml"
-    NAME="output1"
-    PATH="/views/solution/container/editOpenContainer.xhtml"
-    TARGET="rules:#views#solution#container#editOpenContainer.xhtml"
-    TITLE="soleo" model-entity="JSFProcessItemOutput"/>
+    ID="sole::#views#solution#container#editContainer.xhtml"
+    NAME="output1" PATH="/views/solution/container/editContainer.xhtml"
+    TARGET="rules:#views#solution#container#editContainer.xhtml"
+    TITLE="sole" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="sols::#views#solution#container#summaryContainer.xhtml"
     NAME="output2"

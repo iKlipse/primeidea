@@ -11,7 +11,7 @@
 				<p:outputLabel id="alblBody" value="Body : " />
 			</p:column>
 			<p:column>
-				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" style="width: 100%" id="atxtBody" value="#{adminController.notificationBean.notifBody}"  />
+				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" style="width: 100%" id="atxtBody" value="#{adminController.notificationBean.notifBody}" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="alblNUpload" value="Upload File : " />
@@ -24,8 +24,8 @@
 			</p:column>
 			<p:column>
 				<!-- <p:pickList style="width: 100%" id="aplGroupPick" converter="groupConverter" value="#{adminController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" /> -->
-				<p:selectCheckboxMenu id="scmGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{challengeController.selGrpId}">
-					<f:selectItems value="#{challengeController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
+				<p:selectCheckboxMenu id="scmGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{adminController.selGrpId}">
+					<f:selectItems value="#{adminController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 				</p:selectCheckboxMenu>
 			</p:column>
 			<p:row>
