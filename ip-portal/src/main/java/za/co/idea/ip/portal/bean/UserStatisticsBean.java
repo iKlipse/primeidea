@@ -13,6 +13,8 @@ public class UserStatisticsBean implements Serializable {
 	private Long totalCount;
 	private String imgPath;
 	private boolean imgAvail;
+	private String grpImgPath;
+	private boolean grpImgAvail;
 
 	public Long getUserId() {
 		return userId;
@@ -76,6 +78,22 @@ public class UserStatisticsBean implements Serializable {
 
 	public void setImgAvail(boolean imgAvail) {
 		this.imgAvail = imgAvail;
+	}
+
+	public String getGrpImgPath() {
+		return grpImgPath;
+	}
+
+	public void setGrpImgPath(String grpImgPath) {
+		this.grpImgPath = grpImgPath;
+	}
+
+	public boolean isGrpImgAvail() {
+		return grpImgAvail;
+	}
+
+	public void setGrpImgAvail(boolean grpImgAvail) {
+		this.grpImgAvail = grpImgAvail;
 	}
 
 }

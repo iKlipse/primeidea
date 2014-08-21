@@ -823,8 +823,13 @@ public class AdminService {
 			user.setLastLoginDt(ipLogin.getLoginLastDt());
 			user.setSecA(ipLogin.getLoginSecA());
 			user.setSecQ(ipLogin.getIpSecqList().getIslId());
-			if (ipUser.getIpGroup() != null)
+			if (ipUser.getIpGroup() != null) {
 				user.setGroupId(ipUser.getIpGroup().getGroupId());
+				IpBlob grpBlob = ipBlobDAO.getBlobByEntity(user.getGroupId(), "ip_group");
+				user.setGrpImgAvail(true);
+				user.setGrpImgPath("" + user.getGroupId() + "/" + grpBlob.getBlobName());
+			} else
+				user.setGrpImgAvail(false);
 			IpBlob blob = ipBlobDAO.getBlobByEntity(ipUser.getUserId(), "ip_user");
 			if (blob != null) {
 				user.setImgPath("ip_user/" + ipUser.getUserId() + "/" + blob.getBlobName());
@@ -892,6 +897,13 @@ public class AdminService {
 					userStats.setImgAvail(true);
 				} else {
 					userStats.setImgAvail(false);
+				}
+				IpBlob grpBlob = ipBlobDAO.getBlobByEntity(ipUser.getUserId(), "ip_group");
+				if (grpBlob != null && ipUser.getIpGroup() != null) {
+					userStats.setGrpImgPath("ip_group/" + ipUser.getIpGroup().getGroupId() + "/" + grpBlob.getBlobName());
+					userStats.setGrpImgAvail(true);
+				} else {
+					userStats.setGrpImgAvail(false);
 				}
 				userStatsSet.add(userStats);
 			}

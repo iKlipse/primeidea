@@ -1,5 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
-	<p:dataTable id="dtViewSolutions" value="#{challengeController.viewSolutions}" var="solution" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Solutions Found" style="width: 100% !important">
+	<p:dataTable id="dtViewSolutions" value="#{challengeController.viewSolutions}" var="solution" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Solutions Found">
 		<p:column filterBy="#{solution.title}" filterMatchMode="contains">
 			<f:facet name="header">Title</f:facet>
 			<p:outputLabel id="txtVwSolutionTitle" value="#{solution.title}" />

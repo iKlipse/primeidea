@@ -1,35 +1,35 @@
 <ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="adminBody">
-		<p:panelGrid columns="2" id="dpnlEditNews">
+		<p:panelGrid styleClass="panelGridView"  columns="2" id="dpnlEditNews">
 			<p:column>
 				<p:outputLabel id="dlblnTitle" value="Title : " />
 			</p:column>
 			<p:column>
-				<p:inputText style="width: 100%" autocomplete="false" id="dnTitle" value="#{adminController.newsBean.nTitle}" />
+				<p:inputText autocomplete="false" id="dnTitle" value="#{adminController.newsBean.nTitle}" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="dlblNSDt" value="Start Date : " />
 			</p:column>
 			<p:column>
-				<p:calendar style="width: 100%" mode="popup" showOn="button" id="dtxtStartDate" value="#{adminController.newsBean.startDate}" pattern="yyyy/MM/dd HH:mm" />
+				<p:calendar mode="popup" showOn="button" id="dtxtStartDate" value="#{adminController.newsBean.startDate}" pattern="yyyy/MM/dd HH:mm" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="dlblNEDt" value="End Date : " />
 			</p:column>
 			<p:column>
-				<p:calendar style="width: 100%" mode="popup" showOn="button" id="dtxtEndDate" value="#{adminController.newsBean.endDate}" pattern="yyyy/MM/dd HH:mm" />
+				<p:calendar mode="popup" showOn="button" id="dtxtEndDate" value="#{adminController.newsBean.endDate}" pattern="yyyy/MM/dd HH:mm" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="dlblnContent" value="Content : " />
 			</p:column>
-			<p:column style="width: 100%">
+			<p:column>
 				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="dtxtContent" value="#{adminController.newsBean.nContent}"  />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="dlblIDownload" value="Download File : " />
 			</p:column>
 			<p:column>
-				<p:commandButton style="width: 100%" id="dbtnDownload" value="Download" ajax="false" disabled="#{adminController.fileAvail}">
+				<p:commandButton id="dbtnDownload" value="Download" ajax="false" disabled="#{adminController.fileAvail}">
 					<p:fileDownload value="#{adminController.fileContent}" />
 				</p:commandButton>
 			</p:column>
@@ -37,7 +37,7 @@
 				<p:outputLabel id="dlblProfImage" value="News Files : " />
 			</p:column>
 			<p:column>
-				<p:fileUpload id="dfuCGUpload" style="background-color: #55a616;width: 100% !important" fileUploadListener="#{adminController.fileUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+				<p:fileUpload id="dfuCGUpload" fileUploadListener="#{adminController.fileUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 			</p:column>
 			<p:row>
 				<p:column colspan="2">

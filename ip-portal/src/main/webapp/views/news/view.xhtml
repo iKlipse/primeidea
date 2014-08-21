@@ -1,34 +1,29 @@
 <f:view xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:aui="http://alloy.liferay.com/tld/aui" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
 	<h:head />
 	<h:body>
-	<p:panel id="pnlViewNews" style="width: 100% !important">
-		<f:facet name="header">View News</f:facet>
-		<ui:define>
-		<p:dataGrid id="cdgNews" value="#{newsBean.viewNewsBeans}" var="news" columns="1">
-			<p:panel style="border: 0px !important;">
-				<f:facet name="header">
-					<p:outputLabel id="clblNewsDate" value="#{news.nStartDate}" style="float: right !important" />
-				</f:facet>
-				<p:panelGrid columns="1" id="cpnlNews">
-					<p:column>
-						<p:lightBox>
-							<h:outputLink value="../../resources/images/#{news.newsUrl}" title="#{news.nTitle}">
-								<p:graphicImage library="images" name="#{news.newsUrl}" height="150px" width="150px" />
-							</h:outputLink>
-						</p:lightBox>
-					</p:column>
-					<p:column>
-						<h3>
-							<p:outputLabel id="clblITitle" value="#{news.nTitle}" />
-						</h3>
-					</p:column>
-					<p:column>
-						<p:outputLabel id="ctxtIDesc" value="#{news.nContent}" escape="false" />
-					</p:column>
-				</p:panelGrid>
-			</p:panel>
-		</p:dataGrid>
-	</ui:define>
-	</p:panel>
+		<h:form id="frmVwNews" enctype="multipart/form-data">
+			<p:remoteCommand actionListener="#{adminController.initializeNews}" name="onload" autoRun="true" update="cdgNews" />
+			<p:carousel id="cdgNews" value="#{adminController.viewNewsBeans}" var="news" numVisible="1">
+				<p:panel styleClass="panelView" header="#{news.startDate}">
+					<p:panelGrid styleClass="panelGridView" columns="1" id="cpnlNews">
+						<p:column>
+							<p:lightBox>
+								<h:outputLink value="../../resources/images/#{news.newsUrl}" title="#{news.nTitle}">
+									<p:graphicImage library="images" name="#{news.newsUrl}" height="150px" width="150px" />
+								</h:outputLink>
+							</p:lightBox>
+						</p:column>
+						<p:column>
+							<h3>
+								<p:outputLabel id="clblITitle" value="#{news.nTitle}" />
+							</h3>
+						</p:column>
+						<p:column>
+							<p:outputLabel id="ctxtIDesc" value="#{news.nContent}" escape="false" />
+						</p:column>
+					</p:panelGrid>
+				</p:panel>
+			</p:carousel>
+		</h:form>
 	</h:body>
 </f:view>

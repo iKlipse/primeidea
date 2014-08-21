@@ -1,10 +1,10 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
-	<p:panelGrid columns="2" id="pnlCrtSolution">
+	<p:panelGrid styleClass="panelGridView"  columns="2" id="pnlCrtSolution">
 		<p:column>
 			<p:outputLabel id="lblCrtSChal" value="Challenges : " />
 		</p:column>
 		<p:column>
-			<p:selectOneMenu style="width: 100%" id="somCrtSChal" value="#{challengeController.solutionBean.chalId}">
+			<p:selectOneMenu id="somCrtSChal" value="#{challengeController.solutionBean.chalId}">
 				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 				<f:selectItems value="#{challengeController.viewChallenges}" var="schal" itemLabel="#{schal.title}" itemValue="#{schal.id}" />
 			</p:selectOneMenu>
@@ -13,7 +13,7 @@
 			<p:outputLabel id="lblCrtSTitle" value="Title : " />
 		</p:column>
 		<p:column>
-			<p:inputText style="width: 100%" autocomplete="false" id="txtCrtSTitle" value="#{challengeController.solutionBean.title}">
+			<p:inputText autocomplete="false" id="txtCrtSTitle" value="#{challengeController.solutionBean.title}">
 				<p:ajax listener="#{challengeController.checkTitleAvailability}" event="blur" />
 			</p:inputText>
 		</p:column>
@@ -21,13 +21,13 @@
 			<p:outputLabel id="lblCrtSDesc" value="Description : " />
 		</p:column>
 		<p:column>
-			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" style="width: 100%" id="txtCrtSDesc" value="#{challengeController.solutionBean.desc}"  />
+			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="txtCrtSDesc" value="#{challengeController.solutionBean.desc}"  />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblCrtSTag" value="Keywords to Describe Your Solution : " />
 		</p:column>
 		<p:column>
-			<p:inputText style="width: 100%" autocomplete="false" id="txtCrtSTag" value="#{challengeController.solutionBean.tags}" />
+			<p:inputText autocomplete="false" id="txtCrtSTag" value="#{challengeController.solutionBean.tags}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblCrtOpen" value="Save as Open : " />
@@ -39,7 +39,7 @@
 			<p:outputLabel id="lblCrtSUpload" value="Upload File : " />
 		</p:column>
 		<p:column>
-			<p:fileUpload style="width: 100%" id="fuCrtSUpload" fileUploadListener="#{challengeController.solFileUploadHandle}" multiple="false" />
+			<p:fileUpload id="fuCrtSUpload" fileUploadListener="#{challengeController.solFileUploadHandle}" multiple="false" />
 		</p:column>
 		<p:row>
 			<p:column colspan="2">

@@ -1,5 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
-	<p:panelGrid columns="2" id="pnlEditRewards">
+	<p:panelGrid styleClass="panelGridView"  columns="2" id="pnlEditRewards">
 		<p:column>
 			<p:outputLabel id="lblEdRTitle" value="Title : " />
 		</p:column>
@@ -10,7 +10,7 @@
 			<p:outputLabel id="lblEdRCat" value="Category : " />
 		</p:column>
 		<p:column>
-			<p:selectOneMenu style="width: 100%" id="somEdRCat" value="#{rewardsController.rewardsBean.rCatId}">
+			<p:selectOneMenu id="somEdRCat" value="#{rewardsController.rewardsBean.rCatId}">
 				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 				<f:selectItems value="#{rewardsController.rewardsCat}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
 			</p:selectOneMenu>
@@ -19,43 +19,43 @@
 			<p:outputLabel id="lblEdRDesc" value="Description : " />
 		</p:column>
 		<p:column>
-			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" style="width: 100%" id="txtEdRDesc" value="#{rewardsController.rewardsBean.rwDesc}"  />
+			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="txtEdRDesc" value="#{rewardsController.rewardsBean.rwDesc}"  />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdRPoint" value="Point Value : " />
 		</p:column>
 		<p:column>
-			<p:inputText style="width: 100%" autocomplete="false" id="txtEdRPoint" value="#{rewardsController.rewardsBean.rwValue}" />
+			<p:inputText autocomplete="false" id="txtEdRPoint" value="#{rewardsController.rewardsBean.rwValue}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdRStockCdNum" value="Stock Code Num : " />
 		</p:column>
 		<p:column>
-			<p:inputText style="width: 100%" autocomplete="false" id="txtEdRStockCdNum" value="#{rewardsController.rewardsBean.rwStockCodeNum}" />
+			<p:inputText autocomplete="false" id="txtEdRStockCdNum" value="#{rewardsController.rewardsBean.rwStockCodeNum}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdRPrice" value="Price : " />
 		</p:column>
 		<p:column>
-			<p:inputText style="width: 100%" autocomplete="false" id="txtEdRPrice" value="#{rewardsController.rewardsBean.rwPrice}" />
+			<p:inputText autocomplete="false" id="txtEdRPrice" value="#{rewardsController.rewardsBean.rwPrice}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdRQuantity" value="Quantity : " />
 		</p:column>
 		<p:column>
-			<p:inputText style="width: 100%" autocomplete="false" id="txtEdRQuantity" value="#{rewardsController.rewardsBean.rwQuantity}" />
+			<p:inputText autocomplete="false" id="txtEdRQuantity" value="#{rewardsController.rewardsBean.rwQuantity}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdRHoverText" value="Hover Text : " />
 		</p:column>
 		<p:column>
-			<p:inputText style="width: 100%" autocomplete="false" id="txtEdRHoverText" value="#{rewardsController.rewardsBean.rwHoverText}" />
+			<p:inputText autocomplete="false" id="txtEdRHoverText" value="#{rewardsController.rewardsBean.rwHoverText}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdRLaunchDt" value="Launch Date : " />
 		</p:column>
 		<p:column>
-			<p:calendar style="width: 100%" mode="popup" showOn="button" id="txtREdLaunchDt" value="#{rewardsController.rewardsBean.rwLaunchDt}" pattern="yyyy/MM/dd HH:mm">
+			<p:calendar mode="popup" showOn="button" id="txtREdLaunchDt" value="#{rewardsController.rewardsBean.rwLaunchDt}" pattern="yyyy/MM/dd HH:mm">
 				<p:ajax event="blur" update="txtEdRExpiryDt" />
 			</p:calendar>
 		</p:column>
@@ -63,13 +63,13 @@
 			<p:outputLabel id="lblEdRExpiryDt" value="Expiry Date : " />
 		</p:column>
 		<p:column>
-			<p:calendar style="width: 100%" mode="popup" showOn="button" id="txtEdRExpiryDt" value="#{rewardsController.rewardsBean.rwExpiryDt}" pattern="yyyy/MM/dd HH:mm" mindate="#{rewardsController.rewardsBean.rwLaunchDt}" />
+			<p:calendar mode="popup" showOn="button" id="txtEdRExpiryDt" value="#{rewardsController.rewardsBean.rwExpiryDt}" pattern="yyyy/MM/dd HH:mm" mindate="#{rewardsController.rewardsBean.rwLaunchDt}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdRTag" value="Tags : " />
 		</p:column>
 		<p:column>
-			<p:inputText style="width: 100%" autocomplete="false" id="txtEdRTag" value="#{rewardsController.rewardsBean.rwTag}" />
+			<p:inputText autocomplete="false" id="txtEdRTag" value="#{rewardsController.rewardsBean.rwTag}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdIDownload" value="Download File : " />
@@ -84,7 +84,7 @@
 			<p:outputLabel id="lblEdRUpload" value="Upload File : " />
 		</p:column>
 		<p:column>
-			<p:fileUpload style="width: 100%" id="fuEdCUpload" fileUploadListener="#{rewardsController.rwFileUploadHandle}" multiple="false" />
+			<p:fileUpload id="fuEdCUpload" fileUploadListener="#{rewardsController.rwFileUploadHandle}" multiple="false" />
 		</p:column>
 		<p:row>
 			<p:column>

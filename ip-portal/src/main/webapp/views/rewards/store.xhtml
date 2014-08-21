@@ -1,10 +1,10 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
-	<p:panelGrid style="width: 30%" columns="2" id="pnlViewRewards">
+	<p:panelGrid styleClass="panelGridView"  columns="2" id="pnlViewRewards">
 		<p:column>
 			<p:outputLabel id="lblStrRCat" value="Category : " />
 		</p:column>
 		<p:column>
-			<p:selectOneMenu style="width: 100%" id="somStrRCat" value="#{rewardsController.selRwCatId}">
+			<p:selectOneMenu id="somStrRCat" value="#{rewardsController.selRwCatId}">
 				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 				<f:selectItems value="#{rewardsController.rewardsCat}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
 				<f:selectItem itemLabel="All Items" itemValue="0" noSelectionOption="true" />
@@ -13,8 +13,8 @@
 		</p:column>
 	</p:panelGrid>
 	<p:dataGrid id="dgStrRewards" var="rewards" value="#{rewardsController.viewRewardsBeans}" columns="3" rows="12" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="9,12,15">
-		<p:panel header="#{rewards.rwTitle}" style="text-align:center">
-			<p:panelGrid id="pnlStrContent" columns="1">
+		<p:panel styleClass="panelView"  header="#{rewards.rwTitle}">
+			<p:panelGrid styleClass="panelGridView"  id="pnlStrContent" columns="1">
 				<p:column>
 					<p:lightBox>
 						<h:outputLink value="../../resources/images/#{rewards.rwUrl}" title="#{rewards.rwTitle}">

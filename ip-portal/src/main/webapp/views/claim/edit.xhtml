@@ -1,15 +1,15 @@
 <ui:composition template="/views/claim/container/claimContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="claimBody">
-		<p:panel id="ctrEditClaim">
+		<p:panel styleClass="panelView"  id="ctrEditClaim">
 			<f:facet name="header">
 					Edit Claim
 				</f:facet>
-			<p:panelGrid columns="2" id="pnlCrtClaim">
+			<p:panelGrid styleClass="panelGridView"  columns="2" id="pnlCrtClaim">
 				<p:column>
 					<p:outputLabel id="lblCRw" value="Reward : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu style="width: 100%" id="somCRw" value="#{claimController.claimBean.rewardsId}">
+					<p:selectOneMenu id="somCRw" value="#{claimController.claimBean.rewardsId}">
 						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{claimController.viewRewardsBeans}" var="ccat" itemLabel="#{ccat.rwTitle}" itemValue="#{ccat.rwId}" />
 					</p:selectOneMenu>
@@ -18,19 +18,19 @@
 					<p:outputLabel id="lblCDesc" value="Special Notes : " />
 				</p:column>
 				<p:column>
-					<p:inputTextarea style="width: 100%" rows="4" cols="40" autocomplete="false" id="txtCTitle" value="#{claimController.claimBean.claimDesc}" />
+					<p:inputTextarea rows="4" cols="40" autocomplete="false" id="txtCTitle" value="#{claimController.claimBean.claimDesc}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblCComment" value="Comment : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" autocomplete="false" id="txtCComment" value="#{claimController.claimBean.claimComment}" />
+					<p:inputText autocomplete="false" id="txtCComment" value="#{claimController.claimBean.claimComment}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblCStatus" value="Status : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu style="width: 100%" id="somCStatus" value="#{claimController.claimBean.cStatusId}">
+					<p:selectOneMenu id="somCStatus" value="#{claimController.claimBean.cStatusId}">
 						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{claimController.claimStatus}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
 					</p:selectOneMenu>

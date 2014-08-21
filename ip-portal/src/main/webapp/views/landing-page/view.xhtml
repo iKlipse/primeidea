@@ -5,7 +5,7 @@
 		<h:form id="frmHome" enctype="multipart/form-data">
 			<p:growl life="5000" id="frmHomeMsg" showDetail="true" showSummary="true" autoUpdate="true" />
 			<p:remoteCommand actionListener="#{landingPageController.initializePage}" name="onload" autoRun="true" update="pnlLPDet" />
-			<p:panel id="pnlLPMenu">
+			<p:panel styleClass="panelView"  id="pnlLPMenu">
 				<p:commandLink value="My Ideas" actionListener="#{landingPageController.changeIdea}" update="pnlLPDet" />
 				<p:graphicImage name="separator.png" library="images" />
 				<p:commandLink value="My Challenges" actionListener="#{landingPageController.changeChallenge}" update="pnlLPDet" />
@@ -18,23 +18,23 @@
 				<p:graphicImage name="separator.png" library="images" />
 				<p:commandLink value="My Points" actionListener="#{landingPageController.showPointProfile}" update="pnlLPDet" />
 			</p:panel>
-			<p:panel id="pnlLPDet">
-				<p:panel id="ctrMyIdeas" style="width: 100% !important" rendered="#{landingPageController.showIdeas}">
+			<p:panel styleClass="panelView"  id="pnlLPDet">
+				<p:panel styleClass="panelView"  id="ctrMyIdeas" rendered="#{landingPageController.showIdeas}">
 					<ui:include src="/views/landing-page/ideas.xhtml" />
 				</p:panel>
-				<p:panel id="ctrMyChallenges" style="width: 100% !important" rendered="#{landingPageController.showChals}">
+				<p:panel styleClass="panelView"  id="ctrMyChallenges" rendered="#{landingPageController.showChals}">
 					<ui:include src="/views/landing-page/challenges.xhtml" />
 				</p:panel>
-				<p:panel id="ctrMySolutions" style="width: 100% !important" rendered="#{landingPageController.showSols}">
+				<p:panel styleClass="panelView"  id="ctrMySolutions" rendered="#{landingPageController.showSols}">
 					<ui:include src="/views/landing-page/solutions.xhtml" />
 				</p:panel>
-				<p:panel id="ctrMyWishlist" style="width: 100% !important" rendered="#{landingPageController.showWishlist}">
+				<p:panel styleClass="panelView"  id="ctrMyWishlist" rendered="#{landingPageController.showWishlist}">
 					<ui:include src="/views/landing-page/wishlist.xhtml" />
 				</p:panel>
-				<p:panel id="ctrMyClaims" style="width: 100% !important" rendered="#{landingPageController.showClaims}">
+				<p:panel styleClass="panelView"  id="ctrMyClaims" rendered="#{landingPageController.showClaims}">
 					<ui:include src="/views/landing-page/claims.xhtml" />
 				</p:panel>
-				<p:panel id="ctrMyPoints" style="width: 100% !important" rendered="#{landingPageController.showPoints}">
+				<p:panel styleClass="panelView"  id="ctrMyPoints" rendered="#{landingPageController.showPoints}">
 					<ui:include src="/views/landing-page/points.xhtml" />
 				</p:panel>
 			</p:panel>

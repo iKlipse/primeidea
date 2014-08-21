@@ -1,10 +1,10 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<p:panelGrid columns="2" id="pnlEditReviewIdea">
+	<p:panelGrid styleClass="panelGridView"  columns="2" id="pnlEditReviewIdea">
 		<p:column>
 			<p:outputLabel id="lblEdtrITitle" value="Title : " />
 		</p:column>
 		<p:column>
-			<p:inputText style="width: 100%" autocomplete="false" id="txtEdtrITitle" value="#{randomIdeaController.ideaBean.ideaTitle}">
+			<p:inputText autocomplete="false" id="txtEdtrITitle" value="#{randomIdeaController.ideaBean.ideaTitle}">
 				<p:ajax listener="#{randomIdeaController.checkTitleAvailability}" event="blur" />
 			</p:inputText>
 		</p:column>
@@ -12,7 +12,7 @@
 			<p:outputLabel id="lblEdtrIStatus" value="Status : " />
 		</p:column>
 		<p:column>
-			<p:selectOneMenu style="width: 100%" id="somEdtrIStatus" value="#{randomIdeaController.ideaBean.setStatusId}">
+			<p:selectOneMenu id="somEdtrIStatus" value="#{randomIdeaController.ideaBean.setStatusId}">
 				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 				<f:selectItems value="#{randomIdeaController.ideaStatuses}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
 			</p:selectOneMenu>
@@ -21,19 +21,19 @@
 			<p:outputLabel id="lblEdtrIDesc" value="Description : " />
 		</p:column>
 		<p:column>
-			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" style="width: 100%" id="txtEdtrIDesc" value="#{randomIdeaController.ideaBean.ideaDesc}" controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" />
+			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="txtEdtrIDesc" value="#{randomIdeaController.ideaBean.ideaDesc}"/>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtrITag" value="Keywords to Describe Your Idea : " />
 		</p:column>
 		<p:column>
-			<p:inputText style="width: 100%" autocomplete="false" id="txtEdtrITag" value="#{randomIdeaController.ideaBean.ideaTag}" />
+			<p:inputText autocomplete="false" id="txtEdtrITag" value="#{randomIdeaController.ideaBean.ideaTag}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtrIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:commandButton style="width: 100%" id="btnEdtrDownload" value="Download" ajax="false" disabled="true">
+			<p:commandButton id="btnEdtrDownload" value="Download" ajax="false" disabled="true">
 				<!-- disabled="#{randomIdeaController.fileAvail}" -->
 				<p:fileDownload value="#{randomIdeaController.fileContent}" />
 			</p:commandButton>
@@ -42,13 +42,13 @@
 			<p:outputLabel id="lblEdtrIUpload" value="Upload File : " />
 		</p:column>
 		<p:column>
-			<p:fileUpload style="width: 100%" id="fuIUpload" fileUploadListener="#{randomIdeaController.fileUploadHandle}" multiple="false" />
+			<p:fileUpload id="fuIUpload" fileUploadListener="#{randomIdeaController.fileUploadHandle}" multiple="false" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtrFuncGrps" value="Idea Groups" />
 		</p:column>
 		<p:column>
-			<!-- <p:pickList style="width: 100%" id="plGroupPick" converter="groupConverter" value="#{randomIdeaController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" /> -->
+			<!-- <p:pickList id="plGroupPick" converter="groupConverter" value="#{randomIdeaController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" /> -->
 			<p:selectCheckboxMenu id="scmGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{randomIdeaController.selGrpId}">
 				<f:selectItems value="#{randomIdeaController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 			</p:selectCheckboxMenu>
@@ -57,7 +57,7 @@
 			<p:outputLabel id="lblEdtrCrtdBy" value="Created By : " />
 		</p:column>
 		<p:column>
-			<p:selectOneMenu style="width: 100%" id="somEdtrACrtdBy" value="#{randomIdeaController.ideaBean.crtdById}">
+			<p:selectOneMenu id="somEdtrACrtdBy" value="#{randomIdeaController.ideaBean.crtdById}">
 				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 				<f:selectItems value="#{randomIdeaController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
 			</p:selectOneMenu>

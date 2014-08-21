@@ -13,6 +13,8 @@ public class UserStatisticsMessage implements Comparable<UserStatisticsMessage> 
 	private Long totalCount;
 	private String imgPath;
 	private boolean imgAvail;
+	private String grpImgPath;
+	private boolean grpImgAvail;
 
 	public Long getUserId() {
 		return userId;
@@ -85,6 +87,22 @@ public class UserStatisticsMessage implements Comparable<UserStatisticsMessage> 
 			return 1;
 		else
 			return 0;
+	}
+
+	public String getGrpImgPath() {
+		return grpImgPath;
+	}
+
+	public void setGrpImgPath(String grpImgPath) {
+		this.grpImgPath = grpImgPath;
+	}
+
+	public boolean isGrpImgAvail() {
+		return grpImgAvail;
+	}
+
+	public void setGrpImgAvail(boolean grpImgAvail) {
+		this.grpImgAvail = grpImgAvail;
 	}
 
 }

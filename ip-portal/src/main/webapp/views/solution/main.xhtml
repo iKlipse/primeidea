@@ -6,7 +6,7 @@
 		<h:form id="frmSolCtrlr" enctype="multipart/form-data">
 			<p:growl life="5000" id="frmSolCtrlrMsg" showDetail="true" showSummary="true" autoUpdate="true" />
 			<p:remoteCommand actionListener="#{challengeController.initializeSolPage}" name="onload" autoRun="true" update="pnlSolDet" />
-			<p:panel id="pnlSolMenu" style="border: 0px !important">
+			<p:panel styleClass="panelView"  id="pnlSolMenu">
 				<p:commandLink value="View Open Solutions" action="#{challengeController.showViewOpenSolution}" update="pnlSolDet">
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 				</p:commandLink>
@@ -23,20 +23,20 @@
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 				</p:commandLink>
 			</p:panel>
-			<p:panel id="pnlSolDet" style="border: 0px !important">
-				<p:panel id="ctrVwPSolutions" style="width: 100% !important" rendered="#{challengeController.showPubSol}">
+			<p:panel styleClass="panelView"  id="pnlSolDet">
+				<p:panel styleClass="panelView"  id="ctrVwPSolutions" rendered="#{challengeController.showPubSol}">
 					<f:facet name="header">View Open Solutions</f:facet>
 					<ui:include src="/views/solution/viewOpen.xhtml" />
 				</p:panel>
-				<p:panel id="ctrVwReviewSolutions" style="width: 100% !important" rendered="#{challengeController.showReviewSol}">
+				<p:panel styleClass="panelView"  id="ctrVwReviewSolutions" rendered="#{challengeController.showReviewSol}">
 					<f:facet name="header">View Solutions</f:facet>
 					<ui:include src="/views/solution/viewReview.xhtml" />
 				</p:panel>
-				<p:panel id="ctrVwSolutions" style="width: 100% !important" rendered="#{challengeController.showViewSol}">
+				<p:panel styleClass="panelView"  id="ctrVwSolutions" rendered="#{challengeController.showViewSol}">
 					<f:facet name="header">View Solutions</f:facet>
 					<ui:include src="/views/solution/view.xhtml" />
 				</p:panel>
-				<p:panel id="ctrCrtSolution" style="width: 100% !important" rendered="#{challengeController.showCrtSol}">
+				<p:panel styleClass="panelView"  id="ctrCrtSolution" rendered="#{challengeController.showCrtSol}">
 					<f:facet name="header">Create Solution</f:facet>
 					<ui:include src="/views/solution/create.xhtml" />
 				</p:panel>

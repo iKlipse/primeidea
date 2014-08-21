@@ -1,5 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
-	<p:dataTable id="dtViewIdeas" value="#{randomIdeaController.viewIdeas}" var="idea" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Ideas Found" style="width: 100% !important">
+	<p:dataTable id="dtViewIdeas" value="#{randomIdeaController.viewIdeas}" var="idea" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Ideas Found">
 		<p:column filterBy="#{idea.ideaTitle}" filterMatchMode="contains">
 			<f:facet name="header">Title</f:facet>
 			<p:outputLabel id="txtVwIdeaTitle" value="#{idea.ideaTitle}" />

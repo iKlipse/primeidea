@@ -1,17 +1,17 @@
 <ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="adminBody">
-		<p:panelGrid columns="2" id="jpnlEdittGroup">
+		<p:panelGrid styleClass="panelGridView"  columns="2" id="jpnlEdittGroup">
 			<p:column>
 				<p:outputLabel id="jlblGName" value="Group Name : " />
 			</p:column>
 			<p:column>
-				<p:outputLabel style="width: 100%" id="jtxtGName" value="#{adminController.groupBean.gName}" />
+				<p:outputLabel id="jtxtGName" value="#{adminController.groupBean.gName}" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="jlblEMail" value="EMail : " />
 			</p:column>
 			<p:column>
-				<p:outputLabel style="width: 100%" id="jtxtEMail" value="#{adminController.groupBean.geMail}" />
+				<p:outputLabel id="jtxtEMail" value="#{adminController.groupBean.geMail}" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="jlblIDownload" value="Download File : " />
@@ -25,7 +25,7 @@
 				<p:outputLabel id="jlblParentGId" value="Parent : " />
 			</p:column>
 			<p:column>
-				<p:selectOneMenu style="width: 100%" id="jsomPGrpId" value="#{adminController.groupBean.selPGrp}" filter="true" filterMatchMode="contains" disabled="true">
+				<p:selectOneMenu id="jsomPGrpId" value="#{adminController.groupBean.selPGrp}" filter="true" filterMatchMode="contains" disabled="true">
 					<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 					<f:selectItems value="#{adminController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 				</p:selectOneMenu>
@@ -34,7 +34,7 @@
 				<p:outputLabel id="jlblAdmUser" value="Admin User : " />
 			</p:column>
 			<p:column>
-				<p:selectOneMenu style="width: 100%" id="jsomAdmUser" value="#{adminController.groupBean.selAdmUser}" disabled="true">
+				<p:selectOneMenu id="jsomAdmUser" value="#{adminController.groupBean.selAdmUser}" disabled="true">
 					<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 					<f:selectItems value="#{adminController.admUsers}" var="a" itemLabel="#{a.priGroupName} - #{a.fName} #{a.lName}" itemValue="#{a.uId}" />
 				</p:selectOneMenu>
@@ -43,7 +43,7 @@
 				<p:outputLabel id="jlblFuncUsers" value="Group Users" />
 			</p:column>
 			<p:column>
-				<!-- <p:pickList style="width: 100%" id="jplUserPick" disabled="true" converter="userConverter" value="#{adminController.userTwinSelect}" var="user" itemLabel="#{user.priGroupName} - #{user.fName} #{user.lName}" itemValue="#{user.uId}" /> -->
+				<!-- <p:pickList id="jplUserPick" disabled="true" converter="userConverter" value="#{adminController.userTwinSelect}" var="user" itemLabel="#{user.priGroupName} - #{user.fName} #{user.lName}" itemValue="#{user.uId}" /> -->
 				<p:selectCheckboxMenu id="scmUserList" label="Please Select" filter="true" filterMatchMode="contains" value="#{adminController.selUserId}">
 					<f:selectItems value="#{adminController.admUsers}" var="user" itemLabel="#{user.priGroupName} - #{user.scName} #{user.lName}" itemValue="#{user.uId}" />
 				</p:selectCheckboxMenu>
@@ -52,7 +52,7 @@
 				<p:outputLabel id="jlblActive" value="Active : " />
 			</p:column>
 			<p:column>
-				<p:selectBooleanButton style="width: 100%" id="jsbbActive" disabled="true" value="#{adminController.groupBean.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
+				<p:selectBooleanButton id="jsbbActive" disabled="true" value="#{adminController.groupBean.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="jlblGrpFuncs" value="Assigned Fuctions : " />

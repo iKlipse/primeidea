@@ -6,23 +6,23 @@
 		<h:form id="frmRewards" enctype="multipart/form-data">
 			<p:growl life="5000" id="frmRewardsMsg" showDetail="true" showSummary="true" autoUpdate="true" />
 			<p:remoteCommand actionListener="#{rewardsController.showRewardStore}" name="onload" autoRun="true" update="pnlRewardDet" />
-			<p:panel id="pnlRewardMenu" style="border: 0px !important">
+			<p:panel styleClass="panelView"  id="pnlRewardMenu">
 				<p:commandLink value="Online Store" actionListener="#{rewardsController.showRewardStore}" update="pnlRewardDet" />
 				<p:graphicImage name="separator.png" library="images" />
 				<p:commandLink value="View Rewards" actionListener="#{rewardsController.showViewReward}" update="pnlRewardDet" />
 				<p:graphicImage name="separator.png" library="images" />
 				<p:commandLink value="Create Reward" actionListener="#{rewardsController.showCreateReward}" update="pnlRewardDet" />
 			</p:panel>
-			<p:panel id="pnlRewardDet" style="border: 0px !important">
-				<p:panel id="ctrViewIdeas" style="width: 100% !important" rendered="#{rewardsController.showOnlineStore}">
+			<p:panel styleClass="panelView"  id="pnlRewardDet">
+				<p:panel styleClass="panelView"  id="ctrViewIdeas" rendered="#{rewardsController.showOnlineStore}">
 					<f:facet name="header">Online Store</f:facet>
 					<ui:include src="/views/rewards/store.xhtml" />
 				</p:panel>
-				<p:panel id="ctrViewOpenIdeas" style="width: 100% !important" rendered="#{rewardsController.showViewReward}">
+				<p:panel styleClass="panelView"  id="ctrViewOpenIdeas" rendered="#{rewardsController.showViewReward}">
 					<f:facet name="header">View Rewards</f:facet>
 					<ui:include src="/views/rewards/view.xhtml" />
 				</p:panel>
-				<p:panel id="ctrCreateIdeas" style="width: 100% !important" rendered="#{rewardsController.showCrtReward}">
+				<p:panel styleClass="panelView"  id="ctrCreateIdeas" rendered="#{rewardsController.showCrtReward}">
 					<f:facet name="header">Create Reward</f:facet>
 					<ui:include src="/views/rewards/create.xhtml" />
 				</p:panel>

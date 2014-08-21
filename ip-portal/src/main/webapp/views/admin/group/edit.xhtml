@@ -1,17 +1,17 @@
 <ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="adminBody">
-		<p:panelGrid columns="2" id="opnlEdittGroup">
+		<p:panelGrid styleClass="panelGridView"  columns="2" id="opnlEdittGroup">
 			<p:column>
 				<p:outputLabel id="olblGName" value="Group Name : " />
 			</p:column>
 			<p:column>
-				<p:inputText style="width: 100%" autocomplete="false" id="otxtGName" value="#{adminController.groupBean.gName}" />
+				<p:inputText autocomplete="false" id="otxtGName" value="#{adminController.groupBean.gName}" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="olblEMail" value="EMail : " />
 			</p:column>
 			<p:column>
-				<p:inputText style="width: 100%" autocomplete="false" id="otxtEMail" value="#{adminController.groupBean.geMail}" />
+				<p:inputText autocomplete="false" id="otxtEMail" value="#{adminController.groupBean.geMail}" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="olblIDownload" value="Download File : " />
@@ -25,7 +25,7 @@
 				<p:outputLabel id="olblParentGId" value="Parent : " />
 			</p:column>
 			<p:column>
-				<p:selectOneMenu style="width: 100%" id="osomPGrpId" value="#{adminController.groupBean.selPGrp}" filter="true" filterMatchMode="contains">
+				<p:selectOneMenu id="osomPGrpId" value="#{adminController.groupBean.selPGrp}" filter="true" filterMatchMode="contains">
 					<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 					<f:selectItems value="#{adminController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 				</p:selectOneMenu>
@@ -34,13 +34,13 @@
 				<p:outputLabel id="olblProfImage" value="Group Image : " />
 			</p:column>
 			<p:column>
-				<p:fileUpload id="ofuCCUpload" style="background-color: #55a616;width: 100% !important" fileUploadListener="#{adminController.fileGroupUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+				<p:fileUpload id="ofuCCUpload" fileUploadListener="#{adminController.fileGroupUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="olblAdmUser" value="Admin User : " />
 			</p:column>
 			<p:column>
-				<p:selectOneMenu style="width: 100%" id="osomAdmUser" value="#{adminController.groupBean.selAdmUser}">
+				<p:selectOneMenu id="osomAdmUser" value="#{adminController.groupBean.selAdmUser}">
 					<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 					<f:selectItems value="#{adminController.admUsers}" var="a" itemLabel="#{a.priGroupName} - #{a.fName} #{a.lName}" itemValue="#{a.uId}" />
 				</p:selectOneMenu>
@@ -49,7 +49,7 @@
 				<p:outputLabel id="olblFuncUsers" value="Group Users" />
 			</p:column>
 			<p:column>
-				<!-- <p:pickList style="width: 100%" id="oplUserPick" converter="userConverter" value="#{adminController.userTwinSelect}" var="user" itemLabel="#{user.priGroupName} - #{user.fName} #{user.lName}" itemValue="#{user.uId}" /> -->
+				<!-- <p:pickList id="oplUserPick" converter="userConverter" value="#{adminController.userTwinSelect}" var="user" itemLabel="#{user.priGroupName} - #{user.fName} #{user.lName}" itemValue="#{user.uId}" /> -->
 				<p:selectCheckboxMenu id="scmUserList" label="Please Select" filter="true" filterMatchMode="contains" value="#{adminController.selUserId}">
 					<f:selectItems value="#{adminController.admUsers}" var="user" itemLabel="#{user.priGroupName} - #{user.scName} #{user.lName}" itemValue="#{user.uId}" />
 				</p:selectCheckboxMenu>
@@ -58,7 +58,7 @@
 				<p:outputLabel id="olblActive" value="Active : " />
 			</p:column>
 			<p:column>
-				<p:selectBooleanButton style="width: 100%" id="osbbActive" value="#{adminController.groupBean.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
+				<p:selectBooleanButton id="osbbActive" value="#{adminController.groupBean.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="olblGrpFuncs" value="Assigned Fuctions : " />

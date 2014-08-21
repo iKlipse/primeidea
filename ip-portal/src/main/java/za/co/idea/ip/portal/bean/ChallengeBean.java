@@ -20,7 +20,7 @@ public class ChallengeBean implements Serializable {
 	private Date crtdDt;
 	private Long crtdById;
 	private String crtdByName;
- 	private boolean crtByImgAvail;
+	private boolean crtByImgAvail;
 	private String crtByImgPath;
 	private String contentType;
 	private String fileName;

@@ -1,29 +1,27 @@
-.ui-selectonemenu-panel {
-	background-color: white !important;
+.ui-carousel-header {
+	margin: 0px 0px !important;
+	height: 0px !important;
+	overflow: hidden !important;
+	padding: 0px 0px 0px !important;
+	display: none !important;
+	border: none !important;
 }
 
-.ui-selectcheckboxmenu-panel {
-	background-color: white !important;
+.panelView {
+	border: solid 1px lightgray !important;
+	border-radius: 20px;
+	width: 100% !important;
+	height: 100% !important;
 }
 
-.ui-overlaypanel {
-	background-color: white !important;
+.panelGridView {
+	border: solid 1px white !important;
+	width: 100% !important;
+	height: 100% !important;
 }
 
-.ui-menu-list {
-	background-color: white !important;
-}
-
-.ui-datepicker {
-	background-color: white !important;
-}
-
-.ui-tooltip {
-	background-color: white !important;
-}
-
-.ui-menu {
-	background-color: white !important;
+.panelGridView tr, .panelGridView td {
+	border: solid 1px white !important;
 }
 
 .ui-selectonemenu-label {
@@ -34,90 +32,4 @@
 	width: 100% !important;
 	font-size: 1em !important;
 	font-weight: 12 px;
-}
-
-.ui-carousel-header {
-	margin: 0px 1px;
-	height: 0px;
-	overflow: hidden;
-	padding: 7px 10px 8px;
-	display: none !important;
-	border: 0;
-}
-
-.noBorder tr, .noBorder td {
-	border: none !important;
-}
-
-.noBackground {
-	border: none !important;
-	background-color: white !important;
-}
-
-.viewGrid  tr, .viewGrid td {
-	border: none;
-}
-
-.viewGrid {
-	border: none;
-	vertical-align: top;
-}
-
-.ui-panel {
-	background-color: white !important;
-	border-weight: 0px !important;
-	border-color: white !important;
-	border-style: solid !important;
-}
-
-.ui-datagrid {
-	background-color: white !important;
-	border-weight: 0px !important;
-	border-color: white !important;
-	border-style: solid !important;
-}
-
-.ui-panelgrid {
-	background-color: white !important;
-	border-weight: 0px !important;
-	border-color: white !important;
-	border-style: solid !important;
-}
-
-.ui-panel-titlebar {
-	background-color: white !important;
-	border-width: 0px !important;
-	border-color: white !important;
-	border-style: solid !important;
-	height: 30px !important;
-}
-
-.ui-panelgrid-header {
-	background-color: white !important;
-	border-width: 0px !important;
-	border-color: white !important;
-	border-style: solid !important;
-}
-
-.ui-panel-content {
-	background-color: white !important;
-	border-width: 0px !important;
-	border-color: white !important;
-	border-style: solid !important;
-}
-
-.ui-panel-title {
-	background-color: white !important;
-	border-width: 0px !important;
-	border-color: white !important;
-	border-style: solid !important;
-}
-
-.numberbox tr, .numberbox td {
-	border-color: white !important;
-	border-style: solid !important;
-	border-width: 2px !important;
-	background-color: grey !important;
-	color: white !important;
-	text-align: center;
 }

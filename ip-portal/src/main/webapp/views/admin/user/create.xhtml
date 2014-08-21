@@ -1,30 +1,30 @@
 <ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="adminBody">
-		<p:panelGrid id="qpnlCrtUser" columns="2" style="width: 100%">
+		<p:panelGrid styleClass="panelGridView"  id="qpnlCrtUser" columns="2">
 			<p:column>
 				<p:outputLabel id="qlblFName" value="First Name : " />
 			</p:column>
 			<p:column>
-				<p:inputText style="width: 100%" autocomplete="false" id="qtxtFName" value="#{adminController.userBean.fName}" />
+				<p:inputText autocomplete="false" id="qtxtFName" value="#{adminController.userBean.fName}" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="qlblMName" value="Middle Name : " />
 			</p:column>
 			<p:column>
-				<p:inputText style="width: 100%" autocomplete="false" id="qtxtMName" value="#{adminController.userBean.mName}" />
+				<p:inputText autocomplete="false" id="qtxtMName" value="#{adminController.userBean.mName}" />
 			</p:column>
 
 			<p:column>
 				<p:outputLabel id="qlblLName" value="Last Name : " />
 			</p:column>
 			<p:column>
-				<p:inputText style="width: 100%" autocomplete="false" id="qtxtLName" value="#{adminController.userBean.lName}" />
+				<p:inputText autocomplete="false" id="qtxtLName" value="#{adminController.userBean.lName}" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="qlblIdNum" value="ID Number : " />
 			</p:column>
 			<p:column>
-				<p:inputText style="width: 100%" autocomplete="false" id="qtxtIdNum" value="#{adminController.userBean.idNum}">
+				<p:inputText autocomplete="false" id="qtxtIdNum" value="#{adminController.userBean.idNum}">
 					<p:ajax listener="#{adminController.checkAvailabilityIDNumber}" event="blur" update="frmAdminMsg" />
 				</p:inputText>
 			</p:column>
@@ -33,7 +33,7 @@
 				<p:outputLabel id="qlblEMail" value="EMail : " />
 			</p:column>
 			<p:column>
-				<p:inputText style="width: 100%" autocomplete="false" id="qtxtEMail" value="#{adminController.userBean.eMail}">
+				<p:inputText autocomplete="false" id="qtxtEMail" value="#{adminController.userBean.eMail}">
 					<p:ajax listener="#{adminController.checkAvailabilityEmail}" event="blur" update="frmAdminMsg" />
 				</p:inputText>
 			</p:column>
@@ -41,7 +41,7 @@
 				<p:outputLabel id="qlblEmpId" value="Employee ID : " />
 			</p:column>
 			<p:column>
-				<p:inputText style="width: 100%" autocomplete="false" id="qtxtEmpId" value="#{adminController.userBean.employeeId}">
+				<p:inputText autocomplete="false" id="qtxtEmpId" value="#{adminController.userBean.employeeId}">
 					<p:ajax listener="#{adminController.checkAvailabilityEmployeeID}" event="blur" update="frmAdminMsg" />
 				</p:inputText>
 			</p:column>
@@ -49,20 +49,20 @@
 				<p:outputLabel id="qlblContact" value="Contact Number : " />
 			</p:column>
 			<p:column>
-				<p:inputMask style="width: 100%" id="qtxtContact" value="#{adminController.userBean.contact}" mask="+99 999999999" />
+				<p:inputMask id="qtxtContact" value="#{adminController.userBean.contact}" mask="+99 999999999" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="qlblFBHandle" value="Facebook Handle : " />
 			</p:column>
 			<p:column>
 				<p:row>
-					<p:column style="width: 90% !important">
-						<p:inputText style="width: 90%" autocomplete="false" id="qtxtFBHandle" value="#{adminController.userBean.fbHandle}">
+					<p:column>
+						<p:inputText autocomplete="false" id="qtxtFBHandle" value="#{adminController.userBean.fbHandle}">
 							<!-- <f:validator validatorId="za.co.idea.web.util.SocialConnectorValidator" /> -->
 							<f:attribute name="function" value="FB" />
 						</p:inputText>
 					</p:column>
-					<p:column style="width: 10% !important">
+					<p:column>
 						<p:graphicImage id="qgiFBHelp" name="info.jpg" library="images" height="25px" width="25px" onclick="PF('dlgFB').show();" />
 					</p:column>
 				</p:row>
@@ -72,13 +72,13 @@
 			</p:column>
 			<p:column>
 				<p:row>
-					<p:column style="width: 90% !important">
-						<p:inputText style="width: 90%" autocomplete="false" id="qtxtTWHandle" value="#{adminController.userBean.twHandle}">
+					<p:column>
+						<p:inputText autocomplete="false" id="qtxtTWHandle" value="#{adminController.userBean.twHandle}">
 							<!-- <f:validator validatorId="za.co.idea.web.util.SocialConnectorValidator" /> -->
 							<f:attribute name="function" value="TW" />
 						</p:inputText>
 					</p:column>
-					<p:column style="width: 10% !important">
+					<p:column>
 						<p:graphicImage id="qgiTWHelp" name="info.jpg" library="images" height="25px" width="25px" onclick="PF('dlgTW').show();" />
 					</p:column>
 				</p:row>
@@ -88,7 +88,7 @@
 				<p:outputLabel id="qlblSCName" value="Screen Name : " />
 			</p:column>
 			<p:column>
-				<p:inputText style="width: 100%" autocomplete="false" id="qtxtSCName" value="#{adminController.userBean.scName}">
+				<p:inputText autocomplete="false" id="qtxtSCName" value="#{adminController.userBean.scName}">
 					<p:ajax listener="#{adminController.checkAvailability}" event="blur" update="frmAdminMsg" />
 				</p:inputText>
 			</p:column>
@@ -96,13 +96,13 @@
 				<p:outputLabel id="qlblProfImage" value="Profile Image : " />
 			</p:column>
 			<p:column>
-				<p:fileUpload id="qfuCBUpload" style="background-color: #55a616;width: 100% !important" fileUploadListener="#{adminController.fileUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+				<p:fileUpload id="qfuCBUpload" fileUploadListener="#{adminController.fileUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="qlblGroup" value="Primary Group : " />
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="qsomPriGroup" value="#{adminController.userBean.groupId}" style="width: 100% !important">
+				<p:selectOneMenu id="qsomPriGroup" value="#{adminController.userBean.groupId}">
 					<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 					<f:selectItems value="#{adminController.viewGroups}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 				</p:selectOneMenu>
@@ -111,7 +111,7 @@
 				<p:outputLabel id="qlblSecQ" value="Security Question : " />
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="qsomCrtURSecQId" value="#{adminController.secQ}" style="width: 100% !important">
+				<p:selectOneMenu id="qsomCrtURSecQId" value="#{adminController.secQ}">
 					<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 					<f:selectItems value="#{adminController.secqList}" var="p" itemLabel="#{p.desc}" itemValue="#{p.id}" />
 				</p:selectOneMenu>
@@ -120,35 +120,35 @@
 				<p:outputLabel id="qlblSecA" value="Security Answer : " />
 			</p:column>
 			<p:column>
-				<p:inputText style="width: 100%" autocomplete="false" id="qtxtSecA" value="#{adminController.userBean.secA}" />
+				<p:inputText autocomplete="false" id="qtxtSecA" value="#{adminController.userBean.secA}" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="qlblPw" value="Password : " />
 			</p:column>
 			<p:column>
-				<p:password style="width: 100%" autocomplete="false" id="qtxtPw" value="#{adminController.userBean.pwd}" match="qtxtCPw" feedback="true" />
+				<p:password autocomplete="false" id="qtxtPw" value="#{adminController.userBean.pwd}" match="qtxtCPw" feedback="true" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="qlblCPw" value="Confirm Password : " />
 			</p:column>
 			<p:column>
-				<p:password style="width: 100%" autocomplete="false" id="qtxtCPw" value="#{adminController.userBean.cPw}" />
+				<p:password autocomplete="false" id="qtxtCPw" value="#{adminController.userBean.cPw}" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="qlblSkills" value="Skills : " />
 			</p:column>
-			<p:column style="width: 100%">
+			<p:column>
 				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="qtxtSkills" value="#{adminController.userBean.skills}" />
 			</p:column>
 
 			<p:column>
 				<p:outputLabel id="qlblBio" value="Bio : " />
 			</p:column>
-			<p:column style="width: 100%">
+			<p:column>
 				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="qtxtBio" value="#{adminController.userBean.bio}" />
 			</p:column>
 			<p:row>
-				<p:column colspan="2" style="align: center;">
+				<p:column colspan="2">
 					<p:commandButton id="qbtnCSave" value="Save" ajax="false" action="#{adminController.saveUser}">
 						<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
 					</p:commandButton>

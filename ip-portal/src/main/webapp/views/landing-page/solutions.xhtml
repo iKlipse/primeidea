@@ -1,8 +1,8 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
-	<p:dataGrid id="dtViewSolutions" value="#{landingPageController.viewSolutions}" style="width: 100% !important" var="solution" paginator="true" paginatorPosition="bottom" rows="5" columns="1" emptyMessage="No Solutions Found">
-		<p:panel style="width: 100% !important">
-			<f:facet name="options" style="float: right !important;">
-				<p:menu style="vertical-align: center !important">
+	<p:dataGrid id="dtViewSolutions" value="#{landingPageController.viewSolutions}" var="solution" paginator="true" paginatorPosition="bottom" rows="5" columns="1" emptyMessage="No Solutions Found">
+		<p:panel styleClass="panelView" >
+			<f:facet name="options">
+				<p:menu>
 					<p:menuitem value="Edit" ajax="false" immediate="true" action="#{challengeController.showEditSolution}">
 						<f:setPropertyActionListener value="#{solution}" target="#{challengeController.solutionBean}" />
 						<f:setPropertyActionListener value="1" target="#{challengeController.returnView}" />
@@ -13,7 +13,7 @@
 					</p:menuitem>
 				</p:menu>
 			</f:facet>
-			<f:facet name="header" style="align-text: left !important">
+			<f:facet name="header">
 				<p:selectOneMenu value="#{solution.crtdById}">
 					<f:selectItems value="#{landingPageController.admUsers}" var="a" itemLabel="#{a.scName} - #{a.fName} - #{a.lName}" itemValue="#{a.uId}" />
 				</p:selectOneMenu>

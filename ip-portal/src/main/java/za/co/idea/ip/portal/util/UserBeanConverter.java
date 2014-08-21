@@ -18,6 +18,7 @@ import za.co.idea.ip.ws.util.CustomObjectMapper;
 public class UserBeanConverter implements Converter {
 
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
+
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
 		return getUserById(Long.valueOf(arg2));
 	}

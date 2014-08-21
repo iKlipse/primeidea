@@ -2,18 +2,20 @@
 	<h:head />
 	<h:body>
 		<h:form id="frmProfile" enctype="multipart/form-data">
-			<p:panel id="pnlProfImg" style="border: 0px !important; width: 100% !important; height: 100% !important;" header="#{adminController.loggedScrName}">
-				<p:panelGrid id="pnlGrdProfImg" columns="1" styleClass="noBorder">
+			<p:panel styleClass="panelView" id="pnlProfImg" header="#{adminController.loggedScrName}">
+				<p:panelGrid styleClass="panelGridView" id="pnlGrdProfImg" columns="1">
 					<p:column>
-						<p:graphicImage style="float: right !important;" id="imgAvatar" name="#{adminController.imgPath}" library="images" height="75px" width="75px" rendered="#{adminController.imgAvail}" />
-						<p:graphicImage style="float: right !important;" id="imgAvatarDefault" name="profile.jpg" library="images" height="75px" width="75px" rendered="#{!adminController.imgAvail}" />
+						<p:graphicImage style="float: left !important" id="imgAvatar" name="#{adminController.imgPath}" library="images" height="75px" width="75px" rendered="#{adminController.imgAvail}" />
+						<p:graphicImage style="float: left !important" id="imgAvatarDefault" name="profile.jpg" library="images" height="75px" width="75px" rendered="#{!adminController.imgAvail}" />
+						<p:graphicImage style="float: right !important" id="grpAvatar" name="#{adminController.grpImgPath}" library="images" height="75px" width="75px" rendered="#{adminController.grpImgAvail}" />
+						<p:graphicImage style="float: right !important" id="grpAvatarDefault" name="profile.jpg" library="images" height="75px" width="75px" rendered="#{!adminController.grpImgAvail}" />
 					</p:column>
 					<p:column>
-						<p:outputLabel style="float: Left !important;" id="lblGrpHText" value="Group Hierarchy :" />
-						<p:outputLabel style="float: right !important;" id="lblGrpH" value="#{adminController.hierarchy}" />
+						<p:outputLabel id="lblGrpHText" value="Group Hierarchy :" />
+						<p:outputLabel id="lblGrpH" value="#{adminController.hierarchy}" />
 					</p:column>
 					<p:column>
-						<p:panelGrid id="pnlStats" style="width: 100% !important" columns="5" styleClass="numberbox">
+						<p:panelGrid styleClass="panelGridView" id="pnlStats" columns="5">
 							<p:column headerText="Tot">
 								<p:outputLabel value="#{adminController.statsBean.totalCount}" />
 							</p:column>

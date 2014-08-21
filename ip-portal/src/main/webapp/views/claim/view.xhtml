@@ -1,10 +1,10 @@
 <ui:composition template="/views/claim/container/claimContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="claimBody">
-		<p:panel id="ctrViewClaim" style="width: 100% !important">
+		<p:panel styleClass="panelView"  id="ctrViewClaim">
 			<f:facet name="header">
 					View Claim
 				</f:facet>
-			<p:dataTable id="dtViewClaims" value="#{claimController.viewClaimBeans}" var="claim" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Claims Found" style="width: 100% !important">
+			<p:dataTable id="dtViewClaims" value="#{claimController.viewClaimBeans}" var="claim" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Claims Found">
 				<p:column filterBy="#{claim.claimDesc}" filterMatchMode="contains">
 					<f:facet name="header">Claim Desc</f:facet>
 					<p:outputLabel id="txtClaimId" value="#{claim.claimDesc}" />

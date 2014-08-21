@@ -1,16 +1,16 @@
 <ui:composition template="/views/tag/container/tagContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="tagBody">
-		<p:panelGrid id="pnlBuildOn" columns="1">
+		<p:panelGrid styleClass="panelGridView"  id="pnlBuildOn" columns="1">
 			<p:column>
 				<p:dataTable id="dtViewBuildOns" widgetVar="dtViewBuildOns" value="#{buildonController.buildons}" var="buildOn" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No BuildOns Found">
 					<p:column headerText="User Id">
-						<p:outputLabel style="float: left !important" value="#{buildOn.usrScreenName}" />
+						<p:outputLabel value="#{buildOn.usrScreenName}" />
 					</p:column>
 					<p:column headerText="Tag Date">
-						<p:outputLabel style="float: right !important" value="#{buildOn.tagDate}" />
+						<p:outputLabel value="#{buildOn.tagDate}" />
 					</p:column>
 					<p:column headerText="Tag Text">
-						<p:outputLabel style="float: right !important" value="#{buildOn.tagText}" escape="false" />
+						<p:outputLabel value="#{buildOn.tagText}" escape="false" />
 					</p:column>
 					<p:column>
 						<p:commandButton id="summaryButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{buildonController.showSummaryBuildon}">
@@ -25,7 +25,7 @@
 			</p:column>
 			<p:column rendered="#{!buildonBean.taggable}">
 				<p:outputLabel id="lblProfImage" value="Attachments : " />
-				<p:fileUpload id="fuCUpload" style="background-color: #55a616;width: 100% !important" fileUploadListener="#{buildonController.fileUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+				<p:fileUpload id="fuCUpload" fileUploadListener="#{buildonController.fileUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 			</p:column>
 			<p:column>
 				<p:commandButton id="btnSubmitBuildOn" value="Post" action="#{buildonController.createBuildOn}" ajax="false" rendered="#{!buildonBean.taggable}" />

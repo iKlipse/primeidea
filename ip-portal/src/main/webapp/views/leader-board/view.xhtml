@@ -3,22 +3,18 @@
 	<h:body>
 		<h:form id="frmStats" enctype="multipart/form-data">
 			<p:remoteCommand actionListener="#{adminController.initializeLeaderBoard}" name="onload" autoRun="true" update="pnlStats" />
-			<p:panel id="pnlStats" style="border: 0px !important; width: 100% !important; height: 100% !important;">
+			<p:panel styleClass="panelView" id="pnlStats">
 				<p:dataTable id="hdtViewStatsList" value="#{adminController.viewStatsBean}" var="stats" emptyMessage="Leader Board">
 					<p:column>
-						<p:graphicImage style="float: right !important;" name="#{stats.imgPath}" library="images" height="25px" width="25px" rendered="#{stats.imgAvail}" />
+						<p:graphicImage name="#{stats.imgPath}" library="images" height="25px" width="25px" rendered="#{stats.imgAvail}" />
+						<p:graphicImage name="profile.jpg" library="images" height="25px" width="25px" rendered="#{!stats.imgAvail}" />
 					</p:column>
 					<p:column>
-						<p:outputLabel value="#{stats.ideasCount}" />
+						<p:graphicImage name="#{stats.grpImgPath}" library="images" height="25px" width="25px" rendered="#{stats.grpImgAvail}" />
+						<p:graphicImage name="profile.jpg" library="images" height="25px" width="25px" rendered="#{!stats.grpImgAvail}" />
 					</p:column>
 					<p:column>
-						<p:outputLabel value="#{stats.challengesCount}" />
-					</p:column>
-					<p:column>
-						<p:outputLabel value="#{stats.solutionsCount}" />
-					</p:column>
-					<p:column>
-						<p:outputLabel value="#{stats.whishListCount}" />
+						<p:outputLabel value="#{stats.totalCount}" />
 					</p:column>
 				</p:dataTable>
 			</p:panel>

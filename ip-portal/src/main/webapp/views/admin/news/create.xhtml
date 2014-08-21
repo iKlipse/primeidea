@@ -1,17 +1,17 @@
 <ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="adminBody">
-		<p:panelGrid columns="2" id="epnlCrtNews">
+		<p:panelGrid styleClass="panelGridView"  columns="2" id="epnlCrtNews">
 			<p:column>
 				<p:outputLabel id="elblnTitle" value="Title : " />
 			</p:column>
 			<p:column>
-				<p:inputText style="width: 100%" autocomplete="false" id="enTitle" value="#{adminController.newsBean.nTitle}" />
+				<p:inputText autocomplete="false" id="enTitle" value="#{adminController.newsBean.nTitle}" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="elblNSDt" value="Start Date : " />
 			</p:column>
 			<p:column>
-				<p:calendar style="width: 100%" mode="popup" showOn="button" id="etxtStartDate" value="#{adminController.newsBean.startDate}" pattern="yyyy/MM/dd HH:mm">
+				<p:calendar mode="popup" showOn="button" id="etxtStartDate" value="#{adminController.newsBean.startDate}" pattern="yyyy/MM/dd HH:mm">
 					<p:ajax event="blur" update="etxtEndDate" />
 				</p:calendar>
 			</p:column>
@@ -19,19 +19,19 @@
 				<p:outputLabel id="elblNEDt" value="End Date : " />
 			</p:column>
 			<p:column>
-				<p:calendar style="width: 100%"  mode="popup" showOn="button" id="etxtEndDate" value="#{adminController.newsBean.endDate}" pattern="yyyy/MM/dd HH:mm" mindate="#{adminController.newsBean.startDate}" />
+				<p:calendar  mode="popup" showOn="button" id="etxtEndDate" value="#{adminController.newsBean.endDate}" pattern="yyyy/MM/dd HH:mm" mindate="#{adminController.newsBean.startDate}" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="elblnContent" value="Content : " />
 			</p:column>
-			<p:column style="width: 100%">
+			<p:column>
 				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="etxtContent" value="#{adminController.newsBean.nContent}" />
 			</p:column>
 			<p:column>
 				<p:outputLabel id="elblProfImage" value="News Files : " />
 			</p:column>
 			<p:column>
-				<p:fileUpload id="efuCFUpload" style="background-color: #55a616;width: 100% !important" fileUploadListener="#{adminController.fileUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+				<p:fileUpload id="efuCFUpload" fileUploadListener="#{adminController.fileUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 			</p:column>
 			<p:row>
 				<p:column colspan="2">

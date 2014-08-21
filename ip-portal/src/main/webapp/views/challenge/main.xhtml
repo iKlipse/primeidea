@@ -6,7 +6,7 @@
 		<h:form id="frmChalCtrlr" enctype="multipart/form-data">
 			<p:growl life="5000" id="frmChalCtrlrMsg" showDetail="true" showSummary="true" autoUpdate="true" />
 			<p:remoteCommand actionListener="#{challengeController.initializeChalPage}" name="onload" autoRun="true" update="pnlChalDet" />
-			<p:panel id="pnlChalMenu" style="border: 0px !important">
+			<p:panel styleClass="panelView"  id="pnlChalMenu">
 				<p:commandLink value="Published Challenges" action="#{challengeController.showPublishedChallenges}" update="pnlChalDet">
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 				</p:commandLink>
@@ -23,20 +23,20 @@
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 				</p:commandLink>
 			</p:panel>
-			<p:panel id="pnlChalDet" style="border: 0px !important">
-				<p:panel id="ctrVwPChallenges" style="width: 100% !important" rendered="#{challengeController.showPubChal}">
+			<p:panel styleClass="panelView"  id="pnlChalDet">
+				<p:panel styleClass="panelView"  id="ctrVwPChallenges" rendered="#{challengeController.showPubChal}">
 					<f:facet name="header">Published Challenges</f:facet>
 					<ui:include src="/views/challenge/viewOpen.xhtml" />
 				</p:panel>
-				<p:panel id="ctrVwRChallenges" style="width: 100% !important" rendered="#{challengeController.showReviewChal}">
+				<p:panel styleClass="panelView"  id="ctrVwRChallenges" rendered="#{challengeController.showReviewChal}">
 					<f:facet name="header">Review Challenges</f:facet>
 					<ui:include src="/views/challenge/viewReview.xhtml" />
 				</p:panel>
-				<p:panel id="ctrVwChallenges" style="width: 100% !important" rendered="#{challengeController.showViewChal}">
+				<p:panel styleClass="panelView"  id="ctrVwChallenges" rendered="#{challengeController.showViewChal}">
 					<f:facet name="header">View Challenges</f:facet>
 					<ui:include src="/views/challenge/view.xhtml" />
 				</p:panel>
-				<p:panel id="ctrCrtChallenge" style="width: 100% !important" rendered="#{challengeController.showCrtChal}">
+				<p:panel styleClass="panelView"  id="ctrCrtChallenge" rendered="#{challengeController.showCrtChal}">
 					<f:facet name="header">Create Challenge</f:facet>
 					<ui:include src="/views/challenge/create.xhtml" />
 				</p:panel>

@@ -154,6 +154,8 @@ public class AdminController implements Serializable {
 	private UserStatisticsBean statsBean;
 	private String imgPath;
 	private boolean imgAvail;
+	private String grpImgPath;
+	private boolean grpImgAvail;
 	private List<UserStatisticsBean> viewStatsBean;
 
 	private WebClient createCustomClient(String url) {
@@ -204,6 +206,8 @@ public class AdminController implements Serializable {
 			loggedScrName = message.getScName();
 			imgPath = message.getImgPath();
 			imgAvail = message.isImgAvail();
+			grpImgPath = message.getGrpImgPath();
+			grpImgAvail = message.isGrpImgAvail();
 			if (message.getGroupId() != null) {
 				WebClient hClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/hierarchy/" + message.getGroupId());
 				hierarchy = hClient.accept(MediaType.APPLICATION_JSON).get(String.class);
@@ -3193,5 +3197,21 @@ public class AdminController implements Serializable {
 
 	public void setViewStatsBean(List<UserStatisticsBean> viewStatsBean) {
 		this.viewStatsBean = viewStatsBean;
+	}
+
+	public String getGrpImgPath() {
+		return grpImgPath;
+	}
+
+	public void setGrpImgPath(String grpImgPath) {
+		this.grpImgPath = grpImgPath;
+	}
+
+	public boolean isGrpImgAvail() {
+		return grpImgAvail;
+	}
+
+	public void setGrpImgAvail(boolean grpImgAvail) {
+		this.grpImgAvail = grpImgAvail;
 	}
 }

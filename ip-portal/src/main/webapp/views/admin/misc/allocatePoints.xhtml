@@ -1,7 +1,7 @@
 <ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="adminBody">
-		<p:panel id="tpnlPointAlloc" header="Allocate Points">
-			<p:panelGrid id="tgrdPointAlloc" columns="2">
+		<p:panel styleClass="panelView"  id="tpnlPointAlloc" header="Allocate Points">
+			<p:panelGrid styleClass="panelGridView"  id="tgrdPointAlloc" columns="2">
 				<p:column>
 					<p:outputLabel id="tlblEntity" value="Entity : " />
 				</p:column>
@@ -27,7 +27,7 @@
 					<p:outputLabel id="tlblAdmUser" value="Select User : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu style="width: 100%" id="tsomAdmUser" value="#{adminController.allocUserId}">
+					<p:selectOneMenu id="tsomAdmUser" value="#{adminController.allocUserId}">
 						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 						<f:selectItems value="#{adminController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
 					</p:selectOneMenu>
@@ -36,13 +36,13 @@
 					<p:outputLabel id="tlblPointVal" value="Point Value : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" id="ttxtPointVal" value="#{adminController.pointVal}" />
+					<p:inputText id="ttxtPointVal" value="#{adminController.pointVal}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="tlblComments" value="Comments : " />
 				</p:column>
 				<p:column>
-					<p:inputText style="width: 100%" id="ttxtComments" value="#{adminController.comments}" />
+					<p:inputText id="ttxtComments" value="#{adminController.comments}" />
 				</p:column>
 				<p:column>
 					<p:commandButton id="tbtnSavePoint" value="Add Points" action="#{adminController.savePoints}" ajax="false">

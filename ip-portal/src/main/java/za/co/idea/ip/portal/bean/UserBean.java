@@ -30,6 +30,8 @@ public class UserBean implements Serializable {
 	private String priGroupName;
 	private String imgPath;
 	private boolean imgAvail;
+	private String grpImgPath;
+	private boolean grpImgAvail;
 
 	public Long getuId() {
 		return uId;
@@ -221,6 +223,22 @@ public class UserBean implements Serializable {
 
 	public void setImgAvail(boolean imgAvail) {
 		this.imgAvail = imgAvail;
+	}
+
+	public String getGrpImgPath() {
+		return grpImgPath;
+	}
+
+	public void setGrpImgPath(String grpImgPath) {
+		this.grpImgPath = grpImgPath;
+	}
+
+	public boolean isGrpImgAvail() {
+		return grpImgAvail;
+	}
+
+	public void setGrpImgAvail(boolean grpImgAvail) {
+		this.grpImgAvail = grpImgAvail;
 	}
 
 }

@@ -1,7 +1,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
-	<p:dataGrid id="dgRewards" var="rewards" style="width: 100% !important" value="#{landingPageController.viewRewardsBeans}" columns="3" rows="12" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="9,12,15">
-		<p:panel header="#{rewards.rwTitle}" style="text-align:center">
-			<p:panelGrid id="pnlContent" columns="1">
+	<p:dataGrid id="dgRewards" var="rewards" value="#{landingPageController.viewRewardsBeans}" columns="3" rows="12" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="9,12,15">
+		<p:panel styleClass="panelView"  header="#{rewards.rwTitle}">
+			<p:panelGrid styleClass="panelGridView"  id="pnlContent" columns="1">
 				<p:column>
 					<p:lightBox>
 						<h:outputLink value="../../resources/images/#{rewards.rwUrl}" title="#{rewards.rwTitle}">
