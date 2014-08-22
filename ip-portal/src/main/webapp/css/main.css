@@ -34,6 +34,14 @@
 	font-weight: 12 px;
 }
 
+.ui-inputfield {
+	width: 95% !important;
+}
+
+.ui-editor {
+	width: 95% !important;
+}
+
 .autoFlow {
 	overflow: auto !important;
 }

@@ -2,6 +2,7 @@ package za.co.idea.ip.ws;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -40,6 +41,7 @@ public class SolutionService {
 	private IpChallengeDAO ipChallengeDAO;
 	private IpBlobDAO ipBlobDAO;
 	private static final Logger logger = Logger.getLogger(SolutionService.class);
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-ws");
 
 	@GET
 	@Path("/solution/check/title/{title}")
@@ -146,6 +148,7 @@ public class SolutionService {
 					solution.setSolImgAvl(true);
 					solution.setFileName(ipBlob.getBlobName());
 					solution.setContentType(ipBlob.getBlobContentType());
+					solution.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
 				} else {
 					solution.setSolImgAvl(false);
 				}
@@ -192,6 +195,7 @@ public class SolutionService {
 					solution.setSolImgAvl(true);
 					solution.setFileName(ipBlob.getBlobName());
 					solution.setContentType(ipBlob.getBlobContentType());
+					solution.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
 				} else {
 					solution.setSolImgAvl(false);
 				}
@@ -237,6 +241,7 @@ public class SolutionService {
 					solution.setSolImgAvl(true);
 					solution.setFileName(ipBlob.getBlobName());
 					solution.setContentType(ipBlob.getBlobContentType());
+					solution.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
 				} else {
 					solution.setSolImgAvl(false);
 				}
@@ -281,6 +286,7 @@ public class SolutionService {
 					solution.setSolImgAvl(true);
 					solution.setFileName(ipBlob.getBlobName());
 					solution.setContentType(ipBlob.getBlobContentType());
+					solution.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
 				} else {
 					solution.setSolImgAvl(false);
 				}
@@ -325,6 +331,7 @@ public class SolutionService {
 					solution.setSolImgAvl(true);
 					solution.setFileName(ipBlob.getBlobName());
 					solution.setContentType(ipBlob.getBlobContentType());
+					solution.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
 				} else {
 					solution.setSolImgAvl(false);
 				}
@@ -369,6 +376,7 @@ public class SolutionService {
 					solution.setSolImgAvl(true);
 					solution.setFileName(ipBlob.getBlobName());
 					solution.setContentType(ipBlob.getBlobContentType());
+					solution.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
 				} else {
 					solution.setSolImgAvl(false);
 				}
@@ -413,6 +421,7 @@ public class SolutionService {
 					solution.setSolImgAvl(true);
 					solution.setFileName(ipBlob.getBlobName());
 					solution.setContentType(ipBlob.getBlobContentType());
+					solution.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
 				} else {
 					solution.setSolImgAvl(false);
 				}

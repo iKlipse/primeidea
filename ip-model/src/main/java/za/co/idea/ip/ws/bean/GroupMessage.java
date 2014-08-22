@@ -11,6 +11,7 @@ public class GroupMessage {
 	private Long admUserId;
 	private Boolean isActive;
 	private Long[] userIdList;
+	private String blobUrl;
 
 	public Long getgId() {
 		return gId;
@@ -68,6 +69,14 @@ public class GroupMessage {
 
 	public void setUserIdList(Long[] userIdList) {
 		this.userIdList = userIdList;
+	}
+
+	public String getBlobUrl() {
+		return blobUrl;
+	}
+
+	public void setBlobUrl(String blobUrl) {
+		this.blobUrl = blobUrl;
 	}
 
 }

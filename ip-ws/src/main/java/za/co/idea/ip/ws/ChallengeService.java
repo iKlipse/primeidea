@@ -2,6 +2,7 @@ package za.co.idea.ip.ws;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -34,6 +35,7 @@ import za.co.idea.ip.ws.bean.ResponseMessage;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Path(value = "/cs")
 public class ChallengeService {
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-ws");
 	private IpChallengeDAO ipChallengeDAO;
 	private IpChallengeCatDAO ipChallengeCatDAO;
 	private IpChallengeStatusDAO ipChallengeStatusDAO;
@@ -163,6 +165,13 @@ public class ChallengeService {
 					}
 					challenge.setGroupIdList(grps);
 				}
+				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipChallenge.getChalId(), "ip_challenge");
+				if (ipBlob != null) {
+					challenge.setFileName(ipBlob.getBlobName());
+					challenge.setImgAvail(true);
+					challenge.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
+				} else
+					challenge.setImgAvail(false);
 				IpBlob blob = ipBlobDAO.getBlobByEntity(ipChallenge.getIpUser().getUserId(), "ip_user");
 				if (blob != null) {
 					challenge.setCrtByImgAvail(true);
@@ -246,6 +255,13 @@ public class ChallengeService {
 					}
 					challenge.setGroupIdList(grps);
 				}
+				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipChallenge.getChalId(), "ip_challenge");
+				if (ipBlob != null) {
+					challenge.setFileName(ipBlob.getBlobName());
+					challenge.setImgAvail(true);
+					challenge.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
+				} else
+					challenge.setImgAvail(false);
 				IpBlob blob = ipBlobDAO.getBlobByEntity(ipChallenge.getIpUser().getUserId(), "ip_user");
 				if (blob != null) {
 					challenge.setCrtByImgAvail(true);
@@ -293,6 +309,13 @@ public class ChallengeService {
 					}
 					challenge.setGroupIdList(grps);
 				}
+				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipChallenge.getChalId(), "ip_challenge");
+				if (ipBlob != null) {
+					challenge.setFileName(ipBlob.getBlobName());
+					challenge.setImgAvail(true);
+					challenge.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
+				} else
+					challenge.setImgAvail(false);
 				IpBlob blob = ipBlobDAO.getBlobByEntity(ipChallenge.getIpUser().getUserId(), "ip_user");
 				if (blob != null) {
 					challenge.setCrtByImgAvail(true);
@@ -340,6 +363,13 @@ public class ChallengeService {
 					}
 					challenge.setGroupIdList(grps);
 				}
+				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipChallenge.getChalId(), "ip_challenge");
+				if (ipBlob != null) {
+					challenge.setFileName(ipBlob.getBlobName());
+					challenge.setImgAvail(true);
+					challenge.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
+				} else
+					challenge.setImgAvail(false);
 				IpBlob blob = ipBlobDAO.getBlobByEntity(ipChallenge.getIpUser().getUserId(), "ip_user");
 				if (blob != null) {
 					challenge.setCrtByImgAvail(true);
@@ -387,6 +417,13 @@ public class ChallengeService {
 					}
 					challenge.setGroupIdList(grps);
 				}
+				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipChallenge.getChalId(), "ip_challenge");
+				if (ipBlob != null) {
+					challenge.setFileName(ipBlob.getBlobName());
+					challenge.setImgAvail(true);
+					challenge.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
+				} else
+					challenge.setImgAvail(false);
 				IpBlob blob = ipBlobDAO.getBlobByEntity(ipChallenge.getIpUser().getUserId(), "ip_user");
 				if (blob != null) {
 					challenge.setCrtByImgAvail(true);
@@ -434,6 +471,19 @@ public class ChallengeService {
 					}
 					challenge.setGroupIdList(grps);
 				}
+				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipChallenge.getChalId(), "ip_challenge");
+				if (ipBlob != null) {
+					challenge.setFileName(ipBlob.getBlobName());
+					challenge.setImgAvail(true);
+					challenge.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
+				} else
+					challenge.setImgAvail(false);
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipChallenge.getIpUser().getUserId(), "ip_user");
+				if (blob != null) {
+					challenge.setCrtByImgAvail(true);
+					challenge.setCrtByImgPath("ip_user/" + ipChallenge.getIpUser().getUserId() + "/" + blob.getBlobName());
+				} else
+					challenge.setCrtByImgAvail(false);
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {

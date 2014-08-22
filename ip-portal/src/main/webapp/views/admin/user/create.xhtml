@@ -25,7 +25,7 @@
 			</p:column>
 			<p:column>
 				<p:inputText autocomplete="false" id="qtxtIdNum" value="#{adminController.userBean.idNum}">
-					<p:ajax listener="#{adminController.checkAvailabilityIDNumber}" event="blur" update="frmAdminMsg" />
+					<p:ajax listener="#{adminController.checkAvailabilityIDNumber}" event="change" update="frmAdminMsg" />
 				</p:inputText>
 			</p:column>
 
@@ -34,7 +34,7 @@
 			</p:column>
 			<p:column>
 				<p:inputText autocomplete="false" id="qtxtEMail" value="#{adminController.userBean.eMail}">
-					<p:ajax listener="#{adminController.checkAvailabilityEmail}" event="blur" update="frmAdminMsg" />
+					<p:ajax listener="#{adminController.checkAvailabilityEmail}" event="change" update="frmAdminMsg" />
 				</p:inputText>
 			</p:column>
 			<p:column>
@@ -42,7 +42,7 @@
 			</p:column>
 			<p:column>
 				<p:inputText autocomplete="false" id="qtxtEmpId" value="#{adminController.userBean.employeeId}">
-					<p:ajax listener="#{adminController.checkAvailabilityEmployeeID}" event="blur" update="frmAdminMsg" />
+					<p:ajax listener="#{adminController.checkAvailabilityEmployeeID}" event="change" update="frmAdminMsg" />
 				</p:inputText>
 			</p:column>
 			<p:column>
@@ -89,7 +89,7 @@
 			</p:column>
 			<p:column>
 				<p:inputText autocomplete="false" id="qtxtSCName" value="#{adminController.userBean.scName}">
-					<p:ajax listener="#{adminController.checkAvailability}" event="blur" update="frmAdminMsg" />
+					<p:ajax listener="#{adminController.checkAvailability}" event="change" update="frmAdminMsg" />
 				</p:inputText>
 			</p:column>
 			<p:column>

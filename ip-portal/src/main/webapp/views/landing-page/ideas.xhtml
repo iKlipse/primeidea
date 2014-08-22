@@ -35,7 +35,11 @@
 						<br />
 						<p:outputLabel value="#{idea.ideaDesc}" escape="false" style="text-align: left !important; overflow: auto !important" />
 						<p:separator style="width: 100% !important" />
-						<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+						<p:outputLabel value="No Attachments" rendered="#{!idea.imgAvail}" />
+						<h:outputLink value="#{idea.blobUrl}" rendered="#{idea.imgAvail}">
+							<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+							<p:outputLabel value="#{idea.fileName}" style="font-weight: 0.6em" />
+						</h:outputLink>
 					</p:column>
 				</p:row>
 			</p:panelGrid>

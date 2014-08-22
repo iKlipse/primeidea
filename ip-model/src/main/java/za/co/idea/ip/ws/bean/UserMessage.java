@@ -30,6 +30,7 @@ public class UserMessage {
 	private boolean imgAvail;
 	private String grpImgPath;
 	private boolean grpImgAvail;
+	private String blobUrl;
 
 	public Long getuId() {
 		return uId;
@@ -221,6 +222,14 @@ public class UserMessage {
 
 	public void setGrpImgAvail(boolean grpImgAvail) {
 		this.grpImgAvail = grpImgAvail;
+	}
+
+	public String getBlobUrl() {
+		return blobUrl;
+	}
+
+	public void setBlobUrl(String blobUrl) {
+		this.blobUrl = blobUrl;
 	}
 
 }

@@ -18,6 +18,7 @@ public class IdeaBean implements Serializable {
 	private String fileUpload;
 	private String contentType;
 	private String fileName;
+	private boolean imgAvail;
 	private Long fileSize;
 	private Long crtdById;
 	private String crtdByName;
@@ -26,6 +27,7 @@ public class IdeaBean implements Serializable {
 	private Date crtdDate;
 	private List<Long> groupIdList;
 	private boolean taggable;
+	private String blobUrl;
 
 	public Long getIdeaId() {
 		return ideaId;
@@ -107,6 +109,14 @@ public class IdeaBean implements Serializable {
 		this.fileName = fileName;
 	}
 
+	public boolean isImgAvail() {
+		return imgAvail;
+	}
+
+	public void setImgAvail(boolean imgAvail) {
+		this.imgAvail = imgAvail;
+	}
+
 	public Long getFileSize() {
 		return fileSize;
 	}
@@ -169,5 +179,13 @@ public class IdeaBean implements Serializable {
 
 	public void setTaggable(boolean taggable) {
 		this.taggable = taggable;
+	}
+
+	public String getBlobUrl() {
+		return blobUrl;
+	}
+
+	public void setBlobUrl(String blobUrl) {
+		this.blobUrl = blobUrl;
 	}
 }

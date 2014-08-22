@@ -16,6 +16,7 @@ public class GroupBean implements Serializable {
 	private List<Long> userIdList;
 	private String contentType;
 	private String fileName;
+	private String blobUrl;
 
 	public Long getgId() {
 		return gId;
@@ -89,6 +90,14 @@ public class GroupBean implements Serializable {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public String getBlobUrl() {
+		return blobUrl;
+	}
+
+	public void setBlobUrl(String blobUrl) {
+		this.blobUrl = blobUrl;
 	}
 
 }

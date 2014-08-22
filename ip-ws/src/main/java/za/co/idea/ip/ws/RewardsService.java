@@ -2,6 +2,7 @@ package za.co.idea.ip.ws;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -46,6 +47,7 @@ public class RewardsService {
 	private IpGroupDAO ipGroupDAO;
 	private IpNativeSQLDAO ipNativeSQLDAO;
 	private IpBlobDAO ipBlobDAO;
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-ws");
 
 	@POST
 	@Path("/rewards/add")
@@ -182,6 +184,7 @@ public class RewardsService {
 			if (ipBlob != null) {
 				rewards.setRwUrl("ip_rewards/" + ipRewards.getRwId() + "/" + ipBlob.getBlobName());
 				rewards.setRwImgAvail(true);
+				rewards.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
 			} else {
 				rewards.setRwImgAvail(false);
 			}
@@ -219,6 +222,7 @@ public class RewardsService {
 				if (ipBlob != null) {
 					rewards.setRwUrl("ip_rewards/" + ipRewards.getRwId() + "/" + ipBlob.getBlobName());
 					rewards.setRwImgAvail(true);
+					rewards.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
 				} else {
 					rewards.setRwImgAvail(false);
 				}
@@ -258,6 +262,7 @@ public class RewardsService {
 				if (ipBlob != null) {
 					rewards.setRwUrl("ip_rewards/" + ipRewards.getRwId() + "/" + ipBlob.getBlobName());
 					rewards.setRwImgAvail(true);
+					rewards.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
 				} else {
 					rewards.setRwImgAvail(false);
 				}
@@ -297,6 +302,7 @@ public class RewardsService {
 				if (ipBlob != null) {
 					rewards.setRwUrl("ip_rewards/" + ipRewards.getRwId() + "/" + ipBlob.getBlobName());
 					rewards.setRwImgAvail(true);
+					rewards.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
 				} else {
 					rewards.setRwImgAvail(false);
 				}

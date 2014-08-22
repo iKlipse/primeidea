@@ -15,6 +15,7 @@ public class NotificationBean implements Serializable {
 	private String notifStatus;
 	private String notifCrtdDate;
 	private List<Long> groupIdList;
+	private String blobUrl;
 
 	public String getNotifId() {
 		return notifId;
@@ -86,6 +87,14 @@ public class NotificationBean implements Serializable {
 
 	public void setGroupIdList(List<Long> groupIdList) {
 		this.groupIdList = groupIdList;
+	}
+
+	public String getBlobUrl() {
+		return blobUrl;
+	}
+
+	public void setBlobUrl(String blobUrl) {
+		this.blobUrl = blobUrl;
 	}
 
 }

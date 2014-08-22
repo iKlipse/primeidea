@@ -27,6 +27,7 @@ public class RewardsBean implements Serializable {
 	private boolean rwTaggable;
 	private boolean rwClaimable;
 	private boolean rwImgAvail;
+	private String blobUrl;
 
 	public Long getRwId() {
 		return rwId;
@@ -194,5 +195,13 @@ public class RewardsBean implements Serializable {
 
 	public void setRwUrl(String rwUrl) {
 		this.rwUrl = rwUrl;
+	}
+
+	public String getBlobUrl() {
+		return blobUrl;
+	}
+
+	public void setBlobUrl(String blobUrl) {
+		this.blobUrl = blobUrl;
 	}
 }

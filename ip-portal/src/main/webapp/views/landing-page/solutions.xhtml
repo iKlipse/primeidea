@@ -3,7 +3,7 @@
 		<p:panel styleClass="panelView">
 			<p:panelGrid styleClass="panelGridView">
 				<p:row>
-					<p:column colspan="2" rowspan="7" style="vertical-align: top !important">
+					<p:column colspan="2" rowspan="7" style="width: 16% !important;vertical-align: top !important">
 						<p:graphicImage style="vertical-align: top !important;" id="imgAvatar" name="#{solution.crtByImgPath}" library="images" height="25px" width="25px" />
 						<p:graphicImage style="vertical-align: top !important;" id="imgAvatarDefault" name="profile.jpg" library="images" height="25px" width="25px" rendered="#{!solution.crtByImgAvail}" />
 					</p:column>
@@ -35,7 +35,11 @@
 						<br />
 						<p:outputLabel value="#{solution.desc}" escape="false" style="text-align: left !important" />
 						<p:separator style="width: 100% !important" />
-						<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+						<p:outputLabel value="No Attachments" rendered="#{!solution.solImgAvl}" />
+						<h:outputLink value="#{solution.blobUrl}" rendered="#{solution.solImgAvl}">
+							<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+							<p:outputLabel value="#{solution.fileName}" style="font-weight: 0.6em" />
+						</h:outputLink>
 					</p:column>
 				</p:row>
 			</p:panelGrid>

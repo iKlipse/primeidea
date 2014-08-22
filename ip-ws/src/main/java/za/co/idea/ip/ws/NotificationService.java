@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpNotif;
 import za.co.idea.ip.orm.bean.IpNotifGroup;
+import za.co.idea.ip.orm.dao.IpBlobDAO;
 import za.co.idea.ip.orm.dao.IpNativeSQLDAO;
 import za.co.idea.ip.orm.dao.IpNotifDAO;
 import za.co.idea.ip.orm.dao.IpNotifGroupDAO;
@@ -28,6 +29,7 @@ public class NotificationService {
 	private IpNotifDAO ipNotifDAO;
 	private IpNativeSQLDAO ipNativeSQLDAO;
 	private IpNotifGroupDAO ipNotifGroupDAO;
+	private IpBlobDAO ipBlobDAO;
 
 	@POST
 	@Path("/notif/add")
@@ -105,7 +107,7 @@ public class NotificationService {
 	@Path("/notif/list")
 	@Produces("application/json")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public <T extends NotificationMessage> List<T> listIdea() {
+	public <T extends NotificationMessage> List<T> listNotification() {
 		List<T> ret = new ArrayList<T>();
 		try {
 			List notifications = ipNotifDAO.findAll();
@@ -130,7 +132,6 @@ public class NotificationService {
 					}
 					notif.setGroupIdList(grps);
 				}
-
 				ret.add((T) notif);
 			}
 		} catch (Exception e) {
@@ -161,6 +162,14 @@ public class NotificationService {
 
 	public void setIpNotifGroupDAO(IpNotifGroupDAO ipNotifGroupDAO) {
 		this.ipNotifGroupDAO = ipNotifGroupDAO;
+	}
+
+	public IpBlobDAO getIpBlobDAO() {
+		return ipBlobDAO;
+	}
+
+	public void setIpBlobDAO(IpBlobDAO ipBlobDAO) {
+		this.ipBlobDAO = ipBlobDAO;
 	}
 
 }

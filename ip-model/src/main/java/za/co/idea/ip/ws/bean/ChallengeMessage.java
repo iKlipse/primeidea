@@ -23,7 +23,9 @@ public class ChallengeMessage {
 	private String contentType;
 	private String fileName;
 	private Long fileSize;
+	private boolean imgAvail;
 	private Long[] groupIdList;
+	private String blobUrl;
 
 	public Long getId() {
 		return id;
@@ -153,6 +155,14 @@ public class ChallengeMessage {
 		this.fileName = fileName;
 	}
 
+	public boolean isImgAvail() {
+		return imgAvail;
+	}
+
+	public void setImgAvail(boolean imgAvail) {
+		this.imgAvail = imgAvail;
+	}
+
 	public Long getFileSize() {
 		return fileSize;
 	}
@@ -167,6 +177,14 @@ public class ChallengeMessage {
 
 	public void setGroupIdList(Long[] groupIdList) {
 		this.groupIdList = groupIdList;
+	}
+
+	public String getBlobUrl() {
+		return blobUrl;
+	}
+
+	public void setBlobUrl(String blobUrl) {
+		this.blobUrl = blobUrl;
 	}
 
 }

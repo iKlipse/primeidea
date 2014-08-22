@@ -16,6 +16,7 @@ public class TagMessage {
 	private Long tagId;
 	private Date tagDate;
 	private boolean duplicate;
+	private String blobUrl;
 
 	public String getUsrScreenName() {
 		return usrScreenName;
@@ -95,5 +96,13 @@ public class TagMessage {
 
 	public void setTagDate(Date tagDate) {
 		this.tagDate = tagDate;
+	}
+
+	public String getBlobUrl() {
+		return blobUrl;
+	}
+
+	public void setBlobUrl(String blobUrl) {
+		this.blobUrl = blobUrl;
 	}
 }

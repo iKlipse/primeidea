@@ -23,6 +23,7 @@ public class SolutionMessage {
 	private String contentType;
 	private String fileName;
 	private Long fileSize;
+	private String blobUrl;
 
 	public Long getId() {
 		return id;
@@ -158,6 +159,14 @@ public class SolutionMessage {
 
 	public void setFileSize(Long fileSize) {
 		this.fileSize = fileSize;
+	}
+
+	public String getBlobUrl() {
+		return blobUrl;
+	}
+
+	public void setBlobUrl(String blobUrl) {
+		this.blobUrl = blobUrl;
 	}
 
 }

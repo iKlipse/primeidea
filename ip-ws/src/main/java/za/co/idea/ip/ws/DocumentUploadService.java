@@ -148,6 +148,19 @@ public class DocumentUploadService {
 	}
 
 	@GET
+	@Path("/doc/getUrl/{entityId}/{entityTblNm}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional(propagation = Propagation.REQUIRED)
+	public String getUrl(@PathParam("entityId") Long entityId, @PathParam("entityTblNm") String entityTblNm) {
+		String ret = "";
+		IpBlob blob = ipBlobDAO.getBlobByEntity(entityId, entityTblNm);
+		if (blob != null)
+			ret = "http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + blob.getBlobId();
+		return ret;
+	}
+
+	@GET
 	@Path("/doc/getName/{blobId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)

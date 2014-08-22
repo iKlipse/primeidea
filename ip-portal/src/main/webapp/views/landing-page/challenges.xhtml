@@ -35,7 +35,11 @@
 						<br />
 						<p:outputLabel value="#{challenge.desc}" escape="false" style="text-align: left !important" />
 						<p:separator style="width: 100% !important" />
-						<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+						<p:outputLabel value="No Attachments" rendered="#{!challenge.imgAvail}" />
+						<h:outputLink value="#{challenge.blobUrl}" rendered="#{challenge.imgAvail}">
+							<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+							<p:outputLabel value="#{challenge.fileName}" style="font-weight: 0.6em" />
+						</h:outputLink>
 					</p:column>
 				</p:row>
 			</p:panelGrid>

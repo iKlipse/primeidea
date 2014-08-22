@@ -13,6 +13,7 @@ public class NewsBean implements Serializable {
 	private boolean nwImgAvail;
 	private Date startDate;
 	private Date endDate;
+	private String blobUrl;
 
 	public Long getnId() {
 		return nId;
@@ -68,6 +69,14 @@ public class NewsBean implements Serializable {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	public String getBlobUrl() {
+		return blobUrl;
+	}
+
+	public void setBlobUrl(String blobUrl) {
+		this.blobUrl = blobUrl;
 	}
 
 }

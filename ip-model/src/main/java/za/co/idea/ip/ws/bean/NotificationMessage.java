@@ -14,6 +14,7 @@ public class NotificationMessage {
 	private String notifStatus;
 	private String notifCrtdDate;
 	private Long[] groupIdList;
+	private String blobUrl;
 
 	public String getNotifId() {
 		return notifId;
@@ -85,6 +86,14 @@ public class NotificationMessage {
 
 	public void setGroupIdList(Long[] groupIdList) {
 		this.groupIdList = groupIdList;
+	}
+
+	public String getBlobUrl() {
+		return blobUrl;
+	}
+
+	public void setBlobUrl(String blobUrl) {
+		this.blobUrl = blobUrl;
 	}
 
 }

@@ -2,6 +2,7 @@ package za.co.idea.ip.ws;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -29,6 +30,7 @@ public class NewsService {
 	private IpNewsDAO ipNewsDAO;
 	private IpBlobDAO ipBlobDAO;
 	private static final Logger logger = Logger.getLogger(NewsService.class);
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-ws");
 
 	@POST
 	@Path("/news/add")
@@ -118,6 +120,7 @@ public class NewsService {
 				if (ipBlob != null) {
 					message.setNewsUrl("ip_news/" + news.getNewsId() + "/" + ipBlob.getBlobName());
 					message.setNwImgAvail(true);
+					message.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
 				} else {
 					message.setNwImgAvail(false);
 				}

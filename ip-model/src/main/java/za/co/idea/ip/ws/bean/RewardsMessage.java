@@ -24,6 +24,7 @@ public class RewardsMessage {
 	private boolean rwTaggable;
 	private boolean rwClaimable;
 	private boolean rwImgAvail;
+	private String blobUrl;
 
 	public Long getRwId() {
 		return rwId;
@@ -167,6 +168,14 @@ public class RewardsMessage {
 
 	public void setRwClaimable(boolean rwClaimable) {
 		this.rwClaimable = rwClaimable;
+	}
+
+	public String getBlobUrl() {
+		return blobUrl;
+	}
+
+	public void setBlobUrl(String blobUrl) {
+		this.blobUrl = blobUrl;
 	}
 
 }

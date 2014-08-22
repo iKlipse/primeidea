@@ -25,7 +25,9 @@ public class ChallengeBean implements Serializable {
 	private String contentType;
 	private String fileName;
 	private Long fileSize;
+	private boolean imgAvail;
 	private List<Long> groupIdList;
+	private String blobUrl;
 
 	public Long getId() {
 		return id;
@@ -171,12 +173,28 @@ public class ChallengeBean implements Serializable {
 		this.fileSize = fileSize;
 	}
 
+	public boolean isImgAvail() {
+		return imgAvail;
+	}
+
+	public void setImgAvail(boolean imgAvail) {
+		this.imgAvail = imgAvail;
+	}
+
 	public List<Long> getGroupIdList() {
 		return groupIdList;
 	}
 
 	public void setGroupIdList(List<Long> groupIdList) {
 		this.groupIdList = groupIdList;
+	}
+
+	public String getBlobUrl() {
+		return blobUrl;
+	}
+
+	public void setBlobUrl(String blobUrl) {
+		this.blobUrl = blobUrl;
 	}
 
 }
