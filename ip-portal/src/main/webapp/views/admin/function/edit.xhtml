@@ -16,16 +16,14 @@
 					<f:selectItems value="#{adminController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 				</p:selectCheckboxMenu>
 			</p:column>
-			<p:row>
-				<p:column colspan="2">
+			<f:facet name="footer">
 					<p:commandButton id="pbtnDSave" value="Save" ajax="false" action="#{adminController.updateFunction}">
 						<f:setPropertyActionListener value="2" target="#{adminController.toView}" />
 					</p:commandButton>
 					<p:commandButton id="pbtnECancel" value="Return To View" ajax="false" action="#{adminController.showViewFunction}">
 						<f:setPropertyActionListener value="2" target="#{adminController.toView}" />
 					</p:commandButton>
-				</p:column>
-			</p:row>
+			</f:facet>
 		</p:panelGrid>
 	</ui:define>
 </ui:composition>

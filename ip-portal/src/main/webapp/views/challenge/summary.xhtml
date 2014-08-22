@@ -54,32 +54,30 @@
 			</p:commandButton>
 		</f:facet>
 	</p:panelGrid>
-	<p:overlayPanel dynamic="true" for="giSumComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
+	<p:overlayPanel my="right bottom" at="right top" dynamic="true" for="giSumComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
 		<p:panelGrid styleClass="panelGridView" id="pnlSumChallengeComment" columns="1">
 			<p:column>
-				<p:dataGrid id="dtSumViewComments" widgetVar="dtSumViewComments" value="#{challengeController.chalComments}" var="comment" columns="1" emptyMessage="No Comments Found">
-					<p:panel styleClass="panelView">
-						<f:facet name="header">
-							<p:outputLabel value="#{comment.usrScreenName}" />
-						</f:facet>
-						<f:facet name="footer">
-							<p:outputLabel value="#{comment.tagDate}" />
-						</f:facet>
+				<p:dataScroller mode="inline" scrollHeight="200" id="dtSumViewComments" value="#{challengeController.chalComments}" var="comment" chunkSize="2">
+					<p:panelGrid styleClass="panelgridView" columns="1">
 						<p:column>
 							<p:outputLabel value="#{comment.tagText}" escape="false" />
 						</p:column>
-					</p:panel>
-				</p:dataGrid>
+						<p:column>
+							<p:outputLabel style="text-align: left !important; font-size: 0.8em" value="#{comment.usrScreenName}" />
+							<p:outputLabel style="text-align: right !important; font-size: 0.6em" value="#{comment.tagDate}" />
+						</p:column>
+					</p:panelGrid>
+				</p:dataScroller>
 			</p:column>
 			<p:column>
-				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="edSumComment" value="#{challengeController.commentText}" />
+				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="edSumComment" value="#{challengeController.commentText}" height="100" />
 			</p:column>
 			<p:column>
 				<p:commandButton id="btnSumSubmitComment" value="Post" actionListener="#{challengeController.commentChallenge}" update="dtSumViewComments, :frmSummaryChal:lblSumCommentCnt" />
 			</p:column>
 		</p:panelGrid>
 	</p:overlayPanel>
-	<p:overlayPanel dynamic="true" for="giSumLike" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
+	<p:overlayPanel my="right bottom" at="left top" dynamic="true" for="giSumLike" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
 		<p:panelGrid styleClass="panelGridView" id="pnlSumChallengeLikes" columns="1">
 			<p:tagCloud id="tgSumLikes" model="#{challengeController.chalLikes}" />
 		</p:panelGrid>

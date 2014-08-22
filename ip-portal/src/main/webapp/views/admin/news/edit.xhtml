@@ -39,16 +39,14 @@
 			<p:column>
 				<p:fileUpload id="dfuCGUpload" fileUploadListener="#{adminController.fileUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 			</p:column>
-			<p:row>
-				<p:column colspan="2">
+			<f:facet name="footer">
 					<p:commandButton id="dbtnMSave" value="Save" ajax="false" action="#{adminController.updateNews}">
 						<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
 					</p:commandButton>
 					<p:commandButton id="dbtnRCancel" value="Return To view" ajax="false" action="#{adminController.showViewNews}">
 						<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
 					</p:commandButton>
-				</p:column>
-			</p:row>
+			</f:facet>
 		</p:panelGrid>
 	</ui:define>
 </ui:composition>

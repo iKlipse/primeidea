@@ -27,10 +27,10 @@
 				<p:outputLabel id="lblProfImage" value="Attachments : " />
 				<p:fileUpload id="fuCUpload" fileUploadListener="#{buildonController.fileUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 			</p:column>
-			<p:column>
+			<f:facet name="footer">
 				<p:commandButton id="btnSubmitBuildOn" value="Post" action="#{buildonController.createBuildOn}" ajax="false" rendered="#{!buildonBean.taggable}" />
 				<p:commandButton id="btnRedirectSummary" value="Return To View" action="#{buildonController.redirectView}" ajax="false" />
-			</p:column>
+			</f:facet>
 		</p:panelGrid>
 	</ui:define>
 </ui:composition>

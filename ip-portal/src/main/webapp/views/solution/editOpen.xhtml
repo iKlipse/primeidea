@@ -60,8 +60,7 @@
 		<p:column>
 			<p:fileUpload id="fuSUpload" fileUploadListener="#{challengeController.solFileUploadHandle}" multiple="false" />
 		</p:column>
-		<p:row>
-			<p:column colspan="2">
+		<f:facet name="footer">
 				<p:commandButton id="btnOSave" value="Save" ajax="false" action="#{challengeController.updateSolution}">
 					<f:setPropertyActionListener value="2" target="#{challengeController.toView}" />
 				</p:commandButton>
@@ -69,7 +68,6 @@
 					<f:setPropertyActionListener value="3" target="#{landingPageController.toView}" />
 					<f:setPropertyActionListener value="2" target="#{challengeController.toView}" />
 				</p:commandButton>
-			</p:column>
-		</p:row>
+		</f:facet>
 	</p:panelGrid>
 </ui:composition>

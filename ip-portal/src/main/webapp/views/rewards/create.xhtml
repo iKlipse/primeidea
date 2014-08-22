@@ -77,11 +77,9 @@
 		<p:column>
 			<p:fileUpload id="fuCrtCUpload" fileUploadListener="#{rewardsController.rwFileUploadHandle}" multiple="false" />
 		</p:column>
-		<p:row>
-			<p:column colspan="2">
+		<f:facet name="footer">
 				<p:commandButton id="btnCrtSave" value="Save" ajax="false" action="#{rewardsController.saveRewards}" />
 				<p:commandButton id="btnCrtCancel" value="Return To View" ajax="false" action="#{rewardsController.showViewReward}" />
-			</p:column>
-		</p:row>
+		</f:facet>
 	</p:panelGrid>
 </ui:composition>

@@ -33,16 +33,14 @@
 			<p:column>
 				<p:fileUpload id="efuCFUpload" fileUploadListener="#{adminController.fileUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 			</p:column>
-			<p:row>
-				<p:column colspan="2">
+			<f:facet name="footer">
 					<p:commandButton id="ebtnLSave" value="Save" ajax="false" action="#{adminController.saveNews}">
 						<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
 					</p:commandButton>
 					<p:commandButton id="ebtnQCancel" value="Return To View" ajax="false" action="#{adminController.showViewNews}">
 						<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
 					</p:commandButton>
-				</p:column>
-			</p:row>
+			</f:facet>
 		</p:panelGrid>
 	</ui:define>
 </ui:composition>

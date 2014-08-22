@@ -44,11 +44,11 @@
 				<p:column>
 					<p:inputText id="ttxtComments" value="#{adminController.comments}" />
 				</p:column>
-				<p:column>
+				<f:facet name="footer">
 					<p:commandButton id="tbtnSavePoint" value="Add Points" action="#{adminController.savePoints}" ajax="false">
 						<f:setPropertyActionListener value="3" target="#{adminController.toView}" />
 					</p:commandButton>
-				</p:column>
+				</f:facet>
 			</p:panelGrid>
 		</p:panel>
 	</ui:define>

@@ -12,11 +12,15 @@
 			</p:column>
 			<p:column>
 				<f:facet name="header">Start Date</f:facet>
-				<p:calendar mode="popup" id="bnewsStartDate" value="#{news.startDate}" disabled="true" />
+				<p:outputLabel id="bnewsStartDate" value="#{news.startDate}" >
+			   <f:convertDateTime pattern="yyyy.MM.dd HH:mm" />
+			</p:outputLabel>
 			</p:column>
 			<p:column>
 				<f:facet name="header">End Date</f:facet>
-				<p:calendar mode="popup" id="bnewsEndDate" value="#{news.endDate}" disabled="true" />
+				<p:outputLabel id="bnewsEndDate" value="#{news.endDate}" >
+			   <f:convertDateTime pattern="yyyy.MM.dd HH:mm" />
+			</p:outputLabel>
 			</p:column>
 
 			<p:column>

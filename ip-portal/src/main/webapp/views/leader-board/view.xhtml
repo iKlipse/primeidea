@@ -2,21 +2,24 @@
 	<h:head />
 	<h:body>
 		<h:form id="frmStats" enctype="multipart/form-data">
-			<p:remoteCommand actionListener="#{adminController.initializeLeaderBoard}" name="onload" autoRun="true" update="pnlStats" />
 			<p:panel styleClass="panelView" id="pnlStats">
-				<p:dataTable id="hdtViewStatsList" value="#{adminController.viewStatsBean}" var="stats" emptyMessage="Leader Board">
-					<p:column>
-						<p:graphicImage name="#{stats.imgPath}" library="images" height="25px" width="25px" rendered="#{stats.imgAvail}" />
-						<p:graphicImage name="profile.jpg" library="images" height="25px" width="25px" rendered="#{!stats.imgAvail}" />
-					</p:column>
-					<p:column>
-						<p:graphicImage name="#{stats.grpImgPath}" library="images" height="25px" width="25px" rendered="#{stats.grpImgAvail}" />
-						<p:graphicImage name="profile.jpg" library="images" height="25px" width="25px" rendered="#{!stats.grpImgAvail}" />
-					</p:column>
-					<p:column>
-						<p:outputLabel value="#{stats.totalCount}" />
-					</p:column>
-				</p:dataTable>
+				<p:dataGrid id="hdtViewStatsList" value="#{adminController.viewStatsBean}" var="stats" emptyMessage="Leader Board" columns="1">
+					<p:panel styleClass="panelView">
+						<p:panelGrid styleClass="panelGridView" columns="3">
+							<p:column>
+								<p:graphicImage name="#{stats.imgPath}" library="images" height="25px" width="25px" rendered="#{stats.imgAvail}" />
+								<p:graphicImage name="profile.jpg" library="images" height="25px" width="25px" rendered="#{!stats.imgAvail}" />
+							</p:column>
+							<p:column>
+								<p:graphicImage name="#{stats.grpImgPath}" library="images" height="25px" width="25px" rendered="#{stats.grpImgAvail}" />
+								<p:graphicImage name="profile.jpg" library="images" height="25px" width="25px" rendered="#{!stats.grpImgAvail}" />
+							</p:column>
+							<p:column>
+								<p:outputLabel value="#{stats.totalCount}" />
+							</p:column>
+						</p:panelGrid>
+					</p:panel>
+				</p:dataGrid>
 			</p:panel>
 		</h:form>
 	</h:body>

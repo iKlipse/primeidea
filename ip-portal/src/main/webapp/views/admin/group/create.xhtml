@@ -46,16 +46,14 @@
 					<f:selectItems value="#{adminController.admUsers}" var="user" itemLabel="#{user.priGroupName} - #{user.scName} #{user.lName}" itemValue="#{user.uId}" />
 				</p:selectCheckboxMenu>
 			</p:column>
-			<p:row>
-				<p:column colspan="2">
+			<f:facet name="footer">
 					<p:commandButton id="rbtnBSave" value="Save" ajax="false" action="#{adminController.saveGroup}">
 						<f:setPropertyActionListener value="2" target="#{adminController.toView}" />
 					</p:commandButton>
 					<p:commandButton id="rbtnCCancel" value="Return To View" ajax="false" action="#{adminController.showViewGroups}">
 						<f:setPropertyActionListener value="2" target="#{adminController.toView}" />
 					</p:commandButton>
-				</p:column>
-			</p:row>
+			</f:facet>
 		</p:panelGrid>
 	</ui:define>
 </ui:composition>

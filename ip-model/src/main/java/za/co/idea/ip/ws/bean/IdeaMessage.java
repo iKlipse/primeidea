@@ -19,6 +19,9 @@ public class IdeaMessage {
 	private boolean crtByImgAvail;
 	private String crtByImgPath;
 	private Date crtdDate;
+	private String contentType;
+	private String fileName;
+	private Long fileSize;
 	private Long[] groupIdList;
 
 	public Long getIdeaId() {
@@ -115,6 +118,30 @@ public class IdeaMessage {
 
 	public void setCrtdDate(Date crtdDate) {
 		this.crtdDate = crtdDate;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public Long getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(Long fileSize) {
+		this.fileSize = fileSize;
 	}
 
 	public Long[] getGroupIdList() {

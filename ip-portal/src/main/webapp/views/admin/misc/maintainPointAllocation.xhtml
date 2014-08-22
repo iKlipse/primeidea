@@ -66,14 +66,14 @@
 			<p:column>
 				<p:inputText id="klblAddPntVal" value="#{adminController.allocationBean.allocVal}" />
 			</p:column>
-			<p:column colspan="2">
+			<f:facet name="footer">
 				<p:commandButton id="kaddSaveButton" value="Save" ajax="false" action="#{adminController.saveAllocation}">
 					<f:setPropertyActionListener value="3" target="#{adminController.toView}" />
 				</p:commandButton>
 				<p:commandButton id="kaddCancelButton" value="Cancel" ajax="false" action="#{adminController.cancelAllocation}">
 					<f:setPropertyActionListener value="3" target="#{adminController.toView}" />
 				</p:commandButton>
-			</p:column>
+			</f:facet>
 		</p:panelGrid>
 		<p:panelGrid styleClass="panelGridView"  id="kpnlModPntAlloc" rendered="#{adminController.showModPanel}" columns="1">
 			<p:column>
@@ -97,7 +97,7 @@
 			<p:column>
 				<p:inputText id="klblModPntVal" value="#{adminController.allocationBean.allocVal}" />
 			</p:column>
-			<p:column colspan="2">
+			<f:facet name="footer">
 				<p:commandButton id="kmodSaveButton" value="Update" ajax="false" action="#{adminController.updateAllocation}">
 					<f:setPropertyActionListener value="3" target="#{adminController.toView}" />
 				</p:commandButton>
@@ -107,7 +107,7 @@
 				<p:commandButton id="kmodCancelButton" value="Cancel" ajax="false" action="#{adminController.cancelAllocation}">
 					<f:setPropertyActionListener value="3" target="#{adminController.toView}" />
 				</p:commandButton>
-			</p:column>
+			</f:facet>
 		</p:panelGrid>
 	</ui:define>
 </ui:composition>

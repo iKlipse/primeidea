@@ -80,8 +80,7 @@
 				<f:selectItems value="#{challengeController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 			</p:selectCheckboxMenu>
 		</p:column>
-		<p:row>
-			<p:column colspan="2">
+		<f:facet name="footer">
 				<p:commandButton id="btnEdtrSave" value="Save" ajax="false" action="#{challengeController.updateChallenge}">
 					<f:setPropertyActionListener value="4" target="#{challengeController.toView}" />
 				</p:commandButton>
@@ -89,7 +88,6 @@
 					<f:setPropertyActionListener value="2" target="#{landingPageController.toView}" />
 					<f:setPropertyActionListener value="4" target="#{challengeController.toView}" />
 				</p:commandButton>
-			</p:column>
-		</p:row>
+		</f:facet>
 	</p:panelGrid>
 </ui:composition>

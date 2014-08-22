@@ -2,7 +2,6 @@
 	<h:head />
 	<h:body>
 		<h:form id="frmVwNews" enctype="multipart/form-data">
-			<p:remoteCommand actionListener="#{adminController.initializeNews}" name="onload" autoRun="true" update="cdgNews" />
 			<p:carousel id="cdgNews" value="#{adminController.viewNewsBeans}" var="news" numVisible="1">
 				<p:panel styleClass="panelView" header="#{news.startDate}">
 					<p:panelGrid styleClass="panelGridView" columns="1" id="cpnlNews">

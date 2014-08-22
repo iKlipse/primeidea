@@ -827,7 +827,7 @@ public class AdminService {
 				user.setGroupId(ipUser.getIpGroup().getGroupId());
 				IpBlob grpBlob = ipBlobDAO.getBlobByEntity(user.getGroupId(), "ip_group");
 				user.setGrpImgAvail(true);
-				user.setGrpImgPath("" + user.getGroupId() + "/" + grpBlob.getBlobName());
+				user.setGrpImgPath("ip_group/" + user.getGroupId() + "/" + grpBlob.getBlobName());
 			} else
 				user.setGrpImgAvail(false);
 			IpBlob blob = ipBlobDAO.getBlobByEntity(ipUser.getUserId(), "ip_user");
@@ -898,7 +898,7 @@ public class AdminService {
 				} else {
 					userStats.setImgAvail(false);
 				}
-				IpBlob grpBlob = ipBlobDAO.getBlobByEntity(ipUser.getUserId(), "ip_group");
+				IpBlob grpBlob = ipBlobDAO.getBlobByEntity(ipUser.getIpGroup().getGroupId(), "ip_group");
 				if (grpBlob != null && ipUser.getIpGroup() != null) {
 					userStats.setGrpImgPath("ip_group/" + ipUser.getIpGroup().getGroupId() + "/" + grpBlob.getBlobName());
 					userStats.setGrpImgAvail(true);

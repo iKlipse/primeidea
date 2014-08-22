@@ -17,7 +17,9 @@
 				</p:column>
 				<p:column>
 					<f:facet name="header">Created Date</f:facet>
-					<p:calendar mode="popup" id="calLaunchDT" value="#{claim.claimCrtdDt}" disabled="true" />
+					<p:outputLabel id="calLaunchDT" value="#{claim.claimCrtdDt}" >
+			            <f:convertDateTime pattern="yyyy.MM.dd HH:mm" />
+			        </p:outputLabel>
 				</p:column>
 				<p:column>
 					<f:facet name="header">Created By</f:facet>

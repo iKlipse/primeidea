@@ -24,6 +24,7 @@ public class ChallengeBean implements Serializable {
 	private String crtByImgPath;
 	private String contentType;
 	private String fileName;
+	private Long fileSize;
 	private List<Long> groupIdList;
 
 	public Long getId() {
@@ -160,6 +161,14 @@ public class ChallengeBean implements Serializable {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public Long getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(Long fileSize) {
+		this.fileSize = fileSize;
 	}
 
 	public List<Long> getGroupIdList() {

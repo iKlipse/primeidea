@@ -23,6 +23,7 @@ public class SolutionBean implements Serializable {
 	private String crtByImgPath;
 	private String contentType;
 	private String fileName;
+	private Long fileSize;
 	private String crtByName;
 	private boolean taggable;
 	private boolean solImgAvl;
@@ -143,6 +144,14 @@ public class SolutionBean implements Serializable {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public Long getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(Long fileSize) {
+		this.fileSize = fileSize;
 	}
 
 	public String getCrtByName() {

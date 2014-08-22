@@ -12,11 +12,15 @@
 		</p:column>
 		<p:column>
 			<f:facet name="header">Launch Date</f:facet>
-			<p:calendar mode="popup" id="calLaunchDT" value="#{rewards.rwLaunchDt}" disabled="true" />
+			<p:outputLabel id="calLaunchDT" value="#{rewards.rwLaunchDt}" >
+			   <f:convertDateTime pattern="yyyy.MM.dd HH:mm" />
+			</p:outputLabel>
 		</p:column>
 		<p:column>
 			<f:facet name="header">Expiry Date</f:facet>
-			<p:calendar mode="popup" id="calExprDT" value="#{rewards.rwExpiryDt}" disabled="true" />
+			<p:outputLabel id="calExprDT" value="#{rewards.rwExpiryDt}" >
+			   <f:convertDateTime pattern="yyyy.MM.dd HH:mm" />
+			</p:outputLabel>
 		</p:column>
 		<p:column>
 			<p:commandButton id="viewVwButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{rewardsController.showEditReward}">

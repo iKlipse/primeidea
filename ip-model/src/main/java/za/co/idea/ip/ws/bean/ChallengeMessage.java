@@ -20,6 +20,9 @@ public class ChallengeMessage {
 	private String crtdByName;
 	private boolean crtByImgAvail;
 	private String crtByImgPath;
+	private String contentType;
+	private String fileName;
+	private Long fileSize;
 	private Long[] groupIdList;
 
 	public Long getId() {
@@ -132,6 +135,30 @@ public class ChallengeMessage {
 
 	public void setCrtByImgPath(String crtByImgPath) {
 		this.crtByImgPath = crtByImgPath;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public Long getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(Long fileSize) {
+		this.fileSize = fileSize;
 	}
 
 	public Long[] getGroupIdList() {

@@ -1,27 +1,44 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
-	<p:dataGrid id="dtViewSolutions" value="#{landingPageController.viewSolutions}" var="solution" paginator="true" paginatorPosition="bottom" rows="5" columns="1" emptyMessage="No Solutions Found">
-		<p:panel styleClass="panelView" >
-			<f:facet name="options">
-				<p:menu>
-					<p:menuitem value="Edit" ajax="false" immediate="true" action="#{challengeController.showEditSolution}">
-						<f:setPropertyActionListener value="#{solution}" target="#{challengeController.solutionBean}" />
-						<f:setPropertyActionListener value="1" target="#{challengeController.returnView}" />
-					</p:menuitem>
-					<p:menuitem value="Summary" ajax="false" immediate="true" action="#{challengeController.showSummarySolution}">
-						<f:setPropertyActionListener value="#{solution}" target="#{challengeController.solutionBean}" />
-						<f:setPropertyActionListener value="1" target="#{challengeController.returnView}" />
-					</p:menuitem>
-				</p:menu>
-			</f:facet>
-			<f:facet name="header">
-				<p:selectOneMenu value="#{solution.crtdById}">
-					<f:selectItems value="#{landingPageController.admUsers}" var="a" itemLabel="#{a.scName} - #{a.fName} - #{a.lName}" itemValue="#{a.uId}" />
-				</p:selectOneMenu>
-			</f:facet>
-			<b><p:outputLabel value="#{solution.title}" /></b>
-			<p>
-				<p:outputLabel value="#{solution.desc}" escape="false" />
-			</p>
+	<p:dataGrid id="dtViewSolutions" style="width: 100% !important; border: none !important;" value="#{landingPageController.viewSolutions}" var="solution" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="5,10,15" columns="1" rows="5" emptyMessage="No Ideas Found">
+		<p:panel styleClass="panelView">
+			<p:panelGrid styleClass="panelGridView">
+				<p:row>
+					<p:column colspan="2" rowspan="7" style="vertical-align: top !important">
+						<p:graphicImage style="vertical-align: top !important;" id="imgAvatar" name="#{solution.crtByImgPath}" library="images" height="25px" width="25px" />
+						<p:graphicImage style="vertical-align: top !important;" id="imgAvatarDefault" name="profile.jpg" library="images" height="25px" width="25px" rendered="#{!solution.crtByImgAvail}" />
+					</p:column>
+					<p:column colspan="4">
+						<p:outputLabel value="#{solution.crtByName}" style="float:left !important" />
+					</p:column>
+					<p:column colspan="4">
+						<p:outputLabel value="#{solution.crtdDt}" style="float:left !important">
+							<f:convertDateTime pattern="yyyy.MM.dd 'at' HH:mm:ss z" />
+						</p:outputLabel>
+					</p:column>
+					<p:column colspan="2">
+						<p:commandButton id="dynaSolButton" title="Options" type="button" icon="ui-icon-gear" />
+						<p:menu style="vertical-align: middle !important; float: right !important" overlay="true" trigger="dynaSolButton" my="left top" at="left bottom">
+							<p:menuitem value="Edit" ajax="false" immediate="true" action="#{challengeController.showEditSolution}">
+								<f:setPropertyActionListener value="#{solution}" target="#{challengeController.solutionBean}" />
+								<f:setPropertyActionListener value="1" target="#{challengeController.returnView}" />
+							</p:menuitem>
+							<p:menuitem value="Summary" ajax="false" immediate="true" action="#{challengeController.showSummarySolution}">
+								<f:setPropertyActionListener value="#{solution}" target="#{challengeController.solutionBean}" />
+								<f:setPropertyActionListener value="1" target="#{challengeController.returnView}" />
+							</p:menuitem>
+						</p:menu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="10" rowspan="4">
+						<p:outputLabel value="#{solution.title}" style="font-weight: bold !important; text-align: left !important; font-size: 1.2em !important" />
+						<br />
+						<p:outputLabel value="#{solution.desc}" escape="false" style="text-align: left !important" />
+						<p:separator style="width: 100% !important" />
+						<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
 		</p:panel>
 	</p:dataGrid>
 </ui:composition>

@@ -1,5 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
-	<p:panelGrid styleClass="panelGridView"  columns="2" id="pnlSummaryReviewChallenge">
+	<p:panelGrid styleClass="panelGridView" columns="2" id="pnlSummaryReviewChallenge">
 		<p:column>
 			<p:outputLabel id="lblITitle" value="Title : " />
 		</p:column>
@@ -31,15 +31,15 @@
 			<p:outputLabel id="lblISocial" value="Social : " />
 		</p:column>
 		<p:column>
-			<p:panelGrid styleClass="panelGridView"  columns="2">
+			<p:panelGrid styleClass="panelGridView" columns="2">
 				<p:column>
 					<p:commandLink id="lnkSumrLikeIdea" action="#{challengeController.likeChallenge}" update="lblLikeCnt, :frmSummaryReviewChal:tgSumrLikes">
-						<p:outputLabel id="lblLikeCnt" value="#{challengeController.chalLikeCnt}"  />
+						<p:outputLabel id="lblLikeCnt" value="#{challengeController.chalLikeCnt}" />
 						<p:graphicImage id="giSumrLike" name="like-128.png" library="images" height="25px" width="25px" />
 					</p:commandLink>
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblCommentCnt" value="#{challengeController.chalCommentCnt}"  />
+					<p:outputLabel id="lblCommentCnt" value="#{challengeController.chalCommentCnt}" />
 					<p:graphicImage id="giSumrComment" name="comment.jpg" library="images" height="25px" width="25px" />
 				</p:column>
 			</p:panelGrid>
@@ -54,43 +54,38 @@
 			</p:commandButton>
 		</f:facet>
 	</p:panelGrid>
-	<p:overlayPanel dynamic="true" for="giSumrComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
-		<p:panelGrid styleClass="panelGridView"  id="pnlSumrChallengeComment" columns="1">
+	<p:overlayPanel my="right bottom" at="right top" dynamic="true" for="giSumrComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
+		<p:panelGrid styleClass="panelGridView" id="pnlSumrChallengeComment" columns="1">
 			<p:column>
-				<p:dataGrid id="dtSumrViewComments" widgetVar="dtSumrViewComments" value="#{challengeController.chalComments}" var="comment" columns="1" emptyMessage="No Comments Found">
-					<p:panel styleClass="panelView" >
-						<f:facet name="header">
-							<p:outputLabel value="#{comment.usrScreenName}" />
-						</f:facet>
-						<f:facet name="footer">
-							<p:outputLabel value="#{comment.tagDate}" />
-						</f:facet>
+				<p:dataScroller mode="inline" scrollHeight="200" id="dtSumrViewComments" value="#{challengeController.chalComments}" var="comment" chunkSize="2">
+					<p:panelGrid styleClass="panelgridView" columns="1">
 						<p:column>
 							<p:outputLabel value="#{comment.tagText}" escape="false" />
 						</p:column>
-					</p:panel>
-				</p:dataGrid>
+						<p:column>
+							<p:outputLabel style="text-align: left !important; font-size: 0.8em" value="#{comment.usrScreenName}" />
+							<p:outputLabel style="text-align: right !important; font-size: 0.6em" value="#{comment.tagDate}" />
+						</p:column>
+					</p:panelGrid>
+				</p:dataScroller>
 			</p:column>
 			<p:column>
-				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="edSumrComment" value="#{challengeController.commentText}" />
+				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="edSumrComment" value="#{challengeController.commentText}" height="100" />
 			</p:column>
 			<p:column>
 				<p:commandButton id="btnSumrSubmitComment" value="Post" actionListener="#{challengeController.commentChallenge}" update="dtSumrViewComments, :frmSummaryReviewChal:lblCommentCnt" />
 			</p:column>
 		</p:panelGrid>
 	</p:overlayPanel>
-	<p:overlayPanel dynamic="true" for="giSumrLike" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
-		<p:panelGrid styleClass="panelGridView"  id="pnlSumrChallengeLikes" columns="1">
+	<p:overlayPanel my="right bottom" at="left top" dynamic="true" for="giSumrLike" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
+		<p:panelGrid styleClass="panelGridView" id="pnlSumrChallengeLikes" columns="1">
 			<p:tagCloud id="tgSumrLikes" model="#{challengeController.chalLikes}" />
 		</p:panelGrid>
 	</p:overlayPanel>
 	<p:dataGrid id="dgSumrSolForChal" value="#{challengeController.viewSolutions}" var="sol" columns="1">
 		<p:scrollPanel>
-			<p:panel styleClass="panelView" >
-				<f:facet name="header">
-					Solution By - <p:outputLabel value="#{sol.crtByName}" /> - <p:outputLabel value="#{sol.crtdDt}" />
-				</f:facet>
-				<p:panelGrid styleClass="panelGridView"  columns="2" id="pnlSumrSolForChal">
+			<p:panel styleClass="panelView" header="Solution By - #{sol.crtByName} - #{sol.crtdDt}">
+				<p:panelGrid styleClass="panelGridView" columns="2" id="pnlSumrSolForChal">
 					<p:column>
 						<p:outputLabel id="lblISolTitle" value="Title : " />
 					</p:column>

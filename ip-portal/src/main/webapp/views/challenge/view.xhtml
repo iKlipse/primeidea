@@ -18,11 +18,15 @@
 		</p:column>
 		<p:column>
 			<f:facet name="header">Launch Date</f:facet>
-			<p:calendar mode="popup" id="calVwLaunchDT" value="#{challenge.launchDt}" disabled="true" />
+			<p:outputLabel id="calVwLaunchDT" value="#{challenge.launchDt}" >
+			   <f:convertDateTime pattern="yyyy.MM.dd HH:mm" />
+			</p:outputLabel>
 		</p:column>
 		<p:column>
 			<f:facet name="header">Expiry Date</f:facet>
-			<p:calendar mode="popup" id="calVwExprDT" value="#{challenge.exprDt}" disabled="true" />
+			<p:outputLabel id="calVwExprDT" value="#{challenge.exprDt}" >
+			   <f:convertDateTime pattern="yyyy.MM.dd HH:mm" />
+			</p:outputLabel>
 		</p:column>
 		<p:column>
 			<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{challengeController.showEditChallenge}">

@@ -18,6 +18,7 @@ public class IdeaBean implements Serializable {
 	private String fileUpload;
 	private String contentType;
 	private String fileName;
+	private Long fileSize;
 	private Long crtdById;
 	private String crtdByName;
 	private boolean crtByImgAvail;
@@ -104,6 +105,14 @@ public class IdeaBean implements Serializable {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public Long getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(Long fileSize) {
+		this.fileSize = fileSize;
 	}
 
 	public Long getCrtdById() {

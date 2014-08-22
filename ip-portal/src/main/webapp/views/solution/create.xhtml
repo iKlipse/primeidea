@@ -41,12 +41,10 @@
 		<p:column>
 			<p:fileUpload id="fuCrtSUpload" fileUploadListener="#{challengeController.solFileUploadHandle}" multiple="false" />
 		</p:column>
-		<p:row>
-			<p:column colspan="2">
+		<f:facet name="footer">
 				<p:commandButton id="btnCrtSave" value="Save" ajax="false" action="#{challengeController.saveSolution}">
 					<f:setPropertyActionListener value="3" target="#{challengeController.toView}" />
 				</p:commandButton>
-			</p:column>
-		</p:row>
+		</f:facet>
 	</p:panelGrid>
 </ui:composition>

@@ -20,12 +20,10 @@
 				<p:column>
 					<p:inputTextarea rows="4" cols="40" autocomplete="false" id="txtCDesc" value="#{claimController.claimBean.claimDesc}" />
 				</p:column>
-				<p:row>
-					<p:column colspan="2">
+				<f:facet name="footer">
 						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{claimController.saveClaim}" />
 						<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{claimController.showViewClaim}" />
-					</p:column>
-				</p:row>
+				</f:facet>
 			</p:panelGrid>
 		</p:panel>
 	</ui:define>

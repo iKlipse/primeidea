@@ -165,6 +165,12 @@ public class AdminController implements Serializable {
 		return client;
 	}
 
+	@PostConstruct
+	public void initialize() {
+		initializePage();
+		initializeProfilePage();
+	}
+
 	public void initializePage() {
 		try {
 			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -180,22 +186,6 @@ public class AdminController implements Serializable {
 		}
 	}
 
-	public void initializeNews() {
-		try {
-			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-			User user = (User) request.getAttribute(WebKeys.USER);
-			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
-			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
-			userId = message.getuId();
-			viewNewsBeans = fetchAllNews();
-		} catch (Exception e) {
-			logger.error(e, e);
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		}
-	}
-
-	@PostConstruct
 	public void initializeProfilePage() {
 		try {
 			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -226,32 +216,6 @@ public class AdminController implements Serializable {
 			statsBean.setWhishListCount(statsMsg.getWhishListCount());
 			statsClient.close();
 			logger.info(loggedScrName + " :: " + imgPath + " :: " + imgAvail + " :: " + hierarchy);
-		} catch (Exception e) {
-			logger.error(e, e);
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		}
-	}
-
-	public void initializeLeaderBoard() {
-		try {
-			WebClient statsListClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/stats/topList");
-			Collection<? extends UserStatisticsMessage> messages = new ArrayList<UserStatisticsMessage>(statsListClient.accept(MediaType.APPLICATION_JSON).getCollection(UserStatisticsMessage.class));
-			statsListClient.close();
-			viewStatsBean = new ArrayList<UserStatisticsBean>();
-			for (UserStatisticsMessage userStats : messages) {
-				UserStatisticsBean stats = new UserStatisticsBean();
-				stats.setChallengesCount(userStats.getChallengesCount());
-				stats.setIdeasCount(userStats.getIdeasCount());
-				stats.setSolutionsCount(userStats.getSolutionsCount());
-				stats.setTotalCount(userStats.getTotalCount());
-				stats.setUserId(userStats.getUserId());
-				stats.setWhishListCount(userStats.getWhishListCount());
-				stats.setImgPath(userStats.getImgPath());
-				stats.setImgAvail(userStats.isImgAvail());
-				viewStatsBean.add(stats);
-			}
-
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
@@ -3098,8 +3062,18 @@ public class AdminController implements Serializable {
 	}
 
 	public List<NewsBean> getViewNewsBeans() {
-		if (viewNewsBeans == null)
-			viewNewsBeans = new ArrayList<NewsBean>();
+		try {
+			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			User user = (User) request.getAttribute(WebKeys.USER);
+			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+			userId = message.getuId();
+			viewNewsBeans = fetchAllNews();
+		} catch (Exception e) {
+			logger.error(e, e);
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
 		return viewNewsBeans;
 	}
 
@@ -3192,6 +3166,30 @@ public class AdminController implements Serializable {
 	}
 
 	public List<UserStatisticsBean> getViewStatsBean() {
+		try {
+			WebClient statsListClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/stats/topList");
+			Collection<? extends UserStatisticsMessage> messages = new ArrayList<UserStatisticsMessage>(statsListClient.accept(MediaType.APPLICATION_JSON).getCollection(UserStatisticsMessage.class));
+			statsListClient.close();
+			viewStatsBean = new ArrayList<UserStatisticsBean>();
+			for (UserStatisticsMessage userStats : messages) {
+				UserStatisticsBean stats = new UserStatisticsBean();
+				stats.setChallengesCount(userStats.getChallengesCount());
+				stats.setIdeasCount(userStats.getIdeasCount());
+				stats.setSolutionsCount(userStats.getSolutionsCount());
+				stats.setTotalCount(userStats.getTotalCount());
+				stats.setUserId(userStats.getUserId());
+				stats.setWhishListCount(userStats.getWhishListCount());
+				stats.setImgPath(userStats.getImgPath());
+				stats.setImgAvail(userStats.isImgAvail());
+				stats.setGrpImgAvail(userStats.isGrpImgAvail());
+				stats.setGrpImgPath(userStats.getGrpImgPath());
+				viewStatsBean.add(stats);
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
 		return viewStatsBean;
 	}
 

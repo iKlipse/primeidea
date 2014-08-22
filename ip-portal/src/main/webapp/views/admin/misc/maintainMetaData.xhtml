@@ -42,14 +42,14 @@
 				<p:inputText autocomplete="false" id="ltxtModDesc" value="#{adminController.selVal}" />
 			</p:column>
 
-			<p:column colspan="2">
+			<f:facet name="footer">
 				<p:commandButton id="lmodSaveButton" value="Update" ajax="false" action="#{adminController.updateMetaData}">
 					<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
 				</p:commandButton>
 				<p:commandButton id="lmodDelButton" value="Delete" ajax="false" action="#{adminController.deleteMetaData}">
 					<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
 				</p:commandButton>
-			</p:column>
+			</f:facet>
 
 		</p:panelGrid>
 		<br />
@@ -70,13 +70,11 @@
 					<p:inputText autocomplete="false" id="ltxtAddDesc" value="#{adminController.selVal}" />
 				</p:column>
 			</p:row>
-			<p:row>
-				<p:column colspan="2">
+			<f:facet name="footer">
 					<p:commandButton id="laddSaveButton" value="Save" ajax="false" action="#{adminController.addMetaData}">
 						<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
 					</p:commandButton>
-				</p:column>
-			</p:row>
+			</f:facet>
 		</p:panelGrid>
 	</ui:define>
 </ui:composition>

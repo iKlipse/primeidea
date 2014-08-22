@@ -109,7 +109,6 @@ public class NewsService {
 			for (Object object : vals) {
 				IpNews news = (IpNews) object;
 				NewsMessage message = new NewsMessage();
-				logger.info("Retrieved news ID: " + news.getNewsId() + ", Title: " + news.getNewsTitle());
 				message.setnId(news.getNewsId());
 				message.setContent(news.getNewsContent());
 				message.setStartDate(news.getNewsStartDate());
@@ -117,7 +116,6 @@ public class NewsService {
 				message.setnTitle(news.getNewsTitle());
 				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(news.getNewsId(), "ip_news");
 				if (ipBlob != null) {
-					logger.info(" News attachment URL : " + "ip_news/" + news.getNewsId() + "/" + ipBlob.getBlobName());
 					message.setNewsUrl("ip_news/" + news.getNewsId() + "/" + ipBlob.getBlobName());
 					message.setNwImgAvail(true);
 				} else {

@@ -41,12 +41,10 @@
 				<f:selectItems value="#{randomIdeaController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 			</p:selectCheckboxMenu>
 		</p:column>
-		<p:row>
-			<p:column colspan="2">
+		<f:facet name="footer">
 				<p:commandButton id="btnCrtISave" value="Save" ajax="false" action="#{randomIdeaController.saveIdea}">
 					<f:setPropertyActionListener value="2" target="#{randomIdeaController.toView}" />
 				</p:commandButton>
-			</p:column>
-		</p:row>
+		</f:facet>
 	</p:panelGrid>
 </ui:composition>

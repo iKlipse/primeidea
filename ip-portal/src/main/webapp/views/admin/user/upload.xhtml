@@ -7,16 +7,14 @@
 			<p:column>
 				<p:fileUpload id="ifuCDUpload" fileUploadListener="#{adminController.userUploadHandle}" multiple="false" allowTypes="/(\.|\/)(xls|xlsx)$/" />
 			</p:column>
-			<p:row>
-				<p:column colspan="2">
+			<f:facet name="footer">
 					<p:commandButton id="ibtnHSave" value="Save" ajax="false" action="#{adminController.saveUploadUsers}">
 						<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
 					</p:commandButton>
 					<p:commandButton id="ibtnLCancel" value="Return To View" ajax="false" action="#{adminController.showViewUsers}">
 						<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
 					</p:commandButton>
-				</p:column>
-			</p:row>
+			</f:facet>
 		</p:panel>
 	</ui:define>
 </ui:composition>
