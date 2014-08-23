@@ -1,5 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-	<p:panelGrid styleClass="panelGridView"  columns="2" id="pnlEditReviewIdea">
+	<p:panelGrid styleClass="panelGridView" columns="2" id="pnlEditReviewIdea">
 		<p:column>
 			<p:outputLabel id="lblEdtrITitle" value="Title : " />
 		</p:column>
@@ -21,7 +21,7 @@
 			<p:outputLabel id="lblEdtrIDesc" value="Description : " />
 		</p:column>
 		<p:column>
-			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="txtEdtrIDesc" value="#{randomIdeaController.ideaBean.ideaDesc}"/>
+			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="txtEdtrIDesc" value="#{randomIdeaController.ideaBean.ideaDesc}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtrITag" value="Keywords to Describe Your Idea : " />
@@ -33,10 +33,11 @@
 			<p:outputLabel id="lblEdtrIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:commandButton id="btnEdtrDownload" value="Download" ajax="false" disabled="true">
-				<!-- disabled="#{randomIdeaController.fileAvail}" -->
-				<p:fileDownload value="#{randomIdeaController.fileContent}" />
-			</p:commandButton>
+			<p:outputLabel value="No Attachments" rendered="#{!randomIdeaController.ideaBean.imgAvail}" />
+			<h:outputLink value="#{randomIdeaController.ideaBean.blobUrl}" rendered="#{randomIdeaController.ideaBean.imgAvail}">
+				<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+				<p:outputLabel value="#{randomIdeaController.ideaBean.fileName}" style="font-weight: 0.6em" />
+			</h:outputLink>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtrIUpload" value="Upload File : " />
@@ -63,14 +64,14 @@
 			</p:selectOneMenu>
 		</p:column>
 		<f:facet name="footer">
-				<p:commandButton id="btnEdtrSave" value="Save" ajax="false" action="#{randomIdeaController.updateIdea}">
-					<f:setPropertyActionListener value="1" target="#{landingPageController.toView}" />
-					<f:setPropertyActionListener value="1" target="#{randomIdeaController.toView}" />
-				</p:commandButton>
-				<p:commandButton id="btnEdtrCancel" value="Return To View" ajax="false" action="#{randomIdeaController.redirectMain}">
-					<f:setPropertyActionListener value="1" target="#{landingPageController.toView}" />
-					<f:setPropertyActionListener value="4" target="#{randomIdeaController.toView}" />
-				</p:commandButton>
+			<p:commandButton id="btnEdtrSave" value="Save" ajax="false" action="#{randomIdeaController.updateIdea}">
+				<f:setPropertyActionListener value="1" target="#{landingPageController.toView}" />
+				<f:setPropertyActionListener value="1" target="#{randomIdeaController.toView}" />
+			</p:commandButton>
+			<p:commandButton id="btnEdtrCancel" value="Return To View" ajax="false" action="#{randomIdeaController.redirectMain}">
+				<f:setPropertyActionListener value="1" target="#{landingPageController.toView}" />
+				<f:setPropertyActionListener value="4" target="#{randomIdeaController.toView}" />
+			</p:commandButton>
 		</f:facet>
 	</p:panelGrid>
 </ui:composition>

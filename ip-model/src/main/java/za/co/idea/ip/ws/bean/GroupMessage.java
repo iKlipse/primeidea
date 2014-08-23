@@ -12,6 +12,8 @@ public class GroupMessage {
 	private Boolean isActive;
 	private Long[] userIdList;
 	private String blobUrl;
+	private boolean imgAvl;
+	private String fileName;
 
 	public Long getgId() {
 		return gId;
@@ -62,8 +64,6 @@ public class GroupMessage {
 	}
 
 	public Long[] getUserIdList() {
-		if (userIdList == null)
-			userIdList = new Long[] {};
 		return userIdList;
 	}
 
@@ -77,6 +77,22 @@ public class GroupMessage {
 
 	public void setBlobUrl(String blobUrl) {
 		this.blobUrl = blobUrl;
+	}
+
+	public boolean isImgAvl() {
+		return imgAvl;
+	}
+
+	public void setImgAvl(boolean imgAvl) {
+		this.imgAvl = imgAvl;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 }

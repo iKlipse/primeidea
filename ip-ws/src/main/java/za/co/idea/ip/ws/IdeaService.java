@@ -175,19 +175,21 @@ public class IdeaService {
 			ipIdea.setIpUser(ipUserDAO.findById(idea.getCrtdById()));
 		try {
 			ipIdeaDAO.save(ipIdea);
+			if (idea.getGroupIdList() != null && idea.getGroupIdList().length > 0) {
+				Long[] ids = ipNativeSQLDAO.getNextIds(IpIdeaGroup.class, idea.getGroupIdList().length);
+				int i = 0;
+				for (Long gId : idea.getGroupIdList()) {
+					IpIdeaGroup ipIdeaGroup = new IpIdeaGroup();
+					ipIdeaGroup.setIgId(ids[i]);
+					ipIdeaGroup.setIpIdea(ipIdea);
+					ipIdeaGroup.setIpGroup(ipGroupDAO.findById(gId));
+					ipIdeaGroupDAO.save(ipIdeaGroup);
+					i++;
+				}
+			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
-			Long[] ids = ipNativeSQLDAO.getNextIds(IpIdeaGroup.class, idea.getGroupIdList().length);
-			int i = 0;
-			for (Long gId : idea.getGroupIdList()) {
-				IpIdeaGroup ipIdeaGroup = new IpIdeaGroup();
-				ipIdeaGroup.setIgId(ids[i]);
-				ipIdeaGroup.setIpIdea(ipIdea);
-				ipIdeaGroup.setIpGroup(ipGroupDAO.findById(gId));
-				ipIdeaGroupDAO.save(ipIdeaGroup);
-				i++;
-			}
 			return message;
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -219,20 +221,22 @@ public class IdeaService {
 			ipIdea.setIpUser(ipUserDAO.findById(idea.getCrtdById()));
 		try {
 			ipIdeaDAO.merge(ipIdea);
+			ipIdeaGroupDAO.deleteByIdeaId(idea.getIdeaId());
+			if (idea.getGroupIdList() != null && idea.getGroupIdList().length > 0) {
+				Long[] ids = ipNativeSQLDAO.getNextIds(IpIdeaGroup.class, idea.getGroupIdList().length);
+				int i = 0;
+				for (Long gId : idea.getGroupIdList()) {
+					IpIdeaGroup ipIdeaGroup = new IpIdeaGroup();
+					ipIdeaGroup.setIgId(ids[i]);
+					ipIdeaGroup.setIpIdea(ipIdea);
+					ipIdeaGroup.setIpGroup(ipGroupDAO.findById(gId));
+					ipIdeaGroupDAO.save(ipIdeaGroup);
+					i++;
+				}
+			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
-			ipIdeaGroupDAO.deleteByIdeaId(idea.getIdeaId());
-			Long[] ids = ipNativeSQLDAO.getNextIds(IpIdeaGroup.class, idea.getGroupIdList().length);
-			int i = 0;
-			for (Long gId : idea.getGroupIdList()) {
-				IpIdeaGroup ipIdeaGroup = new IpIdeaGroup();
-				ipIdeaGroup.setIgId(ids[i]);
-				ipIdeaGroup.setIpIdea(ipIdea);
-				ipIdeaGroup.setIpGroup(ipGroupDAO.findById(gId));
-				ipIdeaGroupDAO.save(ipIdeaGroup);
-				i++;
-			}
 			return message;
 		} catch (Exception e) {
 			logger.error(e, e);

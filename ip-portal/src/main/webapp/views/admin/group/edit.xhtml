@@ -17,9 +17,11 @@
 				<p:outputLabel id="olblIDownload" value="Download File : " />
 			</p:column>
 			<p:column>
-				<p:commandButton id="obtnDownload" value="Download" ajax="false" disabled="#{adminController.fileAvail}">
-					<p:fileDownload value="#{adminController.fileContent}" />
-				</p:commandButton>
+				<p:outputLabel value="No Attachments" rendered="#{!adminController.groupBean.imgAvl}" />
+			    <h:outputLink value="#{adminController.groupBean.blobUrl}" rendered="#{adminController.groupBean.imgAvl}">
+				     <p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+				     <p:outputLabel value="#{adminController.groupBean.fileName}" style="font-weight: 0.6em" />
+			    </h:outputLink>
 			</p:column>
 			<p:column>
 				<p:outputLabel id="olblParentGId" value="Parent : " />

@@ -29,9 +29,11 @@
 				<p:outputLabel id="dlblIDownload" value="Download File : " />
 			</p:column>
 			<p:column>
-				<p:commandButton id="dbtnDownload" value="Download" ajax="false" disabled="#{adminController.fileAvail}">
-					<p:fileDownload value="#{adminController.fileContent}" />
-				</p:commandButton>
+				<p:outputLabel value="No Attachments" rendered="#{!adminController.newsBean.nwImgAvail}" />
+			<h:outputLink value="#{adminController.newsBean.blobUrl}" rendered="#{adminController.newsBean.nwImgAvail}">
+				<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+				<p:outputLabel value="#{adminController.newsBean.newsUrl}" style="font-weight: 0.6em" />
+			</h:outputLink>
 			</p:column>
 			<p:column>
 				<p:outputLabel id="dlblProfImage" value="News Files : " />

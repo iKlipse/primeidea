@@ -16,6 +16,7 @@ public class GroupBean implements Serializable {
 	private List<Long> userIdList;
 	private String contentType;
 	private String fileName;
+	private boolean imgAvl;
 	private String blobUrl;
 
 	public Long getgId() {
@@ -98,6 +99,14 @@ public class GroupBean implements Serializable {
 
 	public void setBlobUrl(String blobUrl) {
 		this.blobUrl = blobUrl;
+	}
+
+	public boolean isImgAvl() {
+		return imgAvl;
+	}
+
+	public void setImgAvl(boolean imgAvl) {
+		this.imgAvl = imgAvl;
 	}
 
 }

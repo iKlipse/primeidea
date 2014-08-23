@@ -49,10 +49,11 @@
 			<p:outputLabel id="lblrIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:commandButton id="btnDownload" value="Download" ajax="false" disabled="true">
-				<!-- disabled="#{challengeController.solFileAvail}" -->
-				<p:fileDownload value="#{challengeController.solFileContent}" />
-			</p:commandButton>
+			<p:outputLabel value="No Attachments" rendered="#{!solution.solImgAvl}" />
+			<h:outputLink value="#{solution.blobUrl}" rendered="#{solution.solImgAvl}">
+			    <p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+				<p:outputLabel value="#{solution.fileName}" style="font-weight: 0.6em" />
+			</h:outputLink>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblSrUpload" value="Upload File : " />

@@ -62,7 +62,11 @@ public class FileDownloadServlet extends HttpServlet {
 			IpBlobDAO dao = (IpBlobDAO) ctx.getBean("IpBlobDAO");
 			IpBlob blob = dao.findById(blobId);
 			OutputStream out = response.getOutputStream();
-			response.setHeader("Content-Disposition", "attachment; filename=" + blob.getBlobName() + ";");
+			Boolean inline = Boolean.valueOf(request.getParameter("inline"));
+			if (inline == null || !inline)
+				response.setHeader("Content-Disposition", "attachment; filename=" + blob.getBlobName() + ";");
+			else
+				response.setHeader("Content-Disposition", "inline; filename=" + blob.getBlobName() + ";");
 			FileInputStream in = new FileInputStream(new File(baseDir + File.separator + blob.getBlobEntityTblNm() + File.separator + blob.getBlobEntityId() + File.separator + blob.getBlobName()));
 			byte[] buffer = new byte[4096];
 			int length;

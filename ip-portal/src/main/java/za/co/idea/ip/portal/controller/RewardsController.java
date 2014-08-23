@@ -752,6 +752,7 @@ public class RewardsController implements Serializable {
 			bean.setRwUrl(message.getRwUrl());
 			bean.setRwTaggable(isWishlist(message.getRwId()));
 			bean.setRwClaimable(totalPoints >= message.getRwValue() && message.getRwQuantity() > 0);
+			bean.setBlobUrl(message.getBlobUrl());
 			ret.add(bean);
 		}
 		return ret;
@@ -783,6 +784,7 @@ public class RewardsController implements Serializable {
 			bean.setRwUrl(message.getRwUrl());
 			bean.setRwClaimable(totalPoints > message.getRwValue() && message.getRwQuantity() > 0);
 			bean.setRwTaggable(isWishlist(message.getRwId()));
+			bean.setBlobUrl(message.getBlobUrl());
 			ret.add(bean);
 		}
 		return ret;
@@ -792,9 +794,6 @@ public class RewardsController implements Serializable {
 		fetchAllPointsByUser();
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
 		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list/" + userId);
-		// WebClient viewRewardsClient =
-		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" +
-		// BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list/0");
 		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
 		viewRewardsClient.close();
 		for (RewardsMessage message : rewards) {
@@ -816,6 +815,7 @@ public class RewardsController implements Serializable {
 			bean.setRwUrl(message.getRwUrl());
 			bean.setRwTaggable(isWishlist(message.getRwId()));
 			bean.setRwClaimable(totalPoints >= message.getRwValue() && message.getRwQuantity() > 0);
+			bean.setBlobUrl(message.getBlobUrl());
 			ret.add(bean);
 		}
 		return ret;
@@ -824,9 +824,6 @@ public class RewardsController implements Serializable {
 	private List<PointBean> fetchAllPointsByUser() {
 		List<PointBean> ret = new ArrayList<PointBean>();
 		WebClient viewPointClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/points/get/user/" + userId);
-		// WebClient viewPointClient =
-		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" +
-		// BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/points/get/user/0");
 		Collection<? extends PointMessage> points = new ArrayList<PointMessage>(viewPointClient.accept(MediaType.APPLICATION_JSON).getCollection(PointMessage.class));
 		viewPointClient.close();
 		totalPoints = 0l;
@@ -869,6 +866,7 @@ public class RewardsController implements Serializable {
 			bean.setRwUrl(message.getRwUrl());
 			bean.setRwClaimable(totalPoints >= message.getRwValue() && message.getRwQuantity() > 0);
 			bean.setRwTaggable(isWishlist(message.getRwId()));
+			bean.setBlobUrl(message.getBlobUrl());
 			ret.add(bean);
 		}
 		return ret;

@@ -129,6 +129,9 @@ public class RESTServiceHelper {
 			bean.setCrtByImgAvail(ideaMessage.isCrtByImgAvail());
 			bean.setCrtByImgPath(ideaMessage.getCrtByImgPath());
 			bean.setCrtdByName(ideaMessage.getCrtdByName());
+			bean.setBlobUrl(ideaMessage.getBlobUrl());
+			bean.setFileName(ideaMessage.getFileName());
+			bean.setImgAvail(ideaMessage.isImgAvail());
 			ret.add(bean);
 		}
 		return ret;
@@ -231,6 +234,12 @@ public class RESTServiceHelper {
 			bean.setSelCatId(ideaMessage.getSelCatId());
 			bean.setSetStatusId(ideaMessage.getSetStatusId());
 			bean.setGroupIdList(getIdsFromArray(ideaMessage.getGroupIdList()));
+			bean.setCrtByImgAvail(ideaMessage.isCrtByImgAvail());
+			bean.setCrtByImgPath(ideaMessage.getCrtByImgPath());
+			bean.setCrtdByName(ideaMessage.getCrtdByName());
+			bean.setBlobUrl(ideaMessage.getBlobUrl());
+			bean.setFileName(ideaMessage.getFileName());
+			bean.setImgAvail(ideaMessage.isImgAvail());
 			ret.add(bean);
 		}
 		return ret;
@@ -345,6 +354,12 @@ public class RESTServiceHelper {
 			bean.setTag(challengeMessage.getTag());
 			bean.setTitle(challengeMessage.getTitle());
 			bean.setGroupIdList(getIdsFromArray(challengeMessage.getGroupIdList()));
+			bean.setCrtByImgAvail(challengeMessage.isCrtByImgAvail());
+			bean.setCrtByImgPath(challengeMessage.getCrtByImgPath());
+			bean.setCrtdByName(challengeMessage.getCrtdByName());
+			bean.setImgAvail(challengeMessage.isImgAvail());
+			bean.setBlobUrl(challengeMessage.getBlobUrl());
+			bean.setFileName(challengeMessage.getFileName());
 			ret.add(bean);
 		}
 		return ret;
@@ -551,6 +566,7 @@ public class RESTServiceHelper {
 			bean.setTitle(solutionMessage.getTitle());
 			bean.setCrtByImgAvail(solutionMessage.isCrtByImgAvail());
 			bean.setCrtByImgPath(solutionMessage.getCrtByImgPath());
+			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
 			bean.setBlobUrl(solutionMessage.getBlobUrl());
 			bean.setFileName(solutionMessage.getFileName());
 			ret.add(bean);

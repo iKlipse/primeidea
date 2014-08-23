@@ -1,32 +1,39 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
-	<p:dataGrid id="dgRewards" var="rewards" value="#{landingPageController.viewRewardsBeans}" columns="3" rows="12" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="9,12,15">
-		<p:panel styleClass="panelView"  header="#{rewards.rwTitle}">
-			<p:panelGrid styleClass="panelGridView"  id="pnlContent" columns="1">
+	<p:dataGrid id="dgRewards" var="rewards" value="#{landingPageController.viewRewardsBeans}" columns="2" rows="12" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+		<p:panel styleClass="dgView">
+			<p:panelGrid styleClass="panelGridView" id="pnlContent" columns="1">
 				<p:column>
-					<p:lightBox>
-						<h:outputLink value="../../resources/images/#{rewards.rwUrl}" title="#{rewards.rwTitle}">
-							<p:graphicImage library="images" name="#{rewards.rwUrl}" height="150px" width="150px" />
-						</h:outputLink>
-					</p:lightBox>
+					<center>
+						<p:lightBox style="max-width: 100% !important; height: 300px !important">
+							<h:outputLink value="#{rewards.blobUrl}&amp;inline=true" title="#{rewards.rwTitle}">
+								<p:graphicImage library="images" name="#{rewards.rwUrl}" style="max-width: 100% !important; height: 150px !important" />
+							</h:outputLink>
+						</p:lightBox>
+					</center>
 				</p:column>
 				<p:column>
-					<p:outputLabel value="#{rewards.rwQuantity}" />
+					<p:outputLabel value="#{rewards.rwTitle}" style="font-size:1.2em !important; font-weight: bold !important" />
 				</p:column>
 				<p:column>
-					<p:outputLabel value="#{rewards.rwValue}" />
+					<p:outputLabel value="#{rewards.rwQuantity}" style="font-size:0.8em !important;" />
 				</p:column>
 				<p:column>
-					<p:commandLink id="btnWish" ajax="false" action="#{landingPageController.modifyWishlist}">
-						<p:graphicImage library="images" name="star_highlight.jpg" height="30px" width="30px" rendered="#{rewards.rwTaggable}" />
-						<p:graphicImage library="images" name="star.jpg" height="30px" width="30px" rendered="#{!rewards.rwTaggable}" />
-						<f:setPropertyActionListener value="#{rewards}" target="#{landingPageController.rewardsBean}" />
-					</p:commandLink>
-					<p:commandButton id="btnClaim" value="C" ajax="false" action="#{claimController.showClaimReward}" rendered="#{rewards.rwClaimable}">
-						<f:param name="rewardsId" id="rewardsId" value="#{rewards.rwId}" />
-						<f:param name="rwQuantity" id="rwQuantity" value="#{rewards.rwQuantity}" />
-						<f:param name="rwValue" id="rwValue" value="#{rewards.rwValue}" />
-						<f:setPropertyActionListener value="#{landingPageController.userId}" target="#{claimController.userId}" />
-					</p:commandButton>
+					<p:outputLabel value="#{rewards.rwValue}" style="font-size:0.8em !important;" />
+				</p:column>
+				<p:column>
+					<center>
+						<p:commandLink id="btnWish" ajax="false" action="#{landingPageController.modifyWishlist}">
+							<p:graphicImage library="images" name="star_highlight.jpg" height="30px" width="30px" rendered="#{rewards.rwTaggable}" />
+							<p:graphicImage library="images" name="star.jpg" height="30px" width="30px" rendered="#{!rewards.rwTaggable}" />
+							<f:setPropertyActionListener value="#{rewards}" target="#{landingPageController.rewardsBean}" />
+						</p:commandLink>
+						<p:commandButton id="btnClaim" value="C" ajax="false" action="#{claimController.showClaimReward}" rendered="#{rewards.rwClaimable}">
+							<f:param name="rewardsId" id="rewardsId" value="#{rewards.rwId}" />
+							<f:param name="rwQuantity" id="rwQuantity" value="#{rewards.rwQuantity}" />
+							<f:param name="rwValue" id="rwValue" value="#{rewards.rwValue}" />
+							<f:setPropertyActionListener value="#{landingPageController.userId}" target="#{claimController.userId}" />
+						</p:commandButton>
+					</center>
 				</p:column>
 			</p:panelGrid>
 		</p:panel>

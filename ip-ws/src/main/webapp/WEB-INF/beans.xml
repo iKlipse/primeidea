@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:http-conf="http://cxf.apache.org/transports/http/configuration" xmlns:util="http://www.springframework.org/schema/util" xmlns:cxf="http://cxf.apache.org/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:http-conf="http://cxf.apache.org/transports/http/configuration"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:cxf="http://cxf.apache.org/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
 	http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd
@@ -40,6 +44,7 @@
 			<entry key="en" value="en-gb" />
 		</jaxrs:languageMappings>
 		<jaxrs:features>
+			<cxf:logging />
 		</jaxrs:features>
 	</jaxrs:server>
 </beans>

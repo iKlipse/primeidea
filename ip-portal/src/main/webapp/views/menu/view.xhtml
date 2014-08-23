@@ -3,21 +3,17 @@
 	<h:body style="background-color: grey !important">
 		<h:form id="frmMenu" enctype="multipart/form-data">
 			<p:growl life="5000" id="frmMenuMsg" showDetail="true" showSummary="true" autoUpdate="true" />
-			<p:panelGrid styleClass="panelGridView"  columns="2">
+			<p:panelGrid styleClass="panelGridView" columns="2">
 				<p:column>
-					<p:commandLink>
-						<p:commandLink actionListener="#{menuController.redirectIdea}">
-							<p:graphicImage library="images" name="idea_hdr.png" style="max-width: 100% !important; height: auto !important" />
-							<f:setPropertyActionListener value="-1" target="#{randomIdeaController.returnView}" />
-						</p:commandLink>
+					<p:commandLink actionListener="#{menuController.redirectIdea}">
+						<p:graphicImage library="images" name="idea_hdr.png" style="max-width: 100% !important; height: auto !important" />
+						<f:setPropertyActionListener value="-1" target="#{randomIdeaController.returnView}" />
 					</p:commandLink>
 				</p:column>
 				<p:column>
-					<p:commandLink>
-						<p:commandLink actionListener="#{menuController.redirectSolution}">
-							<p:graphicImage library="images" name="solution_hdr.png" style="max-width: 100% !important; height: auto !important" />
-							<f:setPropertyActionListener value="-1" target="#{challengeController.returnView}" />
-						</p:commandLink>
+					<p:commandLink actionListener="#{menuController.redirectSolution}">
+						<p:graphicImage library="images" name="solution_hdr.png" style="max-width: 100% !important; height: auto !important" />
+						<f:setPropertyActionListener value="-1" target="#{challengeController.returnView}" />
 					</p:commandLink>
 				</p:column>
 				<p:column>
@@ -27,10 +23,8 @@
 					</p:commandLink>
 				</p:column>
 				<p:column>
-					<p:commandLink>
-						<p:commandLink actionListener="#{menuController.redirectRewards}">
-							<p:graphicImage library="images" name="reward_hdr.png" style="max-width: 100% !important; height: auto !important" />
-						</p:commandLink>
+					<p:commandLink actionListener="#{menuController.redirectRewards}">
+						<p:graphicImage library="images" name="reward_hdr.png" style="max-width: 100% !important; height: auto !important" />
 					</p:commandLink>
 				</p:column>
 			</p:panelGrid>

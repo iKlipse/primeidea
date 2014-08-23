@@ -65,15 +65,17 @@ public class ChallengeService {
 			ipChallenge.setIpChallengeStatus(ipChallengeStatusDAO.findById(challenge.getStatusId()));
 			ipChallenge.setIpUser(ipUserDAO.findById(challenge.getCrtdById()));
 			ipChallengeDAO.save(ipChallenge);
-			Long[] ids = ipNativeSQLDAO.getNextIds(IpChallengeGroup.class, challenge.getGroupIdList().length);
-			int i = 0;
-			for (Long gId : challenge.getGroupIdList()) {
-				IpChallengeGroup ipChallengeGroup = new IpChallengeGroup();
-				ipChallengeGroup.setCgId(ids[i]);
-				ipChallengeGroup.setIpChallenge(ipChallenge);
-				ipChallengeGroup.setIpGroup(ipGroupDAO.findById(gId));
-				ipChallengeGroupDAO.save(ipChallengeGroup);
-				i++;
+			if (challenge.getGroupIdList() != null && challenge.getGroupIdList().length > 0) {
+				Long[] ids = ipNativeSQLDAO.getNextIds(IpChallengeGroup.class, challenge.getGroupIdList().length);
+				int i = 0;
+				for (Long gId : challenge.getGroupIdList()) {
+					IpChallengeGroup ipChallengeGroup = new IpChallengeGroup();
+					ipChallengeGroup.setCgId(ids[i]);
+					ipChallengeGroup.setIpChallenge(ipChallenge);
+					ipChallengeGroup.setIpGroup(ipGroupDAO.findById(gId));
+					ipChallengeGroupDAO.save(ipChallengeGroup);
+					i++;
+				}
 			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
@@ -109,15 +111,17 @@ public class ChallengeService {
 			ipChallenge.setIpUser(ipUserDAO.findById(challenge.getCrtdById()));
 			ipChallengeDAO.merge(ipChallenge);
 			ipChallengeGroupDAO.deleteByChallengeId(challenge.getId());
-			Long[] ids = ipNativeSQLDAO.getNextIds(IpChallengeGroup.class, challenge.getGroupIdList().length);
-			int i = 0;
-			for (Long gId : challenge.getGroupIdList()) {
-				IpChallengeGroup ipChallengeGroup = new IpChallengeGroup();
-				ipChallengeGroup.setCgId(ids[i]);
-				ipChallengeGroup.setIpChallenge(ipChallenge);
-				ipChallengeGroup.setIpGroup(ipGroupDAO.findById(gId));
-				ipChallengeGroupDAO.save(ipChallengeGroup);
-				i++;
+			if (challenge.getGroupIdList() != null && challenge.getGroupIdList().length > 0) {
+				Long[] ids = ipNativeSQLDAO.getNextIds(IpChallengeGroup.class, challenge.getGroupIdList().length);
+				int i = 0;
+				for (Long gId : challenge.getGroupIdList()) {
+					IpChallengeGroup ipChallengeGroup = new IpChallengeGroup();
+					ipChallengeGroup.setCgId(ids[i]);
+					ipChallengeGroup.setIpChallenge(ipChallenge);
+					ipChallengeGroup.setIpGroup(ipGroupDAO.findById(gId));
+					ipChallengeGroupDAO.save(ipChallengeGroup);
+					i++;
+				}
 			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);

@@ -215,11 +215,11 @@
 	<navigation-rule>
 		<navigation-case>
 			<from-outcome>bovw</from-outcome>
-			<to-view-id>/views/tag/create.xhtml</to-view-id>
+			<to-view-id>/views/tag/container/tagCreateContainer.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>bosw</from-outcome>
-			<to-view-id>/views/tag/summary.xhtml</to-view-id>
+			<to-view-id>/views/tag/container/tagSummaryContainer.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>

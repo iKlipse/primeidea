@@ -1675,6 +1675,12 @@ public class ChallengeController implements Serializable {
 			bean.setTag(challengeMessage.getTag());
 			bean.setTitle(challengeMessage.getTitle());
 			bean.setGroupIdList(getIdsFromArray(challengeMessage.getGroupIdList()));
+			bean.setCrtByImgAvail(challengeMessage.isCrtByImgAvail());
+			bean.setCrtByImgPath(challengeMessage.getCrtByImgPath());
+			bean.setCrtdByName(challengeMessage.getCrtdByName());
+			bean.setImgAvail(challengeMessage.isImgAvail());
+			bean.setBlobUrl(challengeMessage.getBlobUrl());
+			bean.setFileName(challengeMessage.getFileName());
 			ret.add(bean);
 		}
 		return ret;
@@ -1731,6 +1737,12 @@ public class ChallengeController implements Serializable {
 			bean.setTag(challengeMessage.getTag());
 			bean.setTitle(challengeMessage.getTitle());
 			bean.setGroupIdList(getIdsFromArray(challengeMessage.getGroupIdList()));
+			bean.setCrtByImgAvail(challengeMessage.isCrtByImgAvail());
+			bean.setCrtByImgPath(challengeMessage.getCrtByImgPath());
+			bean.setCrtdByName(challengeMessage.getCrtdByName());
+			bean.setImgAvail(challengeMessage.isImgAvail());
+			bean.setBlobUrl(challengeMessage.getBlobUrl());
+			bean.setFileName(challengeMessage.getFileName());
 			ret.add(bean);
 		}
 		return ret;
@@ -1783,8 +1795,10 @@ public class ChallengeController implements Serializable {
 			bean.setStatusId(solutionMessage.getStatusId());
 			bean.setTags(solutionMessage.getTags());
 			bean.setTitle(solutionMessage.getTitle());
-			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
 			bean.setSolImg(solutionMessage.getSolImg());
+			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
+			bean.setBlobUrl(solutionMessage.getBlobUrl());
+			bean.setFileName(solutionMessage.getFileName());
 			if (solutionMessage.isSolImgAvl())
 				bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
 			ret.add(bean);
@@ -1815,6 +1829,9 @@ public class ChallengeController implements Serializable {
 			bean.setTitle(solutionMessage.getTitle());
 			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
 			bean.setSolImg(solutionMessage.getSolImg());
+			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
+			bean.setBlobUrl(solutionMessage.getBlobUrl());
+			bean.setFileName(solutionMessage.getFileName());
 			if (solutionMessage.isSolImgAvl())
 				bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
 			ret.add(bean);
@@ -1843,8 +1860,10 @@ public class ChallengeController implements Serializable {
 			bean.setStatusId(solutionMessage.getStatusId());
 			bean.setTags(solutionMessage.getTags());
 			bean.setTitle(solutionMessage.getTitle());
-			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
 			bean.setSolImg(solutionMessage.getSolImg());
+			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
+			bean.setBlobUrl(solutionMessage.getBlobUrl());
+			bean.setFileName(solutionMessage.getFileName());
 			if (solutionMessage.isSolImgAvl())
 				bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
 			ret.add(bean);
@@ -1869,8 +1888,10 @@ public class ChallengeController implements Serializable {
 			bean.setStatusId(solutionMessage.getStatusId());
 			bean.setTags(solutionMessage.getTags());
 			bean.setTitle(solutionMessage.getTitle());
-			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
 			bean.setSolImg(solutionMessage.getSolImg());
+			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
+			bean.setBlobUrl(solutionMessage.getBlobUrl());
+			bean.setFileName(solutionMessage.getFileName());
 			if (solutionMessage.isSolImgAvl())
 				bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
 			ret.add(bean);

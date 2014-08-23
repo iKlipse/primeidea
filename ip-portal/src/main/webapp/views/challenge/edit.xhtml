@@ -60,10 +60,11 @@
 			<p:outputLabel id="lblEdtIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:commandButton id="btnEdtDownload" value="Download" ajax="false" disabled="true">
-				<!-- disabled="#{challengeController.chalFileAvail}" -->
-				<p:fileDownload value="#{challengeController.chalFileContent}" />
-			</p:commandButton>
+			<p:outputLabel value="No Attachments" rendered="#{!challenge.imgAvail}" />
+			<h:outputLink value="#{challenge.blobUrl}" rendered="#{challenge.imgAvail}">
+				<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+				<p:outputLabel value="#{challenge.fileName}" style="font-weight: 0.6em" />
+			</h:outputLink>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtCUpload" value="Upload File : " />

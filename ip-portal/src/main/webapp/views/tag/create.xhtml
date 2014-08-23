@@ -1,6 +1,6 @@
-<ui:composition template="/views/tag/container/tagContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition template="/views/tag/container/tagCreateContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="tagBody">
-		<p:panelGrid styleClass="panelGridView"  id="pnlBuildOn" columns="1">
+		<p:panelGrid styleClass="panelGridView" id="pnlBuildOn" columns="1">
 			<p:column>
 				<p:dataTable id="dtViewBuildOns" widgetVar="dtViewBuildOns" value="#{buildonController.buildons}" var="buildOn" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No BuildOns Found">
 					<p:column headerText="User Id">

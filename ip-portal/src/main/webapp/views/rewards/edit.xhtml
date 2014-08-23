@@ -75,10 +75,11 @@
 			<p:outputLabel id="lblEdIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:commandButton id="btnEdDownload" value="Download" ajax="false" disabled="true">
-				<!-- disabled="#{rewardsController.fileAvail}" -->
-				<p:fileDownload value="#{rewardsController.fileContent}" />
-			</p:commandButton>
+		    <p:outputLabel value="No Attachments" rendered="#{!rewardsController.rewardsBean.rwImgAvail}" />
+			<h:outputLink value="#{rewardsController.rewardsBean.blobUrl}" rendered="#{rewardsController.rewardsBean.rwImgAvail}">
+				<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+				<p:outputLabel value="#{rewardsController.rewardsBean.rwUrl}" style="font-weight: 0.6em" />
+			</h:outputLink>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdRUpload" value="Upload File : " />

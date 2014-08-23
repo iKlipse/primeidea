@@ -60,11 +60,13 @@
 				<p:dataScroller mode="inline" scrollHeight="200" id="dtSumrViewComments" value="#{challengeController.chalComments}" var="comment" chunkSize="2">
 					<p:panelGrid styleClass="panelgridView" columns="1">
 						<p:column>
+							<p:outputLabel style="font-size: 0.8em" value="#{comment.usrScreenName}" />
+						</p:column>
+						<p:column>
 							<p:outputLabel value="#{comment.tagText}" escape="false" />
 						</p:column>
 						<p:column>
-							<p:outputLabel style="text-align: left !important; font-size: 0.8em" value="#{comment.usrScreenName}" />
-							<p:outputLabel style="text-align: right !important; font-size: 0.6em" value="#{comment.tagDate}" />
+							<p:outputLabel style="font-size: 0.6em" value="#{comment.tagDate}" />
 						</p:column>
 					</p:panelGrid>
 				</p:dataScroller>

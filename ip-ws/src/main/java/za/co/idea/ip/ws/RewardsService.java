@@ -148,6 +148,7 @@ public class RewardsService {
 				if (ipBlob != null) {
 					rewards.setRwUrl("ip_rewards/" + ipRewards.getRwId() + "/" + ipBlob.getBlobName());
 					rewards.setRwImgAvail(true);
+					rewards.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
 				} else {
 					rewards.setRwImgAvail(false);
 				}

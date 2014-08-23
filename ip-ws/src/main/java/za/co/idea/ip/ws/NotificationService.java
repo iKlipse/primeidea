@@ -48,17 +48,19 @@ public class NotificationService {
 			ipNotif.setNotifStatus(notif.getNotifStatus());
 			ipNotif.setNotifSubject(notif.getNotifSubject());
 			ipNotifDAO.save(ipNotif);
-			Long[] ids = ipNativeSQLDAO.getNextIds(IpNotifGroup.class, notif.getGroupIdList().length);
-			int i = 0;
-			if (notif.getGroupIdList() != null && notif.getGroupIdList().length > 0)
-				for (Long gId : notif.getGroupIdList()) {
-					IpNotifGroup ipNotifGroup = new IpNotifGroup();
-					ipNotifGroup.setIngId(ids[i]);
-					ipNotifGroup.setIngGrpId(gId);
-					ipNotifGroup.setIngNotifId(notif.getNotifId());
-					ipNotifGroupDAO.save(ipNotifGroup);
-					i++;
-				}
+			if (notif.getGroupIdList() != null && notif.getGroupIdList().length > 0) {
+				Long[] ids = ipNativeSQLDAO.getNextIds(IpNotifGroup.class, notif.getGroupIdList().length);
+				int i = 0;
+				if (notif.getGroupIdList() != null && notif.getGroupIdList().length > 0)
+					for (Long gId : notif.getGroupIdList()) {
+						IpNotifGroup ipNotifGroup = new IpNotifGroup();
+						ipNotifGroup.setIngId(ids[i]);
+						ipNotifGroup.setIngGrpId(gId);
+						ipNotifGroup.setIngNotifId(notif.getNotifId());
+						ipNotifGroupDAO.save(ipNotifGroup);
+						i++;
+					}
+			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");

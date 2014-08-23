@@ -336,6 +336,7 @@ public class NewsController implements Serializable {
 				bean.setnTitle(message.getnTitle());
 				bean.setNewsUrl(message.getNewsUrl());
 				bean.setNwImgAvail(message.isNwImgAvail());
+				bean.setBlobUrl(message.getBlobUrl());
 				ret.add(bean);
 			}
 		} catch (Exception e) {
