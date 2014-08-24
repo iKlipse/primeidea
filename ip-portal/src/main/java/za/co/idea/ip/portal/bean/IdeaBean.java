@@ -28,6 +28,7 @@ public class IdeaBean implements Serializable {
 	private List<Long> groupIdList;
 	private boolean taggable;
 	private String blobUrl;
+	private Long revUserId;
 
 	public Long getIdeaId() {
 		return ideaId;
@@ -187,5 +188,13 @@ public class IdeaBean implements Serializable {
 
 	public void setBlobUrl(String blobUrl) {
 		this.blobUrl = blobUrl;
+	}
+
+	public Long getRevUserId() {
+		return revUserId;
+	}
+
+	public void setRevUserId(Long revUserId) {
+		this.revUserId = revUserId;
 	}
 }

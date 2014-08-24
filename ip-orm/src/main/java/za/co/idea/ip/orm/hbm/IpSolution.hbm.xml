@@ -67,12 +67,9 @@
 		select sol.* from ip_solution sol where sol.sol_status=:id
 		<return alias="sol" class="za.co.idea.ip.orm.bean.IpSolution" />
 	</sql-query>
+	<!-- <sql-query name="getReviewSolutionByStatus"> select sol.* from ip_solution sol where sol.sol_status=3 and sol_chal_id in (SELECT cg_chal_id FROM lpdb.ip_challenge_group where cg_group_id in (SELECT gu_grp_id FROM lpdb.ip_group_user where gu_usr_id=:id and gu_grp_id in (SELECT fg_grp_id FROM lpdb.ip_func_group where fg_func_id=13))) <return alias="sol" class="za.co.idea.ip.orm.bean.IpSolution" /> </sql-query> -->
 	<sql-query name="getReviewSolutionByStatus">
-		select sol.* from ip_solution sol where sol.sol_status=3 and
-		sol_chal_id in (SELECT cg_chal_id FROM lpdb.ip_challenge_group where
-		cg_group_id in (SELECT gu_grp_id FROM lpdb.ip_group_user where
-		gu_usr_id=:id and gu_grp_id in (SELECT fg_grp_id FROM
-		lpdb.ip_func_group where fg_func_id=13)))
+		select sol.* from ip_solution sol, ip_review rv where sol.sol_id=rv.rev_entity_id and rv.rev_user_id=:id and rv.rev_entity_name="ip_solution"
 		<return alias="sol" class="za.co.idea.ip.orm.bean.IpSolution" />
 	</sql-query>
 </hibernate-mapping>

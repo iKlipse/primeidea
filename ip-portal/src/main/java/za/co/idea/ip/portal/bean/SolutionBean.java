@@ -34,6 +34,7 @@ public class SolutionBean implements Serializable {
 	private String buildOnCnt;
 	private List<TagBean> solComments;
 	private String blobUrl;
+	private Long revUserId;
 
 	public Long getId() {
 		return id;
@@ -233,6 +234,14 @@ public class SolutionBean implements Serializable {
 
 	public void setBlobUrl(String blobUrl) {
 		this.blobUrl = blobUrl;
+	}
+
+	public Long getRevUserId() {
+		return revUserId;
+	}
+
+	public void setRevUserId(Long revUserId) {
+		this.revUserId = revUserId;
 	}
 
 }

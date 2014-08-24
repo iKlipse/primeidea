@@ -22,6 +22,7 @@
 		<property name="ipGroupDAO" ref="IpGroupDAO" />
 		<property name="ipNativeSQLDAO" ref="IpNativeSQLDAO" />
 		<property name="ipBlobDAO" ref="IpBlobDAO" />
+		<property name="ipReviewDAO" ref="IpReviewDAO" />
 	</bean>
 	<bean id="tagService" class="za.co.idea.ip.ws.TagService">
 		<property name="ipChallengeDAO" ref="IpChallengeDAO" />
@@ -41,6 +42,7 @@
 		<property name="ipNativeSQLDAO" ref="IpNativeSQLDAO" />
 		<property name="ipChallengeGroupDAO" ref="IpChallengeGroupDAO" />
 		<property name="ipBlobDAO" ref="IpBlobDAO" />
+		<property name="ipReviewDAO" ref="IpReviewDAO" />
 	</bean>
 	<bean id="solutionService" class="za.co.idea.ip.ws.SolutionService">
 		<property name="ipSolutionCatDAO" ref="IpSolutionCatDAO" />
@@ -49,6 +51,8 @@
 		<property name="ipUserDAO" ref="IpUserDAO" />
 		<property name="ipChallengeDAO" ref="IpChallengeDAO" />
 		<property name="ipBlobDAO" ref="IpBlobDAO" />
+		<property name="ipReviewDAO" ref="IpReviewDAO" />
+		<property name="ipNativeSQLDAO" ref="IpNativeSQLDAO" />
 	</bean>
 	<bean id="rewardsService" class="za.co.idea.ip.ws.RewardsService" lazy-init="false">
 		<property name="ipUserDAO" ref="IpUserDAO" />

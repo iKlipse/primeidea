@@ -20,6 +20,7 @@ import za.co.idea.ip.orm.bean.IpChallenge;
 import za.co.idea.ip.orm.bean.IpChallengeCat;
 import za.co.idea.ip.orm.bean.IpChallengeGroup;
 import za.co.idea.ip.orm.bean.IpChallengeStatus;
+import za.co.idea.ip.orm.bean.IpReview;
 import za.co.idea.ip.orm.dao.IpBlobDAO;
 import za.co.idea.ip.orm.dao.IpChallengeCatDAO;
 import za.co.idea.ip.orm.dao.IpChallengeDAO;
@@ -27,6 +28,7 @@ import za.co.idea.ip.orm.dao.IpChallengeGroupDAO;
 import za.co.idea.ip.orm.dao.IpChallengeStatusDAO;
 import za.co.idea.ip.orm.dao.IpGroupDAO;
 import za.co.idea.ip.orm.dao.IpNativeSQLDAO;
+import za.co.idea.ip.orm.dao.IpReviewDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
 import za.co.idea.ip.ws.bean.ChallengeMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
@@ -44,6 +46,7 @@ public class ChallengeService {
 	private IpNativeSQLDAO ipNativeSQLDAO;
 	private IpChallengeGroupDAO ipChallengeGroupDAO;
 	private IpBlobDAO ipBlobDAO;
+	private IpReviewDAO ipReviewDAO;
 
 	@POST
 	@Path("/challenge/add")
@@ -77,6 +80,12 @@ public class ChallengeService {
 					i++;
 				}
 			}
+			IpReview ipReview = new IpReview();
+			ipReview.setIpUser(ipUserDAO.findById(challenge.getRevUserId()));
+			ipReview.setRevEntityId(challenge.getId());
+			ipReview.setRevId(ipNativeSQLDAO.getNextId(IpReview.class));
+			ipReview.setRevEntityName("ip_challenge");
+			ipReviewDAO.save(ipReview);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
@@ -123,6 +132,12 @@ public class ChallengeService {
 					i++;
 				}
 			}
+			IpReview ipReview = ipReviewDAO.findByEntityIdEntityName(challenge.getId(), "ip_challenge");
+			ipReview.setIpUser(ipUserDAO.findById(challenge.getRevUserId()));
+			ipReview.setRevEntityId(challenge.getId());
+			ipReview.setRevId(ipNativeSQLDAO.getNextId(IpReview.class));
+			ipReview.setRevEntityName("ip_challenge");
+			ipReviewDAO.merge(ipReview);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
@@ -182,6 +197,7 @@ public class ChallengeService {
 					challenge.setCrtByImgPath("ip_user/" + ipChallenge.getIpUser().getUserId() + "/" + blob.getBlobName());
 				} else
 					challenge.setCrtByImgAvail(false);
+				challenge.setRevUserId(ipReviewDAO.findByEntityIdEntityName(challenge.getId(), "ip_challenge").getIpUser().getUserId());
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
@@ -272,6 +288,7 @@ public class ChallengeService {
 					challenge.setCrtByImgPath("ip_user/" + ipChallenge.getIpUser().getUserId() + "/" + blob.getBlobName());
 				} else
 					challenge.setCrtByImgAvail(false);
+				challenge.setRevUserId(ipReviewDAO.findByEntityIdEntityName(challenge.getId(), "ip_challenge").getIpUser().getUserId());
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
@@ -326,6 +343,7 @@ public class ChallengeService {
 					challenge.setCrtByImgPath("ip_user/" + ipChallenge.getIpUser().getUserId() + "/" + blob.getBlobName());
 				} else
 					challenge.setCrtByImgAvail(false);
+				challenge.setRevUserId(ipReviewDAO.findByEntityIdEntityName(challenge.getId(), "ip_challenge").getIpUser().getUserId());
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
@@ -380,6 +398,7 @@ public class ChallengeService {
 					challenge.setCrtByImgPath("ip_user/" + ipChallenge.getIpUser().getUserId() + "/" + blob.getBlobName());
 				} else
 					challenge.setCrtByImgAvail(false);
+				challenge.setRevUserId(ipReviewDAO.findByEntityIdEntityName(challenge.getId(), "ip_challenge").getIpUser().getUserId());
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
@@ -434,6 +453,7 @@ public class ChallengeService {
 					challenge.setCrtByImgPath("ip_user/" + ipChallenge.getIpUser().getUserId() + "/" + blob.getBlobName());
 				} else
 					challenge.setCrtByImgAvail(false);
+				challenge.setRevUserId(ipReviewDAO.findByEntityIdEntityName(challenge.getId(), "ip_challenge").getIpUser().getUserId());
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
@@ -488,6 +508,7 @@ public class ChallengeService {
 					challenge.setCrtByImgPath("ip_user/" + ipChallenge.getIpUser().getUserId() + "/" + blob.getBlobName());
 				} else
 					challenge.setCrtByImgAvail(false);
+				challenge.setRevUserId(ipReviewDAO.findByEntityIdEntityName(challenge.getId(), "ip_challenge").getIpUser().getUserId());
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
@@ -679,5 +700,13 @@ public class ChallengeService {
 
 	public void setIpBlobDAO(IpBlobDAO ipBlobDAO) {
 		this.ipBlobDAO = ipBlobDAO;
+	}
+
+	public IpReviewDAO getIpReviewDAO() {
+		return ipReviewDAO;
+	}
+
+	public void setIpReviewDAO(IpReviewDAO ipReviewDAO) {
+		this.ipReviewDAO = ipReviewDAO;
 	}
 }

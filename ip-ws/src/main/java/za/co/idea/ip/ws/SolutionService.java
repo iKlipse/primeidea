@@ -18,11 +18,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.bean.IpChallenge;
+import za.co.idea.ip.orm.bean.IpReview;
 import za.co.idea.ip.orm.bean.IpSolution;
 import za.co.idea.ip.orm.bean.IpSolutionCat;
 import za.co.idea.ip.orm.bean.IpSolutionStatus;
 import za.co.idea.ip.orm.dao.IpBlobDAO;
 import za.co.idea.ip.orm.dao.IpChallengeDAO;
+import za.co.idea.ip.orm.dao.IpNativeSQLDAO;
+import za.co.idea.ip.orm.dao.IpReviewDAO;
 import za.co.idea.ip.orm.dao.IpSolutionCatDAO;
 import za.co.idea.ip.orm.dao.IpSolutionDAO;
 import za.co.idea.ip.orm.dao.IpSolutionStatusDAO;
@@ -34,14 +37,16 @@ import za.co.idea.ip.ws.bean.SolutionMessage;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Path(value = "/ss")
 public class SolutionService {
+	private static final Logger logger = Logger.getLogger(SolutionService.class);
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-ws");
 	private IpSolutionDAO ipSolutionDAO;
 	private IpSolutionCatDAO ipSolutionCatDAO;
 	private IpSolutionStatusDAO ipSolutionStatusDAO;
 	private IpUserDAO ipUserDAO;
 	private IpChallengeDAO ipChallengeDAO;
 	private IpBlobDAO ipBlobDAO;
-	private static final Logger logger = Logger.getLogger(SolutionService.class);
-	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-ws");
+	private IpReviewDAO ipReviewDAO;
+	private IpNativeSQLDAO ipNativeSQLDAO;
 
 	@GET
 	@Path("/solution/check/title/{title}")
@@ -77,6 +82,12 @@ public class SolutionService {
 			ipSolution.setSolTags(solution.getTags());
 			ipSolution.setSolTitle(solution.getTitle());
 			ipSolutionDAO.save(ipSolution);
+			IpReview ipReview = new IpReview();
+			ipReview.setIpUser(ipUserDAO.findById(solution.getRevUserId()));
+			ipReview.setRevEntityId(solution.getId());
+			ipReview.setRevId(ipNativeSQLDAO.getNextId(IpReview.class));
+			ipReview.setRevEntityName("ip_solution");
+			ipReviewDAO.save(ipReview);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
@@ -108,6 +119,12 @@ public class SolutionService {
 			ipSolution.setSolTags(solution.getTags());
 			ipSolution.setSolTitle(solution.getTitle());
 			ipSolutionDAO.merge(ipSolution);
+			IpReview ipReview = ipReviewDAO.findByEntityIdEntityName(solution.getId(), "ip_solution");
+			ipReview.setIpUser(ipUserDAO.findById(solution.getRevUserId()));
+			ipReview.setRevEntityId(solution.getId());
+			ipReview.setRevId(ipNativeSQLDAO.getNextId(IpReview.class));
+			ipReview.setRevEntityName("ip_solution");
+			ipReviewDAO.save(ipReview);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
@@ -158,6 +175,7 @@ public class SolutionService {
 					solution.setCrtByImgAvail(true);
 				} else
 					solution.setCrtByImgAvail(false);
+				solution.setRevUserId(ipReviewDAO.findByEntityIdEntityName(solution.getId(), "ip_solution").getIpUser().getUserId());
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -205,6 +223,7 @@ public class SolutionService {
 					solution.setCrtByImgAvail(true);
 				} else
 					solution.setCrtByImgAvail(false);
+				solution.setRevUserId(ipReviewDAO.findByEntityIdEntityName(solution.getId(), "ip_solution").getIpUser().getUserId());
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -251,6 +270,7 @@ public class SolutionService {
 					solution.setCrtByImgAvail(true);
 				} else
 					solution.setCrtByImgAvail(false);
+				solution.setRevUserId(ipReviewDAO.findByEntityIdEntityName(solution.getId(), "ip_solution").getIpUser().getUserId());
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -296,6 +316,7 @@ public class SolutionService {
 					solution.setCrtByImgAvail(true);
 				} else
 					solution.setCrtByImgAvail(false);
+				solution.setRevUserId(ipReviewDAO.findByEntityIdEntityName(solution.getId(), "ip_solution").getIpUser().getUserId());
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -341,6 +362,7 @@ public class SolutionService {
 					solution.setCrtByImgAvail(true);
 				} else
 					solution.setCrtByImgAvail(false);
+				solution.setRevUserId(ipReviewDAO.findByEntityIdEntityName(solution.getId(), "ip_solution").getIpUser().getUserId());
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -386,6 +408,7 @@ public class SolutionService {
 					solution.setCrtByImgAvail(true);
 				} else
 					solution.setCrtByImgAvail(false);
+				solution.setRevUserId(ipReviewDAO.findByEntityIdEntityName(solution.getId(), "ip_solution").getIpUser().getUserId());
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -425,6 +448,7 @@ public class SolutionService {
 				} else {
 					solution.setSolImgAvl(false);
 				}
+				solution.setRevUserId(ipReviewDAO.findByEntityIdEntityName(solution.getId(), "ip_solution").getIpUser().getUserId());
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -603,5 +627,21 @@ public class SolutionService {
 
 	public void setIpBlobDAO(IpBlobDAO ipBlobDAO) {
 		this.ipBlobDAO = ipBlobDAO;
+	}
+
+	public IpReviewDAO getIpReviewDAO() {
+		return ipReviewDAO;
+	}
+
+	public void setIpReviewDAO(IpReviewDAO ipReviewDAO) {
+		this.ipReviewDAO = ipReviewDAO;
+	}
+
+	public IpNativeSQLDAO getIpNativeSQLDAO() {
+		return ipNativeSQLDAO;
+	}
+
+	public void setIpNativeSQLDAO(IpNativeSQLDAO ipNativeSQLDAO) {
+		this.ipNativeSQLDAO = ipNativeSQLDAO;
 	}
 }

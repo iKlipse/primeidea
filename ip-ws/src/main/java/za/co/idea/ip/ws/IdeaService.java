@@ -21,6 +21,7 @@ import za.co.idea.ip.orm.bean.IpIdea;
 import za.co.idea.ip.orm.bean.IpIdeaCat;
 import za.co.idea.ip.orm.bean.IpIdeaGroup;
 import za.co.idea.ip.orm.bean.IpIdeaStatus;
+import za.co.idea.ip.orm.bean.IpReview;
 import za.co.idea.ip.orm.dao.IpBlobDAO;
 import za.co.idea.ip.orm.dao.IpGroupDAO;
 import za.co.idea.ip.orm.dao.IpIdeaCatDAO;
@@ -28,6 +29,7 @@ import za.co.idea.ip.orm.dao.IpIdeaDAO;
 import za.co.idea.ip.orm.dao.IpIdeaGroupDAO;
 import za.co.idea.ip.orm.dao.IpIdeaStatusDAO;
 import za.co.idea.ip.orm.dao.IpNativeSQLDAO;
+import za.co.idea.ip.orm.dao.IpReviewDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
 import za.co.idea.ip.ws.bean.IdeaMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
@@ -46,6 +48,7 @@ public class IdeaService {
 	private IpNativeSQLDAO ipNativeSQLDAO;
 	private IpGroupDAO ipGroupDAO;
 	private IpBlobDAO ipBlobDAO;
+	private IpReviewDAO ipReviewDAO;
 
 	@GET
 	@Path("/idea/check/title/{title}")
@@ -187,6 +190,12 @@ public class IdeaService {
 					i++;
 				}
 			}
+			IpReview ipReview = new IpReview();
+			ipReview.setIpUser(ipUserDAO.findById(idea.getRevUserId()));
+			ipReview.setRevEntityId(idea.getIdeaId());
+			ipReview.setRevId(ipNativeSQLDAO.getNextId(IpReview.class));
+			ipReview.setRevEntityName("ip_idea");
+			ipReviewDAO.save(ipReview);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
@@ -234,6 +243,12 @@ public class IdeaService {
 					i++;
 				}
 			}
+			IpReview ipReview = ipReviewDAO.findByEntityIdEntityName(idea.getIdeaId(), "ip_idea");
+			ipReview.setIpUser(ipUserDAO.findById(idea.getRevUserId()));
+			ipReview.setRevEntityId(idea.getIdeaId());
+			ipReview.setRevId(ipNativeSQLDAO.getNextId(IpReview.class));
+			ipReview.setRevEntityName("ip_idea");
+			ipReviewDAO.merge(ipReview);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
@@ -295,6 +310,9 @@ public class IdeaService {
 					idea.setCrtByImgPath("ip_user/" + ipIdea.getIpUser().getUserId() + "/" + blob.getBlobName());
 				} else
 					idea.setCrtByImgAvail(false);
+				IpReview rev = ipReviewDAO.findByEntityIdEntityName(ipIdea.getIdeaId(), "ip_idea");
+				if (rev != null)
+					idea.setRevUserId(rev.getIpUser().getUserId());
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -351,6 +369,9 @@ public class IdeaService {
 					idea.setCrtByImgPath("ip_user/" + ipIdea.getIpUser().getUserId() + "/" + blob.getBlobName());
 				} else
 					idea.setCrtByImgAvail(false);
+				IpReview rev = ipReviewDAO.findByEntityIdEntityName(ipIdea.getIdeaId(), "ip_idea");
+				if (rev != null)
+					idea.setRevUserId(rev.getIpUser().getUserId());
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -407,6 +428,9 @@ public class IdeaService {
 					idea.setCrtByImgPath("ip_user/" + ipIdea.getIpUser().getUserId() + "/" + blob.getBlobName());
 				} else
 					idea.setCrtByImgAvail(false);
+				IpReview rev = ipReviewDAO.findByEntityIdEntityName(ipIdea.getIdeaId(), "ip_idea");
+				if (rev != null)
+					idea.setRevUserId(rev.getIpUser().getUserId());
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -463,6 +487,9 @@ public class IdeaService {
 					idea.setCrtByImgPath("ip_user/" + ipIdea.getIpUser().getUserId() + "/" + blob.getBlobName());
 				} else
 					idea.setCrtByImgAvail(false);
+				IpReview rev = ipReviewDAO.findByEntityIdEntityName(ipIdea.getIdeaId(), "ip_idea");
+				if (rev != null)
+					idea.setRevUserId(rev.getIpUser().getUserId());
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -519,6 +546,9 @@ public class IdeaService {
 					idea.setCrtByImgPath("ip_user/" + ipIdea.getIpUser().getUserId() + "/" + blob.getBlobName());
 				} else
 					idea.setCrtByImgAvail(false);
+				IpReview rev = ipReviewDAO.findByEntityIdEntityName(ipIdea.getIdeaId(), "ip_idea");
+				if (rev != null)
+					idea.setRevUserId(rev.getIpUser().getUserId());
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -574,6 +604,9 @@ public class IdeaService {
 					idea.setCrtByImgPath("ip_user/" + ipIdea.getIpUser().getUserId() + "/" + blob.getBlobName());
 				} else
 					idea.setCrtByImgAvail(false);
+				IpReview rev = ipReviewDAO.findByEntityIdEntityName(ipIdea.getIdeaId(), "ip_idea");
+				if (rev != null)
+					idea.setRevUserId(rev.getIpUser().getUserId());
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -673,5 +706,13 @@ public class IdeaService {
 
 	public void setIpBlobDAO(IpBlobDAO ipBlobDAO) {
 		this.ipBlobDAO = ipBlobDAO;
+	}
+
+	public IpReviewDAO getIpReviewDAO() {
+		return ipReviewDAO;
+	}
+
+	public void setIpReviewDAO(IpReviewDAO ipReviewDAO) {
+		this.ipReviewDAO = ipReviewDAO;
 	}
 }

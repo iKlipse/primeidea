@@ -26,6 +26,7 @@ public class ChallengeMessage {
 	private boolean imgAvail;
 	private Long[] groupIdList;
 	private String blobUrl;
+	private Long revUserId;
 
 	public Long getId() {
 		return id;
@@ -185,6 +186,14 @@ public class ChallengeMessage {
 
 	public void setBlobUrl(String blobUrl) {
 		this.blobUrl = blobUrl;
+	}
+
+	public Long getRevUserId() {
+		return revUserId;
+	}
+
+	public void setRevUserId(Long revUserId) {
+		this.revUserId = revUserId;
 	}
 
 }

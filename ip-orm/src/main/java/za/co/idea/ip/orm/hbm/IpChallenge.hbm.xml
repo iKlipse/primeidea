@@ -8,16 +8,13 @@
 			<column name="chal_id" />
 			<generator class="assigned" />
 		</id>
-		<many-to-one name="ipChallengeStatus"
-			class="za.co.idea.ip.orm.bean.IpChallengeStatus" fetch="select">
+		<many-to-one name="ipChallengeStatus" class="za.co.idea.ip.orm.bean.IpChallengeStatus" fetch="select">
 			<column name="chal_status" not-null="true" />
 		</many-to-one>
-		<many-to-one name="ipChallengeCat" class="za.co.idea.ip.orm.bean.IpChallengeCat"
-			fetch="select">
+		<many-to-one name="ipChallengeCat" class="za.co.idea.ip.orm.bean.IpChallengeCat" fetch="select">
 			<column name="chal_cat" not-null="true" />
 		</many-to-one>
-		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser"
-			fetch="select">
+		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser" fetch="select">
 			<column name="chal_crtd_by" not-null="true" />
 		</many-to-one>
 		<property name="chalTitle" type="java.lang.String">
@@ -85,11 +82,9 @@
 		update ip_challenge set chal_status=7 where
 		current_timestamp > chal_expiry_dt
 	</sql-query>
+	<!-- <sql-query name="getReviewChallengesByUser"> select chal.* from ip_challenge chal where chal.chal_status=2 and chal_id in (SELECT cg_chal_id FROM lpdb.ip_challenge_group where cg_group_id in (SELECT gu_grp_id FROM lpdb.ip_group_user where gu_usr_id=:id and gu_grp_id in (SELECT fg_grp_id FROM lpdb.ip_func_group where fg_func_id=8))) </sql-query> -->
 	<sql-query name="getReviewChallengesByUser">
-		select chal.* from ip_challenge chal where
-		chal.chal_status=2 and chal_id in (SELECT cg_chal_id FROM
-		lpdb.ip_challenge_group where cg_group_id in (SELECT gu_grp_id FROM
-		lpdb.ip_group_user where gu_usr_id=:id and gu_grp_id in (SELECT
-		fg_grp_id FROM lpdb.ip_func_group where fg_func_id=8)))
+		select idea.* from ip_challenge chal, ip_review rv where chal.chal_id=rv.rev_entity_id and rv.rev_user_id=:id and rv.rev_entity_name="ip_challenge"
+		<return alias="chal" class="za.co.idea.ip.orm.bean.IpChallenge" />
 	</sql-query>
 </hibernate-mapping>

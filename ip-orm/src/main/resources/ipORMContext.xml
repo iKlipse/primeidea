@@ -95,6 +95,7 @@
 				<value>
 					za/co/idea/ip/orm/hbm/IpStateTran.hbm.xml
 				</value>
+				<value>za/co/idea/ip/orm/hbm/IpReview.hbm.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -280,6 +281,11 @@
 		</property>
 	</bean>
 	<bean id="IpNativeSQLDAO" class="za.co.idea.ip.orm.dao.IpNativeSQLDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpReviewDAO" class="za.co.idea.ip.orm.dao.IpReviewDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>

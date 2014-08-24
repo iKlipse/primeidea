@@ -30,7 +30,7 @@
 }
 
 .dgView {
-	border: solid 0px white !important;
+	border: solid 1px grey !important;
 	text-align: center !important;
 	height: 100% !important;
 }

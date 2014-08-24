@@ -28,6 +28,7 @@ public class ChallengeBean implements Serializable {
 	private boolean imgAvail;
 	private List<Long> groupIdList;
 	private String blobUrl;
+	private Long revUserId;
 
 	public Long getId() {
 		return id;
@@ -195,6 +196,14 @@ public class ChallengeBean implements Serializable {
 
 	public void setBlobUrl(String blobUrl) {
 		this.blobUrl = blobUrl;
+	}
+
+	public Long getRevUserId() {
+		return revUserId;
+	}
+
+	public void setRevUserId(Long revUserId) {
+		this.revUserId = revUserId;
 	}
 
 }

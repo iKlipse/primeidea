@@ -25,6 +25,7 @@ public class IdeaMessage {
 	private Long fileSize;
 	private Long[] groupIdList;
 	private String blobUrl;
+	private Long revUserId;
 
 	public Long getIdeaId() {
 		return ideaId;
@@ -168,6 +169,14 @@ public class IdeaMessage {
 
 	public void setBlobUrl(String blobUrl) {
 		this.blobUrl = blobUrl;
+	}
+
+	public Long getRevUserId() {
+		return revUserId;
+	}
+
+	public void setRevUserId(Long revUserId) {
+		this.revUserId = revUserId;
 	}
 
 }
