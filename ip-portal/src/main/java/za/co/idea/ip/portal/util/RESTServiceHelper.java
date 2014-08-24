@@ -432,6 +432,42 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
+	
+	public static List<RewardsBean> fetchAllWishlistByUser(Long userId) {
+		fetchAllPointsByUser(userId);
+		List<RewardsBean> ret = new ArrayList<RewardsBean>();
+		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list/" + userId);
+		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
+		viewRewardsClient.close();
+		for (RewardsMessage message : rewards) {
+			RewardsBean bean = new RewardsBean();
+			bean.setrCatId(message.getrCatId());
+			bean.setRwCrtdDt(message.getRwCrtdDt());
+			bean.setRwDesc(message.getRwDesc());
+			bean.setRwExpiryDt(message.getRwExpiryDt());
+			bean.setRwHoverText(message.getRwHoverText());
+			bean.setRwId(message.getRwId());
+			bean.setRwLaunchDt(message.getRwLaunchDt());
+			bean.setRwStockCodeNum(message.getRwStockCodeNum());
+			bean.setRwTag(message.getRwTag());
+			bean.setRwTitle(message.getRwTitle());
+			bean.setRwValue(message.getRwValue());
+			bean.setRwPrice(message.getRwPrice());
+			bean.setRwQuantity(message.getRwQuantity());
+			bean.setRwImgAvail(message.isRwImgAvail());
+			bean.setRwUrl(message.getRwUrl());
+			bean.setBlobUrl(message.getBlobUrl());
+			ret.add(bean);
+		}
+		return ret;
+	}
+	
+	public static Long calculateTotal(List<PointBean> pntBeans) {
+		Long ret = 0l;
+		for (PointBean pointBean : pntBeans)
+			ret += pointBean.getPointValue();
+		return ret;
+	}
 
 	public static List<PointBean> fetchAllPointsByUser(Long userId) {
 		List<PointBean> ret = new ArrayList<PointBean>();

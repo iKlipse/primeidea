@@ -23,4 +23,7 @@
 		lower(ib.rev_entity_name)=lower(:tblNm)
 		<return alias="ib" class="za.co.idea.ip.orm.bean.IpReview" />
 	</sql-query>
+	<sql-query name="updateReviewer">
+		update ip_review set rev_user_id=:uid where rev_entity_id=:id and rev_entity_name=:tblNm
+	</sql-query>
 </hibernate-mapping>

@@ -568,6 +568,24 @@ public class SolutionService {
 	}
 
 	@GET
+	@Path("/solution/rev/user/{id}/{uid}")
+	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
+	public ResponseMessage updateReviewer(@PathParam("id") Long id, @PathParam("uid") Long uid) {
+		ResponseMessage message = new ResponseMessage();
+		try {
+			ipReviewDAO.updateReviewer(id, "ip_solution", uid);
+		} catch (Exception e) {
+			message.setStatusCode(-999);
+			message.setStatusDesc("Failure :: " + e.getMessage());
+			return message;
+		}
+		message.setStatusCode(200);
+		message.setStatusDesc("Success");
+		return message;
+	}
+
+	@GET
 	@Path("/solution/status/get/{id}")
 	@Produces("application/json")
 	@Transactional(propagation = Propagation.REQUIRED)

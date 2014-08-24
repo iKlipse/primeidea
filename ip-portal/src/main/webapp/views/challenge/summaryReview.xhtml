@@ -46,6 +46,7 @@
 			</p:panelGrid>
 		</p:column>
 		<f:facet name="footer">
+			<p:commandButton id="btnSumrUpdRwDlg" value="Re-Assign Reviewer" type="button" onclick="PF('dlgRwUpd').show();" />
 			<p:commandButton id="btnSumrSolSubmit" value="Submit a Solution" ajax="false" action="#{challengeController.showSubmitSolution}" rendered="#{challengeController.challengeBean.statusId == 4}">
 				<f:param name="chalId" value="#{challengeController.challengeBean.id}" />
 			</p:commandButton>
@@ -55,6 +56,23 @@
 			</p:commandButton>
 		</f:facet>
 	</p:panelGrid>
+	<p:dialog id="dlgRwUpd" widgetVar="dlgRwUpd" modal="true">
+		<p:panelGrid styleClass="panelGridView" columns="2">
+			<p:column>
+				<p:outputLabel value="Review User" />
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="rvAdmUser" value="#{challengeController.challengeBean.revUserId}">
+					<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{challengeController.admUsers}" var="a" itemLabel="#{a.fName} #{a.lName}" itemValue="#{a.uId}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column></p:column>
+			<p:column>
+				<p:commandButton id="btnSumrUpdRw" value="Update Reviwer" actionListener="#{challengeController.updateChallengeReviewer}" oncomplete="PF('dlgRwUpd').hide();" />
+			</p:column>
+		</p:panelGrid>
+	</p:dialog>
 	<p:overlayPanel my="right bottom" at="right top" dynamic="true" for="giSumrComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
 		<p:panelGrid styleClass="panelGridView" id="pnlSumrChallengeComment" columns="1">
 			<p:column>

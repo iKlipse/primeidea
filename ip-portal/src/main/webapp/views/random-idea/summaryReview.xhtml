@@ -60,12 +60,30 @@
 			</p:panelGrid>
 		</p:column>
 		<f:facet name="footer">
+			<p:commandButton id="btnSumrUpdRwDlg" value="Re-Assign Reviewer" type="button" onclick="PF('dlgRwUpd').show();" />
 			<p:commandButton id="btnEdtoCancel" value="Return To View" ajax="false" action="#{randomIdeaController.redirectMain}">
 				<f:setPropertyActionListener value="1" target="#{landingPageController.toView}" />
 				<f:setPropertyActionListener value="4" target="#{randomIdeaController.toView}" />
 			</p:commandButton>
 		</f:facet>
 	</p:panelGrid>
+	<p:dialog id="dlgRwUpd" widgetVar="dlgRwUpd" modal="true">
+		<p:panelGrid styleClass="panelGridView" columns="2">
+			<p:column>
+				<p:outputLabel value="Review User" />
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="rvAdmUser" value="#{randomIdeaController.ideaBean.revUserId}">
+					<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{randomIdeaController.admUsers}" var="a" itemLabel="#{a.fName} #{a.lName}" itemValue="#{a.uId}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column></p:column>
+			<p:column>
+				<p:commandButton id="btnSumrUpdRw" value="Update Reviwer" actionListener="#{randomIdeaController.updateReviewer}" oncomplete="PF('dlgRwUpd').hide();" />
+			</p:column>
+		</p:panelGrid>
+	</p:dialog>
 	<p:overlayPanel my="right bottom" at="right top" dynamic="true" for="giComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
 		<p:panelGrid styleClass="panelGridView" id="pnlIdeaComment" columns="1">
 			<p:column>

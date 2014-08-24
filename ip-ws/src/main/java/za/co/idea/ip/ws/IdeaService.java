@@ -287,7 +287,7 @@ public class IdeaService {
 				if (ipIdea.getIpIdeaStatus() != null) {
 					idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
 					idea.setStatusName(ipIdea.getIpIdeaStatus().getIsDesc());
-				}				    
+				}
 				if (ipIdea.getIpUser() != null) {
 					idea.setCrtdById(ipIdea.getIpUser().getUserId());
 					idea.setCrtdByName(ipIdea.getIpUser().getUserScreenName());
@@ -595,9 +595,9 @@ public class IdeaService {
 				}
 				if (ipIdea.getIpUser() != null) {
 					idea.setCrtdById(ipIdea.getIpUser().getUserId());
-				    idea.setCrtdByName(ipIdea.getIpUser().getUserScreenName());
+					idea.setCrtdByName(ipIdea.getIpUser().getUserScreenName());
 				}
-				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());				
+				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
 				if (val != null) {
 					Long[] grps = new Long[val.size()];
 					int i = 0;
@@ -660,6 +660,24 @@ public class IdeaService {
 			logger.error(e, e);
 		}
 		return idea;
+	}
+
+	@GET
+	@Path("/idea/rev/user/{id}/{uid}")
+	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
+	public ResponseMessage updateReviewer(@PathParam("id") Long id, @PathParam("uid") Long uid) {
+		ResponseMessage message = new ResponseMessage();
+		try {
+			ipReviewDAO.updateReviewer(id, "ip_idea", uid);
+		} catch (Exception e) {
+			message.setStatusCode(-999);
+			message.setStatusDesc("Failure :: " + e.getMessage());
+			return message;
+		}
+		message.setStatusCode(200);
+		message.setStatusDesc("Success");
+		return message;
 	}
 
 	public IpIdeaDAO getIpIdeaDAO() {

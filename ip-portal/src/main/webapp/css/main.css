@@ -11,7 +11,6 @@
 	border: solid 1px lightgray !important;
 	border-radius: 5px !important;
 	width: 100% !important;
-	height: 100% !important;
 }
 
 .ui-datascroller-item {
@@ -22,7 +21,6 @@
 .panelGridView {
 	border: solid 1px white !important;
 	width: 100% !important;
-	height: 100% !important;
 }
 
 .panelGridView tr, .panelGridView td {

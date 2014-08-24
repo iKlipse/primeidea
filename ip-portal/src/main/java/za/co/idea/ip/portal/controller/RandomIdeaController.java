@@ -844,6 +844,18 @@ public class RandomIdeaController implements Serializable {
 		}
 	}
 
+	public void updateReviewer() {
+		WebClient updateReviewerClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/rev/user/" + ideaBean.getIdeaId() + "/" + ideaBean.getRevUserId());
+		ResponseMessage message = updateReviewerClient.accept(MediaType.APPLICATION_JSON).get(ResponseMessage.class);
+		if (message.getStatusCode() == 200) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Update Reviewer Request Success", "Update Reviewer Request Success");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		} else {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Update Reviewer Request Failed", "Update Reviewer Request Failed");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+	}
+
 	protected Long[] toLongArray(String[] val) {
 		logger.info("Input Count :: " + val.length);
 		Long[] ret = new Long[val.length];

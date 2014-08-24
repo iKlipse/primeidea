@@ -1978,6 +1978,30 @@ public class ChallengeController implements Serializable {
 		return ret;
 	}
 
+	public void updateChallengeReviewer() {
+		WebClient updateReviewerClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/rev/user/" + challengeBean.getId() + "/" + challengeBean.getRevUserId());
+		ResponseMessage message = updateReviewerClient.accept(MediaType.APPLICATION_JSON).get(ResponseMessage.class);
+		if (message.getStatusCode() == 200) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Update Reviewer Request Success", "Update Reviewer Request Success");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		} else {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Update Reviewer Request Failed", "Update Reviewer Request Failed");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+	}
+
+	public void updateSolutionReviewer() {
+		WebClient updateReviewerClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/rev/user/" + solutionBean.getId() + "/" + solutionBean.getRevUserId());
+		ResponseMessage message = updateReviewerClient.accept(MediaType.APPLICATION_JSON).get(ResponseMessage.class);
+		if (message.getStatusCode() == 200) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Update Reviewer Request Success", "Update Reviewer Request Success");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		} else {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Update Reviewer Request Failed", "Update Reviewer Request Failed");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+	}
+
 	public void chalFileUploadHandle(FileUploadEvent fue) {
 		try {
 			UploadedFile file = fue.getFile();

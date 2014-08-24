@@ -16,5 +16,7 @@
 		<portlet id="media-portlet"></portlet>
 		<portlet id="news"></portlet>
 		<portlet id="leader-board"></portlet>
+		<portlet id="links-portlet"></portlet>
+		<portlet id="wishlist"></portlet>
 	</category>
 </display>

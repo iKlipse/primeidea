@@ -246,5 +246,6 @@
 	<lifecycle>
 		<phase-listener>com.liferay.faces.util.lifecycle.DebugPhaseListener</phase-listener>
 		<phase-listener>com.liferay.faces.util.lifecycle.ViewScopePhaseListener</phase-listener>
+		<!-- <phase-listener>za.co.idea.ip.portal.util.SessionPhaseListener</phase-listener> -->
 	</lifecycle>
 </faces-config>

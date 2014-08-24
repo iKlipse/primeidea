@@ -159,6 +159,20 @@ public class IpReviewDAO extends HibernateDaoSupport {
 		}
 	}
 
+	public void updateReviewer(Long entityId, String entityName, Long uId) {
+		log.debug("updating reviewer");
+		try {
+			Query query = getSession().getNamedQuery("updateReviewer");
+			query.setLong("id", entityId);
+			query.setString("tblNm", entityName);
+			query.setLong("uid", uId);
+			query.executeUpdate();
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
+	}
+
 	public static IpReviewDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (IpReviewDAO) ctx.getBean("IpReviewDAO");
 	}
