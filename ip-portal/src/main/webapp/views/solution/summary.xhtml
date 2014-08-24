@@ -46,7 +46,7 @@
 					<p:tooltip for="giComment" value="Tags disabled as solution not in open status" rendered="#{challengeController.solutionBean.taggable}" />
 				</p:column>
 				<p:column>
-					<p:commandLink id="lnkBuildonSolution" action="#{buildonController.showBuildon}">
+					<p:commandLink id="lnkBuildonSolution" action="#{buildonController.showBuildon}" ajax="false">
 						<f:setPropertyActionListener value="#{challengeController.userId}" target="#{buildonController.userId}" />
 						<f:setPropertyActionListener value="4" target="#{buildonController.returnView}" />
 						<f:param name="entityId" id="entityId" value="#{challengeController.solutionBean.id}" />

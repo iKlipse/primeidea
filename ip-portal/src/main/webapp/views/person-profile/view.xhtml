@@ -17,19 +17,24 @@
 					<p:column>
 						<p:panelGrid styleClass="panelGridView" id="pnlStats" columns="5">
 							<p:column>
-								<p:outputLabel value="#{adminController.statsBean.totalCount}" />
+								<p:outputLabel id="totCnt" value="#{adminController.statsBean.totalCount}" />
+								<p:tooltip for="totCnt" value="Total Count" />
 							</p:column>
 							<p:column>
-								<p:outputLabel value="#{adminController.statsBean.ideasCount}" />
+								<p:outputLabel id="ideasCnt" value="#{adminController.statsBean.ideasCount}" />
+								<p:tooltip for="ideasCnt" value="Ideas Count" />
 							</p:column>
 							<p:column>
-								<p:outputLabel value="#{adminController.statsBean.challengesCount}" />
+								<p:outputLabel id="chalsCnt" value="#{adminController.statsBean.challengesCount}" />
+								<p:tooltip for="chalsCnt" value="Challenge Count" />
 							</p:column>
 							<p:column>
-								<p:outputLabel value="#{adminController.statsBean.solutionsCount}" />
+								<p:outputLabel id="solsCnt" value="#{adminController.statsBean.solutionsCount}" />
+								<p:tooltip for="solsCnt" value="Solutions Count" />
 							</p:column>
 							<p:column>
-								<p:outputLabel value="#{adminController.statsBean.whishListCount}" />
+								<p:outputLabel id="wlCnt" value="#{adminController.statsBean.whishListCount}" />
+								<p:tooltip for="wlCnt" value="Wishlist Count" />
 							</p:column>
 						</p:panelGrid>
 					</p:column>

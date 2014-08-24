@@ -156,14 +156,14 @@ public class AdminService {
 				group.setgId(ipGroup.getGroupId());
 				group.setgName(ipGroup.getGroupName());
 				group.setIsActive(ipGroup.getGroupStatus().equalsIgnoreCase("y"));
-				if (ipGroup.getIpGroup() != null){
+				if (ipGroup.getIpGroup() != null) {
 					group.setpGrpId(ipGroup.getIpGroup().getGroupId());
-				    group.setpGrpName(ipGroup.getIpGroup().getGroupName());
-					}
-				if (ipGroup.getIpUser() != null){
+					group.setpGrpName(ipGroup.getIpGroup().getGroupName());
+				}
+				if (ipGroup.getIpUser() != null) {
 					group.setAdmUserId(ipGroup.getIpUser().getUserId());
-				    group.setAdmUserName(ipGroup.getIpUser().getUserScreenName());
-					}
+					group.setAdmUserName(ipGroup.getIpUser().getUserScreenName());
+				}
 				List guList = ipGroupUserDAO.fetchByGroupId(ipGroup.getGroupId());
 				Long[] uList = new Long[guList.size()];
 				int i = 0;
@@ -903,6 +903,8 @@ public class AdminService {
 				userStats.setSolutionsCount(solCount);
 				userStats.setWhishListCount(whishListCount);
 				userStats.setTotalCount(totalCount);
+				userStats.setUserScrNm(ipUser.getUserScreenName());
+				userStats.setUserPriGrpName(ipUser.getIpGroup().getGroupName());
 				IpBlob blob = ipBlobDAO.getBlobByEntity(ipUser.getUserId(), "ip_user");
 				if (blob != null) {
 					userStats.setImgPath("ip_user/" + ipUser.getUserId() + "/" + blob.getBlobName());

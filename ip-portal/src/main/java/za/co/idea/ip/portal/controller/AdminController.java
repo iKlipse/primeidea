@@ -3189,6 +3189,8 @@ public class AdminController implements Serializable {
 				stats.setImgAvail(userStats.isImgAvail());
 				stats.setGrpImgAvail(userStats.isGrpImgAvail());
 				stats.setGrpImgPath(userStats.getGrpImgPath());
+				stats.setUserPriGrpName(userStats.getUserPriGrpName());
+				stats.setUserScrNm(userStats.getUserScrNm());
 				viewStatsBean.add(stats);
 			}
 		} catch (Exception e) {
