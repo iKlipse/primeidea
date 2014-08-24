@@ -1,9 +1,9 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
-	<p:dataGrid id="dtViewSolutions" style="width: 100% !important; border: none !important;" value="#{landingPageController.viewSolutions}" var="solution" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="5,10,15" columns="1" rows="5" emptyMessage="No Ideas Found">
+	<p:dataGrid id="dtViewSolutions" style="width: 100% !important; border: none !important;" value="#{landingPageController.viewSolutions}" var="solution" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="5,10,15" columns="1" rows="5" emptyMessage="No Challenges Found">
 		<p:panel styleClass="panelView">
 			<p:panelGrid styleClass="panelGridView">
 				<p:row>
-					<p:column colspan="2" rowspan="7" style="width: 16% !important;vertical-align: top !important">
+					<p:column colspan="2" rowspan="7" style="vertical-align: top !important">
 						<p:graphicImage style="vertical-align: top !important;" id="imgAvatar" name="#{solution.crtByImgPath}" library="images" height="25px" width="25px" />
 						<p:graphicImage style="vertical-align: top !important;" id="imgAvatarDefault" name="profile.jpg" library="images" height="25px" width="25px" rendered="#{!solution.crtByImgAvail}" />
 					</p:column>
@@ -30,10 +30,10 @@
 					</p:column>
 				</p:row>
 				<p:row>
-					<p:column colspan="10" rowspan="4">
+					<p:column colspan="10" rowspan="5">
 						<p:outputLabel value="#{solution.title}" style="font-weight: bold !important; text-align: left !important; font-size: 1.2em !important" />
 						<br />
-						<p:outputLabel value="#{solution.desc}" escape="false" style="text-align: left !important" />
+						<p:outputLabel value="#{solution.desc}" escape="false" style="text-align: left !important; overflow: auto !important" />
 						<p:separator style="width: 100% !important" />
 						<p:outputLabel value="No Attachments" rendered="#{!solution.solImgAvl}" />
 						<h:outputLink value="#{solution.blobUrl}" rendered="#{solution.solImgAvl}">

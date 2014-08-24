@@ -144,6 +144,7 @@ public class RewardsService {
 				rewards.setRwValue(ipRewards.getRwValue());
 				rewards.setRwPrice(ipRewards.getRwPrice());
 				rewards.setRwQuantity(ipRewards.getRwQuantity());
+				rewards.setrCatName(ipRewards.getIpRewardsCat().getRcDesc());
 				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipRewards.getRwId(), "ip_rewards");
 				if (ipBlob != null) {
 					rewards.setRwUrl("ip_rewards/" + ipRewards.getRwId() + "/" + ipBlob.getBlobName());
@@ -181,6 +182,7 @@ public class RewardsService {
 			rewards.setRwValue(ipRewards.getRwValue());
 			rewards.setRwPrice(ipRewards.getRwPrice());
 			rewards.setRwQuantity(ipRewards.getRwQuantity());
+			rewards.setrCatName(ipRewards.getIpRewardsCat().getRcDesc());
 			IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipRewards.getRwId(), "ip_rewards");
 			if (ipBlob != null) {
 				rewards.setRwUrl("ip_rewards/" + ipRewards.getRwId() + "/" + ipBlob.getBlobName());
@@ -219,6 +221,7 @@ public class RewardsService {
 				rewards.setRwValue(ipRewards.getRwValue());
 				rewards.setRwPrice(ipRewards.getRwPrice());
 				rewards.setRwQuantity(ipRewards.getRwQuantity());
+				rewards.setrCatName(ipRewards.getIpRewardsCat().getRcDesc());
 				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipRewards.getRwId(), "ip_rewards");
 				if (ipBlob != null) {
 					rewards.setRwUrl("ip_rewards/" + ipRewards.getRwId() + "/" + ipBlob.getBlobName());
@@ -259,6 +262,7 @@ public class RewardsService {
 				rewards.setRwValue(ipRewards.getRwValue());
 				rewards.setRwPrice(ipRewards.getRwPrice());
 				rewards.setRwQuantity(ipRewards.getRwQuantity());
+				rewards.setrCatName(ipRewards.getIpRewardsCat().getRcDesc());
 				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipRewards.getRwId(), "ip_rewards");
 				if (ipBlob != null) {
 					rewards.setRwUrl("ip_rewards/" + ipRewards.getRwId() + "/" + ipBlob.getBlobName());
@@ -299,6 +303,7 @@ public class RewardsService {
 				rewards.setRwValue(ipRewards.getRwValue());
 				rewards.setRwPrice(ipRewards.getRwPrice());
 				rewards.setRwQuantity(ipRewards.getRwQuantity());
+				rewards.setrCatName(ipRewards.getIpRewardsCat().getRcDesc());
 				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipRewards.getRwId(), "ip_rewards");
 				if (ipBlob != null) {
 					rewards.setRwUrl("ip_rewards/" + ipRewards.getRwId() + "/" + ipBlob.getBlobName());

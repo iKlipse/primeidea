@@ -156,10 +156,14 @@ public class AdminService {
 				group.setgId(ipGroup.getGroupId());
 				group.setgName(ipGroup.getGroupName());
 				group.setIsActive(ipGroup.getGroupStatus().equalsIgnoreCase("y"));
-				if (ipGroup.getIpGroup() != null)
+				if (ipGroup.getIpGroup() != null){
 					group.setpGrpId(ipGroup.getIpGroup().getGroupId());
-				if (ipGroup.getIpUser() != null)
+				    group.setpGrpName(ipGroup.getIpGroup().getGroupName());
+					}
+				if (ipGroup.getIpUser() != null){
 					group.setAdmUserId(ipGroup.getIpUser().getUserId());
+				    group.setAdmUserName(ipGroup.getIpUser().getUserScreenName());
+					}
 				List guList = ipGroupUserDAO.fetchByGroupId(ipGroup.getGroupId());
 				Long[] uList = new Long[guList.size()];
 				int i = 0;

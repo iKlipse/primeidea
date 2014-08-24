@@ -11,30 +11,24 @@
 			</p:column>
 			<p:column>
 				<f:facet name="header">Parent Group</f:facet>
-				<p:selectOneMenu id="gsomPGrpId" value="#{grp.selPGrp}" disabled="true">
-					<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-					<f:selectItems value="#{adminController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
-				</p:selectOneMenu>
+				<p:outputLabel id="gsomPGrpId" value="#{grp.selPGrpName}" />
 			</p:column>
 			<p:column>
 				<f:facet name="header">Admin User</f:facet>
-				<p:selectOneMenu id="gsomAdmUser" value="#{grp.selAdmUser}" disabled="true">
-					<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-					<f:selectItems value="#{adminController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
-				</p:selectOneMenu>
+				<p:outputLabel id="gsomAdmUser" value="#{grp.selAdmUserName}" />
 			</p:column>
 			<p:column>
 				<f:facet name="header">Active</f:facet>
 				<p:selectBooleanButton id="gsbbActive" value="#{grp.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" disabled="true" />
 			</p:column>
 			<p:column>
-				<p:commandButton id="gviewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminController.showEditGroup}">
+				<p:commandButton id="gviewButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{adminController.showEditGroup}">
 					<f:setPropertyActionListener value="#{grp}" target="#{adminController.groupBean}" />
 					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
 				</p:commandButton>
 			</p:column>
 			<p:column>
-				<p:commandButton id="gsummaryButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminController.showSummaryGroup}">
+				<p:commandButton id="gsummaryButton" icon="ui-icon-clipboard" ajax="false" immediate="true" action="#{adminController.showSummaryGroup}">
 					<f:setPropertyActionListener value="#{grp}" target="#{adminController.groupBean}" />
 					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
 				</p:commandButton>

@@ -25,6 +25,7 @@ public class RewardsMessage {
 	private boolean rwClaimable;
 	private boolean rwImgAvail;
 	private String blobUrl;
+	private String rCatName;
 
 	public Long getRwId() {
 		return rwId;
@@ -176,6 +177,14 @@ public class RewardsMessage {
 
 	public void setBlobUrl(String blobUrl) {
 		this.blobUrl = blobUrl;
+	}
+
+	public String getrCatName() {
+		return rCatName;
+	}
+
+	public void setrCatName(String rCatName) {
+		this.rCatName = rCatName;
 	}
 
 }

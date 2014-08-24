@@ -4,17 +4,13 @@
 			<f:facet name="header">Title</f:facet>
 			<p:outputLabel id="txtVwoChallengeTitle" value="#{challenge.title}" />
 		</p:column>
-		<p:column>
+		<p:column sortBy="#{challenge.catName}">
 			<f:facet name="header">Category</f:facet>
-			<p:selectOneMenu id="somVwoICat" value="#{challenge.catId}" disabled="true">
-				<f:selectItems value="#{challengeController.challengeCats}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
-			</p:selectOneMenu>
+			<p:outputLabel id="somVwoICat" value="#{challenge.catName}" />
 		</p:column>
-		<p:column>
+		<p:column sortBy="#{challenge.statusName}">
 			<f:facet name="header">Status</f:facet>
-			<p:selectOneMenu id="somVwoIStatus" value="#{challenge.statusId}" disabled="true">
-				<f:selectItems value="#{challengeController.challengeStatuses}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
-			</p:selectOneMenu>
+			<p:outputLabel id="somVwoIStatus" value="#{challenge.statusName}" />
 		</p:column>
 		<p:column>
 			<f:facet name="header">Launch Date</f:facet>
@@ -29,13 +25,13 @@
 			</p:outputLabel>
 		</p:column>
 		<p:column>
-			<p:commandButton id="viewVwoButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{challengeController.showEditOpenChallenge}">
+			<p:commandButton id="viewVwoButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{challengeController.showEditOpenChallenge}">
 				<f:setPropertyActionListener value="#{challenge}" target="#{challengeController.challengeBean}" />
 				<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 			</p:commandButton>
 		</p:column>
 		<p:column>
-			<p:commandButton id="summaryVwoButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{challengeController.showSummaryOpenChallenge}">
+			<p:commandButton id="summaryVwoButton" icon="ui-icon-clipboard" ajax="false" immediate="true" action="#{challengeController.showSummaryOpenChallenge}">
 				<f:setPropertyActionListener value="#{challenge}" target="#{challengeController.challengeBean}" />
 				<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 			</p:commandButton>

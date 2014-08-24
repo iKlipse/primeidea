@@ -1,5 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
-	<p:dataGrid id="dgViewChallenges" value="#{landingPageController.viewChallenges}" styleClass="noBorder" var="challenge" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" columns="1" rows="5" emptyMessage="No Ideas Found">
+	<p:dataGrid id="dgViewChallenges" value="#{landingPageController.viewChallenges}" styleClass="noBorder" var="challenge" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" columns="1" rows="5" emptyMessage="No Challenges Found">
 		<p:panel styleClass="panelView">
 			<p:panelGrid styleClass="panelGridView">
 				<p:row>
@@ -30,10 +30,10 @@
 					</p:column>
 				</p:row>
 				<p:row>
-					<p:column colspan="10" rowspan="4">
+					<p:column colspan="10" rowspan="5">
 						<p:outputLabel value="#{challenge.title}" style="font-weight: bold !important; text-align: left !important; font-size: 1.2em !important" />
 						<br />
-						<p:outputLabel value="#{challenge.desc}" escape="false" style="text-align: left !important" />
+						<p:outputLabel value="#{challenge.desc}" escape="false" style="text-align: left !important; overflow: auto !important" />
 						<p:separator style="width: 100% !important" />
 						<p:outputLabel value="No Attachments" rendered="#{!challenge.imgAvail}" />
 						<h:outputLink value="#{challenge.blobUrl}" rendered="#{challenge.imgAvail}">

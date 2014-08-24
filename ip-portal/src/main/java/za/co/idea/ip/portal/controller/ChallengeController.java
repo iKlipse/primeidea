@@ -666,6 +666,7 @@ public class ChallengeController implements Serializable {
 			message.setTitle(challengeBean.getTitle());
 			// message.setGroupIdList(getSelGroupIds());
 			message.setGroupIdList(toLongArray(selGrpId));
+			message.setRevUserId(challengeBean.getRevUserId());
 			ResponseMessage response = addChallengeClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			addChallengeClient.close();
 			if (response.getStatusCode() == 0) {
@@ -733,6 +734,7 @@ public class ChallengeController implements Serializable {
 			message.setTitle(challengeBean.getTitle());
 			// message.setGroupIdList(getSelGroupIds());
 			message.setGroupIdList(toLongArray(selGrpId));
+			message.setRevUserId(challengeBean.getRevUserId());
 			ResponseMessage response = updateChallengeClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			updateChallengeClient.close();
 			if (response.getStatusCode() == 0) {
@@ -1320,6 +1322,7 @@ public class ChallengeController implements Serializable {
 			}
 			message.setTags(solutionBean.getTags());
 			message.setTitle(solutionBean.getTitle());
+			message.setRevUserId(solutionBean.getRevUserId());
 			ResponseMessage response = addSolutionClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			addSolutionClient.close();
 			if (response.getStatusCode() == 0) {
@@ -1389,6 +1392,7 @@ public class ChallengeController implements Serializable {
 			message.setStatusId(solutionBean.getStatusId());
 			message.setTags(solutionBean.getTags());
 			message.setTitle(solutionBean.getTitle());
+			message.setRevUserId(solutionBean.getRevUserId());
 			ResponseMessage response = updateSolutionClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			updateSolutionClient.close();
 			if (response.getStatusCode() == 0) {
@@ -1601,6 +1605,12 @@ public class ChallengeController implements Serializable {
 			bean.setTag(challengeMessage.getTag());
 			bean.setTitle(challengeMessage.getTitle());
 			bean.setGroupIdList(getIdsFromArray(challengeMessage.getGroupIdList()));
+			bean.setBlobUrl(challengeMessage.getBlobUrl());
+			bean.setFileName(challengeMessage.getFileName());
+			bean.setImgAvail(challengeMessage.isImgAvail());
+			bean.setRevUserId(challengeMessage.getRevUserId());
+			bean.setStatusName(challengeMessage.getStatusName());
+			bean.setCatName(challengeMessage.getCatName());
 			ret.add(bean);
 		}
 		return ret;
@@ -1624,6 +1634,12 @@ public class ChallengeController implements Serializable {
 		bean.setTag(challengeMessage.getTag());
 		bean.setTitle(challengeMessage.getTitle());
 		bean.setGroupIdList(getIdsFromArray(challengeMessage.getGroupIdList()));
+		bean.setBlobUrl(challengeMessage.getBlobUrl());
+		bean.setFileName(challengeMessage.getFileName());
+		bean.setImgAvail(challengeMessage.isImgAvail());
+		bean.setRevUserId(challengeMessage.getRevUserId());
+		bean.setStatusName(challengeMessage.getStatusName());
+		bean.setCatName(challengeMessage.getCatName());
 		logger.info("Before returning challenge bean: " + bean);
 		return bean;
 	}
@@ -1646,7 +1662,13 @@ public class ChallengeController implements Serializable {
 			bean.setStatusId(challengeMessage.getStatusId());
 			bean.setTag(challengeMessage.getTag());
 			bean.setTitle(challengeMessage.getTitle());
+			bean.setStatusName(challengeMessage.getStatusName());
+			bean.setCatName(challengeMessage.getCatName());
 			bean.setGroupIdList(getIdsFromArray(challengeMessage.getGroupIdList()));
+			bean.setBlobUrl(challengeMessage.getBlobUrl());
+			bean.setFileName(challengeMessage.getFileName());
+			bean.setImgAvail(challengeMessage.isImgAvail());
+			bean.setRevUserId(challengeMessage.getRevUserId());
 			ret.add(bean);
 		}
 		return ret;
@@ -1655,10 +1677,6 @@ public class ChallengeController implements Serializable {
 	private List<ChallengeBean> fetchAllChallengesByUser() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
 		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/user/access/" + userId);
-		// WebClient fetchChallengeClient =
-		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" +
-		// BUNDLE.getString("ws.port") +
-		// "/ip-ws/ip/cs/challenge/list/user/access/0");
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
@@ -1678,9 +1696,12 @@ public class ChallengeController implements Serializable {
 			bean.setCrtByImgAvail(challengeMessage.isCrtByImgAvail());
 			bean.setCrtByImgPath(challengeMessage.getCrtByImgPath());
 			bean.setCrtdByName(challengeMessage.getCrtdByName());
-			bean.setImgAvail(challengeMessage.isImgAvail());
 			bean.setBlobUrl(challengeMessage.getBlobUrl());
 			bean.setFileName(challengeMessage.getFileName());
+			bean.setImgAvail(challengeMessage.isImgAvail());
+			bean.setRevUserId(challengeMessage.getRevUserId());
+			bean.setStatusName(challengeMessage.getStatusName());
+			bean.setCatName(challengeMessage.getCatName());
 			ret.add(bean);
 		}
 		return ret;
@@ -1689,10 +1710,6 @@ public class ChallengeController implements Serializable {
 	public List<ChallengeBean> fetchAllChallengesCreatedByUser() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
 		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/user/created/" + userId);
-		// WebClient fetchChallengeClient =
-		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" +
-		// BUNDLE.getString("ws.port") +
-		// "/ip-ws/ip/cs/challenge/list/user/created/0");
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
@@ -1709,6 +1726,12 @@ public class ChallengeController implements Serializable {
 			bean.setTag(challengeMessage.getTag());
 			bean.setTitle(challengeMessage.getTitle());
 			bean.setGroupIdList(getIdsFromArray(challengeMessage.getGroupIdList()));
+			bean.setBlobUrl(challengeMessage.getBlobUrl());
+			bean.setFileName(challengeMessage.getFileName());
+			bean.setImgAvail(challengeMessage.isImgAvail());
+			bean.setRevUserId(challengeMessage.getRevUserId());
+			bean.setStatusName(challengeMessage.getStatusName());
+			bean.setCatName(challengeMessage.getCatName());
 			ret.add(bean);
 		}
 		return ret;
@@ -1717,10 +1740,6 @@ public class ChallengeController implements Serializable {
 	private List<ChallengeBean> fetchAllChallengesByStatusIdUserId(Integer status) {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
 		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/status/" + status + "/user/" + userId);
-		// WebClient fetchChallengeClient =
-		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" +
-		// BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/status/"
-		// + status + "/user/0");
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
@@ -1743,6 +1762,12 @@ public class ChallengeController implements Serializable {
 			bean.setImgAvail(challengeMessage.isImgAvail());
 			bean.setBlobUrl(challengeMessage.getBlobUrl());
 			bean.setFileName(challengeMessage.getFileName());
+			bean.setStatusName(challengeMessage.getStatusName());
+			bean.setCatName(challengeMessage.getCatName());
+			bean.setBlobUrl(challengeMessage.getBlobUrl());
+			bean.setFileName(challengeMessage.getFileName());
+			bean.setImgAvail(challengeMessage.isImgAvail());
+			bean.setRevUserId(challengeMessage.getRevUserId());
 			ret.add(bean);
 		}
 		return ret;
@@ -1767,6 +1792,11 @@ public class ChallengeController implements Serializable {
 			bean.setTitle(solutionMessage.getTitle());
 			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
 			bean.setSolImg(solutionMessage.getSolImg());
+			bean.setBlobUrl(solutionMessage.getBlobUrl());
+			bean.setFileName(solutionMessage.getFileName());
+			bean.setRevUserId(solutionMessage.getRevUserId());
+			bean.setStatusName(solutionMessage.getStatusName());
+			bean.setCatName(solutionMessage.getCatName());
 			if (solutionMessage.isSolImgAvl())
 				bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
 			ret.add(bean);
@@ -1777,10 +1807,6 @@ public class ChallengeController implements Serializable {
 	private List<SolutionBean> fetchAllSolutionsByUser() {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
 		WebClient fetchSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/user/access/" + userId);
-		// WebClient fetchSolutionClient =
-		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" +
-		// BUNDLE.getString("ws.port") +
-		// "/ip-ws/ip/ss/solution/list/user/access/0");
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
 		fetchSolutionClient.close();
 		for (SolutionMessage solutionMessage : solutions) {
@@ -1799,6 +1825,9 @@ public class ChallengeController implements Serializable {
 			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
 			bean.setBlobUrl(solutionMessage.getBlobUrl());
 			bean.setFileName(solutionMessage.getFileName());
+			bean.setRevUserId(solutionMessage.getRevUserId());
+			bean.setStatusName(solutionMessage.getStatusName());
+			bean.setCatName(solutionMessage.getCatName());
 			if (solutionMessage.isSolImgAvl())
 				bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
 			ret.add(bean);
@@ -1806,13 +1835,9 @@ public class ChallengeController implements Serializable {
 		return ret;
 	}
 
-	public List<SolutionBean> fetchAllSolutionsCreatedByUser() {
+	protected List<SolutionBean> fetchAllSolutionsCreatedByUser() {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
 		WebClient fetchSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/user/created/" + userId);
-		// WebClient fetchSolutionClient =
-		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" +
-		// BUNDLE.getString("ws.port") +
-		// "/ip-ws/ip/ss/solution/list/user/created/0");
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
 		fetchSolutionClient.close();
 		for (SolutionMessage solutionMessage : solutions) {
@@ -1832,6 +1857,9 @@ public class ChallengeController implements Serializable {
 			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
 			bean.setBlobUrl(solutionMessage.getBlobUrl());
 			bean.setFileName(solutionMessage.getFileName());
+			bean.setRevUserId(solutionMessage.getRevUserId());
+			bean.setStatusName(solutionMessage.getStatusName());
+			bean.setCatName(solutionMessage.getCatName());
 			if (solutionMessage.isSolImgAvl())
 				bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
 			ret.add(bean);
@@ -1842,10 +1870,6 @@ public class ChallengeController implements Serializable {
 	private List<SolutionBean> fetchAllSolutionsByStatusIdUserId(Integer status) {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
 		WebClient fetchSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/status/" + status + "/user/" + userId);
-		// WebClient fetchSolutionClient =
-		// createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" +
-		// BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/status/"
-		// + status + "/user/0");
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
 		fetchSolutionClient.close();
 		for (SolutionMessage solutionMessage : solutions) {
@@ -1864,6 +1888,9 @@ public class ChallengeController implements Serializable {
 			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
 			bean.setBlobUrl(solutionMessage.getBlobUrl());
 			bean.setFileName(solutionMessage.getFileName());
+			bean.setRevUserId(solutionMessage.getRevUserId());
+			bean.setCatName(solutionMessage.getCatName());
+			bean.setStatusName(solutionMessage.getStatusName());
 			if (solutionMessage.isSolImgAvl())
 				bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
 			ret.add(bean);
@@ -1892,6 +1919,9 @@ public class ChallengeController implements Serializable {
 			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
 			bean.setBlobUrl(solutionMessage.getBlobUrl());
 			bean.setFileName(solutionMessage.getFileName());
+			bean.setRevUserId(solutionMessage.getRevUserId());
+			bean.setCatName(solutionMessage.getCatName());
+			bean.setStatusName(solutionMessage.getStatusName());
 			if (solutionMessage.isSolImgAvl())
 				bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
 			ret.add(bean);
@@ -1926,6 +1956,8 @@ public class ChallengeController implements Serializable {
 				bean.setSolLikeCnt("(" + fetchAllSolLikeById(solutionMessage.getId()).getTags().size() + ")");
 				bean.setSolCommentCnt("(" + fetchAllSolCommentsById(solutionMessage.getId()).size() + ")");
 				bean.setBuildOnCnt("(" + fetchAllBuildOnsById(solutionMessage.getId()).size() + ")");
+				bean.setCatName(solutionMessage.getCatName());
+				bean.setStatusName(solutionMessage.getStatusName());
 				if (solutionMessage.isSolImgAvl()) {
 					File file = new File("/resources/images/" + solutionMessage.getSolImg());
 					if (file.exists()) {

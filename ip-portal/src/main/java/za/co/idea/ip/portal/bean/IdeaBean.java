@@ -29,6 +29,7 @@ public class IdeaBean implements Serializable {
 	private boolean taggable;
 	private String blobUrl;
 	private Long revUserId;
+	private String statusName;
 
 	public Long getIdeaId() {
 		return ideaId;
@@ -196,5 +197,13 @@ public class IdeaBean implements Serializable {
 
 	public void setRevUserId(Long revUserId) {
 		this.revUserId = revUserId;
+	}
+
+	public String getStatusName() {
+		return statusName;
+	}
+
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
 	}
 }

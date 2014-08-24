@@ -14,6 +14,8 @@ public class GroupMessage {
 	private String blobUrl;
 	private boolean imgAvl;
 	private String fileName;
+	private String pGrpName;
+	private String admUserName;
 
 	public Long getgId() {
 		return gId;
@@ -93,6 +95,22 @@ public class GroupMessage {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public String getpGrpName() {
+		return pGrpName;
+	}
+
+	public void setpGrpName(String pGrpName) {
+		this.pGrpName = pGrpName;
+	}
+
+	public String getAdmUserName() {
+		return admUserName;
+	}
+
+	public void setAdmUserName(String admUserName) {
+		this.admUserName = admUserName;
 	}
 
 }

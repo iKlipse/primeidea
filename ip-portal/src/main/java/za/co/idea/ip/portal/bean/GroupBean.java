@@ -11,7 +11,9 @@ public class GroupBean implements Serializable {
 	private String gName;
 	private String geMail;
 	private Long selPGrp;
+	private String selPGrpName;
 	private Long selAdmUser;
+	private String selAdmUserName;
 	private Boolean isActive;
 	private List<Long> userIdList;
 	private String contentType;
@@ -107,6 +109,22 @@ public class GroupBean implements Serializable {
 
 	public void setImgAvl(boolean imgAvl) {
 		this.imgAvl = imgAvl;
+	}
+
+	public String getSelPGrpName() {
+		return selPGrpName;
+	}
+
+	public void setSelPGrpName(String selPGrpName) {
+		this.selPGrpName = selPGrpName;
+	}
+
+	public String getSelAdmUserName() {
+		return selAdmUserName;
+	}
+
+	public void setSelAdmUserName(String selAdmUserName) {
+		this.selAdmUserName = selAdmUserName;
 	}
 
 }

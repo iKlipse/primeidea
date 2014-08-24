@@ -1,5 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
-	<p:panelGrid styleClass="panelGridView"  columns="2" id="pnlCrtIdea">
+	<p:panelGrid styleClass="panelGridView" columns="2" id="pnlCrtIdea">
 		<p:column>
 			<p:outputLabel id="lblCrtITitle" value="Title : " />
 		</p:column>
@@ -12,7 +12,7 @@
 			<p:outputLabel id="lblCrtIDesc" value="Description : " />
 		</p:column>
 		<p:column>
-			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="txtCrtIDesc" value="#{randomIdeaController.ideaBean.ideaDesc}"  />
+			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="txtCrtIDesc" value="#{randomIdeaController.ideaBean.ideaDesc}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblCrtITag" value="Keywords to Describe Your Idea : " />
@@ -41,10 +41,19 @@
 				<f:selectItems value="#{randomIdeaController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 			</p:selectCheckboxMenu>
 		</p:column>
+		<p:column>
+			<p:outputLabel id="lblRevUser" value="Review User" />
+		</p:column>
+		<p:column>
+			<p:selectOneMenu id="rvAdmUser" value="#{randomIdeaController.ideaBean.revUserId}">
+				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+				<f:selectItems value="#{randomIdeaController.admUsers}" var="a" itemLabel="#{a.fName} #{a.lName}" itemValue="#{a.uId}" />
+			</p:selectOneMenu>
+		</p:column>
 		<f:facet name="footer">
-				<p:commandButton id="btnCrtISave" value="Save" ajax="false" action="#{randomIdeaController.saveIdea}">
-					<f:setPropertyActionListener value="2" target="#{randomIdeaController.toView}" />
-				</p:commandButton>
+			<p:commandButton id="btnCrtISave" value="Save" ajax="false" action="#{randomIdeaController.saveIdea}">
+				<f:setPropertyActionListener value="2" target="#{randomIdeaController.toView}" />
+			</p:commandButton>
 		</f:facet>
 	</p:panelGrid>
 </ui:composition>

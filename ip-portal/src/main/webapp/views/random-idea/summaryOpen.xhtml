@@ -16,10 +16,11 @@
 			<p:outputLabel id="lblSumoIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:commandButton id="btnDownload" value="Download" ajax="false" disabled="true">
-				<!-- disabled="#{randomIdeaController.fileAvail}" -->
-				<p:fileDownload value="#{randomIdeaController.fileContent}" />
-			</p:commandButton>
+			<p:outputLabel value="No Attachments" rendered="#{!randomIdeaController.ideaBean.imgAvail}" />
+			<h:outputLink value="#{randomIdeaController.ideaBean.blobUrl}" rendered="#{randomIdeaController.ideaBean.imgAvail}">
+				<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+				<p:outputLabel value="#{randomIdeaController.ideaBean.fileName}" style="font-weight: 0.6em" />
+			</h:outputLink>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblSumoITag" value="Keywords to Describe Your Idea : " />
@@ -71,13 +72,11 @@
 				<p:dataScroller mode="inline" scrollHeight="200" id="dtViewComments" value="#{randomIdeaController.comments}" var="comment" chunkSize="2">
 					<p:panelGrid styleClass="panelgridView" columns="1">
 						<p:column>
-							<p:outputLabel style="font-size: 0.8em" value="#{comment.usrScreenName}" />
-						</p:column>
-						<p:column>
 							<p:outputLabel value="#{comment.tagText}" escape="false" />
 						</p:column>
 						<p:column>
-							<p:outputLabel style="font-size: 0.6em" value="#{comment.tagDate}" />
+							<p:outputLabel style="text-align: left !important; font-size: 0.8em" value="#{comment.usrScreenName}" />
+							<p:outputLabel style="text-align: right !important; font-size: 0.6em" value="#{comment.tagDate}" />
 						</p:column>
 					</p:panelGrid>
 				</p:dataScroller>
@@ -91,7 +90,7 @@
 			</p:column>
 		</p:panelGrid>
 	</p:overlayPanel>
-	<p:overlayPanel my="right bottom" at="left top" dynamic="true" for="giLike" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
+	<p:overlayPanel my="right bottom" at="left top" dynamic="true" for="giLike" showEvent="mouseover" hideEvent="mousedown" dismissable="true" showCloseIcon="true">
 		<p:panelGrid styleClass="panelGridView" id="pnlIdeaLikes" columns="1">
 			<p:tagCloud id="tgLikes" model="#{randomIdeaController.likes}" />
 		</p:panelGrid>

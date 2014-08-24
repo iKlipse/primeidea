@@ -262,6 +262,8 @@ public class ClaimController implements Serializable {
 			bean.setRewardsId(message.getRewardsId());
 			bean.setUserId(message.getUserId());
 			bean.setClaimComment(message.getClaimComment());
+			bean.setUserName(message.getUserName());
+			bean.setcStatusName(message.getcStatusName());
 			ret.add(bean);
 		}
 		return ret;
@@ -281,6 +283,8 @@ public class ClaimController implements Serializable {
 			bean.setRewardsId(message.getRewardsId());
 			bean.setUserId(message.getUserId());
 			bean.setClaimComment(message.getClaimComment());
+			bean.setUserName(message.getUserName());
+			bean.setcStatusName(message.getcStatusName());
 			ret.add(bean);
 		}
 		return ret;

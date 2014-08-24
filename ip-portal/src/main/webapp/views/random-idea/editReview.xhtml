@@ -12,10 +12,11 @@
 			<p:outputLabel id="lblEdtrIStatus" value="Status : " />
 		</p:column>
 		<p:column>
-			<p:selectOneMenu id="somEdtrIStatus" value="#{randomIdeaController.ideaBean.setStatusId}">
-				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-				<f:selectItems value="#{randomIdeaController.ideaStatuses}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
-			</p:selectOneMenu>
+			<p:outputLabel value="No Attachments" rendered="#{!randomIdeaController.ideaBean.imgAvail}" />
+			<h:outputLink value="#{randomIdeaController.ideaBean.blobUrl}" rendered="#{randomIdeaController.ideaBean.imgAvail}">
+				<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+				<p:outputLabel value="#{randomIdeaController.ideaBean.fileName}" style="font-weight: 0.6em" />
+			</h:outputLink>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtrIDesc" value="Description : " />
@@ -33,10 +34,10 @@
 			<p:outputLabel id="lblEdtrIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:outputLabel value="No Attachments" rendered="#{!randomIdeaController.ideaBean.imgAvail}" />
-			<h:outputLink value="#{randomIdeaController.ideaBean.blobUrl}" rendered="#{randomIdeaController.ideaBean.imgAvail}">
+			<p:outputLabel value="No Attachments" rendered="#{!idea.imgAvail}" />
+			<h:outputLink value="#{idea.blobUrl}" rendered="#{idea.imgAvail}">
 				<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
-				<p:outputLabel value="#{randomIdeaController.ideaBean.fileName}" style="font-weight: 0.6em" />
+				<p:outputLabel value="#{idea.fileName}" style="font-weight: 0.6em" />
 			</h:outputLink>
 		</p:column>
 		<p:column>
@@ -53,6 +54,15 @@
 			<p:selectCheckboxMenu id="scmGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{randomIdeaController.selGrpId}">
 				<f:selectItems value="#{randomIdeaController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 			</p:selectCheckboxMenu>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblRevUser" value="Review User" />
+		</p:column>
+		<p:column>
+			<p:selectOneMenu id="rvAdmUser" value="#{randomIdeaController.ideaBean.revUserId}">
+				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+				<f:selectItems value="#{randomIdeaController.admUsers}" var="a" itemLabel="#{a.fName} #{a.lName}" itemValue="#{a.uId}" />
+			</p:selectOneMenu>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtrCrtdBy" value="Created By : " />

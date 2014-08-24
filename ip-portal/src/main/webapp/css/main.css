@@ -32,7 +32,6 @@
 .dgView {
 	border: solid 1px grey !important;
 	text-align: center !important;
-	height: 100% !important;
 }
 
 .ui-selectonemenu-label {
@@ -60,4 +59,9 @@
 .noBorder {
 	border-width: 0px !important;
 	border-style: solid !important;
+}
+
+.fontBold {
+	font-weight: bold !important;
+	font-size: 1.1em !important;
 }

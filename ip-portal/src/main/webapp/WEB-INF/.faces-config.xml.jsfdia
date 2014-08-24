@@ -174,14 +174,20 @@
     TARGET="rules:#views#solution#container#summaryContainer.xhtml"
     TITLE="sols" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="solsr::#views#solution#container#summaryReviewContainer.xhtml"
+    ID="solso::#views#solution#container#summaryOpenContainer.xhtml"
     NAME="output4"
+    PATH="/views/solution/container/summaryOpenContainer.xhtml"
+    TARGET="rules:#views#solution#container#summaryOpenContainer.xhtml"
+    TITLE="solso" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="solsr::#views#solution#container#summaryReviewContainer.xhtml"
+    NAME="output5"
     PATH="/views/solution/container/summaryReviewContainer.xhtml"
     TARGET="rules:#views#solution#container#summaryReviewContainer.xhtml"
     TITLE="solsr" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="soler::#views#solution#container#editReviewContainer.xhtml"
-    NAME="output5"
+    NAME="output6"
     PATH="/views/solution/container/editReviewContainer.xhtml"
     TARGET="rules:#views#solution#container#editReviewContainer.xhtml"
     TITLE="soler" model-entity="JSFProcessItemOutput"/>
@@ -341,16 +347,12 @@
   PATH="/views/solution/main.xhtml" SHAPE="288,1041,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules::10" SHAPE="32,5377,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules::10" NAME="item" model-entity="JSFProcessItem">
-   <PROCESS-ITEM-OUTPUT
-    ID="bovw::#views#tag#container#tagCreateContainer.xhtml"
-    NAME="output" PATH="/views/tag/container/tagCreateContainer.xhtml"
-    TARGET="rules:#views#tag#container#tagCreateContainer.xhtml"
-    TITLE="bovw" model-entity="JSFProcessItemOutput"/>
-   <PROCESS-ITEM-OUTPUT
-    ID="bosw::#views#tag#container#tagSummaryContainer.xhtml"
-    NAME="output1" PATH="/views/tag/container/tagSummaryContainer.xhtml"
-    TARGET="rules:#views#tag#container#tagSummaryContainer.xhtml"
-    TITLE="bosw" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="bovw::#views#tag#create.xhtml" NAME="output"
+    PATH="/views/tag/create.xhtml"
+    TARGET="rules:#views#tag#create.xhtml" TITLE="bovw" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="bosw::#views#tag#summary.xhtml"
+    NAME="output1" PATH="/views/tag/summary.xhtml"
+    TARGET="rules:#views#tag#summary.xhtml" TITLE="bosw" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules::11" SHAPE="32,7201,0,0" model-entity="JSFProcessGroup">
@@ -409,12 +411,8 @@
   NAME="rules:#views#challenge#container#submitSolContainer.xhtml"
   PATH="/views/challenge/container/submitSolContainer.xhtml"
   SHAPE="304,1697,0,0" model-entity="JSFProcessGroup"/>
- <PROCESS-ITEM
-  NAME="rules:#views#tag#container#tagSummaryContainer.xhtml"
-  PATH="/views/tag/container/tagSummaryContainer.xhtml"
-  SHAPE="256,6545,0,0" model-entity="JSFProcessGroup"/>
- <PROCESS-ITEM
-  NAME="rules:#views#tag#container#tagCreateContainer.xhtml"
-  PATH="/views/tag/container/tagCreateContainer.xhtml"
-  SHAPE="256,6401,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#views#tag#create.xhtml"
+  PATH="/views/tag/create.xhtml" SHAPE="256,6401,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#views#tag#summary.xhtml"
+  PATH="/views/tag/summary.xhtml" SHAPE="256,6433,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

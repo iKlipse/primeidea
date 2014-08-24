@@ -244,9 +244,12 @@ public class IdeaService {
 				}
 			}
 			IpReview ipReview = ipReviewDAO.findByEntityIdEntityName(idea.getIdeaId(), "ip_idea");
+			if (ipReview == null) {
+				ipReview = new IpReview();
+				ipReview.setRevId(ipNativeSQLDAO.getNextId(IpReview.class));
+			}
 			ipReview.setIpUser(ipUserDAO.findById(idea.getRevUserId()));
 			ipReview.setRevEntityId(idea.getIdeaId());
-			ipReview.setRevId(ipNativeSQLDAO.getNextId(IpReview.class));
 			ipReview.setRevEntityName("ip_idea");
 			ipReviewDAO.merge(ipReview);
 			ResponseMessage message = new ResponseMessage();
@@ -281,11 +284,13 @@ public class IdeaService {
 				idea.setIdeaTitle(ipIdea.getIdeaTitle());
 				if (ipIdea.getIpIdeaCat() != null)
 					idea.setSelCatId(ipIdea.getIpIdeaCat().getIcId().longValue());
-				if (ipIdea.getIpIdeaStatus() != null)
+				if (ipIdea.getIpIdeaStatus() != null) {
 					idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
+					idea.setStatusName(ipIdea.getIpIdeaStatus().getIsDesc());
+				}				    
 				if (ipIdea.getIpUser() != null) {
 					idea.setCrtdById(ipIdea.getIpUser().getUserId());
-					idea.setCrtdByName(ipIdea.getIpUser().getUserFName() + " " + ipIdea.getIpUser().getUserLName());
+					idea.setCrtdByName(ipIdea.getIpUser().getUserScreenName());
 				}
 				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
 				if (val != null) {
@@ -340,11 +345,13 @@ public class IdeaService {
 				idea.setIdeaTitle(ipIdea.getIdeaTitle());
 				if (ipIdea.getIpIdeaCat() != null)
 					idea.setSelCatId(ipIdea.getIpIdeaCat().getIcId().longValue());
-				if (ipIdea.getIpIdeaStatus() != null)
+				if (ipIdea.getIpIdeaStatus() != null) {
 					idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
+					idea.setStatusName(ipIdea.getIpIdeaStatus().getIsDesc());
+				}
 				if (ipIdea.getIpUser() != null) {
 					idea.setCrtdById(ipIdea.getIpUser().getUserId());
-					idea.setCrtdByName(ipIdea.getIpUser().getUserFName() + " " + ipIdea.getIpUser().getUserLName());
+					idea.setCrtdByName(ipIdea.getIpUser().getUserScreenName());
 				}
 				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
 				if (val != null) {
@@ -399,11 +406,13 @@ public class IdeaService {
 				idea.setIdeaTitle(ipIdea.getIdeaTitle());
 				if (ipIdea.getIpIdeaCat() != null)
 					idea.setSelCatId(ipIdea.getIpIdeaCat().getIcId().longValue());
-				if (ipIdea.getIpIdeaStatus() != null)
+				if (ipIdea.getIpIdeaStatus() != null) {
 					idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
+					idea.setStatusName(ipIdea.getIpIdeaStatus().getIsDesc());
+				}
 				if (ipIdea.getIpUser() != null) {
 					idea.setCrtdById(ipIdea.getIpUser().getUserId());
-					idea.setCrtdByName(ipIdea.getIpUser().getUserFName() + " " + ipIdea.getIpUser().getUserLName());
+					idea.setCrtdByName(ipIdea.getIpUser().getUserScreenName());
 				}
 				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
 				if (val != null) {
@@ -458,11 +467,13 @@ public class IdeaService {
 				idea.setIdeaTitle(ipIdea.getIdeaTitle());
 				if (ipIdea.getIpIdeaCat() != null)
 					idea.setSelCatId(ipIdea.getIpIdeaCat().getIcId().longValue());
-				if (ipIdea.getIpIdeaStatus() != null)
+				if (ipIdea.getIpIdeaStatus() != null) {
 					idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
+					idea.setStatusName(ipIdea.getIpIdeaStatus().getIsDesc());
+				}
 				if (ipIdea.getIpUser() != null) {
 					idea.setCrtdById(ipIdea.getIpUser().getUserId());
-					idea.setCrtdByName(ipIdea.getIpUser().getUserFName() + " " + ipIdea.getIpUser().getUserLName());
+					idea.setCrtdByName(ipIdea.getIpUser().getUserScreenName());
 				}
 				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
 				if (val != null) {
@@ -517,11 +528,13 @@ public class IdeaService {
 				idea.setIdeaTitle(ipIdea.getIdeaTitle());
 				if (ipIdea.getIpIdeaCat() != null)
 					idea.setSelCatId(ipIdea.getIpIdeaCat().getIcId().longValue());
-				if (ipIdea.getIpIdeaStatus() != null)
+				if (ipIdea.getIpIdeaStatus() != null) {
 					idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
+					idea.setStatusName(ipIdea.getIpIdeaStatus().getIsDesc());
+				}
 				if (ipIdea.getIpUser() != null) {
 					idea.setCrtdById(ipIdea.getIpUser().getUserId());
-					idea.setCrtdByName(ipIdea.getIpUser().getUserFName() + " " + ipIdea.getIpUser().getUserLName());
+					idea.setCrtdByName(ipIdea.getIpUser().getUserScreenName());
 				}
 				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
 				if (val != null) {
@@ -576,12 +589,15 @@ public class IdeaService {
 				idea.setIdeaTitle(ipIdea.getIdeaTitle());
 				if (ipIdea.getIpIdeaCat() != null)
 					idea.setSelCatId(ipIdea.getIpIdeaCat().getIcId().longValue());
-				if (ipIdea.getIpIdeaStatus() != null)
+				if (ipIdea.getIpIdeaStatus() != null) {
 					idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
-				if (ipIdea.getIpUser() != null)
+					idea.setStatusName(ipIdea.getIpIdeaStatus().getIsDesc());
+				}
+				if (ipIdea.getIpUser() != null) {
 					idea.setCrtdById(ipIdea.getIpUser().getUserId());
-				idea.setCrtdByName(ipIdea.getIpUser().getUserFName() + " " + ipIdea.getIpUser().getUserLName());
-				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
+				    idea.setCrtdByName(ipIdea.getIpUser().getUserScreenName());
+				}
+				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());				
 				if (val != null) {
 					Long[] grps = new Long[val.size()];
 					int i = 0;
@@ -632,11 +648,13 @@ public class IdeaService {
 			idea.setIdeaTitle(ipIdea.getIdeaTitle());
 			if (ipIdea.getIpIdeaCat() != null)
 				idea.setSelCatId(ipIdea.getIpIdeaCat().getIcId().longValue());
-			if (ipIdea.getIpIdeaStatus() != null)
+			if (ipIdea.getIpIdeaStatus() != null) {
 				idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
+				idea.setStatusName(ipIdea.getIpIdeaStatus().getIsDesc());
+			}
 			if (ipIdea.getIpUser() != null) {
 				idea.setCrtdById(ipIdea.getIpUser().getUserId());
-				idea.setCrtdByName(ipIdea.getIpUser().getUserFName() + " " + ipIdea.getIpUser().getUserLName());
+				idea.setCrtdByName(ipIdea.getIpUser().getUserScreenName());
 			}
 		} catch (Exception e) {
 			logger.error(e, e);

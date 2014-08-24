@@ -108,6 +108,8 @@ public class ClaimService {
 				message.setcStatusId(claim.getIpClaimStatus().getCsId());
 				message.setRewardsId(claim.getIpRewards().getRwId());
 				message.setUserId(claim.getIpUser().getUserId());
+				message.setUserName(claim.getIpUser().getUserScreenName());
+				message.setcStatusName(claim.getIpClaimStatus().getCsDesc());
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
@@ -132,6 +134,8 @@ public class ClaimService {
 			message.setcStatusId(claim.getIpClaimStatus().getCsId());
 			message.setRewardsId(claim.getIpRewards().getRwId());
 			message.setUserId(claim.getIpUser().getUserId());
+			message.setUserName(claim.getIpUser().getUserScreenName());
+			message.setcStatusName(claim.getIpClaimStatus().getCsDesc());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -157,6 +161,8 @@ public class ClaimService {
 				message.setcStatusId(claim.getIpClaimStatus().getCsId());
 				message.setRewardsId(claim.getIpRewards().getRwId());
 				message.setUserId(claim.getIpUser().getUserId());
+				message.setUserName(claim.getIpUser().getUserScreenName());
+				message.setcStatusName(claim.getIpClaimStatus().getCsDesc());
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
@@ -184,6 +190,8 @@ public class ClaimService {
 				message.setcStatusId(claim.getIpClaimStatus().getCsId());
 				message.setRewardsId(claim.getIpRewards().getRwId());
 				message.setUserId(claim.getIpUser().getUserId());
+				message.setUserName(claim.getIpUser().getUserScreenName());
+				message.setcStatusName(claim.getIpClaimStatus().getCsDesc());
 				ret.add((T) message);
 			}
 		} catch (Exception e) {

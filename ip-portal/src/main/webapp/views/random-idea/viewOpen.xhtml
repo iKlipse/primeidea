@@ -4,26 +4,22 @@
 			<f:facet name="header">Title</f:facet>
 			<p:outputLabel id="txtVwOIdeaTitle" value="#{idea.ideaTitle}" />
 		</p:column>
-		<p:column>
+		<p:column sortBy="#{idea.statusName}">
 			<f:facet name="header">Status</f:facet>
-			<p:selectOneMenu id="somVwOIStatus" value="#{idea.setStatusId}" disabled="true">
-				<f:selectItems value="#{randomIdeaController.ideaStatuses}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
-			</p:selectOneMenu>
+			<p:outputLabel id="somVwOIStatus" value="#{idea.statusName}" />
 		</p:column>
-		<p:column>
+		<p:column sortBy="#{idea.crtdByName}">
 			<f:facet name="header">Created By</f:facet>
-			<p:selectOneMenu id="somVwOACrtdBy" value="#{idea.crtdById}" disabled="true">
-				<f:selectItems value="#{randomIdeaController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
-			</p:selectOneMenu>
+			<p:outputLabel id="somVwOACrtdBy" value="#{idea.crtdByName}" />
 		</p:column>
 		<p:column>
-			<p:commandButton id="viewVwOButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{randomIdeaController.showEditOpenIdea}">
+			<p:commandButton id="viewVwOButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{randomIdeaController.showEditOpenIdea}">
 				<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
 				<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />
 			</p:commandButton>
 		</p:column>
 		<p:column>
-			<p:commandButton id="summaryVwOButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{randomIdeaController.showSummaryOpenIdea}">
+			<p:commandButton id="summaryVwOButton" icon="ui-icon-clipboard" ajax="false" immediate="true" action="#{randomIdeaController.showSummaryOpenIdea}">
 				<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
 				<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />
 			</p:commandButton>

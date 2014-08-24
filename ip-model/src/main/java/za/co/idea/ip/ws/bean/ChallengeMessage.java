@@ -27,6 +27,8 @@ public class ChallengeMessage {
 	private Long[] groupIdList;
 	private String blobUrl;
 	private Long revUserId;
+	private String statusName;
+	private String catName;
 
 	public Long getId() {
 		return id;
@@ -194,6 +196,22 @@ public class ChallengeMessage {
 
 	public void setRevUserId(Long revUserId) {
 		this.revUserId = revUserId;
+	}
+
+	public String getStatusName() {
+		return statusName;
+	}
+
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
+	}
+
+	public String getCatName() {
+		return catName;
+	}
+
+	public void setCatName(String catName) {
+		this.catName = catName;
 	}
 
 }

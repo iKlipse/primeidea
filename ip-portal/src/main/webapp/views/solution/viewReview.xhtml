@@ -4,32 +4,26 @@
 			<f:facet name="header">Title</f:facet>
 			<p:outputLabel id="txtVwrSolutionTitle" value="#{solution.title}" />
 		</p:column>
-		<p:column>
+		<p:column sortBy="#{solution.catName}">
 			<f:facet name="header">Category</f:facet>
-			<p:selectOneMenu id="somVwrICat" value="#{solution.catId}" disabled="true">
-				<f:selectItems value="#{challengeController.solutionCats}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
-			</p:selectOneMenu>
+			<p:outputLabel id="somVwrICat" value="#{solution.catName}" />
 		</p:column>
-		<p:column>
+		<p:column sortBy="#{solution.statusName}">
 			<f:facet name="header">Status</f:facet>
-			<p:selectOneMenu id="somVwrIStatus" value="#{solution.statusId}" disabled="true">
-				<f:selectItems value="#{challengeController.solutionStatuses}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
-			</p:selectOneMenu>
+			<p:outputLabel id="somVwrIStatus" value="#{solution.statusName}" />
 		</p:column>
-		<p:column>
+		<p:column sortBy="#{solution.crtByName}">
 			<f:facet name="header">Created By</f:facet>
-			<p:selectOneMenu id="somVwArCrtdBy" value="#{solution.crtdById}" disabled="true">
-				<f:selectItems value="#{challengeController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
-			</p:selectOneMenu>
+			<p:outputLabel id="somVwArCrtdBy" value="#{solution.crtByName}" />
 		</p:column>
 		<p:column>
-			<p:commandButton id="viewVwrButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{challengeController.showEditReviewSolution}">
+			<p:commandButton id="viewVwrButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{challengeController.showEditReviewSolution}">
 				<f:setPropertyActionListener value="#{solution}" target="#{challengeController.solutionBean}" />
 				<f:setPropertyActionListener value="3" target="#{challengeController.returnView}" />
 			</p:commandButton>
 		</p:column>
 		<p:column>
-			<p:commandButton id="summaryVwrButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{challengeController.showSummaryReviewSolution}">
+			<p:commandButton id="summaryVwrButton" icon="ui-icon-clipboard" ajax="false" immediate="true" action="#{challengeController.showSummaryReviewSolution}">
 				<f:setPropertyActionListener value="#{solution}" target="#{challengeController.solutionBean}" />
 				<f:setPropertyActionListener value="3" target="#{challengeController.returnView}" />
 			</p:commandButton>

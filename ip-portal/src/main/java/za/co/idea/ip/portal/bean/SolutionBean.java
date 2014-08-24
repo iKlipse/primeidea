@@ -35,6 +35,8 @@ public class SolutionBean implements Serializable {
 	private List<TagBean> solComments;
 	private String blobUrl;
 	private Long revUserId;
+	private String catName;
+	private String statusName;
 
 	public Long getId() {
 		return id;
@@ -242,6 +244,22 @@ public class SolutionBean implements Serializable {
 
 	public void setRevUserId(Long revUserId) {
 		this.revUserId = revUserId;
+	}
+
+	public String getCatName() {
+		return catName;
+	}
+
+	public void setCatName(String catName) {
+		this.catName = catName;
+	}
+
+	public String getStatusName() {
+		return statusName;
+	}
+
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
 	}
 
 }

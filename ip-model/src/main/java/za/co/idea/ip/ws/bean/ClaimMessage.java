@@ -13,6 +13,8 @@ public class ClaimMessage {
 	private String claimDesc;
 	private String claimComment;
 	private Date claimCrtdDt;
+	private String cStatusName;
+	private String userName;
 
 	public Long getClaimId() {
 		return claimId;
@@ -68,6 +70,22 @@ public class ClaimMessage {
 
 	public void setClaimComment(String claimComment) {
 		this.claimComment = claimComment;
+	}
+
+	public String getcStatusName() {
+		return cStatusName;
+	}
+
+	public void setcStatusName(String cStatusName) {
+		this.cStatusName = cStatusName;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 }

@@ -694,6 +694,7 @@ public class RandomIdeaController implements Serializable {
 			ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
 			ideaMessage.setGroupIdList(toLongArray(selGrpId));
+			ideaMessage.setRevUserId(ideaBean.getRevUserId());
 			if (saveAsOpen) {
 				ideaMessage.setSetStatusId(2l);
 			} else {
@@ -769,6 +770,7 @@ public class RandomIdeaController implements Serializable {
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
 			ideaMessage.setSetStatusId(ideaBean.getSetStatusId());
 			ideaMessage.setGroupIdList(toLongArray(selGrpId));
+			ideaMessage.setRevUserId(ideaBean.getRevUserId());
 			ResponseMessage response = updateIdeaClient.accept(MediaType.APPLICATION_JSON).put(ideaMessage, ResponseMessage.class);
 			updateIdeaClient.close();
 			if (response.getStatusCode() == 0) {

@@ -24,7 +24,7 @@
 			</p:column>
 
 			<p:column>
-				<p:commandButton id="bviewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminController.showEditNews}">
+				<p:commandButton id="bviewButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{adminController.showEditNews}">
 					<f:setPropertyActionListener value="#{news}" target="#{adminController.newsBean}" />
 					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
 				</p:commandButton>

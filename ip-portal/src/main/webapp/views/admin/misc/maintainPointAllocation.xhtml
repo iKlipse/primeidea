@@ -31,7 +31,7 @@
 				<p:outputLabel id="klblPntVal" value="#{bean.allocVal}" />
 			</p:column>
 			<p:column>
-				<p:commandButton id="kviewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminController.showAllocationMod}">
+				<p:commandButton id="kviewButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{adminController.showAllocationMod}">
 					<f:setPropertyActionListener value="#{bean}" target="#{adminController.allocationBean}" />
 				</p:commandButton>
 			</p:column>

@@ -9,11 +9,9 @@
 					<f:facet name="header">Claim Desc</f:facet>
 					<p:outputLabel id="txtClaimId" value="#{claim.claimDesc}" />
 				</p:column>
-				<p:column>
+				<p:column sortBy="#{claim.cStatusName}">
 					<f:facet name="header">Status</f:facet>
-					<p:selectOneMenu id="somIStatus" value="#{claim.cStatusId}" disabled="true">
-						<f:selectItems value="#{claimController.claimStatus}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
-					</p:selectOneMenu>
+					<p:outputLabel id="somIStatus" value="#{claim.cStatusName}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">Created Date</f:facet>
@@ -21,14 +19,12 @@
 			            <f:convertDateTime pattern="yyyy.MM.dd HH:mm" />
 			        </p:outputLabel>
 				</p:column>
-				<p:column>
+				<p:column sortBy="#{claim.userName}">
 					<f:facet name="header">Created By</f:facet>
-					<p:selectOneMenu id="somACrtdBy" value="#{claim.userId}" disabled="true">
-						<f:selectItems value="#{claimController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
-					</p:selectOneMenu>
+					<p:outputLabel id="somACrtdBy" value="#{claim.userName}" />
 				</p:column>
 				<p:column rendered="#{accessBean.editClaimEnabled}">
-					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{claimController.showEditClaim}">
+					<p:commandButton id="viewButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{claimController.showEditClaim}">
 						<f:setPropertyActionListener value="#{claim}" target="#{claimController.claimBean}" />
 					</p:commandButton>
 				</p:column>

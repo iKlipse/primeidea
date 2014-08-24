@@ -15,7 +15,7 @@
 				<p:outputLabel id="llblDesc" value="#{bean.desc}" />
 			</p:column>
 			<p:column>
-				<p:commandButton id="lviewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminController.showMetaData}">
+				<p:commandButton id="lviewButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{adminController.showMetaData}">
 					<f:setPropertyActionListener value="#{bean}" target="#{adminController.bean}" />
 					<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
 				</p:commandButton>

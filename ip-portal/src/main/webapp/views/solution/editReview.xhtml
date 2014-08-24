@@ -1,5 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
-	<p:panelGrid styleClass="panelGridView"  columns="2" id="pnlEditReviewSolution">
+	<p:panelGrid styleClass="panelGridView" columns="2" id="pnlEditReviewSolution">
 		<p:column>
 			<p:outputLabel id="lblSrChal" value="Challenges : " />
 		</p:column>
@@ -37,7 +37,7 @@
 			<p:outputLabel id="lblSrDesc" value="Description : " />
 		</p:column>
 		<p:column>
-			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="txtSrDesc" value="#{challengeController.solutionBean.desc}"  />
+			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="txtSrDesc" value="#{challengeController.solutionBean.desc}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblSrTag" value="Keywords to Describe Your Solution : " />
@@ -49,10 +49,10 @@
 			<p:outputLabel id="lblrIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:outputLabel value="No Attachments" rendered="#{!solution.solImgAvl}" />
-			<h:outputLink value="#{solution.blobUrl}" rendered="#{solution.solImgAvl}">
-			    <p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
-				<p:outputLabel value="#{solution.fileName}" style="font-weight: 0.6em" />
+			<p:outputLabel value="No Attachments" rendered="#{!challengeController.solutionBean.solImgAvl}" />
+			<h:outputLink value="#{challengeController.solutionBean.blobUrl}" rendered="#{challengeController.solutionBean.solImgAvl}">
+				<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+				<p:outputLabel value="#{challengeController.solutionBean.fileName}" style="font-weight: 0.6em" />
 			</h:outputLink>
 		</p:column>
 		<p:column>
@@ -61,14 +61,20 @@
 		<p:column>
 			<p:fileUpload id="fuSrUpload" fileUploadListener="#{challengeController.solFileUploadHandle}" multiple="false" />
 		</p:column>
+		<p:column>
+			<p:selectOneMenu id="rvAdmUser" value="#{challengeController.solutionBean.revUserId}">
+				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+				<f:selectItems value="#{challengeController.admUsers}" var="a" itemLabel="#{a.fName} #{a.lName}" itemValue="#{a.uId}" />
+			</p:selectOneMenu>
+		</p:column>
 		<f:facet name="footer">
-				<p:commandButton id="btnrSave" value="Save" ajax="false" action="#{challengeController.updateSolution}">
-					<f:setPropertyActionListener value="4" target="#{challengeController.toView}" />
-				</p:commandButton>
-				<p:commandButton id="btnVrCancel" value="Return To View" ajax="false" action="#{challengeController.redirectMain}">
-					<f:setPropertyActionListener value="3" target="#{landingPageController.toView}" />
-					<f:setPropertyActionListener value="4" target="#{challengeController.toView}" />
-				</p:commandButton>
+			<p:commandButton id="btnrSave" value="Save" ajax="false" action="#{challengeController.updateSolution}">
+				<f:setPropertyActionListener value="4" target="#{challengeController.toView}" />
+			</p:commandButton>
+			<p:commandButton id="btnVrCancel" value="Return To View" ajax="false" action="#{challengeController.redirectMain}">
+				<f:setPropertyActionListener value="3" target="#{landingPageController.toView}" />
+				<f:setPropertyActionListener value="4" target="#{challengeController.toView}" />
+			</p:commandButton>
 		</f:facet>
 	</p:panelGrid>
 </ui:composition>

@@ -3,6 +3,7 @@ package za.co.idea.ip.orm.dao;
 import java.util.List;
 
 import org.hibernate.LockMode;
+import org.hibernate.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -142,7 +143,20 @@ public class IpReviewDAO extends HibernateDaoSupport {
 	}
 
 	public IpReview findByEntityIdEntityName(Long entityId, String entityName) {
-		return null;
+		log.debug("finding all reviews by entity id");
+		try {
+			Query query = getSession().getNamedQuery("getByEntityIdEntityName");
+			query.setLong("id", entityId);
+			query.setString("tblNm", entityName);
+			IpReview ret = null;
+			List obj = query.list();
+			if (obj != null && obj.size() > 0)
+				ret = (IpReview) obj.get(0);
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
 	}
 
 	public static IpReviewDAO getFromApplicationContext(ApplicationContext ctx) {

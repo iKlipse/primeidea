@@ -1,10 +1,8 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<p:dataTable id="dtViewClaims" value="#{landingPageController.viewClaimBeans}" var="claim" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Claims Found">
-		<p:column>
-			<f:facet name="header">Status</f:facet>
-			<p:selectOneMenu id="somIStatus" value="#{claim.cStatusId}">
-				<f:selectItems value="#{landingPageController.claimStatus}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
-			</p:selectOneMenu>
+		<p:column sortBy="#{claim.cStatusName}">
+					<f:facet name="header">Status</f:facet>
+					<p:outputLabel id="somIStatus" value="#{claim.cStatusName}" />
 		</p:column>
 		<p:column>
 			<f:facet name="header">Created Date</f:facet>
@@ -12,11 +10,9 @@
 			   <f:convertDateTime pattern="yyyy.MM.dd HH:mm" />
 			</p:outputLabel>
 		</p:column>
-		<p:column>
-			<f:facet name="header">Created By</f:facet>
-			<p:selectOneMenu id="somACrtdBy" value="#{claim.userId}" disabled="true">
-				<f:selectItems value="#{landingPageController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
-			</p:selectOneMenu>
+		<p:column sortBy="#{claim.userName}">
+					<f:facet name="header">Created By</f:facet>
+					<p:outputLabel id="somACrtdBy" value="#{claim.userName}" />
 		</p:column>
 	</p:dataTable>
 </ui:composition>

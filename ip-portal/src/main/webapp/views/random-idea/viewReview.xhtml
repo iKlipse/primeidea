@@ -4,26 +4,22 @@
 			<f:facet name="header">Title</f:facet>
 			<p:outputLabel id="txtVwRIdeaTitle" value="#{idea.ideaTitle}" />
 		</p:column>
-		<p:column>
+		<p:column sortBy="#{idea.statusName}">
 			<f:facet name="header">Status</f:facet>
-			<p:selectOneMenu id="somVwRIStatus" value="#{idea.setStatusId}" disabled="true">
-				<f:selectItems value="#{randomIdeaController.ideaStatuses}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
-			</p:selectOneMenu>
+			<p:outputLabel id="somVwRIStatus" value="#{idea.statusName}" />
 		</p:column>
-		<p:column>
+		<p:column sortBy="#{idea.crtdByName}">
 			<f:facet name="header">Created By</f:facet>
-			<p:selectOneMenu id="somVwRACrtdBy" value="#{idea.crtdById}" disabled="true">
-				<f:selectItems value="#{randomIdeaController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
-			</p:selectOneMenu>
+			<p:outputLabel id="somVwRACrtdBy" value="#{idea.crtdByName}" />
 		</p:column>
 		<p:column>
-			<p:commandButton id="viewVwRButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{randomIdeaController.showEditReviewIdea}">
+			<p:commandButton id="viewVwRButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{randomIdeaController.showEditReviewIdea}">
 				<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
 				<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />
 			</p:commandButton>
 		</p:column>
 		<p:column>
-			<p:commandButton id="summaryVwRButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{randomIdeaController.showSummaryReviewIdea}">
+			<p:commandButton id="summaryVwRButton" icon="ui-icon-clipboard" ajax="false" immediate="true" action="#{randomIdeaController.showSummaryReviewIdea}">
 				<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
 				<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />
 			</p:commandButton>

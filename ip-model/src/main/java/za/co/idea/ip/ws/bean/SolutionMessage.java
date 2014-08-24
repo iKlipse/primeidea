@@ -25,6 +25,8 @@ public class SolutionMessage {
 	private Long fileSize;
 	private String blobUrl;
 	private Long revUserId;
+	private String catName;
+	private String statusName;
 
 	public Long getId() {
 		return id;
@@ -176,6 +178,22 @@ public class SolutionMessage {
 
 	public void setRevUserId(Long revUserId) {
 		this.revUserId = revUserId;
+	}
+
+	public String getCatName() {
+		return catName;
+	}
+
+	public void setCatName(String catName) {
+		this.catName = catName;
+	}
+
+	public String getStatusName() {
+		return statusName;
+	}
+
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
 	}
 
 }

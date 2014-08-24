@@ -1930,6 +1930,8 @@ public class AdminController implements Serializable {
 			bean.setBlobUrl(groupMessage.getBlobUrl());
 			bean.setFileName(groupMessage.getFileName());
 			bean.setImgAvl(groupMessage.isImgAvl());
+			bean.setSelAdmUserName(groupMessage.getAdmUserName());
+			bean.setSelPGrpName(groupMessage.getpGrpName());
 			for (Long id : groupMessage.getUserIdList())
 				if (id != null)
 					bean.getUserIdList().add(id);

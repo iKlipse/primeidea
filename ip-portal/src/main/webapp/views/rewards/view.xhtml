@@ -4,11 +4,9 @@
 			<f:facet name="header">Title</f:facet>
 			<p:outputLabel id="txtRewardTitle" value="#{rewards.rwTitle}" />
 		</p:column>
-		<p:column>
+		<p:column sortBy="#{rewards.rCatName}">
 			<f:facet name="header">Category</f:facet>
-			<p:selectOneMenu id="somICat" value="#{rewards.rCatId}" disabled="true">
-				<f:selectItems value="#{rewardsController.rewardsCat}" var="ic" itemLabel="#{ic.desc}" itemValue="#{ic.id}" />
-			</p:selectOneMenu>
+			<p:outputLabel id="somICat" value="#{rewards.rCatName}" />
 		</p:column>
 		<p:column>
 			<f:facet name="header">Launch Date</f:facet>
@@ -23,7 +21,7 @@
 			</p:outputLabel>
 		</p:column>
 		<p:column>
-			<p:commandButton id="viewVwButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{rewardsController.showEditReward}">
+			<p:commandButton id="viewVwButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{rewardsController.showEditReward}">
 				<f:setPropertyActionListener value="#{rewards}" target="#{rewardsController.rewardsBean}" />
 			</p:commandButton>
 		</p:column>

@@ -26,6 +26,7 @@ public class IdeaMessage {
 	private Long[] groupIdList;
 	private String blobUrl;
 	private Long revUserId;
+	private String statusName;
 
 	public Long getIdeaId() {
 		return ideaId;
@@ -177,6 +178,14 @@ public class IdeaMessage {
 
 	public void setRevUserId(Long revUserId) {
 		this.revUserId = revUserId;
+	}
+
+	public String getStatusName() {
+		return statusName;
+	}
+
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
 	}
 
 }

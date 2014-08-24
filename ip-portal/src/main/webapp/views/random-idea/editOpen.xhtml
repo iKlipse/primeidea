@@ -55,6 +55,15 @@
 			</p:selectCheckboxMenu>
 		</p:column>
 		<p:column>
+			<p:outputLabel id="lblRevUser" value="Review User" />
+		</p:column>
+		<p:column>
+			<p:selectOneMenu id="rvAdmUser" value="#{randomIdeaController.ideaBean.revUserId}">
+				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+				<f:selectItems value="#{randomIdeaController.admUsers}" var="a" itemLabel="#{a.fName} #{a.lName}" itemValue="#{a.uId}" />
+			</p:selectOneMenu>
+		</p:column>
+		<p:column>
 			<p:outputLabel id="lblEdtoCrtdBy" value="Created By : " />
 		</p:column>
 		<p:column>

@@ -13,7 +13,7 @@
 						<p:outputLabel value="#{buildOn.tagText}" escape="false" />
 					</p:column>
 					<p:column>
-						<p:commandButton id="summaryButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{buildonController.showSummaryBuildon}">
+						<p:commandButton id="summaryButton" icon="ui-icon-clipboard" ajax="false" immediate="true" action="#{buildonController.showSummaryBuildon}">
 							<f:setPropertyActionListener value="#{buildOn}" target="#{buildonController.buildon}" />
 						</p:commandButton>
 					</p:column>

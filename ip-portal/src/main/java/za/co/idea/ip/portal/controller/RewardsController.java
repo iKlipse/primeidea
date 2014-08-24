@@ -785,6 +785,7 @@ public class RewardsController implements Serializable {
 			bean.setRwClaimable(totalPoints > message.getRwValue() && message.getRwQuantity() > 0);
 			bean.setRwTaggable(isWishlist(message.getRwId()));
 			bean.setBlobUrl(message.getBlobUrl());
+			bean.setrCatName(message.getrCatName());
 			ret.add(bean);
 		}
 		return ret;
@@ -816,6 +817,7 @@ public class RewardsController implements Serializable {
 			bean.setRwTaggable(isWishlist(message.getRwId()));
 			bean.setRwClaimable(totalPoints >= message.getRwValue() && message.getRwQuantity() > 0);
 			bean.setBlobUrl(message.getBlobUrl());
+			bean.setrCatName(message.getrCatName());
 			ret.add(bean);
 		}
 		return ret;
@@ -867,6 +869,7 @@ public class RewardsController implements Serializable {
 			bean.setRwClaimable(totalPoints >= message.getRwValue() && message.getRwQuantity() > 0);
 			bean.setRwTaggable(isWishlist(message.getRwId()));
 			bean.setBlobUrl(message.getBlobUrl());
+			bean.setrCatName(message.getrCatName());
 			ret.add(bean);
 		}
 		return ret;

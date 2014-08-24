@@ -16,10 +16,11 @@
 			<p:outputLabel id="lblSumIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:commandButton id="btnSumDownload" value="Download" ajax="false" disabled="true">
-				<!-- disabled="#{challengeController.chalFileAvail}" -->
-				<p:fileDownload value="#{challengeController.chalFileContent}" />
-			</p:commandButton>
+			<p:outputLabel value="No Attachments" rendered="#{!challengeController.challengeBean.imgAvail}" />
+			<h:outputLink value="#{challengeController.challengeBean.blobUrl}" rendered="#{challengeController.challengeBean.imgAvail}">
+				<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+				<p:outputLabel value="#{challengeController.challengeBean.fileName}" style="font-weight: 0.6em" />
+			</h:outputLink>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblSumITag" value="Keywords to Describe Your Challenge : " />
@@ -60,13 +61,11 @@
 				<p:dataScroller mode="inline" scrollHeight="200" id="dtSumViewComments" value="#{challengeController.chalComments}" var="comment" chunkSize="2">
 					<p:panelGrid styleClass="panelgridView" columns="1">
 						<p:column>
-							<p:outputLabel style="font-size: 0.8em" value="#{comment.usrScreenName}" />
-						</p:column>
-						<p:column>
 							<p:outputLabel value="#{comment.tagText}" escape="false" />
 						</p:column>
 						<p:column>
-							<p:outputLabel style="font-size: 0.6em" value="#{comment.tagDate}" />
+							<p:outputLabel style="text-align: left !important; font-size: 0.8em" value="#{comment.usrScreenName}" />
+							<p:outputLabel style="text-align: right !important; font-size: 0.6em" value="#{comment.tagDate}" />
 						</p:column>
 					</p:panelGrid>
 				</p:dataScroller>
@@ -79,7 +78,7 @@
 			</p:column>
 		</p:panelGrid>
 	</p:overlayPanel>
-	<p:overlayPanel my="right bottom" at="left top" dynamic="true" for="giSumLike" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
+	<p:overlayPanel my="right bottom" at="left top" dynamic="true" for="giSumLike" showEvent="mouseover" hideEvent="mousedown" dismissable="true" showCloseIcon="true">
 		<p:panelGrid styleClass="panelGridView" id="pnlSumChallengeLikes" columns="1">
 			<p:tagCloud id="tgSumLikes" model="#{challengeController.chalLikes}" />
 		</p:panelGrid>
@@ -106,10 +105,11 @@
 					<p:outputLabel id="txtSumICrtdDt" value="#{sol.crtdDt}" escape="false" />
 				</p:column>
 				<p:column>
-					<p:commandButton value="Download" ajax="false" disabled="true">
-						<!--disabled="#{!sol.solImgAvl}"-->
-						<p:fileDownload value="#{sol.solStream}" />
-					</p:commandButton>
+					<p:outputLabel value="No Attachments" rendered="#{!sol.solImgAvl}" />
+					<h:outputLink value="#{sol.blobUrl}" rendered="#{sol.solImgAvl}">
+						<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+						<p:outputLabel value="#{sol.fileName}" style="font-weight: 0.6em" />
+					</h:outputLink>
 				</p:column>
 			</p:panelGrid>
 		</p:panel>

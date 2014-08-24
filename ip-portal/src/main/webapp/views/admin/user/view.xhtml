@@ -35,7 +35,7 @@
 				<p:selectBooleanButton id="fsbbActive" value="#{user.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" disabled="true" />
 			</p:column>
 			<p:column>
-				<p:commandButton id="fviewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminController.showEditUser}">
+				<p:commandButton id="fviewButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{adminController.showEditUser}">
 					<f:setPropertyActionListener value="#{user}" target="#{adminController.userBean}" />
 					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
 				</p:commandButton>
