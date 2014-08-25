@@ -8,29 +8,29 @@
 					<f:selectItems value="#{adminController.allocEntityList}" />
 				</p:selectOneMenu>
 			</f:facet>
-			<p:column>
+			<p:column width="35%">
 				<f:facet name="header">Description</f:facet>
 				<p:outputLabel id="klblId" value="#{bean.allocDesc}" />
 			</p:column>
-			<p:column>
+			<p:column width="25%">
 				<f:facet name="header">Entity Name</f:facet>
 				<p:selectOneMenu id="ksomSelectEntityName" value="#{adminController.entity}">
 					<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
 					<f:selectItems value="#{adminController.allocEntityList}" />
 				</p:selectOneMenu>
 			</p:column>
-			<p:column>
+			<p:column width="15%">
 				<f:facet name="header">Status</f:facet>
 				<p:selectOneMenu id="ksomSelectEntityStatus" value="#{bean.allocStatusId}">
 					<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
 					<f:selectItems value="#{adminController.disStatusList}" var="status" itemLabel="#{status.desc}" itemValue="#{status.id}" />
 				</p:selectOneMenu>
 			</p:column>
-			<p:column>
+			<p:column width="15%">
 				<f:facet name="header">Point Value</f:facet>
 				<p:outputLabel id="klblPntVal" value="#{bean.allocVal}" />
 			</p:column>
-			<p:column>
+			<p:column width="10%">
 				<p:commandButton id="kviewButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{adminController.showAllocationMod}">
 					<f:setPropertyActionListener value="#{bean}" target="#{adminController.allocationBean}" />
 				</p:commandButton>

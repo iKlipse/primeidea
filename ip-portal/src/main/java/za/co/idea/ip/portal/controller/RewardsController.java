@@ -98,6 +98,7 @@ public class RewardsController implements Serializable {
 	private boolean showCrtReward;
 	private boolean showViewReward;
 	private boolean showOnlineStore;
+	private boolean titleAvail;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
@@ -396,8 +397,31 @@ public class RewardsController implements Serializable {
 
 	}
 
+	public void checkTitleAvailability() {
+		if (rewardsBean.getRwTitle() == null || rewardsBean.getRwTitle().length() == 0) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter Title to Check Availability", "Enter Title to Check Availability");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+		WebClient checkAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/reward/check/title/" + rewardsBean.getRwTitle());
+		Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
+		checkAvailablityClient.close();
+		titleAvail = avail.booleanValue();
+		if (titleAvail) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		} else {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Title Available", "Title Available");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+	}
+
 	public String saveRewards() {
 		try {
+			if (titleAvail) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
 			List<String> errors = validateRewards();
 			if (errors.size() > 0) {
 				for (String error : errors) {
@@ -467,6 +491,11 @@ public class RewardsController implements Serializable {
 
 	public String updateRewards() {
 		try {
+			if (titleAvail) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
 			List<String> errors = validateRewards();
 			if (errors.size() > 0) {
 				for (String error : errors) {
@@ -1387,6 +1416,14 @@ public class RewardsController implements Serializable {
 
 	public void setShowOnlineStore(boolean showOnlineStore) {
 		this.showOnlineStore = showOnlineStore;
+	}
+
+	public boolean isTitleAvail() {
+		return titleAvail;
+	}
+
+	public void setTitleAvail(boolean titleAvail) {
+		this.titleAvail = titleAvail;
 	}
 
 }

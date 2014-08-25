@@ -617,6 +617,21 @@ public class RewardsService {
 		return ret;
 	}
 
+	@GET
+	@Path("/reward/check/title/{title}")
+	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
+	public Boolean checkTitle(@PathParam("title") String title) {
+		try {
+			List rwByTitle = ipRewardsDAO.findByRwTitle(title);
+			Boolean ret = (rwByTitle != null && rwByTitle.size() > 0);
+			return ret;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 	public IpUserDAO getIpUserDAO() {
 		return ipUserDAO;
 	}

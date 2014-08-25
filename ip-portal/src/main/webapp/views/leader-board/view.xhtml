@@ -6,15 +6,17 @@
 				<p:dataGrid id="hdtViewStatsList" value="#{adminController.viewStatsBean}" var="stats" emptyMessage="Leader Board" columns="1">
 					<p:panel styleClass="panelView">
 						<p:panelGrid styleClass="panelGridView" columns="3">
-							<p:column id="clmUsrImg">
-								<p:graphicImage name="#{stats.imgPath}" library="images" height="25px" width="25px" rendered="#{stats.imgAvail}" />
-								<p:graphicImage name="profile.jpg" library="images" height="25px" width="25px" rendered="#{!stats.imgAvail}" />
+							<p:column>
+								<p:graphicImage id="clmUsrImg" name="#{stats.imgPath}" library="images" height="25px" width="25px" rendered="#{stats.imgAvail}" />
+								<p:graphicImage id="clmDefUsrImg" name="profile.jpg" library="images" height="25px" width="25px" rendered="#{!stats.imgAvail}" />
 								<p:tooltip for="clmUsrImg" value="#{stats.userScrNm}" />
+								<p:tooltip for="clmDefUsrImg" value="#{stats.userScrNm}" />
 							</p:column>
-							<p:column id="clmGrpImg">
-								<p:graphicImage name="#{stats.grpImgPath}" library="images" height="25px" width="25px" rendered="#{stats.grpImgAvail}" />
-								<p:graphicImage name="profile.jpg" library="images" height="25px" width="25px" rendered="#{!stats.grpImgAvail}" />
+							<p:column>
+								<p:graphicImage id="clmGrpImg" name="#{stats.grpImgPath}" library="images" height="25px" width="25px" rendered="#{stats.grpImgAvail}" />
+								<p:graphicImage id="clmDefGrpImg" name="profile.jpg" library="images" height="25px" width="25px" rendered="#{!stats.grpImgAvail}" />
 								<p:tooltip for="clmGrpImg" value="#{stats.userPriGrpName}" />
+								<p:tooltip for="clmDefGrpImg" value="#{stats.userScrNm}" />
 							</p:column>
 							<p:column>
 								<p:outputLabel value="#{stats.totalCount}" />

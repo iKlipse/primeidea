@@ -838,13 +838,16 @@ public class AdminService {
 			if (ipUser.getIpGroup() != null) {
 				user.setGroupId(ipUser.getIpGroup().getGroupId());
 				IpBlob grpBlob = ipBlobDAO.getBlobByEntity(user.getGroupId(), "ip_group");
-				user.setGrpImgAvail(true);
-				user.setGrpImgPath("ip_group/" + user.getGroupId() + "/" + grpBlob.getBlobName());
+				if (grpBlob != null) {
+					user.setGrpImgAvail(true);
+					user.setGrpImgPath("ip_group/" + user.getGroupId() + "/" + grpBlob.getBlobName());
+				} else
+					user.setGrpImgAvail(false);
 			} else
 				user.setGrpImgAvail(false);
-			IpBlob blob = ipBlobDAO.getBlobByEntity(ipUser.getUserId(), "ip_user");
+			IpBlob blob = ipBlobDAO.getBlobByEntity(user.getuId(), "ip_user");
 			if (blob != null) {
-				user.setImgPath("ip_user/" + ipUser.getUserId() + "/" + blob.getBlobName());
+				user.setImgPath("ip_user/" + user.getuId() + "/" + blob.getBlobName());
 				user.setImgAvail(true);
 			} else
 				user.setImgAvail(false);

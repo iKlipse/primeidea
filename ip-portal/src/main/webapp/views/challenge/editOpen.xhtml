@@ -4,7 +4,9 @@
 			<p:outputLabel id="lblEdtoCTitle" value="Title : " />
 		</p:column>
 		<p:column>
-			<p:inputText autocomplete="false" id="txtEdtoCTitle" value="#{challengeController.challengeBean.title}" />
+			<p:inputText autocomplete="false" id="txtEdtoCTitle" value="#{challengeController.challengeBean.title}">
+				<p:ajax listener="#{challengeController.checkChalTitleAvailability}" event="change" update="frmEditOpenChalMsg" />
+			</p:inputText>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtoCCat" value="Category : " />

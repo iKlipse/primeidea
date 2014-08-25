@@ -8,13 +8,13 @@
 					<f:selectItems value="#{adminController.metaList}" />
 				</p:selectOneMenu>
 			</f:facet>
-			<p:column sortBy="#{bean.id}" headerText="ID">
+			<p:column width="30%" sortBy="#{bean.id}" headerText="ID">
 				<p:outputLabel id="llblId" value="#{bean.id}" />
 			</p:column>
-			<p:column sortBy="#{bean.desc}" headerText="Description">
+			<p:column width="60%" sortBy="#{bean.desc}" headerText="Description">
 				<p:outputLabel id="llblDesc" value="#{bean.desc}" />
 			</p:column>
-			<p:column>
+			<p:column width="10%">
 				<p:commandButton id="lviewButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{adminController.showMetaData}">
 					<f:setPropertyActionListener value="#{bean}" target="#{adminController.bean}" />
 					<f:setPropertyActionListener value="1" target="#{adminController.toView}" />

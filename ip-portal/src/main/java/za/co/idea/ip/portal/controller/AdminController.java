@@ -562,6 +562,7 @@ public class AdminController implements Serializable {
 			userBean.setuId(userMessage.getuId());
 			userBean.setEmployeeId(userMessage.getEmployeeId());
 			userBean.setPriGroupName(userMessage.getPriGroupName());
+			userBean.setGroupId(userMessage.getGroupId());
 			userBean.setcPw(userBean.getPwd());
 			viewGroups = fetchAllGroups();
 			secqList = fetchAllSecQ();
@@ -753,6 +754,9 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		}
+		showEditProfile = false;
+		showChangePwd = true;
+		showChangeSecQ = false;
 	}
 
 	public void resetSecurity() {
@@ -773,6 +777,9 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		}
+		showEditProfile = false;
+		showChangePwd = false;
+		showChangeSecQ = true;
 	}
 
 	public void logout() {
@@ -1595,8 +1602,6 @@ public class AdminController implements Serializable {
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
 			}
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "User Profile Update Successfull", "User Profile Update Successfull");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
@@ -2836,8 +2841,7 @@ public class AdminController implements Serializable {
 	}
 
 	public List<MetaDataBean> getSecqList() {
-		if (secqList == null)
-			secqList = new ArrayList<MetaDataBean>();
+		secqList = fetchAllSecQ();
 		return secqList;
 	}
 

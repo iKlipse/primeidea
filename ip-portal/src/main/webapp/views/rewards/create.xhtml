@@ -1,10 +1,12 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
-	<p:panelGrid styleClass="panelGridView"  columns="2" id="pnlCrtRewards">
+	<p:panelGrid styleClass="panelGridView" columns="2" id="pnlCrtRewards">
 		<p:column>
 			<p:outputLabel id="lblCrtRTitle" value="Title : " />
 		</p:column>
 		<p:column>
-			<p:inputText autocomplete="false" id="txtCrtRTitle" value="#{rewardsController.rewardsBean.rwTitle}" />
+			<p:inputText autocomplete="false" id="txtCrtRTitle" value="#{rewardsController.rewardsBean.rwTitle}">
+				<p:ajax listener="#{rewardsController.checkTitleAvailability}" event="change" update="frmEditRwMsg" />
+			</p:inputText>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblCrtRCat" value="Category : " />
@@ -19,7 +21,7 @@
 			<p:outputLabel id="lblCrtRDesc" value="Description : " />
 		</p:column>
 		<p:column>
-			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="txtCrtRDesc" value="#{rewardsController.rewardsBean.rwDesc}"  />
+			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="txtCrtRDesc" value="#{rewardsController.rewardsBean.rwDesc}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblCrtRPoint" value="Point Value : " />
@@ -78,8 +80,8 @@
 			<p:fileUpload id="fuCrtCUpload" fileUploadListener="#{rewardsController.rwFileUploadHandle}" multiple="false" />
 		</p:column>
 		<f:facet name="footer">
-				<p:commandButton id="btnCrtSave" value="Save" ajax="false" action="#{rewardsController.saveRewards}" />
-				<p:commandButton id="btnCrtCancel" value="Return To View" ajax="false" action="#{rewardsController.showViewReward}" />
+			<p:commandButton id="btnCrtSave" value="Save" ajax="false" action="#{rewardsController.saveRewards}" />
+			<p:commandButton id="btnCrtCancel" value="Return To View" ajax="false" action="#{rewardsController.showViewReward}" />
 		</f:facet>
 	</p:panelGrid>
 </ui:composition>

@@ -1,27 +1,27 @@
 <ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="adminBody">
 		<p:dataTable id="fdtViewUsers" value="#{adminController.viewUsers}" var="user" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Users Found">
-			<p:column>
+			<p:column width="15%">
 				<f:facet name="header">First Name</f:facet>
 				<p:outputLabel id="ftxtFName" value="#{user.fName}" />
 			</p:column>
-			<p:column filterBy="#{user.lName}" filterMatchMode="contains">
+			<p:column width="13%" filterBy="#{user.lName}" filterMatchMode="contains">
 				<f:facet name="header">Last Name</f:facet>
 				<p:outputLabel id="ftxtLName" value="#{user.lName}" />
 			</p:column>
-			<p:column filterBy="#{user.idNum}" filterMatchMode="contains">
+			<p:column width="12%" filterBy="#{user.idNum}" filterMatchMode="contains">
 				<f:facet name="header">ID Number</f:facet>
 				<p:outputLabel id="ftxtIdNum" value="#{user.idNum}" />
 			</p:column>
-			<p:column>
+			<p:column width="20%">
 				<f:facet name="header">EMail</f:facet>
 				<p:outputLabel id="ftxtEMail" value="#{user.eMail}" />
 			</p:column>
-			<p:column>
+			<p:column width="10%">
 				<f:facet name="header">Employee ID</f:facet>
 				<p:outputLabel id="ftxtEMPId" value="#{user.employeeId}" />
 			</p:column>
-			<p:column>
+			<p:column width="10%">
 				<f:facet name="header">Social</f:facet>
 				<p:commandLink id="flnkFBHanlde" target="new" value="#{user.fbHandle}">
 					<p:graphicImage id="fgiFBHandle" name="fb.jpg" library="images" height="25px" width="25px" />
@@ -30,11 +30,11 @@
 					<p:graphicImage id="fgiTWHandle" name="twitter.jpg" library="images" height="25px" width="25px" />
 				</p:commandLink>
 			</p:column>
-			<p:column>
+			<p:column width="10%">
 				<f:facet name="header">Active</f:facet>
 				<p:selectBooleanButton id="fsbbActive" value="#{user.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" disabled="true" />
 			</p:column>
-			<p:column>
+			<p:column width="10%">
 				<p:commandButton id="fviewButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{adminController.showEditUser}">
 					<f:setPropertyActionListener value="#{user}" target="#{adminController.userBean}" />
 					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />

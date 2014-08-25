@@ -1,24 +1,24 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
 	<p:dataTable id="dtViewReviewIdeas" value="#{randomIdeaController.viewIdeas}" var="idea" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Ideas Found">
-		<p:column filterBy="#{idea.ideaTitle}" filterMatchMode="contains">
+		<p:column width="40%" filterBy="#{idea.ideaTitle}" filterMatchMode="contains">
 			<f:facet name="header">Title</f:facet>
 			<p:outputLabel id="txtVwRIdeaTitle" value="#{idea.ideaTitle}" />
 		</p:column>
-		<p:column sortBy="#{idea.statusName}">
+		<p:column width="15%" sortBy="#{idea.statusName}">
 			<f:facet name="header">Status</f:facet>
 			<p:outputLabel id="somVwRIStatus" value="#{idea.statusName}" />
 		</p:column>
-		<p:column sortBy="#{idea.crtdByName}">
+		<p:column width="25%" sortBy="#{idea.crtdByName}">
 			<f:facet name="header">Created By</f:facet>
 			<p:outputLabel id="somVwRACrtdBy" value="#{idea.crtdByName}" />
 		</p:column>
-		<p:column>
+		<p:column width="10%">
 			<p:commandButton id="viewVwRButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{randomIdeaController.showEditReviewIdea}">
 				<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
 				<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />
 			</p:commandButton>
 		</p:column>
-		<p:column>
+		<p:column width="10%">
 			<p:commandButton id="summaryVwRButton" icon="ui-icon-clipboard" ajax="false" immediate="true" action="#{randomIdeaController.showSummaryReviewIdea}">
 				<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
 				<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />

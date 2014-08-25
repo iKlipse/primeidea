@@ -1,10 +1,12 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
-	<p:panelGrid styleClass="panelGridView"  columns="2" id="pnlEditRewards">
+<ui:composition template="/views/rewards/container/editContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+	<p:panelGrid styleClass="panelGridView" columns="2" id="pnlEditRewards">
 		<p:column>
 			<p:outputLabel id="lblEdRTitle" value="Title : " />
 		</p:column>
 		<p:column>
-			<p:inputText autocomplete="false" id="txtEdRTitle" value="#{rewardsController.rewardsBean.rwTitle}" />
+			<p:inputText autocomplete="false" id="txtEdRTitle" value="#{rewardsController.rewardsBean.rwTitle}">
+				<p:ajax listener="#{rewardsController.checkTitleAvailability}" event="change" update="frmRewardsMsg" />
+			</p:inputText>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdRCat" value="Category : " />
@@ -19,7 +21,7 @@
 			<p:outputLabel id="lblEdRDesc" value="Description : " />
 		</p:column>
 		<p:column>
-			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="txtEdRDesc" value="#{rewardsController.rewardsBean.rwDesc}"  />
+			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="txtEdRDesc" value="#{rewardsController.rewardsBean.rwDesc}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdRPoint" value="Point Value : " />
@@ -75,7 +77,7 @@
 			<p:outputLabel id="lblEdIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-		    <p:outputLabel value="No Attachments" rendered="#{!rewardsController.rewardsBean.rwImgAvail}" />
+			<p:outputLabel value="No Attachments" rendered="#{!rewardsController.rewardsBean.rwImgAvail}" />
 			<h:outputLink value="#{rewardsController.rewardsBean.blobUrl}" rendered="#{rewardsController.rewardsBean.rwImgAvail}">
 				<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
 				<p:outputLabel value="#{rewardsController.rewardsBean.rwUrl}" style="font-weight: 0.6em" />
@@ -88,8 +90,8 @@
 			<p:fileUpload id="fuEdCUpload" fileUploadListener="#{rewardsController.rwFileUploadHandle}" multiple="false" />
 		</p:column>
 		<f:facet name="footer">
-				<p:commandButton id="btnEdSave" value="Save" ajax="false" action="#{rewardsController.updateRewards}" />
-			    <p:commandButton id="btnEdCancel" value="Return To View" ajax="false" action="#{rewardsController.showViewReward}" />
+			<p:commandButton id="btnEdSave" value="Save" ajax="false" action="#{rewardsController.updateRewards}" />
+			<p:commandButton id="btnEdCancel" value="Return To View" ajax="false" action="#{rewardsController.showViewReward}" />
 		</f:facet>
 	</p:panelGrid>
 </ui:composition>

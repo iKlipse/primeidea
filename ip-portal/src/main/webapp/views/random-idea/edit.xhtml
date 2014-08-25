@@ -5,7 +5,7 @@
 		</p:column>
 		<p:column>
 			<p:inputText autocomplete="false" id="txtEdtITitle" value="#{randomIdeaController.ideaBean.ideaTitle}">
-				<p:ajax listener="#{randomIdeaController.checkTitleAvailability}" event="change" />
+				<p:ajax listener="#{randomIdeaController.checkTitleAvailability}" event="change" update="frmEditIdeaMsg" />
 			</p:inputText>
 		</p:column>
 		<p:column>

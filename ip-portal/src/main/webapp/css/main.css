@@ -71,3 +71,11 @@
 	font-weight: bold !important;
 	font-size: 1.1em !important;
 }
+
+.ui-selectonemenu {
+	width: 97% !important;
+}
+
+.ui-selectonemenu-list {
+	width: 97% !important;
+}

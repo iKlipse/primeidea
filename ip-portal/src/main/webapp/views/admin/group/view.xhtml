@@ -1,33 +1,33 @@
 <ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="adminBody">
 		<p:dataTable id="gdtViewGroups" value="#{adminController.viewGroups}" var="grp" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Groups Found">
-			<p:column filterBy="#{grp.gName}" filterMatchMode="contains" sortBy="#{grp.gName}">
+			<p:column width="20%" filterBy="#{grp.gName}" filterMatchMode="contains" sortBy="#{grp.gName}">
 				<f:facet name="header">Group Name</f:facet>
 				<p:outputLabel id="gtxtGrpName" value="#{grp.gName}" />
 			</p:column>
-			<p:column>
+			<p:column width="25%">
 				<f:facet name="header">Group EMail</f:facet>
 				<p:outputLabel id="gtxtGrpEMail" value="#{grp.geMail}" />
 			</p:column>
-			<p:column>
+			<p:column width="20%">
 				<f:facet name="header">Parent Group</f:facet>
 				<p:outputLabel id="gsomPGrpId" value="#{grp.selPGrpName}" />
 			</p:column>
-			<p:column>
+			<p:column width="10%">
 				<f:facet name="header">Admin User</f:facet>
 				<p:outputLabel id="gsomAdmUser" value="#{grp.selAdmUserName}" />
 			</p:column>
-			<p:column>
+			<p:column width="9%">
 				<f:facet name="header">Active</f:facet>
 				<p:selectBooleanButton id="gsbbActive" value="#{grp.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" disabled="true" />
 			</p:column>
-			<p:column>
+			<p:column width="8%">
 				<p:commandButton id="gviewButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{adminController.showEditGroup}">
 					<f:setPropertyActionListener value="#{grp}" target="#{adminController.groupBean}" />
 					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
 				</p:commandButton>
 			</p:column>
-			<p:column>
+			<p:column width="8%">
 				<p:commandButton id="gsummaryButton" icon="ui-icon-clipboard" ajax="false" immediate="true" action="#{adminController.showSummaryGroup}">
 					<f:setPropertyActionListener value="#{grp}" target="#{adminController.groupBean}" />
 					<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />

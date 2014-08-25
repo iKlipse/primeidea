@@ -1,28 +1,28 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<p:dataTable id="dtViewSolutions" value="#{challengeController.viewSolutions}" var="solution" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Solutions Found">
-		<p:column filterBy="#{solution.title}" filterMatchMode="contains">
+		<p:column width="35%" filterBy="#{solution.title}" filterMatchMode="contains">
 			<f:facet name="header">Title</f:facet>
 			<p:outputLabel id="txtVwSolutionTitle" value="#{solution.title}" />
 		</p:column>
-		<p:column sortBy="#{solution.catName}">
+		<p:column width="15%" sortBy="#{solution.catName}">
 			<f:facet name="header">Category</f:facet>
 			<p:outputLabel id="somVwICat" value="#{solution.catName}" />
 		</p:column>
-		<p:column sortBy="#{solution.statusName}">
+		<p:column width="15%" sortBy="#{solution.statusName}">
 			<f:facet name="header">Status</f:facet>
 			<p:outputLabel id="somVwIStatus" value="#{solution.statusName}" />
 		</p:column>
-		<p:column sortBy="#{solution.crtByName}">
+		<p:column width="15%" sortBy="#{solution.crtByName}">
 			<f:facet name="header">Created By</f:facet>
 			<p:outputLabel id="somVwACrtdBy" value="#{solution.crtByName}" />
 		</p:column>
-		<p:column>
+		<p:column width="10%">
 			<p:commandButton id="viewVwButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{challengeController.showEditSolution}">
 				<f:setPropertyActionListener value="#{solution}" target="#{challengeController.solutionBean}" />
 				<f:setPropertyActionListener value="3" target="#{challengeController.returnView}" />
 			</p:commandButton>
 		</p:column>
-		<p:column>
+		<p:column width="10%">
 			<p:commandButton id="summaryVwButton" icon="ui-icon-clipboard" ajax="false" immediate="true" action="#{challengeController.showSummarySolution}">
 				<f:setPropertyActionListener value="#{solution}" target="#{challengeController.solutionBean}" />
 				<f:setPropertyActionListener value="3" target="#{challengeController.returnView}" />

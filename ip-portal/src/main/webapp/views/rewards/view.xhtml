@@ -1,26 +1,26 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<p:dataTable id="dtRewards" var="rewards" value="#{rewardsController.viewRewardsBeans}" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
-		<p:column filterBy="#{rewards.rwTitle}" filterMatchMode="contains">
+		<p:column width="40%" filterBy="#{rewards.rwTitle}" filterMatchMode="contains">
 			<f:facet name="header">Title</f:facet>
 			<p:outputLabel id="txtRewardTitle" value="#{rewards.rwTitle}" />
 		</p:column>
-		<p:column sortBy="#{rewards.rCatName}">
+		<p:column width="20%" sortBy="#{rewards.rCatName}">
 			<f:facet name="header">Category</f:facet>
 			<p:outputLabel id="somICat" value="#{rewards.rCatName}" />
 		</p:column>
-		<p:column>
+		<p:column width="15%">
 			<f:facet name="header">Launch Date</f:facet>
 			<p:outputLabel id="calLaunchDT" value="#{rewards.rwLaunchDt}" >
 			   <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss" />
 			</p:outputLabel>
 		</p:column>
-		<p:column>
+		<p:column width="15%">
 			<f:facet name="header">Expiry Date</f:facet>
 			<p:outputLabel id="calExprDT" value="#{rewards.rwExpiryDt}" >
 			   <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss" />
 			</p:outputLabel>
 		</p:column>
-		<p:column>
+		<p:column width="10%">
 			<p:commandButton id="viewVwButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{rewardsController.showEditReward}">
 				<f:setPropertyActionListener value="#{rewards}" target="#{rewardsController.rewardsBean}" />
 			</p:commandButton>

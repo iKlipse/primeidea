@@ -13,7 +13,9 @@
 			<p:outputLabel id="lblSTitle" value="Title : " />
 		</p:column>
 		<p:column>
-			<p:inputText autocomplete="false" id="txtSTitle" value="#{challengeController.solutionBean.title}" />
+			<p:inputText autocomplete="false" id="txtSTitle" value="#{challengeController.solutionBean.title}" >
+				<p:ajax listener="#{challengeController.checkTitleAvailability}" event="change" update="frmEditOpenSolMsg" />
+			</p:inputText>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblSCat" value="Category : " />

@@ -99,6 +99,7 @@ public class ChallengeController implements Serializable {
 	private Date selLaunchDate;
 	private boolean saveAsOpen;
 	private boolean titleAvail;
+	private boolean chalTitleAvail;
 	private Long chalId;
 	private int activeIndex;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
@@ -653,6 +654,11 @@ public class ChallengeController implements Serializable {
 
 	public String saveChallenge() {
 		try {
+			if (chalTitleAvail) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
 			List<String> errors = validateChallenge();
 			if (errors.size() > 0) {
 				for (String error : errors) {
@@ -721,6 +727,11 @@ public class ChallengeController implements Serializable {
 
 	public String updateChallenge() {
 		try {
+			if (chalTitleAvail) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
 			List<String> errors = validateChallenge();
 			if (errors.size() > 0) {
 				for (String error : errors) {
@@ -1281,6 +1292,24 @@ public class ChallengeController implements Serializable {
 			solFileAvail = false;
 			solFileContent = null;
 			return "";
+		}
+	}
+
+	public void checkChalTitleAvailability() {
+		if (challengeBean.getTitle() == null || challengeBean.getTitle().length() == 0) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter Title to Check Availability", "Enter Title to Check Availability");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+		WebClient checkAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/check/title/" + challengeBean.getTitle());
+		Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
+		checkAvailablityClient.close();
+		chalTitleAvail = avail.booleanValue();
+		if (chalTitleAvail) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		} else {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Title Available", "Title Available");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
 	}
 
@@ -2805,5 +2834,13 @@ public class ChallengeController implements Serializable {
 
 	public void setShowReviewSol(boolean showReviewSol) {
 		this.showReviewSol = showReviewSol;
+	}
+
+	public boolean isChalTitleAvail() {
+		return chalTitleAvail;
+	}
+
+	public void setChalTitleAvail(boolean chalTitleAvail) {
+		this.chalTitleAvail = chalTitleAvail;
 	}
 }

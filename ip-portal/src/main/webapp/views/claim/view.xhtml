@@ -5,25 +5,25 @@
 					View Claim
 				</f:facet>
 			<p:dataTable id="dtViewClaims" value="#{claimController.viewClaimBeans}" var="claim" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Claims Found">
-				<p:column filterBy="#{claim.claimDesc}" filterMatchMode="contains">
+				<p:column width="40%" filterBy="#{claim.claimDesc}" filterMatchMode="contains">
 					<f:facet name="header">Claim Desc</f:facet>
 					<p:outputLabel id="txtClaimId" value="#{claim.claimDesc}" />
 				</p:column>
-				<p:column sortBy="#{claim.cStatusName}">
+				<p:column width="15%" sortBy="#{claim.cStatusName}">
 					<f:facet name="header">Status</f:facet>
 					<p:outputLabel id="somIStatus" value="#{claim.cStatusName}" />
 				</p:column>
-				<p:column>
+				<p:column width="15%">
 					<f:facet name="header">Created Date</f:facet>
 					<p:outputLabel id="calLaunchDT" value="#{claim.claimCrtdDt}" >
 			            <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss" />
 			        </p:outputLabel>
 				</p:column>
-				<p:column sortBy="#{claim.userName}">
+				<p:column width="20%" sortBy="#{claim.userName}">
 					<f:facet name="header">Created By</f:facet>
 					<p:outputLabel id="somACrtdBy" value="#{claim.userName}" />
 				</p:column>
-				<p:column rendered="#{accessBean.editClaimEnabled}">
+				<p:column width="10%" rendered="#{accessBean.editClaimEnabled}">
 					<p:commandButton id="viewButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{claimController.showEditClaim}">
 						<f:setPropertyActionListener value="#{claim}" target="#{claimController.claimBean}" />
 					</p:commandButton>
