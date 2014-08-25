@@ -76,6 +76,8 @@ public class LandingPageController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
+			AccessController controller = new AccessController(userId);
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("accessBean", controller);
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			viewIdeas = RESTServiceHelper.fetchAllIdeasByUser(userId);
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
@@ -93,9 +95,12 @@ public class LandingPageController implements Serializable {
 			totalPoints = calculateTotal(pointBeans);
 			rewardsCat = RESTServiceHelper.fetchAllRewardsCat();
 			viewRewardsBeans = RESTServiceHelper.fetchAllRewardsByUser(userId, totalPoints);
-			showIdeas = true;
-			showChals = false;
+			showIdeas = false;
+			showChals = true;
 			showSols = false;
+			showWishlist = false;
+			showClaims = false;
+			showPoints = false;
 			if (toView != null && Integer.valueOf(toView) != -1) {
 				switch (Integer.valueOf(toView)) {
 				case 1:

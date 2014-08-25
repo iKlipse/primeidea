@@ -1,0 +1,22 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+	<p:panelGrid columns="2" styleClass="panelGridView">
+		<p:column>
+			<p:outputLabel id="lblRSProfileSecQ" value="Security Question : " />
+		</p:column>
+		<p:column>
+			<p:selectOneMenu id="somRSRSecQId" value="#{adminController.secQ}">
+				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="false" />
+				<f:selectItems value="#{adminController.secqList}" var="p" itemLabel="#{p.desc}" itemValue="#{p.id}" />
+			</p:selectOneMenu>
+		</p:column>
+		<p:column>
+			<p:outputLabel id="lblRSProfileSecA" value="Security Answer : " />
+		</p:column>
+		<p:column>
+			<p:inputText autocomplete="false" id="txtProfileSecA" value="#{adminController.secA}" />
+		</p:column>
+		<f:facet name="footer">
+			<p:commandButton id="btnRSProfileSave" value="Save" ajax="false" actionListener="#{adminController.resetSecurity}" />
+		</f:facet>
+	</p:panelGrid>
+</ui:composition>

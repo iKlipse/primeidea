@@ -121,6 +121,7 @@ public class NewsService {
 					message.setNewsUrl("ip_news/" + news.getNewsId() + "/" + ipBlob.getBlobName());
 					message.setNwImgAvail(true);
 					message.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
+					message.setFileName(ipBlob.getBlobName());
 				} else {
 					message.setNwImgAvail(false);
 				}
@@ -155,6 +156,7 @@ public class NewsService {
 				logger.info(" News attachment URL : " + "ip_news/" + news.getNewsId() + "/" + ipBlob.getBlobName());
 				message.setNewsUrl("ip_news/" + news.getNewsId() + "/" + ipBlob.getBlobName());
 				message.setNwImgAvail(true);
+				message.setFileName(ipBlob.getBlobName());
 			} else {
 				message.setNwImgAvail(false);
 			}

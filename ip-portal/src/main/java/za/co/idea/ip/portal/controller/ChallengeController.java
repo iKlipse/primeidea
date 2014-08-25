@@ -131,6 +131,8 @@ public class ChallengeController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
+			AccessController controller = new AccessController(userId);
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("accessBean", controller);
 			challengeCats = fetchAllChallengeCat();
 			admUsers = fetchAllUsers();
 			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
@@ -189,6 +191,8 @@ public class ChallengeController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
+			AccessController controller = new AccessController(userId);
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("accessBean", controller);
 			admUsers = fetchAllUsers();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
@@ -253,6 +257,12 @@ public class ChallengeController implements Serializable {
 			return "chalv";
 		case 3:
 			return "solv";
+		case 4:
+			return showSummaryChallenge();
+		case 5:
+			return showSummaryOpenChallenge();
+		case 6:
+			return showSummaryReviewChallenge();
 		default:
 			return "";
 		}

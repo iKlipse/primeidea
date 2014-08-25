@@ -36,6 +36,14 @@
 	width: 100% !important;
 }
 
+.ui-selectcheckboxmenu-label-container {
+	width: 100% !important;
+}
+
+.ui-selectcheckboxmenu {
+	width: 100% !important;
+}
+
 .ui-selectcheckboxmenu-label {
 	width: 100% !important;
 	font-size: 1em !important;
@@ -43,7 +51,7 @@
 }
 
 .ui-inputfield {
-	width: 100% !important;
+	width: 95% !important;
 }
 
 .ui-editor {

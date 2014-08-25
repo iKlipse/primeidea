@@ -32,6 +32,7 @@
 		<property name="ipTagEntityTypeDAO" ref="IpTagEntityTypeDAO" />
 		<property name="ipTagTypeDAO" ref="IpTagTypeDAO" />
 		<property name="ipUserDAO" ref="IpUserDAO" />
+		<property name="ipBlobDAO" ref="IpBlobDAO" />
 	</bean>
 	<bean id="challengeService" class="za.co.idea.ip.ws.ChallengeService">
 		<property name="ipChallengeCatDAO" ref="IpChallengeCatDAO" />

@@ -223,6 +223,7 @@ public class BuildonController implements Serializable {
 		} else
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Build-On", "Error While Saving Build-On"));
 		buildon.setTagText("");
+		fileContent = null;
 		buildons = fetchAllBuildOns();
 		return "";
 	}
@@ -238,6 +239,9 @@ public class BuildonController implements Serializable {
 			bean.setUsrScreenName(msg.getUsrScreenName());
 			bean.setTagDate(msg.getTagDate());
 			bean.setTagId(msg.getTagId());
+			bean.setImgAvail(msg.isImgAvail());
+			bean.setBlobUrl(msg.getBlobUrl());
+			bean.setFileName(msg.getFileName());
 			ret.add(bean);
 		}
 		return ret;

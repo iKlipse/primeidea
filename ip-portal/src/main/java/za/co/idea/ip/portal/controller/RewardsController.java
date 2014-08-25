@@ -135,6 +135,8 @@ public class RewardsController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
+			AccessController controller = new AccessController(userId);
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("accessBean", controller);
 			admUsers = fetchAllUsers();
 			rewardsCat = fetchAllRewardsCat();
 			viewRewardsBeans = fetchAllAvailableRewards();

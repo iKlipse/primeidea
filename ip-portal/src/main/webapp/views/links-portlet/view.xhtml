@@ -4,7 +4,7 @@
 		<h:form id="frmAdmin" enctype="multipart/form-data">
 			<p:panelGrid styleClass="panelGridView" columns="1">
 				<p:column>
-					<h:outputLink value="/web/ip/admin">Admin Page</h:outputLink>
+					<h:outputLink value="/web/ip/admin" rendered=#{accessController.adminEnabled}>Admin Page</h:outputLink>
 				</p:column>
 				<p:column>
 					<h:outputLink value="http://www.innovationexcellence.com" target="_new">Innovation Excellence</h:outputLink>

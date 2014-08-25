@@ -28,7 +28,7 @@ import com.liferay.portal.model.User;
 @ManagedBean(name = "miscPortletController")
 @SessionScoped
 public class MiscPortletController implements Serializable {
-	
+
 	private static final long serialVersionUID = 8415134460058949523L;
 	private static final Logger logger = Logger.getLogger(MiscPortletController.class);
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
@@ -37,7 +37,7 @@ public class MiscPortletController implements Serializable {
 	private List<RewardsBean> viewRewardsBeans;
 	private List<PointBean> pointBeans;
 	private List<RewardsPointsDiffComparable> rewardsPointsDiffList;
-	
+
 	public void initializeWishlist() {
 		Set<RewardsPointsDiffComparable> rewardsPoints = new TreeSet<RewardsPointsDiffComparable>();
 		try {
@@ -46,17 +46,19 @@ public class MiscPortletController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
-			pointBeans=RESTServiceHelper.fetchAllPointsByUser(userId);
-			totalPoints=RESTServiceHelper.calculateTotal(pointBeans);
+			AccessController controller = new AccessController(userId);
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("accessBean", controller);
+			pointBeans = RESTServiceHelper.fetchAllPointsByUser(userId);
+			totalPoints = RESTServiceHelper.calculateTotal(pointBeans);
 			viewRewardsBeans = RESTServiceHelper.fetchAllWishlistByUser(userId);
-			for(RewardsBean reward: viewRewardsBeans) {
-				RewardsPointsDiffComparable rewPoint=new RewardsPointsDiffComparable();
-				rewPoint=(RewardsPointsDiffComparable)reward;
-				rewPoint.setPointsDiff((int)(totalPoints-reward.getRwValue()));
+			for (RewardsBean reward : viewRewardsBeans) {
+				RewardsPointsDiffComparable rewPoint = new RewardsPointsDiffComparable();
+				rewPoint = (RewardsPointsDiffComparable) reward;
+				rewPoint.setPointsDiff((int) (totalPoints - reward.getRwValue()));
 				rewardsPoints.add(rewPoint);
 			}
-			int i=0;
-			for(RewardsPointsDiffComparable object: rewardsPoints) {
+			int i = 0;
+			for (RewardsPointsDiffComparable object : rewardsPoints) {
 				i++;
 				if (i <= 5) {
 					rewardsPointsDiffList.add((RewardsPointsDiffComparable) object);
@@ -105,8 +107,7 @@ public class MiscPortletController implements Serializable {
 		return rewardsPointsDiffList;
 	}
 
-	public void setRewardsPointsDiffList(
-			List<RewardsPointsDiffComparable> rewardsPointsDiffList) {
+	public void setRewardsPointsDiffList(List<RewardsPointsDiffComparable> rewardsPointsDiffList) {
 		this.rewardsPointsDiffList = rewardsPointsDiffList;
 	}
 

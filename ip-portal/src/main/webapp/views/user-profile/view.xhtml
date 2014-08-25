@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<f:view xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
+	<h:body>
+		<h:form id="frmUserProfile" enctype="multipart/form-data">
+			<p:growl life="5000" id="frmUserProfileMsg" showDetail="true" showSummary="true" autoUpdate="true" />
+			<p:remoteCommand actionListener="#{adminController.initializeEditProfile}" name="onload" autoRun="true" update="pnlUserProfile" />
+			<p:panel styleClass="panelView" id="pnlLPMenu">
+				<p:commandLink value="Edit Profile" action="#{adminController.changeEditProfile}" update="pnlUserProfile" />
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="Change Password" action="#{adminController.changePwd}" update="pnlUserProfile" />
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="Change Security Quetion" action="#{adminController.changeSecurity}" update="pnlUserProfile" />
+			</p:panel>
+			<p:panel styleClass="panelView" id="pnlUserProfile">
+				<p:panel styleClass="panelView" id="ctrMyIdeas" rendered="#{adminController.showEditProfile}">
+					<ui:include src="/views/user-profile/editProfile.xhtml" />
+				</p:panel>
+				<p:panel styleClass="panelView" id="ctrMyChallenges" rendered="#{adminController.showChangePwd}">
+					<ui:include src="/views/user-profile/rPwd.xhtml" />
+				</p:panel>
+				<p:panel styleClass="panelView" id="ctrMySolutions" rendered="#{adminController.showChangeSecQ}">
+					<ui:include src="/views/user-profile/rSec.xhtml" />
+				</p:panel>
+			</p:panel>
+		</h:form>
+	</h:body>
+</f:view>

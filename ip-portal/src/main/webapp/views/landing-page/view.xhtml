@@ -6,9 +6,9 @@
 			<p:growl life="5000" id="frmHomeMsg" showDetail="true" showSummary="true" autoUpdate="true" />
 			<p:remoteCommand actionListener="#{landingPageController.initializePage}" name="onload" autoRun="true" update="pnlLPDet" />
 			<p:panel styleClass="panelView" id="pnlLPMenu">
-				<p:commandLink value="My Ideas" actionListener="#{landingPageController.changeIdea}" update="pnlLPDet" />
-				<p:graphicImage name="separator.png" library="images" />
 				<p:commandLink value="My Challenges" actionListener="#{landingPageController.changeChallenge}" update="pnlLPDet" />
+				<p:graphicImage name="separator.png" library="images" />
+				<p:commandLink value="My Ideas" actionListener="#{landingPageController.changeIdea}" update="pnlLPDet" />
 				<p:graphicImage name="separator.png" library="images" />
 				<p:commandLink value="My Solutions" actionListener="#{landingPageController.changeSolution}" update="pnlLPDet" />
 				<p:graphicImage name="separator.png" library="images" />
@@ -19,11 +19,11 @@
 				<p:commandLink value="My Points" actionListener="#{landingPageController.showPointProfile}" update="pnlLPDet" />
 			</p:panel>
 			<p:panel styleClass="panelView" id="pnlLPDet">
-				<p:panel styleClass="panelView" id="ctrMyIdeas" rendered="#{landingPageController.showIdeas}">
-					<ui:include src="/views/landing-page/ideas.xhtml" />
-				</p:panel>
 				<p:panel styleClass="panelView" id="ctrMyChallenges" rendered="#{landingPageController.showChals}">
 					<ui:include src="/views/landing-page/challenges.xhtml" />
+				</p:panel>
+				<p:panel styleClass="panelView" id="ctrMyIdeas" rendered="#{landingPageController.showIdeas}">
+					<ui:include src="/views/landing-page/ideas.xhtml" />
 				</p:panel>
 				<p:panel styleClass="panelView" id="ctrMySolutions" rendered="#{landingPageController.showSols}">
 					<ui:include src="/views/landing-page/solutions.xhtml" />

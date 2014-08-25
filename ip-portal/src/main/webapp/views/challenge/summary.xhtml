@@ -85,6 +85,18 @@
 	</p:overlayPanel>
 	<p:dataGrid id="dgSumSolForChal" value="#{challengeController.viewSolutions}" var="sol" columns="1" rowIndexVar="solRId">
 		<p:panel styleClass="panelView" header="Solution By - #{sol.crtByName} - #{sol.crtdDt}">
+			<f:facet name="options">
+				<p:menu style="vertical-align: middle !important; float: right !important" overlay="true" trigger="dynaSolButton" my="left top" at="left bottom">
+					<p:menuitem value="Edit" ajax="false" immediate="true" action="#{challengeController.showEditSolution}">
+						<f:setPropertyActionListener value="#{sol}" target="#{challengeController.solutionBean}" />
+						<f:setPropertyActionListener value="1" target="#{challengeController.returnView}" />
+					</p:menuitem>
+					<p:menuitem value="Summary" ajax="false" immediate="true" action="#{challengeController.showSummarySolution}">
+						<f:setPropertyActionListener value="#{sol}" target="#{challengeController.solutionBean}" />
+						<f:setPropertyActionListener value="4" target="#{challengeController.returnView}" />
+					</p:menuitem>
+				</p:menu>
+			</f:facet>
 			<p:panelGrid styleClass="panelGridView" columns="2" id="pnlSumSolForChal">
 				<p:column>
 					<p:outputLabel id="lblSumISolTitle" value="Title : " />

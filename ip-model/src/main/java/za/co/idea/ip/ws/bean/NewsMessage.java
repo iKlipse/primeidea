@@ -15,6 +15,7 @@ public class NewsMessage {
 	private String newsUrl;
 	private boolean nwImgAvail;
 	private String blobUrl;
+	private String fileName;
 
 	public String getNewsUrl() {
 		return newsUrl;
@@ -78,6 +79,14 @@ public class NewsMessage {
 
 	public void setBlobUrl(String blobUrl) {
 		this.blobUrl = blobUrl;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 }

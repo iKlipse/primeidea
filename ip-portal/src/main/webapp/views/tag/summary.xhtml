@@ -6,9 +6,10 @@
 				<p:outputLabel value="#{buildonController.buildon.tagDate}" />
 			</f:facet>
 			<f:facet name="footer">
-				<p:commandButton id="backBtn" value="Return to View" action="#{buildonController.showBuildon}">
+				<p:commandButton id="backBtn" value="Return to View" action="#{buildonController.showBuildon}" ajax="false">
 					<f:param name="entityId" id="entityId" value="#{buildonController.entityId}" />
 					<f:param name="entityType" id="entityType" value="#{buildonController.entityType}" />
+					<f:param name="taggable" id="taggable" value="#{buildonController.taggable}" />
 				</p:commandButton>
 			</f:facet>
 			<p:panelGrid styleClass="panelGridView" columns="2">
@@ -22,9 +23,11 @@
 					<p:outputLabel id="lblIDownload" value="Download File : " />
 				</p:column>
 				<p:column>
-					<p:commandButton id="btnDownload" value="Download" ajax="false" disabled="#{buildonController.fileAvail}">
-						<p:fileDownload value="#{buildonController.fileContent}" />
-					</p:commandButton>
+					<p:outputLabel value="No Attachments" rendered="#{!buildonController.buildon.imgAvail}" />
+					<h:outputLink value="#{buildonController.buildon.blobUrl}" rendered="#{buildonController.buildon.imgAvail}">
+						<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+						<p:outputLabel value="#{buildonController.buildon.fileName}" style="font-weight: 0.6em" />
+					</h:outputLink>
 				</p:column>
 			</p:panelGrid>
 			<br />
@@ -65,7 +68,7 @@
 					<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="edComment" value="#{buildonController.commentText}" />
 				</p:column>
 				<p:column rendered="#{!buildonBean.taggable}">
-					<p:commandButton id="btnSubmitComment" value="Post" actionListener="#{buildonController.commentBuildon}" update="dtViewComments" />
+					<p:commandButton id="btnSubmitComment" value="Post" actionListener="#{buildonController.commentBuildon}" update="dtViewComments, :frmTagSummary:lblCommentCnt" />
 				</p:column>
 			</p:panelGrid>
 		</p:overlayPanel>

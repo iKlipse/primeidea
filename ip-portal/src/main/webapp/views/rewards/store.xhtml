@@ -28,19 +28,19 @@
 					<p:outputLabel value="#{rewards.rwTitle}" style="font-size:1.2em !important; font-weight: bold !important" />
 				</p:column>
 				<p:column>
-					<p:outputLabel value="#{rewards.rwQuantity}" style="font-size:0.8em !important;" />
+					<p:outputLabel value="Quantity : #{rewards.rwQuantity}" style="font-size:0.8em !important;" />
 				</p:column>
 				<p:column>
-					<p:outputLabel value="#{rewards.rwValue}" style="font-size:0.8em !important;" />
+					<p:outputLabel value="Point Value : #{rewards.rwValue}" style="font-size:0.8em !important;" />
 				</p:column>
 				<p:column>
 					<center>
-						<p:commandLink id="btnWish" ajax="false" action="#{landingPageController.modifyWishlist}">
+						<p:commandLink id="btnWish" ajax="false" action="#{landingPageController.modifyWishlist}" style="padding-right: 5px !important">
 							<p:graphicImage library="images" name="star_highlight.jpg" height="30px" width="30px" rendered="#{rewards.rwTaggable}" />
 							<p:graphicImage library="images" name="star.jpg" height="30px" width="30px" rendered="#{!rewards.rwTaggable}" />
 							<f:setPropertyActionListener value="#{rewards}" target="#{landingPageController.rewardsBean}" />
 						</p:commandLink>
-						<p:commandButton id="btnClaim" value="C" ajax="false" action="#{claimController.showClaimReward}" rendered="#{rewards.rwClaimable}">
+						<p:commandButton id="btnClaim" value="I Want Some" ajax="false" action="#{claimController.showClaimReward}" rendered="#{rewards.rwClaimable}">
 							<f:param name="rewardsId" id="rewardsId" value="#{rewards.rwId}" />
 							<f:param name="rwQuantity" id="rwQuantity" value="#{rewards.rwQuantity}" />
 							<f:param name="rwValue" id="rwValue" value="#{rewards.rwValue}" />

@@ -16,6 +16,8 @@ public class TagBean implements Serializable {
 	private Date tagDate;
 	private boolean duplicate;
 	private String blobUrl;
+	private String fileName;
+	private boolean imgAvail;
 
 	public String getUsrScreenName() {
 		return usrScreenName;
@@ -103,5 +105,21 @@ public class TagBean implements Serializable {
 
 	public void setBlobUrl(String blobUrl) {
 		this.blobUrl = blobUrl;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public boolean isImgAvail() {
+		return imgAvail;
+	}
+
+	public void setImgAvail(boolean imgAvail) {
+		this.imgAvail = imgAvail;
 	}
 }

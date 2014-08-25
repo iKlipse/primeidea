@@ -66,8 +66,10 @@ import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.bean.UserStatisticsMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
 
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.restfb.DefaultWebRequestor;
 
 @ManagedBean(name = "adminController")
@@ -157,6 +159,9 @@ public class AdminController implements Serializable {
 	private String grpImgPath;
 	private boolean grpImgAvail;
 	private List<UserStatisticsBean> viewStatsBean;
+	private boolean showEditProfile;
+	private boolean showChangePwd;
+	private boolean showChangeSecQ;
 
 	private WebClient createCustomClient(String url) {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
@@ -178,6 +183,8 @@ public class AdminController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
+			AccessController controller = new AccessController(userId);
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("accessBean", controller);
 			viewUsers = fetchAllUsers();
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -193,6 +200,8 @@ public class AdminController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
+			AccessController controller = new AccessController(userId);
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("accessBean", controller);
 			loggedScrName = message.getScName();
 			imgPath = message.getImgPath();
 			imgAvail = message.isImgAvail();
@@ -527,6 +536,115 @@ public class AdminController implements Serializable {
 		}
 	}
 
+	public void initializeEditProfile() {
+		try {
+			viewGroups = fetchAllGroups();
+			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			User user = (User) request.getAttribute(WebKeys.USER);
+			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			UserMessage userMessage = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+			userId = userMessage.getuId();
+			userBean = new UserBean();
+			userBean.setBio(userMessage.getBio());
+			userBean.setContact(userMessage.getContact());
+			userBean.seteMail(userMessage.geteMail());
+			userBean.setFbHandle(userMessage.getFbHandle());
+			userBean.setfName(userMessage.getfName());
+			userBean.setIdNum(userMessage.getIdNum());
+			userBean.setIsActive(userMessage.getIsActive());
+			userBean.setlName(userMessage.getlName());
+			userBean.setmName(userMessage.getmName());
+			userBean.setPwd(userMessage.getPwd());
+			userBean.setScName(userMessage.getScName());
+			userBean.setSkills(userMessage.getSkills());
+			userBean.setTwHandle(userMessage.getTwHandle());
+			userBean.setIsActive(userMessage.getIsActive());
+			userBean.setuId(userMessage.getuId());
+			userBean.setEmployeeId(userMessage.getEmployeeId());
+			userBean.setPriGroupName(userMessage.getPriGroupName());
+			userBean.setcPw(userBean.getPwd());
+			viewGroups = fetchAllGroups();
+			secqList = fetchAllSecQ();
+			showEditProfile = true;
+			showChangePwd = false;
+			showChangeSecQ = false;
+			secqList = fetchAllSecQ();
+			if (toView != null && Integer.valueOf(toView) != -1) {
+				switch (Integer.valueOf(toView)) {
+				case 1:
+					showEditProfile = true;
+					showChangePwd = false;
+					showChangeSecQ = false;
+					break;
+				case 2:
+					showEditProfile = false;
+					showChangePwd = true;
+					showChangeSecQ = false;
+					break;
+				case 3:
+					showEditProfile = false;
+					showChangePwd = false;
+					showChangeSecQ = true;
+					break;
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated user profile view request", "System error occurred, cannot perform updated user profile view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+	}
+
+	public String changeEditProfile() {
+		viewGroups = fetchAllGroups();
+		PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		User user = (User) request.getAttribute(WebKeys.USER);
+		WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
+		UserMessage userMessage = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+		userId = userMessage.getuId();
+		userBean = new UserBean();
+		userBean.setBio(userMessage.getBio());
+		userBean.setContact(userMessage.getContact());
+		userBean.seteMail(userMessage.geteMail());
+		userBean.setFbHandle(userMessage.getFbHandle());
+		userBean.setfName(userMessage.getfName());
+		userBean.setIdNum(userMessage.getIdNum());
+		userBean.setIsActive(userMessage.getIsActive());
+		userBean.setlName(userMessage.getlName());
+		userBean.setmName(userMessage.getmName());
+		userBean.setPwd(userMessage.getPwd());
+		userBean.setScName(userMessage.getScName());
+		userBean.setSkills(userMessage.getSkills());
+		userBean.setTwHandle(userMessage.getTwHandle());
+		userBean.setIsActive(userMessage.getIsActive());
+		userBean.setuId(userMessage.getuId());
+		userBean.setEmployeeId(userMessage.getEmployeeId());
+		userBean.setPriGroupName(userMessage.getPriGroupName());
+		userBean.setcPw(userBean.getPwd());
+		showEditProfile = true;
+		showChangePwd = false;
+		showChangeSecQ = false;
+		return "";
+	}
+
+	public String changePwd() {
+		secqList = fetchAllSecQ();
+		showEditProfile = false;
+		showChangePwd = true;
+		showChangeSecQ = false;
+		return "";
+	}
+
+	public String changeSecurity() {
+		showEditProfile = false;
+		showChangePwd = false;
+		showChangeSecQ = true;
+		secqList = fetchAllSecQ();
+		return "";
+
+	}
+
 	public String showCreateUser() {
 		try {
 			userBean = new UserBean();
@@ -604,36 +722,46 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		} else {
-			if (Base64.encodeBase64URLSafeString(DigestUtils.md5(secA.getBytes())).equalsIgnoreCase(userBean.getSecA())) {
-				WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rpw/");
-				ResponseMessage response = loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())) }, ResponseMessage.class);
-				loginClient.close();
-				if (response.getStatusCode() == 0) {
-					FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-					userBean = new UserBean();
-					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Reset Successful", "Password Reset Successful");
-					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			User user = (User) request.getAttribute(WebKeys.USER);
+			try {
+				user = UserLocalServiceUtil.updatePassword(user.getUserId(), userBean.getPwd(), userBean.getcPw(), false);
+				if (Validator.isNotNull(user)) {
+					if (Base64.encodeBase64URLSafeString(DigestUtils.md5(secA.getBytes())).equalsIgnoreCase(userBean.getSecA())) {
+						WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rpw/");
+						ResponseMessage response = loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())) }, ResponseMessage.class);
+						loginClient.close();
+						if (response.getStatusCode() == 0) {
+							FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+							userBean = new UserBean();
+							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Reset Successful", "Password Reset Successful");
+							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						} else {
+							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusCode() + " :: " + response.getStatusDesc(), response.getStatusCode() + " :: " + response.getStatusDesc());
+							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						}
+					} else {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Security Answer", "Invalid Security Answer");
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+					}
 				} else {
-					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusCode() + " :: " + response.getStatusDesc(), response.getStatusCode() + " :: " + response.getStatusDesc());
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Liferay User password Reset Error", "Liferay User password Reset Error");
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
-			} else {
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Security Answer", "Invalid Security Answer");
+			} catch (Exception e) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Liferay User password Reset Error", "Liferay User password Reset Error");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		}
-
 	}
 
 	public void resetSecurity() {
 		if (secQ == null || secQ.length() == 0) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Question is Mandatory", "Security Question is Mandatory");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			// RequestContext.getCurrentInstance().openDialog("dlgSecUpdate");
 		} else if (secA == null || secA.length() == 0) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Answer is Mandatory", "Security Answer is Mandatory");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			// RequestContext.getCurrentInstance().openDialog("dlgSecUpdate");
 		} else {
 			WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rsec");
 			ResponseMessage response = loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), secQ.toString(), secA }, ResponseMessage.class);
@@ -643,7 +771,6 @@ public class AdminController implements Serializable {
 			if (response.getStatusCode() != 0) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusCode() + " :: " + response.getStatusDesc(), response.getStatusCode() + " :: " + response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				// RequestContext.getCurrentInstance().closeDialog("dlgSecUpdate");
 			}
 		}
 	}
@@ -1467,11 +1594,11 @@ public class AdminController implements Serializable {
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update User", "Unable to update User");
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
-
 			}
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "User Profile Update Successfull", "User Profile Update Successfull");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -3074,6 +3201,8 @@ public class AdminController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
+			AccessController controller = new AccessController(userId);
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("accessBean", controller);
 			viewNewsBeans = fetchAllNews();
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -3219,5 +3348,29 @@ public class AdminController implements Serializable {
 
 	public void setGrpImgAvail(boolean grpImgAvail) {
 		this.grpImgAvail = grpImgAvail;
+	}
+
+	public boolean isShowEditProfile() {
+		return showEditProfile;
+	}
+
+	public void setShowEditProfile(boolean showEditProfile) {
+		this.showEditProfile = showEditProfile;
+	}
+
+	public boolean isShowChangePwd() {
+		return showChangePwd;
+	}
+
+	public void setShowChangePwd(boolean showChangePwd) {
+		this.showChangePwd = showChangePwd;
+	}
+
+	public boolean isShowChangeSecQ() {
+		return showChangeSecQ;
+	}
+
+	public void setShowChangeSecQ(boolean showChangeSecQ) {
+		this.showChangeSecQ = showChangeSecQ;
 	}
 }

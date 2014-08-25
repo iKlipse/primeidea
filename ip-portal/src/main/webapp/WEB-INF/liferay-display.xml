@@ -18,5 +18,6 @@
 		<portlet id="leader-board"></portlet>
 		<portlet id="links-portlet"></portlet>
 		<portlet id="wishlist"></portlet>
+		<portlet id="user-profile"></portlet>
 	</category>
 </display>

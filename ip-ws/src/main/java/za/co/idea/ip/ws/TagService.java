@@ -3,6 +3,7 @@ package za.co.idea.ip.ws;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -14,7 +15,9 @@ import javax.ws.rs.Produces;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.bean.IpTag;
+import za.co.idea.ip.orm.dao.IpBlobDAO;
 import za.co.idea.ip.orm.dao.IpChallengeDAO;
 import za.co.idea.ip.orm.dao.IpIdeaDAO;
 import za.co.idea.ip.orm.dao.IpSolutionDAO;
@@ -28,6 +31,7 @@ import za.co.idea.ip.ws.bean.TagMessage;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 @Path(value = "/ts")
 public class TagService {
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-ws");
 	private IpTagDAO ipTagDAO;
 	private IpTagEntityTypeDAO ipTagEntityTypeDAO;
 	private IpTagTypeDAO ipTagTypeDAO;
@@ -35,6 +39,7 @@ public class TagService {
 	private IpIdeaDAO ipIdeaDAO;
 	private IpChallengeDAO ipChallengeDAO;
 	private IpSolutionDAO ipSolutionDAO;
+	private IpBlobDAO ipBlobDAO;
 
 	@GET
 	@Path("/tag/get/{entityId}/{teId}/{ttId}")
@@ -55,6 +60,13 @@ public class TagService {
 				message.setUserId(ipTag.getIpUser().getUserId());
 				message.setTagId(ipTag.getTagId());
 				message.setTagDate(ipTag.getTagDate());
+				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipTag.getTagId(), "ip_tag");
+				if (ipBlob != null) {
+					message.setImgAvail(true);
+					message.setFileName(ipBlob.getBlobName());
+					message.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
+				} else
+					message.setImgAvail(false);
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
@@ -82,6 +94,13 @@ public class TagService {
 				message.setUserId(ipTag.getIpUser().getUserId());
 				message.setTagId(ipTag.getTagId());
 				message.setTagDate(ipTag.getTagDate());
+				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipTag.getTagId(), "ip_tag");
+				if (ipBlob != null) {
+					message.setImgAvail(true);
+					message.setFileName(ipBlob.getBlobName());
+					message.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
+				} else
+					message.setImgAvail(false);
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
@@ -209,6 +228,14 @@ public class TagService {
 
 	public void setIpSolutionDAO(IpSolutionDAO ipSolutionDAO) {
 		this.ipSolutionDAO = ipSolutionDAO;
+	}
+
+	public IpBlobDAO getIpBlobDAO() {
+		return ipBlobDAO;
+	}
+
+	public void setIpBlobDAO(IpBlobDAO ipBlobDAO) {
+		this.ipBlobDAO = ipBlobDAO;
 	}
 
 }

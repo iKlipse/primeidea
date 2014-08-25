@@ -14,6 +14,7 @@ public class NewsBean implements Serializable {
 	private Date startDate;
 	private Date endDate;
 	private String blobUrl;
+	private String fileName;
 
 	public Long getnId() {
 		return nId;
@@ -77,6 +78,14 @@ public class NewsBean implements Serializable {
 
 	public void setBlobUrl(String blobUrl) {
 		this.blobUrl = blobUrl;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 }
