@@ -1,6 +1,7 @@
 package za.co.idea.ip.ws;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -185,6 +186,7 @@ public class IdeaService {
 					ipIdeaGroup.setIgId(ids[i]);
 					ipIdeaGroup.setIpIdea(ipIdea);
 					ipIdeaGroup.setIpGroup(ipGroupDAO.findById(gId));
+					ipIdeaGroup.setIgCrtdDt(new Date());
 					ipIdeaGroupDAO.save(ipIdeaGroup);
 					i++;
 				}
@@ -232,6 +234,7 @@ public class IdeaService {
 					ipIdeaGroup.setIgId(ids[i]);
 					ipIdeaGroup.setIpIdea(ipIdea);
 					ipIdeaGroup.setIpGroup(ipGroupDAO.findById(gId));
+					ipIdeaGroup.setIgCrtdDt(new Date());
 					ipIdeaGroupDAO.save(ipIdeaGroup);
 					i++;
 				}

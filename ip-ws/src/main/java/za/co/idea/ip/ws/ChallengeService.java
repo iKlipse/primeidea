@@ -1,6 +1,7 @@
 package za.co.idea.ip.ws;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -76,6 +77,7 @@ public class ChallengeService {
 					ipChallengeGroup.setCgId(ids[i]);
 					ipChallengeGroup.setIpChallenge(ipChallenge);
 					ipChallengeGroup.setIpGroup(ipGroupDAO.findById(gId));
+					ipChallengeGroup.setCgCrtdDt(new Date());
 					ipChallengeGroupDAO.save(ipChallengeGroup);
 					i++;
 				}
@@ -123,6 +125,7 @@ public class ChallengeService {
 					ipChallengeGroup.setCgId(ids[i]);
 					ipChallengeGroup.setIpChallenge(ipChallenge);
 					ipChallengeGroup.setIpGroup(ipGroupDAO.findById(gId));
+					ipChallengeGroup.setCgCrtdDt(new Date());
 					ipChallengeGroupDAO.save(ipChallengeGroup);
 					i++;
 				}

@@ -275,7 +275,7 @@ public class ChallengeController implements Serializable {
 		}
 	}
 
-	public String showPublishedChallenges() {
+	public void showPublishedChallenges() {
 		try {
 			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
 			challengeCats = fetchAllChallengeCat();
@@ -285,16 +285,16 @@ public class ChallengeController implements Serializable {
 			showViewChal = false;
 			showCrtChal = false;
 			showReviewChal = false;
-			return "chalv";
+			// return "chalv";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
+			// return "";
 		}
 	}
 
-	public String showViewChallenges() {
+	public void showViewChallenges() {
 		try {
 			viewChallenges = fetchAllChallengesByUser();
 			challengeCats = fetchAllChallengeCat();
@@ -304,16 +304,16 @@ public class ChallengeController implements Serializable {
 			showViewChal = true;
 			showCrtChal = false;
 			showReviewChal = false;
-			return "chalv";
+			// return "chalv";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
+			// return "";
 		}
 	}
 
-	public String showCreateChallenges() {
+	public void showCreateChallenges() {
 		try {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
 			challengeCats = fetchAllChallengeCat();
@@ -326,16 +326,18 @@ public class ChallengeController implements Serializable {
 			showViewChal = false;
 			showCrtChal = true;
 			showReviewChal = false;
-			return "chalv";
+			rvIdCnt = 1;
+			rvIds = null;
+			// return "chalv";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
+			// return "";
 		}
 	}
 
-	public String showReviewChallenges() {
+	public void showReviewChallenges() {
 		try {
 			viewChallenges = RESTServiceHelper.fetchAllReviewChallengesByUser(userId);
 			challengeCats = fetchAllChallengeCat();
@@ -345,12 +347,12 @@ public class ChallengeController implements Serializable {
 			showReviewChal = true;
 			showViewChal = false;
 			showCrtChal = false;
-			return "chalv";
+			// return "chalv";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
+			// return "";
 		}
 	}
 
@@ -663,6 +665,10 @@ public class ChallengeController implements Serializable {
 			if (chalTitleAvail) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				showPubChal = false;
+				showViewChal = false;
+				showCrtChal = true;
+				showReviewChal = false;
 				return "";
 			}
 			List<String> errors = validateChallenge();
@@ -671,6 +677,10 @@ public class ChallengeController implements Serializable {
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
+				showPubChal = false;
+				showViewChal = false;
+				showCrtChal = true;
+				showReviewChal = false;
 				return "";
 			}
 			WebClient addChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/add");
@@ -717,17 +727,25 @@ public class ChallengeController implements Serializable {
 				chalUploadContent = null;
 				rvIdCnt = 1;
 				rvIds = null;
-				return showViewChallenges();
+				showViewChallenges();
+				return redirectMain();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				showPubChal = false;
+				showViewChal = false;
+				showCrtChal = true;
+				showReviewChal = false;
 				return "";
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			showPubChal = false;
+			showViewChal = false;
+			showCrtChal = true;
+			showReviewChal = false;
 			return "";
 		}
 	}
@@ -819,7 +837,8 @@ public class ChallengeController implements Serializable {
 				chalUploadContent = null;
 				rvIdCnt = 1;
 				rvIds = null;
-				return showViewChallenges();
+				showViewChallenges();
+				return redirectMain();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -887,7 +906,7 @@ public class ChallengeController implements Serializable {
 		showChallengeLikes = false;
 	}
 
-	public String showCreateSolution() {
+	public void showCreateSolution() {
 		try {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
 			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
@@ -900,12 +919,14 @@ public class ChallengeController implements Serializable {
 			showViewSol = false;
 			showCrtSol = true;
 			showReviewSol = false;
-			return "solv";
+			rvIdCnt = 1;
+			rvIds = null;
+			// return "solv";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
+			// return "";
 		}
 	}
 
@@ -928,7 +949,7 @@ public class ChallengeController implements Serializable {
 		}
 	}
 
-	public String showViewSolution() {
+	public void showViewSolution() {
 		try {
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			viewChallenges = fetchAllChallengesByUser();
@@ -940,16 +961,16 @@ public class ChallengeController implements Serializable {
 			showViewSol = true;
 			showCrtSol = false;
 			showReviewSol = false;
-			return "solv";
+			// return "solv";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
+			// return "";
 		}
 	}
 
-	public String showViewOpenSolution() {
+	public void showViewOpenSolution() {
 		try {
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			viewChallenges = fetchAllChallengesByUser();
@@ -961,12 +982,12 @@ public class ChallengeController implements Serializable {
 			showViewSol = false;
 			showCrtSol = false;
 			showReviewSol = false;
-			return "solv";
+			// return "solv";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
+			// return "";
 		}
 	}
 
@@ -1403,10 +1424,11 @@ public class ChallengeController implements Serializable {
 				rvIds = null;
 				saveAsOpen = false;
 				if (saveAsOpen) {
-					return showViewOpenSolution();
+					showViewOpenSolution();
 				} else {
-					return showViewSolution();
+					showViewSolution();
 				}
+				return redirectMain();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -1499,7 +1521,7 @@ public class ChallengeController implements Serializable {
 				solUploadContent = null;
 				rvIdCnt = 1;
 				rvIds = null;
-				return showViewSolution();
+				return redirectMain();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);

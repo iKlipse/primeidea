@@ -654,8 +654,8 @@ public class RandomIdeaController implements Serializable {
 		if (ideaBean.getIdeaDesc() == null || ideaBean.getIdeaDesc().length() == 0) {
 			ret.add("Description is Mandatory");
 		}
-		if (rvIdCnt == 0 || rvIds == null || rvIds.size() == 0) {
-			ret.add("Assign Reviewers");
+		if (rvIdCnt == 0 || rvIds == null || rvIds.size() == 0 || rvIds.get(0).getGroupId() == null || rvIds.get(0).getGroupId().length == 0) {
+			ret.add("Please Assign Reviewers");
 		}
 		return ret;
 	}
