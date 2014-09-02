@@ -66,6 +66,7 @@ public class ChallengeService {
 			ipChallenge.setIpChallengeCat(ipChallengeCatDAO.findById(challenge.getCatId()));
 			ipChallenge.setIpChallengeStatus(ipChallengeStatusDAO.findById(challenge.getStatusId()));
 			ipChallenge.setIpUserByChalCrtdBy(ipUserDAO.findById(challenge.getCrtdById()));
+			ipChallenge.setChalReviewCnt(challenge.getRvIdCnt());
 			ipChallengeDAO.save(ipChallenge);
 			if (challenge.getGroupIdList() != null && challenge.getGroupIdList().length > 0) {
 				Long[] ids = ipNativeSQLDAO.getNextIds(IpChallengeGroup.class, challenge.getGroupIdList().length);
@@ -111,6 +112,7 @@ public class ChallengeService {
 			ipChallenge.setIpChallengeCat(ipChallengeCatDAO.findById(challenge.getCatId()));
 			ipChallenge.setIpChallengeStatus(ipChallengeStatusDAO.findById(challenge.getStatusId()));
 			ipChallenge.setIpUserByChalCrtdBy(ipUserDAO.findById(challenge.getCrtdById()));
+			ipChallenge.setChalReviewCnt(challenge.getRvIdCnt());
 			ipChallengeDAO.merge(ipChallenge);
 			ipChallengeGroupDAO.deleteByChallengeId(challenge.getId());
 			if (challenge.getGroupIdList() != null && challenge.getGroupIdList().length > 0) {
@@ -163,6 +165,7 @@ public class ChallengeService {
 				challenge.setTitle(ipChallenge.getChalTitle());
 				challenge.setCatName(ipChallenge.getIpChallengeCat().getCcDesc());
 				challenge.setStatusName(ipChallenge.getIpChallengeStatus().getCsDesc());
+				challenge.setRvIdCnt(ipChallenge.getChalReviewCnt());
 				List val = ipChallengeGroupDAO.fetchByChallengeId(ipChallenge.getChalId());
 				if (val != null) {
 					Long[] grps = new Long[val.size()];
@@ -257,6 +260,7 @@ public class ChallengeService {
 				challenge.setTitle(ipChallenge.getChalTitle());
 				challenge.setCatName(ipChallenge.getIpChallengeCat().getCcDesc());
 				challenge.setStatusName(ipChallenge.getIpChallengeStatus().getCsDesc());
+				challenge.setRvIdCnt(ipChallenge.getChalReviewCnt());
 				List val = ipChallengeGroupDAO.fetchByChallengeId(ipChallenge.getChalId());
 				if (val != null) {
 					Long[] grps = new Long[val.size()];
@@ -313,6 +317,7 @@ public class ChallengeService {
 				challenge.setTitle(ipChallenge.getChalTitle());
 				challenge.setCatName(ipChallenge.getIpChallengeCat().getCcDesc());
 				challenge.setStatusName(ipChallenge.getIpChallengeStatus().getCsDesc());
+				challenge.setRvIdCnt(ipChallenge.getChalReviewCnt());
 				List val = ipChallengeGroupDAO.fetchByChallengeId(ipChallenge.getChalId());
 				if (val != null) {
 					Long[] grps = new Long[val.size()];
@@ -369,6 +374,7 @@ public class ChallengeService {
 				challenge.setTitle(ipChallenge.getChalTitle());
 				challenge.setCatName(ipChallenge.getIpChallengeCat().getCcDesc());
 				challenge.setStatusName(ipChallenge.getIpChallengeStatus().getCsDesc());
+				challenge.setRvIdCnt(ipChallenge.getChalReviewCnt());
 				List val = ipChallengeGroupDAO.fetchByChallengeId(ipChallenge.getChalId());
 				if (val != null) {
 					Long[] grps = new Long[val.size()];
@@ -425,6 +431,7 @@ public class ChallengeService {
 				challenge.setTitle(ipChallenge.getChalTitle());
 				challenge.setCatName(ipChallenge.getIpChallengeCat().getCcDesc());
 				challenge.setStatusName(ipChallenge.getIpChallengeStatus().getCsDesc());
+				challenge.setRvIdCnt(ipChallenge.getChalReviewCnt());
 				List val = ipChallengeGroupDAO.fetchByChallengeId(ipChallenge.getChalId());
 				if (val != null) {
 					Long[] grps = new Long[val.size()];
@@ -481,6 +488,7 @@ public class ChallengeService {
 				challenge.setTitle(ipChallenge.getChalTitle());
 				challenge.setCatName(ipChallenge.getIpChallengeCat().getCcDesc());
 				challenge.setStatusName(ipChallenge.getIpChallengeStatus().getCsDesc());
+				challenge.setRvIdCnt(ipChallenge.getChalReviewCnt());
 				List val = ipChallengeGroupDAO.fetchByChallengeId(ipChallenge.getChalId());
 				if (val != null) {
 					Long[] grps = new Long[val.size()];

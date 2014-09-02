@@ -27,6 +27,7 @@ public class SolutionMessage {
 	private Long revUserId;
 	private String catName;
 	private String statusName;
+	private Integer rvIdCnt;
 
 	public Long getId() {
 		return id;
@@ -194,6 +195,14 @@ public class SolutionMessage {
 
 	public void setStatusName(String statusName) {
 		this.statusName = statusName;
+	}
+
+	public Integer getRvIdCnt() {
+		return rvIdCnt;
+	}
+
+	public void setRvIdCnt(Integer rvIdCnt) {
+		this.rvIdCnt = rvIdCnt;
 	}
 
 }

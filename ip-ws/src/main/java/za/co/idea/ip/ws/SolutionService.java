@@ -80,6 +80,7 @@ public class SolutionService {
 			ipSolution.setSolId(solution.getId());
 			ipSolution.setSolTags(solution.getTags());
 			ipSolution.setSolTitle(solution.getTitle());
+			ipSolution.setSolReviewCnt(solution.getRvIdCnt());
 			ipSolutionDAO.save(ipSolution);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
@@ -111,6 +112,7 @@ public class SolutionService {
 			ipSolution.setSolId(solution.getId());
 			ipSolution.setSolTags(solution.getTags());
 			ipSolution.setSolTitle(solution.getTitle());
+			ipSolution.setSolReviewCnt(solution.getRvIdCnt());
 			ipSolutionDAO.merge(ipSolution);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
@@ -148,6 +150,7 @@ public class SolutionService {
 				solution.setTitle(ipSolution.getSolTitle());
 				solution.setCatName(ipSolution.getIpSolutionCat().getScDesc());
 				solution.setStatusName(ipSolution.getIpSolutionStatus().getSsDesc());
+				solution.setRvIdCnt(ipSolution.getSolReviewCnt());
 				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
 				if (ipBlob != null) {
 					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
@@ -197,6 +200,7 @@ public class SolutionService {
 				solution.setTitle(ipSolution.getSolTitle());
 				solution.setCatName(ipSolution.getIpSolutionCat().getScDesc());
 				solution.setStatusName(ipSolution.getIpSolutionStatus().getSsDesc());
+				solution.setRvIdCnt(ipSolution.getSolReviewCnt());
 				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
 				if (ipBlob != null) {
 					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
@@ -245,6 +249,7 @@ public class SolutionService {
 				solution.setTitle(ipSolution.getSolTitle());
 				solution.setCatName(ipSolution.getIpSolutionCat().getScDesc());
 				solution.setStatusName(ipSolution.getIpSolutionStatus().getSsDesc());
+				solution.setRvIdCnt(ipSolution.getSolReviewCnt());
 				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
 				if (ipBlob != null) {
 					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
@@ -292,6 +297,7 @@ public class SolutionService {
 				solution.setTitle(ipSolution.getSolTitle());
 				solution.setCatName(ipSolution.getIpSolutionCat().getScDesc());
 				solution.setStatusName(ipSolution.getIpSolutionStatus().getSsDesc());
+				solution.setRvIdCnt(ipSolution.getSolReviewCnt());
 				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
 				if (ipBlob != null) {
 					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
@@ -339,6 +345,7 @@ public class SolutionService {
 				solution.setTitle(ipSolution.getSolTitle());
 				solution.setCatName(ipSolution.getIpSolutionCat().getScDesc());
 				solution.setStatusName(ipSolution.getIpSolutionStatus().getSsDesc());
+				solution.setRvIdCnt(ipSolution.getSolReviewCnt());
 				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
 				if (ipBlob != null) {
 					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
@@ -386,6 +393,7 @@ public class SolutionService {
 				solution.setTitle(ipSolution.getSolTitle());
 				solution.setCatName(ipSolution.getIpSolutionCat().getScDesc());
 				solution.setStatusName(ipSolution.getIpSolutionStatus().getSsDesc());
+				solution.setRvIdCnt(ipSolution.getSolReviewCnt());
 				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
 				if (ipBlob != null) {
 					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
@@ -433,6 +441,7 @@ public class SolutionService {
 				solution.setTitle(ipSolution.getSolTitle());
 				solution.setCatName(ipSolution.getIpSolutionCat().getScDesc());
 				solution.setStatusName(ipSolution.getIpSolutionStatus().getSsDesc());
+				solution.setRvIdCnt(ipSolution.getSolReviewCnt());
 				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
 				if (ipBlob != null) {
 					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());

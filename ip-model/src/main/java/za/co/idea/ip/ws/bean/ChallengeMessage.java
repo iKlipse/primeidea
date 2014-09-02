@@ -29,6 +29,7 @@ public class ChallengeMessage {
 	private Long revUserId;
 	private String statusName;
 	private String catName;
+	private Integer rvIdCnt;
 
 	public Long getId() {
 		return id;
@@ -212,6 +213,14 @@ public class ChallengeMessage {
 
 	public void setCatName(String catName) {
 		this.catName = catName;
+	}
+
+	public Integer getRvIdCnt() {
+		return rvIdCnt;
+	}
+
+	public void setRvIdCnt(Integer rvIdCnt) {
+		this.rvIdCnt = rvIdCnt;
 	}
 
 }

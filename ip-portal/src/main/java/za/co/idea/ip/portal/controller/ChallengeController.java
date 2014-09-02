@@ -37,6 +37,7 @@ import org.primefaces.model.tagcloud.TagCloudModel;
 import za.co.idea.ip.portal.bean.ChallengeBean;
 import za.co.idea.ip.portal.bean.GroupBean;
 import za.co.idea.ip.portal.bean.ListSelectorBean;
+import za.co.idea.ip.portal.bean.ReviewBean;
 import za.co.idea.ip.portal.bean.SolutionBean;
 import za.co.idea.ip.portal.bean.TagBean;
 import za.co.idea.ip.portal.bean.UserBean;
@@ -47,6 +48,7 @@ import za.co.idea.ip.ws.bean.ChallengeMessage;
 import za.co.idea.ip.ws.bean.GroupMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
+import za.co.idea.ip.ws.bean.ReviewMessage;
 import za.co.idea.ip.ws.bean.SolutionMessage;
 import za.co.idea.ip.ws.bean.TagMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
@@ -114,6 +116,8 @@ public class ChallengeController implements Serializable {
 	private long userId;
 	private boolean showReviewChal;
 	private boolean showReviewSol;
+	private List<ReviewBean> rvIds;
+	private Integer rvIdCnt;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
@@ -682,9 +686,8 @@ public class ChallengeController implements Serializable {
 			message.setStatusId(1);
 			message.setTag(challengeBean.getTag());
 			message.setTitle(challengeBean.getTitle());
-			// message.setGroupIdList(getSelGroupIds());
 			message.setGroupIdList(toLongArray(selGrpId));
-			message.setRevUserId(challengeBean.getRevUserId());
+			message.setRvIdCnt(rvIdCnt);
 			ResponseMessage response = addChallengeClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			addChallengeClient.close();
 			if (response.getStatusCode() == 0) {
@@ -712,6 +715,8 @@ public class ChallengeController implements Serializable {
 					}
 				}
 				chalUploadContent = null;
+				rvIdCnt = 1;
+				rvIds = null;
 				return showViewChallenges();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -755,9 +760,8 @@ public class ChallengeController implements Serializable {
 			message.setStatusId(challengeBean.getStatusId());
 			message.setTag(challengeBean.getTag());
 			message.setTitle(challengeBean.getTitle());
-			// message.setGroupIdList(getSelGroupIds());
 			message.setGroupIdList(toLongArray(selGrpId));
-			message.setRevUserId(challengeBean.getRevUserId());
+			message.setRvIdCnt(rvIdCnt);
 			ResponseMessage response = updateChallengeClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			updateChallengeClient.close();
 			if (response.getStatusCode() == 0) {
@@ -813,6 +817,8 @@ public class ChallengeController implements Serializable {
 					}
 				}
 				chalUploadContent = null;
+				rvIdCnt = 1;
+				rvIds = null;
 				return showViewChallenges();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -1363,7 +1369,7 @@ public class ChallengeController implements Serializable {
 			}
 			message.setTags(solutionBean.getTags());
 			message.setTitle(solutionBean.getTitle());
-			message.setRevUserId(solutionBean.getRevUserId());
+			message.setRvIdCnt(rvIdCnt);
 			ResponseMessage response = addSolutionClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			addSolutionClient.close();
 			if (response.getStatusCode() == 0) {
@@ -1393,6 +1399,8 @@ public class ChallengeController implements Serializable {
 					}
 				}
 				solUploadContent = null;
+				rvIdCnt = 1;
+				rvIds = null;
 				saveAsOpen = false;
 				if (saveAsOpen) {
 					return showViewOpenSolution();
@@ -1433,7 +1441,7 @@ public class ChallengeController implements Serializable {
 			message.setStatusId(solutionBean.getStatusId());
 			message.setTags(solutionBean.getTags());
 			message.setTitle(solutionBean.getTitle());
-			message.setRevUserId(solutionBean.getRevUserId());
+			message.setRvIdCnt(rvIdCnt);
 			ResponseMessage response = updateSolutionClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			updateSolutionClient.close();
 			if (response.getStatusCode() == 0) {
@@ -1489,6 +1497,8 @@ public class ChallengeController implements Serializable {
 					}
 				}
 				solUploadContent = null;
+				rvIdCnt = 1;
+				rvIds = null;
 				return showViewSolution();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -1743,13 +1753,13 @@ public class ChallengeController implements Serializable {
 			bean.setRevUserId(challengeMessage.getRevUserId());
 			bean.setStatusName(challengeMessage.getStatusName());
 			bean.setCatName(challengeMessage.getCatName());
-			String chalStatus=challengeMessage.getStatusName();
-			if(userId!=0 && chalStatus!=null && !(chalStatus.equals("Draft") && chalStatus.equals("Publish"))) {
+			String chalStatus = challengeMessage.getStatusName();
+			if (userId != 0 && chalStatus != null && !(chalStatus.equals("Draft") && chalStatus.equals("Publish"))) {
 				bean.setDisableEdit(true);
-			}else {
+			} else {
 				bean.setDisableEdit(false);
 			}
-			
+
 			ret.add(bean);
 		}
 		return ret;
@@ -1876,10 +1886,10 @@ public class ChallengeController implements Serializable {
 			bean.setRevUserId(solutionMessage.getRevUserId());
 			bean.setStatusName(solutionMessage.getStatusName());
 			bean.setCatName(solutionMessage.getCatName());
-			String solStatus=solutionMessage.getStatusName();
-			if(userId!=0 && solStatus!=null && !(solStatus.equals("Draft") && solStatus.equals("Open"))) {
+			String solStatus = solutionMessage.getStatusName();
+			if (userId != 0 && solStatus != null && !(solStatus.equals("Draft") && solStatus.equals("Open"))) {
 				bean.setDisableEdit(true);
-			}else {
+			} else {
 				bean.setDisableEdit(false);
 			}
 			if (solutionMessage.isSolImgAvl())
@@ -2053,6 +2063,64 @@ public class ChallengeController implements Serializable {
 		} else {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Update Reviewer Request Failed", "Update Reviewer Request Failed");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+	}
+
+	public void initializeChalAssignReviews() {
+		pGrps = RESTServiceHelper.fetchActiveGroups();
+		rvIds = new ArrayList<ReviewBean>();
+		for (int i = 0; i < rvIdCnt; i++) {
+			ReviewBean bean = new ReviewBean();
+			bean.setEntityId(COUNTER.getNextId("IpChallenge"));
+			bean.setStatusId(i + 1);
+			bean.setTblNm("ip_challenge");
+			rvIds.add(bean);
+		}
+	}
+
+	public void assignChalReviews() {
+		for (ReviewBean bean : rvIds) {
+			ReviewMessage message = new ReviewMessage();
+			message.setEntityId(bean.getEntityId());
+			message.setGroupId(toLongArray(bean.getGroupId()));
+			message.setStatusId(bean.getStatusId());
+			message.setTblNm(bean.getTblNm());
+			WebClient reviewClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rvs/review/modify");
+			ResponseMessage res = reviewClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
+			if (res.getStatusCode() != 0) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Assign Reviewer Request Failed", "Assign Reviewer Request Failed");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			}
+			reviewClient.close();
+		}
+	}
+
+	public void initializeSolAssignReviews() {
+		pGrps = RESTServiceHelper.fetchActiveGroups();
+		rvIds = new ArrayList<ReviewBean>();
+		for (int i = 0; i < rvIdCnt; i++) {
+			ReviewBean bean = new ReviewBean();
+			bean.setEntityId(COUNTER.getNextId("IpSolution"));
+			bean.setStatusId(i + 1);
+			bean.setTblNm("ip_solution");
+			rvIds.add(bean);
+		}
+	}
+
+	public void assignSolReviews() {
+		for (ReviewBean bean : rvIds) {
+			ReviewMessage message = new ReviewMessage();
+			message.setEntityId(bean.getEntityId());
+			message.setGroupId(toLongArray(bean.getGroupId()));
+			message.setStatusId(bean.getStatusId());
+			message.setTblNm(bean.getTblNm());
+			WebClient reviewClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rvs/review/modify");
+			ResponseMessage res = reviewClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
+			if (res.getStatusCode() != 0) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Assign Reviewer Request Failed", "Assign Reviewer Request Failed");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			}
+			reviewClient.close();
 		}
 	}
 
@@ -2243,8 +2311,6 @@ public class ChallengeController implements Serializable {
 		return ret;
 	}
 
-	
-
 	private List<String> validateSolution() {
 		ArrayList<String> ret = new ArrayList<String>();
 		if (solutionBean.getChalId() == null || solutionBean.getChalId().toString().length() == 0) {
@@ -2257,6 +2323,9 @@ public class ChallengeController implements Serializable {
 		}
 		if (solutionBean.getDesc() == null || solutionBean.getDesc().length() == 0) {
 			ret.add("Description is Mandatory");
+		}
+		if (rvIdCnt == 0 || rvIds == null || rvIds.size() == 0) {
+			ret.add("Please assign reviewers");
 		}
 		return ret;
 	}
@@ -2280,6 +2349,9 @@ public class ChallengeController implements Serializable {
 		if (challengeBean.getExprDt() == null || challengeBean.getExprDt().toString().length() == 0) {
 			ret.add("Expiry Date is Mandatory");
 		}
+		if (rvIdCnt == 0 || rvIds == null || rvIds.size() == 0) {
+			ret.add("Please assign reviewers");
+		}
 		return ret;
 	}
 
@@ -2292,8 +2364,6 @@ public class ChallengeController implements Serializable {
 			return false;
 		}
 	}
-
-
 
 	private DualListModel<GroupBean> initializeSelectedGroups(List<GroupBean> grps) {
 		List<Long> selGrps = challengeBean.getGroupIdList();
@@ -2812,5 +2882,23 @@ public class ChallengeController implements Serializable {
 
 	public void setChalTitleAvail(boolean chalTitleAvail) {
 		this.chalTitleAvail = chalTitleAvail;
+	}
+
+	public List<ReviewBean> getRvIds() {
+		if (rvIds == null)
+			rvIds = new ArrayList<ReviewBean>();
+		return rvIds;
+	}
+
+	public void setRvIds(List<ReviewBean> rvIds) {
+		this.rvIds = rvIds;
+	}
+
+	public Integer getRvIdCnt() {
+		return rvIdCnt;
+	}
+
+	public void setRvIdCnt(Integer rvIdCnt) {
+		this.rvIdCnt = rvIdCnt;
 	}
 }

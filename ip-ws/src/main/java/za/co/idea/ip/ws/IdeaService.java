@@ -276,6 +276,7 @@ public class IdeaService {
 					idea.setCrtdById(ipIdea.getIpUserByIdeaUserId().getUserId());
 					idea.setCrtdByName(ipIdea.getIpUserByIdeaUserId().getUserScreenName());
 				}
+				idea.setRvIdCnt(ipIdea.getIdeaReviewCnt());
 				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
 				if (val != null) {
 					Long[] grps = new Long[val.size()];
@@ -334,6 +335,7 @@ public class IdeaService {
 					idea.setCrtdById(ipIdea.getIpUserByIdeaUserId().getUserId());
 					idea.setCrtdByName(ipIdea.getIpUserByIdeaUserId().getUserScreenName());
 				}
+				idea.setRvIdCnt(ipIdea.getIdeaReviewCnt());
 				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
 				if (val != null) {
 					Long[] grps = new Long[val.size()];
@@ -392,6 +394,7 @@ public class IdeaService {
 					idea.setCrtdById(ipIdea.getIpUserByIdeaUserId().getUserId());
 					idea.setCrtdByName(ipIdea.getIpUserByIdeaUserId().getUserScreenName());
 				}
+				idea.setRvIdCnt(ipIdea.getIdeaReviewCnt());
 				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
 				if (val != null) {
 					Long[] grps = new Long[val.size()];
@@ -450,6 +453,7 @@ public class IdeaService {
 					idea.setCrtdById(ipIdea.getIpUserByIdeaUserId().getUserId());
 					idea.setCrtdByName(ipIdea.getIpUserByIdeaUserId().getUserScreenName());
 				}
+				idea.setRvIdCnt(ipIdea.getIdeaReviewCnt());
 				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
 				if (val != null) {
 					Long[] grps = new Long[val.size()];
@@ -508,6 +512,7 @@ public class IdeaService {
 					idea.setCrtdById(ipIdea.getIpUserByIdeaUserId().getUserId());
 					idea.setCrtdByName(ipIdea.getIpUserByIdeaUserId().getUserScreenName());
 				}
+				idea.setRvIdCnt(ipIdea.getIdeaReviewCnt());
 				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
 				if (val != null) {
 					Long[] grps = new Long[val.size()];
@@ -566,6 +571,7 @@ public class IdeaService {
 					idea.setCrtdById(ipIdea.getIpUserByIdeaUserId().getUserId());
 					idea.setCrtdByName(ipIdea.getIpUserByIdeaUserId().getUserScreenName());
 				}
+				idea.setRvIdCnt(ipIdea.getIdeaReviewCnt());
 				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
 				if (val != null) {
 					Long[] grps = new Long[val.size()];
