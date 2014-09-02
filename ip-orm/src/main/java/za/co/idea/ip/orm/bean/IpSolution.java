@@ -13,16 +13,17 @@ public class IpSolution implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -1491859618781054463L;
+	private static final long serialVersionUID = -2820875215291609936L;
 	private Long solId;
 	private IpSolutionStatus ipSolutionStatus;
 	private IpSolutionCat ipSolutionCat;
-	private IpUser ipUser;
+	private IpUser ipUserBySolCrtdBy;
 	private IpChallenge ipChallenge;
 	private String solTitle;
 	private String solDesc;
 	private String solTags;
 	private Date solCrtdDt;
+	private Integer solReviewCnt;
 
 	// Constructors
 
@@ -31,27 +32,29 @@ public class IpSolution implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpSolution(Long solId, IpSolutionStatus ipSolutionStatus, IpUser ipUser, IpChallenge ipChallenge, String solTitle, String solDesc, Date solCrtdDt) {
+	public IpSolution(Long solId, IpSolutionStatus ipSolutionStatus, IpUser ipUserBySolCrtdBy, IpChallenge ipChallenge, String solTitle, String solDesc, Date solCrtdDt, Integer solReviewCnt) {
 		this.solId = solId;
 		this.ipSolutionStatus = ipSolutionStatus;
-		this.ipUser = ipUser;
+		this.ipUserBySolCrtdBy = ipUserBySolCrtdBy;
 		this.ipChallenge = ipChallenge;
 		this.solTitle = solTitle;
 		this.solDesc = solDesc;
 		this.solCrtdDt = solCrtdDt;
+		this.solReviewCnt = solReviewCnt;
 	}
 
 	/** full constructor */
-	public IpSolution(Long solId, IpSolutionStatus ipSolutionStatus, IpSolutionCat ipSolutionCat, IpUser ipUser, IpChallenge ipChallenge, String solTitle, String solDesc, String solTags, Date solCrtdDt) {
+	public IpSolution(Long solId, IpSolutionStatus ipSolutionStatus, IpSolutionCat ipSolutionCat, IpUser ipUserBySolCrtdBy, IpChallenge ipChallenge, String solTitle, String solDesc, String solTags, Date solCrtdDt, Integer solReviewCnt) {
 		this.solId = solId;
 		this.ipSolutionStatus = ipSolutionStatus;
 		this.ipSolutionCat = ipSolutionCat;
-		this.ipUser = ipUser;
+		this.ipUserBySolCrtdBy = ipUserBySolCrtdBy;
 		this.ipChallenge = ipChallenge;
 		this.solTitle = solTitle;
 		this.solDesc = solDesc;
 		this.solTags = solTags;
 		this.solCrtdDt = solCrtdDt;
+		this.solReviewCnt = solReviewCnt;
 	}
 
 	// Property accessors
@@ -80,12 +83,12 @@ public class IpSolution implements java.io.Serializable {
 		this.ipSolutionCat = ipSolutionCat;
 	}
 
-	public IpUser getIpUser() {
-		return this.ipUser;
+	public IpUser getIpUserBySolCrtdBy() {
+		return this.ipUserBySolCrtdBy;
 	}
 
-	public void setIpUser(IpUser ipUser) {
-		this.ipUser = ipUser;
+	public void setIpUserBySolCrtdBy(IpUser ipUserBySolCrtdBy) {
+		this.ipUserBySolCrtdBy = ipUserBySolCrtdBy;
 	}
 
 	public IpChallenge getIpChallenge() {
@@ -126,6 +129,14 @@ public class IpSolution implements java.io.Serializable {
 
 	public void setSolCrtdDt(Date solCrtdDt) {
 		this.solCrtdDt = solCrtdDt;
+	}
+
+	public Integer getSolReviewCnt() {
+		return solReviewCnt;
+	}
+
+	public void setSolReviewCnt(Integer solReviewCnt) {
+		this.solReviewCnt = solReviewCnt;
 	}
 
 }

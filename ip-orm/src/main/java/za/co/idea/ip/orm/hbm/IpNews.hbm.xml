@@ -22,5 +22,8 @@
         <property name="newsContent" type="java.lang.String">
             <column name="news_content" length="9999" />
         </property>
+        <property name="newsCrtdDt" type="java.sql.Timestamp">
+            <column name="news_crtd_dt" length="19" not-null="true" />
+        </property>
     </class>
 </hibernate-mapping>

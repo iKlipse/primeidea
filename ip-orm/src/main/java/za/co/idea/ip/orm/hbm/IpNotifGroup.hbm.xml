@@ -14,6 +14,9 @@
 		<property name="ingGrpId" type="java.lang.Long">
 			<column name="ing_grp_id" />
 		</property>
+        <property name="ingCrtdDt" type="java.sql.Timestamp">
+            <column name="ing_crtd_dt" length="19" not-null="true" />
+        </property>
 	</class>
 	<sql-query name="deleteNGByNotifId">
 		delete from ip_notif_group where

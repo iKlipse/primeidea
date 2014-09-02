@@ -11,7 +11,7 @@
 		<many-to-one name="ipIdeaStatus" class="za.co.idea.ip.orm.bean.IpIdeaStatus" fetch="select">
 			<column name="idea_status" not-null="true" />
 		</many-to-one>
-		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser" fetch="select">
+		<many-to-one name="ipUserByIdeaUserId" class="za.co.idea.ip.orm.bean.IpUser" fetch="select">
 			<column name="idea_user_id" not-null="true" />
 		</many-to-one>
 		<many-to-one name="ipIdeaCat" class="za.co.idea.ip.orm.bean.IpIdeaCat" fetch="select">
@@ -31,6 +31,9 @@
 		</property>
 		<property name="ideaTag" type="java.lang.String">
 			<column name="idea_tag" length="65535" not-null="true" />
+		</property>
+		<property name="ideaReviewCnt" type="java.lang.Integer">
+			<column name="idea_review_cnt" length="11" />
 		</property>
 		<set name="ipIdeaGroups" inverse="true">
 			<key>
@@ -68,7 +71,7 @@
 	</sql-query>
 	<!-- <sql-query name="getReviewsIdeasByUser"> select idea.* from ip_idea idea where idea.idea_status=3 and idea_id in (SELECT ig_idea_id FROM lpdb.ip_idea_group where ig_grp_id in (SELECT gu_grp_id FROM lpdb.ip_group_user where gu_usr_id=:id and gu_grp_id in (SELECT fg_grp_id FROM lpdb.ip_func_group where fg_func_id=18))) <return alias="idea" class="za.co.idea.ip.orm.bean.IpIdea" /> </sql-query> -->
 	<sql-query name="getReviewsIdeasByUser">
-		select idea.* from ip_idea idea, ip_review rv where idea.idea_id=rv.rev_entity_id and idea.idea_status=3 and rv.rev_user_id=:id and rv.rev_entity_name="ip_idea"
+		select idea.* from ip_idea idea, ip_review rv where idea.idea_id=rv.rev_entity_id and idea.idea_status=3 and rv.rev_sel_user_id=:id and rv.rev_entity_name="ip_idea"
 		<return alias="idea" class="za.co.idea.ip.orm.bean.IpIdea" />
 	</sql-query>
 </hibernate-mapping>

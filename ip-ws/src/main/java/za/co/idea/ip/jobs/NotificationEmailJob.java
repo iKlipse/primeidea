@@ -3,12 +3,15 @@ package za.co.idea.ip.jobs;
 import java.util.List;
 
 import org.apache.cxf.common.util.StringUtils;
+import org.apache.log4j.Logger;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpGroupUser;
 import za.co.idea.ip.orm.bean.IpNotif;
@@ -25,7 +28,9 @@ public class NotificationEmailJob extends QuartzJobBean implements StatefulJob {
 	private IpGroupUserDAO ipGroupUserDAO;
 	private IpUserDAO ipUserDAO;
 	private MailSender sender;
+	private static final Logger logger = Logger.getLogger(NotificationEmailJob.class);
 
+	@Transactional(propagation = Propagation.REQUIRED)
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 		try {
 			List notifications = ipNotifDAO.findAll();
@@ -33,6 +38,7 @@ public class NotificationEmailJob extends QuartzJobBean implements StatefulJob {
 				IpNotif ipNotif = (IpNotif) object;
 				if (ipNotif.getNotifList() == null || ipNotif.getNotifList().length() == 0) {
 					List notifList = ipNotifGroupDAO.findByIngNotifId((Object) ipNotif.getNotifId());
+					boolean delete = false;
 					if (notifList != null && !notifList.isEmpty()) {
 						for (Object obj : notifList) {
 							IpNotifGroup group = (IpNotifGroup) obj;
@@ -40,23 +46,37 @@ public class NotificationEmailJob extends QuartzJobBean implements StatefulJob {
 							for (Object usr : groupList) {
 								IpGroupUser igu = (IpGroupUser) usr;
 								SimpleMailMessage message = new SimpleMailMessage();
-								message.setFrom("ipnotif@primedia.co.za");
+								message.setFrom("noreply@primedia.co.za");
 								message.setText(ipNotif.getNotifBody());
 								message.setSubject(ipNotif.getNotifSubject());
 								message.setTo(igu.getIpUser().getUserEmail());
-								sender.send(message);
+								try {
+									sender.send(message);
+									delete = true;
+								} catch (Exception ex) {
+									logger.error("Error: " + ex.getMessage());
+								}
 							}
 						}
-						ipNotifGroupDAO.deleteByNotifId(ipNotif.getNotifId());
+						if (delete) {
+							ipNotifGroupDAO.deleteByNotifId(ipNotif.getNotifId());
+						}
 					} else {
 						SimpleMailMessage message = new SimpleMailMessage();
-						message.setFrom("primedia@primedia.co.za");
+						message.setFrom("noreply@primedia.co.za");
 						message.setText(ipNotif.getNotifBody());
 						message.setSubject(ipNotif.getNotifSubject());
 						message.setTo(StringUtils.split(ipNotif.getNotifList(), ";"));
-						sender.send(message);
+						try {
+							sender.send(message);
+							delete = true;
+						} catch (Exception ex) {
+							logger.error("Error: " + ex.getMessage());
+						}
 					}
-					ipNotifDAO.deleteByNotifId(ipNotif.getNotifId());
+					if (delete) {
+						ipNotifDAO.deleteByNotifId(ipNotif.getNotifId());
+					}
 				}
 			}
 		} catch (Exception e) {

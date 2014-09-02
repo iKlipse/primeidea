@@ -25,7 +25,7 @@ import org.primefaces.model.UploadedFile;
 
 import za.co.idea.ip.portal.bean.GroupBean;
 import za.co.idea.ip.portal.bean.NotificationBean;
-import za.co.idea.ip.ws.bean.GroupMessage;
+import za.co.idea.ip.portal.util.RESTServiceHelper;
 import za.co.idea.ip.ws.bean.NotificationMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
@@ -66,7 +66,7 @@ public class NotificationController implements Serializable {
 	public void initializePage() {
 		try {
 			notificationBean = new NotificationBean();
-			pGrps = fetchAllGroups();
+			pGrps = RESTServiceHelper.fetchActiveGroups();
 			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 			showCreateNotification = true;
 		} catch (Exception e) {
@@ -104,7 +104,7 @@ public class NotificationController implements Serializable {
 	public void showCreateNotification() {
 		try {
 			notificationBean = new NotificationBean();
-			pGrps = fetchAllGroups();
+			pGrps = RESTServiceHelper.fetchActiveGroups();
 			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 			showCreateNotification = true;
 		} catch (Exception e) {
@@ -181,7 +181,7 @@ public class NotificationController implements Serializable {
 		try {
 			WebClient addClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/nos/notif/add");
 			NotificationMessage notifMessage = new NotificationMessage();
-			notifMessage.setNotifCrtdDate(new Date().toString());
+			notifMessage.setNotifCrtdDate(new Date());
 			notifMessage.setNotifId(java.util.UUID.randomUUID().toString());
 			notifMessage.setNotifStatus("n");
 			notifMessage.setNotifSubject(notificationBean.getNotifSubject());
@@ -209,28 +209,6 @@ public class NotificationController implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
-	}
-
-	private List<GroupBean> fetchAllGroups() {
-		List<GroupBean> ret = new ArrayList<GroupBean>();
-		WebClient viewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/list");
-		Collection<? extends GroupMessage> groups = new ArrayList<GroupMessage>(viewGroupsClient.accept(MediaType.APPLICATION_JSON).getCollection(GroupMessage.class));
-		viewGroupsClient.close();
-		for (GroupMessage groupMessage : groups) {
-			GroupBean bean = new GroupBean();
-			bean.setgId(groupMessage.getgId());
-			bean.setGeMail(groupMessage.getGeMail());
-			bean.setgName(groupMessage.getgName());
-			bean.setIsActive(groupMessage.getIsActive());
-			bean.setSelAdmUser(groupMessage.getAdmUserId());
-			bean.setSelPGrp(groupMessage.getpGrpId());
-			bean.getUserIdList().clear();
-			for (Long id : groupMessage.getUserIdList())
-				if (id != null)
-					bean.getUserIdList().add(id);
-			ret.add(bean);
-		}
-		return ret;
 	}
 
 	public void fileUploadHandle(FileUploadEvent fue) {

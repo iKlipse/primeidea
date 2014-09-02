@@ -20,6 +20,9 @@
 		<property name="allocStatusId" type="java.lang.Integer">
 			<column name="alloc_status_id" />
 		</property>
+        <property name="allocCrtdDt" type="java.sql.Timestamp">
+            <column name="alloc_crtd_dt" length="19" not-null="true" />
+        </property>
 		<set name="ipPointses" inverse="true">
 			<key>
 				<column name="alloc_id" />

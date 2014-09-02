@@ -26,8 +26,8 @@
 		<property name="tagText" type="java.lang.String">
 			<column name="tag_text" length="65535" />
 		</property>
-		<property name="tagDate" type="java.sql.Timestamp">
-			<column name="tag_date" length="19" />
+        <property name="tagCrtdDt" type="java.sql.Timestamp">
+            <column name="tag_crtd_dt" length="19" not-null="true" />
 		</property>
 	</class>
 	<sql-query name="getTagByFilterA">

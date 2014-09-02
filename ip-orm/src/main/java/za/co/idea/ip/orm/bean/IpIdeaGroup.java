@@ -1,5 +1,7 @@
 package za.co.idea.ip.orm.bean;
 
+import java.util.Date;
+
 /**
  * IpIdeaGroup entity. @author MyEclipse Persistence Tools
  */
@@ -11,10 +13,11 @@ public class IpIdeaGroup implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -9093634632757238855L;
+	private static final long serialVersionUID = 8409889379001065296L;
 	private Long igId;
 	private IpIdea ipIdea;
 	private IpGroup ipGroup;
+	private Date igCrtdDt;
 
 	// Constructors
 
@@ -23,15 +26,18 @@ public class IpIdeaGroup implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpIdeaGroup(Long igId) {
+	public IpIdeaGroup(Long igId, Date igCrtdDt) {
 		this.igId = igId;
+		this.igCrtdDt = igCrtdDt;
 	}
 
 	/** full constructor */
-	public IpIdeaGroup(Long igId, IpIdea ipIdea, IpGroup ipGroup) {
+	public IpIdeaGroup(Long igId, IpIdea ipIdea, IpGroup ipGroup,
+			Date igCrtdDt) {
 		this.igId = igId;
 		this.ipIdea = ipIdea;
 		this.ipGroup = ipGroup;
+		this.igCrtdDt = igCrtdDt;
 	}
 
 	// Property accessors
@@ -58,6 +64,14 @@ public class IpIdeaGroup implements java.io.Serializable {
 
 	public void setIpGroup(IpGroup ipGroup) {
 		this.ipGroup = ipGroup;
+	}
+
+	public Date getIgCrtdDt() {
+		return this.igCrtdDt;
+	}
+
+	public void setIgCrtdDt(Date igCrtdDt) {
+		this.igCrtdDt = igCrtdDt;
 	}
 
 }

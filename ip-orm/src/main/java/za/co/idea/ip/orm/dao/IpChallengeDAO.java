@@ -163,7 +163,7 @@ public class IpChallengeDAO extends HibernateDaoSupport {
 				IpChallenge chal = (IpChallenge) object;
 				Hibernate.initialize(chal.getIpChallengeCat());
 				Hibernate.initialize(chal.getIpChallengeStatus());
-				Hibernate.initialize(chal.getIpUser());
+				Hibernate.initialize(chal.getIpUserByChalCrtdBy());
 			}
 			return ret;
 		} catch (RuntimeException re) {
@@ -182,7 +182,7 @@ public class IpChallengeDAO extends HibernateDaoSupport {
 				IpChallenge chal = (IpChallenge) object;
 				Hibernate.initialize(chal.getIpChallengeCat());
 				Hibernate.initialize(chal.getIpChallengeStatus());
-				Hibernate.initialize(chal.getIpUser());
+				Hibernate.initialize(chal.getIpUserByChalCrtdBy());
 			}
 			return ret;
 		} catch (RuntimeException re) {
@@ -201,7 +201,7 @@ public class IpChallengeDAO extends HibernateDaoSupport {
 				IpChallenge chal = (IpChallenge) object;
 				Hibernate.initialize(chal.getIpChallengeCat());
 				Hibernate.initialize(chal.getIpChallengeStatus());
-				Hibernate.initialize(chal.getIpUser());
+				Hibernate.initialize(chal.getIpUserByChalCrtdBy());
 			}
 			return ret;
 		} catch (RuntimeException re) {
@@ -221,7 +221,7 @@ public class IpChallengeDAO extends HibernateDaoSupport {
 				IpChallenge chal = (IpChallenge) object;
 				Hibernate.initialize(chal.getIpChallengeCat());
 				Hibernate.initialize(chal.getIpChallengeStatus());
-				Hibernate.initialize(chal.getIpUser());
+				Hibernate.initialize(chal.getIpUserByChalCrtdBy());
 			}
 			return ret;
 		} catch (RuntimeException re) {
@@ -252,7 +252,7 @@ public class IpChallengeDAO extends HibernateDaoSupport {
 				IpChallenge chal = (IpChallenge) object;
 				Hibernate.initialize(chal.getIpChallengeCat());
 				Hibernate.initialize(chal.getIpChallengeStatus());
-				Hibernate.initialize(chal.getIpUser());
+				Hibernate.initialize(chal.getIpUserByChalCrtdBy());
 			}
 			return ret;
 		} catch (RuntimeException re) {

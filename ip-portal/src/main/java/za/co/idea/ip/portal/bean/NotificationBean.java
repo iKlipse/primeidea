@@ -1,6 +1,7 @@
 package za.co.idea.ip.portal.bean;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 public class NotificationBean implements Serializable {
@@ -13,7 +14,7 @@ public class NotificationBean implements Serializable {
 	private String notifBody;
 	private String notifAttach;
 	private String notifStatus;
-	private String notifCrtdDate;
+	private Date notifCrtdDate;
 	private List<Long> groupIdList;
 	private String blobUrl;
 
@@ -73,11 +74,11 @@ public class NotificationBean implements Serializable {
 		this.notifStatus = notifStatus;
 	}
 
-	public String getNotifCrtdDate() {
+	public Date getNotifCrtdDate() {
 		return notifCrtdDate;
 	}
 
-	public void setNotifCrtdDate(String notifCrtdDate) {
+	public void setNotifCrtdDate(Date notifCrtdDate) {
 		this.notifCrtdDate = notifCrtdDate;
 	}
 

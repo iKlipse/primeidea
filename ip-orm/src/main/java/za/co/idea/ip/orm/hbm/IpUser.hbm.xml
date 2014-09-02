@@ -10,7 +10,7 @@
 		</id>
 		<many-to-one name="ipGroup" class="za.co.idea.ip.orm.bean.IpGroup"
 			fetch="select">
-			<column name="pri_grp_id" />
+            <column name="user_pri_grp_id" />
 		</many-to-one>
 		<property name="userFName" type="java.lang.String">
 			<column name="user_f_name" length="75" not-null="true" />
@@ -25,8 +25,7 @@
 			<column name="user_id_num" />
 		</property>
 		<property name="userScreenName" type="java.lang.String">
-			<column name="user_screen_name" length="50" not-null="true"
-				unique="true" />
+            <column name="user_screen_name" length="50" not-null="true" unique="true" />
 		</property>
 		<property name="userEmail" type="java.lang.String">
 			<column name="user_email" length="65535" />
@@ -52,6 +51,9 @@
 		<property name="userEmployeeId" type="java.lang.String">
 			<column name="user_employeeId" length="20" />
 		</property>
+        <property name="userCrtdDt" type="java.sql.Timestamp">
+            <column name="user_crtd_dt" length="19" not-null="true" />
+        </property>
 		<set name="ipGroups" inverse="true">
 			<key>
 				<column name="group_admin_id" />
@@ -63,7 +65,7 @@
 				<column name="gu_usr_id" not-null="true" />
 			</key>
 			<one-to-many class="za.co.idea.ip.orm.bean.IpGroupUser" />
-		</set>
+        </set>
 		<set name="ipTags" inverse="true">
 			<key>
 				<column name="tag_user_id" />
@@ -88,13 +90,13 @@
 			</key>
 			<one-to-many class="za.co.idea.ip.orm.bean.IpPoints" />
 		</set>
-		<set name="ipChallenges" inverse="true">
+        <set name="ipChallengesForChalCrtdBy" inverse="true">
 			<key>
 				<column name="chal_crtd_by" not-null="true" />
 			</key>
 			<one-to-many class="za.co.idea.ip.orm.bean.IpChallenge" />
 		</set>
-		<set name="ipIdeas" inverse="true">
+        <set name="ipIdeasForIdeaUserId" inverse="true">
 			<key>
 				<column name="idea_user_id" not-null="true" />
 			</key>
@@ -106,7 +108,7 @@
 			</key>
 			<one-to-many class="za.co.idea.ip.orm.bean.IpLogin" />
 		</set>
-		<set name="ipSolutions" inverse="true">
+        <set name="ipSolutionsForSolCrtdBy" inverse="true">
 			<key>
 				<column name="sol_crtd_by" not-null="true" />
 			</key>
@@ -120,6 +122,10 @@
 	<sql-query name="sortListByPrimaryGrp">
 		select iu.* from ip_user iu, ip_group ig where
 		iu.pri_grp_id=ig.group_id order by ig.group_name
+		<return alias="iu" class="za.co.idea.ip.orm.bean.IpUser" />
+	</sql-query>
+	<sql-query name="getUsersByStatus">
+		select iu.* from ip_user iu where iu.user_status=:status
 		<return alias="iu" class="za.co.idea.ip.orm.bean.IpUser" />
 	</sql-query>
 	<sql-query name="getSolCountByUserId">

@@ -28,7 +28,8 @@ public class IpConfig implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpConfig(String configKey, String configValue, String configEnv, Date createdDate, String createdBy) {
+	public IpConfig(String configKey, String configValue, String configEnv,
+			Date createdDate, String createdBy) {
 		this.configKey = configKey;
 		this.configValue = configValue;
 		this.configEnv = configEnv;

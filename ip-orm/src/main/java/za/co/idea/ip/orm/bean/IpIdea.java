@@ -16,16 +16,17 @@ public class IpIdea implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 7941230595289352567L;
+	private static final long serialVersionUID = -6324862742266044635L;
 	private Long ideaId;
 	private IpIdeaStatus ipIdeaStatus;
-	private IpUser ipUser;
+	private IpUser ipUserByIdeaUserId;
 	private IpIdeaCat ipIdeaCat;
 	private String ideaTitle;
 	private String ideaDesc;
 	private String ideaBa;
 	private Date ideaDate;
 	private String ideaTag;
+	private Integer ideaReviewCnt;
 	private Set ipIdeaGroups = new HashSet(0);
 
 	// Constructors
@@ -35,21 +36,22 @@ public class IpIdea implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, String ideaTitle, String ideaDesc, Date ideaDate, String ideaTag) {
+	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUserByIdeaUserId, String ideaTitle, String ideaDesc, Date ideaDate, String ideaTag, Integer ideaReviewCnt) {
 		this.ideaId = ideaId;
 		this.ipIdeaStatus = ipIdeaStatus;
-		this.ipUser = ipUser;
+		this.ipUserByIdeaUserId = ipUserByIdeaUserId;
 		this.ideaTitle = ideaTitle;
 		this.ideaDesc = ideaDesc;
 		this.ideaDate = ideaDate;
 		this.ideaTag = ideaTag;
+		this.ideaReviewCnt = ideaReviewCnt;
 	}
 
 	/** full constructor */
-	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc, String ideaBa, Date ideaDate, String ideaTag, Set ipIdeaGroups) {
+	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUserByIdeaUserId, IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc, String ideaBa, Date ideaDate, String ideaTag, Integer ideaReviewCnt, Set ipIdeaGroups) {
 		this.ideaId = ideaId;
 		this.ipIdeaStatus = ipIdeaStatus;
-		this.ipUser = ipUser;
+		this.ipUserByIdeaUserId = ipUserByIdeaUserId;
 		this.ipIdeaCat = ipIdeaCat;
 		this.ideaTitle = ideaTitle;
 		this.ideaDesc = ideaDesc;
@@ -57,6 +59,7 @@ public class IpIdea implements java.io.Serializable {
 		this.ideaDate = ideaDate;
 		this.ideaTag = ideaTag;
 		this.ipIdeaGroups = ipIdeaGroups;
+		this.ideaReviewCnt = ideaReviewCnt;
 	}
 
 	// Property accessors
@@ -77,12 +80,12 @@ public class IpIdea implements java.io.Serializable {
 		this.ipIdeaStatus = ipIdeaStatus;
 	}
 
-	public IpUser getIpUser() {
-		return this.ipUser;
+	public IpUser getIpUserByIdeaUserId() {
+		return this.ipUserByIdeaUserId;
 	}
 
-	public void setIpUser(IpUser ipUser) {
-		this.ipUser = ipUser;
+	public void setIpUserByIdeaUserId(IpUser ipUserByIdeaUserId) {
+		this.ipUserByIdeaUserId = ipUserByIdeaUserId;
 	}
 
 	public IpIdeaCat getIpIdeaCat() {
@@ -139,6 +142,14 @@ public class IpIdea implements java.io.Serializable {
 
 	public void setIpIdeaGroups(Set ipIdeaGroups) {
 		this.ipIdeaGroups = ipIdeaGroups;
+	}
+
+	public Integer getIdeaReviewCnt() {
+		return ideaReviewCnt;
+	}
+
+	public void setIdeaReviewCnt(Integer ideaReviewCnt) {
+		this.ideaReviewCnt = ideaReviewCnt;
 	}
 
 }

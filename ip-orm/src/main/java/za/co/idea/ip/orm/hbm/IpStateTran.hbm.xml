@@ -22,5 +22,8 @@
         <property name="tranIsUi" type="java.lang.String">
             <column name="tran_is_ui" length="1" not-null="true" />
         </property>
+        <property name="tranCrtdDt" type="java.sql.Timestamp">
+            <column name="tran_crtd_dt" length="19" not-null="true" />
+        </property>
     </class>
 </hibernate-mapping>

@@ -1,24 +1,34 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<p:dataTable id="dtReviewChallenges" value="#{challengeController.viewChallenges}" var="challenge" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Challenges Found">
-		<p:column width="30%" filterBy="#{challenge.title}" filterMatchMode="contains">
+		<p:column width="24%" filterBy="#{challenge.title}" filterMatchMode="contains">
 			<f:facet name="header">Title</f:facet>
 			<p:outputLabel id="txtVwrChallengeTitle" value="#{challenge.title}" />
 		</p:column>
-		<p:column width="15%" sortBy="#{challenge.catName}">
+		<p:column width="10%" sortBy="#{challenge.catName}">
 			<f:facet name="header">Category</f:facet>
 			<p:outputLabel id="somVwrICat" value="#{challenge.catName}" />
 		</p:column>
-		<p:column width="15%" sortBy="#{challenge.statusName}">
+		<p:column width="10%" sortBy="#{challenge.statusName}">
 			<f:facet name="header">Status</f:facet>
 			<p:outputLabel id="somVwrIStatus" value="#{challenge.statusName}" />
 		</p:column>
-		<p:column width="12%">
+		<p:column width="10%" filterBy="#{challenge.crtdByName}" filterMatchMode="contains" sortBy="#{challenge.crtdByName}" >
+			<f:facet name="header">Created By</f:facet>
+			<p:outputLabel id="somVwrcrtdBy" value="#{challenge.crtdByName}" />
+		</p:column>
+		<p:column width="10%" filterBy="#{challenge.crtdDt}" filterMatchMode="contains" sortBy="#{challenge.crtdDt}">
+			<f:facet name="header">Created Date</f:facet>
+			<p:outputLabel id="calVwrCrtDT" value="#{challenge.crtdDt}" >
+			   <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss" />
+			</p:outputLabel>
+		</p:column>
+		<p:column width="10%">
 			<f:facet name="header">Launch Date</f:facet>
 			<p:outputLabel id="calVwrLaunchDT" value="#{challenge.launchDt}" >
 			   <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss" />
 			</p:outputLabel>
 		</p:column>
-		<p:column width="12%">
+		<p:column width="10%">
 			<f:facet name="header">Expiry Date</f:facet>
 			<p:outputLabel id="calVwrExprDT" value="#{challenge.exprDt}" >
 			   <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss" />

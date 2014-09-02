@@ -8,17 +8,23 @@
 			<f:facet name="header">Status</f:facet>
 			<p:outputLabel id="somVwRIStatus" value="#{idea.statusName}" />
 		</p:column>
-		<p:column width="25%" sortBy="#{idea.crtdByName}">
+		<p:column width="15%" filterBy="#{idea.crtdByName}" filterMatchMode="contains" sortBy="#{idea.crtdByName}">
 			<f:facet name="header">Created By</f:facet>
 			<p:outputLabel id="somVwRACrtdBy" value="#{idea.crtdByName}" />
 		</p:column>
-		<p:column width="10%">
+		<p:column width="15%" filterBy="#{idea.crtdDate}" filterMatchMode="contains" sortBy="#{idea.crtdDate}">
+			<f:facet name="header">Created Date</f:facet>
+			<p:outputLabel id="somVwRCrtdDate" value="#{idea.crtdDate}">
+			    <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss"></f:convertDateTime>
+			</p:outputLabel>
+		</p:column>
+		<p:column width="7%">
 			<p:commandButton id="viewVwRButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{randomIdeaController.showEditReviewIdea}">
 				<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
 				<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />
 			</p:commandButton>
 		</p:column>
-		<p:column width="10%">
+		<p:column width="8%">
 			<p:commandButton id="summaryVwRButton" icon="ui-icon-clipboard" ajax="false" immediate="true" action="#{randomIdeaController.showSummaryReviewIdea}">
 				<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
 				<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />

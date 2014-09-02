@@ -153,9 +153,29 @@
 			<from-outcome>admuv</from-outcome>
 			<to-view-id>/views/admin/user/view.xhtml</to-view-id>
 		</navigation-case>
+				<navigation-case>
+			<from-outcome>admuav</from-outcome>
+			<to-view-id>/views/admin/user/viewActiveUsers.xhtml</to-view-id>
+		</navigation-case>
+				<navigation-case>
+			<from-outcome>admuiv</from-outcome>
+			<to-view-id>/views/admin/user/viewInActiveUsers.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>clmuv</from-outcome>
+			<to-view-id>/views/admin/claim/view.xhtml</to-view-id>
+		</navigation-case>
 		<navigation-case>
 			<from-outcome>admue</from-outcome>
 			<to-view-id>/views/admin/user/edit.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admuae</from-outcome>
+			<to-view-id>/views/admin/user/editActive.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admuie</from-outcome>
+			<to-view-id>/views/admin/user/editInactive.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>admuu</from-outcome>
@@ -229,11 +249,11 @@
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>clmvc</from-outcome>
-			<to-view-id>/views/claim/view.xhtml</to-view-id>
+			<to-view-id>/views/admin/claim/view.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>clmec</from-outcome>
-			<to-view-id>/views/claim/edit.xhtml</to-view-id>
+			<to-view-id>/views/admin/claim/edit.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>clmuc</from-outcome>

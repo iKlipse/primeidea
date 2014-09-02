@@ -1,5 +1,7 @@
 package za.co.idea.ip.orm.bean;
 
+import java.util.Date;
+
 /**
  * IpFuncGroup entity. @author MyEclipse Persistence Tools
  */
@@ -11,10 +13,11 @@ public class IpFuncGroup implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -6659702280428866806L;
+	private static final long serialVersionUID = -3247235635196806866L;
 	private Long fgId;
 	private IpGroup ipGroup;
 	private IpFunction ipFunction;
+	private Date fgCrtdDt;
 
 	// Constructors
 
@@ -23,16 +26,19 @@ public class IpFuncGroup implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpFuncGroup(Long fgId, IpGroup ipGroup) {
+	public IpFuncGroup(Long fgId, IpGroup ipGroup, Date fgCrtdDt) {
 		this.fgId = fgId;
 		this.ipGroup = ipGroup;
+		this.fgCrtdDt = fgCrtdDt;
 	}
 
 	/** full constructor */
-	public IpFuncGroup(Long fgId, IpGroup ipGroup, IpFunction ipFunction) {
+	public IpFuncGroup(Long fgId, IpGroup ipGroup, IpFunction ipFunction,
+			Date fgCrtdDt) {
 		this.fgId = fgId;
 		this.ipGroup = ipGroup;
 		this.ipFunction = ipFunction;
+		this.fgCrtdDt = fgCrtdDt;
 	}
 
 	// Property accessors
@@ -59,6 +65,14 @@ public class IpFuncGroup implements java.io.Serializable {
 
 	public void setIpFunction(IpFunction ipFunction) {
 		this.ipFunction = ipFunction;
+	}
+
+	public Date getFgCrtdDt() {
+		return this.fgCrtdDt;
+	}
+
+	public void setFgCrtdDt(Date fgCrtdDt) {
+		this.fgCrtdDt = fgCrtdDt;
 	}
 
 }

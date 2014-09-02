@@ -1,5 +1,7 @@
 package za.co.idea.ip.orm.bean;
 
+import java.util.Date;
+
 /**
  * IpBlob entity. @author MyEclipse Persistence Tools
  */
@@ -11,7 +13,7 @@ public class IpBlob implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -6542507118716443541L;
+	private static final long serialVersionUID = 3569760958966375220L;
 	private Long blobId;
 	private String blobName;
 	private String blobContentType;
@@ -19,6 +21,7 @@ public class IpBlob implements java.io.Serializable {
 	private Long blobEntityId;
 	private String blobEntityTblNm;
 	private Long blobSize;
+	private Date blobCrtdDt;
 
 	// Constructors
 
@@ -27,12 +30,15 @@ public class IpBlob implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpBlob(Long blobId) {
+	public IpBlob(Long blobId, Date blobCrtdDt) {
 		this.blobId = blobId;
+		this.blobCrtdDt = blobCrtdDt;
 	}
 
 	/** full constructor */
-	public IpBlob(Long blobId, String blobName, String blobContentType, String blobContent, Long blobEntityId, String blobEntityTblNm, Long blobSize) {
+	public IpBlob(Long blobId, String blobName, String blobContentType,
+			String blobContent, Long blobEntityId, String blobEntityTblNm,
+			Long blobSize, Date blobCrtdDt) {
 		this.blobId = blobId;
 		this.blobName = blobName;
 		this.blobContentType = blobContentType;
@@ -40,6 +46,7 @@ public class IpBlob implements java.io.Serializable {
 		this.blobEntityId = blobEntityId;
 		this.blobEntityTblNm = blobEntityTblNm;
 		this.blobSize = blobSize;
+		this.blobCrtdDt = blobCrtdDt;
 	}
 
 	// Property accessors
@@ -98,6 +105,14 @@ public class IpBlob implements java.io.Serializable {
 
 	public void setBlobSize(Long blobSize) {
 		this.blobSize = blobSize;
+	}
+
+	public Date getBlobCrtdDt() {
+		return this.blobCrtdDt;
+	}
+
+	public void setBlobCrtdDt(Date blobCrtdDt) {
+		this.blobCrtdDt = blobCrtdDt;
 	}
 
 }

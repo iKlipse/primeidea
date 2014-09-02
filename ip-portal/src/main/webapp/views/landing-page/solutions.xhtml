@@ -18,7 +18,7 @@
 					<p:column colspan="2">
 						<p:commandButton id="dynaSolButton" title="Options" type="button" icon="ui-icon-gear" />
 						<p:menu style="vertical-align: middle !important; float: right !important" overlay="true" trigger="dynaSolButton" my="left top" at="left bottom">
-							<p:menuitem value="Edit" ajax="false" immediate="true" action="#{challengeController.showEditSolution}">
+							<p:menuitem value="Edit" ajax="false" immediate="true" action="#{challengeController.showEditSolution}" rendered="#{!solution.disableEdit}">
 								<f:setPropertyActionListener value="#{solution}" target="#{challengeController.solutionBean}" />
 								<f:setPropertyActionListener value="1" target="#{challengeController.returnView}" />
 							</p:menuitem>

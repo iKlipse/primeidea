@@ -1,5 +1,7 @@
 package za.co.idea.ip.orm.bean;
 
+import java.util.Date;
+
 /**
  * IpNotif entity. @author MyEclipse Persistence Tools
  */
@@ -11,7 +13,7 @@ public class IpNotif implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -7903303376692793911L;
+	private static final long serialVersionUID = -7936758635097342188L;
 	private String notifId;
 	private Long notifEntityId;
 	private String notifEntityTblName;
@@ -19,8 +21,8 @@ public class IpNotif implements java.io.Serializable {
 	private String notifBody;
 	private String notifAttach;
 	private String notifStatus;
-	private String notifCrtdDate;
 	private String notifList;
+	private Date notifCrtdDate;
 
 	// Constructors
 
@@ -29,12 +31,16 @@ public class IpNotif implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpNotif(String notifId) {
+	public IpNotif(String notifId, Date notifCrtdDate) {
 		this.notifId = notifId;
+		this.notifCrtdDate = notifCrtdDate;
 	}
 
 	/** full constructor */
-	public IpNotif(String notifId, Long notifEntityId, String notifEntityTblName, String notifSubject, String notifBody, String notifAttach, String notifStatus, String notifCrtdDate, String notifList) {
+	public IpNotif(String notifId, Long notifEntityId,
+			String notifEntityTblName, String notifSubject, String notifBody,
+			String notifAttach, String notifStatus, String notifList,
+			Date notifCrtdDate) {
 		this.notifId = notifId;
 		this.notifEntityId = notifEntityId;
 		this.notifEntityTblName = notifEntityTblName;
@@ -42,8 +48,8 @@ public class IpNotif implements java.io.Serializable {
 		this.notifBody = notifBody;
 		this.notifAttach = notifAttach;
 		this.notifStatus = notifStatus;
-		this.notifCrtdDate = notifCrtdDate;
 		this.notifList = notifList;
+		this.notifCrtdDate = notifCrtdDate;
 	}
 
 	// Property accessors
@@ -104,20 +110,20 @@ public class IpNotif implements java.io.Serializable {
 		this.notifStatus = notifStatus;
 	}
 
-	public String getNotifCrtdDate() {
-		return this.notifCrtdDate;
-	}
-
-	public void setNotifCrtdDate(String notifCrtdDate) {
-		this.notifCrtdDate = notifCrtdDate;
-	}
-
 	public String getNotifList() {
 		return this.notifList;
 	}
 
 	public void setNotifList(String notifList) {
 		this.notifList = notifList;
+	}
+
+	public Date getNotifCrtdDate() {
+		return this.notifCrtdDate;
+	}
+
+	public void setNotifCrtdDate(Date notifCrtdDate) {
+		this.notifCrtdDate = notifCrtdDate;
 	}
 
 }

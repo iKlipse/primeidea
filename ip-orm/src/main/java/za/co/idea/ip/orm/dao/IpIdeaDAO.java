@@ -163,7 +163,7 @@ public class IpIdeaDAO extends HibernateDaoSupport {
 				IpIdea idea = (IpIdea) object;
 				Hibernate.initialize(idea.getIpIdeaCat());
 				Hibernate.initialize(idea.getIpIdeaStatus());
-				Hibernate.initialize(idea.getIpUser());
+				Hibernate.initialize(idea.getIpUserByIdeaUserId());
 			}
 			return ret;
 		} catch (RuntimeException re) {
@@ -182,7 +182,7 @@ public class IpIdeaDAO extends HibernateDaoSupport {
 				IpIdea idea = (IpIdea) object;
 				Hibernate.initialize(idea.getIpIdeaCat());
 				Hibernate.initialize(idea.getIpIdeaStatus());
-				Hibernate.initialize(idea.getIpUser());
+				Hibernate.initialize(idea.getIpUserByIdeaUserId());
 			}
 			return ret;
 		} catch (RuntimeException re) {
@@ -201,7 +201,7 @@ public class IpIdeaDAO extends HibernateDaoSupport {
 				IpIdea idea = (IpIdea) object;
 				Hibernate.initialize(idea.getIpIdeaCat());
 				Hibernate.initialize(idea.getIpIdeaStatus());
-				Hibernate.initialize(idea.getIpUser());
+				Hibernate.initialize(idea.getIpUserByIdeaUserId());
 			}
 			return ret;
 		} catch (RuntimeException re) {
@@ -221,7 +221,7 @@ public class IpIdeaDAO extends HibernateDaoSupport {
 				IpIdea idea = (IpIdea) object;
 				Hibernate.initialize(idea.getIpIdeaCat());
 				Hibernate.initialize(idea.getIpIdeaStatus());
-				Hibernate.initialize(idea.getIpUser());
+				Hibernate.initialize(idea.getIpUserByIdeaUserId());
 			}
 			return ret;
 		} catch (RuntimeException re) {
@@ -240,7 +240,7 @@ public class IpIdeaDAO extends HibernateDaoSupport {
 				IpIdea idea = (IpIdea) object;
 				Hibernate.initialize(idea.getIpIdeaCat());
 				Hibernate.initialize(idea.getIpIdeaStatus());
-				Hibernate.initialize(idea.getIpUser());
+				Hibernate.initialize(idea.getIpUserByIdeaUserId());
 			}
 			return ret;
 		} catch (RuntimeException re) {

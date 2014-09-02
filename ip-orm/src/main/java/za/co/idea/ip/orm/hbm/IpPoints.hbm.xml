@@ -25,6 +25,9 @@
 		<property name="entityId" type="java.lang.Long">
 			<column name="entity_id" />
 		</property>
+        <property name="pointCrtdDt" type="java.sql.Timestamp">
+            <column name="point_crtd_dt" length="19" not-null="true" />
+        </property>
 	</class>
 	<sql-query name="getPointsByUser">
 		select pts.* from ip_points pts where pts.user_id=:id

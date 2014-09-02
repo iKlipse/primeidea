@@ -31,6 +31,7 @@ public class ChallengeBean implements Serializable {
 	private Long revUserId;
 	private String statusName;
 	private String catName;
+	private boolean disableEdit;
 
 	public Long getId() {
 		return id;
@@ -222,6 +223,14 @@ public class ChallengeBean implements Serializable {
 
 	public void setCatName(String catName) {
 		this.catName = catName;
+	}
+
+	public boolean isDisableEdit() {
+		return disableEdit;
+	}
+
+	public void setDisableEdit(boolean disableEdit) {
+		this.disableEdit = disableEdit;
 	}
 
 }

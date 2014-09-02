@@ -2,6 +2,7 @@ package za.co.idea.ip.orm.dao;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
 import org.slf4j.Logger;
@@ -142,17 +143,33 @@ public class IpReviewDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public IpReview findByEntityIdEntityName(Long entityId, String entityName) {
+	public List findByEntityIdEntityName(Long entityId, String entityName, Integer status) {
 		log.debug("finding all reviews by entity id");
 		try {
-			Query query = getSession().getNamedQuery("getByEntityIdEntityName");
+			Query query = getSession().getNamedQuery("getByEntityIdEntityNameStatus");
 			query.setLong("id", entityId);
 			query.setString("tblNm", entityName);
-			IpReview ret = null;
-			List obj = query.list();
-			if (obj != null && obj.size() > 0)
-				ret = (IpReview) obj.get(0);
+			query.setInteger("status", status);
+			List ret = query.list();
+			for (Object object : ret) {
+				IpReview review = (IpReview) object;
+				Hibernate.initialize(review.getIpGroup());
+			}
 			return ret;
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
+	}
+
+	public void deleteByEntityIdEntityName(Long entityId, String entityName, Integer status) {
+		log.debug("finding all reviews by entity id");
+		try {
+			Query query = getSession().getNamedQuery("deleteByEntityIdEntityNameStatus");
+			query.setLong("id", entityId);
+			query.setString("tblNm", entityName);
+			query.setInteger("status", status);
+			query.executeUpdate();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;

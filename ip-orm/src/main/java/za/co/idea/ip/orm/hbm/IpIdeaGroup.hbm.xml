@@ -16,6 +16,9 @@
 			fetch="select">
 			<column name="ig_grp_id" />
 		</many-to-one>
+        <property name="igCrtdDt" type="java.sql.Timestamp">
+            <column name="ig_crtd_dt" length="19" not-null="true" />
+        </property>
 	</class>
 	<sql-query name="deleteIGByIdeaId">
 		delete from ip_idea_group where

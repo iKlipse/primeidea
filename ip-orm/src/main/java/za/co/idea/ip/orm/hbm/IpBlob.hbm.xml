@@ -26,6 +26,9 @@
 		<property name="blobSize" type="java.lang.Long">
 			<column name="blob_size" />
 		</property>
+        <property name="blobCrtdDt" type="java.sql.Timestamp">
+            <column name="blob_crtd_dt" length="19" not-null="true" />
+        </property>
 	</class>
 	<sql-query name="getBlobByEntity">
 		select ib.* from ip_blob ib where ib.blob_entity_id=:id and

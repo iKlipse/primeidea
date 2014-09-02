@@ -19,7 +19,7 @@
 			<column name="func_is_core" length="1" not-null="true" />
 		</property>
 		<property name="funcCrtdDt" type="java.sql.Timestamp">
-			<column name="func_crtd_dt" length="19" />
+            <column name="func_crtd_dt" length="19" not-null="true" />
 		</property>
 		<set name="ipFuncGroups" inverse="true">
 			<key>

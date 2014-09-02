@@ -1,5 +1,7 @@
 package za.co.idea.ip.orm.bean;
 
+import java.util.Date;
+
 /**
  * IpReview entity. @author MyEclipse Persistence Tools
  */
@@ -8,11 +10,17 @@ public class IpReview implements java.io.Serializable {
 
 	// Fields
 
-	private static final long serialVersionUID = -5430584336659391560L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4222906687325264647L;
 	private Long revId;
+	private IpGroup ipGroup;
 	private IpUser ipUser;
 	private Long revEntityId;
 	private String revEntityName;
+	private Integer revEntityStatusId;
+	private Date revCrtdDt;
 
 	// Constructors
 
@@ -21,17 +29,20 @@ public class IpReview implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpReview(Long revId) {
+	public IpReview(Long revId, Date revCrtdDt) {
 		this.revId = revId;
+		this.revCrtdDt = revCrtdDt;
 	}
 
 	/** full constructor */
-	public IpReview(Long revId, IpUser ipUser, Long revEntityId,
-			String revEntityName) {
+	public IpReview(Long revId, IpGroup ipGroup, IpUser ipUser, Long revEntityId, String revEntityName, Integer revEntityStatusId, Date revCrtdDt) {
 		this.revId = revId;
+		this.ipGroup = ipGroup;
 		this.ipUser = ipUser;
 		this.revEntityId = revEntityId;
 		this.revEntityName = revEntityName;
+		this.revEntityStatusId = revEntityStatusId;
+		this.revCrtdDt = revCrtdDt;
 	}
 
 	// Property accessors
@@ -44,8 +55,16 @@ public class IpReview implements java.io.Serializable {
 		this.revId = revId;
 	}
 
+	public IpGroup getIpGroup() {
+		return this.ipGroup;
+	}
+
+	public void setIpGroup(IpGroup ipGroup) {
+		this.ipGroup = ipGroup;
+	}
+
 	public IpUser getIpUser() {
-		return this.ipUser;
+		return ipUser;
 	}
 
 	public void setIpUser(IpUser ipUser) {
@@ -66,6 +85,22 @@ public class IpReview implements java.io.Serializable {
 
 	public void setRevEntityName(String revEntityName) {
 		this.revEntityName = revEntityName;
+	}
+
+	public Integer getRevEntityStatusId() {
+		return this.revEntityStatusId;
+	}
+
+	public void setRevEntityStatusId(Integer revEntityStatusId) {
+		this.revEntityStatusId = revEntityStatusId;
+	}
+
+	public Date getRevCrtdDt() {
+		return this.revCrtdDt;
+	}
+
+	public void setRevCrtdDt(Date revCrtdDt) {
+		this.revCrtdDt = revCrtdDt;
 	}
 
 }

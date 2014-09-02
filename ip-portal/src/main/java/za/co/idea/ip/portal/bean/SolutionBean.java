@@ -37,6 +37,7 @@ public class SolutionBean implements Serializable {
 	private Long revUserId;
 	private String catName;
 	private String statusName;
+	private boolean disableEdit;
 
 	public Long getId() {
 		return id;
@@ -260,6 +261,14 @@ public class SolutionBean implements Serializable {
 
 	public void setStatusName(String statusName) {
 		this.statusName = statusName;
+	}
+
+	public boolean isDisableEdit() {
+		return disableEdit;
+	}
+
+	public void setDisableEdit(boolean disableEdit) {
+		this.disableEdit = disableEdit;
 	}
 
 }

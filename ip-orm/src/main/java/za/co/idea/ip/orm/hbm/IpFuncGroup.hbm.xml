@@ -16,6 +16,9 @@
 			fetch="select">
 			<column name="fg_func_id" />
 		</many-to-one>
+        <property name="fgCrtdDt" type="java.sql.Timestamp">
+            <column name="fg_crtd_dt" length="19" not-null="true" />
+        </property>
 	</class>
 	<sql-query name="deleteFGByFuncId">
 		delete from ip_func_group where

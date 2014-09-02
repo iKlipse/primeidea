@@ -1,5 +1,7 @@
 package za.co.idea.ip.ws.bean;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "notificationMessage")
@@ -12,7 +14,7 @@ public class NotificationMessage {
 	private String notifBody;
 	private String notifAttach;
 	private String notifStatus;
-	private String notifCrtdDate;
+	private Date notifCrtdDate;
 	private Long[] groupIdList;
 	private String blobUrl;
 
@@ -72,11 +74,11 @@ public class NotificationMessage {
 		this.notifStatus = notifStatus;
 	}
 
-	public String getNotifCrtdDate() {
+	public Date getNotifCrtdDate() {
 		return notifCrtdDate;
 	}
 
-	public void setNotifCrtdDate(String notifCrtdDate) {
+	public void setNotifCrtdDate(Date notifCrtdDate) {
 		this.notifCrtdDate = notifCrtdDate;
 	}
 

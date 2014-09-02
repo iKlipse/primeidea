@@ -13,12 +13,13 @@ public class IpNews implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8306751663989862760L;
+	private static final long serialVersionUID = 3859708826750803775L;
 	private Long newsId;
 	private String newsTitle;
 	private Date newsStartDate;
 	private Date newsEndDate;
 	private String newsContent;
+	private Date newsCrtdDt;
 
 	// Constructors
 
@@ -27,17 +28,20 @@ public class IpNews implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpNews(Long newsId) {
+	public IpNews(Long newsId, Date newsCrtdDt) {
 		this.newsId = newsId;
+		this.newsCrtdDt = newsCrtdDt;
 	}
 
 	/** full constructor */
-	public IpNews(Long newsId, String newsTitle, Date newsStartDate, Date newsEndDate, String newsContent) {
+	public IpNews(Long newsId, String newsTitle, Date newsStartDate,
+			Date newsEndDate, String newsContent, Date newsCrtdDt) {
 		this.newsId = newsId;
 		this.newsTitle = newsTitle;
 		this.newsStartDate = newsStartDate;
 		this.newsEndDate = newsEndDate;
 		this.newsContent = newsContent;
+		this.newsCrtdDt = newsCrtdDt;
 	}
 
 	// Property accessors
@@ -80,6 +84,14 @@ public class IpNews implements java.io.Serializable {
 
 	public void setNewsContent(String newsContent) {
 		this.newsContent = newsContent;
+	}
+
+	public Date getNewsCrtdDt() {
+		return this.newsCrtdDt;
+	}
+
+	public void setNewsCrtdDt(Date newsCrtdDt) {
+		this.newsCrtdDt = newsCrtdDt;
 	}
 
 }

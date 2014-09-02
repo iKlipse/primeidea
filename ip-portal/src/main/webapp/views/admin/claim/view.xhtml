@@ -1,0 +1,32 @@
+<ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="adminBody">
+		<p:panel styleClass="panelView"  id="ctrViewClaim">
+			<p:dataTable id="dtViewClaims" value="#{adminController.viewClaimBeans}" var="claim" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Claims Found">
+				<p:column width="40%" filterBy="#{claim.claimDesc}" filterMatchMode="contains">
+					<f:facet name="header">Claim Desc</f:facet>
+					<p:outputLabel id="txtClaimId" value="#{claim.claimDesc}" />
+				</p:column>
+				<p:column width="15%" sortBy="#{claim.cStatusName}">
+					<f:facet name="header">Status</f:facet>
+					<p:outputLabel id="somIStatus" value="#{claim.cStatusName}" />
+				</p:column>
+				<p:column width="15%">
+					<f:facet name="header">Created Date</f:facet>
+					<p:outputLabel id="calLaunchDT" value="#{claim.claimCrtdDt}" >
+			            <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss" />
+			        </p:outputLabel>
+				</p:column>
+				<p:column width="20%" sortBy="#{claim.userName}">
+					<f:facet name="header">Created By</f:facet>
+					<p:outputLabel id="somACrtdBy" value="#{claim.userName}" />
+				</p:column>
+				<p:column width="10%" >
+					<p:commandButton id="viewButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{adminController.showEditClaim}">
+						<f:setPropertyActionListener value="#{claim}" target="#{adminController.claimBean}" />
+						<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+	</ui:define>
+</ui:composition>

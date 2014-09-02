@@ -1,0 +1,45 @@
+<ui:composition template="/views/admin/container/adminContainer.xhtml"  xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="adminBody">
+		<p:panelGrid styleClass="panelGridView"  columns="2" id="pnlCrtClaim">
+				<p:column>
+					<p:outputLabel id="lblCRw" value="Reward : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somCRw" value="#{adminController.claimBean.rewardsId}">
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+						<f:selectItems value="#{adminController.viewRewardsBeans}" var="ccat" itemLabel="#{ccat.rwTitle}" itemValue="#{ccat.rwId}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblCDesc" value="Special Notes : " />
+				</p:column>
+				<p:column>
+					<p:inputTextarea rows="4" cols="40" autocomplete="false" id="txtCTitle" value="#{adminController.claimBean.claimDesc}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblCComment" value="Comment : " />
+				</p:column>
+				<p:column>
+					<p:inputText autocomplete="false" id="txtCComment" value="#{adminController.claimBean.claimComment}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblCStatus" value="Status : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somCStatus" value="#{adminController.claimBean.cStatusId}">
+						<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+						<f:selectItems value="#{adminController.claimStatus}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<f:facet name="footer">
+						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{adminController.updateClaim}">
+							<f:setPropertyActionListener value="#{landingPageController.userId}" target="#{adminController.userId}" />
+							<f:setPropertyActionListener value="2" target="#{adminController.toView}" />
+						</p:commandButton>
+						<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{adminController.showViewClaim}">
+							<f:setPropertyActionListener value="#{landingPageController.userId}" target="#{adminController.userId}" />
+						</p:commandButton>
+				</f:facet>
+			</p:panelGrid>
+	</ui:define>
+</ui:composition>

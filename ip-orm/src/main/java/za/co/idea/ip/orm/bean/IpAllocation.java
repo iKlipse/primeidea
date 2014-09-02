@@ -1,5 +1,6 @@
 package za.co.idea.ip.orm.bean;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,12 +16,13 @@ public class IpAllocation implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -6072770805067338655L;
+	private static final long serialVersionUID = -8070850045304717359L;
 	private Integer allocId;
 	private String allocDesc;
 	private Integer allocVal;
 	private String allocEntity;
 	private Integer allocStatusId;
+	private Date allocCrtdDt;
 	private Set ipPointses = new HashSet(0);
 
 	// Constructors
@@ -30,17 +32,21 @@ public class IpAllocation implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpAllocation(Integer allocId) {
+	public IpAllocation(Integer allocId, Date allocCrtdDt) {
 		this.allocId = allocId;
+		this.allocCrtdDt = allocCrtdDt;
 	}
 
 	/** full constructor */
-	public IpAllocation(Integer allocId, String allocDesc, Integer allocVal, String allocEntity, Integer allocStatusId, Set ipPointses) {
+	public IpAllocation(Integer allocId, String allocDesc, Integer allocVal,
+			String allocEntity, Integer allocStatusId, Date allocCrtdDt,
+			Set ipPointses) {
 		this.allocId = allocId;
 		this.allocDesc = allocDesc;
 		this.allocVal = allocVal;
 		this.allocEntity = allocEntity;
 		this.allocStatusId = allocStatusId;
+		this.allocCrtdDt = allocCrtdDt;
 		this.ipPointses = ipPointses;
 	}
 
@@ -84,6 +90,14 @@ public class IpAllocation implements java.io.Serializable {
 
 	public void setAllocStatusId(Integer allocStatusId) {
 		this.allocStatusId = allocStatusId;
+	}
+
+	public Date getAllocCrtdDt() {
+		return this.allocCrtdDt;
+	}
+
+	public void setAllocCrtdDt(Date allocCrtdDt) {
+		this.allocCrtdDt = allocCrtdDt;
 	}
 
 	public Set getIpPointses() {

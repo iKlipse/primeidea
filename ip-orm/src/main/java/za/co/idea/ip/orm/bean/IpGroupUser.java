@@ -1,5 +1,7 @@
 package za.co.idea.ip.orm.bean;
 
+import java.util.Date;
+
 /**
  * IpGroupUser entity. @author MyEclipse Persistence Tools
  */
@@ -11,10 +13,11 @@ public class IpGroupUser implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6334119771242371557L;
+	private static final long serialVersionUID = 7359504595620983103L;
 	private Long guId;
 	private IpUser ipUser;
 	private IpGroup ipGroup;
+	private Date guCrtdDt;
 
 	// Constructors
 
@@ -23,10 +26,12 @@ public class IpGroupUser implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpGroupUser(Long guId, IpUser ipUser, IpGroup ipGroup) {
+	public IpGroupUser(Long guId, IpUser ipUser, IpGroup ipGroup,
+			Date guCrtdDt) {
 		this.guId = guId;
 		this.ipUser = ipUser;
 		this.ipGroup = ipGroup;
+		this.guCrtdDt = guCrtdDt;
 	}
 
 	// Property accessors
@@ -53,6 +58,14 @@ public class IpGroupUser implements java.io.Serializable {
 
 	public void setIpGroup(IpGroup ipGroup) {
 		this.ipGroup = ipGroup;
+	}
+
+	public Date getGuCrtdDt() {
+		return this.guCrtdDt;
+	}
+
+	public void setGuCrtdDt(Date guCrtdDt) {
+		this.guCrtdDt = guCrtdDt;
 	}
 
 }

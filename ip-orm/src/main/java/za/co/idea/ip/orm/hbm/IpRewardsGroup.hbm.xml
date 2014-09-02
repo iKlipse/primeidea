@@ -16,6 +16,9 @@
 			fetch="select">
 			<column name="rg_group_id" />
 		</many-to-one>
+        <property name="rgCrtdDt" type="java.sql.Timestamp">
+            <column name="rg_crtd_dt" length="19" not-null="true" />
+        </property>
 	</class>
 	<sql-query name="deleteRGByRwId">
 		delete from ip_rewards_group where

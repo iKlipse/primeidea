@@ -1,5 +1,6 @@
 package za.co.idea.ip.orm.bean;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ public class IpUser implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 367921902056908014L;
+	private static final long serialVersionUID = 703603332290381462L;
 	private Long userId;
 	private IpGroup ipGroup;
 	private String userFName;
@@ -31,16 +32,17 @@ public class IpUser implements java.io.Serializable {
 	private String userTwHandle;
 	private String userStatus;
 	private String userEmployeeId;
+	private Date userCrtdDt;
 	private Set ipGroups = new HashSet(0);
 	private Set ipGroupUsers = new HashSet(0);
 	private Set ipTags = new HashSet(0);
 	private Set ipFunctions = new HashSet(0);
 	private Set ipClaims = new HashSet(0);
 	private Set ipPointses = new HashSet(0);
-	private Set ipChallenges = new HashSet(0);
-	private Set ipIdeas = new HashSet(0);
+	private Set ipChallengesForChalCrtdBy = new HashSet(0);
+	private Set ipIdeasForIdeaUserId = new HashSet(0);
 	private Set ipLogins = new HashSet(0);
-	private Set ipSolutions = new HashSet(0);
+	private Set ipSolutionsForSolCrtdBy = new HashSet(0);
 
 	// Constructors
 
@@ -49,16 +51,17 @@ public class IpUser implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpUser(Long userId, String userFName, String userLName, String userScreenName, String userStatus) {
+	public IpUser(Long userId, String userFName, String userLName, String userScreenName, String userStatus, Date userCrtdDt) {
 		this.userId = userId;
 		this.userFName = userFName;
 		this.userLName = userLName;
 		this.userScreenName = userScreenName;
 		this.userStatus = userStatus;
+		this.userCrtdDt = userCrtdDt;
 	}
 
 	/** full constructor */
-	public IpUser(Long userId, IpGroup ipGroup, String userFName, String userLName, String userMName, Long userIdNum, String userScreenName, String userEmail, String userContact, String userSkills, String userBio, String userFbHandle, String userTwHandle, String userStatus, String userEmployeeId, Set ipGroups, Set ipGroupUsers, Set ipTags, Set ipFunctions, Set ipClaims, Set ipPointses, Set ipChallenges, Set ipIdeas, Set ipLogins, Set ipSolutions) {
+	public IpUser(Long userId, IpGroup ipGroup, String userFName, String userLName, String userMName, Long userIdNum, String userScreenName, String userEmail, String userContact, String userSkills, String userBio, String userFbHandle, String userTwHandle, String userStatus, String userEmployeeId, Date userCrtdDt, Set ipGroups, Set ipGroupUsers, Set ipTags, Set ipFunctions, Set ipClaims, Set ipPointses, Set ipChallengesForChalCrtdBy, Set ipIdeasForIdeaUserId, Set ipLogins, Set ipSolutionsForSolCrtdBy) {
 		this.userId = userId;
 		this.ipGroup = ipGroup;
 		this.userFName = userFName;
@@ -74,16 +77,17 @@ public class IpUser implements java.io.Serializable {
 		this.userTwHandle = userTwHandle;
 		this.userStatus = userStatus;
 		this.userEmployeeId = userEmployeeId;
+		this.userCrtdDt = userCrtdDt;
 		this.ipGroups = ipGroups;
 		this.ipGroupUsers = ipGroupUsers;
 		this.ipTags = ipTags;
 		this.ipFunctions = ipFunctions;
 		this.ipClaims = ipClaims;
 		this.ipPointses = ipPointses;
-		this.ipChallenges = ipChallenges;
-		this.ipIdeas = ipIdeas;
+		this.ipChallengesForChalCrtdBy = ipChallengesForChalCrtdBy;
+		this.ipIdeasForIdeaUserId = ipIdeasForIdeaUserId;
 		this.ipLogins = ipLogins;
-		this.ipSolutions = ipSolutions;
+		this.ipSolutionsForSolCrtdBy = ipSolutionsForSolCrtdBy;
 	}
 
 	// Property accessors
@@ -208,6 +212,14 @@ public class IpUser implements java.io.Serializable {
 		this.userEmployeeId = userEmployeeId;
 	}
 
+	public Date getUserCrtdDt() {
+		return this.userCrtdDt;
+	}
+
+	public void setUserCrtdDt(Date userCrtdDt) {
+		this.userCrtdDt = userCrtdDt;
+	}
+
 	public Set getIpGroups() {
 		return this.ipGroups;
 	}
@@ -256,20 +268,20 @@ public class IpUser implements java.io.Serializable {
 		this.ipPointses = ipPointses;
 	}
 
-	public Set getIpChallenges() {
-		return this.ipChallenges;
+	public Set getIpChallengesForChalCrtdBy() {
+		return this.ipChallengesForChalCrtdBy;
 	}
 
-	public void setIpChallenges(Set ipChallenges) {
-		this.ipChallenges = ipChallenges;
+	public void setIpChallengesForChalCrtdBy(Set ipChallengesForChalCrtdBy) {
+		this.ipChallengesForChalCrtdBy = ipChallengesForChalCrtdBy;
 	}
 
-	public Set getIpIdeas() {
-		return this.ipIdeas;
+	public Set getIpIdeasForIdeaUserId() {
+		return this.ipIdeasForIdeaUserId;
 	}
 
-	public void setIpIdeas(Set ipIdeas) {
-		this.ipIdeas = ipIdeas;
+	public void setIpIdeasForIdeaUserId(Set ipIdeasForIdeaUserId) {
+		this.ipIdeasForIdeaUserId = ipIdeasForIdeaUserId;
 	}
 
 	public Set getIpLogins() {
@@ -280,12 +292,12 @@ public class IpUser implements java.io.Serializable {
 		this.ipLogins = ipLogins;
 	}
 
-	public Set getIpSolutions() {
-		return this.ipSolutions;
+	public Set getIpSolutionsForSolCrtdBy() {
+		return this.ipSolutionsForSolCrtdBy;
 	}
 
-	public void setIpSolutions(Set ipSolutions) {
-		this.ipSolutions = ipSolutions;
+	public void setIpSolutionsForSolCrtdBy(Set ipSolutionsForSolCrtdBy) {
+		this.ipSolutionsForSolCrtdBy = ipSolutionsForSolCrtdBy;
 	}
 
 }

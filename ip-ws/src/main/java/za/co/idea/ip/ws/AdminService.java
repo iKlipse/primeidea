@@ -66,15 +66,19 @@ public class AdminService {
 		ipGroup.setGroupId(group.getgId());
 		ipGroup.setGroupEmail(group.getGeMail());
 		ipGroup.setGroupName(group.getgName());
-		ipGroup.setGroupStatus(((group.getIsActive() != null && group.getIsActive()) ? "y" : "n"));
+		ipGroup.setGroupStatus(((group.getIsActive() != null && group
+				.getIsActive()) ? "y" : "n"));
 		if (group.getpGrpId() != null && group.getpGrpId().longValue() >= 0)
 			ipGroup.setIpGroup(ipGroupDAO.findById(group.getpGrpId()));
-		if (group.getAdmUserId() != null && group.getAdmUserId().longValue() >= 0)
+		if (group.getAdmUserId() != null
+				&& group.getAdmUserId().longValue() >= 0)
 			ipGroup.setIpUser(ipUserDAO.findById(group.getAdmUserId()));
 		try {
 			ipGroupDAO.save(ipGroup);
-			if (group.getUserIdList() != null && group.getUserIdList().length > 0) {
-				Long[] ids = ipNativeSQLDAO.getNextIds(IpGroupUser.class, group.getUserIdList().length);
+			if (group.getUserIdList() != null
+					&& group.getUserIdList().length > 0) {
+				Long[] ids = ipNativeSQLDAO.getNextIds(IpGroupUser.class,
+						group.getUserIdList().length);
 				int i = 0;
 				for (Long userId : group.getUserIdList()) {
 					IpGroupUser ipGroupUser = new IpGroupUser();
@@ -108,16 +112,20 @@ public class AdminService {
 		ipGroup.setGroupId(group.getgId());
 		ipGroup.setGroupEmail(group.getGeMail());
 		ipGroup.setGroupName(group.getgName());
-		ipGroup.setGroupStatus(((group.getIsActive() != null && group.getIsActive()) ? "y" : "n"));
+		ipGroup.setGroupStatus(((group.getIsActive() != null && group
+				.getIsActive()) ? "y" : "n"));
 		if (group.getpGrpId() != null && group.getpGrpId().longValue() >= 0)
 			ipGroup.setIpGroup(ipGroupDAO.findById(group.getpGrpId()));
-		if (group.getAdmUserId() != null && group.getAdmUserId().longValue() >= 0)
+		if (group.getAdmUserId() != null
+				&& group.getAdmUserId().longValue() >= 0)
 			ipGroup.setIpUser(ipUserDAO.findById(group.getAdmUserId()));
 		try {
 			ipGroupDAO.merge(ipGroup);
 			ipGroupUserDAO.deleteByGroupId(ipGroup.getGroupId());
-			if (group.getUserIdList() != null && group.getUserIdList().length > 0) {
-				Long[] ids = ipNativeSQLDAO.getNextIds(IpGroupUser.class, group.getUserIdList().length);
+			if (group.getUserIdList() != null
+					&& group.getUserIdList().length > 0) {
+				Long[] ids = ipNativeSQLDAO.getNextIds(IpGroupUser.class,
+						group.getUserIdList().length);
 				int i = 0;
 				for (Long userId : group.getUserIdList()) {
 					IpGroupUser ipGroupUser = new IpGroupUser();
@@ -149,6 +157,87 @@ public class AdminService {
 		List<T> ret = new ArrayList<T>();
 		try {
 			List groups = ipGroupDAO.findAll();
+			for (Object object : groups) {
+				IpGroup ipGroup = (IpGroup) object;
+				GroupMessage group = new GroupMessage();
+				group.setGeMail(ipGroup.getGroupEmail());
+				group.setgId(ipGroup.getGroupId());
+				group.setgName(ipGroup.getGroupName());
+				group.setIsActive(ipGroup.getGroupStatus()
+						.equalsIgnoreCase("y"));
+				if (ipGroup.getIpGroup() != null) {
+					group.setpGrpId(ipGroup.getIpGroup().getGroupId());
+					group.setpGrpName(ipGroup.getIpGroup().getGroupName());
+				}
+				if (ipGroup.getIpUser() != null) {
+					group.setAdmUserId(ipGroup.getIpUser().getUserId());
+					group.setAdmUserName(ipGroup.getIpUser().getUserScreenName());
+				}
+				List guList = ipGroupUserDAO.fetchByGroupId(ipGroup.getGroupId());
+				Long[] uList = new Long[guList.size()];
+				int i = 0;
+				for (Object guObj : guList) {
+					IpGroupUser gu = (IpGroupUser) guObj;
+					uList[i] = gu.getIpUser().getUserId();
+					i++;
+				}
+				group.setUserIdList(uList);
+				ret.add((T) group);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
+	@GET
+	@Path("/group/active/list")
+	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
+	public <T extends GroupMessage> List<T> listActiveGroups() {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List groups = ipGroupDAO.findActiveGroups();
+			for (Object object : groups) {
+				IpGroup ipGroup = (IpGroup) object;
+				GroupMessage group = new GroupMessage();
+				group.setGeMail(ipGroup.getGroupEmail());
+				group.setgId(ipGroup.getGroupId());
+				group.setgName(ipGroup.getGroupName());
+				group.setIsActive(ipGroup.getGroupStatus().equalsIgnoreCase("y"));
+				if (ipGroup.getIpGroup() != null) {
+					group.setpGrpId(ipGroup.getIpGroup().getGroupId());
+					group.setpGrpName(ipGroup.getIpGroup().getGroupName());
+				}
+				if (ipGroup.getIpUser() != null) {
+					group.setAdmUserId(ipGroup.getIpUser().getUserId());
+					group.setAdmUserName(ipGroup.getIpUser().getUserScreenName());
+				}
+				List guList = ipGroupUserDAO.fetchByGroupId(ipGroup.getGroupId());
+				Long[] uList = new Long[guList.size()];
+				int i = 0;
+				for (Object guObj : guList) {
+					IpGroupUser gu = (IpGroupUser) guObj;
+					uList[i] = gu.getIpUser().getUserId();
+					i++;
+				}
+				group.setUserIdList(uList);
+				ret.add((T) group);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
+	@GET
+	@Path("/group/inActive/list")
+	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
+	public <T extends GroupMessage> List<T> listInActiveGroups() {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List groups = ipGroupDAO.findInActiveGroups();
 			for (Object object : groups) {
 				IpGroup ipGroup = (IpGroup) object;
 				GroupMessage group = new GroupMessage();
@@ -231,17 +320,20 @@ public class AdminService {
 	@Path("/func/group/list/{grpId}")
 	@Produces("application/json")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public <T extends FunctionMessage> List<T> listFunctionByGroup(@PathParam("grpId") Long grpId) {
+	public <T extends FunctionMessage> List<T> listFunctionByGroup(
+			@PathParam("grpId") Long grpId) {
 		List<T> ret = new ArrayList<T>();
 		try {
 			List functions = ipFuncGroupDAO.fetchByGroupId(grpId);
 			if (functions != null) {
 				for (Object object : functions) {
-					IpFunction ipFunction = ((IpFuncGroup) object).getIpFunction();
+					IpFunction ipFunction = ((IpFuncGroup) object)
+							.getIpFunction();
 					FunctionMessage function = new FunctionMessage();
 					function.setFuncId(ipFunction.getFuncId());
 					function.setFuncName(ipFunction.getFuncName());
-					List fgs = ipFuncGroupDAO.fetchByFuncId(ipFunction.getFuncId());
+					List fgs = ipFuncGroupDAO.fetchByFuncId(ipFunction
+							.getFuncId());
 					if (fgs != null) {
 						Long[] gList = new Long[fgs.size()];
 						int i = 0;
@@ -356,7 +448,8 @@ public class AdminService {
 			ipUser.setUserScreenName(user.getScName());
 			ipUser.setUserSkills(user.getSkills());
 			ipUser.setUserEmployeeId(user.getEmployeeId());
-			ipUser.setUserStatus(((user.getIsActive() != null && user.getIsActive()) ? "y" : "n"));
+			ipUser.setUserStatus(((user.getIsActive() != null && user
+					.getIsActive()) ? "y" : "n"));
 			if (user.getGroupId() != null)
 				ipUser.setIpGroup(ipGroupDAO.findById(user.getGroupId()));
 			if (user.getFbHandle() != null && user.getFbHandle().length() > 0)
@@ -374,14 +467,17 @@ public class AdminService {
 			ipLogin.setLoginName(ipUser.getUserScreenName());
 			ipLogin.setLoginId(user.getuId());
 			ipLogin.setIpSecqList(ipSecqListDAO.findById(user.getSecQ()));
-			ipLogin.setLoginSecA(Base64.encodeBase64URLSafeString(DigestUtils.md5(user.getSecA().getBytes())));
-			ipLogin.setLoginPwd(Base64.encodeBase64URLSafeString(DigestUtils.md5(user.getPwd().getBytes())));
+			ipLogin.setLoginSecA(Base64.encodeBase64URLSafeString(DigestUtils
+					.md5(user.getSecA().getBytes())));
+			ipLogin.setLoginPwd(Base64.encodeBase64URLSafeString(DigestUtils
+					.md5(user.getPwd().getBytes())));
 			try {
 				ipLoginDAO.save(ipLogin);
 			} catch (Exception e) {
 				e.printStackTrace();
 				ipUserDAO.delete(ipUser);
-				throw new RuntimeException("Cannot create user :: " + e.getMessage());
+				throw new RuntimeException("Cannot create user :: "
+						+ e.getMessage());
 			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
@@ -410,8 +506,10 @@ public class AdminService {
 			ipFunction.setIpUser(ipUserDAO.findById(function.getCrtdBy()));
 			ipFunction.setFuncIsCore("n");
 			ipFunctionDAO.save(ipFunction);
-			if (function.getGroupIdList() != null && function.getGroupIdList().length > 0) {
-				Long[] ids = ipNativeSQLDAO.getNextIds(IpFuncGroup.class, function.getGroupIdList().length);
+			if (function.getGroupIdList() != null
+					&& function.getGroupIdList().length > 0) {
+				Long[] ids = ipNativeSQLDAO.getNextIds(IpFuncGroup.class,
+						function.getGroupIdList().length);
 				int i = 0;
 				for (Long gId : function.getGroupIdList()) {
 					IpFuncGroup ipFuncGroup = new IpFuncGroup();
@@ -450,8 +548,10 @@ public class AdminService {
 			ipFunction.setFuncIsCore("y");
 			ipFunctionDAO.merge(ipFunction);
 			ipFuncGroupDAO.deleteByFunctionId(ipFunction.getFuncId());
-			if (function.getGroupIdList() != null && function.getGroupIdList().length > 0) {
-				Long[] ids = ipNativeSQLDAO.getNextIds(IpFuncGroup.class, function.getGroupIdList().length);
+			if (function.getGroupIdList() != null
+					&& function.getGroupIdList().length > 0) {
+				Long[] ids = ipNativeSQLDAO.getNextIds(IpFuncGroup.class,
+						function.getGroupIdList().length);
 				int i = 0;
 				for (Long gId : function.getGroupIdList()) {
 					IpFuncGroup ipFuncGroup = new IpFuncGroup();
@@ -492,7 +592,8 @@ public class AdminService {
 			ipUser.setUserScreenName(user.getScName());
 			ipUser.setUserSkills(user.getSkills());
 			ipUser.setUserEmployeeId(user.getEmployeeId());
-			ipUser.setUserStatus(((user.getIsActive() != null && user.getIsActive()) ? "y" : "n"));
+			ipUser.setUserStatus(((user.getIsActive() != null && user
+					.getIsActive()) ? "y" : "n"));
 			if (user.getGroupId() != null)
 				ipUser.setIpGroup(ipGroupDAO.findById(user.getGroupId()));
 			if (user.getFbHandle() != null && user.getFbHandle().length() > 0)
@@ -543,15 +644,20 @@ public class AdminService {
 				user.setEmployeeId(ipUser.getUserEmployeeId());
 				if (ipUser.getIpGroup() != null) {
 					user.setGroupId(ipUser.getIpGroup().getGroupId());
-					user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
+					user.setPriGroupName(ipGroupDAO.findById(
+							ipUser.getIpGroup().getGroupId()).getGroupName());
 				}
-				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
+				if (ipUser.getUserFbHandle() != null
+						&& ipUser.getUserFbHandle().length() > 0)
 					user.setFbHandle(ipUser.getUserFbHandle());
-				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
+				if (ipUser.getUserBio() != null
+						&& ipUser.getUserBio().length() > 0)
 					user.setBio(ipUser.getUserBio());
-				if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
+				if (ipUser.getUserMName() != null
+						&& ipUser.getUserMName().length() > 0)
 					user.setmName(ipUser.getUserMName());
-				if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
+				if (ipUser.getUserTwHandle() != null
+						&& ipUser.getUserTwHandle().length() > 0)
 					user.setTwHandle(ipUser.getUserTwHandle());
 				ret.add((T) user);
 			}
@@ -560,15 +666,15 @@ public class AdminService {
 		}
 		return ret;
 	}
-
+	
 	@GET
-	@Path("/user/list/sort/pg")
+	@Path("/user/active/list")
 	@Produces("application/json")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public <T extends UserMessage> List<T> listUserSortedByPrimaryGroup() {
+	public <T extends UserMessage> List<T> lisActivetUsers() {
 		List<T> ret = new ArrayList<T>();
 		try {
-			List users = ipUserDAO.fetchSortByPrimaryGroup();
+			List users = ipUserDAO.fetchActiveUsers();
 			for (Object object : users) {
 				IpUser ipUser = (IpUser) object;
 				UserMessage user = new UserMessage();
@@ -601,6 +707,95 @@ public class AdminService {
 		}
 		return ret;
 	}
+	
+	@GET
+	@Path("/user/inActive/list")
+	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
+	public <T extends UserMessage> List<T> fetchInActiveUsers() {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List users = ipUserDAO.fetchInActiveUsers();
+			for (Object object : users) {
+				IpUser ipUser = (IpUser) object;
+				UserMessage user = new UserMessage();
+				user.setuId(ipUser.getUserId());
+				user.setContact(ipUser.getUserContact());
+				user.seteMail(ipUser.getUserEmail());
+				user.setfName(ipUser.getUserFName());
+				user.setIdNum(ipUser.getUserIdNum());
+				user.setlName(ipUser.getUserLName());
+				user.setScName(ipUser.getUserScreenName());
+				user.setSkills(ipUser.getUserSkills());
+				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
+				user.setEmployeeId(ipUser.getUserEmployeeId());
+				if (ipUser.getIpGroup() != null) {
+					user.setGroupId(ipUser.getIpGroup().getGroupId());
+					user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
+				}
+				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
+					user.setFbHandle(ipUser.getUserFbHandle());
+				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
+					user.setBio(ipUser.getUserBio());
+				if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
+					user.setmName(ipUser.getUserMName());
+				if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
+					user.setTwHandle(ipUser.getUserTwHandle());
+				ret.add((T) user);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
+	
+
+	@GET
+	@Path("/user/list/sort/pg")
+	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
+	public <T extends UserMessage> List<T> listUserSortedByPrimaryGroup() {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List users = ipUserDAO.fetchSortByPrimaryGroup();
+			for (Object object : users) {
+				IpUser ipUser = (IpUser) object;
+				UserMessage user = new UserMessage();
+				user.setuId(ipUser.getUserId());
+				user.setContact(ipUser.getUserContact());
+				user.seteMail(ipUser.getUserEmail());
+				user.setfName(ipUser.getUserFName());
+				user.setIdNum(ipUser.getUserIdNum());
+				user.setlName(ipUser.getUserLName());
+				user.setScName(ipUser.getUserScreenName());
+				user.setSkills(ipUser.getUserSkills());
+				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
+				user.setEmployeeId(ipUser.getUserEmployeeId());
+				if (ipUser.getIpGroup() != null) {
+					user.setGroupId(ipUser.getIpGroup().getGroupId());
+					user.setPriGroupName(ipGroupDAO.findById(
+							ipUser.getIpGroup().getGroupId()).getGroupName());
+				}
+				if (ipUser.getUserFbHandle() != null
+						&& ipUser.getUserFbHandle().length() > 0)
+					user.setFbHandle(ipUser.getUserFbHandle());
+				if (ipUser.getUserBio() != null
+						&& ipUser.getUserBio().length() > 0)
+					user.setBio(ipUser.getUserBio());
+				if (ipUser.getUserMName() != null
+						&& ipUser.getUserMName().length() > 0)
+					user.setmName(ipUser.getUserMName());
+				if (ipUser.getUserTwHandle() != null
+						&& ipUser.getUserTwHandle().length() > 0)
+					user.setTwHandle(ipUser.getUserTwHandle());
+				ret.add((T) user);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
 
 	@GET
 	@Path("/user/get/{id}")
@@ -622,15 +817,19 @@ public class AdminService {
 			user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
 			if (ipUser.getIpGroup() != null) {
 				user.setGroupId(ipUser.getIpGroup().getGroupId());
-				user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
+				user.setPriGroupName(ipGroupDAO.findById(
+						ipUser.getIpGroup().getGroupId()).getGroupName());
 			}
-			if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
+			if (ipUser.getUserFbHandle() != null
+					&& ipUser.getUserFbHandle().length() > 0)
 				user.setFbHandle(ipUser.getUserFbHandle());
 			if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
 				user.setBio(ipUser.getUserBio());
-			if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
+			if (ipUser.getUserMName() != null
+					&& ipUser.getUserMName().length() > 0)
 				user.setmName(ipUser.getUserMName());
-			if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
+			if (ipUser.getUserTwHandle() != null
+					&& ipUser.getUserTwHandle().length() > 0)
 				user.setTwHandle(ipUser.getUserTwHandle());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -649,7 +848,8 @@ public class AdminService {
 				ipLoginDAO.updatePassword(param[0], param[1]);
 			} catch (Exception e) {
 				e.printStackTrace();
-				throw new RuntimeException("Cannot merge login :: " + e.getMessage());
+				throw new RuntimeException("Cannot merge login :: "
+						+ e.getMessage());
 			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
@@ -672,10 +872,13 @@ public class AdminService {
 	public ResponseMessage resetSecurity(String[] param) {
 		try {
 			try {
-				ipLoginDAO.updateSecurity(param[0], Integer.valueOf(param[1]), Base64.encodeBase64URLSafeString(DigestUtils.md5(param[2].getBytes())));
+				ipLoginDAO.updateSecurity(param[0], Integer.valueOf(param[1]),
+						Base64.encodeBase64URLSafeString(DigestUtils
+								.md5(param[2].getBytes())));
 			} catch (Exception e) {
 				e.printStackTrace();
-				throw new RuntimeException("Cannot merge login :: " + e.getMessage());
+				throw new RuntimeException("Cannot merge login :: "
+						+ e.getMessage());
 			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
@@ -742,7 +945,8 @@ public class AdminService {
 	public Boolean checkEmployeeID(@PathParam("eId") String eId) {
 		try {
 			List usersByEmployeeID = ipUserDAO.findByUserEmployeeId(eId);
-			Boolean ret = (usersByEmployeeID != null && usersByEmployeeID.size() > 0);
+			Boolean ret = (usersByEmployeeID != null && usersByEmployeeID
+					.size() > 0);
 			return ret;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -757,7 +961,8 @@ public class AdminService {
 	public Long getNextId(@PathParam("clazz") String clazz) {
 		Long ret = -1l;
 		try {
-			ret = ipNativeSQLDAO.getNextId(Class.forName("za.co.idea.ip.orm.bean." + clazz));
+			ret = ipNativeSQLDAO.getNextId(Class
+					.forName("za.co.idea.ip.orm.bean." + clazz));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -768,7 +973,8 @@ public class AdminService {
 	@Path("/user/login/{login}/{pwd}")
 	@Produces("application/json")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public UserMessage login(@PathParam("login") String login, @PathParam("pwd") String pwd) {
+	public UserMessage login(@PathParam("login") String login,
+			@PathParam("pwd") String pwd) {
 		UserMessage user = new UserMessage();
 		try {
 			List logins = ipLoginDAO.verifyLogin(login, pwd);
@@ -787,22 +993,29 @@ public class AdminService {
 				user.setSkills(ipUser.getUserSkills());
 				if (ipUser.getIpGroup() != null)
 					user.setGroupId(ipUser.getIpGroup().getGroupId());
-				user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
+				user.setPriGroupName(ipGroupDAO.findById(
+						ipUser.getIpGroup().getGroupId()).getGroupName());
 				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
-				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
+				if (ipUser.getUserFbHandle() != null
+						&& ipUser.getUserFbHandle().length() > 0)
 					user.setFbHandle(ipUser.getUserFbHandle());
-				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
+				if (ipUser.getUserBio() != null
+						&& ipUser.getUserBio().length() > 0)
 					user.setBio(ipUser.getUserBio());
-				if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
+				if (ipUser.getUserMName() != null
+						&& ipUser.getUserMName().length() > 0)
 					user.setmName(ipUser.getUserMName());
-				if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
+				if (ipUser.getUserTwHandle() != null
+						&& ipUser.getUserTwHandle().length() > 0)
 					user.setTwHandle(ipUser.getUserTwHandle());
 				user.setLastLoginDt(ipLogin.getLoginLastDt());
 				ipLogin.setLoginLastDt(new Date(System.currentTimeMillis()));
 				ipLoginDAO.merge(ipLogin);
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipUser.getUserId(), "ip_user");
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipUser.getUserId(),
+						"ip_user");
 				if (blob != null) {
-					user.setImgPath("ip_user/" + ipUser.getUserId() + "/" + blob.getBlobName());
+					user.setImgPath("ip_user/" + ipUser.getUserId() + "/"
+							+ blob.getBlobName());
 					user.setImgAvail(true);
 				} else
 					user.setImgAvail(false);
@@ -837,17 +1050,20 @@ public class AdminService {
 			user.setSecQ(ipLogin.getIpSecqList().getIslId());
 			if (ipUser.getIpGroup() != null) {
 				user.setGroupId(ipUser.getIpGroup().getGroupId());
-				IpBlob grpBlob = ipBlobDAO.getBlobByEntity(user.getGroupId(), "ip_group");
+				IpBlob grpBlob = ipBlobDAO.getBlobByEntity(user.getGroupId(),
+						"ip_group");
 				if (grpBlob != null) {
 					user.setGrpImgAvail(true);
-					user.setGrpImgPath("ip_group/" + user.getGroupId() + "/" + grpBlob.getBlobName());
+					user.setGrpImgPath("ip_group/" + user.getGroupId() + "/"
+							+ grpBlob.getBlobName());
 				} else
 					user.setGrpImgAvail(false);
 			} else
 				user.setGrpImgAvail(false);
 			IpBlob blob = ipBlobDAO.getBlobByEntity(user.getuId(), "ip_user");
 			if (blob != null) {
-				user.setImgPath("ip_user/" + user.getuId() + "/" + blob.getBlobName());
+				user.setImgPath("ip_user/" + user.getuId() + "/"
+						+ blob.getBlobName());
 				user.setImgAvail(true);
 			} else
 				user.setImgAvail(false);
@@ -868,7 +1084,8 @@ public class AdminService {
 			Long chalCount = ipUserDAO.findChallengeCount(id);
 			Long whishListCount = ipUserDAO.findWhishlistCount(id);
 			Long ideasCount = ipUserDAO.findIdeasCount(id);
-			Long totalCount = solCount + chalCount + whishListCount + ideasCount;
+			Long totalCount = solCount + chalCount + whishListCount
+					+ ideasCount;
 			userStats.setUserId(id);
 			userStats.setChallengesCount(chalCount);
 			userStats.setIdeasCount(ideasCount);
@@ -895,10 +1112,13 @@ public class AdminService {
 			for (Object object : users) {
 				IpUser ipUser = (IpUser) object;
 				Long solCount = ipUserDAO.findSolutionCount(ipUser.getUserId());
-				Long chalCount = ipUserDAO.findChallengeCount(ipUser.getUserId());
-				Long whishListCount = ipUserDAO.findWhishlistCount(ipUser.getUserId());
+				Long chalCount = ipUserDAO.findChallengeCount(ipUser
+						.getUserId());
+				Long whishListCount = ipUserDAO.findWhishlistCount(ipUser
+						.getUserId());
 				Long ideasCount = ipUserDAO.findIdeasCount(ipUser.getUserId());
-				Long totalCount = solCount + chalCount + whishListCount + ideasCount;
+				Long totalCount = solCount + chalCount + whishListCount
+						+ ideasCount;
 				UserStatisticsMessage userStats = new UserStatisticsMessage();
 				userStats.setUserId(ipUser.getUserId());
 				userStats.setChallengesCount(chalCount);
@@ -908,16 +1128,21 @@ public class AdminService {
 				userStats.setTotalCount(totalCount);
 				userStats.setUserScrNm(ipUser.getUserScreenName());
 				userStats.setUserPriGrpName(ipUser.getIpGroup().getGroupName());
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipUser.getUserId(), "ip_user");
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipUser.getUserId(),
+						"ip_user");
 				if (blob != null) {
-					userStats.setImgPath("ip_user/" + ipUser.getUserId() + "/" + blob.getBlobName());
+					userStats.setImgPath("ip_user/" + ipUser.getUserId() + "/"
+							+ blob.getBlobName());
 					userStats.setImgAvail(true);
 				} else {
 					userStats.setImgAvail(false);
 				}
-				IpBlob grpBlob = ipBlobDAO.getBlobByEntity(ipUser.getIpGroup().getGroupId(), "ip_group");
+				IpBlob grpBlob = ipBlobDAO.getBlobByEntity(ipUser.getIpGroup()
+						.getGroupId(), "ip_group");
 				if (grpBlob != null && ipUser.getIpGroup() != null) {
-					userStats.setGrpImgPath("ip_group/" + ipUser.getIpGroup().getGroupId() + "/" + grpBlob.getBlobName());
+					userStats.setGrpImgPath("ip_group/"
+							+ ipUser.getIpGroup().getGroupId() + "/"
+							+ grpBlob.getBlobName());
 					userStats.setGrpImgAvail(true);
 				} else {
 					userStats.setGrpImgAvail(false);

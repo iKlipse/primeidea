@@ -28,6 +28,9 @@
 		<property name="loginSecA" type="java.lang.String">
 			<column name="login_sec_a" length="450" not-null="true" />
 		</property>
+        <property name="loginCrtdDt" type="java.sql.Timestamp">
+            <column name="login_crtd_dt" length="19" not-null="true" />
+        </property>
 	</class>
 	<sql-query name="verifyLogin">
 		select login.* from ip_login login, ip_user iu where

@@ -12,10 +12,11 @@
 			<p:outputLabel id="lblEdtoIStatus" value="Status : " />
 		</p:column>
 		<p:column>
-			<p:selectOneMenu id="somEdtoIStatus" value="#{randomIdeaController.ideaBean.setStatusId}">
+			<p:selectOneMenu id="somEdtoIStatus" value="#{randomIdeaController.ideaBean.setStatusId}" rendered="#{accessControoler.adminEnabled}">
 				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 				<f:selectItems value="#{randomIdeaController.ideaStatuses}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
 			</p:selectOneMenu>
+			<h:outputText value="#{randomIdeaController.ideaBean.statusName}" rendered="#{!accessControoler.adminEnabled}"></h:outputText>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtoIDesc" value="Description : " />

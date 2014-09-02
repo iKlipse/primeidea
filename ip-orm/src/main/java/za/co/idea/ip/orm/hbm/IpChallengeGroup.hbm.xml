@@ -16,6 +16,9 @@
 			fetch="select">
 			<column name="cg_group_id" />
 		</many-to-one>
+        <property name="cgCrtdDt" type="java.sql.Timestamp">
+            <column name="cg_crtd_dt" length="19" not-null="true" />
+        </property>
 	</class>
 	<sql-query name="deleteCGByChalId">
 		delete from ip_challenge_group where

@@ -34,6 +34,7 @@ import org.primefaces.model.tagcloud.TagCloudModel;
 import za.co.idea.ip.portal.bean.GroupBean;
 import za.co.idea.ip.portal.bean.IdeaBean;
 import za.co.idea.ip.portal.bean.ListSelectorBean;
+import za.co.idea.ip.portal.bean.ReviewBean;
 import za.co.idea.ip.portal.bean.TagBean;
 import za.co.idea.ip.portal.bean.UserBean;
 import za.co.idea.ip.portal.util.FacesUtil;
@@ -42,6 +43,7 @@ import za.co.idea.ip.portal.util.RESTServiceHelper;
 import za.co.idea.ip.ws.bean.AttachmentMessage;
 import za.co.idea.ip.ws.bean.IdeaMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
+import za.co.idea.ip.ws.bean.ReviewMessage;
 import za.co.idea.ip.ws.bean.TagMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
@@ -89,6 +91,8 @@ public class RandomIdeaController implements Serializable {
 	private String toView;
 	private long userId;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
+	private List<ReviewBean> rvIds;
+	private Integer rvIdCnt;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
@@ -128,7 +132,8 @@ public class RandomIdeaController implements Serializable {
 				case 3:
 					saveAsOpen = false;
 					ideaBean = new IdeaBean();
-					pGrps = RESTServiceHelper.fetchAllGroups();
+					pGrps = RESTServiceHelper.fetchActiveGroups();
+					admUsers = RESTServiceHelper.fetchActiveUsers();
 					groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 					showViewOpenIdea = false;
 					showViewIdea = false;
@@ -233,16 +238,18 @@ public class RandomIdeaController implements Serializable {
 		try {
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			saveAsOpen = false;
-			admUsers = RESTServiceHelper.fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchActiveUsers();
 			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
 			ideaBean = new IdeaBean();
-			pGrps = RESTServiceHelper.fetchAllGroups();
+			pGrps = RESTServiceHelper.fetchActiveGroups();
 			selGrpId = null;
 			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 			showViewOpenIdea = false;
 			showViewIdea = false;
 			showCrtIdea = true;
 			showViewReviewIdea = false;
+			rvIdCnt = 1;
+			rvIds = null;
 			// return "ideav";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -255,13 +262,13 @@ public class RandomIdeaController implements Serializable {
 	public String showEditIdea() {
 		try {
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
-			admUsers = RESTServiceHelper.fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchActiveUsers();
 			if (userId == 0l) {
 				ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
 			} else {
 				ideaStatuses = RESTServiceHelper.fetchNextIdeaStatuses(ideaBean.getSetStatusId());
 			}
-			pGrps = RESTServiceHelper.fetchAllGroups();
+			pGrps = RESTServiceHelper.fetchActiveGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
 				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
@@ -290,7 +297,6 @@ public class RandomIdeaController implements Serializable {
 				return "ideae";
 			} catch (Exception e) {
 				logger.error(e, e);
-
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				fileAvail = true;
@@ -310,9 +316,9 @@ public class RandomIdeaController implements Serializable {
 	public String showEditReviewIdea() {
 		try {
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
-			admUsers = RESTServiceHelper.fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchActiveUsers();
 			ideaStatuses = RESTServiceHelper.fetchAllReviewIdeaStatuses();
-			pGrps = RESTServiceHelper.fetchAllGroups();
+			pGrps = RESTServiceHelper.fetchActiveGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			if (userId == 0l) {
 				ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
@@ -367,13 +373,13 @@ public class RandomIdeaController implements Serializable {
 	public String showEditOpenIdea() {
 		try {
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
-			admUsers = RESTServiceHelper.fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchActiveUsers();
 			if (userId == 0l) {
 				ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
 			} else {
 				ideaStatuses = RESTServiceHelper.fetchNextIdeaStatuses(ideaBean.getSetStatusId());
 			}
-			pGrps = RESTServiceHelper.fetchAllGroups();
+			pGrps = RESTServiceHelper.fetchActiveGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
 				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
@@ -648,6 +654,9 @@ public class RandomIdeaController implements Serializable {
 		if (ideaBean.getIdeaDesc() == null || ideaBean.getIdeaDesc().length() == 0) {
 			ret.add("Description is Mandatory");
 		}
+		if (rvIdCnt == 0 || rvIds == null || rvIds.size() == 0) {
+			ret.add("Assign Reviewers");
+		}
 		return ret;
 	}
 
@@ -696,7 +705,7 @@ public class RandomIdeaController implements Serializable {
 			ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
 			ideaMessage.setGroupIdList(toLongArray(selGrpId));
-			ideaMessage.setRevUserId(ideaBean.getRevUserId());
+			ideaMessage.setRvIdCnt(rvIdCnt);
 			if (saveAsOpen) {
 				ideaMessage.setSetStatusId(2l);
 			} else {
@@ -730,6 +739,8 @@ public class RandomIdeaController implements Serializable {
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
 				}
+				rvIds = null;
+				rvIdCnt = 1;
 				uploadContent = null;
 				saveAsOpen = false;
 				if (ideaMessage.getSetStatusId().longValue() == 2l)
@@ -772,7 +783,6 @@ public class RandomIdeaController implements Serializable {
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
 			ideaMessage.setSetStatusId(ideaBean.getSetStatusId());
 			ideaMessage.setGroupIdList(toLongArray(selGrpId));
-			ideaMessage.setRevUserId(ideaBean.getRevUserId());
 			ResponseMessage response = updateIdeaClient.accept(MediaType.APPLICATION_JSON).put(ideaMessage, ResponseMessage.class);
 			updateIdeaClient.close();
 			if (response.getStatusCode() == 0) {
@@ -828,6 +838,9 @@ public class RandomIdeaController implements Serializable {
 					}
 				}
 				uploadContent = null;
+				saveAsOpen = false;
+				rvIds = null;
+				rvIdCnt = 0;
 				if (ideaMessage.getSetStatusId().longValue() == 2l)
 					showViewOpenIdeas();
 				else
@@ -858,12 +871,39 @@ public class RandomIdeaController implements Serializable {
 		}
 	}
 
+	public void initializeAssignReviews() {
+		pGrps = RESTServiceHelper.fetchActiveGroups();
+		rvIds = new ArrayList<ReviewBean>();
+		for (int i = 0; i < rvIdCnt; i++) {
+			ReviewBean bean = new ReviewBean();
+			bean.setEntityId(COUNTER.getNextId("IpIdea"));
+			bean.setStatusId(i + 1);
+			bean.setTblNm("ip_idea");
+			rvIds.add(bean);
+		}
+	}
+
+	public void assignReviews() {
+		for (ReviewBean bean : rvIds) {
+			ReviewMessage message = new ReviewMessage();
+			message.setEntityId(bean.getEntityId());
+			message.setGroupId(toLongArray(bean.getGroupId()));
+			message.setStatusId(bean.getStatusId());
+			message.setTblNm(bean.getTblNm());
+			WebClient reviewClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rvs/review/modify");
+			ResponseMessage res = reviewClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
+			if (res.getStatusCode() != 0) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Assign Reviewer Request Failed", "Assign Reviewer Request Failed");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			}
+			reviewClient.close();
+		}
+	}
+
 	protected Long[] toLongArray(String[] val) {
-		logger.info("Input Count :: " + val.length);
 		Long[] ret = new Long[val.length];
 		for (int i = 0; i < val.length; i++)
 			ret[i] = Long.valueOf(val[i]);
-		logger.info("Output Count :: " + ret.length);
 		return ret;
 	}
 
@@ -1235,4 +1275,29 @@ public class RandomIdeaController implements Serializable {
 	public void setShowViewReviewIdea(boolean showViewReviewIdea) {
 		this.showViewReviewIdea = showViewReviewIdea;
 	}
+
+	public List<ReviewBean> getRvIds() {
+		if (rvIds == null) {
+			rvIds = new ArrayList<ReviewBean>();
+			ReviewBean bean = new ReviewBean();
+			bean.setEntityId(COUNTER.getNextId("IpIdea"));
+			bean.setStatusId(1);
+			bean.setTblNm("ip_idea");
+			rvIds.add(bean);
+		}
+		return rvIds;
+	}
+
+	public void setRvIds(List<ReviewBean> rvIds) {
+		this.rvIds = rvIds;
+	}
+
+	public Integer getRvIdCnt() {
+		return rvIdCnt;
+	}
+
+	public void setRvIdCnt(Integer rvIdCnt) {
+		this.rvIdCnt = rvIdCnt;
+	}
+
 }

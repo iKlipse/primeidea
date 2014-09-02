@@ -29,6 +29,7 @@ import org.primefaces.model.tagcloud.TagCloudModel;
 
 import za.co.idea.ip.portal.bean.TagBean;
 import za.co.idea.ip.portal.util.IdNumberGen;
+import za.co.idea.ip.portal.util.RESTServiceHelper;
 import za.co.idea.ip.ws.bean.AttachmentMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.TagMessage;
@@ -73,7 +74,7 @@ public class BuildonController implements Serializable {
 		entityId = Long.valueOf(reqMap.get("entityId"));
 		entityType = Integer.parseInt(reqMap.get("entityType"));
 		taggable = Boolean.parseBoolean(reqMap.get("taggable"));
-		buildons = fetchAllBuildOns();
+		buildons = RESTServiceHelper.fetchAllBuildOns(entityId, entityType);
 		buildon = new TagBean();
 		commentText = "";
 		return "bovw";
@@ -224,27 +225,8 @@ public class BuildonController implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Build-On", "Error While Saving Build-On"));
 		buildon.setTagText("");
 		fileContent = null;
-		buildons = fetchAllBuildOns();
+		buildons = RESTServiceHelper.fetchAllBuildOns(entityId, entityType);
 		return "";
-	}
-
-	private List<TagBean> fetchAllBuildOns() {
-		WebClient fetchIdeaBuildOnsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + entityId + "/" + entityType + "/3");
-		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaBuildOnsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
-		fetchIdeaBuildOnsClient.close();
-		List<TagBean> ret = new ArrayList<TagBean>();
-		for (TagMessage msg : msgs) {
-			TagBean bean = new TagBean();
-			bean.setTagText(msg.getTagText());
-			bean.setUsrScreenName(msg.getUsrScreenName());
-			bean.setTagDate(msg.getTagDate());
-			bean.setTagId(msg.getTagId());
-			bean.setImgAvail(msg.isImgAvail());
-			bean.setBlobUrl(msg.getBlobUrl());
-			bean.setFileName(msg.getFileName());
-			ret.add(bean);
-		}
-		return ret;
 	}
 
 	private TagCloudModel fetchAllBuildonLikes() {

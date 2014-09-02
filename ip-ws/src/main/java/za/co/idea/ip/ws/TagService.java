@@ -59,7 +59,7 @@ public class TagService {
 				message.setUserFullName(ipTag.getIpUser().getUserFName() + " " + ((ipTag.getIpUser().getUserMName() != null && ipTag.getIpUser().getUserMName().length() > 0) ? (ipTag.getIpUser().getUserMName() + " ") : "") + ipTag.getIpUser().getUserLName());
 				message.setUserId(ipTag.getIpUser().getUserId());
 				message.setTagId(ipTag.getTagId());
-				message.setTagDate(ipTag.getTagDate());
+				message.setTagDate(ipTag.getTagCrtdDt());
 				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipTag.getTagId(), "ip_tag");
 				if (ipBlob != null) {
 					message.setImgAvail(true);
@@ -93,7 +93,7 @@ public class TagService {
 				message.setUserFullName(ipTag.getIpUser().getUserFName() + " " + ((ipTag.getIpUser().getUserMName() != null && ipTag.getIpUser().getUserMName().length() > 0) ? (ipTag.getIpUser().getUserMName() + " ") : "") + ipTag.getIpUser().getUserLName());
 				message.setUserId(ipTag.getIpUser().getUserId());
 				message.setTagId(ipTag.getTagId());
-				message.setTagDate(ipTag.getTagDate());
+				message.setTagDate(ipTag.getTagCrtdDt());
 				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipTag.getTagId(), "ip_tag");
 				if (ipBlob != null) {
 					message.setImgAvail(true);
@@ -137,7 +137,7 @@ public class TagService {
 				ipTag.setTagEntityId(tag.getEntityId());
 				ipTag.setTagId(tag.getTagId());
 				ipTag.setTagText(tag.getTagText());
-				ipTag.setTagDate(new Date(System.currentTimeMillis()));
+				ipTag.setTagCrtdDt(new Date(System.currentTimeMillis()));
 				ipTagDAO.save(ipTag);
 				ResponseMessage message = new ResponseMessage();
 				message.setStatusCode(0);

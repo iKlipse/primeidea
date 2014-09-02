@@ -10,11 +10,11 @@
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 				</p:commandLink>
 				<p:graphicImage name="separator.png" library="images" />
-				<p:commandLink value="Review Challenges" action="#{challengeController.showReviewChallenges}" update="pnlChalDet">
+				<p:commandLink value="View Challenges Under Review" action="#{challengeController.showReviewChallenges}" update="pnlChalDet">
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 				</p:commandLink>
 				<p:graphicImage name="separator.png" library="images" />
-				<p:commandLink value="View Challenges" action="#{challengeController.showViewChallenges}" update="pnlChalDet">
+				<p:commandLink value="View All Challenges" action="#{challengeController.showViewChallenges}" update="pnlChalDet">
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 				</p:commandLink>
 				<p:graphicImage name="separator.png" library="images" />
@@ -28,11 +28,11 @@
 					<ui:include src="/views/challenge/viewOpen.xhtml" />
 				</p:panel>
 				<p:panel styleClass="panelView"  id="ctrVwRChallenges" rendered="#{challengeController.showReviewChal}">
-					<f:facet name="header">Review Challenges</f:facet>
+					<f:facet name="header">View Challenges Under Review</f:facet>
 					<ui:include src="/views/challenge/viewReview.xhtml" />
 				</p:panel>
 				<p:panel styleClass="panelView"  id="ctrVwChallenges" rendered="#{challengeController.showViewChal}">
-					<f:facet name="header">View Challenges</f:facet>
+					<f:facet name="header">View All Challenges</f:facet>
 					<ui:include src="/views/challenge/view.xhtml" />
 				</p:panel>
 				<p:panel styleClass="panelView"  id="ctrCrtChallenge" rendered="#{challengeController.showCrtChal}">

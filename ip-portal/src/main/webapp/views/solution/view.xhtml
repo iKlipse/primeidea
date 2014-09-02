@@ -1,6 +1,6 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<p:dataTable id="dtViewSolutions" value="#{challengeController.viewSolutions}" var="solution" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Solutions Found">
-		<p:column width="35%" filterBy="#{solution.title}" filterMatchMode="contains">
+		<p:column width="31%" filterBy="#{solution.title}" filterMatchMode="contains">
 			<f:facet name="header">Title</f:facet>
 			<p:outputLabel id="txtVwSolutionTitle" value="#{solution.title}" />
 		</p:column>
@@ -8,21 +8,27 @@
 			<f:facet name="header">Category</f:facet>
 			<p:outputLabel id="somVwICat" value="#{solution.catName}" />
 		</p:column>
-		<p:column width="15%" sortBy="#{solution.statusName}">
+		<p:column width="10%" sortBy="#{solution.statusName}">
 			<f:facet name="header">Status</f:facet>
 			<p:outputLabel id="somVwIStatus" value="#{solution.statusName}" />
 		</p:column>
-		<p:column width="15%" sortBy="#{solution.crtByName}">
+		<p:column width="15%" filterBy="#{solution.crtByName}" filterMatchMode="contains" sortBy="#{solution.crtByName}">
 			<f:facet name="header">Created By</f:facet>
 			<p:outputLabel id="somVwACrtdBy" value="#{solution.crtByName}" />
 		</p:column>
-		<p:column width="10%">
-			<p:commandButton id="viewVwButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{challengeController.showEditSolution}">
+		<p:column width="13%" filterBy="#{solution.crtdDt}" filterMatchMode="contains" sortBy="#{solution.crtdDt}">
+			<f:facet name="header">Created Date</f:facet>
+			<p:outputLabel id="somVwACrtdDt" value="#{solution.crtdDt}" >
+			   <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss"></f:convertDateTime>
+			</p:outputLabel>
+		</p:column>
+		<p:column width="8%">
+			<p:commandButton id="viewVwButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{challengeController.showEditSolution}" rendered="#{!solution.disableEdit}">
 				<f:setPropertyActionListener value="#{solution}" target="#{challengeController.solutionBean}" />
 				<f:setPropertyActionListener value="3" target="#{challengeController.returnView}" />
 			</p:commandButton>
 		</p:column>
-		<p:column width="10%">
+		<p:column width="8%">
 			<p:commandButton id="summaryVwButton" icon="ui-icon-clipboard" ajax="false" immediate="true" action="#{challengeController.showSummarySolution}">
 				<f:setPropertyActionListener value="#{solution}" target="#{challengeController.solutionBean}" />
 				<f:setPropertyActionListener value="3" target="#{challengeController.returnView}" />

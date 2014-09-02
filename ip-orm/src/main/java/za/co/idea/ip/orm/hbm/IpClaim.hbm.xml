@@ -24,7 +24,7 @@
 			<column name="claim_desc" length="65535" />
 		</property>
 		<property name="claimCrtdDt" type="java.sql.Timestamp">
-			<column name="claim_crtd_dt" length="19" />
+            <column name="claim_crtd_dt" length="19" not-null="true" />
 		</property>
 		<property name="claimComment" type="java.lang.String">
 			<column name="claim_comment" length="450" />

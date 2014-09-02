@@ -11,11 +11,11 @@
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 				</p:commandLink>
 				<p:graphicImage name="separator.png" library="images" />
-				<p:commandLink value="View Review Solutions" action="#{challengeController.showViewReviewSolution}" update="pnlSolDet">
+				<p:commandLink value="View Solutions Under Review" action="#{challengeController.showViewReviewSolution}" update="pnlSolDet">
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 				</p:commandLink>
 				<p:graphicImage name="separator.png" library="images" />
-				<p:commandLink value="View Solutions" action="#{challengeController.showViewSolution}" update="pnlSolDet">
+				<p:commandLink value="View All Solutions" action="#{challengeController.showViewSolution}" update="pnlSolDet">
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 				</p:commandLink>
 				<p:graphicImage name="separator.png" library="images" />
@@ -29,11 +29,11 @@
 					<ui:include src="/views/solution/viewOpen.xhtml" />
 				</p:panel>
 				<p:panel styleClass="panelView"  id="ctrVwReviewSolutions" rendered="#{challengeController.showReviewSol}">
-					<f:facet name="header">View Solutions</f:facet>
+					<f:facet name="header">View Solutions Under Review</f:facet>
 					<ui:include src="/views/solution/viewReview.xhtml" />
 				</p:panel>
 				<p:panel styleClass="panelView"  id="ctrVwSolutions" rendered="#{challengeController.showViewSol}">
-					<f:facet name="header">View Solutions</f:facet>
+					<f:facet name="header">View All Solutions</f:facet>
 					<ui:include src="/views/solution/view.xhtml" />
 				</p:panel>
 				<p:panel styleClass="panelView"  id="ctrCrtSolution" rendered="#{challengeController.showCrtSol}">

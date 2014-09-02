@@ -44,17 +44,21 @@ import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 import za.co.idea.ip.portal.bean.AllocationBean;
+import za.co.idea.ip.portal.bean.ClaimBean;
 import za.co.idea.ip.portal.bean.FunctionBean;
 import za.co.idea.ip.portal.bean.GroupBean;
+import za.co.idea.ip.portal.bean.ListSelectorBean;
 import za.co.idea.ip.portal.bean.MetaDataBean;
 import za.co.idea.ip.portal.bean.NewsBean;
 import za.co.idea.ip.portal.bean.NotificationBean;
+import za.co.idea.ip.portal.bean.RewardsBean;
 import za.co.idea.ip.portal.bean.UserBean;
 import za.co.idea.ip.portal.bean.UserStatisticsBean;
 import za.co.idea.ip.portal.util.IdNumberGen;
 import za.co.idea.ip.portal.util.RESTServiceHelper;
 import za.co.idea.ip.ws.bean.AllocationMessage;
 import za.co.idea.ip.ws.bean.AttachmentMessage;
+import za.co.idea.ip.ws.bean.ClaimMessage;
 import za.co.idea.ip.ws.bean.FunctionMessage;
 import za.co.idea.ip.ws.bean.GroupMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
@@ -81,6 +85,7 @@ public class AdminController implements Serializable {
 	private static final Logger logger = Logger.getLogger(AdminController.class);
 
 	private UserBean userBean;
+	private ClaimBean claimBean;
 	private GroupBean groupBean;
 	private FunctionBean functionBean;
 	private List<FunctionBean> functions;
@@ -162,6 +167,11 @@ public class AdminController implements Serializable {
 	private boolean showEditProfile;
 	private boolean showChangePwd;
 	private boolean showChangeSecQ;
+	private List<ClaimBean> viewClaimBeans;
+	private List<RewardsBean> viewRewardsBeans;
+	private List<ListSelectorBean> claimStatus;
+	private boolean activeUsersView;
+	private boolean inactiveUsersView;
 
 	private WebClient createCustomClient(String url) {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
@@ -333,8 +343,8 @@ public class AdminController implements Serializable {
 
 	public String showCreateFunction() {
 		try {
-			pGrps = fetchAllGroups();
-			groupTwinSelect = new DualListModel<GroupBean>(fetchAllGroups(), new ArrayList<GroupBean>());
+			pGrps = RESTServiceHelper.fetchActiveGroups();
+			groupTwinSelect = new DualListModel<GroupBean>(RESTServiceHelper.fetchActiveGroups(), new ArrayList<GroupBean>());
 			return "admfc";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -348,7 +358,7 @@ public class AdminController implements Serializable {
 		try {
 			functions = fetchAllFunctions();
 			admUsers = fetchAllUsers();
-			pGrps = fetchAllGroups();
+			pGrps = RESTServiceHelper.fetchActiveGroups();
 			return "admfv";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -360,7 +370,7 @@ public class AdminController implements Serializable {
 
 	public String showViewGroups() {
 		try {
-			pGrps = viewGroups = fetchAllGroups();
+			pGrps = viewGroups = RESTServiceHelper.fetchAllGroups();
 			admUsers = fetchAllUsers();
 			return "admgv";
 		} catch (Exception e) {
@@ -374,7 +384,7 @@ public class AdminController implements Serializable {
 	public String showCreateGroup() {
 		try {
 			groupBean = new GroupBean();
-			viewGroups = pGrps = fetchAllGroups();
+			viewGroups = pGrps = RESTServiceHelper.fetchActiveGroups();
 			admUsers = fetchAllUsersSortByPG();
 			userTwinSelect = new DualListModel<UserBean>(fetchAllUsersSortByPG(), fetchAdminUser());
 			return "admgc";
@@ -388,7 +398,7 @@ public class AdminController implements Serializable {
 
 	public String showEditGroup() {
 		try {
-			viewGroups = pGrps = fetchAllGroups();
+			viewGroups = pGrps = RESTServiceHelper.fetchActiveGroups();
 			admUsers = fetchAllUsersSortByPG();
 			userTwinSelect = initializeSelectedUsers(admUsers);
 			functions = fetchAllFunctionsByGroup();
@@ -438,7 +448,7 @@ public class AdminController implements Serializable {
 
 	public String showSummaryGroup() {
 		try {
-			viewGroups = pGrps = fetchAllGroups();
+			viewGroups = pGrps = RESTServiceHelper.fetchAllGroups();
 			admUsers = fetchAllUsersSortByPG();
 			userTwinSelect = initializeSelectedUsers(admUsers);
 			functions = fetchAllFunctionsByGroup();
@@ -489,7 +499,7 @@ public class AdminController implements Serializable {
 	public String showCreateNotification() {
 		try {
 			notificationBean = new NotificationBean();
-			pGrps = fetchAllGroups();
+			pGrps = RESTServiceHelper.fetchActiveGroups();
 			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 			return "admcno";
 		} catch (Exception e) {
@@ -499,11 +509,99 @@ public class AdminController implements Serializable {
 			return "";
 		}
 	}
+	
+	public String showViewClaim() {
+		try {
+			admUsers = fetchAllUsers();
+			claimStatus = RESTServiceHelper.fetchAllClaimStatuses();
+			viewClaimBeans = RESTServiceHelper.fetchAllClaims();
+			viewRewardsBeans = RESTServiceHelper.fetchAllRewards();
+			return "clmvc";
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+	
+	public String showEditClaim() {
+		try {
+			admUsers = fetchAllUsers();
+			claimStatus = RESTServiceHelper.fetchNextClaimStatuses(claimBean.getcStatusId());
+			viewRewardsBeans = RESTServiceHelper.fetchAllRewards();
+			return "clmec";
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+	
+	public String updateClaim() {
+		try {
+			WebClient updateClaimClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cls/claim/modify");
+			ClaimMessage message = new ClaimMessage();
+			message.setClaimCrtdDt(claimBean.getClaimCrtdDt());
+			message.setClaimDesc(claimBean.getClaimDesc());
+			message.setClaimId(claimBean.getClaimId());
+			message.setcStatusId(claimBean.getcStatusId());
+			message.setClaimComment(claimBean.getClaimComment());
+			message.setRewardsId(claimBean.getRewardsId());
+			message.setUserId(claimBean.getUserId());
+			ResponseMessage response = updateClaimClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
+			updateClaimClient.close();
+			if (response.getStatusCode() == 0) {
+				return showViewClaim();
+			} else {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
 
 	public String showViewUsers() {
 		try {
+			activeUsersView=false;
+			inactiveUsersView=false;
 			viewUsers = fetchAllUsers();
 			return "admuv";
+		} catch (Exception e) {
+			logger.error(e, e);
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform Users View request", "System error occurred, cannot perform Users View request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+	
+	public String showViewActiveUsers() {
+		try {
+			activeUsersView = true;
+			inactiveUsersView = false;
+			viewUsers = RESTServiceHelper.fetchActiveUsers();
+			return "admuav";
+		} catch (Exception e) {
+			logger.error(e, e);
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform Users View request", "System error occurred, cannot perform Users View request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+	
+	public String showViewInactiveUsers() {
+		try {
+			activeUsersView = false;
+			inactiveUsersView = true;
+			viewUsers = RESTServiceHelper.fetchInActiveUsers();
+			return "admuiv";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform Users View request", "System error occurred, cannot perform Users View request");
@@ -524,7 +622,7 @@ public class AdminController implements Serializable {
 	public String showEditUser() {
 		try {
 			secqList = fetchAllSecQ();
-			viewGroups = fetchAllGroups();
+			viewGroups = RESTServiceHelper.fetchActiveGroups();
 			resetPasswd = false;
 			resetSec = false;
 			return "admue";
@@ -535,10 +633,44 @@ public class AdminController implements Serializable {
 			return "";
 		}
 	}
+	
+	public String showEditActiveUser() {
+		try {
+			activeUsersView = true;
+			inactiveUsersView = false;
+			secqList = fetchAllSecQ();
+			viewGroups = RESTServiceHelper.fetchActiveGroups();
+			resetPasswd = false;
+			resetSec = false;
+			return "admuae";
+		} catch (Exception e) {
+			logger.error(e, e);
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated user view request", "System error occurred, cannot perform updated user view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+	
+	public String showEditInActiveUser() {
+		try {
+			inactiveUsersView = true;
+			activeUsersView = false;
+			secqList = fetchAllSecQ();
+			viewGroups = RESTServiceHelper.fetchActiveGroups();
+			resetPasswd = false;
+			resetSec = false;
+			return "admuie";
+		} catch (Exception e) {
+			logger.error(e, e);
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated user view request", "System error occurred, cannot perform updated user view request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
 
 	public void initializeEditProfile() {
 		try {
-			viewGroups = fetchAllGroups();
+			viewGroups = RESTServiceHelper.fetchActiveGroups();
 			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 			User user = (User) request.getAttribute(WebKeys.USER);
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
@@ -564,7 +696,7 @@ public class AdminController implements Serializable {
 			userBean.setPriGroupName(userMessage.getPriGroupName());
 			userBean.setGroupId(userMessage.getGroupId());
 			userBean.setcPw(userBean.getPwd());
-			viewGroups = fetchAllGroups();
+			viewGroups = RESTServiceHelper.fetchAllGroups();
 			secqList = fetchAllSecQ();
 			showEditProfile = true;
 			showChangePwd = false;
@@ -598,7 +730,7 @@ public class AdminController implements Serializable {
 	}
 
 	public String changeEditProfile() {
-		viewGroups = fetchAllGroups();
+		viewGroups = RESTServiceHelper.fetchActiveGroups();
 		PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		User user = (User) request.getAttribute(WebKeys.USER);
 		WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
@@ -650,7 +782,7 @@ public class AdminController implements Serializable {
 		try {
 			userBean = new UserBean();
 			secqList = fetchAllSecQ();
-			viewGroups = fetchAllGroups();
+			viewGroups = RESTServiceHelper.fetchActiveGroups();
 			return "admuc";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -680,7 +812,7 @@ public class AdminController implements Serializable {
 
 	public String showEditFunction() {
 		try {
-			pGrps = fetchAllGroups();
+			pGrps = RESTServiceHelper.fetchActiveGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			return "admfe";
 		} catch (Exception e) {
@@ -1365,6 +1497,8 @@ public class AdminController implements Serializable {
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
 				}
+				FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "User '" + userBean.getfName() + "' created successfully", "User '" + userBean.getfName() + "' created successfully");
+				FacesContext.getCurrentInstance().addMessage(null, successMessage);
 				viewUsers = fetchAllUsers();
 				return "admuv";
 			} else {
@@ -1535,8 +1669,19 @@ public class AdminController implements Serializable {
 			if (response.getStatusCode() == 0) {
 				FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "User '" + userBean.getfName() + "' updated successfully", "User '" + userBean.getfName() + "' updated successfully");
 				FacesContext.getCurrentInstance().addMessage(null, successMessage);
-				viewUsers = fetchAllUsers();
-				return "admuv";
+				if(activeUsersView){
+				viewUsers = RESTServiceHelper.fetchActiveUsers();
+				return "admuav";
+				} else if(inactiveUsersView){
+					viewUsers = RESTServiceHelper.fetchInActiveUsers();
+					return "admuiv";
+				} else {
+					viewUsers = RESTServiceHelper.fetchAllUsers();
+					return "admuv";
+					
+				}
+				
+				
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update User", "Unable to update User");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -1662,7 +1807,7 @@ public class AdminController implements Serializable {
 					}
 					createBlobClient.close();
 				}
-				viewGroups = fetchAllGroups();
+				viewGroups = RESTServiceHelper.fetchAllGroups();
 				return "admgv";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -1794,7 +1939,7 @@ public class AdminController implements Serializable {
 					}
 				}
 				grpImage = null;
-				viewGroups = fetchAllGroups();
+				viewGroups = RESTServiceHelper.fetchAllGroups();
 				return "admgv";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -2045,33 +2190,6 @@ public class AdminController implements Serializable {
 		return ret;
 	}
 
-	private List<GroupBean> fetchAllGroups() {
-		List<GroupBean> ret = new ArrayList<GroupBean>();
-		WebClient viewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/list");
-		Collection<? extends GroupMessage> groups = new ArrayList<GroupMessage>(viewGroupsClient.accept(MediaType.APPLICATION_JSON).getCollection(GroupMessage.class));
-		viewGroupsClient.close();
-		for (GroupMessage groupMessage : groups) {
-			GroupBean bean = new GroupBean();
-			bean.setgId(groupMessage.getgId());
-			bean.setGeMail(groupMessage.getGeMail());
-			bean.setgName(groupMessage.getgName());
-			bean.setIsActive(groupMessage.getIsActive());
-			bean.setSelAdmUser(groupMessage.getAdmUserId());
-			bean.setSelPGrp(groupMessage.getpGrpId());
-			bean.getUserIdList().clear();
-			bean.setBlobUrl(groupMessage.getBlobUrl());
-			bean.setFileName(groupMessage.getFileName());
-			bean.setImgAvl(groupMessage.isImgAvl());
-			bean.setSelAdmUserName(groupMessage.getAdmUserName());
-			bean.setSelPGrpName(groupMessage.getpGrpName());
-			for (Long id : groupMessage.getUserIdList())
-				if (id != null)
-					bean.getUserIdList().add(id);
-			ret.add(bean);
-		}
-		return ret;
-	}
-
 	private List<FunctionBean> fetchAllFunctions() {
 		List<FunctionBean> ret = new ArrayList<FunctionBean>();
 		WebClient viewFunctionsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/func/list");
@@ -2124,6 +2242,7 @@ public class AdminController implements Serializable {
 				bean.setNewsUrl(message.getNewsUrl());
 				bean.setNwImgAvail(message.isNwImgAvail());
 				bean.setBlobUrl(message.getBlobUrl());
+				bean.setFileName(message.getFileName());
 				ret.add(bean);
 			}
 		} catch (Exception e) {
@@ -2588,7 +2707,7 @@ public class AdminController implements Serializable {
 		try {
 			WebClient addClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/nos/notif/add");
 			NotificationMessage notifMessage = new NotificationMessage();
-			notifMessage.setNotifCrtdDate(new Date().toString());
+			notifMessage.setNotifCrtdDate(new Date());
 			notifMessage.setNotifId(java.util.UUID.randomUUID().toString());
 			notifMessage.setNotifStatus("n");
 			notifMessage.setNotifSubject(notificationBean.getNotifSubject());
@@ -3376,5 +3495,55 @@ public class AdminController implements Serializable {
 
 	public void setShowChangeSecQ(boolean showChangeSecQ) {
 		this.showChangeSecQ = showChangeSecQ;
+	}
+
+	public List<ClaimBean> getViewClaimBeans() {
+		return viewClaimBeans;
+	}
+
+	public void setViewClaimBeans(List<ClaimBean> viewClaimBeans) {
+		this.viewClaimBeans = viewClaimBeans;
+	}
+
+	public List<RewardsBean> getViewRewardsBeans() {
+		return viewRewardsBeans;
+	}
+
+	public void setViewRewardsBeans(List<RewardsBean> viewRewardsBeans) {
+		this.viewRewardsBeans = viewRewardsBeans;
+	}
+
+	public List<ListSelectorBean> getClaimStatus() {
+		return claimStatus;
+	}
+
+	public void setClaimStatus(List<ListSelectorBean> claimStatus) {
+		this.claimStatus = claimStatus;
+	}
+	
+	public ClaimBean getClaimBean() {
+		if (claimBean == null)
+			claimBean = new ClaimBean();
+		return claimBean;
+	}
+
+	public void setClaimBean(ClaimBean claimBean) {
+		this.claimBean = claimBean;
+	}
+
+	public boolean isActiveUsersView() {
+		return activeUsersView;
+	}
+
+	public void setActiveUsersView(boolean activeUsersView) {
+		this.activeUsersView = activeUsersView;
+	}
+
+	public boolean isInactiveUsersView() {
+		return inactiveUsersView;
+	}
+
+	public void setInactiveUsersView(boolean inactiveUsersView) {
+		this.inactiveUsersView = inactiveUsersView;
 	}
 }

@@ -16,7 +16,7 @@ public class IpFunction implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -4943256207304653231L;
+	private static final long serialVersionUID = 4636381273429968254L;
 	private Long funcId;
 	private IpUser ipUser;
 	private String funcName;
@@ -31,14 +31,17 @@ public class IpFunction implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpFunction(Long funcId, String funcName, String funcIsCore) {
+	public IpFunction(Long funcId, String funcName, String funcIsCore,
+			Date funcCrtdDt) {
 		this.funcId = funcId;
 		this.funcName = funcName;
 		this.funcIsCore = funcIsCore;
+		this.funcCrtdDt = funcCrtdDt;
 	}
 
 	/** full constructor */
-	public IpFunction(Long funcId, IpUser ipUser, String funcName, String funcIsCore, Date funcCrtdDt, Set ipFuncGroups) {
+	public IpFunction(Long funcId, IpUser ipUser, String funcName,
+			String funcIsCore, Date funcCrtdDt, Set ipFuncGroups) {
 		this.funcId = funcId;
 		this.ipUser = ipUser;
 		this.funcName = funcName;

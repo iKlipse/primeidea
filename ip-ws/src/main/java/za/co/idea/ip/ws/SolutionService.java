@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.bean.IpChallenge;
-import za.co.idea.ip.orm.bean.IpReview;
 import za.co.idea.ip.orm.bean.IpSolution;
 import za.co.idea.ip.orm.bean.IpSolutionCat;
 import za.co.idea.ip.orm.bean.IpSolutionStatus;
@@ -75,19 +74,13 @@ public class SolutionService {
 			ipSolution.setIpChallenge(ipChallengeDAO.findById(solution.getChalId()));
 			ipSolution.setIpSolutionCat(ipSolutionCatDAO.findById(ipChallenge.getIpChallengeCat().getCcId()));
 			ipSolution.setIpSolutionStatus(ipSolutionStatusDAO.findById(solution.getStatusId()));
-			ipSolution.setIpUser(ipUserDAO.findById(solution.getCrtdById()));
+			ipSolution.setIpUserBySolCrtdBy(ipUserDAO.findById(solution.getCrtdById()));
 			ipSolution.setSolCrtdDt(solution.getCrtdDt());
 			ipSolution.setSolDesc(solution.getDesc());
 			ipSolution.setSolId(solution.getId());
 			ipSolution.setSolTags(solution.getTags());
 			ipSolution.setSolTitle(solution.getTitle());
 			ipSolutionDAO.save(ipSolution);
-			IpReview ipReview = new IpReview();
-			ipReview.setIpUser(ipUserDAO.findById(solution.getRevUserId()));
-			ipReview.setRevEntityId(solution.getId());
-			ipReview.setRevId(ipNativeSQLDAO.getNextId(IpReview.class));
-			ipReview.setRevEntityName("ip_solution");
-			ipReviewDAO.save(ipReview);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
@@ -112,22 +105,13 @@ public class SolutionService {
 			ipSolution.setIpChallenge(ipChallengeDAO.findById(solution.getChalId()));
 			ipSolution.setIpSolutionCat(ipSolutionCatDAO.findById(solution.getCatId()));
 			ipSolution.setIpSolutionStatus(ipSolutionStatusDAO.findById(solution.getStatusId()));
-			ipSolution.setIpUser(ipUserDAO.findById(solution.getCrtdById()));
+			ipSolution.setIpUserBySolCrtdBy(ipUserDAO.findById(solution.getCrtdById()));
 			ipSolution.setSolCrtdDt(solution.getCrtdDt());
 			ipSolution.setSolDesc(solution.getDesc());
 			ipSolution.setSolId(solution.getId());
 			ipSolution.setSolTags(solution.getTags());
 			ipSolution.setSolTitle(solution.getTitle());
 			ipSolutionDAO.merge(ipSolution);
-			IpReview ipReview = ipReviewDAO.findByEntityIdEntityName(solution.getId(), "ip_solution");
-			if (ipReview == null) {
-				ipReview = new IpReview();
-				ipReview.setRevId(ipNativeSQLDAO.getNextId(IpReview.class));
-			}
-			ipReview.setIpUser(ipUserDAO.findById(solution.getRevUserId()));
-			ipReview.setRevEntityId(solution.getId());
-			ipReview.setRevEntityName("ip_solution");
-			ipReviewDAO.save(ipReview);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
@@ -155,8 +139,8 @@ public class SolutionService {
 				solution.setChalId(ipSolution.getIpChallenge().getChalId());
 				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
-				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setCrtByName(ipSolution.getIpUser().getUserScreenName());
+				solution.setCrtdById(ipSolution.getIpUserBySolCrtdBy().getUserId());
+				solution.setCrtByName(ipSolution.getIpUserBySolCrtdBy().getUserScreenName());
 				solution.setCrtdDt(ipSolution.getSolCrtdDt());
 				solution.setDesc(ipSolution.getSolDesc());
 				solution.setId(ipSolution.getSolId());
@@ -174,15 +158,12 @@ public class SolutionService {
 				} else {
 					solution.setSolImgAvl(false);
 				}
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUserBySolCrtdBy().getUserId(), "ip_user");
 				if (blob != null) {
-					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
+					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUserBySolCrtdBy().getUserId() + "/" + blob.getBlobName());
 					solution.setCrtByImgAvail(true);
 				} else
 					solution.setCrtByImgAvail(false);
-				IpReview rev = ipReviewDAO.findByEntityIdEntityName(solution.getId(), "ip_solution");
-				if (rev != null)
-					solution.setRevUserId(rev.getIpUser().getUserId());
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -207,8 +188,8 @@ public class SolutionService {
 				solution.setChalId(ipSolution.getIpChallenge().getChalId());
 				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
-				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setCrtByName(ipSolution.getIpUser().getUserScreenName());
+				solution.setCrtdById(ipSolution.getIpUserBySolCrtdBy().getUserId());
+				solution.setCrtByName(ipSolution.getIpUserBySolCrtdBy().getUserScreenName());
 				solution.setCrtdDt(ipSolution.getSolCrtdDt());
 				solution.setDesc(ipSolution.getSolDesc());
 				solution.setId(ipSolution.getSolId());
@@ -226,15 +207,12 @@ public class SolutionService {
 				} else {
 					solution.setSolImgAvl(false);
 				}
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUserBySolCrtdBy().getUserId(), "ip_user");
 				if (blob != null) {
-					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
+					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUserBySolCrtdBy().getUserId() + "/" + blob.getBlobName());
 					solution.setCrtByImgAvail(true);
 				} else
 					solution.setCrtByImgAvail(false);
-				IpReview rev = ipReviewDAO.findByEntityIdEntityName(solution.getId(), "ip_solution");
-				if (rev != null)
-					solution.setRevUserId(rev.getIpUser().getUserId());
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -258,8 +236,8 @@ public class SolutionService {
 				solution.setChalId(ipSolution.getIpChallenge().getChalId());
 				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
-				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setCrtByName(ipSolution.getIpUser().getUserScreenName());
+				solution.setCrtdById(ipSolution.getIpUserBySolCrtdBy().getUserId());
+				solution.setCrtByName(ipSolution.getIpUserBySolCrtdBy().getUserScreenName());
 				solution.setCrtdDt(ipSolution.getSolCrtdDt());
 				solution.setDesc(ipSolution.getSolDesc());
 				solution.setId(ipSolution.getSolId());
@@ -277,15 +255,12 @@ public class SolutionService {
 				} else {
 					solution.setSolImgAvl(false);
 				}
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUserBySolCrtdBy().getUserId(), "ip_user");
 				if (blob != null) {
-					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
+					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUserBySolCrtdBy().getUserId() + "/" + blob.getBlobName());
 					solution.setCrtByImgAvail(true);
 				} else
 					solution.setCrtByImgAvail(false);
-				IpReview rev = ipReviewDAO.findByEntityIdEntityName(solution.getId(), "ip_solution");
-				if (rev != null)
-					solution.setRevUserId(rev.getIpUser().getUserId());
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -308,8 +283,8 @@ public class SolutionService {
 				solution.setChalId(ipSolution.getIpChallenge().getChalId());
 				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
-				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setCrtByName(ipSolution.getIpUser().getUserScreenName());
+				solution.setCrtdById(ipSolution.getIpUserBySolCrtdBy().getUserId());
+				solution.setCrtByName(ipSolution.getIpUserBySolCrtdBy().getUserScreenName());
 				solution.setCrtdDt(ipSolution.getSolCrtdDt());
 				solution.setDesc(ipSolution.getSolDesc());
 				solution.setId(ipSolution.getSolId());
@@ -327,15 +302,12 @@ public class SolutionService {
 				} else {
 					solution.setSolImgAvl(false);
 				}
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUserBySolCrtdBy().getUserId(), "ip_user");
 				if (blob != null) {
-					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
+					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUserBySolCrtdBy().getUserId() + "/" + blob.getBlobName());
 					solution.setCrtByImgAvail(true);
 				} else
 					solution.setCrtByImgAvail(false);
-				IpReview rev = ipReviewDAO.findByEntityIdEntityName(solution.getId(), "ip_solution");
-				if (rev != null)
-					solution.setRevUserId(rev.getIpUser().getUserId());
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -358,8 +330,8 @@ public class SolutionService {
 				solution.setChalId(ipSolution.getIpChallenge().getChalId());
 				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
-				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setCrtByName(ipSolution.getIpUser().getUserScreenName());
+				solution.setCrtdById(ipSolution.getIpUserBySolCrtdBy().getUserId());
+				solution.setCrtByName(ipSolution.getIpUserBySolCrtdBy().getUserScreenName());
 				solution.setCrtdDt(ipSolution.getSolCrtdDt());
 				solution.setDesc(ipSolution.getSolDesc());
 				solution.setId(ipSolution.getSolId());
@@ -377,15 +349,12 @@ public class SolutionService {
 				} else {
 					solution.setSolImgAvl(false);
 				}
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUserBySolCrtdBy().getUserId(), "ip_user");
 				if (blob != null) {
-					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
+					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUserBySolCrtdBy().getUserId() + "/" + blob.getBlobName());
 					solution.setCrtByImgAvail(true);
 				} else
 					solution.setCrtByImgAvail(false);
-				IpReview rev = ipReviewDAO.findByEntityIdEntityName(solution.getId(), "ip_solution");
-				if (rev != null)
-					solution.setRevUserId(rev.getIpUser().getUserId());
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -408,8 +377,8 @@ public class SolutionService {
 				solution.setChalId(ipSolution.getIpChallenge().getChalId());
 				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
-				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setCrtByName(ipSolution.getIpUser().getUserScreenName());
+				solution.setCrtdById(ipSolution.getIpUserBySolCrtdBy().getUserId());
+				solution.setCrtByName(ipSolution.getIpUserBySolCrtdBy().getUserScreenName());
 				solution.setCrtdDt(ipSolution.getSolCrtdDt());
 				solution.setDesc(ipSolution.getSolDesc());
 				solution.setId(ipSolution.getSolId());
@@ -427,15 +396,12 @@ public class SolutionService {
 				} else {
 					solution.setSolImgAvl(false);
 				}
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUserBySolCrtdBy().getUserId(), "ip_user");
 				if (blob != null) {
-					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
+					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUserBySolCrtdBy().getUserId() + "/" + blob.getBlobName());
 					solution.setCrtByImgAvail(true);
 				} else
 					solution.setCrtByImgAvail(false);
-				IpReview rev = ipReviewDAO.findByEntityIdEntityName(solution.getId(), "ip_solution");
-				if (rev != null)
-					solution.setRevUserId(rev.getIpUser().getUserId());
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -458,8 +424,8 @@ public class SolutionService {
 				solution.setChalId(ipSolution.getIpChallenge().getChalId());
 				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
-				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setCrtByName(ipSolution.getIpUser().getUserScreenName());
+				solution.setCrtdById(ipSolution.getIpUserBySolCrtdBy().getUserId());
+				solution.setCrtByName(ipSolution.getIpUserBySolCrtdBy().getUserScreenName());
 				solution.setCrtdDt(ipSolution.getSolCrtdDt());
 				solution.setDesc(ipSolution.getSolDesc());
 				solution.setId(ipSolution.getSolId());
@@ -477,9 +443,6 @@ public class SolutionService {
 				} else {
 					solution.setSolImgAvl(false);
 				}
-				IpReview rev = ipReviewDAO.findByEntityIdEntityName(solution.getId(), "ip_solution");
-				if (rev != null)
-					solution.setRevUserId(rev.getIpUser().getUserId());
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -612,7 +575,7 @@ public class SolutionService {
 			solution.setChalId(ipSolution.getIpChallenge().getChalId());
 			solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 			solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
-			solution.setCrtdById(ipSolution.getIpUser().getUserId());
+			solution.setCrtdById(ipSolution.getIpUserBySolCrtdBy().getUserId());
 			solution.setCrtdDt(ipSolution.getSolCrtdDt());
 			solution.setDesc(ipSolution.getSolDesc());
 			solution.setId(ipSolution.getSolId());
@@ -620,10 +583,10 @@ public class SolutionService {
 			solution.setTitle(ipSolution.getSolTitle());
 			solution.setCatName(ipSolution.getIpSolutionCat().getScDesc());
 			solution.setStatusName(ipSolution.getIpSolutionStatus().getSsDesc());
-			solution.setCrtByName(ipSolution.getIpUser().getUserScreenName());
-			IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
+			solution.setCrtByName(ipSolution.getIpUserBySolCrtdBy().getUserScreenName());
+			IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUserBySolCrtdBy().getUserId(), "ip_user");
 			if (blob != null) {
-				solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
+				solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUserBySolCrtdBy().getUserId() + "/" + blob.getBlobName());
 				solution.setCrtByImgAvail(true);
 			} else
 				solution.setCrtByImgAvail(false);

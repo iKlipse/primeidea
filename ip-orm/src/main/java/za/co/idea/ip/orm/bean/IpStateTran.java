@@ -1,5 +1,7 @@
 package za.co.idea.ip.orm.bean;
 
+import java.util.Date;
+
 /**
  * IpStateTran entity. @author MyEclipse Persistence Tools
  */
@@ -11,12 +13,13 @@ public class IpStateTran implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4882306508930605189L;
+	private static final long serialVersionUID = -316549226191412821L;
 	private Integer tranId;
 	private String tranEntity;
 	private Integer tranCurrState;
 	private Integer tranNextState;
 	private String tranIsUi;
+	private Date tranCrtdDt;
 
 	// Constructors
 
@@ -25,11 +28,13 @@ public class IpStateTran implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpStateTran(String tranEntity, Integer tranCurrState, Integer tranNextState, String tranIsUi) {
+	public IpStateTran(String tranEntity, Integer tranCurrState,
+			Integer tranNextState, String tranIsUi, Date tranCrtdDt) {
 		this.tranEntity = tranEntity;
 		this.tranCurrState = tranCurrState;
 		this.tranNextState = tranNextState;
 		this.tranIsUi = tranIsUi;
+		this.tranCrtdDt = tranCrtdDt;
 	}
 
 	// Property accessors
@@ -72,6 +77,14 @@ public class IpStateTran implements java.io.Serializable {
 
 	public void setTranIsUi(String tranIsUi) {
 		this.tranIsUi = tranIsUi;
+	}
+
+	public Date getTranCrtdDt() {
+		return this.tranCrtdDt;
+	}
+
+	public void setTranCrtdDt(Date tranCrtdDt) {
+		this.tranCrtdDt = tranCrtdDt;
 	}
 
 }

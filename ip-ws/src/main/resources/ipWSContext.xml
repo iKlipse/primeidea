@@ -91,6 +91,11 @@
 		<property name="ipNewsDAO" ref="IpNewsDAO" />
 		<property name="ipBlobDAO" ref="IpBlobDAO" />
 	</bean>
+	<bean id="reviewService" class="za.co.idea.ip.ws.ReviewService">
+		<property name="ipReviewDAO" ref="IpReviewDAO" />
+		<property name="ipNativeSQLDAO" ref="IpNativeSQLDAO" />
+		<property name="ipGroupDAO" ref="IpGroupDAO" />
+	</bean>
 	<bean id="notificationService" class="za.co.idea.ip.ws.NotificationService">
 		<property name="ipNativeSQLDAO" ref="IpNativeSQLDAO" />
 		<property name="ipNotifGroupDAO" ref="IpNotifGroupDAO" />
@@ -101,6 +106,7 @@
 		<property name="jobDataAsMap">
 			<map>
 				<entry key="ipChallengeDAO" value-ref="IpChallengeDAO" />
+				<entry key="ipSolutionDAO" value-ref="IpSolutionDAO" />
 			</map>
 		</property>
 	</bean>
@@ -143,18 +149,21 @@
 	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<!-- <ref bean="ChallengeExpiryJobTrigger" /> <ref bean="NotificationEmailJobTrigger" /> <ref bean="UserNotificationsJobTrigger" /> -->
+				<ref bean="ChallengeExpiryJobTrigger" />
+				<ref bean="NotificationEmailJobTrigger" />
+				<ref bean="UserNotificationsJobTrigger" />
 			</list>
 		</property>
 	</bean>
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" />
+		<property name="username" value="venu@iklipse.co.za" />
+		<property name="password" value="Pa%5W0Rd01" />
 		<property name="javaMailProperties">
 			<props>
-				<prop key="mail.smtp.host">vpbrjhbpexc02.corp.primedia.co.za</prop>
-				<prop key="mail.smtp.port">25</prop>
-				<prop key="mail.smtp.auth">false</prop>
+				<prop key="mail.smtp.auth">true</prop>
 				<prop key="mail.smtp.starttls.enable">true</prop>
-				<prop key="mail.debug">true</prop>
 			</props>
 		</property>
 	</bean>

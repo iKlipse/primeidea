@@ -135,7 +135,7 @@ public class ChallengeController implements Serializable {
 			AccessController controller = new AccessController(userId);
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("accessBean", controller);
 			challengeCats = fetchAllChallengeCat();
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchAllUsers();
 			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
 			showPubChal = true;
 			showViewChal = false;
@@ -159,10 +159,11 @@ public class ChallengeController implements Serializable {
 					showReviewChal = false;
 					break;
 				case 3:
-					pGrps = fetchAllGroups();
+					pGrps = RESTServiceHelper.fetchActiveGroups();
 					challengeStatuses = fetchAllChallengeStatuses();
 					groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 					challengeBean = new ChallengeBean();
+					admUsers = RESTServiceHelper.fetchActiveUsers();
 					showPubChal = false;
 					showViewChal = false;
 					showCrtChal = true;
@@ -194,7 +195,7 @@ public class ChallengeController implements Serializable {
 			userId = message.getuId();
 			AccessController controller = new AccessController(userId);
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("accessBean", controller);
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchAllUsers();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
 			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
@@ -207,6 +208,7 @@ public class ChallengeController implements Serializable {
 				switch (Integer.valueOf(toView)) {
 				case 1:
 					viewChallenges = fetchAllChallengesByStatusIdUserId(4);
+					admUsers = RESTServiceHelper.fetchActiveUsers();
 					solutionBean = new SolutionBean();
 					saveAsOpen = false;
 					showPubSol = false;
@@ -273,7 +275,7 @@ public class ChallengeController implements Serializable {
 		try {
 			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
 			challengeCats = fetchAllChallengeCat();
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchAllUsers();
 			challengeStatuses = fetchAllChallengeStatuses();
 			showPubChal = true;
 			showViewChal = false;
@@ -292,7 +294,7 @@ public class ChallengeController implements Serializable {
 		try {
 			viewChallenges = fetchAllChallengesByUser();
 			challengeCats = fetchAllChallengeCat();
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchAllUsers();
 			challengeStatuses = fetchAllChallengeStatuses();
 			showPubChal = false;
 			showViewChal = true;
@@ -309,10 +311,10 @@ public class ChallengeController implements Serializable {
 
 	public String showCreateChallenges() {
 		try {
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchActiveUsers();
 			challengeCats = fetchAllChallengeCat();
 			challengeStatuses = fetchAllChallengeStatuses();
-			pGrps = fetchAllGroups();
+			pGrps = RESTServiceHelper.fetchActiveGroups();
 			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 			challengeBean = new ChallengeBean();
 			selGrpId = null;
@@ -333,7 +335,7 @@ public class ChallengeController implements Serializable {
 		try {
 			viewChallenges = RESTServiceHelper.fetchAllReviewChallengesByUser(userId);
 			challengeCats = fetchAllChallengeCat();
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchAllUsers();
 			challengeStatuses = RESTServiceHelper.fetchAllReviewChallengeNextStatuses();
 			showPubChal = false;
 			showReviewChal = true;
@@ -351,9 +353,9 @@ public class ChallengeController implements Serializable {
 	public String showEditChallenge() {
 		try {
 			challengeCats = fetchAllChallengeCat();
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchActiveUsers();
 			challengeStatuses = fetchAllChallengeStatuses();
-			pGrps = fetchAllGroups();
+			pGrps = RESTServiceHelper.fetchActiveGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
 				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
@@ -404,9 +406,9 @@ public class ChallengeController implements Serializable {
 	public String showEditOpenChallenge() {
 		try {
 			challengeCats = fetchAllChallengeCat();
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchActiveUsers();
 			challengeStatuses = fetchNextChallengeStatuses();
-			pGrps = fetchAllGroups();
+			pGrps = RESTServiceHelper.fetchActiveGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
 				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
@@ -457,9 +459,9 @@ public class ChallengeController implements Serializable {
 	public String showEditReviewChallenge() {
 		try {
 			challengeCats = fetchAllChallengeCat();
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchActiveUsers();
 			challengeStatuses = RESTServiceHelper.fetchAllReviewChallengeNextStatuses();
-			pGrps = fetchAllGroups();
+			pGrps = RESTServiceHelper.fetchActiveGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
 				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
@@ -881,7 +883,7 @@ public class ChallengeController implements Serializable {
 
 	public String showCreateSolution() {
 		try {
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchActiveUsers();
 			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
@@ -904,7 +906,7 @@ public class ChallengeController implements Serializable {
 	public String showSubmitSolution() {
 		try {
 			Map<String, String> reqMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchActiveUsers();
 			viewChallenges = fetchAllAvailableChallenges();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
@@ -922,7 +924,7 @@ public class ChallengeController implements Serializable {
 
 	public String showViewSolution() {
 		try {
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchAllUsers();
 			viewChallenges = fetchAllChallengesByUser();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
@@ -943,7 +945,7 @@ public class ChallengeController implements Serializable {
 
 	public String showViewOpenSolution() {
 		try {
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchAllUsers();
 			viewChallenges = fetchAllChallengesByUser();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
@@ -964,7 +966,7 @@ public class ChallengeController implements Serializable {
 
 	public String showViewReviewSolution() {
 		try {
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchAllUsers();
 			viewChallenges = fetchAllChallengesByUser();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
@@ -985,7 +987,7 @@ public class ChallengeController implements Serializable {
 
 	public String showEditSolution() {
 		try {
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchActiveUsers();
 			viewChallenges = fetchAllChallengesByUser();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
@@ -1037,7 +1039,7 @@ public class ChallengeController implements Serializable {
 
 	public String showEditOpenSolution() {
 		try {
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchActiveUsers();
 			viewChallenges = fetchAllChallengesByUser();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchNextSolutionStatuses();
@@ -1089,7 +1091,7 @@ public class ChallengeController implements Serializable {
 
 	public String showEditReviewSolution() {
 		try {
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchActiveUsers();
 			viewChallenges = fetchAllChallengesByUser();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = RESTServiceHelper.fetchAllReviewSolutionStatuses();
@@ -1741,6 +1743,13 @@ public class ChallengeController implements Serializable {
 			bean.setRevUserId(challengeMessage.getRevUserId());
 			bean.setStatusName(challengeMessage.getStatusName());
 			bean.setCatName(challengeMessage.getCatName());
+			String chalStatus=challengeMessage.getStatusName();
+			if(userId!=0 && chalStatus!=null && !(chalStatus.equals("Draft") && chalStatus.equals("Publish"))) {
+				bean.setDisableEdit(true);
+			}else {
+				bean.setDisableEdit(false);
+			}
+			
 			ret.add(bean);
 		}
 		return ret;
@@ -1867,6 +1876,12 @@ public class ChallengeController implements Serializable {
 			bean.setRevUserId(solutionMessage.getRevUserId());
 			bean.setStatusName(solutionMessage.getStatusName());
 			bean.setCatName(solutionMessage.getCatName());
+			String solStatus=solutionMessage.getStatusName();
+			if(userId!=0 && solStatus!=null && !(solStatus.equals("Draft") && solStatus.equals("Open"))) {
+				bean.setDisableEdit(true);
+			}else {
+				bean.setDisableEdit(false);
+			}
 			if (solutionMessage.isSolImgAvl())
 				bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
 			ret.add(bean);
@@ -2228,32 +2243,7 @@ public class ChallengeController implements Serializable {
 		return ret;
 	}
 
-	private List<UserBean> fetchAllUsers() {
-		List<UserBean> ret = new ArrayList<UserBean>();
-		WebClient viewUsersClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/list/sort/pg");
-		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
-		viewUsersClient.close();
-		for (UserMessage userMessage : users) {
-			UserBean bean = new UserBean();
-			bean.setBio(userMessage.getBio());
-			bean.setContact(userMessage.getContact());
-			bean.seteMail(userMessage.geteMail());
-			bean.setFbHandle(userMessage.getFbHandle());
-			bean.setfName(userMessage.getfName());
-			bean.setIdNum(userMessage.getIdNum());
-			bean.setIsActive(userMessage.getIsActive());
-			bean.setlName(userMessage.getlName());
-			bean.setmName(userMessage.getmName());
-			bean.setPwd(userMessage.getPwd());
-			bean.setScName(userMessage.getScName());
-			bean.setSkills(userMessage.getSkills());
-			bean.setTwHandle(userMessage.getTwHandle());
-			bean.setIsActive(true);
-			bean.setuId(userMessage.getuId());
-			ret.add(bean);
-		}
-		return ret;
-	}
+	
 
 	private List<String> validateSolution() {
 		ArrayList<String> ret = new ArrayList<String>();
@@ -2303,27 +2293,7 @@ public class ChallengeController implements Serializable {
 		}
 	}
 
-	private List<GroupBean> fetchAllGroups() {
-		List<GroupBean> ret = new ArrayList<GroupBean>();
-		WebClient viewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/list");
-		Collection<? extends GroupMessage> groups = new ArrayList<GroupMessage>(viewGroupsClient.accept(MediaType.APPLICATION_JSON).getCollection(GroupMessage.class));
-		viewGroupsClient.close();
-		for (GroupMessage groupMessage : groups) {
-			GroupBean bean = new GroupBean();
-			bean.setgId(groupMessage.getgId());
-			bean.setGeMail(groupMessage.getGeMail());
-			bean.setgName(groupMessage.getgName());
-			bean.setIsActive(groupMessage.getIsActive());
-			bean.setSelAdmUser(groupMessage.getAdmUserId());
-			bean.setSelPGrp(groupMessage.getpGrpId());
-			bean.getUserIdList().clear();
-			for (Long id : groupMessage.getUserIdList())
-				if (id != null)
-					bean.getUserIdList().add(id);
-			ret.add(bean);
-		}
-		return ret;
-	}
+
 
 	private DualListModel<GroupBean> initializeSelectedGroups(List<GroupBean> grps) {
 		List<Long> selGrps = challengeBean.getGroupIdList();

@@ -196,6 +196,32 @@ public class IpUserDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
+	
+	public List fetchActiveUsers() {
+		log.debug("Fetching all active Users by Query :: getUsersByStatus");
+		try {
+			Query query = getSession().getNamedQuery("getUsersByStatus");
+			query.setString("status", "y");
+			List ret = query.list();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("find users failed", re);
+			throw re;
+		}
+	}
+	
+	public List fetchInActiveUsers() {
+		log.debug("Fetching all in active Users by Query :: getUsersByStatus");
+		try {
+			Query query = getSession().getNamedQuery("getUsersByStatus");
+			query.setString("status", "n");
+			List ret = query.list();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("find users failed", re);
+			throw re;
+		}
+	}
 
 	public List fetchSortByPrimaryGroup() {
 		log.debug("Fetching User by Query :: sortListByPrimaryGrp");

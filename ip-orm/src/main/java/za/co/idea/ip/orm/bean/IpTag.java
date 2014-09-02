@@ -13,14 +13,14 @@ public class IpTag implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4145821326117322916L;
+	private static final long serialVersionUID = 961833067697641035L;
 	private Long tagId;
 	private IpUser ipUser;
 	private IpTagEntityType ipTagEntityType;
 	private IpTagType ipTagType;
 	private Long tagEntityId;
 	private String tagText;
-	private Date tagDate;
+	private Date tagCrtdDt;
 
 	// Constructors
 
@@ -29,19 +29,22 @@ public class IpTag implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpTag(Long tagId) {
+	public IpTag(Long tagId, Date tagCrtdDt) {
 		this.tagId = tagId;
+		this.tagCrtdDt = tagCrtdDt;
 	}
 
 	/** full constructor */
-	public IpTag(Long tagId, IpUser ipUser, IpTagEntityType ipTagEntityType, IpTagType ipTagType, Long tagEntityId, String tagText, Date tagDate) {
+	public IpTag(Long tagId, IpUser ipUser, IpTagEntityType ipTagEntityType,
+			IpTagType ipTagType, Long tagEntityId, String tagText,
+			Date tagCrtdDt) {
 		this.tagId = tagId;
 		this.ipUser = ipUser;
 		this.ipTagEntityType = ipTagEntityType;
 		this.ipTagType = ipTagType;
 		this.tagEntityId = tagEntityId;
 		this.tagText = tagText;
-		this.tagDate = tagDate;
+		this.tagCrtdDt = tagCrtdDt;
 	}
 
 	// Property accessors
@@ -94,12 +97,12 @@ public class IpTag implements java.io.Serializable {
 		this.tagText = tagText;
 	}
 
-	public Date getTagDate() {
-		return this.tagDate;
+	public Date getTagCrtdDt() {
+		return this.tagCrtdDt;
 	}
 
-	public void setTagDate(Date tagDate) {
-		this.tagDate = tagDate;
+	public void setTagCrtdDt(Date tagCrtdDt) {
+		this.tagCrtdDt = tagCrtdDt;
 	}
 
 }

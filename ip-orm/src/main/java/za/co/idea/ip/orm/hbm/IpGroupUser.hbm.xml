@@ -16,6 +16,9 @@
 			fetch="select">
 			<column name="gu_grp_id" not-null="true" />
 		</many-to-one>
+        <property name="guCrtdDt" type="java.sql.Timestamp">
+            <column name="gu_crtd_dt" length="19" not-null="true" />
+        </property>
 	</class>
 	<sql-query name="deleteGUByGroupId">
 		delete from ip_group_user where gu_grp_id=:id

@@ -26,12 +26,12 @@
 		<property name="notifStatus" type="java.lang.String">
 			<column name="notif_status" length="1" />
 		</property>
-		<property name="notifCrtdDate" type="java.lang.String">
-			<column name="notif_crtd_date" length="45" />
-		</property>
 		<property name="notifList" type="java.lang.String">
 			<column name="notif_list" />
 		</property>
+        <property name="notifCrtdDate" type="java.sql.Timestamp">
+            <column name="notif_crtd_date" length="19" not-null="true" />
+        </property>
 	</class>
 	<sql-query name="deleteNotifById">
 		delete from ip_notif where notif_id=:id

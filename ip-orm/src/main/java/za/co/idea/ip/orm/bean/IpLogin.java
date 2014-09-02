@@ -13,7 +13,7 @@ public class IpLogin implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -413850731547950827L;
+	private static final long serialVersionUID = 8570433674808289109L;
 	private Long loginId;
 	private IpUser ipUser;
 	private IpSecqList ipSecqList;
@@ -21,6 +21,7 @@ public class IpLogin implements java.io.Serializable {
 	private String loginPwd;
 	private Date loginLastDt;
 	private String loginSecA;
+	private Date loginCrtdDt;
 
 	// Constructors
 
@@ -29,17 +30,22 @@ public class IpLogin implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpLogin(Long loginId, IpUser ipUser, IpSecqList ipSecqList, String loginName, String loginPwd, String loginSecA) {
+	public IpLogin(Long loginId, IpUser ipUser, IpSecqList ipSecqList,
+			String loginName, String loginPwd, String loginSecA,
+			Date loginCrtdDt) {
 		this.loginId = loginId;
 		this.ipUser = ipUser;
 		this.ipSecqList = ipSecqList;
 		this.loginName = loginName;
 		this.loginPwd = loginPwd;
 		this.loginSecA = loginSecA;
+		this.loginCrtdDt = loginCrtdDt;
 	}
 
 	/** full constructor */
-	public IpLogin(Long loginId, IpUser ipUser, IpSecqList ipSecqList, String loginName, String loginPwd, Date loginLastDt, String loginSecA) {
+	public IpLogin(Long loginId, IpUser ipUser, IpSecqList ipSecqList,
+			String loginName, String loginPwd, Date loginLastDt,
+			String loginSecA, Date loginCrtdDt) {
 		this.loginId = loginId;
 		this.ipUser = ipUser;
 		this.ipSecqList = ipSecqList;
@@ -47,6 +53,7 @@ public class IpLogin implements java.io.Serializable {
 		this.loginPwd = loginPwd;
 		this.loginLastDt = loginLastDt;
 		this.loginSecA = loginSecA;
+		this.loginCrtdDt = loginCrtdDt;
 	}
 
 	// Property accessors
@@ -105,6 +112,14 @@ public class IpLogin implements java.io.Serializable {
 
 	public void setLoginSecA(String loginSecA) {
 		this.loginSecA = loginSecA;
+	}
+
+	public Date getLoginCrtdDt() {
+		return this.loginCrtdDt;
+	}
+
+	public void setLoginCrtdDt(Date loginCrtdDt) {
+		this.loginCrtdDt = loginCrtdDt;
 	}
 
 }

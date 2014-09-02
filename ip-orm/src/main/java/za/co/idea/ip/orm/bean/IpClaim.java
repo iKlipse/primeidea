@@ -13,7 +13,7 @@ public class IpClaim implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -1958395720465147276L;
+	private static final long serialVersionUID = 6156158923203310450L;
 	private Long claimId;
 	private IpUser ipUser;
 	private IpClaimStatus ipClaimStatus;
@@ -29,12 +29,15 @@ public class IpClaim implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpClaim(Long claimId) {
+	public IpClaim(Long claimId, Date claimCrtdDt) {
 		this.claimId = claimId;
+		this.claimCrtdDt = claimCrtdDt;
 	}
 
 	/** full constructor */
-	public IpClaim(Long claimId, IpUser ipUser, IpClaimStatus ipClaimStatus, IpRewards ipRewards, String claimDesc, Date claimCrtdDt, String claimComment) {
+	public IpClaim(Long claimId, IpUser ipUser, IpClaimStatus ipClaimStatus,
+			IpRewards ipRewards, String claimDesc, Date claimCrtdDt,
+			String claimComment) {
 		this.claimId = claimId;
 		this.ipUser = ipUser;
 		this.ipClaimStatus = ipClaimStatus;

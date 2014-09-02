@@ -159,7 +159,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 				Hibernate.initialize(sol.getIpChallenge());
 				Hibernate.initialize(sol.getIpSolutionCat());
 				Hibernate.initialize(sol.getIpSolutionStatus());
-				Hibernate.initialize(sol.getIpUser());
+				Hibernate.initialize(sol.getIpUserBySolCrtdBy());
 			}
 			return ret;
 		} catch (RuntimeException re) {
@@ -179,7 +179,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 				Hibernate.initialize(sol.getIpChallenge());
 				Hibernate.initialize(sol.getIpSolutionCat());
 				Hibernate.initialize(sol.getIpSolutionStatus());
-				Hibernate.initialize(sol.getIpUser());
+				Hibernate.initialize(sol.getIpUserBySolCrtdBy());
 			}
 			return ret;
 		} catch (RuntimeException re) {
@@ -199,7 +199,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 				Hibernate.initialize(sol.getIpChallenge());
 				Hibernate.initialize(sol.getIpSolutionCat());
 				Hibernate.initialize(sol.getIpSolutionStatus());
-				Hibernate.initialize(sol.getIpUser());
+				Hibernate.initialize(sol.getIpUserBySolCrtdBy());
 			}
 			return ret;
 		} catch (RuntimeException re) {
@@ -220,7 +220,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 				Hibernate.initialize(sol.getIpChallenge());
 				Hibernate.initialize(sol.getIpSolutionCat());
 				Hibernate.initialize(sol.getIpSolutionStatus());
-				Hibernate.initialize(sol.getIpUser());
+				Hibernate.initialize(sol.getIpUserBySolCrtdBy());
 			}
 			return ret;
 		} catch (RuntimeException re) {
@@ -240,7 +240,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 				Hibernate.initialize(sol.getIpChallenge());
 				Hibernate.initialize(sol.getIpSolutionCat());
 				Hibernate.initialize(sol.getIpSolutionStatus());
-				Hibernate.initialize(sol.getIpUser());
+				Hibernate.initialize(sol.getIpUserBySolCrtdBy());
 			}
 			return ret;
 		} catch (RuntimeException re) {
@@ -260,8 +260,20 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 				Hibernate.initialize(sol.getIpChallenge());
 				Hibernate.initialize(sol.getIpSolutionCat());
 				Hibernate.initialize(sol.getIpSolutionStatus());
-				Hibernate.initialize(sol.getIpUser());
+				Hibernate.initialize(sol.getIpUserBySolCrtdBy());
 			}
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	public int updateStatusOnExpiry() {
+		log.debug("Updating Solution by Query :: updateSolStatusOnExpiry");
+		try {
+			Query query = getSession().getNamedQuery("updateSolStatusOnExpiry");
+			int ret = query.executeUpdate();
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);

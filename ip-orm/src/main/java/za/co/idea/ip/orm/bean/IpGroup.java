@@ -1,5 +1,6 @@
 package za.co.idea.ip.orm.bean;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ public class IpGroup implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -2098764774664380317L;
+	private static final long serialVersionUID = -8951839931983658432L;
 	private Long groupId;
 	private IpUser ipUser;
 	private IpGroup ipGroup;
@@ -23,7 +24,9 @@ public class IpGroup implements java.io.Serializable {
 	private String groupStatus;
 	private String groupEmail;
 	private String groupIsCore;
+	private Date groupCrtdDt;
 	private Set ipUsers = new HashSet(0);
+	private Set ipReviews = new HashSet(0);
 	private Set ipIdeaGroups = new HashSet(0);
 	private Set ipGroupUsers = new HashSet(0);
 	private Set ipFuncGroups = new HashSet(0);
@@ -38,13 +41,19 @@ public class IpGroup implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpGroup(Long groupId, String groupName) {
+	public IpGroup(Long groupId, String groupName, Date groupCrtdDt) {
 		this.groupId = groupId;
 		this.groupName = groupName;
+		this.groupCrtdDt = groupCrtdDt;
 	}
 
 	/** full constructor */
-	public IpGroup(Long groupId, IpUser ipUser, IpGroup ipGroup, String groupName, String groupStatus, String groupEmail, String groupIsCore, Set ipUsers, Set ipIdeaGroups, Set ipGroupUsers, Set ipFuncGroups, Set ipRewardsGroups, Set ipGroups, Set ipChallengeGroups) {
+	public IpGroup(Long groupId, IpUser ipUser, IpGroup ipGroup,
+			String groupName, String groupStatus, String groupEmail,
+			String groupIsCore, Date groupCrtdDt, Set ipUsers,
+			Set ipReviews, Set ipIdeaGroups, Set ipGroupUsers,
+			Set ipFuncGroups, Set ipRewardsGroups, Set ipGroups,
+			Set ipChallengeGroups) {
 		this.groupId = groupId;
 		this.ipUser = ipUser;
 		this.ipGroup = ipGroup;
@@ -52,7 +61,9 @@ public class IpGroup implements java.io.Serializable {
 		this.groupStatus = groupStatus;
 		this.groupEmail = groupEmail;
 		this.groupIsCore = groupIsCore;
+		this.groupCrtdDt = groupCrtdDt;
 		this.ipUsers = ipUsers;
+		this.ipReviews = ipReviews;
 		this.ipIdeaGroups = ipIdeaGroups;
 		this.ipGroupUsers = ipGroupUsers;
 		this.ipFuncGroups = ipFuncGroups;
@@ -119,12 +130,28 @@ public class IpGroup implements java.io.Serializable {
 		this.groupIsCore = groupIsCore;
 	}
 
+	public Date getGroupCrtdDt() {
+		return this.groupCrtdDt;
+	}
+
+	public void setGroupCrtdDt(Date groupCrtdDt) {
+		this.groupCrtdDt = groupCrtdDt;
+	}
+
 	public Set getIpUsers() {
 		return this.ipUsers;
 	}
 
 	public void setIpUsers(Set ipUsers) {
 		this.ipUsers = ipUsers;
+	}
+
+	public Set getIpReviews() {
+		return this.ipReviews;
+	}
+
+	public void setIpReviews(Set ipReviews) {
+		this.ipReviews = ipReviews;
 	}
 
 	public Set getIpIdeaGroups() {

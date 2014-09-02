@@ -14,7 +14,7 @@
 		<many-to-one name="ipChallengeCat" class="za.co.idea.ip.orm.bean.IpChallengeCat" fetch="select">
 			<column name="chal_cat" not-null="true" />
 		</many-to-one>
-		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser" fetch="select">
+		<many-to-one name="ipUserByChalCrtdBy" class="za.co.idea.ip.orm.bean.IpUser" fetch="select">
 			<column name="chal_crtd_by" not-null="true" />
 		</many-to-one>
 		<property name="chalTitle" type="java.lang.String">
@@ -37,6 +37,9 @@
 		</property>
 		<property name="chalCrtdDt" type="java.sql.Timestamp">
 			<column name="chal_crtd_dt" length="19" not-null="true" />
+		</property>
+		<property name="chalReviewCnt" type="java.lang.Integer">
+			<column name="chal_review_cnt" length="11" />
 		</property>
 		<set name="ipSolutions" inverse="true">
 			<key>
@@ -84,7 +87,7 @@
 	</sql-query>
 	<!-- <sql-query name="getReviewChallengesByUser"> select chal.* from ip_challenge chal where chal.chal_status=2 and chal_id in (SELECT cg_chal_id FROM lpdb.ip_challenge_group where cg_group_id in (SELECT gu_grp_id FROM lpdb.ip_group_user where gu_usr_id=:id and gu_grp_id in (SELECT fg_grp_id FROM lpdb.ip_func_group where fg_func_id=8))) </sql-query> -->
 	<sql-query name="getReviewChallengesByUser">
-		select idea.* from ip_challenge chal, ip_review rv where chal.chal_id=rv.rev_entity_id and chal.chal_status=2 and rv.rev_user_id=:id and rv.rev_entity_name="ip_challenge"
+		select idea.* from ip_challenge chal, ip_review rv where chal.chal_id=rv.rev_entity_id and chal.chal_status=2 and rv.rev_sel_user_id=:id and rv.rev_entity_name="ip_challenge"
 		<return alias="chal" class="za.co.idea.ip.orm.bean.IpChallenge" />
 	</sql-query>
 </hibernate-mapping>

@@ -19,6 +19,7 @@ import za.co.idea.ip.portal.bean.ListSelectorBean;
 import za.co.idea.ip.portal.bean.PointBean;
 import za.co.idea.ip.portal.bean.RewardsBean;
 import za.co.idea.ip.portal.bean.SolutionBean;
+import za.co.idea.ip.portal.bean.TagBean;
 import za.co.idea.ip.portal.bean.UserBean;
 import za.co.idea.ip.ws.bean.ChallengeMessage;
 import za.co.idea.ip.ws.bean.ClaimMessage;
@@ -65,8 +66,68 @@ public class RESTServiceHelper {
 			bean.setScName(userMessage.getScName());
 			bean.setSkills(userMessage.getSkills());
 			bean.setTwHandle(userMessage.getTwHandle());
-			bean.setIsActive(true);
+			bean.setIsActive(userMessage.getIsActive());
 			bean.setuId(userMessage.getuId());
+			bean.setEmployeeId(userMessage.getEmployeeId());
+			bean.setPriGroupName(userMessage.getPriGroupName());
+			ret.add(bean);
+		}
+		return ret;
+	}
+	
+	public static List<UserBean> fetchActiveUsers() {
+		List<UserBean> ret = new ArrayList<UserBean>();
+		WebClient viewUsersClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/active/list");
+		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
+		viewUsersClient.close();
+		for (UserMessage userMessage : users) {
+			UserBean bean = new UserBean();
+			bean.setBio(userMessage.getBio());
+			bean.setContact(userMessage.getContact());
+			bean.seteMail(userMessage.geteMail());
+			bean.setFbHandle(userMessage.getFbHandle());
+			bean.setfName(userMessage.getfName());
+			bean.setIdNum(userMessage.getIdNum());
+			bean.setIsActive(userMessage.getIsActive());
+			bean.setlName(userMessage.getlName());
+			bean.setmName(userMessage.getmName());
+			bean.setPwd(userMessage.getPwd());
+			bean.setScName(userMessage.getScName());
+			bean.setSkills(userMessage.getSkills());
+			bean.setTwHandle(userMessage.getTwHandle());
+			bean.setIsActive(userMessage.getIsActive());
+			bean.setuId(userMessage.getuId());
+			bean.setEmployeeId(userMessage.getEmployeeId());
+			bean.setPriGroupName(userMessage.getPriGroupName());
+			ret.add(bean);
+		}
+		return ret;
+	}
+	
+	public static List<UserBean> fetchInActiveUsers() {
+		List<UserBean> ret = new ArrayList<UserBean>();
+		WebClient viewUsersClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/inActive/list");
+		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
+		viewUsersClient.close();
+		for (UserMessage userMessage : users) {
+			UserBean bean = new UserBean();
+			bean.setBio(userMessage.getBio());
+			bean.setContact(userMessage.getContact());
+			bean.seteMail(userMessage.geteMail());
+			bean.setFbHandle(userMessage.getFbHandle());
+			bean.setfName(userMessage.getfName());
+			bean.setIdNum(userMessage.getIdNum());
+			bean.setIsActive(userMessage.getIsActive());
+			bean.setlName(userMessage.getlName());
+			bean.setmName(userMessage.getmName());
+			bean.setPwd(userMessage.getPwd());
+			bean.setScName(userMessage.getScName());
+			bean.setSkills(userMessage.getSkills());
+			bean.setTwHandle(userMessage.getTwHandle());
+			bean.setIsActive(userMessage.getIsActive());
+			bean.setuId(userMessage.getuId());
+			bean.setEmployeeId(userMessage.getEmployeeId());
+			bean.setPriGroupName(userMessage.getPriGroupName());
 			ret.add(bean);
 		}
 		return ret;
@@ -76,6 +137,28 @@ public class RESTServiceHelper {
 	public static List<GroupBean> fetchAllGroups() {
 		List<GroupBean> ret = new ArrayList<GroupBean>();
 		WebClient viewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/list");
+		Collection<? extends GroupMessage> groups = new ArrayList<GroupMessage>(viewGroupsClient.accept(MediaType.APPLICATION_JSON).getCollection(GroupMessage.class));
+		viewGroupsClient.close();
+		for (GroupMessage groupMessage : groups) {
+			GroupBean bean = new GroupBean();
+			bean.setgId(groupMessage.getgId());
+			bean.setGeMail(groupMessage.getGeMail());
+			bean.setgName(groupMessage.getgName());
+			bean.setIsActive(groupMessage.getIsActive());
+			bean.setSelAdmUser(groupMessage.getAdmUserId());
+			bean.setSelPGrp(groupMessage.getpGrpId());
+			bean.getUserIdList().clear();
+			for (Long id : groupMessage.getUserIdList())
+				if (id != null)
+					bean.getUserIdList().add(id);
+			ret.add(bean);
+		}
+		return ret;
+	}
+	
+	public static List<GroupBean> fetchActiveGroups() {
+		List<GroupBean> ret = new ArrayList<GroupBean>();
+		WebClient viewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/active/list");
 		Collection<? extends GroupMessage> groups = new ArrayList<GroupMessage>(viewGroupsClient.accept(MediaType.APPLICATION_JSON).getCollection(GroupMessage.class));
 		viewGroupsClient.close();
 		for (GroupMessage groupMessage : groups) {
@@ -161,6 +244,11 @@ public class RESTServiceHelper {
 			bean.setFileName(ideaMessage.getFileName());
 			bean.setImgAvail(ideaMessage.isImgAvail());
 			bean.setStatusName(ideaMessage.getStatusName());
+			String status=ideaMessage.getStatusName();			
+			if(userId!=0 && status!=null && !(status.equals("Draft") || status.equals("Open")))
+				bean.setDisableEdit(true);
+			else
+				bean.setDisableEdit(false);
 			ret.add(bean);
 		}
 		return ret;
@@ -188,13 +276,19 @@ public class RESTServiceHelper {
 			bean.setBlobUrl(ideaMessage.getBlobUrl());
 			bean.setFileName(ideaMessage.getFileName());
 			bean.setImgAvail(ideaMessage.isImgAvail());
-			bean.setStatusName(ideaMessage.getStatusName());
+			bean.setStatusName(ideaMessage.getStatusName());			
+			String status=ideaMessage.getStatusName();			
+			if(userId!=0 && status!=null && !(status.equals("Draft") || status.equals("Open")))
+				bean.setDisableEdit(true);
+			else
+				bean.setDisableEdit(false);
+			
 			ret.add(bean);
 		}
 		return ret;
 	}
 
-	public static List<IdeaBean> fetchAllIdeasByStatus(Integer status) {
+	public static List<IdeaBean> fetchAllIdeasByStatus(Integer status, Long userId) {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
 		WebClient fetchIdeaClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/list/status/" + status);
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
@@ -217,7 +311,12 @@ public class RESTServiceHelper {
 			bean.setFileName(ideaMessage.getFileName());
 			bean.setImgAvail(ideaMessage.isImgAvail());
 			bean.setStatusName(ideaMessage.getStatusName());
-			bean.setRevUserId(ideaMessage.getRevUserId());
+			bean.setRevUserId(ideaMessage.getRevUserId());			
+			String checkstatus=ideaMessage.getStatusName();			
+			if(userId!=0 && checkstatus!=null && !(checkstatus.equals("Draft") || checkstatus.equals("Open")))
+				bean.setDisableEdit(true);
+			else
+				bean.setDisableEdit(false);
 			ret.add(bean);
 		}
 		return ret;
@@ -276,6 +375,11 @@ public class RESTServiceHelper {
 			bean.setImgAvail(ideaMessage.isImgAvail());
 			bean.setStatusName(ideaMessage.getStatusName());
 			bean.setRevUserId(ideaMessage.getRevUserId());
+			String checkstatus=ideaMessage.getStatusName();			
+			if(userId!=0 && checkstatus!=null && !(checkstatus.equals("Draft") || checkstatus.equals("Open")))
+				bean.setDisableEdit(true);
+			else
+				bean.setDisableEdit(false);
 			ret.add(bean);
 		}
 		return ret;
@@ -592,6 +696,13 @@ public class RESTServiceHelper {
 			bean.setFileName(challengeMessage.getFileName());
 			bean.setImgAvail(challengeMessage.isImgAvail());
 			bean.setRevUserId(challengeMessage.getRevUserId());
+			String chalStatus=challengeMessage.getStatusName();
+			if(userId!=0 && chalStatus!=null && !(chalStatus.equals("Draft") && chalStatus.equals("Publish"))) {
+				bean.setDisableEdit(true);
+			}else {
+				bean.setDisableEdit(false);
+			}
+			
 			ret.add(bean);
 		}
 		return ret;
@@ -620,6 +731,12 @@ public class RESTServiceHelper {
 			bean.setBlobUrl(solutionMessage.getBlobUrl());
 			bean.setFileName(solutionMessage.getFileName());
 			bean.setRevUserId(solutionMessage.getRevUserId());
+			String solStatus=solutionMessage.getStatusName();
+			if(userId!=0 && solStatus!=null && !(solStatus.equals("Draft") && solStatus.equals("Open"))) {
+				bean.setDisableEdit(true);
+			}else {
+				bean.setDisableEdit(false);
+			}
 			ret.add(bean);
 		}
 		return ret;
@@ -694,4 +811,60 @@ public class RESTServiceHelper {
 		addTagClient.close();
 		return response;
 	}
+	
+	public static List<TagBean> fetchAllBuildOns(Long entityId, int entityType) {
+		WebClient fetchIdeaBuildOnsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + entityId + "/" + entityType + "/3");
+		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaBuildOnsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
+		fetchIdeaBuildOnsClient.close();
+		List<TagBean> ret = new ArrayList<TagBean>();
+		for (TagMessage msg : msgs) {
+			TagBean bean = new TagBean();
+			bean.setTagText(msg.getTagText());
+			bean.setUsrScreenName(msg.getUsrScreenName());
+			bean.setTagDate(msg.getTagDate());
+			bean.setTagId(msg.getTagId());
+			bean.setImgAvail(msg.isImgAvail());
+			bean.setBlobUrl(msg.getBlobUrl());
+			bean.setFileName(msg.getFileName());
+			ret.add(bean);
+		}
+		return ret;
+	}
+	
+	public static List<ClaimBean> fetchAllClaims() {
+		List<ClaimBean> ret = new ArrayList<ClaimBean>();
+		WebClient fetchClaimClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cls/claim/list");
+		Collection<? extends ClaimMessage> claims = new ArrayList<ClaimMessage>(fetchClaimClient.accept(MediaType.APPLICATION_JSON).getCollection(ClaimMessage.class));
+		fetchClaimClient.close();
+		for (ClaimMessage message : claims) {
+			ClaimBean bean = new ClaimBean();
+			bean.setClaimCrtdDt(message.getClaimCrtdDt());
+			bean.setClaimDesc(message.getClaimDesc());
+			bean.setClaimId(message.getClaimId());
+			bean.setcStatusId(message.getcStatusId());
+			bean.setRewardsId(message.getRewardsId());
+			bean.setUserId(message.getUserId());
+			bean.setClaimComment(message.getClaimComment());
+			bean.setUserName(message.getUserName());
+			bean.setcStatusName(message.getcStatusName());
+			ret.add(bean);
+		}
+		return ret;
+	}
+	
+	public static List<ListSelectorBean> fetchNextClaimStatuses(Integer statusId) {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		WebClient viewClaimSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cls/claim/status/list/" + statusId);
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewClaimSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewClaimSelectClient.close();
+		for (MetaDataMessage metaDataMessage : md) {
+			ListSelectorBean bean = new ListSelectorBean();
+			bean.setId(metaDataMessage.getId());
+			bean.setDesc(metaDataMessage.getDesc());
+			ret.add(bean);
+		}
+		return ret;
+	}
+	
+	
 }

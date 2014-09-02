@@ -28,11 +28,20 @@
         <property name="groupIsCore" type="java.lang.String">
             <column name="group_is_core" length="1" />
         </property>
+        <property name="groupCrtdDt" type="java.sql.Timestamp">
+            <column name="group_crtd_dt" length="19" not-null="true" />
+        </property>
         <set name="ipUsers" inverse="true">
             <key>
-                <column name="pri_grp_id" />
+                <column name="user_pri_grp_id" />
             </key>
             <one-to-many class="za.co.idea.ip.orm.bean.IpUser" />
+        </set>
+        <set name="ipReviews" inverse="true">
+            <key>
+                <column name="rev_grp_id" />
+            </key>
+            <one-to-many class="za.co.idea.ip.orm.bean.IpReview" />
         </set>
         <set name="ipIdeaGroups" inverse="true">
             <key>
@@ -71,4 +80,8 @@
             <one-to-many class="za.co.idea.ip.orm.bean.IpChallengeGroup" />
         </set>
     </class>
+    <sql-query name="getGroupsByStatus">
+		select ig.* from ip_group ig where ig.group_status=:status
+		<return alias="ig" class="za.co.idea.ip.orm.bean.IpGroup" />
+	</sql-query>
 </hibernate-mapping>

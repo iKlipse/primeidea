@@ -112,9 +112,9 @@ public class RewardsController implements Serializable {
 
 	public void showCreateReward() {
 		try {
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchActiveUsers();;
 			rewardsCat = fetchAllRewardsCat();
-			pGrps = fetchAllGroups();
+			pGrps = RESTServiceHelper.fetchActiveGroups();
 			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 			rewardsBean = new RewardsBean();
 			showCrtReward = true;
@@ -304,9 +304,9 @@ public class RewardsController implements Serializable {
 
 	public String showEditReward() {
 		try {
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchActiveUsers();
 			rewardsCat = fetchAllRewardsCat();
-			pGrps = fetchAllGroups();
+			pGrps = RESTServiceHelper.fetchActiveGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
 				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + rewardsBean.getRwId() + "/ip_rewards");
@@ -966,28 +966,6 @@ public class RewardsController implements Serializable {
 			bean.setAllocId(message.getAllocId());
 			bean.setAllocStatusId(message.getAllocStatusId());
 			bean.setAllocVal(message.getAllocVal());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<GroupBean> fetchAllGroups() {
-		List<GroupBean> ret = new ArrayList<GroupBean>();
-		WebClient viewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/list");
-		Collection<? extends GroupMessage> groups = new ArrayList<GroupMessage>(viewGroupsClient.accept(MediaType.APPLICATION_JSON).getCollection(GroupMessage.class));
-		viewGroupsClient.close();
-		for (GroupMessage groupMessage : groups) {
-			GroupBean bean = new GroupBean();
-			bean.setgId(groupMessage.getgId());
-			bean.setGeMail(groupMessage.getGeMail());
-			bean.setgName(groupMessage.getgName());
-			bean.setIsActive(groupMessage.getIsActive());
-			bean.setSelAdmUser(groupMessage.getAdmUserId());
-			bean.setSelPGrp(groupMessage.getpGrpId());
-			bean.getUserIdList().clear();
-			for (Long id : groupMessage.getUserIdList())
-				if (id != null)
-					bean.getUserIdList().add(id);
 			ret.add(bean);
 		}
 		return ret;

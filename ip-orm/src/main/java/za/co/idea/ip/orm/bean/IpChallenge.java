@@ -16,11 +16,11 @@ public class IpChallenge implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2769562955707363322L;
+	private static final long serialVersionUID = 2202888229470842480L;
 	private Long chalId;
 	private IpChallengeStatus ipChallengeStatus;
 	private IpChallengeCat ipChallengeCat;
-	private IpUser ipUser;
+	private IpUser ipUserByChalCrtdBy;
 	private String chalTitle;
 	private String chalDesc;
 	private String chalHoverTxt;
@@ -28,6 +28,7 @@ public class IpChallenge implements java.io.Serializable {
 	private Date chalExpiryDt;
 	private String chalTags;
 	private Date chalCrtdDt;
+	private Integer chalReviewCnt;
 	private Set ipSolutions = new HashSet(0);
 	private Set ipChallengeGroups = new HashSet(0);
 
@@ -38,24 +39,25 @@ public class IpChallenge implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpChallenge(Long chalId, IpChallengeStatus ipChallengeStatus, IpChallengeCat ipChallengeCat, IpUser ipUser, String chalTitle, String chalDesc, Date chalLaunchDt, Date chalExpiryDt, Date chalCrtdDt) {
+	public IpChallenge(Long chalId, IpChallengeStatus ipChallengeStatus, IpChallengeCat ipChallengeCat, IpUser ipUserByChalCrtdBy, String chalTitle, String chalDesc, Date chalLaunchDt, Date chalExpiryDt, Date chalCrtdDt, Integer chalReviewCnt) {
 		this.chalId = chalId;
 		this.ipChallengeStatus = ipChallengeStatus;
 		this.ipChallengeCat = ipChallengeCat;
-		this.ipUser = ipUser;
+		this.ipUserByChalCrtdBy = ipUserByChalCrtdBy;
 		this.chalTitle = chalTitle;
 		this.chalDesc = chalDesc;
 		this.chalLaunchDt = chalLaunchDt;
 		this.chalExpiryDt = chalExpiryDt;
 		this.chalCrtdDt = chalCrtdDt;
+		this.chalReviewCnt = chalReviewCnt;
 	}
 
 	/** full constructor */
-	public IpChallenge(Long chalId, IpChallengeStatus ipChallengeStatus, IpChallengeCat ipChallengeCat, IpUser ipUser, String chalTitle, String chalDesc, String chalHoverTxt, Date chalLaunchDt, Date chalExpiryDt, String chalTags, Date chalCrtdDt, Set ipSolutions, Set ipChallengeGroups) {
+	public IpChallenge(Long chalId, IpChallengeStatus ipChallengeStatus, IpChallengeCat ipChallengeCat, IpUser ipUserByChalCrtdBy, String chalTitle, String chalDesc, String chalHoverTxt, Date chalLaunchDt, Date chalExpiryDt, String chalTags, Date chalCrtdDt, Set ipSolutions, Set ipChallengeGroups, Integer chalReviewCnt) {
 		this.chalId = chalId;
 		this.ipChallengeStatus = ipChallengeStatus;
 		this.ipChallengeCat = ipChallengeCat;
-		this.ipUser = ipUser;
+		this.ipUserByChalCrtdBy = ipUserByChalCrtdBy;
 		this.chalTitle = chalTitle;
 		this.chalDesc = chalDesc;
 		this.chalHoverTxt = chalHoverTxt;
@@ -65,6 +67,7 @@ public class IpChallenge implements java.io.Serializable {
 		this.chalCrtdDt = chalCrtdDt;
 		this.ipSolutions = ipSolutions;
 		this.ipChallengeGroups = ipChallengeGroups;
+		this.chalReviewCnt = chalReviewCnt;
 	}
 
 	// Property accessors
@@ -93,12 +96,12 @@ public class IpChallenge implements java.io.Serializable {
 		this.ipChallengeCat = ipChallengeCat;
 	}
 
-	public IpUser getIpUser() {
-		return this.ipUser;
+	public IpUser getIpUserByChalCrtdBy() {
+		return this.ipUserByChalCrtdBy;
 	}
 
-	public void setIpUser(IpUser ipUser) {
-		this.ipUser = ipUser;
+	public void setIpUserByChalCrtdBy(IpUser ipUserByChalCrtdBy) {
+		this.ipUserByChalCrtdBy = ipUserByChalCrtdBy;
 	}
 
 	public String getChalTitle() {
@@ -155,6 +158,14 @@ public class IpChallenge implements java.io.Serializable {
 
 	public void setChalCrtdDt(Date chalCrtdDt) {
 		this.chalCrtdDt = chalCrtdDt;
+	}
+
+	public Integer getChalReviewCnt() {
+		return chalReviewCnt;
+	}
+
+	public void setChalReviewCnt(Integer chalReviewCnt) {
+		this.chalReviewCnt = chalReviewCnt;
 	}
 
 	public Set getIpSolutions() {

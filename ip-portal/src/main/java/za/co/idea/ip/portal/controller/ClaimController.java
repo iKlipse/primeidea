@@ -25,12 +25,12 @@ import za.co.idea.ip.portal.bean.PointBean;
 import za.co.idea.ip.portal.bean.RewardsBean;
 import za.co.idea.ip.portal.bean.UserBean;
 import za.co.idea.ip.portal.util.IdNumberGen;
+import za.co.idea.ip.portal.util.RESTServiceHelper;
 import za.co.idea.ip.ws.bean.ClaimMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.PointMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.RewardsMessage;
-import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
 
 @ManagedBean(name = "claimController")
@@ -74,7 +74,7 @@ public class ClaimController implements Serializable {
 
 	public String showCreateClaim() {
 		try {
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchActiveUsers();
 			claimStatus = fetchAllClaimStatuses();
 			viewRewardsBeans = fetchAllAvailableRewards();
 			claimBean = new ClaimBean();
@@ -92,7 +92,7 @@ public class ClaimController implements Serializable {
 	public String showClaimReward() {
 		try {
 			Map<String, String> reqMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchActiveUsers();
 			claimStatus = fetchAllClaimStatuses();
 			viewRewardsBeans = fetchAllAvailableRewards();
 			fetchAllPointsByUser();
@@ -109,7 +109,7 @@ public class ClaimController implements Serializable {
 
 	public String showViewClaim() {
 		try {
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchAllUsers();
 			claimStatus = fetchAllClaimStatuses();
 			viewClaimBeans = fetchAllClaims();
 			viewRewardsBeans = fetchAllRewards();
@@ -124,7 +124,7 @@ public class ClaimController implements Serializable {
 
 	public String showViewClaimByUser() {
 		try {
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchAllUsers();
 			claimStatus = fetchAllClaimStatuses();
 			viewClaimBeans = fetchAllClaimsByUser();
 			viewRewardsBeans = fetchAllRewards();
@@ -139,7 +139,7 @@ public class ClaimController implements Serializable {
 
 	public String showEditClaim() {
 		try {
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchActiveUsers();
 			claimStatus = fetchNextClaimStatuses();
 			viewRewardsBeans = fetchAllRewards();
 			return "clmec";
@@ -219,33 +219,6 @@ public class ClaimController implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
-	}
-
-	private List<UserBean> fetchAllUsers() {
-		List<UserBean> ret = new ArrayList<UserBean>();
-		WebClient viewUsersClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/list/sort/pg");
-		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
-		viewUsersClient.close();
-		for (UserMessage userMessage : users) {
-			UserBean bean = new UserBean();
-			bean.setBio(userMessage.getBio());
-			bean.setContact(userMessage.getContact());
-			bean.seteMail(userMessage.geteMail());
-			bean.setFbHandle(userMessage.getFbHandle());
-			bean.setfName(userMessage.getfName());
-			bean.setIdNum(userMessage.getIdNum());
-			bean.setIsActive(userMessage.getIsActive());
-			bean.setlName(userMessage.getlName());
-			bean.setmName(userMessage.getmName());
-			bean.setPwd(userMessage.getPwd());
-			bean.setScName(userMessage.getScName());
-			bean.setSkills(userMessage.getSkills());
-			bean.setTwHandle(userMessage.getTwHandle());
-			bean.setIsActive(true);
-			bean.setuId(userMessage.getuId());
-			ret.add(bean);
-		}
-		return ret;
 	}
 
 	private List<ClaimBean> fetchAllClaims() {

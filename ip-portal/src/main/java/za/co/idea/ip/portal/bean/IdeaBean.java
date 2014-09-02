@@ -30,6 +30,7 @@ public class IdeaBean implements Serializable {
 	private String blobUrl;
 	private Long revUserId;
 	private String statusName;
+	private boolean disableEdit;
 
 	public Long getIdeaId() {
 		return ideaId;
@@ -205,5 +206,13 @@ public class IdeaBean implements Serializable {
 
 	public void setStatusName(String statusName) {
 		this.statusName = statusName;
+	}
+
+	public boolean isDisableEdit() {
+		return disableEdit;
+	}
+
+	public void setDisableEdit(boolean disableEdit) {
+		this.disableEdit = disableEdit;
 	}
 }
