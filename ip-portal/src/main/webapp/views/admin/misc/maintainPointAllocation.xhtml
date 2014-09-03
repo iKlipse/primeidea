@@ -39,7 +39,7 @@
 				<p:commandButton id="kaddButton" value="Add" ajax="false" immediate="true" action="#{adminController.showAllocationAdd}" rendered="#{adminController.showAddBtn}">
 					<f:setPropertyActionListener value="3" target="#{adminController.toView}" />
 				</p:commandButton>
-				<p:commandButton id="kbtnJCancel" value="Return To View" ajax="false" action="#{adminController.showPointAllocation}">
+				<p:commandButton id="kbtnJCancel" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" ajax="false" action="#{adminController.showPointAllocation}">
 					<f:setPropertyActionListener value="3" target="#{adminController.toView}" />
 				</p:commandButton>
 			</f:facet>

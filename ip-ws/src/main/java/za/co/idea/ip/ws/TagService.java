@@ -12,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,7 @@ import za.co.idea.ip.ws.bean.TagMessage;
 @Path(value = "/ts")
 public class TagService {
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-ws");
+	private static final Logger logger = Logger.getLogger(TagService.class);
 	private IpTagDAO ipTagDAO;
 	private IpTagEntityTypeDAO ipTagEntityTypeDAO;
 	private IpTagTypeDAO ipTagTypeDAO;
@@ -70,7 +72,7 @@ public class TagService {
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -104,7 +106,7 @@ public class TagService {
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -145,7 +147,7 @@ public class TagService {
 				return message;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -166,7 +168,7 @@ public class TagService {
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());

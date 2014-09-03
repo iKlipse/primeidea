@@ -196,7 +196,7 @@ public class IpUserDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
-	
+
 	public List fetchActiveUsers() {
 		log.debug("Fetching all active Users by Query :: getUsersByStatus");
 		try {
@@ -209,7 +209,7 @@ public class IpUserDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
-	
+
 	public List fetchInActiveUsers() {
 		log.debug("Fetching all in active Users by Query :: getUsersByStatus");
 		try {

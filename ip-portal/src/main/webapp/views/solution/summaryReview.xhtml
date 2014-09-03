@@ -61,7 +61,7 @@
 		</p:column>
 		<f:facet name="footer">
 			<p:commandButton id="btnSumrUpdRwDlg" value="Re-Assign Reviewer" type="button" onclick="PF('dlgRwUpd').show();" />
-			<p:commandButton id="btnXCancel" value="Return To View" ajax="false" action="#{challengeController.redirectMain}">
+			<p:commandButton id="btnXCancel" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" ajax="false" action="#{challengeController.redirectMain}">
 				<f:setPropertyActionListener value="3" target="#{landingPageController.toView}" />
 				<f:setPropertyActionListener value="4" target="#{challengeController.toView}" />
 			</p:commandButton>

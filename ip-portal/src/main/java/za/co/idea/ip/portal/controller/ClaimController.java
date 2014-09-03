@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.client.WebClient;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.primefaces.model.StreamedContent;
 
@@ -36,7 +37,7 @@ import za.co.idea.ip.ws.util.CustomObjectMapper;
 @ManagedBean(name = "claimController")
 @SessionScoped
 public class ClaimController implements Serializable {
-
+	private static final Logger logger = Logger.getLogger(ClaimController.class);
 	private static final long serialVersionUID = 1568895653520394971L;
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
 	private ClaimBean claimBean;
@@ -82,7 +83,7 @@ public class ClaimController implements Serializable {
 			fetchAllPointsByUser();
 			return "clmcc";
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -100,7 +101,7 @@ public class ClaimController implements Serializable {
 			this.selRwId = reqMap.get("rewardsId") + "^" + reqMap.get("rwQuantity") + "^" + reqMap.get("rwValue");
 			return "clmcc";
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -115,7 +116,7 @@ public class ClaimController implements Serializable {
 			viewRewardsBeans = fetchAllRewards();
 			return "clmvc";
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -130,7 +131,7 @@ public class ClaimController implements Serializable {
 			viewRewardsBeans = fetchAllRewards();
 			return "clmuc";
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -144,7 +145,7 @@ public class ClaimController implements Serializable {
 			viewRewardsBeans = fetchAllRewards();
 			return "clmec";
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -186,7 +187,7 @@ public class ClaimController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -214,7 +215,7 @@ public class ClaimController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";

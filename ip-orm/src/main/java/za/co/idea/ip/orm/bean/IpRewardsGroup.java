@@ -32,8 +32,7 @@ public class IpRewardsGroup implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpRewardsGroup(Long rgId, IpRewards ipRewards, IpGroup ipGroup,
-			Date rgCrtdDt) {
+	public IpRewardsGroup(Long rgId, IpRewards ipRewards, IpGroup ipGroup, Date rgCrtdDt) {
 		this.rgId = rgId;
 		this.ipRewards = ipRewards;
 		this.ipGroup = ipGroup;

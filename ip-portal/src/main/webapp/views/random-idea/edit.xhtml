@@ -12,11 +12,10 @@
 			<p:outputLabel id="lblEdtIStatus" value="Status : " />
 		</p:column>
 		<p:column>
-			<p:selectOneMenu id="somEdtIStatus" value="#{randomIdeaController.ideaBean.setStatusId}" rendered="#{accessControoler.adminEnabled}">
+			<p:selectOneMenu id="somEdtIStatus" value="#{randomIdeaController.ideaBean.setStatusId}">
 				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 				<f:selectItems value="#{randomIdeaController.ideaStatuses}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
 			</p:selectOneMenu>
-			<h:outputText value="#{randomIdeaController.ideaBean.statusName}" rendered="#{!accessControoler.adminEnabled}"></h:outputText>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtIDesc" value="Description : " />
@@ -51,17 +50,9 @@
 		</p:column>
 		<p:column>
 			<!-- <p:pickList id="plEdtGroupPick" converter="groupConverter" value="#{randomIdeaController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" /> -->
-			<p:selectCheckboxMenu id="scmGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{randomIdeaController.selGrpId}">
-				<f:selectItems value="#{randomIdeaController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
-			</p:selectCheckboxMenu>
-		</p:column>
-		<p:column>
-			<p:outputLabel id="lblRevUser" value="Review User" />
-		</p:column>
-		<p:column>
-			<p:selectOneMenu id="rvAdmUser" value="#{randomIdeaController.ideaBean.revUserId}">
+			<p:selectOneMenu id="scmGroupList" value="#{randomIdeaController.selGroupId}">
 				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-				<f:selectItems value="#{randomIdeaController.admUsers}" var="a" itemLabel="#{a.fName} #{a.lName}" itemValue="#{a.uId}" />
+				<f:selectItems value="#{randomIdeaController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 			</p:selectOneMenu>
 		</p:column>
 		<p:column>
@@ -78,10 +69,43 @@
 				<f:setPropertyActionListener value="1" target="#{landingPageController.toView}" />
 				<f:setPropertyActionListener value="2" target="#{randomIdeaController.toView}" />
 			</p:commandButton>
-			<p:commandButton id="btnEdtCancel" value="Return To View" ajax="false" action="#{randomIdeaController.redirectMain}">
+			<p:commandButton id="btnEdtCancel" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" ajax="false" action="#{randomIdeaController.redirectMain}">
 				<f:setPropertyActionListener value="1" target="#{landingPageController.toView}" />
 				<f:setPropertyActionListener value="2" target="#{randomIdeaController.toView}" />
 			</p:commandButton>
+			<p:commandButton id="btnEdtARv" value="Assign Reviewers" type="button" onclick="PF('dlgRwUpd').show();" />
 		</f:facet>
 	</p:panelGrid>
+	<p:dialog id="dlgRwUpd" widgetVar="dlgRwUpd" modal="true">
+		<p:panelGrid id="pnlGrdItmSel" styleClass="panelGridView" columns="3">
+			<p:column>
+				<p:outputLabel value="Select Review Stages : " />
+			</p:column>
+			<p:column>
+				<p:selectOneMenu value="#{randomIdeaController.rvIdCnt}">
+					<f:selectItem itemLabel="1" itemValue="1" />
+					<f:selectItem itemLabel="2" itemValue="2" />
+					<f:selectItem itemLabel="3" itemValue="3" />
+					<f:selectItem itemLabel="4" itemValue="4" />
+					<f:selectItem itemLabel="5" itemValue="5" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:commandButton value="Refresh" actionListener="#{randomIdeaController.initializeAssignReviews}" update="dtRevGrp" />
+			</p:column>
+		</p:panelGrid>
+		<p:dataTable id="dtRevGrp" value="#{randomIdeaController.rvIds}" paginator="false" var="rv">
+			<p:column headerText="Stage">
+				<p:outputLabel value="#{rv.statusId}" />
+			</p:column>
+			<p:column headerText="Groups">
+				<p:selectCheckboxMenu id="rvGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{rv.groupId}">
+					<f:selectItems value="#{randomIdeaController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
+				</p:selectCheckboxMenu>
+			</p:column>
+			<f:facet name="footer">
+				<p:commandButton value="Assign Reviewers" actionListener="#{randomIdeaController.assignReviews}" oncomplete="PF('dlgRwUpd').hide();" />
+			</f:facet>
+		</p:dataTable>
+	</p:dialog>
 </ui:composition>

@@ -26,8 +26,7 @@ public class IpGroupUser implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpGroupUser(Long guId, IpUser ipUser, IpGroup ipGroup,
-			Date guCrtdDt) {
+	public IpGroupUser(Long guId, IpUser ipUser, IpGroup ipGroup, Date guCrtdDt) {
 		this.guId = guId;
 		this.ipUser = ipUser;
 		this.ipGroup = ipGroup;

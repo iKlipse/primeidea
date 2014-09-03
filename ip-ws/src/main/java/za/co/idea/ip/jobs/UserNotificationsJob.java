@@ -27,7 +27,7 @@ public class UserNotificationsJob extends QuartzJobBean implements StatefulJob {
 	private IpUserDAO ipUserDAO;
 	private MailSender sender;
 
-	@Transactional(propagation = Propagation.NESTED)
+	@Transactional(propagation = Propagation.REQUIRED)
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 		List ideas = ipIdeaDAO.findByStatusId(1);
 		for (Object obj : ideas) {

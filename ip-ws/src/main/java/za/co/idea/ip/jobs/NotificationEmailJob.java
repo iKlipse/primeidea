@@ -80,7 +80,7 @@ public class NotificationEmailJob extends QuartzJobBean implements StatefulJob {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 	}
 

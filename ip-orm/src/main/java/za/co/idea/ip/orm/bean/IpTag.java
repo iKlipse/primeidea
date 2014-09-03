@@ -35,9 +35,7 @@ public class IpTag implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpTag(Long tagId, IpUser ipUser, IpTagEntityType ipTagEntityType,
-			IpTagType ipTagType, Long tagEntityId, String tagText,
-			Date tagCrtdDt) {
+	public IpTag(Long tagId, IpUser ipUser, IpTagEntityType ipTagEntityType, IpTagType ipTagType, Long tagEntityId, String tagText, Date tagCrtdDt) {
 		this.tagId = tagId;
 		this.ipUser = ipUser;
 		this.ipTagEntityType = ipTagEntityType;

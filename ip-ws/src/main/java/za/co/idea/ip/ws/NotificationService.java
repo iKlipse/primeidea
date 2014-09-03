@@ -10,6 +10,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,7 @@ import za.co.idea.ip.ws.bean.ResponseMessage;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Path(value = "/nos")
 public class NotificationService {
-
+	private static final Logger logger = Logger.getLogger(NotificationService.class);
 	private IpNotifDAO ipNotifDAO;
 	private IpNativeSQLDAO ipNativeSQLDAO;
 	private IpNotifGroupDAO ipNotifGroupDAO;
@@ -66,7 +67,7 @@ public class NotificationService {
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -97,7 +98,7 @@ public class NotificationService {
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -137,7 +138,7 @@ public class NotificationService {
 				ret.add((T) notif);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}

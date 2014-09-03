@@ -1,6 +1,7 @@
 package za.co.idea.ip.ws;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -18,12 +19,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.bean.IpChallenge;
+import za.co.idea.ip.orm.bean.IpNotif;
 import za.co.idea.ip.orm.bean.IpSolution;
 import za.co.idea.ip.orm.bean.IpSolutionCat;
 import za.co.idea.ip.orm.bean.IpSolutionStatus;
+import za.co.idea.ip.orm.bean.IpUser;
 import za.co.idea.ip.orm.dao.IpBlobDAO;
 import za.co.idea.ip.orm.dao.IpChallengeDAO;
 import za.co.idea.ip.orm.dao.IpNativeSQLDAO;
+import za.co.idea.ip.orm.dao.IpNotifDAO;
 import za.co.idea.ip.orm.dao.IpReviewDAO;
 import za.co.idea.ip.orm.dao.IpSolutionCatDAO;
 import za.co.idea.ip.orm.dao.IpSolutionDAO;
@@ -46,6 +50,7 @@ public class SolutionService {
 	private IpBlobDAO ipBlobDAO;
 	private IpReviewDAO ipReviewDAO;
 	private IpNativeSQLDAO ipNativeSQLDAO;
+	private IpNotifDAO ipNotifDAO;
 
 	@GET
 	@Path("/solution/check/title/{title}")
@@ -57,7 +62,7 @@ public class SolutionService {
 			Boolean ret = (solByTitle != null && solByTitle.size() > 0);
 			return ret;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			return false;
 		}
 	}
@@ -71,10 +76,11 @@ public class SolutionService {
 		IpSolution ipSolution = new IpSolution();
 		try {
 			IpChallenge ipChallenge = ipChallengeDAO.findById(solution.getChalId());
-			ipSolution.setIpChallenge(ipChallengeDAO.findById(solution.getChalId()));
+			ipSolution.setIpChallenge(ipChallenge);
 			ipSolution.setIpSolutionCat(ipSolutionCatDAO.findById(ipChallenge.getIpChallengeCat().getCcId()));
 			ipSolution.setIpSolutionStatus(ipSolutionStatusDAO.findById(solution.getStatusId()));
-			ipSolution.setIpUserBySolCrtdBy(ipUserDAO.findById(solution.getCrtdById()));
+			IpUser ipUser = ipUserDAO.findById(solution.getCrtdById());
+			ipSolution.setIpUserBySolCrtdBy(ipUser);
 			ipSolution.setSolCrtdDt(solution.getCrtdDt());
 			ipSolution.setSolDesc(solution.getDesc());
 			ipSolution.setSolId(solution.getId());
@@ -82,12 +88,28 @@ public class SolutionService {
 			ipSolution.setSolTitle(solution.getTitle());
 			ipSolution.setSolReviewCnt(solution.getRvIdCnt());
 			ipSolutionDAO.save(ipSolution);
+			try {
+				IpNotif ipNotif = new IpNotif();
+				ipNotif.setNotifAttach(null);
+				ipNotif.setNotifId(java.util.UUID.randomUUID().toString());
+				ipNotif.setNotifStatus("n");
+				ipNotif.setNotifSubject("New Solution submitted");
+				ipNotif.setNotifBody(ipSolution.getIpUserBySolCrtdBy().getUserScreenName() + " has submitted solution to your challenge " + ipChallenge.getChalTitle());
+				ipNotif.setNotifCrtdDate(new Date());
+				ipNotif.setNotifEntityId(null);
+				ipNotif.setNotifEntityTblName(null);
+				ipNotif.setNotifList(ipUser.getUserEmail());
+				ipNotifDAO.save(ipNotif);
+			} catch (Exception e) {
+				logger.error("Error while creating notification: " + e);
+			}
+
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -119,7 +141,7 @@ public class SolutionService {
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -170,7 +192,7 @@ public class SolutionService {
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -221,7 +243,7 @@ public class SolutionService {
 			}
 		} catch (Exception e) {
 			logger.error("Error in service : " + e.getMessage());
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -269,7 +291,7 @@ public class SolutionService {
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -317,7 +339,7 @@ public class SolutionService {
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -365,7 +387,7 @@ public class SolutionService {
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -413,7 +435,7 @@ public class SolutionService {
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -455,7 +477,7 @@ public class SolutionService {
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -476,7 +498,7 @@ public class SolutionService {
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -497,7 +519,7 @@ public class SolutionService {
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -518,7 +540,7 @@ public class SolutionService {
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -534,7 +556,7 @@ public class SolutionService {
 			message.setId(cat.getScId());
 			message.setDesc(cat.getScDesc());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return message;
 	}
@@ -568,7 +590,7 @@ public class SolutionService {
 			message.setId(status.getSsId());
 			message.setDesc(status.getSsDesc());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return message;
 	}
@@ -600,7 +622,7 @@ public class SolutionService {
 			} else
 				solution.setCrtByImgAvail(false);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return solution;
 	}
@@ -667,5 +689,13 @@ public class SolutionService {
 
 	public void setIpNativeSQLDAO(IpNativeSQLDAO ipNativeSQLDAO) {
 		this.ipNativeSQLDAO = ipNativeSQLDAO;
+	}
+
+	public IpNotifDAO getIpNotifDAO() {
+		return ipNotifDAO;
+	}
+
+	public void setIpNotifDAO(IpNotifDAO ipNotifDAO) {
+		this.ipNotifDAO = ipNotifDAO;
 	}
 }

@@ -26,6 +26,7 @@ import za.co.idea.ip.orm.bean.IpFunction;
 import za.co.idea.ip.orm.bean.IpGroup;
 import za.co.idea.ip.orm.bean.IpGroupUser;
 import za.co.idea.ip.orm.bean.IpLogin;
+import za.co.idea.ip.orm.bean.IpNotif;
 import za.co.idea.ip.orm.bean.IpUser;
 import za.co.idea.ip.orm.dao.IpBlobDAO;
 import za.co.idea.ip.orm.dao.IpFuncGroupDAO;
@@ -34,6 +35,7 @@ import za.co.idea.ip.orm.dao.IpGroupDAO;
 import za.co.idea.ip.orm.dao.IpGroupUserDAO;
 import za.co.idea.ip.orm.dao.IpLoginDAO;
 import za.co.idea.ip.orm.dao.IpNativeSQLDAO;
+import za.co.idea.ip.orm.dao.IpNotifDAO;
 import za.co.idea.ip.orm.dao.IpSecqListDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
 import za.co.idea.ip.ws.bean.FunctionMessage;
@@ -55,6 +57,7 @@ public class AdminService {
 	private IpFuncGroupDAO ipFuncGroupDAO;
 	private IpBlobDAO ipBlobDAO;
 	private IpSecqListDAO ipSecqListDAO;
+	private IpNotifDAO ipNotifDAO;
 
 	@POST
 	@Path("/group/add")
@@ -66,19 +69,15 @@ public class AdminService {
 		ipGroup.setGroupId(group.getgId());
 		ipGroup.setGroupEmail(group.getGeMail());
 		ipGroup.setGroupName(group.getgName());
-		ipGroup.setGroupStatus(((group.getIsActive() != null && group
-				.getIsActive()) ? "y" : "n"));
+		ipGroup.setGroupStatus(((group.getIsActive() != null && group.getIsActive()) ? "y" : "n"));
 		if (group.getpGrpId() != null && group.getpGrpId().longValue() >= 0)
 			ipGroup.setIpGroup(ipGroupDAO.findById(group.getpGrpId()));
-		if (group.getAdmUserId() != null
-				&& group.getAdmUserId().longValue() >= 0)
+		if (group.getAdmUserId() != null && group.getAdmUserId().longValue() >= 0)
 			ipGroup.setIpUser(ipUserDAO.findById(group.getAdmUserId()));
 		try {
 			ipGroupDAO.save(ipGroup);
-			if (group.getUserIdList() != null
-					&& group.getUserIdList().length > 0) {
-				Long[] ids = ipNativeSQLDAO.getNextIds(IpGroupUser.class,
-						group.getUserIdList().length);
+			if (group.getUserIdList() != null && group.getUserIdList().length > 0) {
+				Long[] ids = ipNativeSQLDAO.getNextIds(IpGroupUser.class, group.getUserIdList().length);
 				int i = 0;
 				for (Long userId : group.getUserIdList()) {
 					IpGroupUser ipGroupUser = new IpGroupUser();
@@ -94,7 +93,7 @@ public class AdminService {
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -112,20 +111,16 @@ public class AdminService {
 		ipGroup.setGroupId(group.getgId());
 		ipGroup.setGroupEmail(group.getGeMail());
 		ipGroup.setGroupName(group.getgName());
-		ipGroup.setGroupStatus(((group.getIsActive() != null && group
-				.getIsActive()) ? "y" : "n"));
+		ipGroup.setGroupStatus(((group.getIsActive() != null && group.getIsActive()) ? "y" : "n"));
 		if (group.getpGrpId() != null && group.getpGrpId().longValue() >= 0)
 			ipGroup.setIpGroup(ipGroupDAO.findById(group.getpGrpId()));
-		if (group.getAdmUserId() != null
-				&& group.getAdmUserId().longValue() >= 0)
+		if (group.getAdmUserId() != null && group.getAdmUserId().longValue() >= 0)
 			ipGroup.setIpUser(ipUserDAO.findById(group.getAdmUserId()));
 		try {
 			ipGroupDAO.merge(ipGroup);
 			ipGroupUserDAO.deleteByGroupId(ipGroup.getGroupId());
-			if (group.getUserIdList() != null
-					&& group.getUserIdList().length > 0) {
-				Long[] ids = ipNativeSQLDAO.getNextIds(IpGroupUser.class,
-						group.getUserIdList().length);
+			if (group.getUserIdList() != null && group.getUserIdList().length > 0) {
+				Long[] ids = ipNativeSQLDAO.getNextIds(IpGroupUser.class, group.getUserIdList().length);
 				int i = 0;
 				for (Long userId : group.getUserIdList()) {
 					IpGroupUser ipGroupUser = new IpGroupUser();
@@ -141,7 +136,7 @@ public class AdminService {
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -163,8 +158,7 @@ public class AdminService {
 				group.setGeMail(ipGroup.getGroupEmail());
 				group.setgId(ipGroup.getGroupId());
 				group.setgName(ipGroup.getGroupName());
-				group.setIsActive(ipGroup.getGroupStatus()
-						.equalsIgnoreCase("y"));
+				group.setIsActive(ipGroup.getGroupStatus().equalsIgnoreCase("y"));
 				if (ipGroup.getIpGroup() != null) {
 					group.setpGrpId(ipGroup.getIpGroup().getGroupId());
 					group.setpGrpName(ipGroup.getIpGroup().getGroupName());
@@ -185,11 +179,11 @@ public class AdminService {
 				ret.add((T) group);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
-	
+
 	@GET
 	@Path("/group/active/list")
 	@Produces("application/json")
@@ -225,11 +219,11 @@ public class AdminService {
 				ret.add((T) group);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
-	
+
 	@GET
 	@Path("/group/inActive/list")
 	@Produces("application/json")
@@ -265,7 +259,7 @@ public class AdminService {
 				ret.add((T) group);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -279,7 +273,7 @@ public class AdminService {
 		try {
 			ret = ipGroupDAO.getGroupHierarchy(id);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -311,7 +305,7 @@ public class AdminService {
 				ret.add((T) function);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -320,20 +314,17 @@ public class AdminService {
 	@Path("/func/group/list/{grpId}")
 	@Produces("application/json")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public <T extends FunctionMessage> List<T> listFunctionByGroup(
-			@PathParam("grpId") Long grpId) {
+	public <T extends FunctionMessage> List<T> listFunctionByGroup(@PathParam("grpId") Long grpId) {
 		List<T> ret = new ArrayList<T>();
 		try {
 			List functions = ipFuncGroupDAO.fetchByGroupId(grpId);
 			if (functions != null) {
 				for (Object object : functions) {
-					IpFunction ipFunction = ((IpFuncGroup) object)
-							.getIpFunction();
+					IpFunction ipFunction = ((IpFuncGroup) object).getIpFunction();
 					FunctionMessage function = new FunctionMessage();
 					function.setFuncId(ipFunction.getFuncId());
 					function.setFuncName(ipFunction.getFuncName());
-					List fgs = ipFuncGroupDAO.fetchByFuncId(ipFunction
-							.getFuncId());
+					List fgs = ipFuncGroupDAO.fetchByFuncId(ipFunction.getFuncId());
 					if (fgs != null) {
 						Long[] gList = new Long[fgs.size()];
 						int i = 0;
@@ -348,7 +339,7 @@ public class AdminService {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -368,7 +359,7 @@ public class AdminService {
 				i++;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -395,7 +386,7 @@ public class AdminService {
 				function.setGroupIdList(gList);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return function;
 	}
@@ -426,7 +417,7 @@ public class AdminService {
 			}
 			group.setUserIdList(uList);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return group;
 	}
@@ -448,8 +439,7 @@ public class AdminService {
 			ipUser.setUserScreenName(user.getScName());
 			ipUser.setUserSkills(user.getSkills());
 			ipUser.setUserEmployeeId(user.getEmployeeId());
-			ipUser.setUserStatus(((user.getIsActive() != null && user
-					.getIsActive()) ? "y" : "n"));
+			ipUser.setUserStatus(((user.getIsActive() != null && user.getIsActive()) ? "y" : "n"));
 			if (user.getGroupId() != null)
 				ipUser.setIpGroup(ipGroupDAO.findById(user.getGroupId()));
 			if (user.getFbHandle() != null && user.getFbHandle().length() > 0)
@@ -467,24 +457,21 @@ public class AdminService {
 			ipLogin.setLoginName(ipUser.getUserScreenName());
 			ipLogin.setLoginId(user.getuId());
 			ipLogin.setIpSecqList(ipSecqListDAO.findById(user.getSecQ()));
-			ipLogin.setLoginSecA(Base64.encodeBase64URLSafeString(DigestUtils
-					.md5(user.getSecA().getBytes())));
-			ipLogin.setLoginPwd(Base64.encodeBase64URLSafeString(DigestUtils
-					.md5(user.getPwd().getBytes())));
+			ipLogin.setLoginSecA(Base64.encodeBase64URLSafeString(DigestUtils.md5(user.getSecA().getBytes())));
+			ipLogin.setLoginPwd(Base64.encodeBase64URLSafeString(DigestUtils.md5(user.getPwd().getBytes())));
 			try {
 				ipLoginDAO.save(ipLogin);
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e, e);
 				ipUserDAO.delete(ipUser);
-				throw new RuntimeException("Cannot create user :: "
-						+ e.getMessage());
+				throw new RuntimeException("Cannot create user :: " + e.getMessage());
 			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -506,10 +493,8 @@ public class AdminService {
 			ipFunction.setIpUser(ipUserDAO.findById(function.getCrtdBy()));
 			ipFunction.setFuncIsCore("n");
 			ipFunctionDAO.save(ipFunction);
-			if (function.getGroupIdList() != null
-					&& function.getGroupIdList().length > 0) {
-				Long[] ids = ipNativeSQLDAO.getNextIds(IpFuncGroup.class,
-						function.getGroupIdList().length);
+			if (function.getGroupIdList() != null && function.getGroupIdList().length > 0) {
+				Long[] ids = ipNativeSQLDAO.getNextIds(IpFuncGroup.class, function.getGroupIdList().length);
 				int i = 0;
 				for (Long gId : function.getGroupIdList()) {
 					IpFuncGroup ipFuncGroup = new IpFuncGroup();
@@ -525,7 +510,7 @@ public class AdminService {
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -548,10 +533,8 @@ public class AdminService {
 			ipFunction.setFuncIsCore("y");
 			ipFunctionDAO.merge(ipFunction);
 			ipFuncGroupDAO.deleteByFunctionId(ipFunction.getFuncId());
-			if (function.getGroupIdList() != null
-					&& function.getGroupIdList().length > 0) {
-				Long[] ids = ipNativeSQLDAO.getNextIds(IpFuncGroup.class,
-						function.getGroupIdList().length);
+			if (function.getGroupIdList() != null && function.getGroupIdList().length > 0) {
+				Long[] ids = ipNativeSQLDAO.getNextIds(IpFuncGroup.class, function.getGroupIdList().length);
 				int i = 0;
 				for (Long gId : function.getGroupIdList()) {
 					IpFuncGroup ipFuncGroup = new IpFuncGroup();
@@ -567,7 +550,7 @@ public class AdminService {
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -592,8 +575,7 @@ public class AdminService {
 			ipUser.setUserScreenName(user.getScName());
 			ipUser.setUserSkills(user.getSkills());
 			ipUser.setUserEmployeeId(user.getEmployeeId());
-			ipUser.setUserStatus(((user.getIsActive() != null && user
-					.getIsActive()) ? "y" : "n"));
+			ipUser.setUserStatus(((user.getIsActive() != null && user.getIsActive()) ? "y" : "n"));
 			if (user.getGroupId() != null)
 				ipUser.setIpGroup(ipGroupDAO.findById(user.getGroupId()));
 			if (user.getFbHandle() != null && user.getFbHandle().length() > 0)
@@ -613,7 +595,7 @@ public class AdminService {
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -644,29 +626,24 @@ public class AdminService {
 				user.setEmployeeId(ipUser.getUserEmployeeId());
 				if (ipUser.getIpGroup() != null) {
 					user.setGroupId(ipUser.getIpGroup().getGroupId());
-					user.setPriGroupName(ipGroupDAO.findById(
-							ipUser.getIpGroup().getGroupId()).getGroupName());
+					user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
 				}
-				if (ipUser.getUserFbHandle() != null
-						&& ipUser.getUserFbHandle().length() > 0)
+				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
 					user.setFbHandle(ipUser.getUserFbHandle());
-				if (ipUser.getUserBio() != null
-						&& ipUser.getUserBio().length() > 0)
+				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
 					user.setBio(ipUser.getUserBio());
-				if (ipUser.getUserMName() != null
-						&& ipUser.getUserMName().length() > 0)
+				if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
 					user.setmName(ipUser.getUserMName());
-				if (ipUser.getUserTwHandle() != null
-						&& ipUser.getUserTwHandle().length() > 0)
+				if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
 					user.setTwHandle(ipUser.getUserTwHandle());
 				ret.add((T) user);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
-	
+
 	@GET
 	@Path("/user/active/list")
 	@Produces("application/json")
@@ -703,11 +680,11 @@ public class AdminService {
 				ret.add((T) user);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
-	
+
 	@GET
 	@Path("/user/inActive/list")
 	@Produces("application/json")
@@ -744,12 +721,10 @@ public class AdminService {
 				ret.add((T) user);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
-	
-	
 
 	@GET
 	@Path("/user/list/sort/pg")
@@ -774,25 +749,20 @@ public class AdminService {
 				user.setEmployeeId(ipUser.getUserEmployeeId());
 				if (ipUser.getIpGroup() != null) {
 					user.setGroupId(ipUser.getIpGroup().getGroupId());
-					user.setPriGroupName(ipGroupDAO.findById(
-							ipUser.getIpGroup().getGroupId()).getGroupName());
+					user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
 				}
-				if (ipUser.getUserFbHandle() != null
-						&& ipUser.getUserFbHandle().length() > 0)
+				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
 					user.setFbHandle(ipUser.getUserFbHandle());
-				if (ipUser.getUserBio() != null
-						&& ipUser.getUserBio().length() > 0)
+				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
 					user.setBio(ipUser.getUserBio());
-				if (ipUser.getUserMName() != null
-						&& ipUser.getUserMName().length() > 0)
+				if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
 					user.setmName(ipUser.getUserMName());
-				if (ipUser.getUserTwHandle() != null
-						&& ipUser.getUserTwHandle().length() > 0)
+				if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
 					user.setTwHandle(ipUser.getUserTwHandle());
 				ret.add((T) user);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -817,22 +787,18 @@ public class AdminService {
 			user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
 			if (ipUser.getIpGroup() != null) {
 				user.setGroupId(ipUser.getIpGroup().getGroupId());
-				user.setPriGroupName(ipGroupDAO.findById(
-						ipUser.getIpGroup().getGroupId()).getGroupName());
+				user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
 			}
-			if (ipUser.getUserFbHandle() != null
-					&& ipUser.getUserFbHandle().length() > 0)
+			if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
 				user.setFbHandle(ipUser.getUserFbHandle());
 			if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
 				user.setBio(ipUser.getUserBio());
-			if (ipUser.getUserMName() != null
-					&& ipUser.getUserMName().length() > 0)
+			if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
 				user.setmName(ipUser.getUserMName());
-			if (ipUser.getUserTwHandle() != null
-					&& ipUser.getUserTwHandle().length() > 0)
+			if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
 				user.setTwHandle(ipUser.getUserTwHandle());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return user;
 	}
@@ -846,17 +812,36 @@ public class AdminService {
 		try {
 			try {
 				ipLoginDAO.updatePassword(param[0], param[1]);
+				try {
+					List users = ipUserDAO.findByUserScreenName(param[0]);
+					for (Object object : users) {
+						IpUser user = (IpUser) object;
+						IpNotif ipNotif = new IpNotif();
+						ipNotif.setNotifAttach(null);
+						ipNotif.setNotifId(java.util.UUID.randomUUID().toString());
+						ipNotif.setNotifStatus("n");
+						ipNotif.setNotifSubject("Password Reset");
+						ipNotif.setNotifBody("Hi " + user.getUserScreenName() + ", your Password has been reset to : " + param[2]);
+						ipNotif.setNotifCrtdDate(new Date());
+						ipNotif.setNotifEntityId(null);
+						ipNotif.setNotifEntityTblName(null);
+						ipNotif.setNotifList(user.getUserEmail());
+						ipNotifDAO.save(ipNotif);
+					}
+				} catch (Exception e) {
+					logger.error("Error while creating notification : " + e);
+				}
+
 			} catch (Exception e) {
-				e.printStackTrace();
-				throw new RuntimeException("Cannot merge login :: "
-						+ e.getMessage());
+				logger.error(e, e);
+				throw new RuntimeException("Cannot merge login :: " + e.getMessage());
 			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -872,20 +857,17 @@ public class AdminService {
 	public ResponseMessage resetSecurity(String[] param) {
 		try {
 			try {
-				ipLoginDAO.updateSecurity(param[0], Integer.valueOf(param[1]),
-						Base64.encodeBase64URLSafeString(DigestUtils
-								.md5(param[2].getBytes())));
+				ipLoginDAO.updateSecurity(param[0], Integer.valueOf(param[1]), Base64.encodeBase64URLSafeString(DigestUtils.md5(param[2].getBytes())));
 			} catch (Exception e) {
-				e.printStackTrace();
-				throw new RuntimeException("Cannot merge login :: "
-						+ e.getMessage());
+				logger.error(e, e);
+				throw new RuntimeException("Cannot merge login :: " + e.getMessage());
 			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -903,7 +885,7 @@ public class AdminService {
 			Boolean ret = (usersByScName != null && usersByScName.size() > 0);
 			return ret;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			return false;
 		}
 	}
@@ -918,7 +900,7 @@ public class AdminService {
 			Boolean ret = (usersByEmail != null && usersByEmail.size() > 0);
 			return ret;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			return false;
 		}
 	}
@@ -933,7 +915,7 @@ public class AdminService {
 			Boolean ret = (usersByIDNumber != null && usersByIDNumber.size() > 0);
 			return ret;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			return false;
 		}
 	}
@@ -945,11 +927,10 @@ public class AdminService {
 	public Boolean checkEmployeeID(@PathParam("eId") String eId) {
 		try {
 			List usersByEmployeeID = ipUserDAO.findByUserEmployeeId(eId);
-			Boolean ret = (usersByEmployeeID != null && usersByEmployeeID
-					.size() > 0);
+			Boolean ret = (usersByEmployeeID != null && usersByEmployeeID.size() > 0);
 			return ret;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			return false;
 		}
 	}
@@ -961,10 +942,9 @@ public class AdminService {
 	public Long getNextId(@PathParam("clazz") String clazz) {
 		Long ret = -1l;
 		try {
-			ret = ipNativeSQLDAO.getNextId(Class
-					.forName("za.co.idea.ip.orm.bean." + clazz));
+			ret = ipNativeSQLDAO.getNextId(Class.forName("za.co.idea.ip.orm.bean." + clazz));
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -973,8 +953,7 @@ public class AdminService {
 	@Path("/user/login/{login}/{pwd}")
 	@Produces("application/json")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public UserMessage login(@PathParam("login") String login,
-			@PathParam("pwd") String pwd) {
+	public UserMessage login(@PathParam("login") String login, @PathParam("pwd") String pwd) {
 		UserMessage user = new UserMessage();
 		try {
 			List logins = ipLoginDAO.verifyLogin(login, pwd);
@@ -993,35 +972,28 @@ public class AdminService {
 				user.setSkills(ipUser.getUserSkills());
 				if (ipUser.getIpGroup() != null)
 					user.setGroupId(ipUser.getIpGroup().getGroupId());
-				user.setPriGroupName(ipGroupDAO.findById(
-						ipUser.getIpGroup().getGroupId()).getGroupName());
+				user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
 				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
-				if (ipUser.getUserFbHandle() != null
-						&& ipUser.getUserFbHandle().length() > 0)
+				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
 					user.setFbHandle(ipUser.getUserFbHandle());
-				if (ipUser.getUserBio() != null
-						&& ipUser.getUserBio().length() > 0)
+				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
 					user.setBio(ipUser.getUserBio());
-				if (ipUser.getUserMName() != null
-						&& ipUser.getUserMName().length() > 0)
+				if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
 					user.setmName(ipUser.getUserMName());
-				if (ipUser.getUserTwHandle() != null
-						&& ipUser.getUserTwHandle().length() > 0)
+				if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
 					user.setTwHandle(ipUser.getUserTwHandle());
 				user.setLastLoginDt(ipLogin.getLoginLastDt());
 				ipLogin.setLoginLastDt(new Date(System.currentTimeMillis()));
 				ipLoginDAO.merge(ipLogin);
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipUser.getUserId(),
-						"ip_user");
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipUser.getUserId(), "ip_user");
 				if (blob != null) {
-					user.setImgPath("ip_user/" + ipUser.getUserId() + "/"
-							+ blob.getBlobName());
+					user.setImgPath("ip_user/" + ipUser.getUserId() + "/" + blob.getBlobName());
 					user.setImgAvail(true);
 				} else
 					user.setImgAvail(false);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return user;
 	}
@@ -1050,25 +1022,22 @@ public class AdminService {
 			user.setSecQ(ipLogin.getIpSecqList().getIslId());
 			if (ipUser.getIpGroup() != null) {
 				user.setGroupId(ipUser.getIpGroup().getGroupId());
-				IpBlob grpBlob = ipBlobDAO.getBlobByEntity(user.getGroupId(),
-						"ip_group");
+				IpBlob grpBlob = ipBlobDAO.getBlobByEntity(user.getGroupId(), "ip_group");
 				if (grpBlob != null) {
 					user.setGrpImgAvail(true);
-					user.setGrpImgPath("ip_group/" + user.getGroupId() + "/"
-							+ grpBlob.getBlobName());
+					user.setGrpImgPath("ip_group/" + user.getGroupId() + "/" + grpBlob.getBlobName());
 				} else
 					user.setGrpImgAvail(false);
 			} else
 				user.setGrpImgAvail(false);
 			IpBlob blob = ipBlobDAO.getBlobByEntity(user.getuId(), "ip_user");
 			if (blob != null) {
-				user.setImgPath("ip_user/" + user.getuId() + "/"
-						+ blob.getBlobName());
+				user.setImgPath("ip_user/" + user.getuId() + "/" + blob.getBlobName());
 				user.setImgAvail(true);
 			} else
 				user.setImgAvail(false);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return user;
 	}
@@ -1084,8 +1053,7 @@ public class AdminService {
 			Long chalCount = ipUserDAO.findChallengeCount(id);
 			Long whishListCount = ipUserDAO.findWhishlistCount(id);
 			Long ideasCount = ipUserDAO.findIdeasCount(id);
-			Long totalCount = solCount + chalCount + whishListCount
-					+ ideasCount;
+			Long totalCount = solCount + chalCount + whishListCount + ideasCount;
 			userStats.setUserId(id);
 			userStats.setChallengesCount(chalCount);
 			userStats.setIdeasCount(ideasCount);
@@ -1093,7 +1061,7 @@ public class AdminService {
 			userStats.setWhishListCount(whishListCount);
 			userStats.setTotalCount(totalCount);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return userStats;
 	}
@@ -1112,13 +1080,10 @@ public class AdminService {
 			for (Object object : users) {
 				IpUser ipUser = (IpUser) object;
 				Long solCount = ipUserDAO.findSolutionCount(ipUser.getUserId());
-				Long chalCount = ipUserDAO.findChallengeCount(ipUser
-						.getUserId());
-				Long whishListCount = ipUserDAO.findWhishlistCount(ipUser
-						.getUserId());
+				Long chalCount = ipUserDAO.findChallengeCount(ipUser.getUserId());
+				Long whishListCount = ipUserDAO.findWhishlistCount(ipUser.getUserId());
 				Long ideasCount = ipUserDAO.findIdeasCount(ipUser.getUserId());
-				Long totalCount = solCount + chalCount + whishListCount
-						+ ideasCount;
+				Long totalCount = solCount + chalCount + whishListCount + ideasCount;
 				UserStatisticsMessage userStats = new UserStatisticsMessage();
 				userStats.setUserId(ipUser.getUserId());
 				userStats.setChallengesCount(chalCount);
@@ -1127,25 +1092,22 @@ public class AdminService {
 				userStats.setWhishListCount(whishListCount);
 				userStats.setTotalCount(totalCount);
 				userStats.setUserScrNm(ipUser.getUserScreenName());
-				userStats.setUserPriGrpName(ipUser.getIpGroup().getGroupName());
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipUser.getUserId(),
-						"ip_user");
+				if (ipUser.getIpGroup() != null) {
+					userStats.setUserPriGrpName(ipUser.getIpGroup().getGroupName());
+					IpBlob grpBlob = ipBlobDAO.getBlobByEntity(ipUser.getIpGroup().getGroupId(), "ip_group");
+					if (grpBlob != null && ipUser.getIpGroup() != null) {
+						userStats.setGrpImgPath("ip_group/" + ipUser.getIpGroup().getGroupId() + "/" + grpBlob.getBlobName());
+						userStats.setGrpImgAvail(true);
+					} else {
+						userStats.setGrpImgAvail(false);
+					}
+				}
+				IpBlob blob = ipBlobDAO.getBlobByEntity(ipUser.getUserId(), "ip_user");
 				if (blob != null) {
-					userStats.setImgPath("ip_user/" + ipUser.getUserId() + "/"
-							+ blob.getBlobName());
+					userStats.setImgPath("ip_user/" + ipUser.getUserId() + "/" + blob.getBlobName());
 					userStats.setImgAvail(true);
 				} else {
 					userStats.setImgAvail(false);
-				}
-				IpBlob grpBlob = ipBlobDAO.getBlobByEntity(ipUser.getIpGroup()
-						.getGroupId(), "ip_group");
-				if (grpBlob != null && ipUser.getIpGroup() != null) {
-					userStats.setGrpImgPath("ip_group/"
-							+ ipUser.getIpGroup().getGroupId() + "/"
-							+ grpBlob.getBlobName());
-					userStats.setGrpImgAvail(true);
-				} else {
-					userStats.setGrpImgAvail(false);
 				}
 				userStatsSet.add(userStats);
 			}
@@ -1158,7 +1120,7 @@ public class AdminService {
 			}
 
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e, e);
 		}
 		return usersStatsList;
 	}
@@ -1233,5 +1195,13 @@ public class AdminService {
 
 	public void setIpSecqListDAO(IpSecqListDAO ipSecqListDAO) {
 		this.ipSecqListDAO = ipSecqListDAO;
+	}
+
+	public IpNotifDAO getIpNotifDAO() {
+		return ipNotifDAO;
+	}
+
+	public void setIpNotifDAO(IpNotifDAO ipNotifDAO) {
+		this.ipNotifDAO = ipNotifDAO;
 	}
 }

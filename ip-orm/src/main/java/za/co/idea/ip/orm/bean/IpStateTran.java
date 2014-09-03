@@ -28,8 +28,7 @@ public class IpStateTran implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpStateTran(String tranEntity, Integer tranCurrState,
-			Integer tranNextState, String tranIsUi, Date tranCrtdDt) {
+	public IpStateTran(String tranEntity, Integer tranCurrState, Integer tranNextState, String tranIsUi, Date tranCrtdDt) {
 		this.tranEntity = tranEntity;
 		this.tranCurrState = tranCurrState;
 		this.tranNextState = tranNextState;

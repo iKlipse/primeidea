@@ -70,6 +70,7 @@ public class RandomIdeaController implements Serializable {
 	private StreamedContent uploadContent;
 	private List<GroupBean> pGrps;
 	private String[] selGrpId;
+	private Long selGroupId;
 	private DualListModel<GroupBean> groupTwinSelect;
 	private String commentText;
 	private String buildOnText;
@@ -111,8 +112,6 @@ public class RandomIdeaController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
-			AccessController controller = new AccessController(userId);
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("accessBean", controller);
 			if (toView != null && Integer.valueOf(toView) != -1) {
 				switch (Integer.valueOf(toView)) {
 				case 1:
@@ -269,6 +268,12 @@ public class RandomIdeaController implements Serializable {
 				ideaStatuses = RESTServiceHelper.fetchNextIdeaStatuses(ideaBean.getSetStatusId());
 			}
 			pGrps = RESTServiceHelper.fetchActiveGroups();
+			rvIds = RESTServiceHelper.fetchReviews(ideaBean.getIdeaId(), "ip_idea");
+			rvIdCnt = rvIds.size();
+			List<Long> grpList = ideaBean.getGroupIdList();
+			if (grpList != null && !grpList.isEmpty()) {
+				selGroupId = (Long) grpList.get(0);
+			}
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
 				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
@@ -319,6 +324,12 @@ public class RandomIdeaController implements Serializable {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
 			ideaStatuses = RESTServiceHelper.fetchAllReviewIdeaStatuses();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
+			rvIds = RESTServiceHelper.fetchReviews(ideaBean.getIdeaId(), "ip_idea");
+			rvIdCnt = rvIds.size();
+			List<Long> grpList = ideaBean.getGroupIdList();
+			if (grpList != null && !grpList.isEmpty()) {
+				selGroupId = (Long) grpList.get(0);
+			}
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			if (userId == 0l) {
 				ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
@@ -380,6 +391,12 @@ public class RandomIdeaController implements Serializable {
 				ideaStatuses = RESTServiceHelper.fetchNextIdeaStatuses(ideaBean.getSetStatusId());
 			}
 			pGrps = RESTServiceHelper.fetchActiveGroups();
+			rvIds = RESTServiceHelper.fetchReviews(ideaBean.getIdeaId(), "ip_idea");
+			rvIdCnt = rvIds.size();
+			List<Long> grpList = ideaBean.getGroupIdList();
+			if (grpList != null && !grpList.isEmpty()) {
+				selGroupId = (Long) grpList.get(0);
+			}
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
 				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
@@ -679,85 +696,94 @@ public class RandomIdeaController implements Serializable {
 		}
 	}
 
-	public String saveIdea() {
+	public void saveIdea() {
 		try {
 			if (titleAvail) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				return "";
-			}
-			List<String> errors = validateIdea();
-			if (errors.size() > 0) {
-				for (String error : errors) {
-					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
-					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				}
-				return "";
-			}
-			WebClient addIdeaClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/add");
-			IdeaMessage ideaMessage = new IdeaMessage();
-			ideaMessage.setCrtdById(userId);
-			ideaMessage.setCrtdDate(new Date());
-			ideaMessage.setIdeaBa(ideaBean.getIdeaBa());
-			ideaMessage.setIdeaDesc(ideaBean.getIdeaDesc());
-			ideaMessage.setIdeaTag(ideaBean.getIdeaTag());
-			ideaMessage.setIdeaId(COUNTER.getNextId("IpIdea"));
-			ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
-			ideaMessage.setSelCatId(ideaBean.getSelCatId());
-			ideaMessage.setGroupIdList(toLongArray(selGrpId));
-			ideaMessage.setRvIdCnt(rvIdCnt);
-			if (saveAsOpen) {
-				ideaMessage.setSetStatusId(2l);
+				// toView = "3";
+				// return redirectMain();
 			} else {
-				ideaMessage.setSetStatusId(1l);
-			}
-			ResponseMessage response = addIdeaClient.accept(MediaType.APPLICATION_JSON).post(ideaMessage, ResponseMessage.class);
-			addIdeaClient.close();
-			if (response.getStatusCode() == 0) {
-				if (uploadContent != null) {
-					WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
-					AttachmentMessage message = new AttachmentMessage();
-					message.setBlobContentType(ideaBean.getContentType());
-					message.setBlobEntityId(ideaMessage.getIdeaId());
-					message.setBlobEntityTblNm("ip_idea");
-					message.setBlobName(ideaBean.getFileName());
-					message.setBlobId(COUNTER.getNextId("IpBlob"));
-					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
-					createBlobClient.close();
-					if (crtRes.getStatus() == 200) {
-						WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + message.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-						client.header("Accept", "application/json");
-						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment;filename=" + ideaBean.getFileName())));
-						if (docRes.getStatus() != 200) {
-							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
-							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-						}
-						client.close();
-					} else {
-						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
+				List<String> errors = validateIdea();
+				if (errors.size() > 0) {
+					for (String error : errors) {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
+					// toView = "3";
+					// return redirectMain();
+				} else {
+					WebClient addIdeaClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/add");
+					IdeaMessage ideaMessage = new IdeaMessage();
+					ideaMessage.setCrtdById(userId);
+					ideaMessage.setCrtdDate(new Date());
+					ideaMessage.setIdeaBa(ideaBean.getIdeaBa());
+					ideaMessage.setIdeaDesc(ideaBean.getIdeaDesc());
+					ideaMessage.setIdeaTag(ideaBean.getIdeaTag());
+					ideaMessage.setIdeaId(COUNTER.getNextId("IpIdea"));
+					ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
+					ideaMessage.setSelCatId(ideaBean.getSelCatId());
+					ideaMessage.setGroupIdList(getLongArray(selGroupId));
+					ideaMessage.setRvIdCnt(rvIdCnt);
+					if (saveAsOpen) {
+						ideaMessage.setSetStatusId(2l);
+					} else {
+						ideaMessage.setSetStatusId(1l);
+					}
+					ResponseMessage response = addIdeaClient.accept(MediaType.APPLICATION_JSON).post(ideaMessage, ResponseMessage.class);
+					addIdeaClient.close();
+					if (response.getStatusCode() == 0) {
+						if (uploadContent != null) {
+							WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
+							AttachmentMessage message = new AttachmentMessage();
+							message.setBlobContentType(ideaBean.getContentType());
+							message.setBlobEntityId(ideaMessage.getIdeaId());
+							message.setBlobEntityTblNm("ip_idea");
+							message.setBlobName(ideaBean.getFileName());
+							message.setBlobId(COUNTER.getNextId("IpBlob"));
+							Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
+							createBlobClient.close();
+							if (crtRes.getStatus() == 200) {
+								WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + message.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+								client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+								client.header("Accept", "application/json");
+								Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment;filename=" + ideaBean.getFileName())));
+								if (docRes.getStatus() != 200) {
+									FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
+									FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+								}
+								client.close();
+							} else {
+								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
+								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+							}
+						}
+						rvIds = null;
+						rvIdCnt = 1;
+						uploadContent = null;
+						saveAsOpen = false;
+						if (ideaMessage.getSetStatusId().longValue() == 2l)
+							showViewOpenIdeas();
+						else
+							showViewIdeas();
+						ideaBean = new IdeaBean();
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Idea Saved", "Idea Saved");
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						// return redirectMain();
+					} else {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						// toView = "3";
+						// return redirectMain();
+					}
 				}
-				rvIds = null;
-				rvIdCnt = 1;
-				uploadContent = null;
-				saveAsOpen = false;
-				if (ideaMessage.getSetStatusId().longValue() == 2l)
-					showViewOpenIdeas();
-				else
-					showViewIdeas();
-				return redirectMain();
-			} else {
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				return "";
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create Idea request", "System error occurred, cannot perform create Idea request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
+			// toView = "3";
+			// return redirectMain();
 		}
 	}
 
@@ -782,7 +808,7 @@ public class RandomIdeaController implements Serializable {
 			ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
 			ideaMessage.setSetStatusId(ideaBean.getSetStatusId());
-			ideaMessage.setGroupIdList(toLongArray(selGrpId));
+			ideaMessage.setGroupIdList(getLongArray(selGroupId));
 			ideaMessage.setRvIdCnt(rvIdCnt);
 			ResponseMessage response = updateIdeaClient.accept(MediaType.APPLICATION_JSON).put(ideaMessage, ResponseMessage.class);
 			updateIdeaClient.close();
@@ -905,6 +931,12 @@ public class RandomIdeaController implements Serializable {
 		Long[] ret = new Long[val.length];
 		for (int i = 0; i < val.length; i++)
 			ret[i] = Long.valueOf(val[i]);
+		return ret;
+	}
+
+	protected Long[] getLongArray(Long groupId) {
+		Long[] ret = new Long[1];
+		ret[0] = groupId;
 		return ret;
 	}
 
@@ -1278,14 +1310,8 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	public List<ReviewBean> getRvIds() {
-		if (rvIds == null) {
+		if (rvIds == null)
 			rvIds = new ArrayList<ReviewBean>();
-			ReviewBean bean = new ReviewBean();
-			bean.setEntityId(COUNTER.getNextId("IpIdea"));
-			bean.setStatusId(1);
-			bean.setTblNm("ip_idea");
-			rvIds.add(bean);
-		}
 		return rvIds;
 	}
 
@@ -1299,6 +1325,14 @@ public class RandomIdeaController implements Serializable {
 
 	public void setRvIdCnt(Integer rvIdCnt) {
 		this.rvIdCnt = rvIdCnt;
+	}
+
+	public Long getSelGroupId() {
+		return selGroupId;
+	}
+
+	public void setSelGroupId(Long selGroupId) {
+		this.selGroupId = selGroupId;
 	}
 
 }

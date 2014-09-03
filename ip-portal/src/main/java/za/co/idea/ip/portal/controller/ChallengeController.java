@@ -136,8 +136,6 @@ public class ChallengeController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
-			AccessController controller = new AccessController(userId);
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("accessBean", controller);
 			challengeCats = fetchAllChallengeCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
@@ -197,8 +195,6 @@ public class ChallengeController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
-			AccessController controller = new AccessController(userId);
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("accessBean", controller);
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
@@ -362,6 +358,8 @@ public class ChallengeController implements Serializable {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
 			challengeStatuses = fetchAllChallengeStatuses();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
+			rvIds = RESTServiceHelper.fetchReviews(challengeBean.getId(), "ip_challenge");
+			rvIdCnt = rvIds.size();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
 				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
@@ -415,6 +413,8 @@ public class ChallengeController implements Serializable {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
 			challengeStatuses = fetchNextChallengeStatuses();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
+			rvIds = RESTServiceHelper.fetchReviews(challengeBean.getId(), "ip_challenge");
+			rvIdCnt = rvIds.size();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
 				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
@@ -468,6 +468,8 @@ public class ChallengeController implements Serializable {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
 			challengeStatuses = RESTServiceHelper.fetchAllReviewChallengeNextStatuses();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
+			rvIds = RESTServiceHelper.fetchReviews(challengeBean.getId(), "ip_challenge");
+			rvIdCnt = rvIds.size();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
 			try {
 				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
@@ -660,93 +662,78 @@ public class ChallengeController implements Serializable {
 		}
 	}
 
-	public String saveChallenge() {
+	public void saveChallenge() {
 		try {
 			if (chalTitleAvail) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				showPubChal = false;
-				showViewChal = false;
-				showCrtChal = true;
-				showReviewChal = false;
-				return "";
-			}
-			List<String> errors = validateChallenge();
-			if (errors.size() > 0) {
-				for (String error : errors) {
-					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
-					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				}
-				showPubChal = false;
-				showViewChal = false;
-				showCrtChal = true;
-				showReviewChal = false;
-				return "";
-			}
-			WebClient addChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/add");
-			ChallengeMessage message = new ChallengeMessage();
-			message.setCatId(challengeBean.getCatId());
-			message.setCrtdById(userId);
-			message.setCrtdDt(new Date());
-			message.setDesc(challengeBean.getDesc());
-			message.setExprDt(challengeBean.getExprDt());
-			message.setHoverText(challengeBean.getHoverText());
-			message.setId(COUNTER.getNextId("IpChallenge"));
-			message.setLaunchDt(challengeBean.getLaunchDt());
-			message.setStatusId(1);
-			message.setTag(challengeBean.getTag());
-			message.setTitle(challengeBean.getTitle());
-			message.setGroupIdList(toLongArray(selGrpId));
-			message.setRvIdCnt(rvIdCnt);
-			ResponseMessage response = addChallengeClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
-			addChallengeClient.close();
-			if (response.getStatusCode() == 0) {
-				if (chalUploadContent != null) {
-					WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
-					AttachmentMessage attach = new AttachmentMessage();
-					attach.setBlobContentType(challengeBean.getContentType());
-					attach.setBlobEntityId(message.getId());
-					attach.setBlobEntityTblNm("ip_challenge");
-					attach.setBlobName(challengeBean.getFileName());
-					attach.setBlobId(COUNTER.getNextId("IpBlob"));
-					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
-					if (crtRes.getStatus() == 200) {
-						WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-						client.header("Accept", "application/json");
-						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), chalUploadContent.getStream(), new ContentDisposition("attachment;filename=" + challengeBean.getFileName())));
-						if (docRes.getStatus() != 200) {
-							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
-							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-						}
-					} else {
-						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
+				// return "";
+			} else {
+				List<String> errors = validateChallenge();
+				if (errors.size() > 0) {
+					for (String error : errors) {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
+					// return "";
+				} else {
+					WebClient addChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/add");
+					ChallengeMessage message = new ChallengeMessage();
+					message.setCatId(challengeBean.getCatId());
+					message.setCrtdById(userId);
+					message.setCrtdDt(new Date());
+					message.setDesc(challengeBean.getDesc());
+					message.setExprDt(challengeBean.getExprDt());
+					message.setHoverText(challengeBean.getHoverText());
+					message.setId(COUNTER.getNextId("IpChallenge"));
+					message.setLaunchDt(challengeBean.getLaunchDt());
+					message.setStatusId(1);
+					message.setTag(challengeBean.getTag());
+					message.setTitle(challengeBean.getTitle());
+					message.setGroupIdList(toLongArray(selGrpId));
+					message.setRvIdCnt(rvIdCnt);
+					ResponseMessage response = addChallengeClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+					addChallengeClient.close();
+					if (response.getStatusCode() == 0) {
+						if (chalUploadContent != null) {
+							WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
+							AttachmentMessage attach = new AttachmentMessage();
+							attach.setBlobContentType(challengeBean.getContentType());
+							attach.setBlobEntityId(message.getId());
+							attach.setBlobEntityTblNm("ip_challenge");
+							attach.setBlobName(challengeBean.getFileName());
+							attach.setBlobId(COUNTER.getNextId("IpBlob"));
+							Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
+							if (crtRes.getStatus() == 200) {
+								WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+								client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+								client.header("Accept", "application/json");
+								Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), chalUploadContent.getStream(), new ContentDisposition("attachment;filename=" + challengeBean.getFileName())));
+								if (docRes.getStatus() != 200) {
+									FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
+									FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+								}
+							} else {
+								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
+								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+							}
+						}
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Challenge Saved", "Challenge Saved");
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						showViewChallenges();
+						// return redirectMain();
+					} else {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						// return "";
+					}
 				}
-				chalUploadContent = null;
-				rvIdCnt = 1;
-				rvIds = null;
-				showViewChallenges();
-				return redirectMain();
-			} else {
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				showPubChal = false;
-				showViewChal = false;
-				showCrtChal = true;
-				showReviewChal = false;
-				return "";
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			showPubChal = false;
-			showViewChal = false;
-			showCrtChal = true;
-			showReviewChal = false;
-			return "";
+			// return "";
 		}
 	}
 
@@ -940,6 +927,8 @@ public class ChallengeController implements Serializable {
 			solutionBean = new SolutionBean();
 			solutionBean.setChalId(Long.valueOf(reqMap.get("chalId")));
 			saveAsOpen = false;
+			rvIdCnt = 1;
+			rvIds = null;
 			return "chalss";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -1018,6 +1007,8 @@ public class ChallengeController implements Serializable {
 			viewChallenges = fetchAllChallengesByUser();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
+			rvIds = RESTServiceHelper.fetchReviews(solutionBean.getId(), "ip_solution");
+			rvIdCnt = rvIds.size();
 			try {
 				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
 				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
@@ -1070,6 +1061,8 @@ public class ChallengeController implements Serializable {
 			viewChallenges = fetchAllChallengesByUser();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchNextSolutionStatuses();
+			rvIds = RESTServiceHelper.fetchReviews(solutionBean.getId(), "ip_solution");
+			rvIdCnt = rvIds.size();
 			try {
 				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
 				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
@@ -1122,6 +1115,8 @@ public class ChallengeController implements Serializable {
 			viewChallenges = fetchAllChallengesByUser();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = RESTServiceHelper.fetchAllReviewSolutionStatuses();
+			rvIds = RESTServiceHelper.fetchReviews(solutionBean.getId(), "ip_solution");
+			rvIdCnt = rvIds.size();
 			try {
 				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
 				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
@@ -1360,85 +1355,89 @@ public class ChallengeController implements Serializable {
 		}
 	}
 
-	public String saveSolution() {
+	public void saveSolution() {
 		try {
 			if (titleAvail) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				return "";
-			}
-			List<String> errors = validateSolution();
-			if (errors.size() > 0) {
-				for (String error : errors) {
-					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
-					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				}
-				return "";
-			}
-			WebClient addSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/add");
-			SolutionMessage message = new SolutionMessage();
-			message.setCatId(solutionBean.getCatId());
-			message.setChalId(solutionBean.getChalId());
-			message.setCrtdById(userId);
-			message.setCrtdDt(new Date());
-			message.setDesc(solutionBean.getDesc());
-			message.setId(COUNTER.getNextId("IpSolution"));
-			if (saveAsOpen) {
-				message.setStatusId(2);
+				// return "";
 			} else {
-				message.setStatusId(1);
-			}
-			message.setTags(solutionBean.getTags());
-			message.setTitle(solutionBean.getTitle());
-			message.setRvIdCnt(rvIdCnt);
-			ResponseMessage response = addSolutionClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
-			addSolutionClient.close();
-			if (response.getStatusCode() == 0) {
-				if (solUploadContent != null) {
-					WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
-					AttachmentMessage attach = new AttachmentMessage();
-					attach.setBlobContentType(solutionBean.getContentType());
-					attach.setBlobEntityId(message.getId());
-					attach.setBlobEntityTblNm("ip_solution");
-					attach.setBlobName(solutionBean.getFileName());
-					attach.setBlobId(COUNTER.getNextId("IpBlob"));
-					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
-					createBlobClient.close();
-					if (crtRes.getStatus() == 200) {
-						WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-						client.header("Accept", "application/json");
-						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), solUploadContent.getStream(), new ContentDisposition("attachment;filename=" + solutionBean.getFileName())));
-						if (docRes.getStatus() != 200) {
-							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
-							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-						}
-						client.close();
-					} else {
-						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
+				List<String> errors = validateSolution();
+				if (errors.size() > 0) {
+					for (String error : errors) {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
-				}
-				solUploadContent = null;
-				rvIdCnt = 1;
-				rvIds = null;
-				saveAsOpen = false;
-				if (saveAsOpen) {
-					showViewOpenSolution();
+					// return "";
 				} else {
-					showViewSolution();
+					WebClient addSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/add");
+					SolutionMessage message = new SolutionMessage();
+					message.setCatId(solutionBean.getCatId());
+					message.setChalId(solutionBean.getChalId());
+					message.setCrtdById(userId);
+					message.setCrtdDt(new Date());
+					message.setDesc(solutionBean.getDesc());
+					message.setId(COUNTER.getNextId("IpSolution"));
+					if (saveAsOpen) {
+						message.setStatusId(2);
+					} else {
+						message.setStatusId(1);
+					}
+					message.setTags(solutionBean.getTags());
+					message.setTitle(solutionBean.getTitle());
+					message.setRvIdCnt(rvIdCnt);
+					ResponseMessage response = addSolutionClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+					addSolutionClient.close();
+					if (response.getStatusCode() == 0) {
+						if (solUploadContent != null) {
+							WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
+							AttachmentMessage attach = new AttachmentMessage();
+							attach.setBlobContentType(solutionBean.getContentType());
+							attach.setBlobEntityId(message.getId());
+							attach.setBlobEntityTblNm("ip_solution");
+							attach.setBlobName(solutionBean.getFileName());
+							attach.setBlobId(COUNTER.getNextId("IpBlob"));
+							Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
+							createBlobClient.close();
+							if (crtRes.getStatus() == 200) {
+								WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+								client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+								client.header("Accept", "application/json");
+								Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), solUploadContent.getStream(), new ContentDisposition("attachment;filename=" + solutionBean.getFileName())));
+								if (docRes.getStatus() != 200) {
+									FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
+									FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+								}
+								client.close();
+							} else {
+								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
+								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+							}
+						}
+						solUploadContent = null;
+						rvIdCnt = 1;
+						rvIds = null;
+						saveAsOpen = false;
+						if (saveAsOpen) {
+							showViewOpenSolution();
+						} else {
+							showViewSolution();
+						}
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Solution Saved", "Solution Saved");
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						// return redirectMain();
+					} else {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						// return "";
+					}
 				}
-				return redirectMain();
-			} else {
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				return "";
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
+			// return "";
 		}
 	}
 
@@ -2346,7 +2345,7 @@ public class ChallengeController implements Serializable {
 		if (solutionBean.getDesc() == null || solutionBean.getDesc().length() == 0) {
 			ret.add("Description is Mandatory");
 		}
-		if (rvIdCnt == 0 || rvIds == null || rvIds.size() == 0) {
+		if (rvIdCnt == 0 || rvIds == null || rvIds.size() == 0 || rvIds.get(0).getGroupId() == null || rvIds.get(0).getGroupId().length == 0) {
 			ret.add("Please assign reviewers");
 		}
 		return ret;
@@ -2371,7 +2370,7 @@ public class ChallengeController implements Serializable {
 		if (challengeBean.getExprDt() == null || challengeBean.getExprDt().toString().length() == 0) {
 			ret.add("Expiry Date is Mandatory");
 		}
-		if (rvIdCnt == 0 || rvIds == null || rvIds.size() == 0) {
+		if (rvIdCnt == 0 || rvIds == null || rvIds.size() == 0 || rvIds.get(0).getGroupId() == null || rvIds.get(0).getGroupId().length == 0) {
 			ret.add("Please assign reviewers");
 		}
 		return ret;

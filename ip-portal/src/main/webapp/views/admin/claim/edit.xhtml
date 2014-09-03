@@ -36,7 +36,7 @@
 							<f:setPropertyActionListener value="#{landingPageController.userId}" target="#{adminController.userId}" />
 							<f:setPropertyActionListener value="2" target="#{adminController.toView}" />
 						</p:commandButton>
-						<p:commandButton id="btnCancel" value="Return To View" ajax="false" action="#{adminController.showViewClaim}">
+						<p:commandButton id="btnCancel" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" ajax="false" action="#{adminController.showViewClaim}">
 							<f:setPropertyActionListener value="#{landingPageController.userId}" target="#{adminController.userId}" />
 						</p:commandButton>
 				</f:facet>

@@ -31,8 +31,7 @@ public class IpFunction implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpFunction(Long funcId, String funcName, String funcIsCore,
-			Date funcCrtdDt) {
+	public IpFunction(Long funcId, String funcName, String funcIsCore, Date funcCrtdDt) {
 		this.funcId = funcId;
 		this.funcName = funcName;
 		this.funcIsCore = funcIsCore;
@@ -40,8 +39,7 @@ public class IpFunction implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpFunction(Long funcId, IpUser ipUser, String funcName,
-			String funcIsCore, Date funcCrtdDt, Set ipFuncGroups) {
+	public IpFunction(Long funcId, IpUser ipUser, String funcName, String funcIsCore, Date funcCrtdDt, Set ipFuncGroups) {
 		this.funcId = funcId;
 		this.ipUser = ipUser;
 		this.funcName = funcName;

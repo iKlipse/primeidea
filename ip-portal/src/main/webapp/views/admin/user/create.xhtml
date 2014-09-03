@@ -151,7 +151,7 @@
 					<p:commandButton id="qbtnCSave" value="Save" ajax="false" action="#{adminController.saveUser}">
 						<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
 					</p:commandButton>
-					<p:commandButton id="qbtnDCancel" value="Return To View" ajax="false" action="#{adminController.showViewUsers}">
+					<p:commandButton id="qbtnDCancel" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" ajax="false" action="#{adminController.showViewUsers}">
 						<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
 					</p:commandButton>
 			</f:facet>

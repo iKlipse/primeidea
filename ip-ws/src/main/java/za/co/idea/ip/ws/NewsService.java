@@ -56,7 +56,7 @@ public class NewsService {
 			return message;
 		} catch (Exception e) {
 			logger.error("Error in create news : " + e.getMessage());
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -89,7 +89,7 @@ public class NewsService {
 			return message;
 		} catch (Exception e) {
 			logger.error("Error in update news : " + e.getMessage());
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -129,7 +129,7 @@ public class NewsService {
 			}
 		} catch (Exception e) {
 			logger.error("Error while getting news : " + e.getMessage());
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		logger.info("Before returning news data response from service : " + ret);
 		return ret;
@@ -162,7 +162,7 @@ public class NewsService {
 			}
 		} catch (Exception e) {
 			logger.error("Error while news based on news id  : " + e.getMessage());
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return message;
 	}

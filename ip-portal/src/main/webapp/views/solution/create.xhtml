@@ -42,7 +42,7 @@
 			<p:fileUpload id="fuCrtSUpload" fileUploadListener="#{challengeController.solFileUploadHandle}" multiple="false" />
 		</p:column>
 		<f:facet name="footer">
-			<p:commandButton id="btnCrtSave" value="Save" ajax="false" action="#{challengeController.saveSolution}">
+			<p:commandButton id="btnCrtSave" value="Save" action="#{challengeController.saveSolution}" update="@namingcontainer, :frmSolCtrlr:frmSolCtrlrMsg">
 				<f:setPropertyActionListener value="3" target="#{challengeController.toView}" />
 			</p:commandButton>
 			<p:commandButton id="btnCrtIARv" value="Assign Reviewers" type="button" onclick="PF('dlgRwUpd').show();" />

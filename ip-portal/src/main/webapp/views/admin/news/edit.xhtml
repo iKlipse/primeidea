@@ -45,7 +45,7 @@
 					<p:commandButton id="dbtnMSave" value="Save" ajax="false" action="#{adminController.updateNews}">
 						<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
 					</p:commandButton>
-					<p:commandButton id="dbtnRCancel" value="Return To view" ajax="false" action="#{adminController.showViewNews}">
+					<p:commandButton id="dbtnRCancel" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" ajax="false" action="#{adminController.showViewNews}">
 						<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
 					</p:commandButton>
 			</f:facet>

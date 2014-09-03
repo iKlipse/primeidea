@@ -35,9 +35,7 @@ public class IpClaim implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpClaim(Long claimId, IpUser ipUser, IpClaimStatus ipClaimStatus,
-			IpRewards ipRewards, String claimDesc, Date claimCrtdDt,
-			String claimComment) {
+	public IpClaim(Long claimId, IpUser ipUser, IpClaimStatus ipClaimStatus, IpRewards ipRewards, String claimDesc, Date claimCrtdDt, String claimComment) {
 		this.claimId = claimId;
 		this.ipUser = ipUser;
 		this.ipClaimStatus = ipClaimStatus;

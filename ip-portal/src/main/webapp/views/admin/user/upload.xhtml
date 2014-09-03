@@ -11,7 +11,7 @@
 					<p:commandButton id="ibtnHSave" value="Save" ajax="false" action="#{adminController.saveUploadUsers}">
 						<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
 					</p:commandButton>
-					<p:commandButton id="ibtnLCancel" value="Return To View" ajax="false" action="#{adminController.showViewUsers}">
+					<p:commandButton id="ibtnLCancel" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" ajax="false" action="#{adminController.showViewUsers}">
 						<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
 					</p:commandButton>
 			</f:facet>

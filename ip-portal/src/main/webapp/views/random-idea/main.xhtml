@@ -6,7 +6,7 @@
 		<h:form id="frmRandomIdea" enctype="multipart/form-data">
 			<p:growl life="5000" id="frmRandomIdeaMsg" showDetail="true" showSummary="true" autoUpdate="true" />
 			<p:remoteCommand actionListener="#{randomIdeaController.initializePage}" name="onload" autoRun="true" update="pnlIdeaDet" />
-			<p:panel styleClass="panelView"  id="pnlIdeaMenu">
+			<p:panel styleClass="panelView" id="pnlIdeaMenu">
 				<p:commandLink value="View Open Ideas" actionListener="#{randomIdeaController.showViewOpenIdeas}" update="pnlIdeaDet">
 					<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />
 				</p:commandLink>
@@ -23,20 +23,20 @@
 					<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />
 				</p:commandLink>
 			</p:panel>
-			<p:panel styleClass="panelView"  id="pnlIdeaDet">
-				<p:panel styleClass="panelView"  id="ctrViewIdeas" rendered="#{randomIdeaController.showViewIdea}">
+			<p:panel styleClass="panelView" id="pnlIdeaDet">
+				<p:panel styleClass="panelView" id="ctrViewIdeas" rendered="#{randomIdeaController.showViewIdea}">
 					<f:facet name="header">View All Ideas</f:facet>
 					<ui:include src="/views/random-idea/view.xhtml" />
 				</p:panel>
-				<p:panel styleClass="panelView"  id="ctrViewOpenIdeas" rendered="#{randomIdeaController.showViewOpenIdea}">
+				<p:panel styleClass="panelView" id="ctrViewOpenIdeas" rendered="#{randomIdeaController.showViewOpenIdea}">
 					<f:facet name="header">View Open Ideas</f:facet>
 					<ui:include src="/views/random-idea/viewOpen.xhtml" />
 				</p:panel>
-				<p:panel styleClass="panelView"  id="ctrViewReviewIdeas" rendered="#{randomIdeaController.showViewReviewIdea}">
+				<p:panel styleClass="panelView" id="ctrViewReviewIdeas" rendered="#{randomIdeaController.showViewReviewIdea}">
 					<f:facet name="header">View Ideas Under Review</f:facet>
 					<ui:include src="/views/random-idea/viewReview.xhtml" />
 				</p:panel>
-				<p:panel styleClass="panelView"  id="ctrCreateIdeas" rendered="#{randomIdeaController.showCrtIdea}">
+				<p:panel styleClass="panelView" id="ctrCreateIdeas" rendered="#{randomIdeaController.showCrtIdea}">
 					<f:facet name="header">Create Ideas</f:facet>
 					<ui:include src="/views/random-idea/create.xhtml" />
 				</p:panel>

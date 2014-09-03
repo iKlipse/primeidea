@@ -60,7 +60,7 @@
 			</p:panelGrid>
 		</p:column>
 		<f:facet name="footer">
-			<p:commandButton id="btnWCancel" value="Return To View" ajax="false" action="#{challengeController.redirectMain}">
+			<p:commandButton id="btnWCancel" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" ajax="false" action="#{challengeController.redirectMain}">
 				<f:setPropertyActionListener value="3" target="#{landingPageController.toView}" />
 				<f:setPropertyActionListener value="3" target="#{challengeController.toView}" />
 			</p:commandButton>

@@ -29,7 +29,7 @@
 			</p:column>
 			<f:facet name="footer">
 				<p:commandButton id="btnSubmitBuildOn" value="Post" action="#{buildonController.createBuildOn}" ajax="false" rendered="#{!buildonBean.taggable}" />
-				<p:commandButton id="btnRedirectSummary" value="Return To View" action="#{buildonController.redirectView}" ajax="false" />
+				<p:commandButton id="btnRedirectSummary" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" action="#{buildonController.redirectView}" ajax="false" />
 			</f:facet>
 		</p:panelGrid>
 	</ui:define>

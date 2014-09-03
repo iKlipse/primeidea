@@ -35,9 +35,7 @@ public class IpPoints implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpPoints(Long pointId, IpAllocation ipAllocation, IpUser ipUser,
-			Integer pointValue, String comments, Long entityId,
-			Date pointCrtdDt) {
+	public IpPoints(Long pointId, IpAllocation ipAllocation, IpUser ipUser, Integer pointValue, String comments, Long entityId, Date pointCrtdDt) {
 		this.pointId = pointId;
 		this.ipAllocation = ipAllocation;
 		this.ipUser = ipUser;

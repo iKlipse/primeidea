@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
@@ -38,7 +39,7 @@ import za.co.idea.ip.ws.util.CustomObjectMapper;
 @ManagedBean(name = "buildonController")
 @SessionScoped
 public class BuildonController implements Serializable {
-
+	private static final Logger logger = Logger.getLogger(BuildonController.class);
 	private static final long serialVersionUID = -6184166952920477924L;
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
 	private static final IdNumberGen COUNTER = new IdNumberGen();
@@ -133,7 +134,7 @@ public class BuildonController implements Serializable {
 				fileContent = null;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			fileAvail = true;
@@ -261,7 +262,7 @@ public class BuildonController implements Serializable {
 			this.fileName = file.getFileName();
 			this.contentType = file.getContentType();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}

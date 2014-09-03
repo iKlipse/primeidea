@@ -37,10 +37,7 @@ public class IpNotif implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpNotif(String notifId, Long notifEntityId,
-			String notifEntityTblName, String notifSubject, String notifBody,
-			String notifAttach, String notifStatus, String notifList,
-			Date notifCrtdDate) {
+	public IpNotif(String notifId, Long notifEntityId, String notifEntityTblName, String notifSubject, String notifBody, String notifAttach, String notifStatus, String notifList, Date notifCrtdDate) {
 		this.notifId = notifId;
 		this.notifEntityId = notifEntityId;
 		this.notifEntityTblName = notifEntityTblName;

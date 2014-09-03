@@ -12,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +39,7 @@ import za.co.idea.ip.ws.bean.RewardsMessage;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Path(value = "/rs")
 public class RewardsService {
+	private static final Logger logger = Logger.getLogger(RewardsService.class);
 	private IpUserDAO ipUserDAO;
 	private IpRewardsCatDAO ipRewardsCatDAO;
 	private IpRewardsDAO ipRewardsDAO;
@@ -76,7 +78,7 @@ public class RewardsService {
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -112,7 +114,7 @@ public class RewardsService {
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -156,7 +158,7 @@ public class RewardsService {
 				ret.add((T) rewards);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -192,7 +194,7 @@ public class RewardsService {
 				rewards.setRwImgAvail(false);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return rewards;
 	}
@@ -233,7 +235,7 @@ public class RewardsService {
 				ret.add((T) rewards);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -274,7 +276,7 @@ public class RewardsService {
 				ret.add((T) rewards);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -315,7 +317,7 @@ public class RewardsService {
 				ret.add((T) rewards);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -336,7 +338,7 @@ public class RewardsService {
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -352,7 +354,7 @@ public class RewardsService {
 			message.setId(cat.getRcId());
 			message.setDesc(cat.getRcDesc());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return message;
 	}
@@ -376,7 +378,7 @@ public class RewardsService {
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -404,7 +406,7 @@ public class RewardsService {
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -428,7 +430,7 @@ public class RewardsService {
 			message.setComments(ipPoints.getComments());
 			message.setUserId(ipPoints.getIpUser().getUserId());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return message;
 	}
@@ -453,7 +455,7 @@ public class RewardsService {
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -477,7 +479,7 @@ public class RewardsService {
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -513,7 +515,7 @@ public class RewardsService {
 				return message;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -541,7 +543,7 @@ public class RewardsService {
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -569,7 +571,7 @@ public class RewardsService {
 				ret.add((T) msg);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -593,7 +595,7 @@ public class RewardsService {
 				ret.add((T) msg);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -612,7 +614,7 @@ public class RewardsService {
 			ret.setAllocStatusId(allocation.getAllocStatusId());
 			ret.setAllocVal(allocation.getAllocVal());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -627,7 +629,7 @@ public class RewardsService {
 			Boolean ret = (rwByTitle != null && rwByTitle.size() > 0);
 			return ret;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			return false;
 		}
 	}

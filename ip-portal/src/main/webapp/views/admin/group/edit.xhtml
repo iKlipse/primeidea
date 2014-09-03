@@ -74,7 +74,7 @@
 			</p:column>
 			<f:facet name="footer">
 					<p:commandButton id="obtnESave" value="Save" ajax="false" action="#{adminController.updateGroup}" />
-					<p:commandButton id="obtnFCancel" value="Return To View" ajax="false" action="#{adminController.showViewGroups}">
+					<p:commandButton id="obtnFCancel" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" ajax="false" action="#{adminController.showViewGroups}">
 						<f:setPropertyActionListener value="2" target="#{adminController.toView}" />
 					</p:commandButton>
 			</f:facet>

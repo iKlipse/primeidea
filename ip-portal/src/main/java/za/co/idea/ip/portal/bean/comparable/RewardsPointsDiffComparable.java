@@ -6,7 +6,7 @@ public class RewardsPointsDiffComparable extends RewardsBean implements Comparab
 
 	private static final long serialVersionUID = 1214438004800690831L;
 	private int pointsDiff;
-	
+
 	public int getPointsDiff() {
 		return pointsDiff;
 	}
@@ -14,7 +14,7 @@ public class RewardsPointsDiffComparable extends RewardsBean implements Comparab
 	public void setPointsDiff(int pointsDiff) {
 		this.pointsDiff = pointsDiff;
 	}
-	
+
 	public int compareTo(RewardsPointsDiffComparable o) {
 		if (this.getPointsDiff() < o.getPointsDiff())
 			return -1;

@@ -13,6 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,8 @@ import za.co.idea.ip.orm.bean.IpChallenge;
 import za.co.idea.ip.orm.bean.IpChallengeCat;
 import za.co.idea.ip.orm.bean.IpChallengeGroup;
 import za.co.idea.ip.orm.bean.IpChallengeStatus;
+import za.co.idea.ip.orm.bean.IpNotif;
+import za.co.idea.ip.orm.bean.IpUser;
 import za.co.idea.ip.orm.dao.IpBlobDAO;
 import za.co.idea.ip.orm.dao.IpChallengeCatDAO;
 import za.co.idea.ip.orm.dao.IpChallengeDAO;
@@ -28,6 +31,7 @@ import za.co.idea.ip.orm.dao.IpChallengeGroupDAO;
 import za.co.idea.ip.orm.dao.IpChallengeStatusDAO;
 import za.co.idea.ip.orm.dao.IpGroupDAO;
 import za.co.idea.ip.orm.dao.IpNativeSQLDAO;
+import za.co.idea.ip.orm.dao.IpNotifDAO;
 import za.co.idea.ip.orm.dao.IpReviewDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
 import za.co.idea.ip.ws.bean.ChallengeMessage;
@@ -37,6 +41,7 @@ import za.co.idea.ip.ws.bean.ResponseMessage;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Path(value = "/cs")
 public class ChallengeService {
+	private static final Logger logger = Logger.getLogger(ChallengeService.class);
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-ws");
 	private IpChallengeDAO ipChallengeDAO;
 	private IpChallengeCatDAO ipChallengeCatDAO;
@@ -47,6 +52,7 @@ public class ChallengeService {
 	private IpChallengeGroupDAO ipChallengeGroupDAO;
 	private IpBlobDAO ipBlobDAO;
 	private IpReviewDAO ipReviewDAO;
+	private IpNotifDAO ipNotifDAO;
 
 	@POST
 	@Path("/challenge/add")
@@ -87,7 +93,7 @@ public class ChallengeService {
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -130,12 +136,67 @@ public class ChallengeService {
 					i++;
 				}
 			}
+
+			String subject = "";
+			String body = "";
+			boolean notification = false;
+			IpUser user = (IpUser) ipUserDAO.findById(challenge.getCrtdById());
+			if (challenge.getStatusId() != null && challenge.getStatusId() == 2) {
+				notification = true;
+				subject = "Challenge is under Review status";
+				body = "Your challenge, '" + challenge.getTitle() + ": " + challenge.getDesc() + "' has gone under review";
+
+			} else if (challenge.getStatusId() != null && challenge.getStatusId() == 3) {
+				notification = true;
+				subject = "Challenge is Approved status";
+				body = "Your challenge, '" + challenge.getTitle() + ": " + challenge.getDesc() + "' has been approved";
+
+			} else if (challenge.getStatusId() != null && challenge.getStatusId() == 4) {
+				notification = true;
+				subject = "Challenge is Publish status";
+				body = "Your challenge, '" + challenge.getTitle() + ": " + challenge.getDesc() + "' has been published";
+
+			} else if (challenge.getStatusId() != null && challenge.getStatusId() == 5) {
+				notification = true;
+				subject = "Challenge is Removed status";
+				body = "Your challenge, '" + challenge.getTitle() + ": " + challenge.getDesc() + "' has been removed";
+
+			} else if (challenge.getStatusId() != null && challenge.getStatusId() == 6) {
+				notification = true;
+				subject = "Challenge is Rejected status";
+				body = "Your challenge, '" + challenge.getTitle() + ": " + challenge.getDesc() + "' has been rejected";
+
+			} else if (challenge.getStatusId() != null && challenge.getStatusId() == 7) {
+				notification = true;
+				subject = "Challenge is Expired status";
+				body = "Your challenge, '" + challenge.getTitle() + ": " + challenge.getDesc() + "' has been expired";
+
+			}
+			if (notification) {
+				try {
+
+					IpNotif ipNotif = new IpNotif();
+					ipNotif.setNotifAttach(null);
+					ipNotif.setNotifId(java.util.UUID.randomUUID().toString());
+					ipNotif.setNotifStatus("n");
+					ipNotif.setNotifSubject(subject);
+					ipNotif.setNotifBody(body);
+					ipNotif.setNotifCrtdDate(new Date());
+					ipNotif.setNotifEntityId(null);
+					ipNotif.setNotifEntityTblName(null);
+					ipNotif.setNotifList(user.getUserEmail());
+					ipNotifDAO.save(ipNotif);
+				} catch (Exception e) {
+					logger.error("Error while creating notification: " + e);
+				}
+			}
+
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -195,7 +256,7 @@ public class ChallengeService {
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -233,7 +294,7 @@ public class ChallengeService {
 				challenge.setGroupIdList(grps);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return challenge;
 	}
@@ -290,7 +351,7 @@ public class ChallengeService {
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -347,7 +408,7 @@ public class ChallengeService {
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -404,7 +465,7 @@ public class ChallengeService {
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -461,7 +522,7 @@ public class ChallengeService {
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -518,7 +579,7 @@ public class ChallengeService {
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -539,7 +600,7 @@ public class ChallengeService {
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -560,7 +621,7 @@ public class ChallengeService {
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -581,7 +642,7 @@ public class ChallengeService {
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -597,7 +658,7 @@ public class ChallengeService {
 			message.setId(cat.getCcId());
 			message.setDesc(cat.getCcDesc());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return message;
 	}
@@ -613,7 +674,7 @@ public class ChallengeService {
 			message.setId(status.getCsId());
 			message.setDesc(status.getCsDesc());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return message;
 	}
@@ -659,7 +720,7 @@ public class ChallengeService {
 			challenge.setCatName(ipChallenge.getIpChallengeCat().getCcDesc());
 			challenge.setStatusName(ipChallenge.getIpChallengeStatus().getCsDesc());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return challenge;
 	}
@@ -674,7 +735,7 @@ public class ChallengeService {
 			Boolean ret = (solByTitle != null && solByTitle.size() > 0);
 			return ret;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			return false;
 		}
 	}
@@ -749,5 +810,17 @@ public class ChallengeService {
 
 	public void setIpReviewDAO(IpReviewDAO ipReviewDAO) {
 		this.ipReviewDAO = ipReviewDAO;
+	}
+
+	public IpNotifDAO getIpNotifDAO() {
+		return ipNotifDAO;
+	}
+
+	public void setIpNotifDAO(IpNotifDAO ipNotifDAO) {
+		this.ipNotifDAO = ipNotifDAO;
+	}
+
+	public IpUserDAO getIpUserDAO() {
+		return ipUserDAO;
 	}
 }

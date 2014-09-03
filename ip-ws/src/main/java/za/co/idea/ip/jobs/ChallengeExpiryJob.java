@@ -14,7 +14,7 @@ public class ChallengeExpiryJob extends QuartzJobBean implements StatefulJob {
 	private IpChallengeDAO ipChallengeDAO;
 	private IpSolutionDAO ipSolutionDAO;
 
-	@Transactional(propagation = Propagation.NESTED)
+	@Transactional(propagation = Propagation.REQUIRED)
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 		ipChallengeDAO.updateStatusOnExpiry();
 		ipSolutionDAO.updateStatusOnExpiry();

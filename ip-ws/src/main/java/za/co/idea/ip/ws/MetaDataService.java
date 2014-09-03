@@ -11,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +41,7 @@ import za.co.idea.ip.ws.bean.ResponseMessage;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Path(value = "/ms")
 public class MetaDataService {
+	private static final Logger logger = Logger.getLogger(MetaDataService.class);
 	private IpChallengeCatDAO ipChallengeCatDAO;
 	private IpChallengeStatusDAO ipChallengeStatusDAO;
 	private IpClaimStatusDAO ipClaimStatusDAO;
@@ -67,7 +69,7 @@ public class MetaDataService {
 				ipChallengeCatDAO.save(cat);
 				success = true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e, e);
 				success = false;
 				msg = e.getMessage();
 			}
@@ -79,7 +81,7 @@ public class MetaDataService {
 				ipIdeaCatDAO.save(cat);
 				success = true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e, e);
 				success = false;
 				msg = e.getMessage();
 			}
@@ -91,7 +93,7 @@ public class MetaDataService {
 				ipRewardsCatDAO.save(cat);
 				success = true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e, e);
 				success = false;
 				msg = e.getMessage();
 			}
@@ -103,7 +105,7 @@ public class MetaDataService {
 				ipSolutionCatDAO.save(cat);
 				success = true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e, e);
 				success = false;
 				msg = e.getMessage();
 			}
@@ -115,7 +117,7 @@ public class MetaDataService {
 				ipSecqListDAO.save(cat);
 				success = true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e, e);
 				success = false;
 				msg = e.getMessage();
 			}
@@ -127,7 +129,7 @@ public class MetaDataService {
 				ipCategoryDAO.save(cat);
 				success = true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e, e);
 				success = false;
 				msg = e.getMessage();
 			}
@@ -161,7 +163,7 @@ public class MetaDataService {
 				ipChallengeCatDAO.merge(cat);
 				success = true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e, e);
 				success = false;
 				msg = e.getMessage();
 			}
@@ -173,7 +175,7 @@ public class MetaDataService {
 				ipIdeaCatDAO.merge(cat);
 				success = true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e, e);
 				success = false;
 				msg = e.getMessage();
 			}
@@ -185,7 +187,7 @@ public class MetaDataService {
 				ipRewardsCatDAO.merge(cat);
 				success = true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e, e);
 				success = false;
 				msg = e.getMessage();
 			}
@@ -197,7 +199,7 @@ public class MetaDataService {
 				ipSolutionCatDAO.merge(cat);
 				success = true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e, e);
 				success = false;
 				msg = e.getMessage();
 			}
@@ -209,7 +211,7 @@ public class MetaDataService {
 				ipSecqListDAO.merge(cat);
 				success = true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e, e);
 				success = false;
 				msg = e.getMessage();
 			}
@@ -221,7 +223,7 @@ public class MetaDataService {
 				ipCategoryDAO.merge(cat);
 				success = true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e, e);
 				success = false;
 				msg = e.getMessage();
 			}
@@ -255,7 +257,7 @@ public class MetaDataService {
 				ipChallengeCatDAO.delete(cat);
 				success = true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e, e);
 				success = false;
 				msg = e.getMessage();
 			}
@@ -267,7 +269,7 @@ public class MetaDataService {
 				ipIdeaCatDAO.delete(cat);
 				success = true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e, e);
 				success = false;
 				msg = e.getMessage();
 			}
@@ -284,7 +286,7 @@ public class MetaDataService {
 					ipRewardsCatDAO.delete(cat);
 					success = true;
 				} catch (Exception e) {
-					e.printStackTrace();
+					logger.error(e, e);
 					success = false;
 					msg = e.getMessage();
 				}
@@ -297,7 +299,7 @@ public class MetaDataService {
 				ipSolutionCatDAO.delete(cat);
 				success = true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e, e);
 				success = false;
 				msg = e.getMessage();
 			}
@@ -309,7 +311,7 @@ public class MetaDataService {
 				ipSecqListDAO.delete(cat);
 				success = true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e, e);
 				success = false;
 				msg = e.getMessage();
 			}
@@ -326,7 +328,7 @@ public class MetaDataService {
 					ipCategoryDAO.delete(cat);
 					success = true;
 				} catch (Exception e) {
-					e.printStackTrace();
+					logger.error(e, e);
 					success = false;
 					msg = e.getMessage();
 				}
@@ -457,7 +459,7 @@ public class MetaDataService {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -514,7 +516,7 @@ public class MetaDataService {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}

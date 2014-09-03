@@ -65,7 +65,7 @@
 			</p:selectCheckboxMenu>
 		</p:column>
 		<f:facet name="footer">
-			<p:commandButton id="btnISave" value="Save" ajax="false" action="#{challengeController.saveChallenge}">
+			<p:commandButton id="btnISave" value="Save" actionListener="#{challengeController.saveChallenge}" update="@namingcontainer, :frmChalCtrlr:frmChalCtrlrMsg">
 				<f:setPropertyActionListener value="2" target="#{challengeController.toView}" />
 			</p:commandButton>
 			<p:commandButton id="btnCrtIARv" value="Assign Reviewers" type="button" onclick="PF('dlgRwUpd').show();" />

@@ -193,8 +193,6 @@ public class AdminController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
-			AccessController controller = new AccessController(userId);
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("accessBean", controller);
 			viewUsers = fetchAllUsers();
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -210,8 +208,6 @@ public class AdminController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
-			AccessController controller = new AccessController(userId);
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("accessBean", controller);
 			loggedScrName = message.getScName();
 			imgPath = message.getImgPath();
 			imgAvail = message.isImgAvail();
@@ -509,7 +505,7 @@ public class AdminController implements Serializable {
 			return "";
 		}
 	}
-	
+
 	public String showViewClaim() {
 		try {
 			admUsers = fetchAllUsers();
@@ -518,13 +514,13 @@ public class AdminController implements Serializable {
 			viewRewardsBeans = RESTServiceHelper.fetchAllRewards();
 			return "clmvc";
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
 	}
-	
+
 	public String showEditClaim() {
 		try {
 			admUsers = fetchAllUsers();
@@ -532,13 +528,13 @@ public class AdminController implements Serializable {
 			viewRewardsBeans = RESTServiceHelper.fetchAllRewards();
 			return "clmec";
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
 	}
-	
+
 	public String updateClaim() {
 		try {
 			WebClient updateClaimClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cls/claim/modify");
@@ -560,18 +556,17 @@ public class AdminController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
 	}
 
-
 	public String showViewUsers() {
 		try {
-			activeUsersView=false;
-			inactiveUsersView=false;
+			activeUsersView = false;
+			inactiveUsersView = false;
 			viewUsers = fetchAllUsers();
 			return "admuv";
 		} catch (Exception e) {
@@ -581,7 +576,7 @@ public class AdminController implements Serializable {
 			return "";
 		}
 	}
-	
+
 	public String showViewActiveUsers() {
 		try {
 			activeUsersView = true;
@@ -595,7 +590,7 @@ public class AdminController implements Serializable {
 			return "";
 		}
 	}
-	
+
 	public String showViewInactiveUsers() {
 		try {
 			activeUsersView = false;
@@ -633,7 +628,7 @@ public class AdminController implements Serializable {
 			return "";
 		}
 	}
-	
+
 	public String showEditActiveUser() {
 		try {
 			activeUsersView = true;
@@ -650,7 +645,7 @@ public class AdminController implements Serializable {
 			return "";
 		}
 	}
-	
+
 	public String showEditInActiveUser() {
 		try {
 			inactiveUsersView = true;
@@ -723,7 +718,7 @@ public class AdminController implements Serializable {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated user profile view request", "System error occurred, cannot perform updated user profile view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -862,7 +857,7 @@ public class AdminController implements Serializable {
 				if (Validator.isNotNull(user)) {
 					if (Base64.encodeBase64URLSafeString(DigestUtils.md5(secA.getBytes())).equalsIgnoreCase(userBean.getSecA())) {
 						WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rpw/");
-						ResponseMessage response = loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())) }, ResponseMessage.class);
+						ResponseMessage response = loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())), userBean.getPwd() }, ResponseMessage.class);
 						loginClient.close();
 						if (response.getStatusCode() == 0) {
 							FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
@@ -1656,7 +1651,7 @@ public class AdminController implements Serializable {
 			updateUserClient.close();
 			if (resetPasswd) {
 				WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rpw/");
-				loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5("Passw123".getBytes())) }, ResponseMessage.class);
+				loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5("Passw123".getBytes())), userBean.getPwd() }, ResponseMessage.class);
 				loginClient.close();
 				resetPasswd = false;
 			}
@@ -1669,19 +1664,18 @@ public class AdminController implements Serializable {
 			if (response.getStatusCode() == 0) {
 				FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "User '" + userBean.getfName() + "' updated successfully", "User '" + userBean.getfName() + "' updated successfully");
 				FacesContext.getCurrentInstance().addMessage(null, successMessage);
-				if(activeUsersView){
-				viewUsers = RESTServiceHelper.fetchActiveUsers();
-				return "admuav";
-				} else if(inactiveUsersView){
+				if (activeUsersView) {
+					viewUsers = RESTServiceHelper.fetchActiveUsers();
+					return "admuav";
+				} else if (inactiveUsersView) {
 					viewUsers = RESTServiceHelper.fetchInActiveUsers();
 					return "admuiv";
 				} else {
 					viewUsers = RESTServiceHelper.fetchAllUsers();
 					return "admuv";
-					
+
 				}
-				
-				
+
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update User", "Unable to update User");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -3324,8 +3318,6 @@ public class AdminController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
-			AccessController controller = new AccessController(userId);
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("accessBean", controller);
 			viewNewsBeans = fetchAllNews();
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -3520,7 +3512,7 @@ public class AdminController implements Serializable {
 	public void setClaimStatus(List<ListSelectorBean> claimStatus) {
 		this.claimStatus = claimStatus;
 	}
-	
+
 	public ClaimBean getClaimBean() {
 		if (claimBean == null)
 			claimBean = new ClaimBean();

@@ -32,8 +32,7 @@ public class IpIdeaGroup implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpIdeaGroup(Long igId, IpIdea ipIdea, IpGroup ipGroup,
-			Date igCrtdDt) {
+	public IpIdeaGroup(Long igId, IpIdea ipIdea, IpGroup ipGroup, Date igCrtdDt) {
 		this.igId = igId;
 		this.ipIdea = ipIdea;
 		this.ipGroup = ipGroup;

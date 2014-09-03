@@ -6,7 +6,7 @@
 				<p:outputLabel value="#{buildonController.buildon.tagDate}" />
 			</f:facet>
 			<f:facet name="footer">
-				<p:commandButton id="backBtn" value="Return to View" action="#{buildonController.showBuildon}" ajax="false">
+				<p:commandButton id="backBtn" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" action="#{buildonController.showBuildon}" ajax="false">
 					<f:param name="entityId" id="entityId" value="#{buildonController.entityId}" />
 					<f:param name="entityType" id="entityType" value="#{buildonController.entityType}" />
 					<f:param name="taggable" id="taggable" value="#{buildonController.taggable}" />

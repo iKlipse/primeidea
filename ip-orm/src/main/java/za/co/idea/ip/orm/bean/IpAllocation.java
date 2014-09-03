@@ -38,9 +38,7 @@ public class IpAllocation implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpAllocation(Integer allocId, String allocDesc, Integer allocVal,
-			String allocEntity, Integer allocStatusId, Date allocCrtdDt,
-			Set ipPointses) {
+	public IpAllocation(Integer allocId, String allocDesc, Integer allocVal, String allocEntity, Integer allocStatusId, Date allocCrtdDt, Set ipPointses) {
 		this.allocId = allocId;
 		this.allocDesc = allocDesc;
 		this.allocVal = allocVal;

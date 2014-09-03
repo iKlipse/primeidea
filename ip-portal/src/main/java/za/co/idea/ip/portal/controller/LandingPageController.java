@@ -76,8 +76,6 @@ public class LandingPageController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
-			AccessController controller = new AccessController(userId);
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("accessBean", controller);
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			viewIdeas = RESTServiceHelper.fetchAllIdeasByUser(userId);
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
@@ -263,7 +261,7 @@ public class LandingPageController implements Serializable {
 			showClaims = true;
 			showPoints = false;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}

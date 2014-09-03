@@ -22,6 +22,8 @@ import za.co.idea.ip.orm.bean.IpIdea;
 import za.co.idea.ip.orm.bean.IpIdeaCat;
 import za.co.idea.ip.orm.bean.IpIdeaGroup;
 import za.co.idea.ip.orm.bean.IpIdeaStatus;
+import za.co.idea.ip.orm.bean.IpNotif;
+import za.co.idea.ip.orm.bean.IpUser;
 import za.co.idea.ip.orm.dao.IpBlobDAO;
 import za.co.idea.ip.orm.dao.IpGroupDAO;
 import za.co.idea.ip.orm.dao.IpIdeaCatDAO;
@@ -29,6 +31,7 @@ import za.co.idea.ip.orm.dao.IpIdeaDAO;
 import za.co.idea.ip.orm.dao.IpIdeaGroupDAO;
 import za.co.idea.ip.orm.dao.IpIdeaStatusDAO;
 import za.co.idea.ip.orm.dao.IpNativeSQLDAO;
+import za.co.idea.ip.orm.dao.IpNotifDAO;
 import za.co.idea.ip.orm.dao.IpReviewDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
 import za.co.idea.ip.ws.bean.IdeaMessage;
@@ -49,6 +52,7 @@ public class IdeaService {
 	private IpGroupDAO ipGroupDAO;
 	private IpBlobDAO ipBlobDAO;
 	private IpReviewDAO ipReviewDAO;
+	private IpNotifDAO ipNotifDAO;
 
 	@GET
 	@Path("/idea/check/title/{title}")
@@ -239,6 +243,61 @@ public class IdeaService {
 					i++;
 				}
 			}
+
+			String subject = "";
+			String body = "";
+			boolean notification = false;
+			IpUser user = (IpUser) ipUserDAO.findById(idea.getCrtdById());
+			if (idea.getSetStatusId() != null && idea.getSetStatusId() == 3) {
+				notification = true;
+				subject = "Random Idea is under 'In Review' status";
+				body = "Your Idea, '" + idea.getIdeaTitle() + ": " + idea.getIdeaDesc() + "' has gone under review";
+
+			} else if (idea.getSetStatusId() != null && idea.getSetStatusId() == 4) {
+				notification = true;
+				subject = "Random Idea is Short-list status";
+				body = "Your Idea, '" + idea.getIdeaTitle() + ": " + idea.getIdeaDesc() + "' has been shortlitsed";
+
+			} else if (idea.getSetStatusId() != null && idea.getSetStatusId() == 5) {
+				notification = true;
+				subject = "Random Idea is Approved status";
+				body = "Your Idea, '" + idea.getIdeaTitle() + ": " + idea.getIdeaDesc() + "' has been Approved";
+
+			} else if (idea.getSetStatusId() != null && idea.getSetStatusId() == 6) {
+				notification = true;
+				subject = "Random Idea is Implemented status";
+				body = user.getUserScreenName() + "from '" + user.getIpGroup().getGroupName() + "' is an innovation champion. " + "Your Idea, '" + idea.getIdeaTitle() + ": " + idea.getIdeaDesc() + "' has been rolled out.";
+
+			} else if (idea.getSetStatusId() != null && idea.getSetStatusId() == 7) {
+				notification = true;
+				subject = "Random Idea is Parked status";
+				body = "Your Idea, '" + idea.getIdeaTitle() + ": " + idea.getIdeaDesc() + "' has gone under Parked status";
+
+			} else if (idea.getSetStatusId() != null && idea.getSetStatusId() == 8) {
+				notification = true;
+				subject = "Random Idea is Closed status";
+				body = "Your Idea, '" + idea.getIdeaTitle() + ": " + idea.getIdeaDesc() + "' has gone under Closed status";
+
+			}
+			if (notification) {
+				try {
+
+					IpNotif ipNotif = new IpNotif();
+					ipNotif.setNotifAttach(null);
+					ipNotif.setNotifId(java.util.UUID.randomUUID().toString());
+					ipNotif.setNotifStatus("n");
+					ipNotif.setNotifSubject(subject);
+					ipNotif.setNotifBody(body);
+					ipNotif.setNotifCrtdDate(new Date());
+					ipNotif.setNotifEntityId(null);
+					ipNotif.setNotifEntityTblName(null);
+					ipNotif.setNotifList(user.getUserEmail());
+					ipNotifDAO.save(ipNotif);
+				} catch (Exception e) {
+					logger.error("Error while creating notification: " + e);
+				}
+			}
+
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
@@ -725,5 +784,13 @@ public class IdeaService {
 
 	public void setIpReviewDAO(IpReviewDAO ipReviewDAO) {
 		this.ipReviewDAO = ipReviewDAO;
+	}
+
+	public IpNotifDAO getIpNotifDAO() {
+		return ipNotifDAO;
+	}
+
+	public void setIpNotifDAO(IpNotifDAO ipNotifDAO) {
+		this.ipNotifDAO = ipNotifDAO;
 	}
 }

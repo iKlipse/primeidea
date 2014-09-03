@@ -32,8 +32,7 @@ public class IpNotifGroup implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpNotifGroup(Long ingId, String ingNotifId, Long ingGrpId,
-			Date ingCrtdDt) {
+	public IpNotifGroup(Long ingId, String ingNotifId, Long ingGrpId, Date ingCrtdDt) {
 		this.ingId = ingId;
 		this.ingNotifId = ingNotifId;
 		this.ingGrpId = ingGrpId;

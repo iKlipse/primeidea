@@ -117,7 +117,7 @@ public class IpGroupDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
-	
+
 	public List findActiveGroups() {
 		log.debug("finding all active  IpGroup instances by query: getGroupsByStatus");
 		try {
@@ -130,7 +130,7 @@ public class IpGroupDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
-	
+
 	public List findInActiveGroups() {
 		log.debug("finding all In active IpGroup instances by query: getGroupsByStatus ");
 		try {
@@ -189,6 +189,7 @@ public class IpGroupDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
+
 	public static IpGroupDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (IpGroupDAO) ctx.getBean("IpGroupDAO");
 	}

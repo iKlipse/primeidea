@@ -49,7 +49,7 @@
 			<p:commandButton id="btnSumSolSubmit" value="Submit a Solution" ajax="false" action="#{challengeController.showSubmitSolution}" rendered="#{challengeController.challengeBean.statusId == 4}">
 				<f:param name="chalId" value="#{challengeController.challengeBean.id}" />
 			</p:commandButton>
-			<p:commandButton id="btnEdtCancel" value="Return To View" ajax="false" action="#{challengeController.redirectMain}">
+			<p:commandButton id="btnEdtCancel" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" ajax="false" action="#{challengeController.redirectMain}">
 				<f:setPropertyActionListener value="2" target="#{landingPageController.toView}" />
 				<f:setPropertyActionListener value="2" target="#{challengeController.toView}" />
 			</p:commandButton>

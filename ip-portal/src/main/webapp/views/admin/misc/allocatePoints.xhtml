@@ -20,7 +20,7 @@
 						<p:ajax listener="#{adminController.updateAllocationChange}" update="ttxtPointVal" />
 						<f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true" />
 						<f:selectItem itemLabel="Custom Allocation" itemValue="0" />
-						<f:selectItems value="#{adminController.allocs}" var="a" itemLabel="#{a.allocDesc}" itemValue="#{a.allocId}" />
+						<!-- <f:selectItems value="#{adminController.allocs}" var="a" itemLabel="#{a.allocDesc}" itemValue="#{a.allocId}" />-->
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>

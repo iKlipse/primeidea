@@ -11,11 +11,14 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.portlet.PortletRequest;
 
+import org.apache.log4j.Logger;
+
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.User;
 
 public class SessionPhaseListener implements PhaseListener {
 	private static final long serialVersionUID = 3201240827257809143L;
+	private static final Logger logger = Logger.getLogger(SessionPhaseListener.class);
 
 	public void afterPhase(PhaseEvent pe) {
 		System.out.println(pe.getPhaseId() + " :: " + pe.getFacesContext().getViewRoot());
@@ -32,9 +35,9 @@ public class SessionPhaseListener implements PhaseListener {
 				url = new URL(request.getScheme(), request.getServerName(), request.getServerPort(), "/c/portal/logout").toString();
 				FacesContext.getCurrentInstance().getExternalContext().redirect(url);
 			} catch (MalformedURLException e) {
-				e.printStackTrace();
+				logger.error(e, e);
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error(e, e);
 			}
 		}
 	}

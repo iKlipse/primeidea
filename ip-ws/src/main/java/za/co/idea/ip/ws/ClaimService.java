@@ -1,6 +1,7 @@
 package za.co.idea.ip.ws;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -11,13 +12,17 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpClaim;
 import za.co.idea.ip.orm.bean.IpClaimStatus;
+import za.co.idea.ip.orm.bean.IpNotif;
+import za.co.idea.ip.orm.bean.IpUser;
 import za.co.idea.ip.orm.dao.IpClaimDAO;
 import za.co.idea.ip.orm.dao.IpClaimStatusDAO;
+import za.co.idea.ip.orm.dao.IpNotifDAO;
 import za.co.idea.ip.orm.dao.IpRewardsDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
 import za.co.idea.ip.ws.bean.ClaimMessage;
@@ -27,10 +32,12 @@ import za.co.idea.ip.ws.bean.ResponseMessage;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Path(value = "/cls")
 public class ClaimService {
+	private static final Logger logger = Logger.getLogger(ClaimService.class);
 	private IpUserDAO ipUserDAO;
 	private IpClaimDAO ipClaimDAO;
 	private IpClaimStatusDAO ipClaimStatusDAO;
 	private IpRewardsDAO ipRewardsDAO;
+	private IpNotifDAO ipNotifDAO;
 
 	@POST
 	@Path("/claim/add")
@@ -47,12 +54,28 @@ public class ClaimService {
 			ipClaim.setIpRewards(ipRewardsDAO.findById(claim.getRewardsId()));
 			ipClaim.setIpUser(ipUserDAO.findById(claim.getUserId()));
 			ipClaimDAO.save(ipClaim);
+			try {
+				IpUser user = (IpUser) ipUserDAO.findById(claim.getUserId());
+				IpNotif ipNotif = new IpNotif();
+				ipNotif.setNotifAttach(null);
+				ipNotif.setNotifId(java.util.UUID.randomUUID().toString());
+				ipNotif.setNotifStatus("n");
+				ipNotif.setNotifSubject("Claim Submitted");
+				ipNotif.setNotifBody("You have claimed for reward: " + ipRewardsDAO.findById(claim.getRewardsId()).getRwTitle());
+				ipNotif.setNotifCrtdDate(new Date());
+				ipNotif.setNotifEntityId(null);
+				ipNotif.setNotifEntityTblName(null);
+				ipNotif.setNotifList(user.getUserEmail());
+				ipNotifDAO.save(ipNotif);
+			} catch (Exception e) {
+				logger.error("Error while creating : " + e);
+			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -76,12 +99,46 @@ public class ClaimService {
 			ipClaim.setIpUser(ipUserDAO.findById(claim.getUserId()));
 			ipClaim.setClaimComment(claim.getClaimComment());
 			ipClaimDAO.merge(ipClaim);
+			String subject = "";
+			String body = "";
+			boolean notification = false;
+			if (claim.getcStatusId() != null && claim.getcStatusId() == 2) {
+				notification = true;
+				subject = "Claim is Approved status";
+				body = "Your Reward '" + ipRewardsDAO.findById(claim.getRewardsId()).getRwTitle() + "' is on its way";
+			} else if (claim.getcStatusId() != null && claim.getcStatusId() == 3) {
+				notification = true;
+				subject = "Claim is Rejected status";
+				body = "You have just missed it, Reward '" + ipRewardsDAO.findById(claim.getRewardsId()).getRwTitle() + "' cannot be claimed";
+			} else if (claim.getcStatusId() != null && claim.getcStatusId() == 4) {
+				notification = true;
+				subject = "Claim is Delivered status";
+				body = "Your Reward '" + ipRewardsDAO.findById(claim.getRewardsId()).getRwTitle() + "' has delivered";
+			}
+			if (notification) {
+				try {
+					IpUser user = (IpUser) ipUserDAO.findById(claim.getUserId());
+					IpNotif ipNotif = new IpNotif();
+					ipNotif.setNotifAttach(null);
+					ipNotif.setNotifId(java.util.UUID.randomUUID().toString());
+					ipNotif.setNotifStatus("n");
+					ipNotif.setNotifSubject(subject);
+					ipNotif.setNotifBody(body);
+					ipNotif.setNotifCrtdDate(new Date());
+					ipNotif.setNotifEntityId(null);
+					ipNotif.setNotifEntityTblName(null);
+					ipNotif.setNotifList(user.getUserEmail());
+					ipNotifDAO.save(ipNotif);
+				} catch (Exception e) {
+					logger.error("Error while creating notification: " + e);
+				}
+			}
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
 			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(1);
 			message.setStatusDesc(e.getMessage());
@@ -113,7 +170,7 @@ public class ClaimService {
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -137,7 +194,7 @@ public class ClaimService {
 			message.setUserName(claim.getIpUser().getUserScreenName());
 			message.setcStatusName(claim.getIpClaimStatus().getCsDesc());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return message;
 	}
@@ -166,7 +223,7 @@ public class ClaimService {
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -195,7 +252,7 @@ public class ClaimService {
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -217,7 +274,7 @@ public class ClaimService {
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -239,7 +296,7 @@ public class ClaimService {
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return ret;
 	}
@@ -256,7 +313,7 @@ public class ClaimService {
 			message.setId(status.getCsId());
 			message.setDesc(status.getCsDesc());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 		return message;
 	}
@@ -291,6 +348,14 @@ public class ClaimService {
 
 	public void setIpRewardsDAO(IpRewardsDAO ipRewardsDAO) {
 		this.ipRewardsDAO = ipRewardsDAO;
+	}
+
+	public IpNotifDAO getIpNotifDAO() {
+		return ipNotifDAO;
+	}
+
+	public void setIpNotifDAO(IpNotifDAO ipNotifDAO) {
+		this.ipNotifDAO = ipNotifDAO;
 	}
 
 }

@@ -12,6 +12,7 @@
 		<property name="ipFuncGroupDAO" ref="IpFuncGroupDAO" />
 		<property name="ipBlobDAO" ref="IpBlobDAO" />
 		<property name="ipSecqListDAO" ref="IpSecqListDAO" />
+		<property name="ipNotifDAO" ref="IpNotifDAO" />
 	</bean>
 	<bean id="ideaService" class="za.co.idea.ip.ws.IdeaService">
 		<property name="ipIdeaCatDAO" ref="IpIdeaCatDAO" />
@@ -23,6 +24,7 @@
 		<property name="ipNativeSQLDAO" ref="IpNativeSQLDAO" />
 		<property name="ipBlobDAO" ref="IpBlobDAO" />
 		<property name="ipReviewDAO" ref="IpReviewDAO" />
+		<property name="ipNotifDAO" ref="IpNotifDAO" />
 	</bean>
 	<bean id="tagService" class="za.co.idea.ip.ws.TagService">
 		<property name="ipChallengeDAO" ref="IpChallengeDAO" />
@@ -44,6 +46,7 @@
 		<property name="ipChallengeGroupDAO" ref="IpChallengeGroupDAO" />
 		<property name="ipBlobDAO" ref="IpBlobDAO" />
 		<property name="ipReviewDAO" ref="IpReviewDAO" />
+		<property name="ipNotifDAO" ref="IpNotifDAO" />
 	</bean>
 	<bean id="solutionService" class="za.co.idea.ip.ws.SolutionService">
 		<property name="ipSolutionCatDAO" ref="IpSolutionCatDAO" />
@@ -54,6 +57,7 @@
 		<property name="ipBlobDAO" ref="IpBlobDAO" />
 		<property name="ipReviewDAO" ref="IpReviewDAO" />
 		<property name="ipNativeSQLDAO" ref="IpNativeSQLDAO" />
+		<property name="ipNotifDAO" ref="IpNotifDAO" />
 	</bean>
 	<bean id="rewardsService" class="za.co.idea.ip.ws.RewardsService" lazy-init="false">
 		<property name="ipUserDAO" ref="IpUserDAO" />
@@ -71,6 +75,7 @@
 		<property name="ipClaimDAO" ref="IpClaimDAO" />
 		<property name="ipClaimStatusDAO" ref="IpClaimStatusDAO" />
 		<property name="ipRewardsDAO" ref="IpRewardsDAO" />
+		<property name="ipNotifDAO" ref="IpNotifDAO" />
 	</bean>
 	<bean id="metaDataService" class="za.co.idea.ip.ws.MetaDataService">
 		<property name="ipChallengeCatDAO" ref="IpChallengeCatDAO" />
@@ -156,14 +161,13 @@
 		</property>
 	</bean>
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="smtp.gmail.com" />
-		<property name="port" value="587" />
-		<property name="username" value="venu@iklipse.co.za" />
-		<property name="password" value="Pa%5W0Rd01" />
 		<property name="javaMailProperties">
 			<props>
-				<prop key="mail.smtp.auth">true</prop>
-				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.smtp.host">vpbrjhbpexc02.corp.primedia.co.za</prop>
+				<prop key="mail.smtp.port">25</prop>
+				<prop key="mail.smtp.auth">false</prop>
+				<prop key="mail.smtp.starttls.enable">false</prop>
+				<prop key="mail.debug">true</prop>
 			</props>
 		</property>
 	</bean>

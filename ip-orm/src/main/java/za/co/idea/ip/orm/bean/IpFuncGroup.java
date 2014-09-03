@@ -33,8 +33,7 @@ public class IpFuncGroup implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpFuncGroup(Long fgId, IpGroup ipGroup, IpFunction ipFunction,
-			Date fgCrtdDt) {
+	public IpFuncGroup(Long fgId, IpGroup ipGroup, IpFunction ipFunction, Date fgCrtdDt) {
 		this.fgId = fgId;
 		this.ipGroup = ipGroup;
 		this.ipFunction = ipFunction;

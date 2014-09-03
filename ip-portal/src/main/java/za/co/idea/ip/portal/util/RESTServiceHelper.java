@@ -17,6 +17,7 @@ import za.co.idea.ip.portal.bean.GroupBean;
 import za.co.idea.ip.portal.bean.IdeaBean;
 import za.co.idea.ip.portal.bean.ListSelectorBean;
 import za.co.idea.ip.portal.bean.PointBean;
+import za.co.idea.ip.portal.bean.ReviewBean;
 import za.co.idea.ip.portal.bean.RewardsBean;
 import za.co.idea.ip.portal.bean.SolutionBean;
 import za.co.idea.ip.portal.bean.TagBean;
@@ -28,6 +29,7 @@ import za.co.idea.ip.ws.bean.IdeaMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.PointMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
+import za.co.idea.ip.ws.bean.ReviewMessage;
 import za.co.idea.ip.ws.bean.RewardsMessage;
 import za.co.idea.ip.ws.bean.SolutionMessage;
 import za.co.idea.ip.ws.bean.TagMessage;
@@ -74,7 +76,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static List<UserBean> fetchActiveUsers() {
 		List<UserBean> ret = new ArrayList<UserBean>();
 		WebClient viewUsersClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/active/list");
@@ -103,7 +105,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static List<UserBean> fetchInActiveUsers() {
 		List<UserBean> ret = new ArrayList<UserBean>();
 		WebClient viewUsersClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/inActive/list");
@@ -155,7 +157,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static List<GroupBean> fetchActiveGroups() {
 		List<GroupBean> ret = new ArrayList<GroupBean>();
 		WebClient viewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/active/list");
@@ -244,8 +246,8 @@ public class RESTServiceHelper {
 			bean.setFileName(ideaMessage.getFileName());
 			bean.setImgAvail(ideaMessage.isImgAvail());
 			bean.setStatusName(ideaMessage.getStatusName());
-			String status=ideaMessage.getStatusName();			
-			if(userId!=0 && status!=null && !(status.equals("Draft") || status.equals("Open")))
+			String status = ideaMessage.getStatusName();
+			if (userId != 0 && status != null && !(status.equals("Draft") || status.equals("Open")))
 				bean.setDisableEdit(true);
 			else
 				bean.setDisableEdit(false);
@@ -276,13 +278,13 @@ public class RESTServiceHelper {
 			bean.setBlobUrl(ideaMessage.getBlobUrl());
 			bean.setFileName(ideaMessage.getFileName());
 			bean.setImgAvail(ideaMessage.isImgAvail());
-			bean.setStatusName(ideaMessage.getStatusName());			
-			String status=ideaMessage.getStatusName();			
-			if(userId!=0 && status!=null && !(status.equals("Draft") || status.equals("Open")))
+			bean.setStatusName(ideaMessage.getStatusName());
+			String status = ideaMessage.getStatusName();
+			if (userId != 0 && status != null && !(status.equals("Draft") || status.equals("Open")))
 				bean.setDisableEdit(true);
 			else
 				bean.setDisableEdit(false);
-			
+
 			ret.add(bean);
 		}
 		return ret;
@@ -311,9 +313,9 @@ public class RESTServiceHelper {
 			bean.setFileName(ideaMessage.getFileName());
 			bean.setImgAvail(ideaMessage.isImgAvail());
 			bean.setStatusName(ideaMessage.getStatusName());
-			bean.setRevUserId(ideaMessage.getRevUserId());			
-			String checkstatus=ideaMessage.getStatusName();			
-			if(userId!=0 && checkstatus!=null && !(checkstatus.equals("Draft") || checkstatus.equals("Open")))
+			bean.setRevUserId(ideaMessage.getRevUserId());
+			String checkstatus = ideaMessage.getStatusName();
+			if (userId != 0 && checkstatus != null && !(checkstatus.equals("Draft") || checkstatus.equals("Open")))
 				bean.setDisableEdit(true);
 			else
 				bean.setDisableEdit(false);
@@ -375,8 +377,8 @@ public class RESTServiceHelper {
 			bean.setImgAvail(ideaMessage.isImgAvail());
 			bean.setStatusName(ideaMessage.getStatusName());
 			bean.setRevUserId(ideaMessage.getRevUserId());
-			String checkstatus=ideaMessage.getStatusName();			
-			if(userId!=0 && checkstatus!=null && !(checkstatus.equals("Draft") || checkstatus.equals("Open")))
+			String checkstatus = ideaMessage.getStatusName();
+			if (userId != 0 && checkstatus != null && !(checkstatus.equals("Draft") || checkstatus.equals("Open")))
 				bean.setDisableEdit(true);
 			else
 				bean.setDisableEdit(false);
@@ -536,7 +538,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static List<RewardsBean> fetchAllWishlistByUser(Long userId) {
 		fetchAllPointsByUser(userId);
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
@@ -565,7 +567,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static Long calculateTotal(List<PointBean> pntBeans) {
 		Long ret = 0l;
 		for (PointBean pointBean : pntBeans)
@@ -696,13 +698,13 @@ public class RESTServiceHelper {
 			bean.setFileName(challengeMessage.getFileName());
 			bean.setImgAvail(challengeMessage.isImgAvail());
 			bean.setRevUserId(challengeMessage.getRevUserId());
-			String chalStatus=challengeMessage.getStatusName();
-			if(userId!=0 && chalStatus!=null && !(chalStatus.equals("Draft") && chalStatus.equals("Publish"))) {
+			String chalStatus = challengeMessage.getStatusName();
+			if (userId != 0 && chalStatus != null && !(chalStatus.equals("Draft") && chalStatus.equals("Publish"))) {
 				bean.setDisableEdit(true);
-			}else {
+			} else {
 				bean.setDisableEdit(false);
 			}
-			
+
 			ret.add(bean);
 		}
 		return ret;
@@ -731,10 +733,10 @@ public class RESTServiceHelper {
 			bean.setBlobUrl(solutionMessage.getBlobUrl());
 			bean.setFileName(solutionMessage.getFileName());
 			bean.setRevUserId(solutionMessage.getRevUserId());
-			String solStatus=solutionMessage.getStatusName();
-			if(userId!=0 && solStatus!=null && !(solStatus.equals("Draft") && solStatus.equals("Open"))) {
+			String solStatus = solutionMessage.getStatusName();
+			if (userId != 0 && solStatus != null && !(solStatus.equals("Draft") && solStatus.equals("Open"))) {
 				bean.setDisableEdit(true);
-			}else {
+			} else {
 				bean.setDisableEdit(false);
 			}
 			ret.add(bean);
@@ -811,7 +813,7 @@ public class RESTServiceHelper {
 		addTagClient.close();
 		return response;
 	}
-	
+
 	public static List<TagBean> fetchAllBuildOns(Long entityId, int entityType) {
 		WebClient fetchIdeaBuildOnsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + entityId + "/" + entityType + "/3");
 		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaBuildOnsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
@@ -830,7 +832,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static List<ClaimBean> fetchAllClaims() {
 		List<ClaimBean> ret = new ArrayList<ClaimBean>();
 		WebClient fetchClaimClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cls/claim/list");
@@ -851,7 +853,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static List<ListSelectorBean> fetchNextClaimStatuses(Integer statusId) {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewClaimSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cls/claim/status/list/" + statusId);
@@ -865,6 +867,29 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
-	
+
+	// Review Section
+	public static List<ReviewBean> fetchReviews(Long entityId, String tblNm) {
+		List<ReviewBean> ret = new ArrayList<ReviewBean>();
+		for (int i = 1; i <= 5; i++) {
+			WebClient fetchReviewsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rvs/review/list/" + entityId + "/" + tblNm + "/" + i);
+			ReviewMessage add = fetchReviewsClient.accept(MediaType.APPLICATION_JSON).get(ReviewMessage.class);
+			if (add != null && add.getGroupId() != null && add.getGroupId().length > 0) {
+				ReviewBean bean = new ReviewBean();
+				bean.setEntityId(add.getEntityId());
+				bean.setGroupId(toStringArray(add.getGroupId()));
+				bean.setStatusId(add.getStatusId());
+				bean.setTblNm(add.getTblNm());
+				ret.add(bean);
+			}
+		}
+		return ret;
+	}
+
+	private static String[] toStringArray(Long[] val) {
+		String[] ret = new String[val.length];
+		for (int i = 0; i < val.length; i++)
+			ret[i] = val[i].toString();
+		return ret;
+	}
 }

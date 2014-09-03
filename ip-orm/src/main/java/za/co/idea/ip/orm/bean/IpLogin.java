@@ -30,9 +30,7 @@ public class IpLogin implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpLogin(Long loginId, IpUser ipUser, IpSecqList ipSecqList,
-			String loginName, String loginPwd, String loginSecA,
-			Date loginCrtdDt) {
+	public IpLogin(Long loginId, IpUser ipUser, IpSecqList ipSecqList, String loginName, String loginPwd, String loginSecA, Date loginCrtdDt) {
 		this.loginId = loginId;
 		this.ipUser = ipUser;
 		this.ipSecqList = ipSecqList;
@@ -43,9 +41,7 @@ public class IpLogin implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpLogin(Long loginId, IpUser ipUser, IpSecqList ipSecqList,
-			String loginName, String loginPwd, Date loginLastDt,
-			String loginSecA, Date loginCrtdDt) {
+	public IpLogin(Long loginId, IpUser ipUser, IpSecqList ipSecqList, String loginName, String loginPwd, Date loginLastDt, String loginSecA, Date loginCrtdDt) {
 		this.loginId = loginId;
 		this.ipUser = ipUser;
 		this.ipSecqList = ipSecqList;

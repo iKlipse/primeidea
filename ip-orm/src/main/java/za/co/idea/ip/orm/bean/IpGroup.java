@@ -48,12 +48,7 @@ public class IpGroup implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpGroup(Long groupId, IpUser ipUser, IpGroup ipGroup,
-			String groupName, String groupStatus, String groupEmail,
-			String groupIsCore, Date groupCrtdDt, Set ipUsers,
-			Set ipReviews, Set ipIdeaGroups, Set ipGroupUsers,
-			Set ipFuncGroups, Set ipRewardsGroups, Set ipGroups,
-			Set ipChallengeGroups) {
+	public IpGroup(Long groupId, IpUser ipUser, IpGroup ipGroup, String groupName, String groupStatus, String groupEmail, String groupIsCore, Date groupCrtdDt, Set ipUsers, Set ipReviews, Set ipIdeaGroups, Set ipGroupUsers, Set ipFuncGroups, Set ipRewardsGroups, Set ipGroups, Set ipChallengeGroups) {
 		this.groupId = groupId;
 		this.ipUser = ipUser;
 		this.ipGroup = ipGroup;

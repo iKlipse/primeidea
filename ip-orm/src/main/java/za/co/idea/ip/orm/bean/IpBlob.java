@@ -36,9 +36,7 @@ public class IpBlob implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpBlob(Long blobId, String blobName, String blobContentType,
-			String blobContent, Long blobEntityId, String blobEntityTblNm,
-			Long blobSize, Date blobCrtdDt) {
+	public IpBlob(Long blobId, String blobName, String blobContentType, String blobContent, Long blobEntityId, String blobEntityTblNm, Long blobSize, Date blobCrtdDt) {
 		this.blobId = blobId;
 		this.blobName = blobName;
 		this.blobContentType = blobContentType;

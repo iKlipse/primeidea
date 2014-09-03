@@ -32,8 +32,7 @@ public class IpChallengeGroup implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpChallengeGroup(Long cgId, IpChallenge ipChallenge,
-			IpGroup ipGroup, Date cgCrtdDt) {
+	public IpChallengeGroup(Long cgId, IpChallenge ipChallenge, IpGroup ipGroup, Date cgCrtdDt) {
 		this.cgId = cgId;
 		this.ipChallenge = ipChallenge;
 		this.ipGroup = ipGroup;

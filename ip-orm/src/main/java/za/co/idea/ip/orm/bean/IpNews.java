@@ -34,8 +34,7 @@ public class IpNews implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpNews(Long newsId, String newsTitle, Date newsStartDate,
-			Date newsEndDate, String newsContent, Date newsCrtdDt) {
+	public IpNews(Long newsId, String newsTitle, Date newsStartDate, Date newsEndDate, String newsContent, Date newsCrtdDt) {
 		this.newsId = newsId;
 		this.newsTitle = newsTitle;
 		this.newsStartDate = newsStartDate;
