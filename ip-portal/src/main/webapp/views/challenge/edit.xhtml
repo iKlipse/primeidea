@@ -4,7 +4,7 @@
 			<p:outputLabel id="lblEdtCTitle" value="Title : " />
 		</p:column>
 		<p:column>
-			<p:inputText autocomplete="false" id="txtEdtCTitle" value="#{challengeController.challengeBean.title}">
+			<p:inputText autocomplete="false" id="txtEdtCTitle" value="#{challengeController.challengeBean.title}" disabled="#{challengeController.challengeBean.disableField}">
 				<p:ajax listener="#{challengeController.checkChalTitleAvailability}" event="change" update="frmEditChalMsg" />
 			</p:inputText>
 		</p:column>
@@ -12,7 +12,7 @@
 			<p:outputLabel id="lblEdtCCat" value="Category : " />
 		</p:column>
 		<p:column>
-			<p:selectOneMenu id="somEdtCCat" value="#{challengeController.challengeBean.catId}" filter="true" filterMatchMode="contains">
+			<p:selectOneMenu id="somEdtCCat" value="#{challengeController.challengeBean.catId}" filter="true" filterMatchMode="contains" disabled="#{challengeController.challengeBean.disableField}">
 				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 				<f:selectItems value="#{challengeController.challengeCats}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
 			</p:selectOneMenu>
@@ -30,19 +30,20 @@
 			<p:outputLabel id="lblEdtCDesc" value="Description : " />
 		</p:column>
 		<p:column>
-			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="txtEdtCDesc" value="#{challengeController.challengeBean.desc}" />
+			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="txtEdtCDesc" value="#{challengeController.challengeBean.desc}" rendered="#{!challengeController.challengeBean.disableField}" />
+			<p:outputLabel id="outEdtCDesc" value="#{challengeController.challengeBean.desc}" rendered="#{challengeController.challengeBean.disableField}" escape="false"/>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtCHoverText" value="Hover Text : " />
 		</p:column>
 		<p:column>
-			<p:inputText autocomplete="false" id="txtEdtCHoverText" value="#{challengeController.challengeBean.hoverText}" />
+			<p:inputText autocomplete="false" id="txtEdtCHoverText" value="#{challengeController.challengeBean.hoverText}" disabled="#{challengeController.challengeBean.disableField}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtCLaunchDt" value="Launch Date : " />
 		</p:column>
 		<p:column>
-			<p:calendar mode="popup" showOn="button" id="txtEdtCLaunchDt" value="#{challengeController.challengeBean.launchDt}" pattern="yyyy/MM/dd HH:mm">
+			<p:calendar mode="popup" showOn="button" id="txtEdtCLaunchDt" value="#{challengeController.challengeBean.launchDt}" pattern="yyyy/MM/dd HH:mm" disabled="#{challengeController.challengeBean.disableField}">
 				<p:ajax event="blur" update="txtEdtCExpiryDt" />
 			</p:calendar>
 		</p:column>
@@ -50,13 +51,13 @@
 			<p:outputLabel id="lblEdtCExpiryDt" value="Expiry Date : " />
 		</p:column>
 		<p:column>
-			<p:calendar mode="popup" showOn="button" id="txtEdtCExpiryDt" value="#{challengeController.challengeBean.exprDt}" pattern="yyyy/MM/dd HH:mm" mindate="#{challengeController.challengeBean.launchDt}" />
+			<p:calendar mode="popup" showOn="button" id="txtEdtCExpiryDt" value="#{challengeController.challengeBean.exprDt}" pattern="yyyy/MM/dd HH:mm" mindate="#{challengeController.challengeBean.launchDt}" disabled="#{challengeController.challengeBean.disableField}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtCTag" value="Keywords to Describe Your Challenge : " />
 		</p:column>
 		<p:column>
-			<p:inputText autocomplete="false" id="txtEdtCTag" value="#{challengeController.challengeBean.tag}" />
+			<p:inputText autocomplete="false" id="txtEdtCTag" value="#{challengeController.challengeBean.tag}" disabled="#{challengeController.challengeBean.disableField}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtIDownload" value="Download File : " />
@@ -68,10 +69,10 @@
 				<p:outputLabel value="#{challengeController.challengeBean.fileName}" style="font-weight: 0.6em" />
 			</h:outputLink>
 		</p:column>
-		<p:column>
+		<p:column rendered="#{!challengeController.challengeBean.disableField}">
 			<p:outputLabel id="lblEdtCUpload" value="Upload File : " />
 		</p:column>
-		<p:column>
+		<p:column rendered="#{!challengeController.challengeBean.disableField}">
 			<p:fileUpload id="fuEdtCUpload" fileUploadListener="#{challengeController.chalFileUploadHandle}" multiple="false" />
 		</p:column>
 		<p:column>
@@ -79,7 +80,7 @@
 		</p:column>
 		<p:column>
 			<!-- <p:pickList id="plEdtGroupPick" converter="groupConverter" value="#{challengeController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" /> -->
-			<p:selectCheckboxMenu id="scmGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{challengeController.selGrpId}">
+			<p:selectCheckboxMenu id="scmGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{challengeController.selGrpId}" disabled="#{challengeController.challengeBean.disableField}">
 				<f:selectItems value="#{challengeController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 			</p:selectCheckboxMenu>
 		</p:column>
@@ -91,7 +92,7 @@
 				<f:setPropertyActionListener value="2" target="#{landingPageController.toView}" />
 				<f:setPropertyActionListener value="2" target="#{challengeController.toView}" />
 			</p:commandButton>
-			<p:commandButton id="btnEdtARv" value="Assign Reviewers" type="button" onclick="PF('dlgRwUpd').show();" />
+			<p:commandButton id="btnEdtARv" value="Assign Reviewers" type="button" onclick="PF('dlgRwUpd').show();" rendered="#{!challengeController.challengeBean.disableField}"/>
 		</f:facet>
 	</p:panelGrid>
 	<p:dialog id="dlgRwUpd" widgetVar="dlgRwUpd" modal="true">

@@ -31,6 +31,7 @@ public class IdeaBean implements Serializable {
 	private Long revUserId;
 	private String statusName;
 	private boolean disableEdit;
+	private boolean disableField;
 
 	public Long getIdeaId() {
 		return ideaId;
@@ -214,5 +215,17 @@ public class IdeaBean implements Serializable {
 
 	public void setDisableEdit(boolean disableEdit) {
 		this.disableEdit = disableEdit;
+	}
+
+	public boolean isDisableField() {
+		if (setStatusId > 2)
+			disableField = true;
+		else
+			disableField = false;
+		return disableField;
+	}
+
+	public void setDisableField(boolean disableField) {
+		this.disableField = disableField;
 	}
 }

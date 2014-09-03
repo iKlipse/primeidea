@@ -18,12 +18,12 @@
 		</p:column>
 		<p:column width="13%" filterBy="#{solution.crtdDt}" filterMatchMode="contains" sortBy="#{solution.crtdDt}">
 			<f:facet name="header">Created Date</f:facet>
-			<p:outputLabel id="somVwACrtdDt" value="#{solution.crtdDt}" >
-			   <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss"></f:convertDateTime>
+			<p:outputLabel id="somVwACrtdDt" value="#{solution.crtdDt}">
+				<f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss"></f:convertDateTime>
 			</p:outputLabel>
 		</p:column>
 		<p:column width="8%">
-			<p:commandButton id="viewVwButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{challengeController.showEditSolution}" rendered="#{!solution.disableEdit}">
+			<p:commandButton id="viewVwButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{challengeController.showEditSolution}">
 				<f:setPropertyActionListener value="#{solution}" target="#{challengeController.solutionBean}" />
 				<f:setPropertyActionListener value="3" target="#{challengeController.returnView}" />
 			</p:commandButton>

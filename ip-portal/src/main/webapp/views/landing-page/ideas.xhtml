@@ -18,7 +18,7 @@
 					<p:column colspan="2">
 						<p:commandButton id="dynaButton" title="Options" type="button" icon="ui-icon-gear" />
 						<p:menu style="vertical-align: middle !important; float: right !important" overlay="true" trigger="dynaButton" my="left top" at="left bottom">
-							<p:menuitem value="Edit" ajax="false" immediate="true" action="#{randomIdeaController.showEditIdea}" rendered="#{!idea.disableEdit}">
+							<p:menuitem value="Edit" ajax="false" immediate="true" action="#{randomIdeaController.showEditIdea}">
 								<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
 								<f:setPropertyActionListener value="1" target="#{randomIdeaController.returnView}" />
 							</p:menuitem>

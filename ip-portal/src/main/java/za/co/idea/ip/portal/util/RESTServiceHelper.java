@@ -246,11 +246,6 @@ public class RESTServiceHelper {
 			bean.setFileName(ideaMessage.getFileName());
 			bean.setImgAvail(ideaMessage.isImgAvail());
 			bean.setStatusName(ideaMessage.getStatusName());
-			String status = ideaMessage.getStatusName();
-			if (userId != 0 && status != null && !(status.equals("Draft") || status.equals("Open")))
-				bean.setDisableEdit(true);
-			else
-				bean.setDisableEdit(false);
 			ret.add(bean);
 		}
 		return ret;
@@ -279,12 +274,6 @@ public class RESTServiceHelper {
 			bean.setFileName(ideaMessage.getFileName());
 			bean.setImgAvail(ideaMessage.isImgAvail());
 			bean.setStatusName(ideaMessage.getStatusName());
-			String status = ideaMessage.getStatusName();
-			if (userId != 0 && status != null && !(status.equals("Draft") || status.equals("Open")))
-				bean.setDisableEdit(true);
-			else
-				bean.setDisableEdit(false);
-
 			ret.add(bean);
 		}
 		return ret;
@@ -314,11 +303,6 @@ public class RESTServiceHelper {
 			bean.setImgAvail(ideaMessage.isImgAvail());
 			bean.setStatusName(ideaMessage.getStatusName());
 			bean.setRevUserId(ideaMessage.getRevUserId());
-			String checkstatus = ideaMessage.getStatusName();
-			if (userId != 0 && checkstatus != null && !(checkstatus.equals("Draft") || checkstatus.equals("Open")))
-				bean.setDisableEdit(true);
-			else
-				bean.setDisableEdit(false);
 			ret.add(bean);
 		}
 		return ret;
@@ -377,11 +361,6 @@ public class RESTServiceHelper {
 			bean.setImgAvail(ideaMessage.isImgAvail());
 			bean.setStatusName(ideaMessage.getStatusName());
 			bean.setRevUserId(ideaMessage.getRevUserId());
-			String checkstatus = ideaMessage.getStatusName();
-			if (userId != 0 && checkstatus != null && !(checkstatus.equals("Draft") || checkstatus.equals("Open")))
-				bean.setDisableEdit(true);
-			else
-				bean.setDisableEdit(false);
 			ret.add(bean);
 		}
 		return ret;
@@ -698,13 +677,6 @@ public class RESTServiceHelper {
 			bean.setFileName(challengeMessage.getFileName());
 			bean.setImgAvail(challengeMessage.isImgAvail());
 			bean.setRevUserId(challengeMessage.getRevUserId());
-			String chalStatus = challengeMessage.getStatusName();
-			if (userId != 0 && chalStatus != null && !(chalStatus.equals("Draft") && chalStatus.equals("Publish"))) {
-				bean.setDisableEdit(true);
-			} else {
-				bean.setDisableEdit(false);
-			}
-
 			ret.add(bean);
 		}
 		return ret;
@@ -733,12 +705,6 @@ public class RESTServiceHelper {
 			bean.setBlobUrl(solutionMessage.getBlobUrl());
 			bean.setFileName(solutionMessage.getFileName());
 			bean.setRevUserId(solutionMessage.getRevUserId());
-			String solStatus = solutionMessage.getStatusName();
-			if (userId != 0 && solStatus != null && !(solStatus.equals("Draft") && solStatus.equals("Open"))) {
-				bean.setDisableEdit(true);
-			} else {
-				bean.setDisableEdit(false);
-			}
 			ret.add(bean);
 		}
 		return ret;

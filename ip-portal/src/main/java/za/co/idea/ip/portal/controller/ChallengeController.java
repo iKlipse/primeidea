@@ -1774,13 +1774,6 @@ public class ChallengeController implements Serializable {
 			bean.setRevUserId(challengeMessage.getRevUserId());
 			bean.setStatusName(challengeMessage.getStatusName());
 			bean.setCatName(challengeMessage.getCatName());
-			String chalStatus = challengeMessage.getStatusName();
-			if (userId != 0 && chalStatus != null && !(chalStatus.equals("Draft") && chalStatus.equals("Publish"))) {
-				bean.setDisableEdit(true);
-			} else {
-				bean.setDisableEdit(false);
-			}
-
 			ret.add(bean);
 		}
 		return ret;
@@ -1907,12 +1900,6 @@ public class ChallengeController implements Serializable {
 			bean.setRevUserId(solutionMessage.getRevUserId());
 			bean.setStatusName(solutionMessage.getStatusName());
 			bean.setCatName(solutionMessage.getCatName());
-			String solStatus = solutionMessage.getStatusName();
-			if (userId != 0 && solStatus != null && !(solStatus.equals("Draft") && solStatus.equals("Open"))) {
-				bean.setDisableEdit(true);
-			} else {
-				bean.setDisableEdit(false);
-			}
 			if (solutionMessage.isSolImgAvl())
 				bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
 			ret.add(bean);

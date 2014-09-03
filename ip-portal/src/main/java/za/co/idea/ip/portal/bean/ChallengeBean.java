@@ -32,6 +32,7 @@ public class ChallengeBean implements Serializable {
 	private String statusName;
 	private String catName;
 	private boolean disableEdit;
+	private boolean disableField;
 
 	public Long getId() {
 		return id;
@@ -233,4 +234,15 @@ public class ChallengeBean implements Serializable {
 		this.disableEdit = disableEdit;
 	}
 
+	public boolean isDisableField() {
+		if (statusId > 1)
+			disableField = true;
+		else
+			disableField = false;
+		return disableField;
+	}
+
+	public void setDisableField(boolean disableField) {
+		this.disableField = disableField;
+	}
 }
