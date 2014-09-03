@@ -67,6 +67,7 @@ public class LandingPageController implements Serializable {
 	private ClaimBean claimBean;
 	private List<PointBean> pointBeans;
 	private Long totalPoints;
+	private AccessController controller;
 
 	@PostConstruct
 	public void initializePage() {
@@ -76,6 +77,7 @@ public class LandingPageController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
+			controller = new AccessController(userId);
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			viewIdeas = RESTServiceHelper.fetchAllIdeasByUser(userId);
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
@@ -543,6 +545,16 @@ public class LandingPageController implements Serializable {
 
 	public void setTotalPoints(Long totalPoints) {
 		this.totalPoints = totalPoints;
+	}
+
+	public AccessController getController() {
+		if (controller == null)
+			controller = new AccessController(userId);
+		return controller;
+	}
+
+	public void setController(AccessController controller) {
+		this.controller = controller;
 	}
 
 }

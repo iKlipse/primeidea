@@ -10,16 +10,16 @@
 				<p:commandLink value="View Open Solutions" actionListener="#{challengeController.showViewOpenSolution}" update="pnlSolDet">
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 				</p:commandLink>
-				<p:graphicImage name="separator.png" library="images" />
-				<p:commandLink value="View Solutions Under Review" actionListener="#{challengeController.showViewReviewSolution}" update="pnlSolDet">
+				<p:graphicImage name="separator.png" library="images" rendered="#{landingPageController.controller.reviewSolutionEnabled}" />
+				<p:commandLink value="View Solutions Under Review" actionListener="#{challengeController.showViewReviewSolution}" update="pnlSolDet" rendered="#{landingPageController.controller.reviewSolutionEnabled}">
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 				</p:commandLink>
 				<p:graphicImage name="separator.png" library="images" />
 				<p:commandLink value="View All Solutions" actionListener="#{challengeController.showViewSolution}" update="pnlSolDet">
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 				</p:commandLink>
-				<p:graphicImage name="separator.png" library="images" />
-				<p:commandLink value="Create Solution" actionListener="#{challengeController.showCreateSolution}" update="pnlSolDet">
+				<p:graphicImage name="separator.png" library="images" rendered="#{landingPageController.controller.createSolutionEnabled}" />
+				<p:commandLink value="Create Solution" actionListener="#{challengeController.showCreateSolution}" update="pnlSolDet" rendered="#{landingPageController.controller.createSolutionEnabled}">
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 				</p:commandLink>
 			</p:panel>

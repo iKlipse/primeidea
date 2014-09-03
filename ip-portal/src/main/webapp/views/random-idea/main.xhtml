@@ -14,12 +14,12 @@
 				<p:commandLink value="View All Ideas" actionListener="#{randomIdeaController.showViewIdeas}" update="pnlIdeaDet">
 					<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />
 				</p:commandLink>
-				<p:graphicImage name="separator.png" library="images" />
-				<p:commandLink value="View Ideas Under Review" actionListener="#{randomIdeaController.showViewReviewIdeas}" update="pnlIdeaDet">
+				<p:graphicImage name="separator.png" library="images" rendered="#{landingPageController.controller.reviewIdeaEnabled}" />
+				<p:commandLink value="View Ideas Under Review" actionListener="#{randomIdeaController.showViewReviewIdeas}" update="pnlIdeaDet" rendered="#{landingPageController.controller.reviewIdeaEnabled}">
 					<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />
 				</p:commandLink>
-				<p:graphicImage name="separator.png" library="images" />
-				<p:commandLink value="Create Idea" actionListener="#{randomIdeaController.showCreateIdea}" update="pnlIdeaDet">
+				<p:graphicImage name="separator.png" library="images" rendered="#{landingPageController.controller.createIdeaEnabled}" />
+				<p:commandLink value="Create Idea" actionListener="#{randomIdeaController.showCreateIdea}" update="pnlIdeaDet" rendered="#{landingPageController.controller.createIdeaEnabled}">
 					<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />
 				</p:commandLink>
 			</p:panel>

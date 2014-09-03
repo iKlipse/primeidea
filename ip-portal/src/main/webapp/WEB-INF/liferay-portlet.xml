@@ -14,6 +14,7 @@
 		<portlet-name>landing-page</portlet-name>
 		<icon></icon>
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>
+		<render-weight>15</render-weight>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript></footer-portlet-javascript>
 		<css-class-wrapper></css-class-wrapper>
@@ -119,6 +120,14 @@
 		<icon></icon>
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>
 		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript></footer-portlet-javascript>
+		<css-class-wrapper></css-class-wrapper>
+	</portlet>
+	<portlet>
+		<portlet-name>test-portlet</portlet-name>
+		<icon></icon>
+		<requires-namespaced-parameters>false</requires-namespaced-parameters>
+		<header-portlet-css></header-portlet-css>
 		<footer-portlet-javascript></footer-portlet-javascript>
 		<css-class-wrapper></css-class-wrapper>
 	</portlet>

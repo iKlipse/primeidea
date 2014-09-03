@@ -23,6 +23,7 @@ public class AccessController implements Serializable {
 	private boolean createGroupEnabled;
 	private boolean createRewardsEnabled;
 	private boolean createChallengeEnabled;
+	private boolean createSolutionEnabled;
 	private boolean createIdeaEnabled;
 	private boolean createNewsEnabled;
 	private boolean editUserEnabled;
@@ -55,6 +56,9 @@ public class AccessController implements Serializable {
 	private boolean viewNewsEnabled;
 	private boolean sendBroadcastEnabled;
 	private boolean adminEnabled;
+	private boolean reviewChallengeEnabled;
+	private boolean reviewSolutionEnabled;
+	private boolean reviewIdeaEnabled;
 
 	public AccessController(Long userId) {
 		if (userId == null) {
@@ -106,6 +110,15 @@ public class AccessController implements Serializable {
 
 	public void setCreateChallengeEnabled(boolean createChallengeEnabled) {
 		this.createChallengeEnabled = createChallengeEnabled;
+	}
+
+	public boolean isCreateSolutionEnabled() {
+		createSolutionEnabled = functions.contains("Create Solution");
+		return createSolutionEnabled;
+	}
+
+	public void setCreateSolutionEnabled(boolean createSolutionEnabled) {
+		this.createSolutionEnabled = createSolutionEnabled;
 	}
 
 	public boolean isCreateIdeaEnabled() {
@@ -402,6 +415,33 @@ public class AccessController implements Serializable {
 
 	public void setAdminEnabled(boolean adminEnabled) {
 		this.adminEnabled = adminEnabled;
+	}
+
+	public boolean isReviewChallengeEnabled() {
+		reviewChallengeEnabled = functions.contains("Review Challenge");
+		return reviewChallengeEnabled;
+	}
+
+	public void setReviewChallengeEnabled(boolean reviewChallengeEnabled) {
+		this.reviewChallengeEnabled = reviewChallengeEnabled;
+	}
+
+	public boolean isReviewSolutionEnabled() {
+		reviewSolutionEnabled = functions.contains("Review Solution");
+		return reviewSolutionEnabled;
+	}
+
+	public void setReviewSolutionEnabled(boolean reviewSolutionEnabled) {
+		this.reviewSolutionEnabled = reviewSolutionEnabled;
+	}
+
+	public boolean isReviewIdeaEnabled() {
+		reviewIdeaEnabled = functions.contains("Review Idea");
+		return reviewIdeaEnabled;
+	}
+
+	public void setReviewIdeaEnabled(boolean reviewIdeaEnabled) {
+		this.reviewIdeaEnabled = reviewIdeaEnabled;
 	}
 
 }
