@@ -1,8 +1,7 @@
 /target
 /.settings
 *attach*.pid
-/.project
-/.classpath
-/target
-/.myhibernatedata
-/.springBeans
+.project
+.classpath
+.myhibernatedata
+.springBeans
