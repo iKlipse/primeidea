@@ -180,6 +180,28 @@ public class RESTServiceHelper {
 		return ret;
 	}
 
+	public static List<GroupBean> fetchReviewGroups() {
+		List<GroupBean> ret = new ArrayList<GroupBean>();
+		WebClient viewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/review/list");
+		Collection<? extends GroupMessage> groups = new ArrayList<GroupMessage>(viewGroupsClient.accept(MediaType.APPLICATION_JSON).getCollection(GroupMessage.class));
+		viewGroupsClient.close();
+		for (GroupMessage groupMessage : groups) {
+			GroupBean bean = new GroupBean();
+			bean.setgId(groupMessage.getgId());
+			bean.setGeMail(groupMessage.getGeMail());
+			bean.setgName(groupMessage.getgName());
+			bean.setIsActive(groupMessage.getIsActive());
+			bean.setSelAdmUser(groupMessage.getAdmUserId());
+			bean.setSelPGrp(groupMessage.getpGrpId());
+			bean.getUserIdList().clear();
+			for (Long id : groupMessage.getUserIdList())
+				if (id != null)
+					bean.getUserIdList().add(id);
+			ret.add(bean);
+		}
+		return ret;
+	}
+
 	public static GroupBean getGroupById(Long pGrpId) {
 		GroupBean bean = new GroupBean();
 		WebClient groupByIdClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/get/" + pGrpId);

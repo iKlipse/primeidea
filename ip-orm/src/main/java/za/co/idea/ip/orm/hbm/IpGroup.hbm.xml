@@ -84,4 +84,8 @@
 		select ig.* from ip_group ig where ig.group_status=:status
 		<return alias="ig" class="za.co.idea.ip.orm.bean.IpGroup" />
 	</sql-query>
+    <sql-query name="getGroupsForReview">
+		select distinct ig.* from ip_group ig, ip_group_user igu where ig.group_id=igu.gu_grp_id
+		<return alias="ig" class="za.co.idea.ip.orm.bean.IpGroup" />
+	</sql-query>
 </hibernate-mapping>

@@ -162,6 +162,39 @@ public class IpReviewDAO extends HibernateDaoSupport {
 		}
 	}
 
+	public List findUnAllocatedReviews() {
+		log.debug("finding all reviews by entity id");
+		try {
+			Query query = getSession().getNamedQuery("getUnallocatedReview");
+			List ret = query.list();
+			for (Object object : ret) {
+				IpReview review = (IpReview) object;
+				Hibernate.initialize(review.getIpGroup());
+			}
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
+	}
+
+	public List findReviewsByUserId(Long uId) {
+		log.debug("finding all reviews by entity id");
+		try {
+			Query query = getSession().getNamedQuery("getReviewByUserId");
+			query.setLong("id", uId);
+			List ret = query.list();
+			for (Object object : ret) {
+				IpReview review = (IpReview) object;
+				Hibernate.initialize(review.getIpGroup());
+			}
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
+	}
+
 	public void deleteByEntityIdEntityName(Long entityId, String entityName, Integer status) {
 		log.debug("finding all reviews by entity id");
 		try {

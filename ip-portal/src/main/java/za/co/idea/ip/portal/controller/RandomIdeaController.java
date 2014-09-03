@@ -899,7 +899,7 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	public void initializeAssignReviews() {
-		pGrps = RESTServiceHelper.fetchActiveGroups();
+		pGrps = RESTServiceHelper.fetchReviewGroups();
 		rvIds = new ArrayList<ReviewBean>();
 		for (int i = 0; i < rvIdCnt; i++) {
 			ReviewBean bean = new ReviewBean();

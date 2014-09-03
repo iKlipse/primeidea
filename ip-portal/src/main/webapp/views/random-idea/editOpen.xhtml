@@ -4,7 +4,7 @@
 			<p:outputLabel id="lblEdtoITitle" value="Title : " />
 		</p:column>
 		<p:column>
-			<p:inputText autocomplete="false" id="txtEdtoITitle" value="#{randomIdeaController.ideaBean.ideaTitle}">
+			<p:inputText autocomplete="false" id="txtEdtoITitle" value="#{randomIdeaController.ideaBean.ideaTitle}" disabled="#{randomIdeaController.ideaBean.disableField}">
 				<p:ajax listener="#{randomIdeaController.checkTitleAvailability}" event="change" update="frmEditOpenIdeaMsg" />
 			</p:inputText>
 		</p:column>
@@ -21,13 +21,14 @@
 			<p:outputLabel id="lblEdtoIDesc" value="Description : " />
 		</p:column>
 		<p:column>
-			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="txtEdtoIDesc" value="#{randomIdeaController.ideaBean.ideaDesc}" />
+			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="txtEdtoIDesc" value="#{randomIdeaController.ideaBean.ideaDesc}" rendered="#{!randomIdeaController.ideaBean.disableField}" />
+			<p:outputLabel id="outEdtoIDesc" escape="false" value="#{randomIdeaController.ideaBean.ideaDesc}" rendered="#{randomIdeaController.ideaBean.disableField}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtoITag" value="Keywords to Describe Your Idea : " />
 		</p:column>
 		<p:column>
-			<p:inputText autocomplete="false" id="txtEdtoITag" value="#{randomIdeaController.ideaBean.ideaTag}" />
+			<p:inputText autocomplete="false" id="txtEdtoITag" value="#{randomIdeaController.ideaBean.ideaTag}" disabled="#{randomIdeaController.ideaBean.disableField}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtoIDownload" value="Download File : " />
@@ -39,10 +40,10 @@
 				<p:outputLabel value="#{randomIdeaController.ideaBean.fileName}" style="font-weight: 0.6em" />
 			</h:outputLink>
 		</p:column>
-		<p:column>
+		<p:column rendered="#{!randomIdeaController.ideaBean.disableField}">
 			<p:outputLabel id="lblEdtoIUpload" value="Upload File : " />
 		</p:column>
-		<p:column>
+		<p:column rendered="#{!randomIdeaController.ideaBean.disableField}">
 			<p:fileUpload id="fuIUpload" fileUploadListener="#{randomIdeaController.fileUploadHandle}" multiple="false" />
 		</p:column>
 		<p:column>
@@ -50,7 +51,7 @@
 		</p:column>
 		<p:column>
 			<!-- <p:pickList id="plGroupPick" converter="groupConverter" value="#{randomIdeaController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" /> -->
-			<p:selectOneMenu id="scmoGroupList" value="#{randomIdeaController.selGroupId}">
+			<p:selectOneMenu id="scmoGroupList" value="#{randomIdeaController.selGroupId}" disabled="#{randomIdeaController.ideaBean.disableField}">
 				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 				<f:selectItems value="#{randomIdeaController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 			</p:selectOneMenu>
@@ -59,7 +60,7 @@
 			<p:outputLabel id="lblEdtoCrtdBy" value="Created By : " />
 		</p:column>
 		<p:column>
-			<p:selectOneMenu id="somEdtoACrtdBy" value="#{randomIdeaController.ideaBean.crtdById}">
+			<p:selectOneMenu id="somEdtoACrtdBy" value="#{randomIdeaController.ideaBean.crtdById}" disabled="#{randomIdeaController.ideaBean.disableField}">
 				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 				<f:selectItems value="#{randomIdeaController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
 			</p:selectOneMenu>
@@ -73,7 +74,7 @@
 				<f:setPropertyActionListener value="1" target="#{landingPageController.toView}" />
 				<f:setPropertyActionListener value="1" target="#{randomIdeaController.toView}" />
 			</p:commandButton>
-			<p:commandButton id="btnEdtoARv" value="Assign Reviewers" type="button" onclick="PF('dlgRwUpd').show();" />
+			<p:commandButton id="btnEdtoARv" value="Assign Reviewers" type="button" onclick="PF('dlgRwUpd').show();" rendered="#{!randomIdeaController.ideaBean.disableField}" />
 		</f:facet>
 	</p:panelGrid>
 	<p:dialog id="dlgRwUpd" widgetVar="dlgRwUpd" modal="true">

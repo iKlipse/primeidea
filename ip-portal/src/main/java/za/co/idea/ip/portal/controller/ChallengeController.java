@@ -2075,7 +2075,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	public void initializeChalAssignReviews() {
-		pGrps = RESTServiceHelper.fetchActiveGroups();
+		pGrps = RESTServiceHelper.fetchReviewGroups();
 		rvIds = new ArrayList<ReviewBean>();
 		for (int i = 0; i < rvIdCnt; i++) {
 			ReviewBean bean = new ReviewBean();
@@ -2104,7 +2104,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	public void initializeSolAssignReviews() {
-		pGrps = RESTServiceHelper.fetchActiveGroups();
+		pGrps = RESTServiceHelper.fetchReviewGroups();
 		rvIds = new ArrayList<ReviewBean>();
 		for (int i = 0; i < rvIdCnt; i++) {
 			ReviewBean bean = new ReviewBean();

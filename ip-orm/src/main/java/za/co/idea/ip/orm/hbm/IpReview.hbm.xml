@@ -36,7 +36,15 @@
 		delete from ip_review where rev_entity_id=:id and
 		lower(rev_entity_name)=lower(:tblNm) and rev_entity_status_id=:status
 	</sql-query>
+	<sql-query name="getUnallocatedReview">
+		select ib.* from ip_review ib where ib.rev_sel_user_id is null
+		<return alias="ib" class="za.co.idea.ip.orm.bean.IpReview" />
+	</sql-query>
+	<sql-query name="getReviewByUserId">
+		select ib.* from ip_review ib where ib.rev_sel_user_id=:id
+		<return alias="ib" class="za.co.idea.ip.orm.bean.IpReview" />
+	</sql-query>
 	<sql-query name="updateReviewer">
-		update ip_review set rev_user_id=:uid where rev_entity_id=:id and rev_entity_name=:tblNm
+		update ip_review set rev_sel_user_id=:uid where rev_entity_id=:id and rev_entity_name=:tblNm
 	</sql-query>
 </hibernate-mapping>
