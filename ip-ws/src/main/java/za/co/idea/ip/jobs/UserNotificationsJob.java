@@ -55,7 +55,7 @@ public class UserNotificationsJob extends QuartzJobBean implements StatefulJob {
 			SimpleMailMessage message = new SimpleMailMessage();
 			message.setText("Solution in Draft Status");
 			message.setSubject("Solution '" + solution.getSolTitle() + "' is in Draft Status");
-			message.setTo(solution.getIpUserBySolCrtdBy().getUserEmail());
+			message.setTo(solution.getIpUser().getUserEmail());
 			sender.send(message);
 		}
 	}

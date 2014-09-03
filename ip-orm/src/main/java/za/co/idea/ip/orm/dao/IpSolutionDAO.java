@@ -159,7 +159,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 				Hibernate.initialize(sol.getIpChallenge());
 				Hibernate.initialize(sol.getIpSolutionCat());
 				Hibernate.initialize(sol.getIpSolutionStatus());
-				Hibernate.initialize(sol.getIpUserBySolCrtdBy());
+				Hibernate.initialize(sol.getIpUser());
 			}
 			return ret;
 		} catch (RuntimeException re) {
@@ -179,7 +179,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 				Hibernate.initialize(sol.getIpChallenge());
 				Hibernate.initialize(sol.getIpSolutionCat());
 				Hibernate.initialize(sol.getIpSolutionStatus());
-				Hibernate.initialize(sol.getIpUserBySolCrtdBy());
+				Hibernate.initialize(sol.getIpUser());
 			}
 			return ret;
 		} catch (RuntimeException re) {
@@ -199,7 +199,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 				Hibernate.initialize(sol.getIpChallenge());
 				Hibernate.initialize(sol.getIpSolutionCat());
 				Hibernate.initialize(sol.getIpSolutionStatus());
-				Hibernate.initialize(sol.getIpUserBySolCrtdBy());
+				Hibernate.initialize(sol.getIpUser());
 			}
 			return ret;
 		} catch (RuntimeException re) {
@@ -220,7 +220,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 				Hibernate.initialize(sol.getIpChallenge());
 				Hibernate.initialize(sol.getIpSolutionCat());
 				Hibernate.initialize(sol.getIpSolutionStatus());
-				Hibernate.initialize(sol.getIpUserBySolCrtdBy());
+				Hibernate.initialize(sol.getIpUser());
 			}
 			return ret;
 		} catch (RuntimeException re) {
@@ -240,7 +240,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 				Hibernate.initialize(sol.getIpChallenge());
 				Hibernate.initialize(sol.getIpSolutionCat());
 				Hibernate.initialize(sol.getIpSolutionStatus());
-				Hibernate.initialize(sol.getIpUserBySolCrtdBy());
+				Hibernate.initialize(sol.getIpUser());
 			}
 			return ret;
 		} catch (RuntimeException re) {
@@ -260,7 +260,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 				Hibernate.initialize(sol.getIpChallenge());
 				Hibernate.initialize(sol.getIpSolutionCat());
 				Hibernate.initialize(sol.getIpSolutionStatus());
-				Hibernate.initialize(sol.getIpUserBySolCrtdBy());
+				Hibernate.initialize(sol.getIpUser());
 			}
 			return ret;
 		} catch (RuntimeException re) {

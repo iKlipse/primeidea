@@ -12,6 +12,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.portlet.PortletRequest;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +20,9 @@ import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.primefaces.model.StreamedContent;
+
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
 
 import za.co.idea.ip.portal.bean.ClaimBean;
 import za.co.idea.ip.portal.bean.ListSelectorBean;
@@ -32,6 +36,7 @@ import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.PointMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.RewardsMessage;
+import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
 
 @ManagedBean(name = "claimController")
@@ -51,6 +56,7 @@ public class ClaimController implements Serializable {
 	private Long userId;
 	private String returnView;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
+	private AccessController controller;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
@@ -450,5 +456,21 @@ public class ClaimController implements Serializable {
 
 	public void setReturnView(String returnView) {
 		this.returnView = returnView;
+	}
+
+	public AccessController getController() {
+		if (controller == null || controller.getFunctions() == null) {
+			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			User user = (User) request.getAttribute(WebKeys.USER);
+			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+			userId = message.getuId();
+			controller = new AccessController(userId);
+		}
+		return controller;
+	}
+
+	public void setController(AccessController controller) {
+		this.controller = controller;
 	}
 }

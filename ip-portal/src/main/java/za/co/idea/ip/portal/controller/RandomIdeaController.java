@@ -94,6 +94,7 @@ public class RandomIdeaController implements Serializable {
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 	private List<ReviewBean> rvIds;
 	private Integer rvIdCnt;
+	private AccessController controller;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
@@ -760,6 +761,7 @@ public class RandomIdeaController implements Serializable {
 						}
 						rvIds = null;
 						rvIdCnt = 1;
+						selGroupId = -1l;
 						uploadContent = null;
 						saveAsOpen = false;
 						if (ideaMessage.getSetStatusId().longValue() == 2l)
@@ -867,6 +869,7 @@ public class RandomIdeaController implements Serializable {
 				}
 				uploadContent = null;
 				saveAsOpen = false;
+				selGroupId = -1l;
 				rvIds = null;
 				rvIdCnt = 0;
 				if (ideaMessage.getSetStatusId().longValue() == 2l)
@@ -1334,6 +1337,21 @@ public class RandomIdeaController implements Serializable {
 
 	public void setSelGroupId(Long selGroupId) {
 		this.selGroupId = selGroupId;
+	}
+
+	public AccessController getController() {
+		if (controller == null || controller.getFunctions() == null) {
+			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			User user = (User) request.getAttribute(WebKeys.USER);
+			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+			controller = new AccessController(message.getuId());
+		}
+		return controller;
+	}
+
+	public void setController(AccessController controller) {
+		this.controller = controller;
 	}
 
 }

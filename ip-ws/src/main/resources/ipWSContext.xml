@@ -150,15 +150,15 @@
 	</bean>
 	<bean id="ChallengeExpiryJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="ChallengeExpiryJob" />
-		<property name="cronExpression" value="0 0/10 * * * ?" />
+		<property name="cronExpression" value="0 1/4 * * * ?" />
 	</bean>
 	<bean id="AllocateReviewUserJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="AllocateReviewUserJob" />
-		<property name="cronExpression" value="0 0/3 * * * ?" />
+		<property name="cronExpression" value="0 2/4 * * * ?" />
 	</bean>
 	<bean id="NotificationEmailJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="NotificationEmailJob" />
-		<property name="cronExpression" value="0 3/10 * * * ?" />
+		<property name="cronExpression" value="0 3/4 * * * ?" />
 	</bean>
 	<bean id="UserNotificationsJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="UserNotificationsJob" />
@@ -187,7 +187,7 @@
 	</bean>
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="username" value="venumadhav.pattamatta@hotmail.com" />
-		<property name="password" value="" />
+		<property name="password" value="vahdamUnEv140609" />
 		<property name="javaMailProperties">
 			<props>
 				<prop key="mail.smtp.host">smtp.live.com</prop>

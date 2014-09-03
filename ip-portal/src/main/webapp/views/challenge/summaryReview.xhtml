@@ -47,7 +47,7 @@
 		</p:column>
 		<f:facet name="footer">
 			<p:commandButton id="btnSumrUpdRwDlg" value="Re-Assign Reviewer" type="button" onclick="PF('dlgRwUpd').show();" />
-			<p:commandButton id="btnSumrSolSubmit" value="Submit a Solution" ajax="false" action="#{challengeController.showSubmitSolution}" rendered="#{challengeController.challengeBean.statusId == 4}">
+			<p:commandButton id="btnSumrSolSubmit" value="Submit a Solution" ajax="false" action="#{challengeController.showSubmitSolution}" rendered="#{challengeController.challengeBean.statusId == 8}">
 				<f:param name="chalId" value="#{challengeController.challengeBean.id}" />
 			</p:commandButton>
 			<p:commandButton id="btnEdtoCancel" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" ajax="false" action="#{challengeController.redirectMain}">

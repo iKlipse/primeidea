@@ -11,6 +11,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.portlet.PortletRequest;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -25,11 +26,16 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
+
 import za.co.idea.ip.portal.bean.NewsBean;
 import za.co.idea.ip.portal.util.IdNumberGen;
+import za.co.idea.ip.portal.util.RESTServiceHelper;
 import za.co.idea.ip.ws.bean.AttachmentMessage;
 import za.co.idea.ip.ws.bean.NewsMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
+import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
 
 @ManagedBean(name = "newsController")
@@ -51,6 +57,7 @@ public class NewsController implements Serializable {
 	private boolean showViewNews;
 	private String returnView;
 	private String toView;
+	private AccessController controller;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
@@ -446,6 +453,21 @@ public class NewsController implements Serializable {
 
 	public void setToView(String toView) {
 		this.toView = toView;
+	}
+
+	public AccessController getController() {
+		if (controller == null || controller.getFunctions() == null) {
+			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			User user = (User) request.getAttribute(WebKeys.USER);
+			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+			controller = new AccessController(message.getuId());
+		}
+		return controller;
+	}
+
+	public void setController(AccessController controller) {
+		this.controller = controller;
 	}
 
 }

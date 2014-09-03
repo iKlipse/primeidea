@@ -172,6 +172,7 @@ public class AdminController implements Serializable {
 	private List<ListSelectorBean> claimStatus;
 	private boolean activeUsersView;
 	private boolean inactiveUsersView;
+	private AccessController controller;
 
 	private WebClient createCustomClient(String url) {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
@@ -3537,5 +3538,21 @@ public class AdminController implements Serializable {
 
 	public void setInactiveUsersView(boolean inactiveUsersView) {
 		this.inactiveUsersView = inactiveUsersView;
+	}
+
+	public AccessController getController() {
+		if (controller == null || controller.getFunctions() == null) {
+			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			User user = (User) request.getAttribute(WebKeys.USER);
+			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+			userId = message.getuId();
+			controller = new AccessController(userId);
+		}
+		return controller;
+	}
+
+	public void setController(AccessController controller) {
+		this.controller = controller;
 	}
 }

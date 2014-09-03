@@ -35,10 +35,10 @@ public class NotificationEmailJob extends QuartzJobBean implements StatefulJob {
 		try {
 			List notifications = ipNotifDAO.findAll();
 			for (Object object : notifications) {
+				boolean delete = false;
 				IpNotif ipNotif = (IpNotif) object;
 				if (ipNotif.getNotifList() == null || ipNotif.getNotifList().length() == 0) {
 					List notifList = ipNotifGroupDAO.findByIngNotifId((Object) ipNotif.getNotifId());
-					boolean delete = false;
 					if (notifList != null && !notifList.isEmpty()) {
 						for (Object obj : notifList) {
 							IpNotifGroup group = (IpNotifGroup) obj;
@@ -61,22 +61,22 @@ public class NotificationEmailJob extends QuartzJobBean implements StatefulJob {
 						if (delete) {
 							ipNotifGroupDAO.deleteByNotifId(ipNotif.getNotifId());
 						}
-					} else {
-						SimpleMailMessage message = new SimpleMailMessage();
-						message.setFrom("noreply@primedia.co.za");
-						message.setText(ipNotif.getNotifBody());
-						message.setSubject(ipNotif.getNotifSubject());
-						message.setTo(StringUtils.split(ipNotif.getNotifList(), ";"));
-						try {
-							sender.send(message);
-							delete = true;
-						} catch (Exception ex) {
-							logger.error("Error: " + ex.getMessage());
-						}
 					}
-					if (delete) {
-						ipNotifDAO.deleteByNotifId(ipNotif.getNotifId());
+				} else {
+					SimpleMailMessage message = new SimpleMailMessage();
+					message.setFrom("noreply@primedia.co.za");
+					message.setText(ipNotif.getNotifBody());
+					message.setSubject(ipNotif.getNotifSubject());
+					message.setTo(StringUtils.split(ipNotif.getNotifList(), ";"));
+					try {
+						sender.send(message);
+						delete = true;
+					} catch (Exception ex) {
+						logger.error("Error: " + ex.getMessage());
 					}
+				}
+				if (delete) {
+					ipNotifDAO.deleteByNotifId(ipNotif.getNotifId());
 				}
 			}
 		} catch (Exception e) {

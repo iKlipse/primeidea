@@ -186,7 +186,7 @@ public class IdeaService {
 				Long[] ids = ipNativeSQLDAO.getNextIds(IpIdeaGroup.class, idea.getGroupIdList().length);
 				int i = 0;
 				for (Long gId : idea.getGroupIdList()) {
-					if (gId != null && gId.toString().length() > 0) {
+					if (ipGroupDAO.findById(gId) != null) {
 						IpIdeaGroup ipIdeaGroup = new IpIdeaGroup();
 						ipIdeaGroup.setIgId(ids[i]);
 						ipIdeaGroup.setIpIdea(ipIdea);
@@ -236,13 +236,15 @@ public class IdeaService {
 				Long[] ids = ipNativeSQLDAO.getNextIds(IpIdeaGroup.class, idea.getGroupIdList().length);
 				int i = 0;
 				for (Long gId : idea.getGroupIdList()) {
-					IpIdeaGroup ipIdeaGroup = new IpIdeaGroup();
-					ipIdeaGroup.setIgId(ids[i]);
-					ipIdeaGroup.setIpIdea(ipIdea);
-					ipIdeaGroup.setIpGroup(ipGroupDAO.findById(gId));
-					ipIdeaGroup.setIgCrtdDt(new Date());
-					ipIdeaGroupDAO.save(ipIdeaGroup);
-					i++;
+					if (ipGroupDAO.findById(gId) != null) {
+						IpIdeaGroup ipIdeaGroup = new IpIdeaGroup();
+						ipIdeaGroup.setIgId(ids[i]);
+						ipIdeaGroup.setIpIdea(ipIdea);
+						ipIdeaGroup.setIpGroup(ipGroupDAO.findById(gId));
+						ipIdeaGroup.setIgCrtdDt(new Date());
+						ipIdeaGroupDAO.save(ipIdeaGroup);
+						i++;
+					}
 				}
 			}
 

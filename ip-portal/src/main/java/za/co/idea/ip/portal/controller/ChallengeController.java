@@ -118,6 +118,7 @@ public class ChallengeController implements Serializable {
 	private boolean showReviewSol;
 	private List<ReviewBean> rvIds;
 	private Integer rvIdCnt;
+	private AccessController controller;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
@@ -138,14 +139,14 @@ public class ChallengeController implements Serializable {
 			userId = message.getuId();
 			challengeCats = fetchAllChallengeCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
+			viewChallenges = fetchAllChallengesByStatusIdUserId(8);
 			showPubChal = true;
 			showViewChal = false;
 			showCrtChal = false;
 			if (toView != null && Integer.valueOf(toView) != -1) {
 				switch (Integer.valueOf(toView)) {
 				case 1:
-					viewChallenges = fetchAllChallengesByStatusIdUserId(4);
+					viewChallenges = fetchAllChallengesByStatusIdUserId(8);
 					challengeStatuses = fetchAllChallengeStatuses();
 					showPubChal = true;
 					showViewChal = false;
@@ -198,7 +199,7 @@ public class ChallengeController implements Serializable {
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
-			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
+			viewChallenges = fetchAllChallengesByStatusIdUserId(8);
 			solutionBean = new SolutionBean();
 			saveAsOpen = false;
 			showPubSol = true;
@@ -207,7 +208,7 @@ public class ChallengeController implements Serializable {
 			if (toView != null && Integer.valueOf(toView) != -1) {
 				switch (Integer.valueOf(toView)) {
 				case 1:
-					viewChallenges = fetchAllChallengesByStatusIdUserId(4);
+					viewChallenges = fetchAllChallengesByStatusIdUserId(8);
 					admUsers = RESTServiceHelper.fetchActiveUsers();
 					solutionBean = new SolutionBean();
 					saveAsOpen = false;
@@ -273,7 +274,7 @@ public class ChallengeController implements Serializable {
 
 	public void showPublishedChallenges() {
 		try {
-			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
+			viewChallenges = fetchAllChallengesByStatusIdUserId(8);
 			challengeCats = fetchAllChallengeCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			challengeStatuses = fetchAllChallengeStatuses();
@@ -361,46 +362,9 @@ public class ChallengeController implements Serializable {
 			rvIds = RESTServiceHelper.fetchReviews(challengeBean.getId(), "ip_challenge");
 			rvIdCnt = rvIds.size();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
-			try {
-				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
-				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-				getBlobClient.close();
-				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-					client.header("Content-Type", "application/json");
-					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-					if (attachment != null) {
-						chalFileAvail = false;
-						WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
-						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-						getBlobTypeClient.close();
-						challengeBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-						chalFileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-					} else {
-						chalFileAvail = true;
-						chalFileContent = null;
-					}
-				} else {
-					chalFileAvail = true;
-					chalFileContent = null;
-				}
-				return "chale";
-			} catch (Exception e) {
-				logger.error(e, e);
-
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform edit request", "System error occurred, cannot perform edit request");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				chalFileAvail = true;
-				chalFileContent = null;
-				return "";
-			}
+			return "chale";
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform edit request", "System error occurred, cannot perform edit request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -416,46 +380,9 @@ public class ChallengeController implements Serializable {
 			rvIds = RESTServiceHelper.fetchReviews(challengeBean.getId(), "ip_challenge");
 			rvIdCnt = rvIds.size();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
-			try {
-				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
-				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-				getBlobClient.close();
-				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-					client.header("Content-Type", "application/json");
-					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-					if (attachment != null) {
-						chalFileAvail = false;
-						WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
-						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-						getBlobTypeClient.close();
-						challengeBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-						chalFileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-					} else {
-						chalFileAvail = true;
-						chalFileContent = null;
-					}
-				} else {
-					chalFileAvail = true;
-					chalFileContent = null;
-				}
-				return "chaleo";
-			} catch (Exception e) {
-				logger.error(e, e);
-
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform edit request", "System error occurred, cannot perform edit request");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				chalFileAvail = true;
-				chalFileContent = null;
-				return "";
-			}
+			return "chaleo";
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform edit request", "System error occurred, cannot perform edit request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -471,43 +398,7 @@ public class ChallengeController implements Serializable {
 			rvIds = RESTServiceHelper.fetchReviews(challengeBean.getId(), "ip_challenge");
 			rvIdCnt = rvIds.size();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
-			try {
-				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
-				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-				getBlobClient.close();
-				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-					client.header("Content-Type", "application/json");
-					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-					if (attachment != null) {
-						chalFileAvail = false;
-						WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
-						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-						getBlobTypeClient.close();
-						challengeBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-						chalFileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-					} else {
-						chalFileAvail = true;
-						chalFileContent = null;
-					}
-				} else {
-					chalFileAvail = true;
-					chalFileContent = null;
-				}
-				return "chaler";
-			} catch (Exception e) {
-				logger.error(e, e);
-
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform edit request", "System error occurred, cannot perform edit request");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				chalFileAvail = true;
-				chalFileContent = null;
-				return "";
-			}
+			return "chaler";
 		} catch (Exception e) {
 			logger.error(e, e);
 
@@ -527,43 +418,7 @@ public class ChallengeController implements Serializable {
 		showChallengeComments = false;
 		showChallengeLikes = false;
 		viewSolutions = fetchAllSolutionsByChal();
-		try {
-			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
-			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-			getBlobClient.close();
-			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-				client.header("Content-Type", "application/json");
-				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-				if (attachment != null) {
-					chalFileAvail = false;
-					WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
-					String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobTypeClient.close();
-					challengeBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-					chalFileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-				} else {
-					chalFileAvail = true;
-					chalFileContent = null;
-				}
-			} else {
-				chalFileAvail = true;
-				chalFileContent = null;
-			}
-			return "chals";
-		} catch (Exception e) {
-			logger.error(e, e);
-
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform summary request", "System error occurred, cannot perform summary request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			chalFileAvail = true;
-			chalFileContent = null;
-			return "";
-		}
+		return "chals";
 	}
 
 	public String showSummaryOpenChallenge() {
@@ -575,43 +430,7 @@ public class ChallengeController implements Serializable {
 		showChallengeLikes = false;
 		commentText = "";
 		viewSolutions = fetchAllSolutionsByChal();
-		try {
-			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
-			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-			getBlobClient.close();
-			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-				client.header("Content-Type", "application/json");
-				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-				if (attachment != null) {
-					chalFileAvail = false;
-					WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
-					String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobTypeClient.close();
-					challengeBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-					chalFileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-				} else {
-					chalFileAvail = true;
-					chalFileContent = null;
-				}
-			} else {
-				chalFileAvail = true;
-				chalFileContent = null;
-			}
-			return "chalso";
-		} catch (Exception e) {
-			logger.error(e, e);
-
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform summary request", "System error occurred, cannot perform summary request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			chalFileAvail = true;
-			chalFileContent = null;
-			return "";
-		}
+		return "chalso";
 	}
 
 	public String showSummaryReviewChallenge() {
@@ -623,43 +442,7 @@ public class ChallengeController implements Serializable {
 		commentText = "";
 		showChallengeLikes = false;
 		viewSolutions = fetchAllSolutionsByChal();
-		try {
-			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
-			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-			getBlobClient.close();
-			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-				client.header("Content-Type", "application/json");
-				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-				if (attachment != null) {
-					chalFileAvail = false;
-					WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
-					String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobTypeClient.close();
-					challengeBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-					chalFileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-				} else {
-					chalFileAvail = true;
-					chalFileContent = null;
-				}
-			} else {
-				chalFileAvail = true;
-				chalFileContent = null;
-			}
-			return "chalsr";
-		} catch (Exception e) {
-			logger.error(e, e);
-
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform summary request", "System error occurred, cannot perform summary request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			chalFileAvail = true;
-			chalFileContent = null;
-			return "";
-		}
+		return "chalsr";
 	}
 
 	public void saveChallenge() {
@@ -785,10 +568,10 @@ public class ChallengeController implements Serializable {
 						attach.setBlobId(COUNTER.getNextId("IpBlob"));
 						Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
 						if (crtRes.getStatus() == 200) {
-							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-							client.header("Accept", "application/json");
-							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), chalUploadContent.getStream(), new ContentDisposition("attachment;filename=" + challengeBean.getFileName())));
+							WebClient chalUploadClient = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+							chalUploadClient.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+							chalUploadClient.header("Accept", "application/json");
+							Response docRes = chalUploadClient.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), chalUploadContent.getStream(), new ContentDisposition("attachment;filename=" + challengeBean.getFileName())));
 							if (docRes.getStatus() != 200) {
 								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
 								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -808,15 +591,15 @@ public class ChallengeController implements Serializable {
 						Response updRes = updateBlobClient.accept(MediaType.APPLICATION_JSON).put(attach);
 						updateBlobClient.close();
 						if (updRes.getStatus() == 200) {
-							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-							client.header("Accept", "application/json");
-							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), chalUploadContent.getStream(), new ContentDisposition("attachment;filename=" + challengeBean.getFileName())));
+							WebClient chalUploadClient = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+							chalUploadClient.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+							chalUploadClient.header("Accept", "application/json");
+							Response docRes = chalUploadClient.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), chalUploadContent.getStream(), new ContentDisposition("attachment;filename=" + challengeBean.getFileName())));
 							if (docRes.getStatus() != 200) {
 								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
 								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 							}
-							client.close();
+							chalUploadClient.close();
 						} else {
 							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
 							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -898,7 +681,7 @@ public class ChallengeController implements Serializable {
 	public void showCreateSolution() {
 		try {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
-			viewChallenges = fetchAllChallengesByStatusIdUserId(4);
+			viewChallenges = fetchAllChallengesByStatusIdUserId(8);
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
 			solutionBean = new SolutionBean();
@@ -1720,7 +1503,7 @@ public class ChallengeController implements Serializable {
 
 	private List<ChallengeBean> fetchAllAvailableChallenges() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
-		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list//status/4");
+		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/status/8");
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
@@ -2910,5 +2693,21 @@ public class ChallengeController implements Serializable {
 
 	public void setRvIdCnt(Integer rvIdCnt) {
 		this.rvIdCnt = rvIdCnt;
+	}
+
+	public AccessController getController() {
+		if (controller == null || controller.getFunctions() == null) {
+			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			User user = (User) request.getAttribute(WebKeys.USER);
+			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+			userId = message.getuId();
+			controller = new AccessController(userId);
+		}
+		return controller;
+	}
+
+	public void setController(AccessController controller) {
+		this.controller = controller;
 	}
 }

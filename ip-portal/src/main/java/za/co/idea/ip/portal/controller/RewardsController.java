@@ -99,6 +99,7 @@ public class RewardsController implements Serializable {
 	private boolean showViewReward;
 	private boolean showOnlineStore;
 	private boolean titleAvail;
+	private AccessController controller;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
@@ -1401,6 +1402,21 @@ public class RewardsController implements Serializable {
 
 	public void setTitleAvail(boolean titleAvail) {
 		this.titleAvail = titleAvail;
+	}
+
+	public AccessController getController() {
+		if (controller == null || controller.getFunctions() == null) {
+			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			User user = (User) request.getAttribute(WebKeys.USER);
+			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+			controller = new AccessController(message.getuId());
+		}
+		return controller;
+	}
+
+	public void setController(AccessController controller) {
+		this.controller = controller;
 	}
 
 }

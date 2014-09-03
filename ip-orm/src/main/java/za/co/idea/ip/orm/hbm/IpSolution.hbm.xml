@@ -14,7 +14,7 @@
 		<many-to-one name="ipSolutionCat" class="za.co.idea.ip.orm.bean.IpSolutionCat" fetch="select">
 			<column name="sol_cat" />
 		</many-to-one>
-		<many-to-one name="ipUserBySolCrtdBy" class="za.co.idea.ip.orm.bean.IpUser" fetch="select">
+		<many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser" fetch="select">
 			<column name="sol_crtd_by" not-null="true" />
 		</many-to-one>
 		<many-to-one name="ipChallenge" class="za.co.idea.ip.orm.bean.IpChallenge" fetch="select">
@@ -29,11 +29,11 @@
 		<property name="solTags" type="java.lang.String">
 			<column name="sol_tags" length="65535" />
 		</property>
-		<property name="solCrtdDt" type="java.sql.Timestamp">
+		<property name="solCrtdDt" type="java.util.Date">
 			<column name="sol_crtd_dt" length="19" not-null="true" />
 		</property>
 		<property name="solReviewCnt" type="java.lang.Integer">
-			<column name="sol_review_cnt" length="11" />
+			<column name="sol_review_cnt" />
 		</property>
 	</class>
 	<sql-query name="getSolutionCreatedByUser">
@@ -72,7 +72,7 @@
 	</sql-query>
 	<!-- <sql-query name="getReviewSolutionByStatus"> select sol.* from ip_solution sol where sol.sol_status=3 and sol_chal_id in (SELECT cg_chal_id FROM lpdb.ip_challenge_group where cg_group_id in (SELECT gu_grp_id FROM lpdb.ip_group_user where gu_usr_id=:id and gu_grp_id in (SELECT fg_grp_id FROM lpdb.ip_func_group where fg_func_id=13))) <return alias="sol" class="za.co.idea.ip.orm.bean.IpSolution" /> </sql-query> -->
 	<sql-query name="getReviewSolutionByStatus">
-		select sol.* from ip_solution sol, ip_review rv where sol.sol_id=rv.rev_entity_id and sol.sol_status=3 and rv.rev_sel_user_id=:id and rv.rev_entity_name="ip_solution"
+		select distinct sol.* from ip_solution sol, ip_review rv where sol.sol_id=rv.rev_entity_id and sol.sol_status in (3,4,5,6,7) and rv.rev_sel_user_id=:id and rv.rev_entity_name="ip_solution" and (sol.sol_status = (select ss_id from ip_solution_status where lower(ss_desc) = lower(concat('In-Review ',rv.rev_entity_status_id))))
 		<return alias="sol" class="za.co.idea.ip.orm.bean.IpSolution" />
 	</sql-query>
 	<sql-query name="updateSolStatusOnExpiry">

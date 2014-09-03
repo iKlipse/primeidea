@@ -9,16 +9,16 @@
 				<p:commandLink value="Published Challenges" actionListener="#{challengeController.showPublishedChallenges}" update="pnlChalDet">
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 				</p:commandLink>
-				<p:graphicImage name="separator.png" library="images" rendered="#{landingPageController.controller.reviewChallengeEnabled}" />
-				<p:commandLink value="View Challenges Under Review" actionListener="#{challengeController.showReviewChallenges}" update="pnlChalDet" rendered="#{landingPageController.controller.reviewChallengeEnabled}">
+				<p:graphicImage name="separator.png" library="images" rendered="#{challengeController.controller.reviewChallengeEnabled}" />
+				<p:commandLink value="View Challenges Under Review" actionListener="#{challengeController.showReviewChallenges}" update="pnlChalDet" rendered="#{challengeController.controller.reviewChallengeEnabled}">
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 				</p:commandLink>
 				<p:graphicImage name="separator.png" library="images" />
 				<p:commandLink value="View All Challenges" actionListener="#{challengeController.showViewChallenges}" update="pnlChalDet">
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 				</p:commandLink>
-				<p:graphicImage name="separator.png" library="images" rendered="#{landingPageController.controller.createChallengeEnabled}" />
-				<p:commandLink value="Create Challenge" actionListener="#{challengeController.showCreateChallenges}" update="pnlChalDet" rendered="#{landingPageController.controller.createChallengeEnabled}">
+				<p:graphicImage name="separator.png" library="images" rendered="#{challengeController.controller.createChallengeEnabled}" />
+				<p:commandLink value="Create Challenge" actionListener="#{challengeController.showCreateChallenges}" update="pnlChalDet" rendered="#{challengeController.controller.createChallengeEnabled}">
 					<f:setPropertyActionListener value="2" target="#{challengeController.returnView}" />
 				</p:commandLink>
 			</p:panel>
