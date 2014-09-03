@@ -718,6 +718,8 @@ public class ChallengeController implements Serializable {
 								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 							}
 						}
+						rvIds = null;
+						rvIdCnt = 0;
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Challenge Saved", "Challenge Saved");
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 						showViewChallenges();

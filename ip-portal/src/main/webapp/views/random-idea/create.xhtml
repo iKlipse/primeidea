@@ -38,7 +38,7 @@
 		<p:column>
 			<!-- <p:pickList id="plCrtGroupPick" converter="groupConverter" value="#{randomIdeaController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" /> -->
 			<p:selectOneMenu id="scmGroupList" value="#{randomIdeaController.selGroupId}">
-				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+				<f:selectItem itemLabel="Select One" itemValue="" />
 				<f:selectItems value="#{randomIdeaController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 			</p:selectOneMenu>
 		</p:column>

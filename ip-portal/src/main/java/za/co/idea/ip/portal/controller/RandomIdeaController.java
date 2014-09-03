@@ -808,7 +808,8 @@ public class RandomIdeaController implements Serializable {
 			ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
 			ideaMessage.setSetStatusId(ideaBean.getSetStatusId());
-			ideaMessage.setGroupIdList(getLongArray(selGroupId));
+			if (selGroupId != null && selGroupId.toString().length() != 0)
+				ideaMessage.setGroupIdList(getLongArray(selGroupId));
 			ideaMessage.setRvIdCnt(rvIdCnt);
 			ResponseMessage response = updateIdeaClient.accept(MediaType.APPLICATION_JSON).put(ideaMessage, ResponseMessage.class);
 			updateIdeaClient.close();

@@ -174,7 +174,7 @@
 			</list>
 		</property>
 	</bean>
-	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	<bean id="mailSenderPrimedia" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="javaMailProperties">
 			<props>
 				<prop key="mail.smtp.host">vpbrjhbpexc02.corp.primedia.co.za</prop>
@@ -185,7 +185,7 @@
 			</props>
 		</property>
 	</bean>
-	<bean id="mailSenderHotmail" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="username" value="venumadhav.pattamatta@hotmail.com" />
 		<property name="password" value="" />
 		<property name="javaMailProperties">

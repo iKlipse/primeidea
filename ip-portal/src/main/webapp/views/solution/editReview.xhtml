@@ -4,7 +4,7 @@
 			<p:outputLabel id="lblSrChal" value="Challenges : " />
 		</p:column>
 		<p:column>
-			<p:selectOneMenu id="somSrChal" value="#{challengeController.solutionBean.chalId}">
+			<p:selectOneMenu id="somSrChal" value="#{challengeController.solutionBean.chalId}" disabled="#{challengeController.solutionBean.disableField}">
 				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 				<f:selectItems value="#{challengeController.viewChallenges}" var="schal" itemLabel="#{schal.title}" itemValue="#{schal.id}" />
 			</p:selectOneMenu>
@@ -13,7 +13,7 @@
 			<p:outputLabel id="lblSrTitle" value="Title : " />
 		</p:column>
 		<p:column>
-			<p:inputText autocomplete="false" id="txtSrTitle" value="#{challengeController.solutionBean.title}">
+			<p:inputText autocomplete="false" id="txtSrTitle" value="#{challengeController.solutionBean.title}" disabled="#{challengeController.solutionBean.disableField}">
 				<p:ajax listener="#{challengeController.checkTitleAvailability}" event="change" update="frmEditReviewolMsg" />
 			</p:inputText>
 		</p:column>
@@ -21,7 +21,7 @@
 			<p:outputLabel id="lblSrCat" value="Category : " />
 		</p:column>
 		<p:column>
-			<p:selectOneMenu id="somSrCat" value="#{challengeController.solutionBean.catId}">
+			<p:selectOneMenu id="somSrCat" value="#{challengeController.solutionBean.catId}" disabled="#{challengeController.solutionBean.disableField}">
 				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 				<f:selectItems value="#{challengeController.solutionCats}" var="scat" itemLabel="#{scat.desc}" itemValue="#{scat.id}" />
 			</p:selectOneMenu>
@@ -39,13 +39,14 @@
 			<p:outputLabel id="lblSrDesc" value="Description : " />
 		</p:column>
 		<p:column>
-			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="txtSrDesc" value="#{challengeController.solutionBean.desc}" />
+			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="txtSrDesc" value="#{challengeController.solutionBean.desc}" rendered="#{!challengeController.solutionBean.disableField}" />
+			<p:outputLabel id="outSrDesc" escape="false" value="#{challengeController.solutionBean.desc}" rendered="#{challengeController.solutionBean.disableField}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblSrTag" value="Keywords to Describe Your Solution : " />
 		</p:column>
 		<p:column>
-			<p:inputText autocomplete="false" id="txtSrTag" value="#{challengeController.solutionBean.tags}" />
+			<p:inputText autocomplete="false" id="txtSrTag" value="#{challengeController.solutionBean.tags}" disabled="#{challengeController.solutionBean.disableField}" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblrIDownload" value="Download File : " />
@@ -57,17 +58,11 @@
 				<p:outputLabel value="#{challengeController.solutionBean.fileName}" style="font-weight: 0.6em" />
 			</h:outputLink>
 		</p:column>
-		<p:column>
+		<p:column rendered="#{!challengeController.solutionBean.disableField}">
 			<p:outputLabel id="lblSrUpload" value="Upload File : " />
 		</p:column>
-		<p:column>
+		<p:column rendered="#{!challengeController.solutionBean.disableField}">
 			<p:fileUpload id="fuSrUpload" fileUploadListener="#{challengeController.solFileUploadHandle}" multiple="false" />
-		</p:column>
-		<p:column>
-			<p:selectOneMenu id="rvAdmUser" value="#{challengeController.solutionBean.revUserId}">
-				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-				<f:selectItems value="#{challengeController.admUsers}" var="a" itemLabel="#{a.fName} #{a.lName}" itemValue="#{a.uId}" />
-			</p:selectOneMenu>
 		</p:column>
 		<f:facet name="footer">
 			<p:commandButton id="btnrSave" value="Save" ajax="false" action="#{challengeController.updateSolution}">
@@ -77,7 +72,7 @@
 				<f:setPropertyActionListener value="3" target="#{landingPageController.toView}" />
 				<f:setPropertyActionListener value="4" target="#{challengeController.toView}" />
 			</p:commandButton>
-			<p:commandButton id="btnEdtrARv" value="Assign Reviewers" type="button" onclick="PF('dlgRwUpd').show();" />
+			<p:commandButton id="btnEdtrARv" value="Assign Reviewers" type="button" onclick="PF('dlgRwUpd').show();" rendered="#{!challengeController.solutionBean.disableField}" />
 		</f:facet>
 	</p:panelGrid>
 	<p:dialog id="dlgRwUpd" widgetVar="dlgRwUpd" modal="true">
