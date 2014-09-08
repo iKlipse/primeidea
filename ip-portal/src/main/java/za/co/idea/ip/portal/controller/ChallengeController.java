@@ -788,7 +788,7 @@ public class ChallengeController implements Serializable {
 			solutionStatuses = RESTServiceHelper.fetchAllSolutionStatuses();
 			rvIds = RESTServiceHelper.fetchReviews(solutionBean.getId(), "ip_solution");
 			rvIdCnt = rvIds.size();
-			return "sole";			
+			return "sole";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
@@ -805,7 +805,7 @@ public class ChallengeController implements Serializable {
 			solutionStatuses = RESTServiceHelper.fetchNextSolutionStatuses(solutionBean.getStatusId());
 			rvIds = RESTServiceHelper.fetchReviews(solutionBean.getId(), "ip_solution");
 			rvIdCnt = rvIds.size();
-			return "soleo";			
+			return "soleo";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
@@ -822,7 +822,7 @@ public class ChallengeController implements Serializable {
 			solutionStatuses = RESTServiceHelper.fetchAllReviewSolutionStatuses();
 			rvIds = RESTServiceHelper.fetchReviews(solutionBean.getId(), "ip_solution");
 			rvIdCnt = rvIds.size();
-			return "soler";			
+			return "soler";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
@@ -837,7 +837,7 @@ public class ChallengeController implements Serializable {
 			solComments = RESTServiceHelper.fetchAllBuildonComments(solutionBean.getId(), 3);
 			solLikeCnt = "(" + solLikes.getTags().size() + ")	";
 			solCommentCnt = "(" + solComments.size() + ")	";
-			buildOns = RESTServiceHelper.fetchAllBuildOns(solutionBean.getId(),	3);
+			buildOns = RESTServiceHelper.fetchAllBuildOns(solutionBean.getId(), 3);
 			buildOnCnt = "(" + buildOns.size() + ")	";
 			buildOnText = "";
 			commentText = "";
@@ -845,7 +845,7 @@ public class ChallengeController implements Serializable {
 			showSolBuildOns = true;
 			showSolutionLikes = false;
 			solutionBean.setTaggable(solutionBean.getStatusId() != 2);
-			return "sols";		
+			return "sols";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
@@ -862,7 +862,7 @@ public class ChallengeController implements Serializable {
 			solComments = RESTServiceHelper.fetchAllBuildonComments(solutionBean.getId(), 3);
 			solLikeCnt = "(" + solLikes.getTags().size() + ")	";
 			solCommentCnt = "(" + solComments.size() + ")	";
-			buildOns = RESTServiceHelper.fetchAllBuildOns(solutionBean.getId(),	3);
+			buildOns = RESTServiceHelper.fetchAllBuildOns(solutionBean.getId(), 3);
 			buildOnCnt = "(" + buildOns.size() + ")	";
 			buildOnText = "";
 			commentText = "";
@@ -887,7 +887,7 @@ public class ChallengeController implements Serializable {
 			solComments = RESTServiceHelper.fetchAllBuildonComments(solutionBean.getId(), 3);
 			solLikeCnt = "(" + solLikes.getTags().size() + ")	";
 			solCommentCnt = "(" + solComments.size() + ")	";
-			buildOns = RESTServiceHelper.fetchAllBuildOns(solutionBean.getId(),	3);
+			buildOns = RESTServiceHelper.fetchAllBuildOns(solutionBean.getId(), 3);
 			buildOnCnt = "(" + buildOns.size() + ")	";
 			commentText = "";
 			buildOnText = "";
@@ -895,7 +895,7 @@ public class ChallengeController implements Serializable {
 			showSolBuildOns = true;
 			showSolutionLikes = false;
 			solutionBean.setTaggable(solutionBean.getStatusId() != 2);
-			return "solsr";				
+			return "solsr";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
@@ -1242,13 +1242,14 @@ public class ChallengeController implements Serializable {
 	public void initializeChalAssignReviews() {
 		pGrps = RESTServiceHelper.fetchReviewGroups();
 		rvIds = new ArrayList<ReviewBean>();
-		for (int i = 0; i < rvIdCnt; i++) {
-			ReviewBean bean = new ReviewBean();
-			bean.setEntityId(COUNTER.getNextId("IpChallenge"));
-			bean.setStatusId(i + 1);
-			bean.setTblNm("ip_challenge");
-			rvIds.add(bean);
-		}
+		if (rvIdCnt != null)
+			for (int i = 0; i < rvIdCnt; i++) {
+				ReviewBean bean = new ReviewBean();
+				bean.setEntityId(COUNTER.getNextId("IpChallenge"));
+				bean.setStatusId(i + 1);
+				bean.setTblNm("ip_challenge");
+				rvIds.add(bean);
+			}
 	}
 
 	public void assignChalReviews() {
@@ -1271,13 +1272,14 @@ public class ChallengeController implements Serializable {
 	public void initializeSolAssignReviews() {
 		pGrps = RESTServiceHelper.fetchReviewGroups();
 		rvIds = new ArrayList<ReviewBean>();
-		for (int i = 0; i < rvIdCnt; i++) {
-			ReviewBean bean = new ReviewBean();
-			bean.setEntityId(COUNTER.getNextId("IpSolution"));
-			bean.setStatusId(i + 1);
-			bean.setTblNm("ip_solution");
-			rvIds.add(bean);
-		}
+		if (rvIdCnt != null)
+			for (int i = 0; i < rvIdCnt; i++) {
+				ReviewBean bean = new ReviewBean();
+				bean.setEntityId(COUNTER.getNextId("IpSolution"));
+				bean.setStatusId(i + 1);
+				bean.setTblNm("ip_solution");
+				rvIds.add(bean);
+			}
 	}
 
 	public void assignSolReviews() {

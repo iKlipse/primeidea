@@ -153,11 +153,11 @@
 			<from-outcome>admuv</from-outcome>
 			<to-view-id>/views/admin/user/view.xhtml</to-view-id>
 		</navigation-case>
-				<navigation-case>
+		<navigation-case>
 			<from-outcome>admuav</from-outcome>
 			<to-view-id>/views/admin/user/viewActiveUsers.xhtml</to-view-id>
 		</navigation-case>
-				<navigation-case>
+		<navigation-case>
 			<from-outcome>admuiv</from-outcome>
 			<to-view-id>/views/admin/user/viewInActiveUsers.xhtml</to-view-id>
 		</navigation-case>
@@ -187,6 +187,10 @@
 		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
+		<navigation-case>
+			<from-outcome>admair</from-outcome>
+			<to-view-id>/views/admin/misc/allocateGroups.xhtml</to-view-id>
+		</navigation-case>
 		<navigation-case>
 			<from-outcome>admap</from-outcome>
 			<to-view-id>/views/admin/misc/allocatePoints.xhtml</to-view-id>

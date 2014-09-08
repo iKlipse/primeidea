@@ -313,6 +313,47 @@ public class AdminService {
 	}
 
 	@GET
+	@Path("/group/sub/list/{id}")
+	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
+	public <T extends GroupMessage> List<T> listSubGroups(@PathParam("id") Long id) {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List groups = ipGroupDAO.findSubGroups(id);
+			for (Object object : groups) {
+				IpGroup ipGroup = (IpGroup) object;
+				GroupMessage group = new GroupMessage();
+				group.setGeMail(ipGroup.getGroupEmail());
+				group.setgId(ipGroup.getGroupId());
+				group.setgName(ipGroup.getGroupName());
+				group.setIsActive(ipGroup.getGroupStatus().equalsIgnoreCase("y"));
+				group.setCrtdDate(ipGroup.getGroupCrtdDt());
+				if (ipGroup.getIpGroup() != null) {
+					group.setpGrpId(ipGroup.getIpGroup().getGroupId());
+					group.setpGrpName(ipGroup.getIpGroup().getGroupName());
+				}
+				if (ipGroup.getIpUser() != null) {
+					group.setAdmUserId(ipGroup.getIpUser().getUserId());
+					group.setAdmUserName(ipGroup.getIpUser().getUserScreenName());
+				}
+				List guList = ipGroupUserDAO.fetchByGroupId(ipGroup.getGroupId());
+				Long[] uList = new Long[guList.size()];
+				int i = 0;
+				for (Object guObj : guList) {
+					IpGroupUser gu = (IpGroupUser) guObj;
+					uList[i] = gu.getIpUser().getUserId();
+					i++;
+				}
+				group.setUserIdList(uList);
+				ret.add((T) group);
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
+		return ret;
+	}
+
+	@GET
 	@Path("/group/hierarchy/{id}")
 	@Produces("application/json")
 	@Transactional(propagation = Propagation.REQUIRED)

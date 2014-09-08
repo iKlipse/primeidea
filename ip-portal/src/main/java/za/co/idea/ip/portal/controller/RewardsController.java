@@ -140,6 +140,7 @@ public class RewardsController implements Serializable {
 			userId = message.getuId();
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			rewardsCat = RESTServiceHelper.fetchAllRewardsCat();
+			totalPoints = RESTServiceHelper.calculateTotal(RESTServiceHelper.fetchAllPointsByUser(userId));
 			viewRewardsBeans = RESTServiceHelper.fetchAllAvailableRewards(userId, totalPoints);
 			showCrtReward = false;
 			showViewReward = false;
@@ -308,7 +309,7 @@ public class RewardsController implements Serializable {
 			rewardsCat = RESTServiceHelper.fetchAllRewardsCat();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
-			return "rwer";			
+			return "rwer";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update reward request", "System error occurred, cannot perform update reward request");
@@ -714,8 +715,6 @@ public class RewardsController implements Serializable {
 		}
 	}
 
-
-	
 	private DualListModel<GroupBean> initializeSelectedGroups(List<GroupBean> grps) {
 		List<Long> selGrps = rewardsBean.getGroupIdList();
 		DualListModel<GroupBean> ret = new DualListModel<GroupBean>(new ArrayList<GroupBean>(), new ArrayList<GroupBean>());
@@ -979,7 +978,6 @@ public class RewardsController implements Serializable {
 		}
 		return claimStatusList;
 	}
-
 
 	public void setClaimStatusList(List<MetaDataBean> claimStatusList) {
 		this.claimStatusList = claimStatusList;

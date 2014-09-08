@@ -66,6 +66,7 @@ public class RandomIdeaController implements Serializable {
 	private StreamedContent fileContent;
 	private StreamedContent uploadContent;
 	private List<GroupBean> pGrps;
+	private List<GroupBean> cGrps;
 	private String[] selGrpId;
 	private Long selGroupId;
 	private DualListModel<GroupBean> groupTwinSelect;
@@ -273,7 +274,7 @@ public class RandomIdeaController implements Serializable {
 				selGroupId = (Long) grpList.get(0);
 			}
 			groupTwinSelect = initializeSelectedGroups(pGrps);
-			return "ideae";			
+			return "ideae";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
@@ -302,7 +303,7 @@ public class RandomIdeaController implements Serializable {
 			} else {
 				ideaStatuses = RESTServiceHelper.fetchAllReviewIdeaStatuses();
 			}
-			return "ideaer";			
+			return "ideaer";
 		} catch (Exception e) {
 			logger.error(e, e);
 
@@ -331,7 +332,7 @@ public class RandomIdeaController implements Serializable {
 				selGroupId = (Long) grpList.get(0);
 			}
 			groupTwinSelect = initializeSelectedGroups(pGrps);
-			return "ideaeo";			
+			return "ideaeo";
 		} catch (Exception e) {
 			logger.error(e, e);
 
@@ -343,7 +344,7 @@ public class RandomIdeaController implements Serializable {
 		}
 	}
 
-	public String showSummaryIdea() {		
+	public String showSummaryIdea() {
 		try {
 			likes = RESTServiceHelper.fetchAllBuildonLikes(ideaBean.getIdeaId(), 1);
 			comments = RESTServiceHelper.fetchAllBuildonComments(ideaBean.getIdeaId(), 1);
@@ -366,7 +367,7 @@ public class RandomIdeaController implements Serializable {
 		}
 	}
 
-	public String showSummaryReviewIdea() {		
+	public String showSummaryReviewIdea() {
 		try {
 			likes = RESTServiceHelper.fetchAllBuildonLikes(ideaBean.getIdeaId(), 1);
 			comments = RESTServiceHelper.fetchAllBuildonComments(ideaBean.getIdeaId(), 1);
@@ -389,7 +390,7 @@ public class RandomIdeaController implements Serializable {
 		}
 	}
 
-	public String showSummaryOpenIdea() {		
+	public String showSummaryOpenIdea() {
 		try {
 			likes = RESTServiceHelper.fetchAllBuildonLikes(ideaBean.getIdeaId(), 1);
 			comments = RESTServiceHelper.fetchAllBuildonComments(ideaBean.getIdeaId(), 1);
@@ -735,13 +736,36 @@ public class RandomIdeaController implements Serializable {
 	public void initializeAssignReviews() {
 		pGrps = RESTServiceHelper.fetchReviewGroups();
 		rvIds = new ArrayList<ReviewBean>();
-		for (int i = 0; i < rvIdCnt; i++) {
-			ReviewBean bean = new ReviewBean();
-			bean.setEntityId(COUNTER.getNextId("IpIdea"));
-			bean.setStatusId(i + 1);
-			bean.setTblNm("ip_idea");
-			rvIds.add(bean);
-		}
+		if (rvIdCnt != null)
+			for (int i = 0; i < rvIdCnt; i++) {
+				ReviewBean bean = new ReviewBean();
+				bean.setEntityId(null);
+				bean.setStatusId(i + 1);
+				bean.setTblNm("ip_idea");
+				rvIds.add(bean);
+			}
+	}
+
+	public void changeGroup() {
+		if (selGroupId != null && selGroupId != -999) {
+			rvIds = new ArrayList<ReviewBean>();
+			cGrps = RESTServiceHelper.fetchSubGroups(selGroupId);
+		} else
+			rvIds = new ArrayList<ReviewBean>();
+	}
+
+	public void changeCount() {
+		if (rvIdCnt != null && rvIdCnt != -999)
+			for (int i = 0; i < rvIdCnt; i++) {
+				ReviewBean bean = new ReviewBean();
+				bean.setEntityId(null);
+				bean.setStatusId(i + 1);
+				bean.setTblNm("ip_idea");
+				rvIds.add(bean);
+			}
+		else
+			rvIds = new ArrayList<ReviewBean>();
+
 	}
 
 	public void assignReviews() {
@@ -773,8 +797,6 @@ public class RandomIdeaController implements Serializable {
 		ret[0] = groupId;
 		return ret;
 	}
-
-	
 
 	public void fileUploadHandle(FileUploadEvent fue) {
 		try {
@@ -1008,6 +1030,16 @@ public class RandomIdeaController implements Serializable {
 
 	public void setpGrps(List<GroupBean> pGrps) {
 		this.pGrps = pGrps;
+	}
+
+	public List<GroupBean> getcGrps() {
+		if (cGrps == null)
+			cGrps = new ArrayList<GroupBean>();
+		return cGrps;
+	}
+
+	public void setcGrps(List<GroupBean> cGrps) {
+		this.cGrps = cGrps;
 	}
 
 	public String[] getSelGrpId() {

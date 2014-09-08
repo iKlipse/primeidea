@@ -177,6 +177,7 @@ public class AdminController implements Serializable {
 	private boolean activeUsersView;
 	private boolean inactiveUsersView;
 	private AccessController controller;
+	public boolean showAllocIdeaReview;
 
 	private WebClient createCustomClient(String url) {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
@@ -378,7 +379,7 @@ public class AdminController implements Serializable {
 			admUsers = RESTServiceHelper.fetchAllUsersSortByPG();
 			userTwinSelect = initializeSelectedUsers(admUsers);
 			functions = RESTServiceHelper.fetchAllFunctionsByGroup(groupBean.getgId());
-			return "admge";			
+			return "admge";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated groups view request", "System error occurred, cannot perform updated groups view request");
@@ -393,7 +394,7 @@ public class AdminController implements Serializable {
 			admUsers = RESTServiceHelper.fetchAllUsersSortByPG();
 			userTwinSelect = initializeSelectedUsers(admUsers);
 			functions = RESTServiceHelper.fetchAllFunctionsByGroup(groupBean.getgId());
-			return "admgs";			
+			return "admgs";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated groups view request", "System error occurred, cannot perform updated groups view request");
@@ -517,6 +518,10 @@ public class AdminController implements Serializable {
 
 	public String showUploadUsers() {
 		return "admuu";
+	}
+
+	public String showAllocateGroups() {
+		return "admair";
 	}
 
 	public String showRPw() {
@@ -1105,26 +1110,26 @@ public class AdminController implements Serializable {
 		if (userBean.getScName() == null || userBean.getScName().length() == 0) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter Screen Name to Check Availability", "Enter Screen Name to Check Availability");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		} else if(curTitle != null && !curTitle.equals(userBean.getScName())) {
-		WebClient checkAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/check/screenName/" + userBean.getScName());
-		Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
-		checkAvailablityClient.close();
-		available = avail.booleanValue();
-		if (available) {
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Screen Name Not Available", "Screen Name Not Available");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		} else {
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Screen Name Available", "Screen Name Available");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		}
-		
+		} else if (curTitle != null && !curTitle.equals(userBean.getScName())) {
+			WebClient checkAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/check/screenName/" + userBean.getScName());
+			Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
+			checkAvailablityClient.close();
+			available = avail.booleanValue();
+			if (available) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Screen Name Not Available", "Screen Name Not Available");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			} else {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Screen Name Available", "Screen Name Available");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			}
+
 		}
 	}
 
 	public void checkAvailabilityEmail() {
 		if (userBean.geteMail() == null || userBean.geteMail().length() == 0) {
 
-		} else if(curEmailId != null && !curEmailId.equals(userBean.geteMail())) {
+		} else if (curEmailId != null && !curEmailId.equals(userBean.geteMail())) {
 			WebClient checkAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/check/email/" + userBean.geteMail());
 			Boolean availE = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 			checkAvailablityClient.close();
@@ -1139,7 +1144,7 @@ public class AdminController implements Serializable {
 	public void checkAvailabilityIDNumber() {
 		if (userBean.getIdNum() == null || userBean.getIdNum() == 0) {
 
-		} else if(curId != null && curId != userBean.getIdNum()) {
+		} else if (curId != null && curId != userBean.getIdNum()) {
 			WebClient checkAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/check/idNumber/" + userBean.getIdNum());
 			Boolean availID = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 			checkAvailablityClient.close();
@@ -1154,7 +1159,7 @@ public class AdminController implements Serializable {
 	public void checkAvailabilityEmployeeID() {
 		if (userBean.getEmployeeId() == null || userBean.getEmployeeId().length() == 0) {
 
-		} else if(curEmpId != null && !curEmpId.equals(userBean.getEmployeeId())) {
+		} else if (curEmpId != null && !curEmpId.equals(userBean.getEmployeeId())) {
 			WebClient checkAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/check/employeeId/" + userBean.getEmployeeId());
 			Boolean availEmpID = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 			checkAvailablityClient.close();
@@ -1950,7 +1955,6 @@ public class AdminController implements Serializable {
 	// return ret;
 	// }
 	//
-	
 
 	private DualListModel<GroupBean> initializeSelectedGroups(List<GroupBean> grps) {
 		List<Long> selGrps = functionBean.getGroupIdList();
@@ -1977,8 +1981,6 @@ public class AdminController implements Serializable {
 				ret.getSource().add(bean);
 		return ret;
 	}
-
-
 
 	private GroupBean getGroupById(Long pGrpId) {
 		GroupBean bean = new GroupBean();
@@ -3261,5 +3263,13 @@ public class AdminController implements Serializable {
 
 	public void setCurId(Long curId) {
 		this.curId = curId;
+	}
+
+	public boolean isShowAllocIdeaReview() {
+		return showAllocIdeaReview;
+	}
+
+	public void setShowAllocIdeaReview(boolean showAllocIdeaReview) {
+		this.showAllocIdeaReview = showAllocIdeaReview;
 	}
 }

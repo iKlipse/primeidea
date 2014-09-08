@@ -620,7 +620,6 @@ public class RESTServiceHelper {
 	}
 
 	public static List<RewardsBean> fetchAllAvailableRewards(Long userId, long totalPoints) {
-		fetchAllPointsByUser(userId);
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
 		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list/avail");
 		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
