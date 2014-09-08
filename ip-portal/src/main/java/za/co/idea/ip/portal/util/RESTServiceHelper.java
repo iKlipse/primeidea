@@ -225,6 +225,29 @@ public class RESTServiceHelper {
 		return ret;
 	}
 
+	public static List<GroupBean> fetchSubGroups(Long id) {
+		List<GroupBean> ret = new ArrayList<GroupBean>();
+		WebClient viewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/sub/list/" + id);
+		Collection<? extends GroupMessage> groups = new ArrayList<GroupMessage>(viewGroupsClient.accept(MediaType.APPLICATION_JSON).getCollection(GroupMessage.class));
+		viewGroupsClient.close();
+		for (GroupMessage groupMessage : groups) {
+			GroupBean bean = new GroupBean();
+			bean.setgId(groupMessage.getgId());
+			bean.setGeMail(groupMessage.getGeMail());
+			bean.setgName(groupMessage.getgName());
+			bean.setIsActive(groupMessage.getIsActive());
+			bean.setSelAdmUser(groupMessage.getAdmUserId());
+			bean.setSelPGrp(groupMessage.getpGrpId());
+			bean.setgCrtdDate(groupMessage.getCrtdDate());
+			bean.getUserIdList().clear();
+			for (Long grpId : groupMessage.getUserIdList())
+				if (grpId != null)
+					bean.getUserIdList().add(grpId);
+			ret.add(bean);
+		}
+		return ret;
+	}
+
 	public static GroupBean getGroupById(Long pGrpId) {
 		GroupBean bean = new GroupBean();
 		WebClient groupByIdClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/get/" + pGrpId);
@@ -533,7 +556,7 @@ public class RESTServiceHelper {
 		ret.add(bean);
 		return ret;
 	}
-	
+
 	public static List<RewardsBean> fetchAllRewards(Long userId, long totalPoints) {
 		fetchAllPointsByUser(userId);
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
@@ -566,7 +589,6 @@ public class RESTServiceHelper {
 		return ret;
 	}
 
-
 	public static List<RewardsBean> fetchAllRewardsByUser(Long userId, long totalPoints) {
 		fetchAllPointsByUser(userId);
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
@@ -596,7 +618,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static List<RewardsBean> fetchAllAvailableRewards(Long userId, long totalPoints) {
 		fetchAllPointsByUser(userId);
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
@@ -697,7 +719,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static List<RewardsBean> fetchAllAvailableRewardsByCat(Long userId, long totalPoints, Integer selRwCatId) {
 		fetchAllPointsByUser(userId);
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
@@ -729,7 +751,6 @@ public class RESTServiceHelper {
 		return ret;
 
 	}
-
 
 	public static List<ClaimBean> fetchAllClaimsByUser(Long userId) {
 		List<ClaimBean> ret = new ArrayList<ClaimBean>();
@@ -910,7 +931,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static List<ListSelectorBean> fetchNextChallengeStatuses(Integer statusId) {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewChallengeSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/status/list/" + statusId);
@@ -924,7 +945,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static List<ListSelectorBean> fetchNextSolutionStatuses(Integer statusId) {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewSolutionSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/status/list/" + statusId);
@@ -1005,7 +1026,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static List<MetaDataBean> fetchAllStatusList(String entity) {
 		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
 		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/" + entity);
@@ -1020,7 +1041,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static List<UserBean> fetchAllUsersSortByPG() {
 		List<UserBean> ret = new ArrayList<UserBean>();
 		WebClient viewUsersClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/list/sort/pg");
@@ -1050,7 +1071,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static List<UserBean> fetchAdminUser() {
 		List<UserBean> ret = new ArrayList<UserBean>();
 		WebClient userByIdClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/get/" + 0l);
@@ -1078,7 +1099,6 @@ public class RESTServiceHelper {
 		ret.add(bean);
 		return ret;
 	}
-	
 
 	public static List<FunctionBean> fetchAllFunctions() {
 		List<FunctionBean> ret = new ArrayList<FunctionBean>();
@@ -1195,7 +1215,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static List<AllocationBean> fetchAllAllocationsByEntity(String entity) {
 		List<AllocationBean> ret = new ArrayList<AllocationBean>();
 		WebClient allocCLient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/alloc/list/" + entity);
@@ -1212,14 +1232,14 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	private static String[] toStringArray(Long[] val) {
 		String[] ret = new String[val.length];
 		for (int i = 0; i < val.length; i++)
 			ret[i] = val[i].toString();
 		return ret;
 	}
-	
+
 	public static List<ChallengeBean> fetchAllChallenges() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
 		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list");
@@ -1249,7 +1269,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static ChallengeBean fetchChallengeById(Long chalId) {
 		logger.debug("Control handled in fecthChallengeById() ");
 		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/get/" + chalId);
@@ -1277,7 +1297,7 @@ public class RESTServiceHelper {
 		logger.info("Before returning challenge bean: " + bean);
 		return bean;
 	}
-	
+
 	public static List<ChallengeBean> fetchAllAvailableChallenges() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
 		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/status/8");
@@ -1337,7 +1357,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static List<ChallengeBean> fetchAllChallengesByStatusIdUserId(Long userId, Integer status) {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
 		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/status/" + status + "/user/" + userId);
@@ -1373,7 +1393,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static List<SolutionBean> fetchAllSolutions() {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
 		WebClient fetchSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list");
@@ -1404,8 +1424,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
-	
+
 	public static List<SolutionBean> fetchAllSolutionsCreatedByUser(Long userId) {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
 		WebClient fetchSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/user/created/" + userId);
@@ -1437,7 +1456,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static List<SolutionBean> fetchAllSolutionsByStatusIdUserId(Long userId, Integer status) {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
 		WebClient fetchSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/status/" + status + "/user/" + userId);
@@ -1468,7 +1487,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static List<SolutionBean> fetchAllReviewSolutionsByUser(Long userId) {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
 		WebClient fetchSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/reviewStatus/" + userId);
@@ -1499,7 +1518,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static List<SolutionBean> fetchAllSolutionsByChal(Long chalId) {
 		logger.debug("Control handled in fetchAllSolutionsByChal method ");
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
@@ -1549,7 +1568,6 @@ public class RESTServiceHelper {
 		return ret;
 	}
 
-
 	public static List<MetaDataBean> fetchAllMetadata(String table) {
 		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
 		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/" + table);
@@ -1564,7 +1582,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static List<TagBean> fetchAllBuildOns(Long entityId, int entityType) {
 		WebClient fetchIdeaBuildOnsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + entityId + "/" + entityType + "/3");
 		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaBuildOnsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
@@ -1583,7 +1601,7 @@ public class RESTServiceHelper {
 		}
 		return ret;
 	}
-	
+
 	public static TagCloudModel fetchAllBuildonLikes(Long entityId, int entityType) {
 		TagCloudModel likes = new DefaultTagCloudModel();
 		WebClient fetchBuildonLikesClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + entityId + "/" + entityType + "/1");
@@ -1593,7 +1611,7 @@ public class RESTServiceHelper {
 			likes.addTag(new DefaultTagCloudItem(tagMessage.getUsrScreenName(), 1));
 		return likes;
 	}
-	
+
 	public static List<TagBean> fetchAllBuildonComments(Long entityId, int entityType) {
 		WebClient fetchBuildonCommentsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + entityId + "/" + entityType + "/2");
 		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchBuildonCommentsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
@@ -1607,6 +1625,6 @@ public class RESTServiceHelper {
 			ret.add(bean);
 		}
 		return ret;
-	}	
-		
+	}
+
 }

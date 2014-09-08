@@ -74,39 +74,6 @@
 				<f:setPropertyActionListener value="1" target="#{landingPageController.toView}" />
 				<f:setPropertyActionListener value="1" target="#{randomIdeaController.toView}" />
 			</p:commandButton>
-			<p:commandButton id="btnEdtoARv" value="Assign Reviewers" type="button" onclick="PF('dlgRwUpd').show();" rendered="#{!randomIdeaController.ideaBean.disableField}" />
 		</f:facet>
 	</p:panelGrid>
-	<p:dialog id="dlgRwUpd" widgetVar="dlgRwUpd" modal="true">
-		<p:panelGrid id="pnlGrdItmSel" styleClass="panelGridView" columns="3">
-			<p:column>
-				<p:outputLabel value="Select Review Stages : " />
-			</p:column>
-			<p:column>
-				<p:selectOneMenu value="#{randomIdeaController.rvIdCnt}">
-					<f:selectItem itemLabel="1" itemValue="1" />
-					<f:selectItem itemLabel="2" itemValue="2" />
-					<f:selectItem itemLabel="3" itemValue="3" />
-					<f:selectItem itemLabel="4" itemValue="4" />
-					<f:selectItem itemLabel="5" itemValue="5" />
-				</p:selectOneMenu>
-			</p:column>
-			<p:column>
-				<p:commandButton value="Refresh" actionListener="#{randomIdeaController.initializeAssignReviews}" update="dtRevGrp" />
-			</p:column>
-		</p:panelGrid>
-		<p:dataTable id="dtRevGrp" value="#{randomIdeaController.rvIds}" paginator="false" var="rv">
-			<p:column headerText="Stage">
-				<p:outputLabel value="#{rv.statusId}" />
-			</p:column>
-			<p:column headerText="Groups">
-				<p:selectCheckboxMenu id="rvGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{rv.groupId}">
-					<f:selectItems value="#{randomIdeaController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
-				</p:selectCheckboxMenu>
-			</p:column>
-			<f:facet name="footer">
-				<p:commandButton value="Assign Reviewers" actionListener="#{randomIdeaController.assignReviews}" oncomplete="PF('dlgRwUpd').hide();" />
-			</f:facet>
-		</p:dataTable>
-	</p:dialog>
 </ui:composition>

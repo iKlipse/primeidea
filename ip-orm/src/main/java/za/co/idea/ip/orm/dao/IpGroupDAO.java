@@ -143,6 +143,19 @@ public class IpGroupDAO extends HibernateDaoSupport {
 		}
 	}
 
+	public List findSubGroups(Long id) {
+		log.debug("finding all sub group instances by query: getGroupsByParent");
+		try {
+			Query query = getSession().getNamedQuery("getGroupsByParent");
+			query.setLong("id", id);
+			List ret = query.list();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
+	}
+
 	public List findInActiveGroups() {
 		log.debug("finding all In active IpGroup instances by query: getGroupsByStatus ");
 		try {
