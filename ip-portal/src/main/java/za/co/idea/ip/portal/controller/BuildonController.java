@@ -2,7 +2,6 @@ package za.co.idea.ip.portal.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -25,12 +24,7 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
-import org.primefaces.model.tagcloud.DefaultTagCloudItem;
-import org.primefaces.model.tagcloud.DefaultTagCloudModel;
 import org.primefaces.model.tagcloud.TagCloudModel;
-
-import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.model.User;
 
 import za.co.idea.ip.portal.bean.TagBean;
 import za.co.idea.ip.portal.util.IdNumberGen;
@@ -40,6 +34,9 @@ import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.TagMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
+
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
 
 @ManagedBean(name = "buildonController")
 @SessionScoped
@@ -106,47 +103,24 @@ public class BuildonController implements Serializable {
 		}
 	}
 
-	public String showSummaryBuildon() {
-		buildonLikes = fetchAllBuildonLikes();
-		buildonComments = fetchAllBuildonComments();
-		buildonLikeCnt = "(" + buildonLikes.getTags().size() + ")	";
-		buildonCommentCnt = "(" + buildonComments.size() + ")	";
-		showBuildonComments = false;
-		showBuildonLikes = false;
+	public String showSummaryBuildon() {		
 		try {
-			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + buildon.getTagId() + "/ip_tag");
-			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-			getBlobClient.close();
-			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-				client.header("Content-Type", "application/json");
-				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-				if (attachment != null) {
-					fileAvail = false;
-					WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
-					String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobTypeClient.close();
-					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-				} else {
-					fileAvail = true;
-					fileContent = null;
-				}
-			} else {
-				fileAvail = true;
-				fileContent = null;
-			}
+			buildonLikes = RESTServiceHelper.fetchAllBuildonLikes(buildon.getTagId(), 5);
+			buildonComments = RESTServiceHelper.fetchAllBuildonComments(buildon.getTagId(), 5);
+			buildonLikeCnt = "(" + buildonLikes.getTags().size() + ")	";
+			buildonCommentCnt = "(" + buildonComments.size() + ")	";
+			showBuildonComments = false;
+			showBuildonLikes = false;
+			return "bosw";
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			fileAvail = true;
 			fileContent = null;
+			return "";
 		}
-		return "bosw";
+		
 	}
 
 	public String likeBuildon() {
@@ -162,7 +136,7 @@ public class BuildonController implements Serializable {
 		addTagClient.close();
 		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
-		buildonLikes = fetchAllBuildonLikes();
+		buildonLikes = RESTServiceHelper.fetchAllBuildonLikes(buildon.getTagId(), 5);
 		buildonLikeCnt = "(" + buildonLikes.getTags().size() + ")	";
 		showBuildonComments = false;
 		showBuildonLikes = true;
@@ -183,7 +157,7 @@ public class BuildonController implements Serializable {
 		addTagClient.close();
 		if (response.getStatusCode() != 0)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Comment", "Error While Saving Comment"));
-		buildonComments = fetchAllBuildonComments();
+		buildonComments = RESTServiceHelper.fetchAllBuildonComments(buildon.getTagId(), 5);
 		buildonCommentCnt = "(" + buildonComments.size() + ")	";
 		commentText = "";
 		showBuildonComments = true;
@@ -234,31 +208,6 @@ public class BuildonController implements Serializable {
 		fileContent = null;
 		buildons = RESTServiceHelper.fetchAllBuildOns(entityId, entityType);
 		return "";
-	}
-
-	private TagCloudModel fetchAllBuildonLikes() {
-		TagCloudModel likes = new DefaultTagCloudModel();
-		WebClient fetchBuildonLikesClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + buildon.getTagId() + "/5/1");
-		Collection<? extends TagMessage> likeList = new ArrayList<TagMessage>(fetchBuildonLikesClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
-		fetchBuildonLikesClient.close();
-		for (TagMessage tagMessage : likeList)
-			likes.addTag(new DefaultTagCloudItem(tagMessage.getUsrScreenName(), 1));
-		return likes;
-	}
-
-	private List<TagBean> fetchAllBuildonComments() {
-		WebClient fetchBuildonCommentsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + buildon.getTagId() + "/5/2");
-		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchBuildonCommentsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
-		fetchBuildonCommentsClient.close();
-		List<TagBean> ret = new ArrayList<TagBean>();
-		for (TagMessage msg : msgs) {
-			TagBean bean = new TagBean();
-			bean.setTagText(msg.getTagText());
-			bean.setUsrScreenName(msg.getUsrScreenName());
-			bean.setTagDate(msg.getTagDate());
-			ret.add(bean);
-		}
-		return ret;
 	}
 
 	public void fileUploadHandle(FileUploadEvent fue) {

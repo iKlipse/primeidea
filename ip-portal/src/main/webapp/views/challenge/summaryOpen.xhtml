@@ -34,14 +34,16 @@
 		<p:column>
 			<p:panelGrid styleClass="panelGridView" columns="2">
 				<p:column>
-					<p:commandLink id="lnkSumoLikeIdea" action="#{challengeController.likeChallenge}" update="lblLikeCnt, :frmSummaryOpenChal:tgSumoLikes">
+					<p:commandButton id="giSumoLike" icon="ui-icon-heart" action="#{challengeController.likeChallenge}" update="lblLikeCnt, :frmSummaryOpenChal:tgSumoLikes">
 						<p:outputLabel id="lblLikeCnt" value="#{challengeController.chalLikeCnt}" />
-						<p:graphicImage id="giSumoLike" name="like-128.png" library="images" height="25px" width="25px" />
-					</p:commandLink>
+						<!--<p:graphicImage id="giSumoLike" name="like-128.png" library="images" height="25px" width="25px" /> -->
+					</p:commandButton>
 				</p:column>
 				<p:column>
+				<p:commandButton id="giSumoComment" icon="ui-icon-comment" >
 					<p:outputLabel id="lblCommentCnt" value="#{challengeController.chalCommentCnt}" />
-					<p:graphicImage id="giSumoComment" name="comment.jpg" library="images" height="25px" width="25px" />
+					<!--<p:graphicImage id="giSumoComment" name="comment.jpg" library="images" height="25px" width="25px" /> -->
+					</p:commandButton>
 				</p:column>
 			</p:panelGrid>
 		</p:column>
@@ -55,7 +57,7 @@
 			</p:commandButton>
 		</f:facet>
 	</p:panelGrid>
-	<p:overlayPanel my="right bottom" at="right top" dynamic="true" for="giSumoComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
+	<p:overlayPanel my="right bottom" at="right top" dynamic="true" for="giSumoComment" showEvent="click" hideEvent="click" dismissable="true" showCloseIcon="true">
 		<p:panelGrid styleClass="panelGridView" id="pnlSumoChallengeComment" columns="1">
 			<p:column>
 				<p:dataScroller mode="inline" scrollHeight="200" id="dtSumoViewComments" value="#{challengeController.chalComments}" var="comment" chunkSize="2">

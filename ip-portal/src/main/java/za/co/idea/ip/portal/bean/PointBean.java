@@ -1,6 +1,7 @@
 package za.co.idea.ip.portal.bean;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class PointBean implements Serializable {
 	private static final long serialVersionUID = 6011887684010931471L;
@@ -10,6 +11,7 @@ public class PointBean implements Serializable {
 	private Long pointId;
 	private String comments;
 	private Long entityId;
+	private Date crtdDt;
 
 	public Long getUserId() {
 		return userId;
@@ -57,6 +59,14 @@ public class PointBean implements Serializable {
 
 	public void setEntityId(Long entityId) {
 		this.entityId = entityId;
+	}
+
+	public Date getCrtdDt() {
+		return crtdDt;
+	}
+
+	public void setCrtdDt(Date crtdDt) {
+		this.crtdDt = crtdDt;
 	}
 
 }

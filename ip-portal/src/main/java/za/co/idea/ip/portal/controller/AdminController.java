@@ -99,6 +99,10 @@ public class AdminController implements Serializable {
 	private boolean available;
 	private boolean availableID;
 	private boolean availableEmail;
+	private String curEmailId;
+	private String curTitle;
+	private String curEmpId;
+	private Long curId;
 	private boolean availableEmpID;
 	private String secA;
 	private String secQ;
@@ -194,7 +198,7 @@ public class AdminController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
-			viewUsers = fetchAllUsers();
+			viewUsers = RESTServiceHelper.fetchAllUsers();
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
@@ -264,7 +268,7 @@ public class AdminController implements Serializable {
 
 	public String showViewNews() {
 		try {
-			viewNewsBeans = fetchAllNews();
+			viewNewsBeans = RESTServiceHelper.fetchAllNews();
 			return "admvn";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -276,31 +280,6 @@ public class AdminController implements Serializable {
 
 	public String showEditNews() {
 		try {
-			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + newsBean.getnId() + "/ip_news");
-			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-			getBlobClient.close();
-			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-				client.header("Content-Type", "application/json");
-				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-				if (attachment != null) {
-					fileAvail = false;
-					WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
-					String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobTypeClient.close();
-					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-				} else {
-					fileAvail = true;
-					fileContent = null;
-				}
-			} else {
-				fileAvail = true;
-				fileContent = null;
-			}
 			return "admen";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -314,7 +293,7 @@ public class AdminController implements Serializable {
 
 	public String showSummaryNews() {
 		try {
-			viewNewsBeans = fetchAllNews();
+			viewNewsBeans = RESTServiceHelper.fetchAllNews();
 			return "admsn";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -327,7 +306,7 @@ public class AdminController implements Serializable {
 	public String showAllocatePoints() {
 		try {
 			entity = "";
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchAllUsers();
 			allocs = new ArrayList<AllocationBean>();
 			return "admap";
 		} catch (Exception e) {
@@ -353,8 +332,8 @@ public class AdminController implements Serializable {
 
 	public String showViewFunction() {
 		try {
-			functions = fetchAllFunctions();
-			admUsers = fetchAllUsers();
+			functions = RESTServiceHelper.fetchAllFunctions();
+			admUsers = RESTServiceHelper.fetchAllUsers();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
 			return "admfv";
 		} catch (Exception e) {
@@ -368,7 +347,7 @@ public class AdminController implements Serializable {
 	public String showViewGroups() {
 		try {
 			pGrps = viewGroups = RESTServiceHelper.fetchAllGroups();
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchAllUsers();
 			return "admgv";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -382,8 +361,8 @@ public class AdminController implements Serializable {
 		try {
 			groupBean = new GroupBean();
 			viewGroups = pGrps = RESTServiceHelper.fetchActiveGroups();
-			admUsers = fetchAllUsersSortByPG();
-			userTwinSelect = new DualListModel<UserBean>(fetchAllUsersSortByPG(), fetchAdminUser());
+			admUsers = RESTServiceHelper.fetchAllUsersSortByPG();
+			userTwinSelect = new DualListModel<UserBean>(RESTServiceHelper.fetchAllUsersSortByPG(), RESTServiceHelper.fetchAdminUser());
 			return "admgc";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -396,45 +375,10 @@ public class AdminController implements Serializable {
 	public String showEditGroup() {
 		try {
 			viewGroups = pGrps = RESTServiceHelper.fetchActiveGroups();
-			admUsers = fetchAllUsersSortByPG();
+			admUsers = RESTServiceHelper.fetchAllUsersSortByPG();
 			userTwinSelect = initializeSelectedUsers(admUsers);
-			functions = fetchAllFunctionsByGroup();
-			try {
-				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + groupBean.getgId() + "/ip_group");
-				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-				getBlobClient.close();
-				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-					client.header("Content-Type", "application/json");
-					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-					if (attachment != null) {
-						fileAvail = false;
-						WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
-						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-						getBlobTypeClient.close();
-						groupBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-					} else {
-						fileAvail = true;
-						fileContent = null;
-					}
-				} else {
-					fileAvail = true;
-					fileContent = null;
-				}
-				return "admge";
-			} catch (Exception e) {
-				logger.error(e, e);
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				fileAvail = true;
-				fileContent = null;
-				return "";
-			}
+			functions = RESTServiceHelper.fetchAllFunctionsByGroup(groupBean.getgId());
+			return "admge";			
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated groups view request", "System error occurred, cannot perform updated groups view request");
@@ -446,45 +390,10 @@ public class AdminController implements Serializable {
 	public String showSummaryGroup() {
 		try {
 			viewGroups = pGrps = RESTServiceHelper.fetchAllGroups();
-			admUsers = fetchAllUsersSortByPG();
+			admUsers = RESTServiceHelper.fetchAllUsersSortByPG();
 			userTwinSelect = initializeSelectedUsers(admUsers);
-			functions = fetchAllFunctionsByGroup();
-			try {
-				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + groupBean.getgId() + "/ip_group");
-				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-				getBlobClient.close();
-				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-					client.header("Content-Type", "application/json");
-					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-					if (attachment != null) {
-						fileAvail = false;
-						WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
-						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-						getBlobTypeClient.close();
-						groupBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-					} else {
-						fileAvail = true;
-						fileContent = null;
-					}
-				} else {
-					fileAvail = true;
-					fileContent = null;
-				}
-				return "admgs";
-			} catch (Exception e) {
-				logger.error(e, e);
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				fileAvail = true;
-				fileContent = null;
-				return "";
-			}
+			functions = RESTServiceHelper.fetchAllFunctionsByGroup(groupBean.getgId());
+			return "admgs";			
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated groups view request", "System error occurred, cannot perform updated groups view request");
@@ -509,7 +418,7 @@ public class AdminController implements Serializable {
 
 	public String showViewClaim() {
 		try {
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchAllUsers();
 			claimStatus = RESTServiceHelper.fetchAllClaimStatuses();
 			viewClaimBeans = RESTServiceHelper.fetchAllClaims();
 			viewRewardsBeans = RESTServiceHelper.fetchAllRewards();
@@ -524,7 +433,7 @@ public class AdminController implements Serializable {
 
 	public String showEditClaim() {
 		try {
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchAllUsers();
 			claimStatus = RESTServiceHelper.fetchNextClaimStatuses(claimBean.getcStatusId());
 			viewRewardsBeans = RESTServiceHelper.fetchAllRewards();
 			return "clmec";
@@ -568,7 +477,7 @@ public class AdminController implements Serializable {
 		try {
 			activeUsersView = false;
 			inactiveUsersView = false;
-			viewUsers = fetchAllUsers();
+			viewUsers = RESTServiceHelper.fetchAllUsers();
 			return "admuv";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -611,16 +520,20 @@ public class AdminController implements Serializable {
 	}
 
 	public String showRPw() {
-		secqList = fetchAllSecQ();
+		secqList = RESTServiceHelper.fetchAllSecQ();
 		return "";
 	}
 
 	public String showEditUser() {
 		try {
-			secqList = fetchAllSecQ();
+			secqList = RESTServiceHelper.fetchAllSecQ();
 			viewGroups = RESTServiceHelper.fetchActiveGroups();
 			resetPasswd = false;
 			resetSec = false;
+			curTitle = userBean.getScName();
+			curId = userBean.getIdNum();
+			curEmailId = userBean.geteMail();
+			curEmailId = userBean.getEmployeeId();
 			return "admue";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -634,7 +547,7 @@ public class AdminController implements Serializable {
 		try {
 			activeUsersView = true;
 			inactiveUsersView = false;
-			secqList = fetchAllSecQ();
+			secqList = RESTServiceHelper.fetchAllSecQ();
 			viewGroups = RESTServiceHelper.fetchActiveGroups();
 			resetPasswd = false;
 			resetSec = false;
@@ -651,7 +564,7 @@ public class AdminController implements Serializable {
 		try {
 			inactiveUsersView = true;
 			activeUsersView = false;
-			secqList = fetchAllSecQ();
+			secqList = RESTServiceHelper.fetchAllSecQ();
 			viewGroups = RESTServiceHelper.fetchActiveGroups();
 			resetPasswd = false;
 			resetSec = false;
@@ -693,11 +606,11 @@ public class AdminController implements Serializable {
 			userBean.setGroupId(userMessage.getGroupId());
 			userBean.setcPw(userBean.getPwd());
 			viewGroups = RESTServiceHelper.fetchAllGroups();
-			secqList = fetchAllSecQ();
+			secqList = RESTServiceHelper.fetchAllSecQ();
 			showEditProfile = true;
 			showChangePwd = false;
 			showChangeSecQ = false;
-			secqList = fetchAllSecQ();
+			secqList = RESTServiceHelper.fetchAllSecQ();
 			if (toView != null && Integer.valueOf(toView) != -1) {
 				switch (Integer.valueOf(toView)) {
 				case 1:
@@ -758,7 +671,7 @@ public class AdminController implements Serializable {
 	}
 
 	public String changePwd() {
-		secqList = fetchAllSecQ();
+		secqList = RESTServiceHelper.fetchAllSecQ();
 		showEditProfile = false;
 		showChangePwd = true;
 		showChangeSecQ = false;
@@ -769,7 +682,7 @@ public class AdminController implements Serializable {
 		showEditProfile = false;
 		showChangePwd = false;
 		showChangeSecQ = true;
-		secqList = fetchAllSecQ();
+		secqList = RESTServiceHelper.fetchAllSecQ();
 		return "";
 
 	}
@@ -777,7 +690,7 @@ public class AdminController implements Serializable {
 	public String showCreateUser() {
 		try {
 			userBean = new UserBean();
-			secqList = fetchAllSecQ();
+			secqList = RESTServiceHelper.fetchAllSecQ();
 			viewGroups = RESTServiceHelper.fetchActiveGroups();
 			return "admuc";
 		} catch (Exception e) {
@@ -923,6 +836,7 @@ public class AdminController implements Serializable {
 			message.setPointValue(pointVal);
 			message.setUserId(allocUserId);
 			message.setComments(comments);
+			message.setCrtdDt(new Date());
 			ResponseMessage res = savePointsClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			if (res.getStatusCode() == 0) {
 				selAllocId = null;
@@ -949,7 +863,7 @@ public class AdminController implements Serializable {
 	public String showAllocationMod() {
 		this.showAddPanel = false;
 		this.showModPanel = true;
-		disStatusList = fetchAllStatusList();
+		disStatusList = RESTServiceHelper.fetchAllStatusList(entity);
 		if (entity.equalsIgnoreCase("ip_solution_status"))
 			statusList = getSolStatusList();
 		else if (entity.equalsIgnoreCase("ip_challenge_status"))
@@ -964,8 +878,8 @@ public class AdminController implements Serializable {
 	public String showAllocationAdd() {
 		this.showAddPanel = true;
 		this.showModPanel = false;
-		statusList = fetchAllNonAllocStatus();
-		disStatusList = fetchAllStatusList();
+		statusList = RESTServiceHelper.fetchAllNonAllocStatus(entity);
+		disStatusList = RESTServiceHelper.fetchAllStatusList(entity);
 		allocationBean = new AllocationBean();
 		return "";
 	}
@@ -985,7 +899,7 @@ public class AdminController implements Serializable {
 			entity = "";
 			allocs = new ArrayList<AllocationBean>();
 		} else {
-			allocs = fetchAllAllocationsByEntity();
+			allocs = RESTServiceHelper.fetchAllAllocationsByEntity(entity);
 		}
 		pointVal = null;
 	}
@@ -1011,9 +925,10 @@ public class AdminController implements Serializable {
 			message.setAllocId(allocationBean.getAllocId());
 			message.setAllocStatusId(allocationBean.getAllocStatusId());
 			message.setAllocVal(allocationBean.getAllocVal());
+			message.setAllocCrtdDt(allocationBean.getAllocCrtdDt());
 			ResponseMessage res = updateAllocClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			if (res.getStatusCode() == 0) {
-				allocs = fetchAllAllocationsByEntity();
+				allocs = RESTServiceHelper.fetchAllAllocationsByEntity(entity);
 				this.showAddPanel = false;
 				this.showModPanel = false;
 			} else {
@@ -1040,7 +955,7 @@ public class AdminController implements Serializable {
 			message.setAllocVal(allocationBean.getAllocVal());
 			ResponseMessage res = updateAllocClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			if (res.getStatusCode() == 0) {
-				allocs = fetchAllAllocationsByEntity();
+				allocs = RESTServiceHelper.fetchAllAllocationsByEntity(entity);
 				this.showAddPanel = false;
 				this.showModPanel = false;
 			} else {
@@ -1063,8 +978,8 @@ public class AdminController implements Serializable {
 			allocs = new ArrayList<AllocationBean>();
 			this.showAddBtn = false;
 		} else {
-			allocs = fetchAllAllocationsByEntity();
-			disStatusList = fetchAllStatusList();
+			allocs = RESTServiceHelper.fetchAllAllocationsByEntity(entity);
+			disStatusList = RESTServiceHelper.fetchAllStatusList(entity);
 			if (entity.equalsIgnoreCase("ip_solution_status"))
 				statusList = getSolStatusList();
 			else if (entity.equalsIgnoreCase("ip_challenge_status"))
@@ -1089,9 +1004,10 @@ public class AdminController implements Serializable {
 			message.setAllocId(COUNTER.getNextId("IpAllocation").intValue());
 			message.setAllocStatusId(allocationBean.getAllocStatusId());
 			message.setAllocVal(allocationBean.getAllocVal());
+			message.setAllocCrtdDt(new Date());
 			ResponseMessage res = saveAllocClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			if (res.getStatusCode() == 0) {
-				allocs = fetchAllAllocationsByEntity();
+				allocs = RESTServiceHelper.fetchAllAllocationsByEntity(entity);
 				this.showAddPanel = false;
 				this.showModPanel = false;
 				return "";
@@ -1107,52 +1023,6 @@ public class AdminController implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
-	}
-
-	private List<MetaDataBean> fetchAllNonAllocStatus() {
-		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/non/" + entity);
-		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		mDataClient.close();
-		for (MetaDataMessage message : messages) {
-			MetaDataBean bean = new MetaDataBean();
-			bean.setDesc(message.getDesc());
-			bean.setId(message.getId());
-			bean.setTable(message.getTable());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<AllocationBean> fetchAllAllocationsByEntity() {
-		List<AllocationBean> ret = new ArrayList<AllocationBean>();
-		WebClient allocCLient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/alloc/list/" + entity);
-		Collection<? extends AllocationMessage> messages = new ArrayList<AllocationMessage>(allocCLient.accept(MediaType.APPLICATION_JSON).getCollection(AllocationMessage.class));
-		for (AllocationMessage message : messages) {
-			AllocationBean bean = new AllocationBean();
-			bean.setAllocDesc(message.getAllocDesc());
-			bean.setAllocEntity(message.getAllocEntity());
-			bean.setAllocId(message.getAllocId());
-			bean.setAllocStatusId(message.getAllocStatusId());
-			bean.setAllocVal(message.getAllocVal());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<MetaDataBean> fetchAllStatusList() {
-		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/" + entity);
-		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		mDataClient.close();
-		for (MetaDataMessage message : messages) {
-			MetaDataBean bean = new MetaDataBean();
-			bean.setDesc(message.getDesc());
-			bean.setId(message.getId());
-			bean.setTable(message.getTable());
-			ret.add(bean);
-		}
-		return ret;
 	}
 
 	public List<MetaDataBean> getIdeaStatusList() {
@@ -1235,7 +1105,7 @@ public class AdminController implements Serializable {
 		if (userBean.getScName() == null || userBean.getScName().length() == 0) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter Screen Name to Check Availability", "Enter Screen Name to Check Availability");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-		}
+		} else if(curTitle != null && !curTitle.equals(userBean.getScName())) {
 		WebClient checkAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/check/screenName/" + userBean.getScName());
 		Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 		checkAvailablityClient.close();
@@ -1247,12 +1117,14 @@ public class AdminController implements Serializable {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Screen Name Available", "Screen Name Available");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
+		
+		}
 	}
 
 	public void checkAvailabilityEmail() {
 		if (userBean.geteMail() == null || userBean.geteMail().length() == 0) {
 
-		} else {
+		} else if(curEmailId != null && !curEmailId.equals(userBean.geteMail())) {
 			WebClient checkAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/check/email/" + userBean.geteMail());
 			Boolean availE = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 			checkAvailablityClient.close();
@@ -1267,7 +1139,7 @@ public class AdminController implements Serializable {
 	public void checkAvailabilityIDNumber() {
 		if (userBean.getIdNum() == null || userBean.getIdNum() == 0) {
 
-		} else {
+		} else if(curId != null && curId != userBean.getIdNum()) {
 			WebClient checkAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/check/idNumber/" + userBean.getIdNum());
 			Boolean availID = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 			checkAvailablityClient.close();
@@ -1282,7 +1154,7 @@ public class AdminController implements Serializable {
 	public void checkAvailabilityEmployeeID() {
 		if (userBean.getEmployeeId() == null || userBean.getEmployeeId().length() == 0) {
 
-		} else {
+		} else if(curEmpId != null && !curEmpId.equals(userBean.getEmployeeId())) {
 			WebClient checkAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/check/employeeId/" + userBean.getEmployeeId());
 			Boolean availEmpID = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 			checkAvailablityClient.close();
@@ -1465,6 +1337,7 @@ public class AdminController implements Serializable {
 			bean.setSecA(userBean.getSecA());
 			bean.setEmployeeId(userBean.getEmployeeId());
 			bean.setGroupId(userBean.getGroupId());
+			bean.setuCrtdDate(new Date());
 			ResponseMessage response = addUserClient.accept(MediaType.APPLICATION_JSON).post(bean, ResponseMessage.class);
 			addUserClient.close();
 			if (response.getStatusCode() == 0) {
@@ -1495,7 +1368,7 @@ public class AdminController implements Serializable {
 				}
 				FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "User '" + userBean.getfName() + "' created successfully", "User '" + userBean.getfName() + "' created successfully");
 				FacesContext.getCurrentInstance().addMessage(null, successMessage);
-				viewUsers = fetchAllUsers();
+				viewUsers = RESTServiceHelper.fetchAllUsers();
 				return "admuv";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -1648,6 +1521,7 @@ public class AdminController implements Serializable {
 			bean.setLastLoginDt(userBean.getLastLoginDt());
 			bean.setEmployeeId(userBean.getEmployeeId());
 			bean.setGroupId(userBean.getGroupId());
+			bean.setuCrtdDate(userBean.getuCrtdDate());
 			ResponseMessage response = updateUserClient.accept(MediaType.APPLICATION_JSON).put(bean, ResponseMessage.class);
 			updateUserClient.close();
 			if (resetPasswd) {
@@ -1719,6 +1593,7 @@ public class AdminController implements Serializable {
 				bean.setLastLoginDt(userBean.getLastLoginDt());
 				bean.setEmployeeId(userBean.getEmployeeId());
 				bean.setGroupId(userBean.getGroupId());
+				bean.setuCrtdDate(userBean.getuCrtdDate());
 				ResponseMessage response = updateUserClient.accept(MediaType.APPLICATION_JSON).put(bean, ResponseMessage.class);
 				updateUserClient.close();
 				if (resetPasswd) {
@@ -1773,6 +1648,7 @@ public class AdminController implements Serializable {
 			groupMessage.setUserIdList(toLongArray(selUserId));
 			groupMessage.setIsActive(true);
 			groupMessage.setpGrpId(groupBean.getSelPGrp());
+			groupMessage.setCrtdDate(new Date());
 			ResponseMessage response = addGroupClient.accept(MediaType.APPLICATION_JSON).post(groupMessage, ResponseMessage.class);
 			addGroupClient.close();
 			if (response.getStatusCode() == 0) {
@@ -1842,7 +1718,7 @@ public class AdminController implements Serializable {
 			ResponseMessage response = addFunctionClient.accept(MediaType.APPLICATION_JSON).post(functionMessage, ResponseMessage.class);
 			addFunctionClient.close();
 			if (response.getStatusCode() == 0) {
-				functions = fetchAllFunctions();
+				functions = RESTServiceHelper.fetchAllFunctions();
 				return "admfv";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -1877,6 +1753,7 @@ public class AdminController implements Serializable {
 			groupMessage.setUserIdList(toLongArray(selUserId));
 			groupMessage.setIsActive(groupBean.getIsActive());
 			groupMessage.setpGrpId(groupBean.getSelPGrp());
+			groupMessage.setCrtdDate(groupBean.getgCrtdDate());
 			ResponseMessage response = updateGroupClient.accept(MediaType.APPLICATION_JSON).put(groupMessage, ResponseMessage.class);
 			updateGroupClient.close();
 			if (response.getStatusCode() == 0) {
@@ -1969,7 +1846,7 @@ public class AdminController implements Serializable {
 			ResponseMessage response = updateFunctionClient.accept(MediaType.APPLICATION_JSON).put(functionMessage, ResponseMessage.class);
 			updateFunctionClient.close();
 			if (response.getStatusCode() == 0) {
-				functions = fetchAllFunctions();
+				functions = RESTServiceHelper.fetchAllFunctions();
 				return "admfv";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -2073,91 +1950,7 @@ public class AdminController implements Serializable {
 	// return ret;
 	// }
 	//
-	private List<UserBean> fetchAllUsers() {
-		List<UserBean> ret = new ArrayList<UserBean>();
-		WebClient viewUsersClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/list");
-		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
-		viewUsersClient.close();
-		for (UserMessage userMessage : users) {
-			UserBean bean = new UserBean();
-			bean.setBio(userMessage.getBio());
-			bean.setContact(userMessage.getContact());
-			bean.seteMail(userMessage.geteMail());
-			bean.setFbHandle(userMessage.getFbHandle());
-			bean.setfName(userMessage.getfName());
-			bean.setIdNum(userMessage.getIdNum());
-			bean.setIsActive(userMessage.getIsActive());
-			bean.setlName(userMessage.getlName());
-			bean.setmName(userMessage.getmName());
-			bean.setPwd(userMessage.getPwd());
-			bean.setScName(userMessage.getScName());
-			bean.setSkills(userMessage.getSkills());
-			bean.setTwHandle(userMessage.getTwHandle());
-			bean.setIsActive(userMessage.getIsActive());
-			bean.setuId(userMessage.getuId());
-			bean.setEmployeeId(userMessage.getEmployeeId());
-			bean.setPriGroupName(userMessage.getPriGroupName());
-			bean.setGroupId(userMessage.getGroupId());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<UserBean> fetchAllUsersSortByPG() {
-		List<UserBean> ret = new ArrayList<UserBean>();
-		WebClient viewUsersClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/list/sort/pg");
-		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
-		viewUsersClient.close();
-		for (UserMessage userMessage : users) {
-			UserBean bean = new UserBean();
-			bean.setBio(userMessage.getBio());
-			bean.setContact(userMessage.getContact());
-			bean.seteMail(userMessage.geteMail());
-			bean.setFbHandle(userMessage.getFbHandle());
-			bean.setfName(userMessage.getfName());
-			bean.setIdNum(userMessage.getIdNum());
-			bean.setIsActive(userMessage.getIsActive());
-			bean.setlName(userMessage.getlName());
-			bean.setmName(userMessage.getmName());
-			bean.setPwd(userMessage.getPwd());
-			bean.setScName(userMessage.getScName());
-			bean.setSkills(userMessage.getSkills());
-			bean.setTwHandle(userMessage.getTwHandle());
-			bean.setIsActive(userMessage.getIsActive());
-			bean.setuId(userMessage.getuId());
-			bean.setEmployeeId(userMessage.getEmployeeId());
-			bean.setPriGroupName(userMessage.getPriGroupName());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<UserBean> fetchAdminUser() {
-		List<UserBean> ret = new ArrayList<UserBean>();
-		WebClient userByIdClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/get/" + 0l);
-		UserMessage userMessage = userByIdClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
-		userByIdClient.close();
-		UserBean bean = new UserBean();
-		bean.setBio(userMessage.getBio());
-		bean.setContact(userMessage.getContact());
-		bean.seteMail(userMessage.geteMail());
-		bean.setFbHandle(userMessage.getFbHandle());
-		bean.setfName(userMessage.getfName());
-		bean.setIdNum(userMessage.getIdNum());
-		bean.setIsActive(userMessage.getIsActive());
-		bean.setlName(userMessage.getlName());
-		bean.setmName(userMessage.getmName());
-		bean.setPwd(userMessage.getPwd());
-		bean.setScName(userMessage.getScName());
-		bean.setSkills(userMessage.getSkills());
-		bean.setTwHandle(userMessage.getTwHandle());
-		bean.setIsActive(userMessage.getIsActive());
-		bean.setuId(userMessage.getuId());
-		bean.setEmployeeId(userMessage.getEmployeeId());
-		bean.setPriGroupName(userMessage.getPriGroupName());
-		ret.add(bean);
-		return ret;
-	}
+	
 
 	private DualListModel<GroupBean> initializeSelectedGroups(List<GroupBean> grps) {
 		List<Long> selGrps = functionBean.getGroupIdList();
@@ -2185,104 +1978,7 @@ public class AdminController implements Serializable {
 		return ret;
 	}
 
-	private List<FunctionBean> fetchAllFunctions() {
-		List<FunctionBean> ret = new ArrayList<FunctionBean>();
-		WebClient viewFunctionsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/func/list");
-		Collection<? extends FunctionMessage> functions = new ArrayList<FunctionMessage>(viewFunctionsClient.accept(MediaType.APPLICATION_JSON).getCollection(FunctionMessage.class));
-		viewFunctionsClient.close();
-		for (FunctionMessage functionMessage : functions) {
-			FunctionBean bean = new FunctionBean();
-			bean.setFuncId(functionMessage.getFuncId());
-			bean.setFuncName(functionMessage.getFuncName());
-			bean.getGroupIdList().clear();
-			for (Long id : functionMessage.getGroupIdList())
-				if (id != null)
-					bean.getGroupIdList().add(id);
-			ret.add(bean);
-		}
-		return ret;
-	}
 
-	private List<FunctionBean> fetchAllFunctionsByGroup() {
-		List<FunctionBean> ret = new ArrayList<FunctionBean>();
-		WebClient viewFunctionsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/func/group/list/" + groupBean.getgId());
-		Collection<? extends FunctionMessage> functions = new ArrayList<FunctionMessage>(viewFunctionsClient.accept(MediaType.APPLICATION_JSON).getCollection(FunctionMessage.class));
-		viewFunctionsClient.close();
-		for (FunctionMessage functionMessage : functions) {
-			FunctionBean bean = new FunctionBean();
-			bean.setFuncId(functionMessage.getFuncId());
-			bean.setFuncName(functionMessage.getFuncName());
-			bean.getGroupIdList().clear();
-			for (Long id : functionMessage.getGroupIdList())
-				if (id != null)
-					bean.getGroupIdList().add(id);
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<NewsBean> fetchAllNews() {
-		List<NewsBean> ret = new ArrayList<NewsBean>();
-		try {
-			WebClient fetchNewsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ns/news/list");
-			Collection<? extends NewsMessage> news = new ArrayList<NewsMessage>(fetchNewsClient.accept(MediaType.APPLICATION_JSON).getCollection(NewsMessage.class));
-			fetchNewsClient.close();
-			for (NewsMessage message : news) {
-				NewsBean bean = new NewsBean();
-				bean.setnId(message.getnId());
-				bean.setnContent(message.getContent());
-				bean.setEndDate(message.getEndDate());
-				bean.setStartDate(message.getStartDate());
-				bean.setnTitle(message.getnTitle());
-				bean.setNewsUrl(message.getNewsUrl());
-				bean.setNwImgAvail(message.isNwImgAvail());
-				bean.setBlobUrl(message.getBlobUrl());
-				bean.setFileName(message.getFileName());
-				ret.add(bean);
-			}
-		} catch (Exception e) {
-			logger.error(e, e);
-			logger.error("Error in fetching data : " + e.getMessage());
-		}
-		logger.info("News data displaying from List: " + ret);
-		return ret;
-	}
-
-	protected List<NotificationBean> fetchAllNotifications() {
-		List<NotificationBean> ret = new ArrayList<NotificationBean>();
-		WebClient fetchNotifClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/nos/notif/list/" + userId);
-		Collection<? extends NotificationMessage> notifications = new ArrayList<NotificationMessage>(fetchNotifClient.accept(MediaType.APPLICATION_JSON).getCollection(NotificationMessage.class));
-		fetchNotifClient.close();
-		for (NotificationMessage notificationMessage : notifications) {
-			NotificationBean bean = new NotificationBean();
-			bean.setNotifAttach(notificationMessage.getNotifAttach());
-			bean.setNotifBody(notificationMessage.getNotifBody());
-			bean.setNotifCrtdDate(notificationMessage.getNotifCrtdDate());
-			bean.setNotifEntityId(notificationMessage.getNotifEntityId());
-			bean.setNotifEntityTblName(notificationMessage.getNotifEntityTblName());
-			bean.setNotifId(notificationMessage.getNotifId());
-			bean.setNotifStatus(notificationMessage.getNotifStatus());
-			bean.setNotifSubject(notificationMessage.getNotifSubject());
-			bean.setGroupIdList(getIdsFromArray(notificationMessage.getGroupIdList()));
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<MetaDataBean> fetchAllSecQ() {
-		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
-		WebClient metaDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/IpSecqList");
-		Collection<? extends MetaDataMessage> metaDatas = new ArrayList<MetaDataMessage>(metaDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		metaDataClient.close();
-		for (MetaDataMessage metaDataMessage : metaDatas) {
-			MetaDataBean bean = new MetaDataBean();
-			bean.setDesc(metaDataMessage.getDesc());
-			bean.setId(metaDataMessage.getId());
-			bean.setTable(metaDataMessage.getTable());
-			ret.add(bean);
-		}
-		return ret;
-	}
 
 	private GroupBean getGroupById(Long pGrpId) {
 		GroupBean bean = new GroupBean();
@@ -2446,7 +2142,7 @@ public class AdminController implements Serializable {
 		ResponseMessage response = mDataClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 		mDataClient.close();
 		if (response.getStatusCode() == 0) {
-			beans = fetchAllMetadata();
+			beans = RESTServiceHelper.fetchAllMetadata(table);
 			return "";
 		} else {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -2467,7 +2163,7 @@ public class AdminController implements Serializable {
 		ResponseMessage response = mDataClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 		mDataClient.close();
 		if (response.getStatusCode() == 0) {
-			beans = fetchAllMetadata();
+			beans = RESTServiceHelper.fetchAllMetadata(table);
 			return "admmm";
 		} else {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -2495,7 +2191,7 @@ public class AdminController implements Serializable {
 		ResponseMessage response = mDataClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 		mDataClient.close();
 		if (response.getStatusCode() == 0) {
-			beans = fetchAllMetadata();
+			beans = RESTServiceHelper.fetchAllMetadata(table);
 			return "";
 		} else {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -2511,26 +2207,11 @@ public class AdminController implements Serializable {
 			this.showModPanel = false;
 			this.showAddBtn = false;
 		} else {
-			beans = fetchAllMetadata();
+			beans = RESTServiceHelper.fetchAllMetadata(table);
 			this.showAddPanel = false;
 			this.showModPanel = false;
 			this.showAddBtn = true;
 		}
-	}
-
-	private List<MetaDataBean> fetchAllMetadata() {
-		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/" + table);
-		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		mDataClient.close();
-		for (MetaDataMessage message : messages) {
-			MetaDataBean bean = new MetaDataBean();
-			bean.setDesc(message.getDesc());
-			bean.setId(message.getId());
-			bean.setTable(message.getTable());
-			ret.add(bean);
-		}
-		return ret;
 	}
 
 	public HashMap<String, String> getMetaList() {
@@ -2545,7 +2226,7 @@ public class AdminController implements Serializable {
 
 	private boolean verifyMetadata(String desc) {
 		boolean ret = false;
-		for (MetaDataBean bean : fetchAllMetadata()) {
+		for (MetaDataBean bean : RESTServiceHelper.fetchAllMetadata(table)) {
 			if (bean.getDesc().equalsIgnoreCase(desc)) {
 				ret = true;
 				break;
@@ -2568,6 +2249,7 @@ public class AdminController implements Serializable {
 			message.setnId(COUNTER.getNextId("IpNews"));
 			message.setStartDate(newsBean.getStartDate());
 			message.setEndDate(newsBean.getEndDate());
+			message.setNewsCrtdDt(new Date());
 			ResponseMessage response = addNewsClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			addNewsClient.close();
 			if (response.getStatusCode() == 0) {
@@ -2598,7 +2280,7 @@ public class AdminController implements Serializable {
 					}
 					createBlobClient.close();
 				}
-				viewNewsBeans = fetchAllNews();
+				viewNewsBeans = RESTServiceHelper.fetchAllNews();
 				return "admvn";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -2624,6 +2306,7 @@ public class AdminController implements Serializable {
 			message.setContent(newsBean.getnContent());
 			message.setStartDate(newsBean.getStartDate());
 			message.setEndDate(newsBean.getEndDate());
+			message.setNewsCrtdDt(newsBean.getNewsCrtdDt());
 			ResponseMessage response = updateNewsClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			updateNewsClient.close();
 			if (response.getStatusCode() == 0) {
@@ -2681,7 +2364,7 @@ public class AdminController implements Serializable {
 					}
 				}
 				image = null;
-				viewNewsBeans = fetchAllNews();
+				viewNewsBeans = RESTServiceHelper.fetchAllNews();
 				return "admvn";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -2729,14 +2412,6 @@ public class AdminController implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
-	}
-
-	private List<Long> getIdsFromArray(Long[] ae) {
-		List<Long> ret = new ArrayList<Long>();
-		if (ae != null)
-			for (Long id : ae)
-				ret.add(id);
-		return ret;
 	}
 
 	protected Long[] toLongArray(String[] val) {
@@ -2955,7 +2630,7 @@ public class AdminController implements Serializable {
 	}
 
 	public List<MetaDataBean> getSecqList() {
-		secqList = fetchAllSecQ();
+		secqList = RESTServiceHelper.fetchAllSecQ();
 		return secqList;
 	}
 
@@ -3319,7 +2994,7 @@ public class AdminController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
-			viewNewsBeans = fetchAllNews();
+			viewNewsBeans = RESTServiceHelper.fetchAllNews();
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
@@ -3554,5 +3229,37 @@ public class AdminController implements Serializable {
 
 	public void setController(AccessController controller) {
 		this.controller = controller;
+	}
+
+	public String getCurEmailId() {
+		return curEmailId;
+	}
+
+	public void setCurEmailId(String curEmailId) {
+		this.curEmailId = curEmailId;
+	}
+
+	public String getCurTitle() {
+		return curTitle;
+	}
+
+	public void setCurTitle(String curTitle) {
+		this.curTitle = curTitle;
+	}
+
+	public String getCurEmpId() {
+		return curEmpId;
+	}
+
+	public void setCurEmpId(String curEmpId) {
+		this.curEmpId = curEmpId;
+	}
+
+	public Long getCurId() {
+		return curId;
+	}
+
+	public void setCurId(Long curId) {
+		this.curId = curId;
 	}
 }

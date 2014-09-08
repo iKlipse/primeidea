@@ -2,7 +2,6 @@ package za.co.idea.ip.portal.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -24,9 +23,6 @@ import org.primefaces.model.DualListModel;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
-import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.model.User;
-
 import za.co.idea.ip.portal.bean.GroupBean;
 import za.co.idea.ip.portal.bean.NotificationBean;
 import za.co.idea.ip.portal.util.RESTServiceHelper;
@@ -34,6 +30,9 @@ import za.co.idea.ip.ws.bean.NotificationMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
+
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
 
 @ManagedBean(name = "notificationController")
 @SessionScoped
@@ -96,7 +95,7 @@ public class NotificationController implements Serializable {
 
 	public String showViewNotifications() {
 		try {
-			viewNotifications = fetchAllNotifications();
+			viewNotifications = RESTServiceHelper.fetchAllNotifications(userId);
 			return "notifv";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -162,27 +161,6 @@ public class NotificationController implements Serializable {
 	 * setFileAvail(true); fileContent = null; return ""; } }
 	 */
 
-	private List<NotificationBean> fetchAllNotifications() {
-		List<NotificationBean> ret = new ArrayList<NotificationBean>();
-		WebClient fetchNotifClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/nos/notif/list/" + userId);
-		Collection<? extends NotificationMessage> notifications = new ArrayList<NotificationMessage>(fetchNotifClient.accept(MediaType.APPLICATION_JSON).getCollection(NotificationMessage.class));
-		fetchNotifClient.close();
-		for (NotificationMessage notificationMessage : notifications) {
-			NotificationBean bean = new NotificationBean();
-			bean.setNotifAttach(notificationMessage.getNotifAttach());
-			bean.setNotifBody(notificationMessage.getNotifBody());
-			bean.setNotifCrtdDate(notificationMessage.getNotifCrtdDate());
-			bean.setNotifEntityId(notificationMessage.getNotifEntityId());
-			bean.setNotifEntityTblName(notificationMessage.getNotifEntityTblName());
-			bean.setNotifId(notificationMessage.getNotifId());
-			bean.setNotifStatus(notificationMessage.getNotifStatus());
-			bean.setNotifSubject(notificationMessage.getNotifSubject());
-			bean.setGroupIdList(getIdsFromArray(notificationMessage.getGroupIdList()));
-			ret.add(bean);
-		}
-		return ret;
-	}
-
 	public String saveNotification() {
 		try {
 			WebClient addClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/nos/notif/add");
@@ -238,14 +216,6 @@ public class NotificationController implements Serializable {
 			ret[i] = bean.getgId();
 			i++;
 		}
-		return ret;
-	}
-
-	private List<Long> getIdsFromArray(Long[] ae) {
-		List<Long> ret = new ArrayList<Long>();
-		if (ae != null)
-			for (Long id : ae)
-				ret.add(id);
 		return ret;
 	}
 

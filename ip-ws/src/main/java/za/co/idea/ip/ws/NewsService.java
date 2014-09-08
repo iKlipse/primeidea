@@ -1,6 +1,7 @@
 package za.co.idea.ip.ws;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -46,6 +47,7 @@ public class NewsService {
 			ipNews.setNewsStartDate(news.getStartDate());
 			ipNews.setNewsEndDate(news.getEndDate());
 			ipNews.setNewsContent(news.getContent());
+			ipNews.setNewsCrtdDt(new Date());
 			logger.info("Before saving news details");
 			ipNewsDAO.save(ipNews);
 			logger.info("After saving new details");
@@ -79,6 +81,7 @@ public class NewsService {
 			ipNews.setNewsStartDate(news.getStartDate());
 			ipNews.setNewsEndDate(news.getEndDate());
 			ipNews.setNewsContent(news.getContent());
+			ipNews.setNewsCrtdDt(news.getNewsCrtdDt());
 			logger.info("Before updating news details for new id : " + news.getnId());
 			ipNewsDAO.merge(ipNews);
 			logger.info("News details are updated success fully");
@@ -116,6 +119,7 @@ public class NewsService {
 				message.setStartDate(news.getNewsStartDate());
 				message.setEndDate(news.getNewsEndDate());
 				message.setnTitle(news.getNewsTitle());
+				message.setNewsCrtdDt(news.getNewsCrtdDt());
 				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(news.getNewsId(), "ip_news");
 				if (ipBlob != null) {
 					message.setNewsUrl("ip_news/" + news.getNewsId() + "/" + ipBlob.getBlobName());
@@ -151,6 +155,7 @@ public class NewsService {
 			message.setStartDate(news.getNewsStartDate());
 			message.setEndDate(news.getNewsEndDate());
 			message.setnTitle(news.getNewsTitle());
+			message.setNewsCrtdDt(news.getNewsCrtdDt());
 			IpBlob ipBlob = ipBlobDAO.getBlobByEntity(news.getNewsId(), "ip_news");
 			if (ipBlob != null) {
 				logger.info(" News attachment URL : " + "ip_news/" + news.getNewsId() + "/" + ipBlob.getBlobName());

@@ -115,7 +115,7 @@ public class RewardsController implements Serializable {
 		try {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
 			;
-			rewardsCat = fetchAllRewardsCat();
+			rewardsCat = RESTServiceHelper.fetchAllRewardsCat();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
 			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 			rewardsBean = new RewardsBean();
@@ -138,9 +138,9 @@ public class RewardsController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
-			admUsers = fetchAllUsers();
-			rewardsCat = fetchAllRewardsCat();
-			viewRewardsBeans = fetchAllAvailableRewards();
+			admUsers = RESTServiceHelper.fetchAllUsers();
+			rewardsCat = RESTServiceHelper.fetchAllRewardsCat();
+			viewRewardsBeans = RESTServiceHelper.fetchAllAvailableRewards(userId, totalPoints);
 			showCrtReward = false;
 			showViewReward = false;
 			showOnlineStore = true;
@@ -154,9 +154,9 @@ public class RewardsController implements Serializable {
 
 	public void showRewardStoreByCategory() {
 		try {
-			admUsers = fetchAllUsers();
-			rewardsCat = fetchAllRewardsCat();
-			viewRewardsBeans = fetchAllAvailableRewardsByCat();
+			admUsers = RESTServiceHelper.fetchAllUsers();
+			rewardsCat = RESTServiceHelper.fetchAllRewardsCat();
+			viewRewardsBeans = RESTServiceHelper.fetchAllAvailableRewardsByCat(userId, totalPoints, selRwCatId);
 			showCrtReward = false;
 			showViewReward = false;
 			showOnlineStore = true;
@@ -170,9 +170,9 @@ public class RewardsController implements Serializable {
 
 	public void showViewReward() {
 		try {
-			admUsers = fetchAllUsers();
-			rewardsCat = fetchAllRewardsCat();
-			viewRewardsBeans = fetchAllRewards();
+			admUsers = RESTServiceHelper.fetchAllUsers();
+			rewardsCat = RESTServiceHelper.fetchAllRewardsCat();
+			viewRewardsBeans = RESTServiceHelper.fetchAllRewards(userId, totalPoints);
 			showCrtReward = false;
 			showViewReward = true;
 			showOnlineStore = false;
@@ -186,10 +186,10 @@ public class RewardsController implements Serializable {
 
 	public void showViewRewardByUser() {
 		try {
-			admUsers = fetchAllUsers();
-			rewardsCat = fetchAllRewardsCat();
+			admUsers = RESTServiceHelper.fetchAllUsers();
+			rewardsCat = RESTServiceHelper.fetchAllRewardsCat();
 			rewardsBean = new RewardsBean();
-			viewRewardsBeans = fetchAllRewardsByUser();
+			viewRewardsBeans = RESTServiceHelper.fetchAllRewardsByUser(userId, totalPoints);
 		} catch (Exception e) {
 			logger.error(e, e);
 
@@ -218,7 +218,7 @@ public class RewardsController implements Serializable {
 	public void showAllocationMod() {
 		this.showAddPanel = false;
 		this.showModPanel = true;
-		disStatusList = fetchAllStatusList();
+		disStatusList = RESTServiceHelper.fetchAllStatusList(entity);
 		if (entity.equalsIgnoreCase("ip_solution_status"))
 			statusList = getSolStatusList();
 		else if (entity.equalsIgnoreCase("ip_challenge_status"))
@@ -232,8 +232,8 @@ public class RewardsController implements Serializable {
 	public void showAllocationAdd() {
 		this.showAddPanel = true;
 		this.showModPanel = false;
-		statusList = fetchAllNonAllocStatus();
-		disStatusList = fetchAllStatusList();
+		statusList = RESTServiceHelper.fetchAllNonAllocStatus(entity);
+		disStatusList = RESTServiceHelper.fetchAllStatusList(entity);
 		allocationBean = new AllocationBean();
 	}
 
@@ -249,7 +249,7 @@ public class RewardsController implements Serializable {
 	public void showAllocatePoints() {
 		try {
 			entity = "";
-			admUsers = fetchAllUsers();
+			admUsers = RESTServiceHelper.fetchAllUsers();
 			allocs = new ArrayList<AllocationBean>();
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -264,7 +264,7 @@ public class RewardsController implements Serializable {
 			entity = "";
 			allocs = new ArrayList<AllocationBean>();
 		} else {
-			allocs = fetchAllAllocationsByEntity();
+			allocs = RESTServiceHelper.fetchAllAllocationsByEntity(entity);
 		}
 		pointVal = null;
 	}
@@ -286,8 +286,8 @@ public class RewardsController implements Serializable {
 			allocs = new ArrayList<AllocationBean>();
 			this.showAddBtn = false;
 		} else {
-			allocs = fetchAllAllocationsByEntity();
-			disStatusList = fetchAllStatusList();
+			allocs = RESTServiceHelper.fetchAllAllocationsByEntity(entity);
+			disStatusList = RESTServiceHelper.fetchAllStatusList(entity);
 			if (entity.equalsIgnoreCase("ip_solution_status"))
 				statusList = getSolStatusList();
 			else if (entity.equalsIgnoreCase("ip_challenge_status"))
@@ -305,45 +305,10 @@ public class RewardsController implements Serializable {
 	public String showEditReward() {
 		try {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
-			rewardsCat = fetchAllRewardsCat();
+			rewardsCat = RESTServiceHelper.fetchAllRewardsCat();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
 			groupTwinSelect = initializeSelectedGroups(pGrps);
-			try {
-				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + rewardsBean.getRwId() + "/ip_rewards");
-				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-				getBlobClient.close();
-				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-					client.header("Content-Type", "application/json");
-					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-					if (attachment != null) {
-						fileAvail = false;
-						WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
-						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-						getBlobTypeClient.close();
-						rewardsBean.setRwFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-					} else {
-						fileAvail = true;
-						fileContent = null;
-					}
-				} else {
-					fileAvail = true;
-					fileContent = null;
-				}
-				return "rwer";
-			} catch (Exception e) {
-				logger.error(e, e);
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update reward request", "System error occurred, cannot perform update reward request");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				fileAvail = true;
-				fileContent = null;
-				return "";
-			}
+			return "rwer";			
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update reward request", "System error occurred, cannot perform update reward request");
@@ -353,7 +318,7 @@ public class RewardsController implements Serializable {
 	}
 
 	public void showPointProfile() {
-		pointBeans = fetchAllPointsByUser();
+		pointBeans = RESTServiceHelper.fetchAllPointsByUser(userId);
 	}
 
 	private List<String> validateRewards() {
@@ -474,7 +439,7 @@ public class RewardsController implements Serializable {
 					}
 				}
 				uploadContent = null;
-				viewRewardsBeans = fetchAllRewards();
+				viewRewardsBeans = RESTServiceHelper.fetchAllRewards(userId, totalPoints);
 				return "rwvr";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -574,7 +539,7 @@ public class RewardsController implements Serializable {
 					}
 				}
 				uploadContent = null;
-				viewRewardsBeans = fetchAllRewards();
+				viewRewardsBeans = RESTServiceHelper.fetchAllRewards(userId, totalPoints);
 				return "rwvr";
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -599,9 +564,10 @@ public class RewardsController implements Serializable {
 			message.setAllocId(COUNTER.getNextId("IpAllocation").intValue());
 			message.setAllocStatusId(allocationBean.getAllocStatusId());
 			message.setAllocVal(allocationBean.getAllocVal());
+			message.setAllocCrtdDt(new Date());
 			ResponseMessage res = saveAllocClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			if (res.getStatusCode() == 0) {
-				allocs = fetchAllAllocationsByEntity();
+				allocs = RESTServiceHelper.fetchAllAllocationsByEntity(entity);
 				this.showAddPanel = false;
 				this.showModPanel = false;
 			} else {
@@ -625,6 +591,7 @@ public class RewardsController implements Serializable {
 			message.setPointValue(pointVal);
 			message.setUserId(userId);
 			message.setComments(comments);
+			message.setCrtdDt(new Date());
 			ResponseMessage res = savePointsClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			if (res.getStatusCode() == 0) {
 				selAllocId = null;
@@ -656,9 +623,10 @@ public class RewardsController implements Serializable {
 			message.setAllocId(allocationBean.getAllocId());
 			message.setAllocStatusId(allocationBean.getAllocStatusId());
 			message.setAllocVal(allocationBean.getAllocVal());
+			message.setAllocCrtdDt(allocationBean.getAllocCrtdDt());
 			ResponseMessage res = updateAllocClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			if (res.getStatusCode() == 0) {
-				allocs = fetchAllAllocationsByEntity();
+				allocs = RESTServiceHelper.fetchAllAllocationsByEntity(entity);
 				this.showAddPanel = false;
 				this.showModPanel = false;
 			} else {
@@ -682,9 +650,10 @@ public class RewardsController implements Serializable {
 			message.setAllocId(allocationBean.getAllocId());
 			message.setAllocStatusId(allocationBean.getAllocStatusId());
 			message.setAllocVal(allocationBean.getAllocVal());
+			message.setAllocCrtdDt(allocationBean.getAllocCrtdDt());
 			ResponseMessage res = updateAllocClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			if (res.getStatusCode() == 0) {
-				allocs = fetchAllAllocationsByEntity();
+				allocs = RESTServiceHelper.fetchAllAllocationsByEntity(entity);
 				this.showAddPanel = false;
 				this.showModPanel = false;
 			} else {
@@ -697,33 +666,6 @@ public class RewardsController implements Serializable {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update allocation request", "System error occurred, cannot perform update allocation request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
-	}
-
-	private List<UserBean> fetchAllUsers() {
-		List<UserBean> ret = new ArrayList<UserBean>();
-		WebClient viewUsersClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/list/sort/pg");
-		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
-		viewUsersClient.close();
-		for (UserMessage userMessage : users) {
-			UserBean bean = new UserBean();
-			bean.setBio(userMessage.getBio());
-			bean.setContact(userMessage.getContact());
-			bean.seteMail(userMessage.geteMail());
-			bean.setFbHandle(userMessage.getFbHandle());
-			bean.setfName(userMessage.getfName());
-			bean.setIdNum(userMessage.getIdNum());
-			bean.setIsActive(userMessage.getIsActive());
-			bean.setlName(userMessage.getlName());
-			bean.setmName(userMessage.getmName());
-			bean.setPwd(userMessage.getPwd());
-			bean.setScName(userMessage.getScName());
-			bean.setSkills(userMessage.getSkills());
-			bean.setTwHandle(userMessage.getTwHandle());
-			bean.setIsActive(true);
-			bean.setuId(userMessage.getuId());
-			ret.add(bean);
-		}
-		return ret;
 	}
 
 	public void addToWishlist() {
@@ -739,7 +681,7 @@ public class RewardsController implements Serializable {
 		addTagClient.close();
 		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
-		viewRewardsBeans = fetchAllAvailableRewards();
+		viewRewardsBeans = RESTServiceHelper.fetchAllAvailableRewards(userId, totalPoints);
 	}
 
 	public void removeFromWishlist() {
@@ -755,175 +697,7 @@ public class RewardsController implements Serializable {
 		addTagClient.close();
 		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
-		viewRewardsBeans = fetchAllRewardsByUser();
-	}
-
-	private List<RewardsBean> fetchAllAvailableRewardsByCat() {
-		fetchAllPointsByUser();
-		List<RewardsBean> ret = new ArrayList<RewardsBean>();
-		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list/cat/" + selRwCatId);
-		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
-		viewRewardsClient.close();
-		for (RewardsMessage message : rewards) {
-			RewardsBean bean = new RewardsBean();
-			bean.setrCatId(message.getrCatId());
-			bean.setRwCrtdDt(message.getRwCrtdDt());
-			bean.setRwDesc(message.getRwDesc());
-			bean.setRwExpiryDt(message.getRwExpiryDt());
-			bean.setRwHoverText(message.getRwHoverText());
-			bean.setRwId(message.getRwId());
-			bean.setRwLaunchDt(message.getRwLaunchDt());
-			bean.setRwStockCodeNum(message.getRwStockCodeNum());
-			bean.setRwTag(message.getRwTag());
-			bean.setRwTitle(message.getRwTitle());
-			bean.setRwValue(message.getRwValue());
-			bean.setRwPrice(message.getRwPrice());
-			bean.setRwQuantity(message.getRwQuantity());
-			bean.setRwImgAvail(message.isRwImgAvail());
-			bean.setRwUrl(message.getRwUrl());
-			bean.setRwTaggable(isWishlist(message.getRwId()));
-			bean.setRwClaimable(totalPoints >= message.getRwValue() && message.getRwQuantity() > 0);
-			bean.setBlobUrl(message.getBlobUrl());
-			ret.add(bean);
-		}
-		return ret;
-
-	}
-
-	private List<RewardsBean> fetchAllRewards() {
-		fetchAllPointsByUser();
-		List<RewardsBean> ret = new ArrayList<RewardsBean>();
-		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list");
-		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
-		viewRewardsClient.close();
-		for (RewardsMessage message : rewards) {
-			RewardsBean bean = new RewardsBean();
-			bean.setrCatId(message.getrCatId());
-			bean.setRwCrtdDt(message.getRwCrtdDt());
-			bean.setRwDesc(message.getRwDesc());
-			bean.setRwExpiryDt(message.getRwExpiryDt());
-			bean.setRwHoverText(message.getRwHoverText());
-			bean.setRwId(message.getRwId());
-			bean.setRwLaunchDt(message.getRwLaunchDt());
-			bean.setRwStockCodeNum(message.getRwStockCodeNum());
-			bean.setRwTag(message.getRwTag());
-			bean.setRwTitle(message.getRwTitle());
-			bean.setRwValue(message.getRwValue());
-			bean.setRwPrice(message.getRwPrice());
-			bean.setRwQuantity(message.getRwQuantity());
-			bean.setRwImgAvail(message.isRwImgAvail());
-			bean.setRwUrl(message.getRwUrl());
-			bean.setRwClaimable(totalPoints > message.getRwValue() && message.getRwQuantity() > 0);
-			bean.setRwTaggable(isWishlist(message.getRwId()));
-			bean.setBlobUrl(message.getBlobUrl());
-			bean.setrCatName(message.getrCatName());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<RewardsBean> fetchAllRewardsByUser() {
-		fetchAllPointsByUser();
-		List<RewardsBean> ret = new ArrayList<RewardsBean>();
-		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list/" + userId);
-		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
-		viewRewardsClient.close();
-		for (RewardsMessage message : rewards) {
-			RewardsBean bean = new RewardsBean();
-			bean.setrCatId(message.getrCatId());
-			bean.setRwCrtdDt(message.getRwCrtdDt());
-			bean.setRwDesc(message.getRwDesc());
-			bean.setRwExpiryDt(message.getRwExpiryDt());
-			bean.setRwHoverText(message.getRwHoverText());
-			bean.setRwId(message.getRwId());
-			bean.setRwLaunchDt(message.getRwLaunchDt());
-			bean.setRwStockCodeNum(message.getRwStockCodeNum());
-			bean.setRwTag(message.getRwTag());
-			bean.setRwTitle(message.getRwTitle());
-			bean.setRwValue(message.getRwValue());
-			bean.setRwPrice(message.getRwPrice());
-			bean.setRwQuantity(message.getRwQuantity());
-			bean.setRwImgAvail(message.isRwImgAvail());
-			bean.setRwUrl(message.getRwUrl());
-			bean.setRwTaggable(isWishlist(message.getRwId()));
-			bean.setRwClaimable(totalPoints >= message.getRwValue() && message.getRwQuantity() > 0);
-			bean.setBlobUrl(message.getBlobUrl());
-			bean.setrCatName(message.getrCatName());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<PointBean> fetchAllPointsByUser() {
-		List<PointBean> ret = new ArrayList<PointBean>();
-		WebClient viewPointClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/points/get/user/" + userId);
-		Collection<? extends PointMessage> points = new ArrayList<PointMessage>(viewPointClient.accept(MediaType.APPLICATION_JSON).getCollection(PointMessage.class));
-		viewPointClient.close();
-		totalPoints = 0l;
-		for (PointMessage message : points) {
-			PointBean bean = new PointBean();
-			bean.setAllocId(message.getAllocId());
-			bean.setComments(message.getComments());
-			bean.setEntityId(message.getEntityId());
-			bean.setPointId(message.getPointId());
-			bean.setPointValue(message.getPointValue());
-			bean.setUserId(message.getUserId());
-			totalPoints += message.getPointValue();
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<RewardsBean> fetchAllAvailableRewards() {
-		fetchAllPointsByUser();
-		List<RewardsBean> ret = new ArrayList<RewardsBean>();
-		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list/avail");
-		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
-		viewRewardsClient.close();
-		for (RewardsMessage message : rewards) {
-			RewardsBean bean = new RewardsBean();
-			bean.setrCatId(message.getrCatId());
-			bean.setRwCrtdDt(message.getRwCrtdDt());
-			bean.setRwDesc(message.getRwDesc());
-			bean.setRwExpiryDt(message.getRwExpiryDt());
-			bean.setRwHoverText(message.getRwHoverText());
-			bean.setRwId(message.getRwId());
-			bean.setRwLaunchDt(message.getRwLaunchDt());
-			bean.setRwStockCodeNum(message.getRwStockCodeNum());
-			bean.setRwTag(message.getRwTag());
-			bean.setRwTitle(message.getRwTitle());
-			bean.setRwValue(message.getRwValue());
-			bean.setRwPrice(message.getRwPrice());
-			bean.setRwQuantity(message.getRwQuantity());
-			bean.setRwImgAvail(message.isRwImgAvail());
-			bean.setRwUrl(message.getRwUrl());
-			bean.setRwClaimable(totalPoints >= message.getRwValue() && message.getRwQuantity() > 0);
-			bean.setRwTaggable(isWishlist(message.getRwId()));
-			bean.setBlobUrl(message.getBlobUrl());
-			bean.setrCatName(message.getrCatName());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private boolean isWishlist(Long rwId) {
-		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/getByUser/" + rwId + "/4/4/" + userId);
-		Collection<? extends TagMessage> rewards = new ArrayList<TagMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
-		return (rewards.size() > 0);
-	}
-
-	private List<ListSelectorBean> fetchAllRewardsCat() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewRewardsSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/cat/list");
-		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewRewardsSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		viewRewardsSelectClient.close();
-		for (MetaDataMessage metaDataMessage : md) {
-			ListSelectorBean bean = new ListSelectorBean();
-			bean.setId(metaDataMessage.getId());
-			bean.setDesc(metaDataMessage.getDesc());
-			ret.add(bean);
-		}
-		return ret;
+		viewRewardsBeans = RESTServiceHelper.fetchAllRewardsByUser(userId, totalPoints);
 	}
 
 	public void rwFileUploadHandle(FileUploadEvent fue) {
@@ -940,37 +714,8 @@ public class RewardsController implements Serializable {
 		}
 	}
 
-	private List<MetaDataBean> fetchAllNonAllocStatus() {
-		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/non/" + entity);
-		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		mDataClient.close();
-		for (MetaDataMessage message : messages) {
-			MetaDataBean bean = new MetaDataBean();
-			bean.setDesc(message.getDesc());
-			bean.setId(message.getId());
-			bean.setTable(message.getTable());
-			ret.add(bean);
-		}
-		return ret;
-	}
 
-	private List<AllocationBean> fetchAllAllocationsByEntity() {
-		List<AllocationBean> ret = new ArrayList<AllocationBean>();
-		WebClient allocCLient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/alloc/list/" + entity);
-		Collection<? extends AllocationMessage> messages = new ArrayList<AllocationMessage>(allocCLient.accept(MediaType.APPLICATION_JSON).getCollection(AllocationMessage.class));
-		for (AllocationMessage message : messages) {
-			AllocationBean bean = new AllocationBean();
-			bean.setAllocDesc(message.getAllocDesc());
-			bean.setAllocEntity(message.getAllocEntity());
-			bean.setAllocId(message.getAllocId());
-			bean.setAllocStatusId(message.getAllocStatusId());
-			bean.setAllocVal(message.getAllocVal());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
+	
 	private DualListModel<GroupBean> initializeSelectedGroups(List<GroupBean> grps) {
 		List<Long> selGrps = rewardsBean.getGroupIdList();
 		DualListModel<GroupBean> ret = new DualListModel<GroupBean>(new ArrayList<GroupBean>(), new ArrayList<GroupBean>());
@@ -1235,20 +980,6 @@ public class RewardsController implements Serializable {
 		return claimStatusList;
 	}
 
-	private List<MetaDataBean> fetchAllStatusList() {
-		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/" + entity);
-		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		mDataClient.close();
-		for (MetaDataMessage message : messages) {
-			MetaDataBean bean = new MetaDataBean();
-			bean.setDesc(message.getDesc());
-			bean.setId(message.getId());
-			bean.setTable(message.getTable());
-			ret.add(bean);
-		}
-		return ret;
-	}
 
 	public void setClaimStatusList(List<MetaDataBean> claimStatusList) {
 		this.claimStatusList = claimStatusList;

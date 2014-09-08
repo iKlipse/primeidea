@@ -1,6 +1,7 @@
 package za.co.idea.ip.ws;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -58,6 +59,7 @@ public class NotificationService {
 						ipNotifGroup.setIngId(ids[i]);
 						ipNotifGroup.setIngGrpId(gId);
 						ipNotifGroup.setIngNotifId(notif.getNotifId());
+						ipNotifGroup.setIngCrtdDt(new Date());
 						ipNotifGroupDAO.save(ipNotifGroup);
 						i++;
 					}

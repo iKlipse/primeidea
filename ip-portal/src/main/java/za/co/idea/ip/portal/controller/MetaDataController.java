@@ -2,7 +2,6 @@ package za.co.idea.ip.portal.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +19,7 @@ import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 
 import za.co.idea.ip.portal.bean.MetaDataBean;
 import za.co.idea.ip.portal.util.IdNumberGen;
+import za.co.idea.ip.portal.util.RESTServiceHelper;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
@@ -141,7 +141,7 @@ public class MetaDataController implements Serializable {
 		ResponseMessage response = mDataClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 		mDataClient.close();
 		if (response.getStatusCode() == 0) {
-			beans = fetchAllMetadata();
+			beans = RESTServiceHelper.fetchAllMetadata(table);
 			showMetadataMaintain = true;
 			return "";
 		} else {
@@ -164,7 +164,7 @@ public class MetaDataController implements Serializable {
 		ResponseMessage response = mDataClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 		mDataClient.close();
 		if (response.getStatusCode() == 0) {
-			beans = fetchAllMetadata();
+			beans = RESTServiceHelper.fetchAllMetadata(table);
 			return "mdata";
 		} else {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -192,7 +192,7 @@ public class MetaDataController implements Serializable {
 		ResponseMessage response = mDataClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 		mDataClient.close();
 		if (response.getStatusCode() == 0) {
-			beans = fetchAllMetadata();
+			beans = RESTServiceHelper.fetchAllMetadata(table);
 			return "";
 		} else {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
@@ -208,27 +208,13 @@ public class MetaDataController implements Serializable {
 			this.showModPanel = false;
 			this.showAddBtn = false;
 		} else {
-			beans = fetchAllMetadata();
+			beans = RESTServiceHelper.fetchAllMetadata(table);
 			this.showAddPanel = false;
 			this.showModPanel = false;
 			this.showAddBtn = true;
 		}
 	}
 
-	private List<MetaDataBean> fetchAllMetadata() {
-		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/" + table);
-		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		mDataClient.close();
-		for (MetaDataMessage message : messages) {
-			MetaDataBean bean = new MetaDataBean();
-			bean.setDesc(message.getDesc());
-			bean.setId(message.getId());
-			bean.setTable(message.getTable());
-			ret.add(bean);
-		}
-		return ret;
-	}
 
 	public HashMap<String, String> getMetaList() {
 		if (metaList == null) {
@@ -242,7 +228,7 @@ public class MetaDataController implements Serializable {
 
 	private boolean verifyMetadata(String desc) {
 		boolean ret = false;
-		for (MetaDataBean bean : fetchAllMetadata()) {
+		for (MetaDataBean bean : RESTServiceHelper.fetchAllMetadata(table)) {
 			if (bean.getDesc().equalsIgnoreCase(desc)) {
 				ret = true;
 				break;

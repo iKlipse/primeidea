@@ -2,7 +2,6 @@ package za.co.idea.ip.portal.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -27,8 +26,6 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
-import org.primefaces.model.tagcloud.DefaultTagCloudItem;
-import org.primefaces.model.tagcloud.DefaultTagCloudModel;
 import org.primefaces.model.tagcloud.TagCloudModel;
 
 import za.co.idea.ip.portal.bean.GroupBean;
@@ -276,39 +273,7 @@ public class RandomIdeaController implements Serializable {
 				selGroupId = (Long) grpList.get(0);
 			}
 			groupTwinSelect = initializeSelectedGroups(pGrps);
-			try {
-				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
-				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-				getBlobClient.close();
-				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-					client.header("Content-Type", "application/json");
-					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-					if (attachment != null) {
-						fileAvail = false;
-						ideaBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
-					} else {
-						fileAvail = true;
-						fileContent = null;
-					}
-				} else {
-					fileAvail = true;
-					fileContent = null;
-				}
-				return "ideae";
-			} catch (Exception e) {
-				logger.error(e, e);
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				fileAvail = true;
-				fileContent = null;
-				return "";
-			}
+			return "ideae";			
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
@@ -337,40 +302,7 @@ public class RandomIdeaController implements Serializable {
 			} else {
 				ideaStatuses = RESTServiceHelper.fetchAllReviewIdeaStatuses();
 			}
-			try {
-				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
-				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-				getBlobClient.close();
-				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-					client.header("Content-Type", "application/json");
-					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-					if (attachment != null) {
-						fileAvail = false;
-						ideaBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
-					} else {
-						fileAvail = true;
-						fileContent = null;
-					}
-				} else {
-					fileAvail = true;
-					fileContent = null;
-				}
-				return "ideaer";
-			} catch (Exception e) {
-				logger.error(e, e);
-
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				fileAvail = true;
-				fileContent = null;
-				return "";
-			}
+			return "ideaer";			
 		} catch (Exception e) {
 			logger.error(e, e);
 
@@ -399,40 +331,7 @@ public class RandomIdeaController implements Serializable {
 				selGroupId = (Long) grpList.get(0);
 			}
 			groupTwinSelect = initializeSelectedGroups(pGrps);
-			try {
-				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
-				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-				getBlobClient.close();
-				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-					client.header("Content-Type", "application/json");
-					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-					if (attachment != null) {
-						fileAvail = false;
-						ideaBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
-					} else {
-						fileAvail = true;
-						fileContent = null;
-					}
-				} else {
-					fileAvail = true;
-					fileContent = null;
-				}
-				return "ideaeo";
-			} catch (Exception e) {
-				logger.error(e, e);
-
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				fileAvail = true;
-				fileContent = null;
-				return "";
-			}
+			return "ideaeo";			
 		} catch (Exception e) {
 			logger.error(e, e);
 
@@ -444,41 +343,18 @@ public class RandomIdeaController implements Serializable {
 		}
 	}
 
-	public String showSummaryIdea() {
-		likes = fetchAllLikes();
-		comments = fetchAllComments();
-		buildOns = fetchAllBuildOns();
-		likeCnt = "(" + likes.getTags().size() + ")	";
-		commentCnt = "(" + comments.size() + ")	";
-		buildOnCnt = "(" + buildOns.size() + ")	";
-		showIdeaComments = false;
-		showIdeaLikes = false;
-		showIdeaBuildOns = false;
-		ideaBean.setTaggable(ideaBean.getSetStatusId() != 2);
+	public String showSummaryIdea() {		
 		try {
-			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
-			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-			getBlobClient.close();
-			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-				client.header("Content-Type", "application/json");
-				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-				if (attachment != null) {
-					fileAvail = false;
-					ideaBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
-				} else {
-					fileAvail = true;
-					fileContent = null;
-				}
-			} else {
-				fileAvail = true;
-				fileContent = null;
-			}
+			likes = RESTServiceHelper.fetchAllBuildonLikes(ideaBean.getIdeaId(), 1);
+			comments = RESTServiceHelper.fetchAllBuildonComments(ideaBean.getIdeaId(), 1);
+			buildOns = RESTServiceHelper.fetchAllBuildOns(ideaBean.getIdeaId(), 1);
+			likeCnt = "(" + likes.getTags().size() + ")	";
+			commentCnt = "(" + comments.size() + ")	";
+			buildOnCnt = "(" + buildOns.size() + ")	";
+			showIdeaComments = false;
+			showIdeaLikes = false;
+			showIdeaBuildOns = false;
+			ideaBean.setTaggable(ideaBean.getSetStatusId() != 2);
 			return "ideas";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -490,41 +366,18 @@ public class RandomIdeaController implements Serializable {
 		}
 	}
 
-	public String showSummaryReviewIdea() {
-		likes = fetchAllLikes();
-		comments = fetchAllComments();
-		buildOns = fetchAllBuildOns();
-		likeCnt = "(" + likes.getTags().size() + ")	";
-		commentCnt = "(" + comments.size() + ")	";
-		buildOnCnt = "(" + buildOns.size() + ")	";
-		showIdeaComments = false;
-		showIdeaLikes = false;
-		showIdeaBuildOns = false;
-		ideaBean.setTaggable(ideaBean.getSetStatusId() != 2);
+	public String showSummaryReviewIdea() {		
 		try {
-			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
-			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-			getBlobClient.close();
-			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-				client.header("Content-Type", "application/json");
-				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-				if (attachment != null) {
-					fileAvail = false;
-					ideaBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
-				} else {
-					fileAvail = true;
-					fileContent = null;
-				}
-			} else {
-				fileAvail = true;
-				fileContent = null;
-			}
+			likes = RESTServiceHelper.fetchAllBuildonLikes(ideaBean.getIdeaId(), 1);
+			comments = RESTServiceHelper.fetchAllBuildonComments(ideaBean.getIdeaId(), 1);
+			buildOns = RESTServiceHelper.fetchAllBuildOns(ideaBean.getIdeaId(), 1);
+			likeCnt = "(" + likes.getTags().size() + ")	";
+			commentCnt = "(" + comments.size() + ")	";
+			buildOnCnt = "(" + buildOns.size() + ")	";
+			showIdeaComments = false;
+			showIdeaLikes = false;
+			showIdeaBuildOns = false;
+			ideaBean.setTaggable(ideaBean.getSetStatusId() != 2);
 			return "ideasr";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -536,41 +389,18 @@ public class RandomIdeaController implements Serializable {
 		}
 	}
 
-	public String showSummaryOpenIdea() {
-		likes = fetchAllLikes();
-		comments = fetchAllComments();
-		buildOns = fetchAllBuildOns();
-		likeCnt = "(" + likes.getTags().size() + ")	";
-		commentCnt = "(" + comments.size() + ")	";
-		buildOnCnt = "(" + buildOns.size() + ")	";
-		showIdeaComments = false;
-		showIdeaLikes = false;
-		showIdeaBuildOns = false;
-		ideaBean.setTaggable(ideaBean.getSetStatusId() != 2);
+	public String showSummaryOpenIdea() {		
 		try {
-			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip_idea");
-			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-			getBlobClient.close();
-			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-				client.header("Content-Type", "application/json");
-				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-				if (attachment != null) {
-					fileAvail = false;
-					ideaBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
-				} else {
-					fileAvail = true;
-					fileContent = null;
-				}
-			} else {
-				fileAvail = true;
-				fileContent = null;
-			}
+			likes = RESTServiceHelper.fetchAllBuildonLikes(ideaBean.getIdeaId(), 1);
+			comments = RESTServiceHelper.fetchAllBuildonComments(ideaBean.getIdeaId(), 1);
+			buildOns = RESTServiceHelper.fetchAllBuildOns(ideaBean.getIdeaId(), 1);
+			likeCnt = "(" + likes.getTags().size() + ")	";
+			commentCnt = "(" + comments.size() + ")	";
+			buildOnCnt = "(" + buildOns.size() + ")	";
+			showIdeaComments = false;
+			showIdeaLikes = false;
+			showIdeaBuildOns = false;
+			ideaBean.setTaggable(ideaBean.getSetStatusId() != 2);
 			return "ideaso";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -583,7 +413,7 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	public void showCommentIdea() {
-		comments = fetchAllComments();
+		comments = RESTServiceHelper.fetchAllBuildonComments(ideaBean.getIdeaId(), 1);
 		commentText = "";
 		showIdeaComments = true;
 		showIdeaLikes = false;
@@ -591,7 +421,7 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	public void showBuildOnIdea() {
-		buildOns = fetchAllBuildOns();
+		buildOns = RESTServiceHelper.fetchAllBuildOns(ideaBean.getIdeaId(), 1);
 		showIdeaComments = false;
 		showIdeaLikes = false;
 		showIdeaBuildOns = true;
@@ -610,7 +440,7 @@ public class RandomIdeaController implements Serializable {
 		addTagClient.close();
 		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
-		likes = fetchAllLikes();
+		likes = RESTServiceHelper.fetchAllBuildonLikes(ideaBean.getIdeaId(), 1);
 		likeCnt = "(" + likes.getTags().size() + ")	";
 		showIdeaComments = false;
 		showIdeaLikes = true;
@@ -631,7 +461,7 @@ public class RandomIdeaController implements Serializable {
 		addTagClient.close();
 		if (response.getStatusCode() != 0)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Comment", "Error While Saving Comment"));
-		comments = fetchAllComments();
+		comments = RESTServiceHelper.fetchAllBuildonComments(ideaBean.getIdeaId(), 1);
 		commentCnt = "(" + comments.size() + ")	";
 		commentText = "";
 		showIdeaComments = true;
@@ -653,7 +483,7 @@ public class RandomIdeaController implements Serializable {
 		addTagClient.close();
 		if (response.getStatusCode() != 0)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Build-On", "Error While Saving Build-On"));
-		buildOns = fetchAllBuildOns();
+		buildOns = RESTServiceHelper.fetchAllBuildOns(ideaBean.getIdeaId(), 1);
 		buildOnCnt = "(" + buildOns.size() + ")	";
 		buildOnText = "";
 		showIdeaComments = false;
@@ -944,45 +774,7 @@ public class RandomIdeaController implements Serializable {
 		return ret;
 	}
 
-	private TagCloudModel fetchAllLikes() {
-		TagCloudModel likes = new DefaultTagCloudModel();
-		WebClient fetchIdeaLikesClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/1");
-		Collection<? extends TagMessage> likeList = new ArrayList<TagMessage>(fetchIdeaLikesClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
-		fetchIdeaLikesClient.close();
-		for (TagMessage tagMessage : likeList)
-			likes.addTag(new DefaultTagCloudItem(tagMessage.getUsrScreenName(), 1));
-		return likes;
-	}
-
-	private List<TagBean> fetchAllComments() {
-		WebClient fetchIdeaCommentsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/2");
-		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaCommentsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
-		fetchIdeaCommentsClient.close();
-		List<TagBean> ret = new ArrayList<TagBean>();
-		for (TagMessage msg : msgs) {
-			TagBean bean = new TagBean();
-			bean.setTagText(msg.getTagText());
-			bean.setUsrScreenName(msg.getUsrScreenName());
-			bean.setTagDate(msg.getTagDate());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<TagBean> fetchAllBuildOns() {
-		WebClient fetchIdeaBuildOnsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/3");
-		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaBuildOnsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
-		fetchIdeaBuildOnsClient.close();
-		List<TagBean> ret = new ArrayList<TagBean>();
-		for (TagMessage msg : msgs) {
-			TagBean bean = new TagBean();
-			bean.setTagText(msg.getTagText());
-			bean.setUsrScreenName(msg.getUsrScreenName());
-			bean.setTagDate(msg.getTagDate());
-			ret.add(bean);
-		}
-		return ret;
-	}
+	
 
 	public void fileUploadHandle(FileUploadEvent fue) {
 		try {

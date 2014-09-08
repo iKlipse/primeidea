@@ -1,5 +1,7 @@
 package za.co.idea.ip.ws.bean;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "pointMessage")
@@ -10,6 +12,7 @@ public class PointMessage {
 	private Long pointId;
 	private String comments;
 	private Long entityId;
+	private Date crtdDt;
 
 	public Long getUserId() {
 		return userId;
@@ -57,5 +60,13 @@ public class PointMessage {
 
 	public void setEntityId(Long entityId) {
 		this.entityId = entityId;
+	}
+
+	public Date getCrtdDt() {
+		return crtdDt;
+	}
+
+	public void setCrtdDt(Date crtdDt) {
+		this.crtdDt = crtdDt;
 	}
 }

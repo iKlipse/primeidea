@@ -1,5 +1,7 @@
 package za.co.idea.ip.ws.bean;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "groupMessage")
@@ -16,6 +18,7 @@ public class GroupMessage {
 	private String fileName;
 	private String pGrpName;
 	private String admUserName;
+	private Date crtdDate;
 
 	public Long getgId() {
 		return gId;
@@ -111,6 +114,14 @@ public class GroupMessage {
 
 	public void setAdmUserName(String admUserName) {
 		this.admUserName = admUserName;
+	}
+
+	public Date getCrtdDate() {
+		return crtdDate;
+	}
+
+	public void setCrtdDate(Date crtdDate) {
+		this.crtdDate = crtdDate;
 	}
 
 }

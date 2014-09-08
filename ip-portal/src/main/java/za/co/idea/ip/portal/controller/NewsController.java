@@ -2,7 +2,6 @@ package za.co.idea.ip.portal.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -26,9 +25,6 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
-import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.model.User;
-
 import za.co.idea.ip.portal.bean.NewsBean;
 import za.co.idea.ip.portal.util.IdNumberGen;
 import za.co.idea.ip.portal.util.RESTServiceHelper;
@@ -37,6 +33,9 @@ import za.co.idea.ip.ws.bean.NewsMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
+
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
 
 @ManagedBean(name = "newsController")
 @SessionScoped
@@ -73,13 +72,13 @@ public class NewsController implements Serializable {
 
 	public void initializePage() {
 		try {
-			viewNewsBeans = fetchAllNews();
+			viewNewsBeans = RESTServiceHelper.fetchAllNews();
 			showCreateNews = false;
 			showViewNews = true;
 			if (toView != null && Integer.valueOf(toView) != -1) {
 				switch (Integer.valueOf(toView)) {
 				case 1:
-					viewNewsBeans = fetchAllNews();
+					viewNewsBeans = RESTServiceHelper.fetchAllNews();
 					showCreateNews = false;
 					showViewNews = true;
 					break;
@@ -124,7 +123,7 @@ public class NewsController implements Serializable {
 	public void showViewNews() {
 		try {
 			logger.debug("Control handled in createCustomClient()");
-			viewNewsBeans = fetchAllNews();
+			viewNewsBeans = RESTServiceHelper.fetchAllNews();
 			showCreateNews = false;
 			showViewNews = true;
 		} catch (Exception e) {
@@ -139,47 +138,22 @@ public class NewsController implements Serializable {
 	public String showEditNews() {
 		try {
 			logger.debug("Control handled in showEditNews() method");
-			logger.info("Sending request to NewsService");
-			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + newsBean.getnId() + "/ip_news");
-			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-			getBlobClient.close();
-			logger.info("After gettin response from NewsService");
-			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-				client.header("Content-Type", "application/json");
-				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-				if (attachment != null) {
-					fileAvail = false;
-					WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
-					String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobTypeClient.close();
-					fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-				} else {
-					fileAvail = true;
-					fileContent = null;
-				}
-			} else {
-				fileAvail = true;
-				fileContent = null;
-			}
+			return "newse";
 		} catch (Exception e) {
 			logger.error(e, e);
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform edit request", "System error occurred, cannot perform edit request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			fileAvail = true;
 			fileContent = null;
+			return "";
 		}
-		return "newse";
+		
 	}
 
 	public String showSummaryNews() {
 		try {
 			logger.debug("In showSummaryNews method");
-			viewNewsBeans = fetchAllNews();
+			viewNewsBeans = RESTServiceHelper.fetchAllNews();
 			logger.info("News details after fetching data from fetchALLNews(): " + viewNewsBeans);
 			return "nssc";
 		} catch (Exception e) {
@@ -324,33 +298,6 @@ public class NewsController implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
-	}
-
-	private List<NewsBean> fetchAllNews() {
-		List<NewsBean> ret = new ArrayList<NewsBean>();
-		try {
-			logger.debug("Control handled in fetchAllNews method of NewsController ");
-			WebClient fetchNewsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ns/news/list");
-			Collection<? extends NewsMessage> news = new ArrayList<NewsMessage>(fetchNewsClient.accept(MediaType.APPLICATION_JSON).getCollection(NewsMessage.class));
-			fetchNewsClient.close();
-			logger.info("News data adding to List: ");
-			for (NewsMessage message : news) {
-				NewsBean bean = new NewsBean();
-				bean.setnId(message.getnId());
-				bean.setnContent(message.getContent());
-				bean.setEndDate(message.getEndDate());
-				bean.setStartDate(message.getStartDate());
-				bean.setnTitle(message.getnTitle());
-				bean.setNewsUrl(message.getNewsUrl());
-				bean.setNwImgAvail(message.isNwImgAvail());
-				bean.setBlobUrl(message.getBlobUrl());
-				ret.add(bean);
-			}
-		} catch (Exception e) {
-			logger.error(e, e);
-		}
-		logger.info("News data displaying from List: " + ret);
-		return ret;
 	}
 
 	public void fileUploadHandle(FileUploadEvent fue) {

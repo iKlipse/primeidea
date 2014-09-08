@@ -34,28 +34,30 @@
 		<p:column>
 			<p:panelGrid styleClass="panelGridView" columns="3">
 				<p:column>
-					<p:commandLink id="lnkLikeSolution" actionListener="#{challengeController.likeSolution}" update="lblLikeCnt, :frmRVwSummarySol:tgLikes" disabled="#{challengeController.solutionBean.taggable}">
+					<p:p:commandButton id="giLike" icon="ui-icon-heart" actionListener="#{challengeController.likeSolution}" update="lblLikeCnt, :frmRVwSummarySol:tgLikes" disabled="#{challengeController.solutionBean.taggable}">
 						<p:outputLabel id="lblLikeCnt" value="#{challengeController.solLikeCnt}" />
-						<p:graphicImage id="giLike" name="like-128.png" library="images" height="25px" width="25px" />
+						<!-- <p:graphicImage id="giLike" name="like-128.png" library="images" height="25px" width="25px" /> -->
 						<p:tooltip for="giLike" value="Tags disabled as solution not in open status" rendered="#{challengeController.solutionBean.taggable}" />
-					</p:commandLink>
+					</p:p:commandButton>
 				</p:column>
 				<p:column>
+				<p:commandButton id="giComment" icon="ui-icon-comment" >
 					<p:outputLabel id="lblCommentCnt" value="#{challengeController.solCommentCnt}" />
-					<p:graphicImage id="giComment" name="comment.jpg" library="images" height="25px" width="25px" />
+					<!-- <p:graphicImage id="giComment" name="comment.jpg" library="images" height="25px" width="25px" /> -->
 					<p:tooltip for="giComment" value="Tags disabled as solution not in open status" rendered="#{challengeController.solutionBean.taggable}" />
+					</p:commandButton>
 				</p:column>
 				<p:column>
-					<p:commandLink id="lnkBuildonSolution" action="#{buildonController.showBuildon}" ajax="false">
+					<p:p:commandButton id="giBuildOn" icon="ui-icon-note" action="#{buildonController.showBuildon}" ajax="false">
 						<f:setPropertyActionListener value="#{challengeController.userId}" target="#{buildonController.userId}" />
 						<f:setPropertyActionListener value="6" target="#{buildonController.returnView}" />
 						<f:param name="entityId" id="entityId" value="#{challengeController.solutionBean.id}" />
 						<f:param name="entityType" id="entityType" value="3" />
 						<f:param name="taggable" id="taggable" value="#{challengeController.solutionBean.taggable}" />
 						<p:outputLabel id="lblBuildOnCnt" value="#{challengeController.buildOnCnt}" />
-						<p:graphicImage id="giBuildOn" name="lego.png" library="images" height="25px" width="25px" />
+						<!-- <p:graphicImage id="giBuildOn" name="lego.png" library="images" height="25px" width="25px" /> -->
 						<p:tooltip for="giBuildOn" value="Tags disabled as solution not in open status" rendered="#{challengeController.solutionBean.taggable}" />
-					</p:commandLink>
+					</p:commandButton>
 				</p:column>
 			</p:panelGrid>
 		</p:column>
@@ -84,7 +86,7 @@
 			</p:column>
 		</p:panelGrid>
 	</p:dialog>
-	<p:overlayPanel my="right bottom" at="right top" dynamic="true" for="giComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
+	<p:overlayPanel my="right bottom" at="right top" dynamic="true" for="giComment" showEvent="click" hideEvent="click" dismissable="true" showCloseIcon="true">
 		<p:panelGrid styleClass="panelGridView" id="pnlSolutionComment" columns="1">
 			<p:column>
 				<p:dataScroller mode="inline" scrollHeight="200" id="dtViewComments" value="#{challengeController.solComments}" var="comment" chunkSize="2">
@@ -100,10 +102,10 @@
 				</p:dataScroller>
 				<p:tooltip for="dtViewComments" value="Tags disabled as solution not in open status" rendered="#{challengeController.solutionBean.taggable}" />
 			</p:column>
-			<p:column rendered="#{!challengeBean.solutionBean.taggable}">
+			<p:column rendered="#{!challengeController.solutionBean.taggable}">
 				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="edComment" value="#{challengeController.commentText}" height="100" />
 			</p:column>
-			<p:column rendered="#{!challengeBean.solutionBean.taggable}">
+			<p:column rendered="#{!challengeController.solutionBean.taggable}">
 				<p:commandButton id="btnSubmitComment" value="Post" actionListener="#{challengeController.commentSolution}" update="dtViewComments, :frmRVwSummarySol:lblCommentCnt" />
 			</p:column>
 		</p:panelGrid>

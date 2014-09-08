@@ -70,6 +70,7 @@ public class AdminService {
 		ipGroup.setGroupEmail(group.getGeMail());
 		ipGroup.setGroupName(group.getgName());
 		ipGroup.setGroupStatus(((group.getIsActive() != null && group.getIsActive()) ? "y" : "n"));
+		ipGroup.setGroupCrtdDt(group.getCrtdDate());
 		if (group.getpGrpId() != null && group.getpGrpId().longValue() >= 0)
 			ipGroup.setIpGroup(ipGroupDAO.findById(group.getpGrpId()));
 		if (group.getAdmUserId() != null && group.getAdmUserId().longValue() >= 0)
@@ -84,6 +85,7 @@ public class AdminService {
 					ipGroupUser.setIpGroup(ipGroup);
 					ipGroupUser.setIpUser(ipUserDAO.findById(userId));
 					ipGroupUser.setGuId(ids[i]);
+					ipGroupUser.setGuCrtdDt(new Date());
 					ipGroupUserDAO.save(ipGroupUser);
 					i++;
 				}
@@ -112,6 +114,7 @@ public class AdminService {
 		ipGroup.setGroupEmail(group.getGeMail());
 		ipGroup.setGroupName(group.getgName());
 		ipGroup.setGroupStatus(((group.getIsActive() != null && group.getIsActive()) ? "y" : "n"));
+		ipGroup.setGroupCrtdDt(group.getCrtdDate());
 		if (group.getpGrpId() != null && group.getpGrpId().longValue() >= 0)
 			ipGroup.setIpGroup(ipGroupDAO.findById(group.getpGrpId()));
 		if (group.getAdmUserId() != null && group.getAdmUserId().longValue() >= 0)
@@ -127,6 +130,7 @@ public class AdminService {
 					ipGroupUser.setIpGroup(ipGroup);
 					ipGroupUser.setIpUser(ipUserDAO.findById(userId));
 					ipGroupUser.setGuId(ids[i]);
+					ipGroupUser.setGuCrtdDt(new Date());
 					ipGroupUserDAO.save(ipGroupUser);
 					i++;
 				}
@@ -159,6 +163,7 @@ public class AdminService {
 				group.setgId(ipGroup.getGroupId());
 				group.setgName(ipGroup.getGroupName());
 				group.setIsActive(ipGroup.getGroupStatus().equalsIgnoreCase("y"));
+				group.setCrtdDate(ipGroup.getGroupCrtdDt());
 				if (ipGroup.getIpGroup() != null) {
 					group.setpGrpId(ipGroup.getIpGroup().getGroupId());
 					group.setpGrpName(ipGroup.getIpGroup().getGroupName());
@@ -199,6 +204,7 @@ public class AdminService {
 				group.setgId(ipGroup.getGroupId());
 				group.setgName(ipGroup.getGroupName());
 				group.setIsActive(ipGroup.getGroupStatus().equalsIgnoreCase("y"));
+				group.setCrtdDate(ipGroup.getGroupCrtdDt());
 				if (ipGroup.getIpGroup() != null) {
 					group.setpGrpId(ipGroup.getIpGroup().getGroupId());
 					group.setpGrpName(ipGroup.getIpGroup().getGroupName());
@@ -239,6 +245,7 @@ public class AdminService {
 				group.setgId(ipGroup.getGroupId());
 				group.setgName(ipGroup.getGroupName());
 				group.setIsActive(ipGroup.getGroupStatus().equalsIgnoreCase("y"));
+				group.setCrtdDate(ipGroup.getGroupCrtdDt());
 				if (ipGroup.getIpGroup() != null) {
 					group.setpGrpId(ipGroup.getIpGroup().getGroupId());
 					group.setpGrpName(ipGroup.getIpGroup().getGroupName());
@@ -279,6 +286,7 @@ public class AdminService {
 				group.setgId(ipGroup.getGroupId());
 				group.setgName(ipGroup.getGroupName());
 				group.setIsActive(ipGroup.getGroupStatus().equalsIgnoreCase("y"));
+				group.setCrtdDate(ipGroup.getGroupCrtdDt());
 				if (ipGroup.getIpGroup() != null) {
 					group.setpGrpId(ipGroup.getIpGroup().getGroupId());
 					group.setpGrpName(ipGroup.getIpGroup().getGroupName());
@@ -443,6 +451,7 @@ public class AdminService {
 			group.setgId(ipGroup.getGroupId());
 			group.setgName(ipGroup.getGroupName());
 			group.setIsActive(ipGroup.getGroupStatus().equalsIgnoreCase("y"));
+			group.setCrtdDate(ipGroup.getGroupCrtdDt());
 			if (ipGroup.getIpGroup() != null)
 				group.setpGrpId(ipGroup.getIpGroup().getGroupId());
 			if (ipGroup.getIpUser() != null)
@@ -480,6 +489,7 @@ public class AdminService {
 			ipUser.setUserSkills(user.getSkills());
 			ipUser.setUserEmployeeId(user.getEmployeeId());
 			ipUser.setUserStatus(((user.getIsActive() != null && user.getIsActive()) ? "y" : "n"));
+			ipUser.setUserCrtdDt(user.getuCrtdDate());
 			if (user.getGroupId() != null)
 				ipUser.setIpGroup(ipGroupDAO.findById(user.getGroupId()));
 			if (user.getFbHandle() != null && user.getFbHandle().length() > 0)
@@ -499,6 +509,7 @@ public class AdminService {
 			ipLogin.setIpSecqList(ipSecqListDAO.findById(user.getSecQ()));
 			ipLogin.setLoginSecA(Base64.encodeBase64URLSafeString(DigestUtils.md5(user.getSecA().getBytes())));
 			ipLogin.setLoginPwd(Base64.encodeBase64URLSafeString(DigestUtils.md5(user.getPwd().getBytes())));
+			ipLogin.setLoginCrtdDt(new Date());
 			try {
 				ipLoginDAO.save(ipLogin);
 			} catch (Exception e) {
@@ -541,6 +552,7 @@ public class AdminService {
 					ipFuncGroup.setFgId(ids[i]);
 					ipFuncGroup.setIpFunction(ipFunction);
 					ipFuncGroup.setIpGroup(ipGroupDAO.findById(gId));
+					ipFuncGroup.setFgCrtdDt(new Date());
 					ipFuncGroupDAO.save(ipFuncGroup);
 					i++;
 				}
@@ -581,6 +593,7 @@ public class AdminService {
 					ipFuncGroup.setFgId(ids[i]);
 					ipFuncGroup.setIpFunction(ipFunction);
 					ipFuncGroup.setIpGroup(ipGroupDAO.findById(gId));
+					ipFuncGroup.setFgCrtdDt(new Date());
 					ipFuncGroupDAO.save(ipFuncGroup);
 					i++;
 				}
@@ -616,6 +629,7 @@ public class AdminService {
 			ipUser.setUserSkills(user.getSkills());
 			ipUser.setUserEmployeeId(user.getEmployeeId());
 			ipUser.setUserStatus(((user.getIsActive() != null && user.getIsActive()) ? "y" : "n"));
+			ipUser.setUserCrtdDt(user.getuCrtdDate());
 			if (user.getGroupId() != null)
 				ipUser.setIpGroup(ipGroupDAO.findById(user.getGroupId()));
 			if (user.getFbHandle() != null && user.getFbHandle().length() > 0)
@@ -664,6 +678,7 @@ public class AdminService {
 				user.setSkills(ipUser.getUserSkills());
 				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
 				user.setEmployeeId(ipUser.getUserEmployeeId());
+				user.setuCrtdDate(ipUser.getUserCrtdDt());
 				if (ipUser.getIpGroup() != null) {
 					user.setGroupId(ipUser.getIpGroup().getGroupId());
 					user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
@@ -705,6 +720,7 @@ public class AdminService {
 				user.setSkills(ipUser.getUserSkills());
 				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
 				user.setEmployeeId(ipUser.getUserEmployeeId());
+				user.setuCrtdDate(ipUser.getUserCrtdDt());
 				if (ipUser.getIpGroup() != null) {
 					user.setGroupId(ipUser.getIpGroup().getGroupId());
 					user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
@@ -746,6 +762,7 @@ public class AdminService {
 				user.setSkills(ipUser.getUserSkills());
 				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
 				user.setEmployeeId(ipUser.getUserEmployeeId());
+				user.setuCrtdDate(ipUser.getUserCrtdDt());
 				if (ipUser.getIpGroup() != null) {
 					user.setGroupId(ipUser.getIpGroup().getGroupId());
 					user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
@@ -787,6 +804,7 @@ public class AdminService {
 				user.setSkills(ipUser.getUserSkills());
 				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
 				user.setEmployeeId(ipUser.getUserEmployeeId());
+				user.setuCrtdDate(ipUser.getUserCrtdDt());
 				if (ipUser.getIpGroup() != null) {
 					user.setGroupId(ipUser.getIpGroup().getGroupId());
 					user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
@@ -824,6 +842,7 @@ public class AdminService {
 			user.setScName(ipUser.getUserScreenName());
 			user.setSkills(ipUser.getUserSkills());
 			user.setEmployeeId(ipUser.getUserEmployeeId());
+			user.setuCrtdDate(ipUser.getUserCrtdDt());
 			user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
 			if (ipUser.getIpGroup() != null) {
 				user.setGroupId(ipUser.getIpGroup().getGroupId());
@@ -1010,6 +1029,7 @@ public class AdminService {
 				user.setlName(ipUser.getUserLName());
 				user.setScName(ipUser.getUserScreenName());
 				user.setSkills(ipUser.getUserSkills());
+				user.setuCrtdDate(ipUser.getUserCrtdDt());
 				if (ipUser.getIpGroup() != null)
 					user.setGroupId(ipUser.getIpGroup().getGroupId());
 				user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
@@ -1059,6 +1079,7 @@ public class AdminService {
 			user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
 			user.setLastLoginDt(ipLogin.getLoginLastDt());
 			user.setSecA(ipLogin.getLoginSecA());
+			user.setuCrtdDate(ipUser.getUserCrtdDt());
 			user.setSecQ(ipLogin.getIpSecqList().getIslId());
 			if (ipUser.getIpGroup() != null) {
 				user.setGroupId(ipUser.getIpGroup().getGroupId());

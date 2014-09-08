@@ -34,21 +34,23 @@
 			<p:column>
 				<p:panelGrid styleClass="panelGridView" columns="2">
 					<p:column>
-						<p:commandLink id="lnkLikeIdea" action="#{buildonController.likeBuildon}" update="lblLikeCnt, :frmTagSummary:tgLikes" disabled="#{buildonController.taggable}">
+						<p:p:commandButton id="giLike" icon="ui-icon-heart" action="#{buildonController.likeBuildon}" update="lblLikeCnt, :frmTagSummary:tgLikes" disabled="#{buildonController.taggable}">
 							<p:outputLabel id="lblLikeCnt" value="#{buildonController.buildonLikeCnt}" />
-							<p:graphicImage id="giLike" name="like-128.png" library="images" height="25px" width="25px" />
+							<!--  <p:graphicImage id="giLike" name="like-128.png" library="images" height="25px" width="25px" /> -->
 							<p:tooltip for="giLike" value="Tags disabled as item not in open status" rendered="#{buildonController.taggable}" />
-						</p:commandLink>
+						</p:commandButton>
 					</p:column>
 					<p:column>
-						<p:outputLabel id="lblCommentCnt" value="#{buildonController.buildonCommentCnt}" />
-						<p:graphicImage id="giComment" name="comment.jpg" library="images" height="25px" width="25px" />
+					   <p:commandButton id="giComment" icon="ui-icon-comment" >
+						<p:outputLabel id="giComment" value="#{buildonController.buildonCommentCnt}" />
+						<!-- <p:graphicImage id="giComment" name="comment.jpg" library="images" height="25px" width="25px" /> -->
 						<p:tooltip for="giComment" value="Tags disabled as item not in open status" rendered="#{buildonController.taggable}" />
+						</p:commandButton>
 					</p:column>
 				</p:panelGrid>
 			</p:column>
 		</p:panel>
-		<p:overlayPanel my="right bottom" at="right top" dynamic="true" for="giComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
+		<p:overlayPanel my="right bottom" at="right top" dynamic="true" for="giComment" showEvent="click" hideEvent="click" dismissable="true" showCloseIcon="true">
 			<p:panelGrid styleClass="panelGridView" id="pnlBuildonComment" columns="1">
 				<p:column>
 					<p:dataScroller mode="inline" scrollHeight="200" id="dtViewComments" widgetVar="dtViewComments" value="#{buildonController.buildonComments}" var="comment" chunkSize="2" emptyMessage="No Comments Found">
@@ -64,10 +66,10 @@
 					</p:dataScroller>
 					<p:tooltip for="dtViewComments" value="Tags disabled as item not in open status" rendered="#{buildonController.taggable}" />
 				</p:column>
-				<p:column rendered="#{!buildonBean.taggable}">
+				<p:column rendered="#{!buildonController.taggable}">
 					<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="edComment" value="#{buildonController.commentText}" />
 				</p:column>
-				<p:column rendered="#{!buildonBean.taggable}">
+				<p:column rendered="#{!buildonController.taggable}">
 					<p:commandButton id="btnSubmitComment" value="Post" actionListener="#{buildonController.commentBuildon}" update="dtViewComments, :frmTagSummary:lblCommentCnt" />
 				</p:column>
 			</p:panelGrid>

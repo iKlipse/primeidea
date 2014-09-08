@@ -1,6 +1,7 @@
 package za.co.idea.ip.portal.bean;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class AllocationBean implements Serializable {
 
@@ -10,6 +11,7 @@ public class AllocationBean implements Serializable {
 	private Integer allocVal;
 	private String allocEntity;
 	private Integer allocStatusId;
+	private Date allocCrtdDt;
 
 	public Integer getAllocId() {
 		return allocId;
@@ -49,6 +51,14 @@ public class AllocationBean implements Serializable {
 
 	public void setAllocStatusId(Integer allocStatusId) {
 		this.allocStatusId = allocStatusId;
+	}
+
+	public Date getAllocCrtdDt() {
+		return allocCrtdDt;
+	}
+
+	public void setAllocCrtdDt(Date allocCrtdDt) {
+		this.allocCrtdDt = allocCrtdDt;
 	}
 
 }

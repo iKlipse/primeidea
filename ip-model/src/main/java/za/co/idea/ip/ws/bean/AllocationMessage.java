@@ -1,5 +1,7 @@
 package za.co.idea.ip.ws.bean;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "allocationMessage")
@@ -9,6 +11,7 @@ public class AllocationMessage {
 	private Integer allocVal;
 	private String allocEntity;
 	private Integer allocStatusId;
+	private Date allocCrtdDt;
 
 	public Integer getAllocId() {
 		return allocId;
@@ -48,6 +51,14 @@ public class AllocationMessage {
 
 	public void setAllocStatusId(Integer allocStatusId) {
 		this.allocStatusId = allocStatusId;
+	}
+
+	public Date getAllocCrtdDt() {
+		return allocCrtdDt;
+	}
+
+	public void setAllocCrtdDt(Date allocCrtdDt) {
+		this.allocCrtdDt = allocCrtdDt;
 	}
 
 }

@@ -34,14 +34,16 @@
 		<p:column>
 			<p:panelGrid styleClass="panelGridView" columns="2">
 				<p:column>
-					<p:commandLink id="lnkSumrLikeIdea" action="#{challengeController.likeChallenge}" update="lblLikeCnt, :frmSummaryReviewChal:tgSumrLikes">
+					<p:commandButton id="giSumrLike" icon="ui-icon-heart" action="#{challengeController.likeChallenge}" update="lblLikeCnt, :frmSummaryReviewChal:tgSumrLikes">
 						<p:outputLabel id="lblLikeCnt" value="#{challengeController.chalLikeCnt}" />
-						<p:graphicImage id="giSumrLike" name="like-128.png" library="images" height="25px" width="25px" />
-					</p:commandLink>
+						<!--<p:graphicImage id="giSumrLike" name="like-128.png" library="images" height="25px" width="25px" /> -->
+					</p:commandButton>
 				</p:column>
 				<p:column>
+				<p:commandButton id="giSumrComment" icon="ui-icon-comment" >
 					<p:outputLabel id="lblCommentCnt" value="#{challengeController.chalCommentCnt}" />
-					<p:graphicImage id="giSumrComment" name="comment.jpg" library="images" height="25px" width="25px" />
+					<!--<p:graphicImage id="giSumrComment" name="comment.jpg" library="images" height="25px" width="25px" /> -->
+					</p:commandButton>
 				</p:column>
 			</p:panelGrid>
 		</p:column>
@@ -73,7 +75,7 @@
 			</p:column>
 		</p:panelGrid>
 	</p:dialog>
-	<p:overlayPanel my="right bottom" at="right top" dynamic="true" for="giSumrComment" showEvent="click" hideEvent="blur" dismissable="true" showCloseIcon="true">
+	<p:overlayPanel my="right bottom" at="right top" dynamic="true" for="giSumrComment" showEvent="click" hideEvent="click" dismissable="true" showCloseIcon="true">
 		<p:panelGrid styleClass="panelGridView" id="pnlSumrChallengeComment" columns="1">
 			<p:column>
 				<p:dataScroller mode="inline" scrollHeight="200" id="dtSumrViewComments" value="#{challengeController.chalComments}" var="comment" chunkSize="2">
@@ -96,7 +98,7 @@
 			</p:column>
 		</p:panelGrid>
 	</p:overlayPanel>
-	<p:overlayPanel my="right bottom" at="left top" dynamic="true" for="giSumrLike" showEvent="mouseover" hideEvent="mousedown" dismissable="true" showCloseIcon="true">
+	<p:overlayPanel my="right bottom" at="left top" dynamic="true" for="giSumrLike" showEvent="mouseover" hideEvent="click" dismissable="true" showCloseIcon="true">
 		<p:panelGrid styleClass="panelGridView" id="pnlSumrChallengeLikes" columns="1">
 			<p:tagCloud id="tgSumrLikes" model="#{challengeController.chalLikes}" />
 		</p:panelGrid>

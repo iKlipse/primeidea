@@ -372,6 +372,7 @@ public class RewardsService {
 			ipPoints.setPointId(point.getPointId());
 			ipPoints.setPointValue(point.getPointValue());
 			ipPoints.setComments(point.getComments());
+			ipPoints.setPointCrtdDt(point.getCrtdDt());
 			ipPointsDAO.save(ipPoints);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
@@ -400,6 +401,7 @@ public class RewardsService {
 			ipPoints.setPointId(point.getPointId());
 			ipPoints.setPointValue(point.getPointValue());
 			ipPoints.setComments(point.getComments());
+			ipPoints.setPointCrtdDt(point.getCrtdDt());
 			ipPointsDAO.merge(ipPoints);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
@@ -428,6 +430,7 @@ public class RewardsService {
 			message.setPointId(ipPoints.getPointId());
 			message.setPointValue(ipPoints.getPointValue());
 			message.setComments(ipPoints.getComments());
+			message.setCrtdDt(ipPoints.getPointCrtdDt());
 			message.setUserId(ipPoints.getIpUser().getUserId());
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -451,6 +454,7 @@ public class RewardsService {
 				message.setPointId(ipPoints.getPointId());
 				message.setPointValue(ipPoints.getPointValue());
 				message.setComments(ipPoints.getComments());
+				message.setCrtdDt(ipPoints.getPointCrtdDt());
 				message.setUserId(ipPoints.getIpUser().getUserId());
 				ret.add((T) message);
 			}
@@ -473,6 +477,7 @@ public class RewardsService {
 			ipAllocation.setAllocId(alloc.getAllocId());
 			ipAllocation.setAllocStatusId(alloc.getAllocStatusId());
 			ipAllocation.setAllocVal(alloc.getAllocVal());
+			ipAllocation.setAllocCrtdDt(alloc.getAllocCrtdDt());
 			ipAllocationDAO.save(ipAllocation);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
@@ -508,6 +513,7 @@ public class RewardsService {
 				ipAllocation.setAllocId(alloc.getAllocId());
 				ipAllocation.setAllocStatusId(alloc.getAllocStatusId());
 				ipAllocation.setAllocVal(alloc.getAllocVal());
+				ipAllocation.setAllocCrtdDt(alloc.getAllocCrtdDt());
 				ipAllocationDAO.delete(ipAllocation);
 				ResponseMessage message = new ResponseMessage();
 				message.setStatusCode(0);
@@ -537,6 +543,7 @@ public class RewardsService {
 			ipAllocation.setAllocId(alloc.getAllocId());
 			ipAllocation.setAllocStatusId(alloc.getAllocStatusId());
 			ipAllocation.setAllocVal(alloc.getAllocVal());
+			ipAllocation.setAllocCrtdDt(alloc.getAllocCrtdDt());
 			ipAllocationDAO.merge(ipAllocation);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
@@ -568,6 +575,7 @@ public class RewardsService {
 				msg.setAllocId(allocation.getAllocId());
 				msg.setAllocStatusId(allocation.getAllocStatusId());
 				msg.setAllocVal(allocation.getAllocVal());
+				msg.setAllocCrtdDt(allocation.getAllocCrtdDt());
 				ret.add((T) msg);
 			}
 		} catch (Exception e) {
@@ -592,6 +600,7 @@ public class RewardsService {
 				msg.setAllocId(allocation.getAllocId());
 				msg.setAllocStatusId(allocation.getAllocStatusId());
 				msg.setAllocVal(allocation.getAllocVal());
+				msg.setAllocCrtdDt(allocation.getAllocCrtdDt());
 				ret.add((T) msg);
 			}
 		} catch (Exception e) {
@@ -613,6 +622,7 @@ public class RewardsService {
 			ret.setAllocId(allocation.getAllocId());
 			ret.setAllocStatusId(allocation.getAllocStatusId());
 			ret.setAllocVal(allocation.getAllocVal());
+			ret.setAllocCrtdDt(allocation.getAllocCrtdDt());
 		} catch (Exception e) {
 			logger.error(e, e);
 		}

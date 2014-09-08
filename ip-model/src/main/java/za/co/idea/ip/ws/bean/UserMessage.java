@@ -31,6 +31,7 @@ public class UserMessage {
 	private String grpImgPath;
 	private boolean grpImgAvail;
 	private String blobUrl;
+	private Date uCrtdDate;
 
 	public Long getuId() {
 		return uId;
@@ -230,6 +231,14 @@ public class UserMessage {
 
 	public void setBlobUrl(String blobUrl) {
 		this.blobUrl = blobUrl;
+	}
+
+	public Date getuCrtdDate() {
+		return uCrtdDate;
+	}
+
+	public void setuCrtdDate(Date uCrtdDate) {
+		this.uCrtdDate = uCrtdDate;
 	}
 
 }

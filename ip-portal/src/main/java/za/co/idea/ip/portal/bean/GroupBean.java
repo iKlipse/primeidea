@@ -2,6 +2,7 @@ package za.co.idea.ip.portal.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class GroupBean implements Serializable {
@@ -20,6 +21,7 @@ public class GroupBean implements Serializable {
 	private String fileName;
 	private boolean imgAvl;
 	private String blobUrl;
+	private Date gCrtdDate;
 
 	public Long getgId() {
 		return gId;
@@ -125,6 +127,14 @@ public class GroupBean implements Serializable {
 
 	public void setSelAdmUserName(String selAdmUserName) {
 		this.selAdmUserName = selAdmUserName;
+	}
+
+	public Date getgCrtdDate() {
+		return gCrtdDate;
+	}
+
+	public void setgCrtdDate(Date gCrtdDate) {
+		this.gCrtdDate = gCrtdDate;
 	}
 
 }

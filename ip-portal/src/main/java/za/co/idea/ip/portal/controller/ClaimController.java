@@ -2,7 +2,6 @@ package za.co.idea.ip.portal.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -26,16 +25,12 @@ import com.liferay.portal.model.User;
 
 import za.co.idea.ip.portal.bean.ClaimBean;
 import za.co.idea.ip.portal.bean.ListSelectorBean;
-import za.co.idea.ip.portal.bean.PointBean;
 import za.co.idea.ip.portal.bean.RewardsBean;
 import za.co.idea.ip.portal.bean.UserBean;
 import za.co.idea.ip.portal.util.IdNumberGen;
 import za.co.idea.ip.portal.util.RESTServiceHelper;
 import za.co.idea.ip.ws.bean.ClaimMessage;
-import za.co.idea.ip.ws.bean.MetaDataMessage;
-import za.co.idea.ip.ws.bean.PointMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
-import za.co.idea.ip.ws.bean.RewardsMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
 
@@ -82,11 +77,11 @@ public class ClaimController implements Serializable {
 	public String showCreateClaim() {
 		try {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
-			claimStatus = fetchAllClaimStatuses();
-			viewRewardsBeans = fetchAllAvailableRewards();
+			claimStatus = RESTServiceHelper.fetchAllClaimStatuses();
+			viewRewardsBeans = RESTServiceHelper.fetchAllAvailableRewards(userId, totalPoints);
 			claimBean = new ClaimBean();
 			selRwId = "";
-			fetchAllPointsByUser();
+			RESTServiceHelper.fetchAllPointsByUser(userId);
 			return "clmcc";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -100,9 +95,9 @@ public class ClaimController implements Serializable {
 		try {
 			Map<String, String> reqMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 			admUsers = RESTServiceHelper.fetchActiveUsers();
-			claimStatus = fetchAllClaimStatuses();
-			viewRewardsBeans = fetchAllAvailableRewards();
-			fetchAllPointsByUser();
+			claimStatus = RESTServiceHelper.fetchAllClaimStatuses();
+			viewRewardsBeans = RESTServiceHelper.fetchAllAvailableRewards(userId, totalPoints);
+			RESTServiceHelper.fetchAllPointsByUser(userId);
 			claimBean = new ClaimBean();
 			this.selRwId = reqMap.get("rewardsId") + "^" + reqMap.get("rwQuantity") + "^" + reqMap.get("rwValue");
 			return "clmcc";
@@ -117,9 +112,9 @@ public class ClaimController implements Serializable {
 	public String showViewClaim() {
 		try {
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			claimStatus = fetchAllClaimStatuses();
-			viewClaimBeans = fetchAllClaims();
-			viewRewardsBeans = fetchAllRewards();
+			claimStatus = RESTServiceHelper.fetchAllClaimStatuses();
+			viewClaimBeans = RESTServiceHelper.fetchAllClaims();
+			viewRewardsBeans = RESTServiceHelper.fetchAllRewards();
 			return "clmvc";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -132,9 +127,9 @@ public class ClaimController implements Serializable {
 	public String showViewClaimByUser() {
 		try {
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			claimStatus = fetchAllClaimStatuses();
-			viewClaimBeans = fetchAllClaimsByUser();
-			viewRewardsBeans = fetchAllRewards();
+			claimStatus = RESTServiceHelper.fetchAllClaimStatuses();
+			viewClaimBeans = RESTServiceHelper.fetchAllClaimsByUser(userId);
+			viewRewardsBeans = RESTServiceHelper.fetchAllRewards();
 			return "clmuc";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -147,8 +142,8 @@ public class ClaimController implements Serializable {
 	public String showEditClaim() {
 		try {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
-			claimStatus = fetchNextClaimStatuses();
-			viewRewardsBeans = fetchAllRewards();
+			claimStatus = RESTServiceHelper.fetchNextClaimStatuses(claimBean.getcStatusId());
+			viewRewardsBeans = RESTServiceHelper.fetchAllRewards();
 			return "clmec";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -228,143 +223,6 @@ public class ClaimController implements Serializable {
 		}
 	}
 
-	private List<ClaimBean> fetchAllClaims() {
-		List<ClaimBean> ret = new ArrayList<ClaimBean>();
-		WebClient fetchClaimClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cls/claim/list");
-		Collection<? extends ClaimMessage> claims = new ArrayList<ClaimMessage>(fetchClaimClient.accept(MediaType.APPLICATION_JSON).getCollection(ClaimMessage.class));
-		fetchClaimClient.close();
-		for (ClaimMessage message : claims) {
-			ClaimBean bean = new ClaimBean();
-			bean.setClaimCrtdDt(message.getClaimCrtdDt());
-			bean.setClaimDesc(message.getClaimDesc());
-			bean.setClaimId(message.getClaimId());
-			bean.setcStatusId(message.getcStatusId());
-			bean.setRewardsId(message.getRewardsId());
-			bean.setUserId(message.getUserId());
-			bean.setClaimComment(message.getClaimComment());
-			bean.setUserName(message.getUserName());
-			bean.setcStatusName(message.getcStatusName());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<ClaimBean> fetchAllClaimsByUser() {
-		List<ClaimBean> ret = new ArrayList<ClaimBean>();
-		WebClient fetchClaimClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cls/claim/list/user/" + (userId).longValue());
-		Collection<? extends ClaimMessage> claims = new ArrayList<ClaimMessage>(fetchClaimClient.accept(MediaType.APPLICATION_JSON).getCollection(ClaimMessage.class));
-		fetchClaimClient.close();
-		for (ClaimMessage message : claims) {
-			ClaimBean bean = new ClaimBean();
-			bean.setClaimCrtdDt(message.getClaimCrtdDt());
-			bean.setClaimDesc(message.getClaimDesc());
-			bean.setClaimId(message.getClaimId());
-			bean.setcStatusId(message.getcStatusId());
-			bean.setRewardsId(message.getRewardsId());
-			bean.setUserId(message.getUserId());
-			bean.setClaimComment(message.getClaimComment());
-			bean.setUserName(message.getUserName());
-			bean.setcStatusName(message.getcStatusName());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<ListSelectorBean> fetchAllClaimStatuses() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewClaimSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cls/claim/status/list");
-		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewClaimSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		viewClaimSelectClient.close();
-		for (MetaDataMessage metaDataMessage : md) {
-			ListSelectorBean bean = new ListSelectorBean();
-			bean.setId(metaDataMessage.getId());
-			bean.setDesc(metaDataMessage.getDesc());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<ListSelectorBean> fetchNextClaimStatuses() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewClaimSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cls/claim/status/list/" + claimBean.getcStatusId());
-		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewClaimSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		viewClaimSelectClient.close();
-		for (MetaDataMessage metaDataMessage : md) {
-			ListSelectorBean bean = new ListSelectorBean();
-			bean.setId(metaDataMessage.getId());
-			bean.setDesc(metaDataMessage.getDesc());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<RewardsBean> fetchAllRewards() {
-		List<RewardsBean> ret = new ArrayList<RewardsBean>();
-		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list");
-		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
-		viewRewardsClient.close();
-		for (RewardsMessage message : rewards) {
-			RewardsBean bean = new RewardsBean();
-			bean.setrCatId(message.getrCatId());
-			bean.setRwCrtdDt(message.getRwCrtdDt());
-			bean.setRwDesc(message.getRwDesc());
-			bean.setRwExpiryDt(message.getRwExpiryDt());
-			bean.setRwHoverText(message.getRwHoverText());
-			bean.setRwId(message.getRwId());
-			bean.setRwLaunchDt(message.getRwLaunchDt());
-			bean.setRwStockCodeNum(message.getRwStockCodeNum());
-			bean.setRwTag(message.getRwTag());
-			bean.setRwTitle(message.getRwTitle());
-			bean.setRwValue(message.getRwValue());
-			bean.setRwQuantity(message.getRwQuantity());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<RewardsBean> fetchAllAvailableRewards() {
-		List<RewardsBean> ret = new ArrayList<RewardsBean>();
-		WebClient viewRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/list/avail");
-		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
-		viewRewardsClient.close();
-		for (RewardsMessage message : rewards) {
-			RewardsBean bean = new RewardsBean();
-			bean.setrCatId(message.getrCatId());
-			bean.setRwCrtdDt(message.getRwCrtdDt());
-			bean.setRwDesc(message.getRwDesc());
-			bean.setRwExpiryDt(message.getRwExpiryDt());
-			bean.setRwHoverText(message.getRwHoverText());
-			bean.setRwId(message.getRwId());
-			bean.setRwLaunchDt(message.getRwLaunchDt());
-			bean.setRwStockCodeNum(message.getRwStockCodeNum());
-			bean.setRwTag(message.getRwTag());
-			bean.setRwTitle(message.getRwTitle());
-			bean.setRwValue(message.getRwValue());
-			bean.setRwQuantity(message.getRwQuantity());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<PointBean> fetchAllPointsByUser() {
-		List<PointBean> ret = new ArrayList<PointBean>();
-		WebClient viewPointClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/points/get/user/" + userId);
-		Collection<? extends PointMessage> points = new ArrayList<PointMessage>(viewPointClient.accept(MediaType.APPLICATION_JSON).getCollection(PointMessage.class));
-		viewPointClient.close();
-		totalPoints = 0l;
-		for (PointMessage message : points) {
-			PointBean bean = new PointBean();
-			bean.setAllocId(message.getAllocId());
-			bean.setComments(message.getComments());
-			bean.setEntityId(message.getEntityId());
-			bean.setPointId(message.getPointId());
-			bean.setPointValue(message.getPointValue());
-			bean.setUserId(message.getUserId());
-			totalPoints += message.getPointValue();
-			ret.add(bean);
-		}
-		return ret;
-	}
 
 	public ClaimBean getClaimBean() {
 		if (claimBean == null)

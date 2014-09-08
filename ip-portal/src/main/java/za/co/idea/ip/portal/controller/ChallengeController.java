@@ -1,9 +1,7 @@
 package za.co.idea.ip.portal.controller;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -14,7 +12,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.portlet.PortletContext;
 import javax.portlet.PortletRequest;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -30,8 +27,6 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
-import org.primefaces.model.tagcloud.DefaultTagCloudItem;
-import org.primefaces.model.tagcloud.DefaultTagCloudModel;
 import org.primefaces.model.tagcloud.TagCloudModel;
 
 import za.co.idea.ip.portal.bean.ChallengeBean;
@@ -46,7 +41,6 @@ import za.co.idea.ip.portal.util.RESTServiceHelper;
 import za.co.idea.ip.ws.bean.AttachmentMessage;
 import za.co.idea.ip.ws.bean.ChallengeMessage;
 import za.co.idea.ip.ws.bean.GroupMessage;
-import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.ReviewMessage;
 import za.co.idea.ip.ws.bean.SolutionMessage;
@@ -137,25 +131,25 @@ public class ChallengeController implements Serializable {
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
-			challengeCats = fetchAllChallengeCat();
+			challengeCats = RESTServiceHelper.fetchAllChallengeCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			viewChallenges = fetchAllChallengesByStatusIdUserId(8);
+			viewChallenges = RESTServiceHelper.fetchAllChallengesByStatusIdUserId(userId, 8);
 			showPubChal = true;
 			showViewChal = false;
 			showCrtChal = false;
 			if (toView != null && Integer.valueOf(toView) != -1) {
 				switch (Integer.valueOf(toView)) {
 				case 1:
-					viewChallenges = fetchAllChallengesByStatusIdUserId(8);
-					challengeStatuses = fetchAllChallengeStatuses();
+					viewChallenges = RESTServiceHelper.fetchAllChallengesByStatusIdUserId(userId, 8);
+					challengeStatuses = RESTServiceHelper.fetchAllChallengeStatuses();
 					showPubChal = true;
 					showViewChal = false;
 					showCrtChal = false;
 					showReviewChal = false;
 					break;
 				case 2:
-					viewChallenges = fetchAllChallengesByUser();
-					challengeStatuses = fetchAllChallengeStatuses();
+					viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
+					challengeStatuses = RESTServiceHelper.fetchAllChallengeStatuses();
 					showPubChal = false;
 					showViewChal = true;
 					showCrtChal = false;
@@ -163,7 +157,7 @@ public class ChallengeController implements Serializable {
 					break;
 				case 3:
 					pGrps = RESTServiceHelper.fetchActiveGroups();
-					challengeStatuses = fetchAllChallengeStatuses();
+					challengeStatuses = RESTServiceHelper.fetchAllChallengeStatuses();
 					groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 					challengeBean = new ChallengeBean();
 					admUsers = RESTServiceHelper.fetchActiveUsers();
@@ -197,9 +191,9 @@ public class ChallengeController implements Serializable {
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			solutionCats = fetchAllSolutionCat();
-			solutionStatuses = fetchAllSolutionStatuses();
-			viewChallenges = fetchAllChallengesByStatusIdUserId(8);
+			solutionCats = RESTServiceHelper.fetchAllSolutionCat();
+			solutionStatuses = RESTServiceHelper.fetchAllSolutionStatuses();
+			viewChallenges = RESTServiceHelper.fetchAllChallengesByStatusIdUserId(userId, 8);
 			solutionBean = new SolutionBean();
 			saveAsOpen = false;
 			showPubSol = true;
@@ -208,7 +202,7 @@ public class ChallengeController implements Serializable {
 			if (toView != null && Integer.valueOf(toView) != -1) {
 				switch (Integer.valueOf(toView)) {
 				case 1:
-					viewChallenges = fetchAllChallengesByStatusIdUserId(8);
+					viewChallenges = RESTServiceHelper.fetchAllChallengesByStatusIdUserId(userId, 8);
 					admUsers = RESTServiceHelper.fetchActiveUsers();
 					solutionBean = new SolutionBean();
 					saveAsOpen = false;
@@ -219,8 +213,8 @@ public class ChallengeController implements Serializable {
 					break;
 				case 2:
 					solutionBean = new SolutionBean();
-					viewChallenges = fetchAllChallengesByUser();
-					viewSolutions = fetchAllSolutionsByStatusIdUserId(2);
+					viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
+					viewSolutions = RESTServiceHelper.fetchAllSolutionsByStatusIdUserId(userId, 2);
 					showPubSol = true;
 					showViewSol = false;
 					showCrtSol = false;
@@ -228,8 +222,8 @@ public class ChallengeController implements Serializable {
 					break;
 				case 3:
 					solutionBean = new SolutionBean();
-					viewChallenges = fetchAllChallengesByUser();
-					viewSolutions = fetchAllSolutionsByUser();
+					viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
+					viewSolutions = RESTServiceHelper.fetchAllSolutionsByUser(userId);
 					showPubSol = false;
 					showViewSol = true;
 					showCrtSol = false;
@@ -237,8 +231,8 @@ public class ChallengeController implements Serializable {
 					break;
 				case 4:
 					solutionBean = new SolutionBean();
-					viewChallenges = fetchAllChallengesByUser();
-					viewSolutions = fetchAllSolutionsByStatusIdUserId(2);
+					viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
+					viewSolutions = RESTServiceHelper.fetchAllSolutionsByStatusIdUserId(userId, 2);
 					showPubSol = false;
 					showViewSol = false;
 					showCrtSol = false;
@@ -274,10 +268,10 @@ public class ChallengeController implements Serializable {
 
 	public void showPublishedChallenges() {
 		try {
-			viewChallenges = fetchAllChallengesByStatusIdUserId(8);
-			challengeCats = fetchAllChallengeCat();
+			viewChallenges = RESTServiceHelper.fetchAllChallengesByStatusIdUserId(userId, 8);
+			challengeCats = RESTServiceHelper.fetchAllChallengeCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			challengeStatuses = fetchAllChallengeStatuses();
+			challengeStatuses = RESTServiceHelper.fetchAllChallengeStatuses();
 			showPubChal = true;
 			showViewChal = false;
 			showCrtChal = false;
@@ -293,10 +287,10 @@ public class ChallengeController implements Serializable {
 
 	public void showViewChallenges() {
 		try {
-			viewChallenges = fetchAllChallengesByUser();
-			challengeCats = fetchAllChallengeCat();
+			viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
+			challengeCats = RESTServiceHelper.fetchAllChallengeCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			challengeStatuses = fetchAllChallengeStatuses();
+			challengeStatuses = RESTServiceHelper.fetchAllChallengeStatuses();
 			showPubChal = false;
 			showViewChal = true;
 			showCrtChal = false;
@@ -313,8 +307,8 @@ public class ChallengeController implements Serializable {
 	public void showCreateChallenges() {
 		try {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
-			challengeCats = fetchAllChallengeCat();
-			challengeStatuses = fetchAllChallengeStatuses();
+			challengeCats = RESTServiceHelper.fetchAllChallengeCat();
+			challengeStatuses = RESTServiceHelper.fetchAllChallengeStatuses();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
 			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 			challengeBean = new ChallengeBean();
@@ -337,7 +331,7 @@ public class ChallengeController implements Serializable {
 	public void showReviewChallenges() {
 		try {
 			viewChallenges = RESTServiceHelper.fetchAllReviewChallengesByUser(userId);
-			challengeCats = fetchAllChallengeCat();
+			challengeCats = RESTServiceHelper.fetchAllChallengeCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			challengeStatuses = RESTServiceHelper.fetchAllReviewChallengeNextStatuses();
 			showPubChal = false;
@@ -355,9 +349,9 @@ public class ChallengeController implements Serializable {
 
 	public String showEditChallenge() {
 		try {
-			challengeCats = fetchAllChallengeCat();
+			challengeCats = RESTServiceHelper.fetchAllChallengeCat();
 			admUsers = RESTServiceHelper.fetchActiveUsers();
-			challengeStatuses = fetchAllChallengeStatuses();
+			challengeStatuses = RESTServiceHelper.fetchAllChallengeStatuses();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
 			rvIds = RESTServiceHelper.fetchReviews(challengeBean.getId(), "ip_challenge");
 			rvIdCnt = rvIds.size();
@@ -373,9 +367,9 @@ public class ChallengeController implements Serializable {
 
 	public String showEditOpenChallenge() {
 		try {
-			challengeCats = fetchAllChallengeCat();
+			challengeCats = RESTServiceHelper.fetchAllChallengeCat();
 			admUsers = RESTServiceHelper.fetchActiveUsers();
-			challengeStatuses = fetchNextChallengeStatuses();
+			challengeStatuses = RESTServiceHelper.fetchNextChallengeStatuses(challengeBean.getStatusId());
 			pGrps = RESTServiceHelper.fetchActiveGroups();
 			rvIds = RESTServiceHelper.fetchReviews(challengeBean.getId(), "ip_challenge");
 			rvIdCnt = rvIds.size();
@@ -391,7 +385,7 @@ public class ChallengeController implements Serializable {
 
 	public String showEditReviewChallenge() {
 		try {
-			challengeCats = fetchAllChallengeCat();
+			challengeCats = RESTServiceHelper.fetchAllChallengeCat();
 			admUsers = RESTServiceHelper.fetchActiveUsers();
 			challengeStatuses = RESTServiceHelper.fetchAllReviewChallengeNextStatuses();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
@@ -410,38 +404,38 @@ public class ChallengeController implements Serializable {
 
 	public String showSummaryChallenge() {
 		logger.debug("Control handled in showSummaryChallenge method");
-		chalLikes = fetchAllChalLikes();
-		chalComments = fetchAllChalComments();
+		chalLikes = RESTServiceHelper.fetchAllBuildonLikes(challengeBean.getId(), 2);
+		chalComments = RESTServiceHelper.fetchAllBuildonComments(challengeBean.getId(), 2);
 		chalLikeCnt = "(" + chalLikes.getTags().size() + ")	";
 		chalCommentCnt = "(" + chalComments.size() + ")	";
 		commentText = "";
 		showChallengeComments = false;
 		showChallengeLikes = false;
-		viewSolutions = fetchAllSolutionsByChal();
+		viewSolutions = RESTServiceHelper.fetchAllSolutionsByChal(challengeBean.getId());
 		return "chals";
 	}
 
 	public String showSummaryOpenChallenge() {
-		chalLikes = fetchAllChalLikes();
-		chalComments = fetchAllChalComments();
+		chalLikes = RESTServiceHelper.fetchAllBuildonLikes(challengeBean.getId(), 2);
+		chalComments = RESTServiceHelper.fetchAllBuildonComments(challengeBean.getId(), 2);
 		chalLikeCnt = "(" + chalLikes.getTags().size() + ")	";
 		chalCommentCnt = "(" + chalComments.size() + ")	";
 		showChallengeComments = false;
 		showChallengeLikes = false;
 		commentText = "";
-		viewSolutions = fetchAllSolutionsByChal();
+		viewSolutions = RESTServiceHelper.fetchAllSolutionsByChal(challengeBean.getId());
 		return "chalso";
 	}
 
 	public String showSummaryReviewChallenge() {
-		chalLikes = fetchAllChalLikes();
-		chalComments = fetchAllChalComments();
+		chalLikes = RESTServiceHelper.fetchAllBuildonLikes(challengeBean.getId(), 2);
+		chalComments = RESTServiceHelper.fetchAllBuildonComments(challengeBean.getId(), 2);
 		chalLikeCnt = "(" + chalLikes.getTags().size() + ")	";
 		chalCommentCnt = "(" + chalComments.size() + ")	";
 		showChallengeComments = false;
 		commentText = "";
 		showChallengeLikes = false;
-		viewSolutions = fetchAllSolutionsByChal();
+		viewSolutions = RESTServiceHelper.fetchAllSolutionsByChal(challengeBean.getId());
 		return "chalsr";
 	}
 
@@ -646,7 +640,7 @@ public class ChallengeController implements Serializable {
 		addTagClient.close();
 		if (response.getStatusCode() != 0)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Comment", "Error While Saving Comment"));
-		chalComments = fetchAllChalComments();
+		chalComments = RESTServiceHelper.fetchAllBuildonComments(challengeBean.getId(), 2);
 		chalCommentCnt = "(" + chalComments.size() + ")	";
 		commentText = "";
 		showChallengeComments = true;
@@ -666,14 +660,14 @@ public class ChallengeController implements Serializable {
 		addTagClient.close();
 		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
-		chalLikes = fetchAllChalLikes();
+		chalLikes = RESTServiceHelper.fetchAllBuildonLikes(challengeBean.getId(), 2);
 		chalLikeCnt = "(" + chalLikes.getTags().size() + ")	";
 		showChallengeComments = false;
 		showChallengeLikes = true;
 	}
 
 	public void showCommentChallenge() {
-		chalComments = fetchAllChalComments();
+		chalComments = RESTServiceHelper.fetchAllBuildonComments(challengeBean.getId(), 2);
 		showChallengeComments = true;
 		showChallengeLikes = false;
 	}
@@ -681,9 +675,9 @@ public class ChallengeController implements Serializable {
 	public void showCreateSolution() {
 		try {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
-			viewChallenges = fetchAllChallengesByStatusIdUserId(8);
-			solutionCats = fetchAllSolutionCat();
-			solutionStatuses = fetchAllSolutionStatuses();
+			viewChallenges = RESTServiceHelper.fetchAllChallengesByStatusIdUserId(userId, 8);
+			solutionCats = RESTServiceHelper.fetchAllSolutionCat();
+			solutionStatuses = RESTServiceHelper.fetchAllSolutionStatuses();
 			solutionBean = new SolutionBean();
 			selGrpId = null;
 			saveAsOpen = false;
@@ -706,9 +700,9 @@ public class ChallengeController implements Serializable {
 		try {
 			Map<String, String> reqMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 			admUsers = RESTServiceHelper.fetchActiveUsers();
-			viewChallenges = fetchAllAvailableChallenges();
-			solutionCats = fetchAllSolutionCat();
-			solutionStatuses = fetchAllSolutionStatuses();
+			viewChallenges = RESTServiceHelper.fetchAllAvailableChallenges();
+			solutionCats = RESTServiceHelper.fetchAllSolutionCat();
+			solutionStatuses = RESTServiceHelper.fetchAllSolutionStatuses();
 			solutionBean = new SolutionBean();
 			solutionBean.setChalId(Long.valueOf(reqMap.get("chalId")));
 			saveAsOpen = false;
@@ -726,11 +720,11 @@ public class ChallengeController implements Serializable {
 	public void showViewSolution() {
 		try {
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			viewChallenges = fetchAllChallengesByUser();
-			solutionCats = fetchAllSolutionCat();
-			solutionStatuses = fetchAllSolutionStatuses();
+			viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
+			solutionCats = RESTServiceHelper.fetchAllSolutionCat();
+			solutionStatuses = RESTServiceHelper.fetchAllSolutionStatuses();
 			solutionBean = new SolutionBean();
-			viewSolutions = fetchAllSolutionsByUser();
+			viewSolutions = RESTServiceHelper.fetchAllSolutionsByUser(userId);
 			showPubSol = false;
 			showViewSol = true;
 			showCrtSol = false;
@@ -747,11 +741,11 @@ public class ChallengeController implements Serializable {
 	public void showViewOpenSolution() {
 		try {
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			viewChallenges = fetchAllChallengesByUser();
-			solutionCats = fetchAllSolutionCat();
-			solutionStatuses = fetchAllSolutionStatuses();
+			viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
+			solutionCats = RESTServiceHelper.fetchAllSolutionCat();
+			solutionStatuses = RESTServiceHelper.fetchAllSolutionStatuses();
 			solutionBean = new SolutionBean();
-			viewSolutions = fetchAllSolutionsByStatusIdUserId(2);
+			viewSolutions = RESTServiceHelper.fetchAllSolutionsByStatusIdUserId(userId, 2);
 			showPubSol = true;
 			showViewSol = false;
 			showCrtSol = false;
@@ -768,11 +762,11 @@ public class ChallengeController implements Serializable {
 	public String showViewReviewSolution() {
 		try {
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			viewChallenges = fetchAllChallengesByUser();
-			solutionCats = fetchAllSolutionCat();
-			solutionStatuses = fetchAllSolutionStatuses();
+			viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
+			solutionCats = RESTServiceHelper.fetchAllSolutionCat();
+			solutionStatuses = RESTServiceHelper.fetchAllSolutionStatuses();
 			solutionBean = new SolutionBean();
-			viewSolutions = fetchAllReviewSolutionsByUser();
+			viewSolutions = RESTServiceHelper.fetchAllReviewSolutionsByUser(userId);
 			showPubSol = false;
 			showViewSol = false;
 			showCrtSol = false;
@@ -789,51 +783,14 @@ public class ChallengeController implements Serializable {
 	public String showEditSolution() {
 		try {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
-			viewChallenges = fetchAllChallengesByUser();
-			solutionCats = fetchAllSolutionCat();
-			solutionStatuses = fetchAllSolutionStatuses();
+			viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
+			solutionCats = RESTServiceHelper.fetchAllSolutionCat();
+			solutionStatuses = RESTServiceHelper.fetchAllSolutionStatuses();
 			rvIds = RESTServiceHelper.fetchReviews(solutionBean.getId(), "ip_solution");
 			rvIdCnt = rvIds.size();
-			try {
-				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
-				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-				getBlobClient.close();
-				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-					client.header("Content-Type", "application/json");
-					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-					if (attachment != null) {
-						solFileAvail = false;
-						WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
-						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-						getBlobTypeClient.close();
-						solutionBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-						solFileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-					} else {
-						solFileAvail = true;
-						solFileContent = null;
-					}
-				} else {
-					solFileAvail = true;
-					solFileContent = null;
-				}
-				return "sole";
-			} catch (Exception e) {
-				logger.error(e, e);
-
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				solFileAvail = false;
-				solFileContent = null;
-				return "";
-			}
+			return "sole";			
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -843,51 +800,14 @@ public class ChallengeController implements Serializable {
 	public String showEditOpenSolution() {
 		try {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
-			viewChallenges = fetchAllChallengesByUser();
-			solutionCats = fetchAllSolutionCat();
-			solutionStatuses = fetchNextSolutionStatuses();
+			viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
+			solutionCats = RESTServiceHelper.fetchAllSolutionCat();
+			solutionStatuses = RESTServiceHelper.fetchNextSolutionStatuses(solutionBean.getStatusId());
 			rvIds = RESTServiceHelper.fetchReviews(solutionBean.getId(), "ip_solution");
 			rvIdCnt = rvIds.size();
-			try {
-				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
-				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-				getBlobClient.close();
-				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-					client.header("Content-Type", "application/json");
-					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-					if (attachment != null) {
-						solFileAvail = false;
-						WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
-						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-						getBlobTypeClient.close();
-						solutionBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-						solFileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-					} else {
-						solFileAvail = true;
-						solFileContent = null;
-					}
-				} else {
-					solFileAvail = true;
-					solFileContent = null;
-				}
-				return "soleo";
-			} catch (Exception e) {
-				logger.error(e, e);
-
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				solFileAvail = false;
-				solFileContent = null;
-				return "";
-			}
+			return "soleo";			
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -897,51 +817,14 @@ public class ChallengeController implements Serializable {
 	public String showEditReviewSolution() {
 		try {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
-			viewChallenges = fetchAllChallengesByUser();
-			solutionCats = fetchAllSolutionCat();
+			viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
+			solutionCats = RESTServiceHelper.fetchAllSolutionCat();
 			solutionStatuses = RESTServiceHelper.fetchAllReviewSolutionStatuses();
 			rvIds = RESTServiceHelper.fetchReviews(solutionBean.getId(), "ip_solution");
 			rvIdCnt = rvIds.size();
-			try {
-				WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
-				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-				getBlobClient.close();
-				if (blobId != -999l) {
-					WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-					String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobNameClient.close();
-					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-					client.header("Content-Type", "application/json");
-					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-					if (attachment != null) {
-						solFileAvail = false;
-						WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
-						String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-						getBlobTypeClient.close();
-						solutionBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-						solFileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-					} else {
-						solFileAvail = true;
-						solFileContent = null;
-					}
-				} else {
-					solFileAvail = true;
-					solFileContent = null;
-				}
-				return "soler";
-			} catch (Exception e) {
-				logger.error(e, e);
-
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				solFileAvail = false;
-				solFileContent = null;
-				return "";
-			}
+			return "soler";			
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform updated view request", "System error occurred, cannot perform updated view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -949,49 +832,22 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String showSummarySolution() {
-		solLikes = fetchAllSolLikes();
-		solComments = fetchAllSolComments();
-		solLikeCnt = "(" + solLikes.getTags().size() + ")	";
-		solCommentCnt = "(" + solComments.size() + ")	";
-		buildOns = fetchAllBuildOns();
-		buildOnCnt = "(" + buildOns.size() + ")	";
-		buildOnText = "";
-		commentText = "";
-		showSolutionComments = false;
-		showSolBuildOns = true;
-		showSolutionLikes = false;
-		solutionBean.setTaggable(solutionBean.getStatusId() != 2);
 		try {
-			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
-			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-			getBlobClient.close();
-			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-				client.header("Content-Type", "application/json");
-				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-				if (attachment != null) {
-					solFileAvail = false;
-					WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
-					String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobTypeClient.close();
-					solutionBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-					solFileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-				} else {
-					solFileAvail = true;
-					solFileContent = null;
-				}
-			} else {
-				solFileAvail = true;
-				solFileContent = null;
-			}
-			return "sols";
+			solLikes = RESTServiceHelper.fetchAllBuildonLikes(solutionBean.getId(), 3);
+			solComments = RESTServiceHelper.fetchAllBuildonComments(solutionBean.getId(), 3);
+			solLikeCnt = "(" + solLikes.getTags().size() + ")	";
+			solCommentCnt = "(" + solComments.size() + ")	";
+			buildOns = RESTServiceHelper.fetchAllBuildOns(solutionBean.getId(),	3);
+			buildOnCnt = "(" + buildOns.size() + ")	";
+			buildOnText = "";
+			commentText = "";
+			showSolutionComments = false;
+			showSolBuildOns = true;
+			showSolutionLikes = false;
+			solutionBean.setTaggable(solutionBean.getStatusId() != 2);
+			return "sols";		
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			solFileAvail = false;
@@ -1001,49 +857,22 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String showSummaryOpenSolution() {
-		solLikes = fetchAllSolLikes();
-		solComments = fetchAllSolComments();
-		solLikeCnt = "(" + solLikes.getTags().size() + ")	";
-		solCommentCnt = "(" + solComments.size() + ")	";
-		buildOns = fetchAllBuildOns();
-		buildOnCnt = "(" + buildOns.size() + ")	";
-		buildOnText = "";
-		commentText = "";
-		showSolutionComments = false;
-		showSolBuildOns = true;
-		showSolutionLikes = false;
-		solutionBean.setTaggable(solutionBean.getStatusId() != 2);
 		try {
-			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
-			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-			getBlobClient.close();
-			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-				client.header("Content-Type", "application/json");
-				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-				if (attachment != null) {
-					solFileAvail = false;
-					WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
-					String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobTypeClient.close();
-					solutionBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-					solFileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-				} else {
-					solFileAvail = true;
-					solFileContent = null;
-				}
-			} else {
-				solFileAvail = true;
-				solFileContent = null;
-			}
+			solLikes = RESTServiceHelper.fetchAllBuildonLikes(solutionBean.getId(), 3);
+			solComments = RESTServiceHelper.fetchAllBuildonComments(solutionBean.getId(), 3);
+			solLikeCnt = "(" + solLikes.getTags().size() + ")	";
+			solCommentCnt = "(" + solComments.size() + ")	";
+			buildOns = RESTServiceHelper.fetchAllBuildOns(solutionBean.getId(),	3);
+			buildOnCnt = "(" + buildOns.size() + ")	";
+			buildOnText = "";
+			commentText = "";
+			showSolutionComments = false;
+			showSolBuildOns = true;
+			showSolutionLikes = false;
+			solutionBean.setTaggable(solutionBean.getStatusId() != 2);
 			return "solso";
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			solFileAvail = false;
@@ -1053,49 +882,22 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String showSummaryReviewSolution() {
-		solLikes = fetchAllSolLikes();
-		solComments = fetchAllSolComments();
-		solLikeCnt = "(" + solLikes.getTags().size() + ")	";
-		solCommentCnt = "(" + solComments.size() + ")	";
-		buildOns = fetchAllBuildOns();
-		buildOnCnt = "(" + buildOns.size() + ")	";
-		commentText = "";
-		buildOnText = "";
-		showSolutionComments = false;
-		showSolBuildOns = true;
-		showSolutionLikes = false;
-		solutionBean.setTaggable(solutionBean.getStatusId() != 2);
 		try {
-			WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
-			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-			getBlobClient.close();
-			if (blobId != -999l) {
-				WebClient getBlobNameClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-				String blobName = getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-				getBlobNameClient.close();
-				WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-				client.header("Content-Type", "application/json");
-				client.header("Accept", MediaType.MULTIPART_FORM_DATA);
-				Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
-				if (attachment != null) {
-					solFileAvail = false;
-					WebClient getBlobTypeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getContentType/" + blobId);
-					String blobType = getBlobTypeClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-					getBlobTypeClient.close();
-					solutionBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
-					solFileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream(), blobType, blobName);
-				} else {
-					solFileAvail = true;
-					solFileContent = null;
-				}
-			} else {
-				solFileAvail = true;
-				solFileContent = null;
-			}
-			return "solsr";
+			solLikes = RESTServiceHelper.fetchAllBuildonLikes(solutionBean.getId(), 3);
+			solComments = RESTServiceHelper.fetchAllBuildonComments(solutionBean.getId(), 3);
+			solLikeCnt = "(" + solLikes.getTags().size() + ")	";
+			solCommentCnt = "(" + solComments.size() + ")	";
+			buildOns = RESTServiceHelper.fetchAllBuildOns(solutionBean.getId(),	3);
+			buildOnCnt = "(" + buildOns.size() + ")	";
+			commentText = "";
+			buildOnText = "";
+			showSolutionComments = false;
+			showSolBuildOns = true;
+			showSolutionLikes = false;
+			solutionBean.setTaggable(solutionBean.getStatusId() != 2);
+			return "solsr";				
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			solFileAvail = false;
@@ -1334,7 +1136,7 @@ public class ChallengeController implements Serializable {
 		addTagClient.close();
 		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
-		solLikes = fetchAllSolLikeById(solutionBean.getId());
+		solLikes = RESTServiceHelper.fetchAllBuildonLikes(solutionBean.getId(), 3);
 		solLikeCnt = "(" + solLikes.getTags().size() + ")	";
 		showSolutionComments = false;
 		showSolutionLikes = true;
@@ -1358,10 +1160,10 @@ public class ChallengeController implements Serializable {
 		addTagClient.close();
 		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
-		solLikeCnt = "(" + fetchAllSolLikeById(solutionBean.getId()).getTags().size() + ")	";
+		solLikeCnt = "(" + RESTServiceHelper.fetchAllBuildonLikes(solutionBean.getId(), 3).getTags().size() + ")	";
 		showSolutionComments = false;
 		showSolutionLikes = true;
-		challengeBean = fetchChallengeById(chalId);
+		challengeBean = RESTServiceHelper.fetchChallengeById(chalId);
 	}
 
 	public void commentSolution() {
@@ -1378,7 +1180,7 @@ public class ChallengeController implements Serializable {
 		addTagClient.close();
 		if (response.getStatusCode() != 0)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Comment", "Error While Saving Comment"));
-		solComments = fetchAllSolComments();
+		solComments = RESTServiceHelper.fetchAllBuildonComments(solutionBean.getId(), 3);
 		solCommentCnt = "(" + solComments.size() + ")	";
 		commentText = "";
 		showSolutionComments = true;
@@ -1399,7 +1201,7 @@ public class ChallengeController implements Serializable {
 		addTagClient.close();
 		if (response.getStatusCode() != 0)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Build-On", "Error While Saving Build-On"));
-		buildOns = fetchAllBuildOns();
+		buildOns = RESTServiceHelper.fetchAllBuildOns(solutionBean.getId(), 3);
 		buildOnCnt = "(" + buildOns.size() + ")	";
 		buildOnText = "";
 		showSolutionComments = false;
@@ -1408,431 +1210,9 @@ public class ChallengeController implements Serializable {
 	}
 
 	public void showCommentSolution() {
-		solComments = fetchAllSolComments();
+		solComments = RESTServiceHelper.fetchAllBuildonComments(solutionBean.getId(), 3);
 		showSolutionComments = true;
 		showSolutionLikes = false;
-	}
-
-	private List<TagBean> fetchAllBuildOns() {
-		WebClient fetchIdeaBuildOnsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + solutionBean.getId() + "/3/3");
-		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaBuildOnsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
-		fetchIdeaBuildOnsClient.close();
-		List<TagBean> ret = new ArrayList<TagBean>();
-		for (TagMessage msg : msgs) {
-			TagBean bean = new TagBean();
-			bean.setTagText(msg.getTagText());
-			bean.setUsrScreenName(msg.getUsrScreenName());
-			bean.setTagDate(msg.getTagDate());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<TagBean> fetchAllBuildOnsById(Long solId) {
-		WebClient fetchIdeaBuildOnsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + solId + "/3/3");
-		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaBuildOnsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
-		fetchIdeaBuildOnsClient.close();
-		List<TagBean> ret = new ArrayList<TagBean>();
-		for (TagMessage msg : msgs) {
-			TagBean bean = new TagBean();
-			bean.setTagText(msg.getTagText());
-			bean.setUsrScreenName(msg.getUsrScreenName());
-			bean.setTagDate(msg.getTagDate());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	protected List<ChallengeBean> fetchAllChallenges() {
-		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
-		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list");
-		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
-		fetchChallengeClient.close();
-		for (ChallengeMessage challengeMessage : challenges) {
-			ChallengeBean bean = new ChallengeBean();
-			bean.setCatId(challengeMessage.getCatId());
-			bean.setCrtdById(challengeMessage.getCrtdById());
-			bean.setCrtdDt(challengeMessage.getCrtdDt());
-			bean.setDesc(challengeMessage.getDesc());
-			bean.setExprDt(challengeMessage.getExprDt());
-			bean.setHoverText(challengeMessage.getHoverText());
-			bean.setId(challengeMessage.getId());
-			bean.setLaunchDt(challengeMessage.getLaunchDt());
-			bean.setStatusId(challengeMessage.getStatusId());
-			bean.setTag(challengeMessage.getTag());
-			bean.setTitle(challengeMessage.getTitle());
-			bean.setGroupIdList(getIdsFromArray(challengeMessage.getGroupIdList()));
-			bean.setBlobUrl(challengeMessage.getBlobUrl());
-			bean.setFileName(challengeMessage.getFileName());
-			bean.setImgAvail(challengeMessage.isImgAvail());
-			bean.setRevUserId(challengeMessage.getRevUserId());
-			bean.setStatusName(challengeMessage.getStatusName());
-			bean.setCatName(challengeMessage.getCatName());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	protected ChallengeBean fetchChallengeById(Long chalId) {
-		logger.debug("Control handled in fecthChallengeById() ");
-		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/get/" + chalId);
-		ChallengeMessage challengeMessage = fetchChallengeClient.accept(MediaType.APPLICATION_JSON).get(ChallengeMessage.class);
-		fetchChallengeClient.close();
-		ChallengeBean bean = new ChallengeBean();
-		bean.setCatId(challengeMessage.getCatId());
-		bean.setCrtdById(challengeMessage.getCrtdById());
-		bean.setCrtdDt(challengeMessage.getCrtdDt());
-		bean.setDesc(challengeMessage.getDesc());
-		bean.setExprDt(challengeMessage.getExprDt());
-		bean.setHoverText(challengeMessage.getHoverText());
-		bean.setId(challengeMessage.getId());
-		bean.setLaunchDt(challengeMessage.getLaunchDt());
-		bean.setStatusId(challengeMessage.getStatusId());
-		bean.setTag(challengeMessage.getTag());
-		bean.setTitle(challengeMessage.getTitle());
-		bean.setGroupIdList(getIdsFromArray(challengeMessage.getGroupIdList()));
-		bean.setBlobUrl(challengeMessage.getBlobUrl());
-		bean.setFileName(challengeMessage.getFileName());
-		bean.setImgAvail(challengeMessage.isImgAvail());
-		bean.setRevUserId(challengeMessage.getRevUserId());
-		bean.setStatusName(challengeMessage.getStatusName());
-		bean.setCatName(challengeMessage.getCatName());
-		logger.info("Before returning challenge bean: " + bean);
-		return bean;
-	}
-
-	private List<ChallengeBean> fetchAllAvailableChallenges() {
-		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
-		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/status/8");
-		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
-		fetchChallengeClient.close();
-		for (ChallengeMessage challengeMessage : challenges) {
-			ChallengeBean bean = new ChallengeBean();
-			bean.setCatId(challengeMessage.getCatId());
-			bean.setCrtdById(challengeMessage.getCrtdById());
-			bean.setCrtdDt(challengeMessage.getCrtdDt());
-			bean.setDesc(challengeMessage.getDesc());
-			bean.setExprDt(challengeMessage.getExprDt());
-			bean.setHoverText(challengeMessage.getHoverText());
-			bean.setId(challengeMessage.getId());
-			bean.setLaunchDt(challengeMessage.getLaunchDt());
-			bean.setStatusId(challengeMessage.getStatusId());
-			bean.setTag(challengeMessage.getTag());
-			bean.setTitle(challengeMessage.getTitle());
-			bean.setStatusName(challengeMessage.getStatusName());
-			bean.setCatName(challengeMessage.getCatName());
-			bean.setGroupIdList(getIdsFromArray(challengeMessage.getGroupIdList()));
-			bean.setBlobUrl(challengeMessage.getBlobUrl());
-			bean.setFileName(challengeMessage.getFileName());
-			bean.setImgAvail(challengeMessage.isImgAvail());
-			bean.setRevUserId(challengeMessage.getRevUserId());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<ChallengeBean> fetchAllChallengesByUser() {
-		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
-		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/user/access/" + userId);
-		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
-		fetchChallengeClient.close();
-		for (ChallengeMessage challengeMessage : challenges) {
-			ChallengeBean bean = new ChallengeBean();
-			bean.setCatId(challengeMessage.getCatId());
-			bean.setCrtdById(challengeMessage.getCrtdById());
-			bean.setCrtdDt(challengeMessage.getCrtdDt());
-			bean.setDesc(challengeMessage.getDesc());
-			bean.setExprDt(challengeMessage.getExprDt());
-			bean.setHoverText(challengeMessage.getHoverText());
-			bean.setId(challengeMessage.getId());
-			bean.setLaunchDt(challengeMessage.getLaunchDt());
-			bean.setStatusId(challengeMessage.getStatusId());
-			bean.setTag(challengeMessage.getTag());
-			bean.setTitle(challengeMessage.getTitle());
-			bean.setGroupIdList(getIdsFromArray(challengeMessage.getGroupIdList()));
-			bean.setCrtByImgAvail(challengeMessage.isCrtByImgAvail());
-			bean.setCrtByImgPath(challengeMessage.getCrtByImgPath());
-			bean.setCrtdByName(challengeMessage.getCrtdByName());
-			bean.setBlobUrl(challengeMessage.getBlobUrl());
-			bean.setFileName(challengeMessage.getFileName());
-			bean.setImgAvail(challengeMessage.isImgAvail());
-			bean.setRevUserId(challengeMessage.getRevUserId());
-			bean.setStatusName(challengeMessage.getStatusName());
-			bean.setCatName(challengeMessage.getCatName());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	public List<ChallengeBean> fetchAllChallengesCreatedByUser() {
-		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
-		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/user/created/" + userId);
-		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
-		fetchChallengeClient.close();
-		for (ChallengeMessage challengeMessage : challenges) {
-			ChallengeBean bean = new ChallengeBean();
-			bean.setCatId(challengeMessage.getCatId());
-			bean.setCrtdById(challengeMessage.getCrtdById());
-			bean.setCrtdDt(challengeMessage.getCrtdDt());
-			bean.setDesc(challengeMessage.getDesc());
-			bean.setExprDt(challengeMessage.getExprDt());
-			bean.setHoverText(challengeMessage.getHoverText());
-			bean.setId(challengeMessage.getId());
-			bean.setLaunchDt(challengeMessage.getLaunchDt());
-			bean.setStatusId(challengeMessage.getStatusId());
-			bean.setTag(challengeMessage.getTag());
-			bean.setTitle(challengeMessage.getTitle());
-			bean.setGroupIdList(getIdsFromArray(challengeMessage.getGroupIdList()));
-			bean.setBlobUrl(challengeMessage.getBlobUrl());
-			bean.setFileName(challengeMessage.getFileName());
-			bean.setImgAvail(challengeMessage.isImgAvail());
-			bean.setRevUserId(challengeMessage.getRevUserId());
-			bean.setStatusName(challengeMessage.getStatusName());
-			bean.setCatName(challengeMessage.getCatName());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<ChallengeBean> fetchAllChallengesByStatusIdUserId(Integer status) {
-		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
-		WebClient fetchChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/list/status/" + status + "/user/" + userId);
-		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
-		fetchChallengeClient.close();
-		for (ChallengeMessage challengeMessage : challenges) {
-			ChallengeBean bean = new ChallengeBean();
-			bean.setCatId(challengeMessage.getCatId());
-			bean.setCrtdById(challengeMessage.getCrtdById());
-			bean.setCrtdDt(challengeMessage.getCrtdDt());
-			bean.setDesc(challengeMessage.getDesc());
-			bean.setExprDt(challengeMessage.getExprDt());
-			bean.setHoverText(challengeMessage.getHoverText());
-			bean.setId(challengeMessage.getId());
-			bean.setLaunchDt(challengeMessage.getLaunchDt());
-			bean.setStatusId(challengeMessage.getStatusId());
-			bean.setTag(challengeMessage.getTag());
-			bean.setTitle(challengeMessage.getTitle());
-			bean.setGroupIdList(getIdsFromArray(challengeMessage.getGroupIdList()));
-			bean.setCrtByImgAvail(challengeMessage.isCrtByImgAvail());
-			bean.setCrtByImgPath(challengeMessage.getCrtByImgPath());
-			bean.setCrtdByName(challengeMessage.getCrtdByName());
-			bean.setImgAvail(challengeMessage.isImgAvail());
-			bean.setBlobUrl(challengeMessage.getBlobUrl());
-			bean.setFileName(challengeMessage.getFileName());
-			bean.setStatusName(challengeMessage.getStatusName());
-			bean.setCatName(challengeMessage.getCatName());
-			bean.setBlobUrl(challengeMessage.getBlobUrl());
-			bean.setFileName(challengeMessage.getFileName());
-			bean.setImgAvail(challengeMessage.isImgAvail());
-			bean.setRevUserId(challengeMessage.getRevUserId());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	protected List<SolutionBean> fetchAllSolutions() {
-		List<SolutionBean> ret = new ArrayList<SolutionBean>();
-		WebClient fetchSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list");
-		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
-		fetchSolutionClient.close();
-		for (SolutionMessage solutionMessage : solutions) {
-			SolutionBean bean = new SolutionBean();
-			bean.setChalId(solutionMessage.getChalId());
-			bean.setCatId(solutionMessage.getCatId());
-			bean.setCrtdById(solutionMessage.getCrtdById());
-			bean.setCrtdDt(solutionMessage.getCrtdDt());
-			bean.setDesc(solutionMessage.getDesc());
-			bean.setId(solutionMessage.getId());
-			bean.setStatusId(solutionMessage.getStatusId());
-			bean.setCrtByName(solutionMessage.getCrtByName());
-			bean.setTags(solutionMessage.getTags());
-			bean.setTitle(solutionMessage.getTitle());
-			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
-			bean.setSolImg(solutionMessage.getSolImg());
-			bean.setBlobUrl(solutionMessage.getBlobUrl());
-			bean.setFileName(solutionMessage.getFileName());
-			bean.setRevUserId(solutionMessage.getRevUserId());
-			bean.setStatusName(solutionMessage.getStatusName());
-			bean.setCatName(solutionMessage.getCatName());
-			if (solutionMessage.isSolImgAvl())
-				bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<SolutionBean> fetchAllSolutionsByUser() {
-		List<SolutionBean> ret = new ArrayList<SolutionBean>();
-		WebClient fetchSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/user/access/" + userId);
-		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
-		fetchSolutionClient.close();
-		for (SolutionMessage solutionMessage : solutions) {
-			SolutionBean bean = new SolutionBean();
-			bean.setChalId(solutionMessage.getChalId());
-			bean.setCatId(solutionMessage.getCatId());
-			bean.setCrtdById(solutionMessage.getCrtdById());
-			bean.setCrtByName(solutionMessage.getCrtByName());
-			bean.setCrtdDt(solutionMessage.getCrtdDt());
-			bean.setDesc(solutionMessage.getDesc());
-			bean.setId(solutionMessage.getId());
-			bean.setStatusId(solutionMessage.getStatusId());
-			bean.setTags(solutionMessage.getTags());
-			bean.setTitle(solutionMessage.getTitle());
-			bean.setSolImg(solutionMessage.getSolImg());
-			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
-			bean.setBlobUrl(solutionMessage.getBlobUrl());
-			bean.setFileName(solutionMessage.getFileName());
-			bean.setRevUserId(solutionMessage.getRevUserId());
-			bean.setStatusName(solutionMessage.getStatusName());
-			bean.setCatName(solutionMessage.getCatName());
-			if (solutionMessage.isSolImgAvl())
-				bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	protected List<SolutionBean> fetchAllSolutionsCreatedByUser() {
-		List<SolutionBean> ret = new ArrayList<SolutionBean>();
-		WebClient fetchSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/user/created/" + userId);
-		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
-		fetchSolutionClient.close();
-		for (SolutionMessage solutionMessage : solutions) {
-			SolutionBean bean = new SolutionBean();
-			bean.setChalId(solutionMessage.getChalId());
-			bean.setCatId(solutionMessage.getCatId());
-			bean.setCrtdById(solutionMessage.getCrtdById());
-			bean.setCrtByName(solutionMessage.getCrtByName());
-			bean.setCrtdDt(solutionMessage.getCrtdDt());
-			bean.setDesc(solutionMessage.getDesc());
-			bean.setId(solutionMessage.getId());
-			bean.setStatusId(solutionMessage.getStatusId());
-			bean.setTags(solutionMessage.getTags());
-			bean.setTitle(solutionMessage.getTitle());
-			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
-			bean.setSolImg(solutionMessage.getSolImg());
-			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
-			bean.setBlobUrl(solutionMessage.getBlobUrl());
-			bean.setFileName(solutionMessage.getFileName());
-			bean.setRevUserId(solutionMessage.getRevUserId());
-			bean.setStatusName(solutionMessage.getStatusName());
-			bean.setCatName(solutionMessage.getCatName());
-			if (solutionMessage.isSolImgAvl())
-				bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<SolutionBean> fetchAllSolutionsByStatusIdUserId(Integer status) {
-		List<SolutionBean> ret = new ArrayList<SolutionBean>();
-		WebClient fetchSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/status/" + status + "/user/" + userId);
-		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
-		fetchSolutionClient.close();
-		for (SolutionMessage solutionMessage : solutions) {
-			SolutionBean bean = new SolutionBean();
-			bean.setChalId(solutionMessage.getChalId());
-			bean.setCatId(solutionMessage.getCatId());
-			bean.setCrtdById(solutionMessage.getCrtdById());
-			bean.setCrtByName(solutionMessage.getCrtByName());
-			bean.setCrtdDt(solutionMessage.getCrtdDt());
-			bean.setDesc(solutionMessage.getDesc());
-			bean.setId(solutionMessage.getId());
-			bean.setStatusId(solutionMessage.getStatusId());
-			bean.setTags(solutionMessage.getTags());
-			bean.setTitle(solutionMessage.getTitle());
-			bean.setSolImg(solutionMessage.getSolImg());
-			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
-			bean.setBlobUrl(solutionMessage.getBlobUrl());
-			bean.setFileName(solutionMessage.getFileName());
-			bean.setRevUserId(solutionMessage.getRevUserId());
-			bean.setCatName(solutionMessage.getCatName());
-			bean.setStatusName(solutionMessage.getStatusName());
-			if (solutionMessage.isSolImgAvl())
-				bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<SolutionBean> fetchAllReviewSolutionsByUser() {
-		List<SolutionBean> ret = new ArrayList<SolutionBean>();
-		WebClient fetchSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/reviewStatus/" + userId);
-		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
-		fetchSolutionClient.close();
-		for (SolutionMessage solutionMessage : solutions) {
-			SolutionBean bean = new SolutionBean();
-			bean.setChalId(solutionMessage.getChalId());
-			bean.setCatId(solutionMessage.getCatId());
-			bean.setCrtdById(solutionMessage.getCrtdById());
-			bean.setCrtByName(solutionMessage.getCrtByName());
-			bean.setCrtdDt(solutionMessage.getCrtdDt());
-			bean.setDesc(solutionMessage.getDesc());
-			bean.setId(solutionMessage.getId());
-			bean.setStatusId(solutionMessage.getStatusId());
-			bean.setTags(solutionMessage.getTags());
-			bean.setTitle(solutionMessage.getTitle());
-			bean.setSolImg(solutionMessage.getSolImg());
-			bean.setSolImgAvl(solutionMessage.isSolImgAvl());
-			bean.setBlobUrl(solutionMessage.getBlobUrl());
-			bean.setFileName(solutionMessage.getFileName());
-			bean.setRevUserId(solutionMessage.getRevUserId());
-			bean.setCatName(solutionMessage.getCatName());
-			bean.setStatusName(solutionMessage.getStatusName());
-			if (solutionMessage.isSolImgAvl())
-				bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg())));
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<SolutionBean> fetchAllSolutionsByChal() {
-		logger.debug("Control handled in fetchAllSolutionsByChal method ");
-		List<SolutionBean> ret = new ArrayList<SolutionBean>();
-		try {
-			WebClient fetchSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/list/chal/" + challengeBean.getId());
-			Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
-			fetchSolutionClient.close();
-			logger.info("Before getting all solutions in controller");
-			for (SolutionMessage solutionMessage : solutions) {
-				SolutionBean bean = new SolutionBean();
-				bean.setChalId(solutionMessage.getChalId());
-				bean.setCatId(solutionMessage.getCatId());
-				bean.setCrtdById(solutionMessage.getCrtdById());
-				bean.setCrtByName(solutionMessage.getCrtByName());
-				bean.setCrtdDt(solutionMessage.getCrtdDt());
-				bean.setDesc(solutionMessage.getDesc());
-				bean.setId(solutionMessage.getId());
-				bean.setStatusId(solutionMessage.getStatusId());
-				bean.setTags(solutionMessage.getTags());
-				bean.setTitle(solutionMessage.getTitle());
-				bean.setSolImgAvl(solutionMessage.isSolImgAvl());
-				bean.setSolImg(solutionMessage.getSolImg());
-				bean.setSolComments(fetchAllSolCommentsById(solutionMessage.getId()));
-				bean.setTaggable(solutionMessage.getStatusId() != 2);
-				bean.setSolLikeCnt("(" + fetchAllSolLikeById(solutionMessage.getId()).getTags().size() + ")");
-				bean.setSolCommentCnt("(" + fetchAllSolCommentsById(solutionMessage.getId()).size() + ")");
-				bean.setBuildOnCnt("(" + fetchAllBuildOnsById(solutionMessage.getId()).size() + ")");
-				bean.setCatName(solutionMessage.getCatName());
-				bean.setStatusName(solutionMessage.getStatusName());
-				if (solutionMessage.isSolImgAvl()) {
-					File file = new File("/resources/images/" + solutionMessage.getSolImg());
-					if (file.exists()) {
-						logger.info("image file content type---" + solutionMessage.getContentType() + "-----file name -----" + solutionMessage.getFileName() + "-------imag file ----" + solutionMessage.getSolImg());
-						bean.setSolStream(new DefaultStreamedContent(((PortletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/images/" + solutionMessage.getSolImg()), solutionMessage.getContentType(), solutionMessage.getFileName()));
-					} else {
-						bean.setSolImgAvl(false);
-					}
-
-				}
-				logger.info("Solution: Id-" + solutionMessage.getId() + " name-" + solutionMessage.getTitle() + " image-" + solutionMessage.getSolImg());
-				ret.add(bean);
-			}
-		} catch (Exception e) {
-			logger.error(e, e);
-			logger.error("Error in fetchAllSolutionsByChal() : " + e.getMessage());
-		}
-		return ret;
 	}
 
 	public void updateChallengeReviewer() {
@@ -1945,165 +1325,6 @@ public class ChallengeController implements Serializable {
 		}
 	}
 
-	private TagCloudModel fetchAllChalLikes() {
-		TagCloudModel likes = new DefaultTagCloudModel();
-		WebClient fetchChallengeLikesClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + challengeBean.getId() + "/2/1");
-		Collection<? extends TagMessage> likeList = new ArrayList<TagMessage>(fetchChallengeLikesClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
-		fetchChallengeLikesClient.close();
-		for (TagMessage tagMessage : likeList)
-			likes.addTag(new DefaultTagCloudItem(tagMessage.getUsrScreenName(), 1));
-		return likes;
-	}
-
-	private List<TagBean> fetchAllChalComments() {
-		WebClient fetchChallengeCommentsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + challengeBean.getId() + "/2/2");
-		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchChallengeCommentsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
-		fetchChallengeCommentsClient.close();
-		List<TagBean> ret = new ArrayList<TagBean>();
-		for (TagMessage msg : msgs) {
-			TagBean bean = new TagBean();
-			bean.setTagText(msg.getTagText());
-			bean.setUsrScreenName(msg.getUsrScreenName());
-			bean.setTagDate(msg.getTagDate());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private TagCloudModel fetchAllSolLikes() {
-		TagCloudModel likes = new DefaultTagCloudModel();
-		WebClient fetchSolutionLikesClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + solutionBean.getId() + "/3/1");
-		Collection<? extends TagMessage> likeList = new ArrayList<TagMessage>(fetchSolutionLikesClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
-		fetchSolutionLikesClient.close();
-		for (TagMessage tagMessage : likeList)
-			likes.addTag(new DefaultTagCloudItem(tagMessage.getUsrScreenName(), 1));
-		return likes;
-	}
-
-	private TagCloudModel fetchAllSolLikeById(Long solId) {
-		TagCloudModel likes = new DefaultTagCloudModel();
-		WebClient fetchSolutionLikesClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + solId + "/3/1");
-		Collection<? extends TagMessage> likeList = new ArrayList<TagMessage>(fetchSolutionLikesClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
-		fetchSolutionLikesClient.close();
-		for (TagMessage tagMessage : likeList)
-			likes.addTag(new DefaultTagCloudItem(tagMessage.getUsrScreenName(), 1));
-		return likes;
-	}
-
-	private List<TagBean> fetchAllSolComments() {
-		WebClient fetchSolutionCommentsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + solutionBean.getId() + "/3/2");
-		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchSolutionCommentsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
-		fetchSolutionCommentsClient.close();
-		List<TagBean> ret = new ArrayList<TagBean>();
-		for (TagMessage msg : msgs) {
-			TagBean bean = new TagBean();
-			bean.setTagText(msg.getTagText());
-			bean.setUsrScreenName(msg.getUsrScreenName());
-			bean.setTagDate(msg.getTagDate());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<TagBean> fetchAllSolCommentsById(Long solId) {
-		WebClient fetchSolutionCommentsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/get/" + solId + "/3/2");
-		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchSolutionCommentsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
-		fetchSolutionCommentsClient.close();
-		List<TagBean> ret = new ArrayList<TagBean>();
-		for (TagMessage msg : msgs) {
-			TagBean bean = new TagBean();
-			bean.setTagText(msg.getTagText());
-			bean.setUsrScreenName(msg.getUsrScreenName());
-			bean.setTagDate(msg.getTagDate());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<ListSelectorBean> fetchAllChallengeStatuses() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewChallengeSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/status/list");
-		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		viewChallengeSelectClient.close();
-		for (MetaDataMessage metaDataMessage : md) {
-			ListSelectorBean bean = new ListSelectorBean();
-			bean.setId(metaDataMessage.getId());
-			bean.setDesc(metaDataMessage.getDesc());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<ListSelectorBean> fetchNextChallengeStatuses() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewChallengeSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/status/list/" + challengeBean.getStatusId());
-		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		viewChallengeSelectClient.close();
-		for (MetaDataMessage metaDataMessage : md) {
-			ListSelectorBean bean = new ListSelectorBean();
-			bean.setId(metaDataMessage.getId());
-			bean.setDesc(metaDataMessage.getDesc());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<ListSelectorBean> fetchAllChallengeCat() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewChallengeSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/cat/list");
-		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		viewChallengeSelectClient.close();
-		for (MetaDataMessage metaDataMessage : md) {
-			ListSelectorBean bean = new ListSelectorBean();
-			bean.setId(metaDataMessage.getId());
-			bean.setDesc(metaDataMessage.getDesc());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<ListSelectorBean> fetchAllSolutionStatuses() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewSolutionSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/status/list");
-		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		viewSolutionSelectClient.close();
-		for (MetaDataMessage metaDataMessage : md) {
-			ListSelectorBean bean = new ListSelectorBean();
-			bean.setId(metaDataMessage.getId());
-			bean.setDesc(metaDataMessage.getDesc());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<ListSelectorBean> fetchNextSolutionStatuses() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewSolutionSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/status/list/" + solutionBean.getStatusId());
-		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		viewSolutionSelectClient.close();
-		for (MetaDataMessage metaDataMessage : md) {
-			ListSelectorBean bean = new ListSelectorBean();
-			bean.setId(metaDataMessage.getId());
-			bean.setDesc(metaDataMessage.getDesc());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	private List<ListSelectorBean> fetchAllSolutionCat() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewSolutionSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/cat/list");
-		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		viewSolutionSelectClient.close();
-		for (MetaDataMessage metaDataMessage : md) {
-			ListSelectorBean bean = new ListSelectorBean();
-			bean.setId(metaDataMessage.getId());
-			bean.setDesc(metaDataMessage.getDesc());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
 	private List<String> validateSolution() {
 		ArrayList<String> ret = new ArrayList<String>();
 		if (solutionBean.getChalId() == null || solutionBean.getChalId().toString().length() == 0) {
@@ -2194,14 +1415,6 @@ public class ChallengeController implements Serializable {
 			ret[i] = bean.getgId();
 			i++;
 		}
-		return ret;
-	}
-
-	private List<Long> getIdsFromArray(Long[] ae) {
-		List<Long> ret = new ArrayList<Long>();
-		if (ae != null)
-			for (Long id : ae)
-				ret.add(id);
 		return ret;
 	}
 
