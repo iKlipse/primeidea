@@ -69,6 +69,7 @@ public class DocumentUploadService {
 					blob.setBlobSize(totalSize);
 					ipBlobDAO.merge(blob);
 				} catch (Exception e) {
+					logger.error("Error ---"+e);
 					return Response.status(Status.INTERNAL_SERVER_ERROR)
 							.build();
 				}
@@ -76,6 +77,52 @@ public class DocumentUploadService {
 			} else
 				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		} catch (Exception e) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+	@POST
+	@Path("/doc/multiUpload/{blobId}/{nextExists}")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional(propagation = Propagation.REQUIRED)
+	public Response doMultiUpload(final Attachment stream,
+			@PathParam("blobId") Long blobId, @PathParam("nextExists") boolean nextExists) {
+		try {
+			logger.info("Multi upload service : "+blobId);			
+			IpBlob blob = ipBlobDAO.findById(blobId);
+			if (blob != null) {
+				File file = new File(BUNDLE.getString("base.dir") + File.separator + blob.getBlobEntityTblNm() + File.separator + blob.getBlobEntityId() + File.separator + blob.getBlobName());
+				if (file.getParentFile().exists()) {
+					if(!nextExists) {
+						logger.info("----next exists");
+					FileUtils.cleanDirectory(file.getParentFile());
+					}
+				}
+				else
+					file.getParentFile().mkdirs();
+				file.createNewFile();
+				FileOutputStream data = new FileOutputStream(file);
+				byte[] buf = new byte[4096];
+				long totalSize = 0l;
+				while (stream.getDataHandler().getInputStream().read(buf) > 0) {
+					totalSize += buf.length;
+					data.write(buf);
+					data.flush();
+				}
+				data.close();
+				try {
+					blob.setBlobSize(totalSize);
+					ipBlobDAO.merge(blob);
+				} catch (Exception e) {
+					return Response.status(Status.INTERNAL_SERVER_ERROR)
+							.build();
+				}
+				return Response.ok().build();
+			} else
+				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (Exception e) {
+			logger.info("Error in service : "+e.getMessage());
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
 	}

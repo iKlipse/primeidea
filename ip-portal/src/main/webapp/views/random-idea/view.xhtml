@@ -19,7 +19,7 @@
 			</p:outputLabel>
 		</p:column>
 		<p:column width="7%" >
-			<p:commandButton id="viewVwButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{randomIdeaController.showEditIdea}">
+			<p:commandButton id="viewVwButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{randomIdeaController.showEditIdea}" disabled="#{idea.disableEdit}">
 				<f:setPropertyActionListener value="#{idea}" target="#{randomIdeaController.ideaBean}" />
 				<f:setPropertyActionListener value="2" target="#{randomIdeaController.returnView}" />
 			</p:commandButton>

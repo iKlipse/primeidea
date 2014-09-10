@@ -23,7 +23,7 @@
 			</p:outputLabel>
 		</p:column>
 		<p:column width="8%">
-			<p:commandButton id="viewVwoButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{challengeController.showEditOpenSolution}">
+			<p:commandButton id="viewVwoButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{challengeController.showEditOpenSolution}" disabled="#{solution.disableEdit}">
 				<f:setPropertyActionListener value="#{solution}" target="#{challengeController.solutionBean}" />
 				<f:setPropertyActionListener value="3" target="#{challengeController.returnView}" />
 			</p:commandButton>

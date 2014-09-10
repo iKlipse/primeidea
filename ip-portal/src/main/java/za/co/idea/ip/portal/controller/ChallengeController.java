@@ -1340,9 +1340,6 @@ public class ChallengeController implements Serializable {
 		if (solutionBean.getDesc() == null || solutionBean.getDesc().length() == 0) {
 			ret.add("Description is Mandatory");
 		}
-		if (rvIdCnt == 0 || rvIds == null || rvIds.size() == 0 || rvIds.get(0).getGroupId() == null || rvIds.get(0).getGroupId().length == 0) {
-			ret.add("Please assign reviewers");
-		}
 		return ret;
 	}
 

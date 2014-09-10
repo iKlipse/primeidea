@@ -25,7 +25,7 @@ import za.co.idea.ip.ws.bean.ReviewMessage;
 @SuppressWarnings({ "rawtypes" })
 @Path(value = "/rvs")
 public class ReviewService {
-	private static final Logger logger = Logger.getLogger(AdminService.class);
+	private static final Logger logger = Logger.getLogger(ReviewService.class);
 	private IpReviewDAO ipReviewDAO;
 	private IpNativeSQLDAO ipNativeSQLDAO;
 	private IpGroupDAO ipGroupDAO;
@@ -71,11 +71,13 @@ public class ReviewService {
 	@Transactional(propagation = Propagation.NESTED)
 	public ResponseMessage updateReview(ReviewMessage message) {
 		try {
-			Long[] ids = ipNativeSQLDAO.getNextIds(IpReview.class,
-					message.getGroupId().length);
+			Long[] ids = ipNativeSQLDAO.getNextIds(IpReview.class, message.getGroupId().length);
 			int i = 0;
-			ipReviewDAO.deleteByEntityIdEntityName(message.getEntityId(),
-					message.getTblNm(), message.getStatusId());
+			if(message.getEntityId() != null ) {
+				logger.info("Entity Id----"+message.getEntityId());				
+			    ipReviewDAO.deleteByEntityIdEntityName(message.getEntityId(),message.getTblNm(), message.getStatusId());
+			}
+			
 			for (Long grpId : message.getGroupId()) {
 				IpReview rv = new IpReview();
 				rv.setIpGroup(ipGroupDAO.findById(grpId));
@@ -90,9 +92,10 @@ public class ReviewService {
 			ResponseMessage ret = new ResponseMessage();
 			ret.setStatusCode(0);
 			ret.setStatusDesc("Success");
+			logger.info("Success Message ----");
 			return ret;
 		} catch (Exception e) {
-			logger.error(e, e);
+			logger.error("Error while saving reviewer: " + e);
 			ResponseMessage ret = new ResponseMessage();
 			ret.setStatusCode(1);
 			ret.setStatusDesc("Java Exception " + e.getMessage());

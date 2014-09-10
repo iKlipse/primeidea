@@ -503,9 +503,6 @@ public class RandomIdeaController implements Serializable {
 		if (ideaBean.getIdeaDesc() == null || ideaBean.getIdeaDesc().length() == 0) {
 			ret.add("Description is Mandatory");
 		}
-		if (rvIdCnt == 0 || rvIds == null || rvIds.size() == 0 || rvIds.get(0).getGroupId() == null || rvIds.get(0).getGroupId().length == 0) {
-			ret.add("Please Assign Reviewers");
-		}
 		return ret;
 	}
 
@@ -734,9 +731,11 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	public void initializeAssignReviews() {
+		logger.info("in initializeAssignReviews method ");
 		pGrps = RESTServiceHelper.fetchReviewGroups();
+		logger.info("Review Groups : "+pGrps);
 		rvIds = new ArrayList<ReviewBean>();
-		if (rvIdCnt != null)
+		if (rvIdCnt != null) {
 			for (int i = 0; i < rvIdCnt; i++) {
 				ReviewBean bean = new ReviewBean();
 				bean.setEntityId(null);
@@ -744,6 +743,12 @@ public class RandomIdeaController implements Serializable {
 				bean.setTblNm("ip_idea");
 				rvIds.add(bean);
 			}
+		}
+		if (selGroupId != null && selGroupId != -999) {
+			rvIds = new ArrayList<ReviewBean>();
+			cGrps = RESTServiceHelper.fetchSubGroups(selGroupId);
+		}
+		logger.info("after getting assign reviewers");
 	}
 
 	public void changeGroup() {
@@ -769,6 +774,7 @@ public class RandomIdeaController implements Serializable {
 	}
 
 	public void assignReviews() {
+		logger.info("Control handled in assign reviews");
 		for (ReviewBean bean : rvIds) {
 			ReviewMessage message = new ReviewMessage();
 			message.setEntityId(bean.getEntityId());
@@ -780,6 +786,9 @@ public class RandomIdeaController implements Serializable {
 			if (res.getStatusCode() != 0) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Assign Reviewer Request Failed", "Assign Reviewer Request Failed");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			} else {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Assign Reviewer Request completed successfully", "Assign Reviewer Request completed successfully");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 			reviewClient.close();
 		}
@@ -787,8 +796,10 @@ public class RandomIdeaController implements Serializable {
 
 	protected Long[] toLongArray(String[] val) {
 		Long[] ret = new Long[val.length];
-		for (int i = 0; i < val.length; i++)
-			ret[i] = Long.valueOf(val[i]);
+		for (int i = 0; i < val.length; i++) {
+			if(val[i] != null)
+			  ret[i] = Long.valueOf(val[i]);
+		}
 		return ret;
 	}
 

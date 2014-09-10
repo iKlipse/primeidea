@@ -8,11 +8,11 @@
 					<p:outputLabel value="Select Review Group : " />
 				</p:column>
 				<p:column>
-					<p:selectCheckboxMenu id="groupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{randomIdeaController.selGroupId}">
+					<p:selectOneMenu  id="groupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{randomIdeaController.selGroupId}">
 						<p:ajax listener="#{randomIdeaController.changeGroup}" update="dtRevGrp" />
 						<f:selectItem itemLabel="Please Select" itemValue="-999" noSelectionOption="true" />
 						<f:selectItems value="#{randomIdeaController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
-					</p:selectCheckboxMenu>
+					</p:selectOneMenu>
 				</p:column>
 				<p:column>
 					<p:outputLabel value="Select Review Stages : " />
