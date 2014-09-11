@@ -29,7 +29,7 @@
 		<property name="solTags" type="java.lang.String">
 			<column name="sol_tags" length="65535" />
 		</property>
-		<property name="solCrtdDt" type="java.util.Date">
+		<property name="solCrtdDt" type="java.sql.Timestamp">
 			<column name="sol_crtd_dt" length="19" not-null="true" />
 		</property>
 		<property name="solReviewCnt" type="java.lang.Integer">

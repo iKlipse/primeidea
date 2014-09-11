@@ -215,7 +215,6 @@ public class MetaDataController implements Serializable {
 		}
 	}
 
-
 	public HashMap<String, String> getMetaList() {
 		if (metaList == null) {
 			metaList = new HashMap<String, String>();

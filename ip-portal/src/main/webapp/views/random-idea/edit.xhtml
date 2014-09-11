@@ -34,23 +34,25 @@
 			<p:outputLabel id="lblEdtIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:outputLabel value="No Attachments" rendered="#{!randomIdeaController.ideaBean.imgAvail}" />
-			<h:outputLink value="#{randomIdeaController.ideaBean.blobUrl}" rendered="#{randomIdeaController.ideaBean.imgAvail}">
-				<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
-				<p:outputLabel value="#{randomIdeaController.ideaBean.fileName}" style="font-weight: 0.6em" />
-			</h:outputLink>
+			<p:dataGrid id="edtIDocCar" var="file" value="#{idea.files}" columns="3" rows="1" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="No Attachments">
+				<p:panel styleClass="dgView">
+					<h:outputLink value="#{file.url}">
+						<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+						<p:outputLabel value="#{file.name}" style="font-weight: 0.6em" />
+					</h:outputLink>
+				</p:panel>
+			</p:dataGrid>
 		</p:column>
 		<p:column rendered="#{!randomIdeaController.ideaBean.disableField}">
 			<p:outputLabel id="lblEdtIUpload" value="Upload File : " />
 		</p:column>
 		<p:column rendered="#{!randomIdeaController.ideaBean.disableField}">
-			<p:fileUpload id="fuEdtIUpload" fileUploadListener="#{randomIdeaController.fileUploadHandle}" multiple="false" />
+			<p:fileUpload id="fuEdtIUpload" fileUploadListener="#{randomIdeaController.fileUploadHandle}" multiple="false" dragDropSupport="true" sizeLimit="100000" fileLimit="3" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtFuncGrps" value="Idea Groups" />
 		</p:column>
 		<p:column>
-			<!-- <p:pickList id="plEdtGroupPick" converter="groupConverter" value="#{randomIdeaController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" /> -->
 			<p:selectOneMenu id="scmGroupList" value="#{randomIdeaController.selGroupId}" disabled="#{randomIdeaController.ideaBean.disableField}">
 				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 				<f:selectItems value="#{randomIdeaController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />

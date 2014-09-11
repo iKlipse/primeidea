@@ -8,8 +8,8 @@
 					<p:outputLabel value="Select Review Group : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu  id="groupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{randomIdeaController.selGroupId}">
-						<p:ajax listener="#{randomIdeaController.changeGroup}" update="dtRevGrp" />
+					<p:selectOneMenu id="groupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{randomIdeaController.selGroupId}">
+						<p:ajax event="change" listener="#{randomIdeaController.changeGroup}" update="dtRevGrp, :frmAdmin:itemCntList" />
 						<f:selectItem itemLabel="Please Select" itemValue="-999" noSelectionOption="true" />
 						<f:selectItems value="#{randomIdeaController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 					</p:selectOneMenu>
@@ -18,8 +18,8 @@
 					<p:outputLabel value="Select Review Stages : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu value="#{randomIdeaController.rvIdCnt}">
-						<p:ajax listener="#{randomIdeaController.changeGroup}" update="dtRevGrp" />
+					<p:selectOneMenu id="itemCntList" value="#{randomIdeaController.rvIdCnt}">
+						<p:ajax event="change" listener="#{randomIdeaController.changeCount}" update="dtRevGrp" />
 						<f:selectItem itemLabel="Please Select" itemValue="-999" noSelectionOption="true" />
 						<f:selectItem itemLabel="1" itemValue="1" />
 						<f:selectItem itemLabel="2" itemValue="2" />
@@ -42,7 +42,7 @@
 					</p:selectCheckboxMenu>
 				</p:column>
 				<f:facet name="footer">
-					<p:commandButton value="Save" actionListener="#{randomIdeaController.assignReviews}" />
+					<p:commandButton value="Save" actionListener="#{randomIdeaController.assignReviews}" update="tpnlGroupAlloc" />
 				</f:facet>
 			</p:dataTable>
 		</p:panel>

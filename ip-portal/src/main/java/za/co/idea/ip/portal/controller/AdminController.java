@@ -39,7 +39,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.DualListModel;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
@@ -94,8 +93,6 @@ public class AdminController implements Serializable {
 	private List<UserBean> viewUsers;
 	private List<GroupBean> viewGroups;
 	private List<MetaDataBean> secqList;
-	private DualListModel<UserBean> userTwinSelect;
-	private DualListModel<GroupBean> groupTwinSelect;
 	private boolean available;
 	private boolean availableID;
 	private boolean availableEmail;
@@ -226,17 +223,6 @@ public class AdminController implements Serializable {
 			} else {
 				hierarchy = "assign primary group";
 			}
-			WebClient statsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/stats/" + message.getuId());
-			UserStatisticsMessage statsMsg = statsClient.accept(MediaType.APPLICATION_JSON).get(UserStatisticsMessage.class);
-			statsBean = new UserStatisticsBean();
-			statsBean.setChallengesCount(statsMsg.getChallengesCount());
-			statsBean.setIdeasCount(statsMsg.getIdeasCount());
-			statsBean.setSolutionsCount(statsMsg.getSolutionsCount());
-			statsBean.setTotalCount(statsMsg.getTotalCount());
-			statsBean.setUserId(statsMsg.getUserId());
-			statsBean.setWhishListCount(statsMsg.getWhishListCount());
-			statsClient.close();
-			logger.info(loggedScrName + " :: " + imgPath + " :: " + imgAvail + " :: " + hierarchy);
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
@@ -321,7 +307,6 @@ public class AdminController implements Serializable {
 	public String showCreateFunction() {
 		try {
 			pGrps = RESTServiceHelper.fetchActiveGroups();
-			groupTwinSelect = new DualListModel<GroupBean>(RESTServiceHelper.fetchActiveGroups(), new ArrayList<GroupBean>());
 			return "admfc";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -363,7 +348,6 @@ public class AdminController implements Serializable {
 			groupBean = new GroupBean();
 			viewGroups = pGrps = RESTServiceHelper.fetchActiveGroups();
 			admUsers = RESTServiceHelper.fetchAllUsersSortByPG();
-			userTwinSelect = new DualListModel<UserBean>(RESTServiceHelper.fetchAllUsersSortByPG(), RESTServiceHelper.fetchAdminUser());
 			return "admgc";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -377,7 +361,6 @@ public class AdminController implements Serializable {
 		try {
 			viewGroups = pGrps = RESTServiceHelper.fetchActiveGroups();
 			admUsers = RESTServiceHelper.fetchAllUsersSortByPG();
-			userTwinSelect = initializeSelectedUsers(admUsers);
 			functions = RESTServiceHelper.fetchAllFunctionsByGroup(groupBean.getgId());
 			return "admge";
 		} catch (Exception e) {
@@ -392,7 +375,6 @@ public class AdminController implements Serializable {
 		try {
 			viewGroups = pGrps = RESTServiceHelper.fetchAllGroups();
 			admUsers = RESTServiceHelper.fetchAllUsersSortByPG();
-			userTwinSelect = initializeSelectedUsers(admUsers);
 			functions = RESTServiceHelper.fetchAllFunctionsByGroup(groupBean.getgId());
 			return "admgs";
 		} catch (Exception e) {
@@ -407,7 +389,6 @@ public class AdminController implements Serializable {
 		try {
 			notificationBean = new NotificationBean();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
-			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 			return "admcno";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -727,7 +708,6 @@ public class AdminController implements Serializable {
 	public String showEditFunction() {
 		try {
 			pGrps = RESTServiceHelper.fetchActiveGroups();
-			groupTwinSelect = initializeSelectedGroups(pGrps);
 			return "admfe";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -1935,91 +1915,6 @@ public class AdminController implements Serializable {
 		}
 	}
 
-	// private Long[] getSelUserIds() {
-	// Long[] ret = new Long[userTwinSelect.getTarget().size()];
-	// int i = 0;
-	// for (UserBean bean : userTwinSelect.getTarget()) {
-	// ret[i] = bean.getuId();
-	// i++;
-	// }
-	// return ret;
-	// }
-
-	// private Long[] getSelGroupIds() {
-	// Long[] ret = new Long[groupTwinSelect.getTarget().size()];
-	// int i = 0;
-	// for (GroupBean bean : groupTwinSelect.getTarget()) {
-	// ret[i] = bean.getgId();
-	// i++;
-	// }
-	// return ret;
-	// }
-	//
-
-	private DualListModel<GroupBean> initializeSelectedGroups(List<GroupBean> grps) {
-		List<Long> selGrps = functionBean.getGroupIdList();
-		DualListModel<GroupBean> ret = new DualListModel<GroupBean>(new ArrayList<GroupBean>(), new ArrayList<GroupBean>());
-		for (Long grpId : selGrps)
-			ret.getTarget().add(getGroupById(grpId));
-		for (GroupBean bean : grps)
-			if (selGrps.contains(bean.getgId()))
-				continue;
-			else
-				ret.getSource().add(bean);
-		return ret;
-	}
-
-	private DualListModel<UserBean> initializeSelectedUsers(List<UserBean> users) {
-		List<Long> selUsrs = groupBean.getUserIdList();
-		DualListModel<UserBean> ret = new DualListModel<UserBean>(new ArrayList<UserBean>(), new ArrayList<UserBean>());
-		for (Long usrId : selUsrs)
-			ret.getTarget().add(getUserById(usrId));
-		for (UserBean bean : users)
-			if (selUsrs.contains(bean.getuId()))
-				continue;
-			else
-				ret.getSource().add(bean);
-		return ret;
-	}
-
-	private GroupBean getGroupById(Long pGrpId) {
-		GroupBean bean = new GroupBean();
-		WebClient groupByIdClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/get/" + pGrpId);
-		GroupMessage groupMessage = groupByIdClient.accept(MediaType.APPLICATION_JSON).get(GroupMessage.class);
-		groupByIdClient.close();
-		bean.setgId(groupMessage.getgId());
-		bean.setGeMail(groupMessage.getGeMail());
-		bean.setgName(groupMessage.getgName());
-		bean.setIsActive(groupMessage.getIsActive());
-		bean.setSelAdmUser(groupMessage.getAdmUserId());
-		bean.setSelPGrp(groupMessage.getpGrpId());
-		return bean;
-	}
-
-	private UserBean getUserById(Long id) {
-		UserBean bean = new UserBean();
-		WebClient userByIdClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/get/" + id);
-		UserMessage userMessage = userByIdClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
-		userByIdClient.close();
-		bean.setBio(userMessage.getBio());
-		bean.setContact(userMessage.getContact());
-		bean.seteMail(userMessage.geteMail());
-		bean.setFbHandle(userMessage.getFbHandle());
-		bean.setfName(userMessage.getfName());
-		bean.setIdNum(userMessage.getIdNum());
-		bean.setIsActive(userMessage.getIsActive());
-		bean.setlName(userMessage.getlName());
-		bean.setmName(userMessage.getmName());
-		bean.setPwd(userMessage.getPwd());
-		bean.setScName(userMessage.getScName());
-		bean.setSkills(userMessage.getSkills());
-		bean.setTwHandle(userMessage.getTwHandle());
-		bean.setPriGroupName(userMessage.getPriGroupName());
-		bean.setIsActive(true);
-		bean.setuId(userMessage.getuId());
-		return bean;
-	}
-
 	public void fileUploadHandle(FileUploadEvent fue) {
 		try {
 			UploadedFile file = fue.getFile();
@@ -2640,28 +2535,6 @@ public class AdminController implements Serializable {
 		this.secqList = secqList;
 	}
 
-	public DualListModel<UserBean> getUserTwinSelect() {
-		if (userTwinSelect == null) {
-			userTwinSelect = new DualListModel<UserBean>();
-		}
-		return userTwinSelect;
-	}
-
-	public DualListModel<GroupBean> getGroupTwinSelect() {
-		if (groupTwinSelect == null) {
-			groupTwinSelect = new DualListModel<GroupBean>();
-		}
-		return groupTwinSelect;
-	}
-
-	public void setUserTwinSelect(DualListModel<UserBean> userTwinSelect) {
-		this.userTwinSelect = userTwinSelect;
-	}
-
-	public void setGroupTwinSelect(DualListModel<GroupBean> groupTwinSelect) {
-		this.groupTwinSelect = groupTwinSelect;
-	}
-
 	public boolean isAvailableID() {
 		return availableID;
 	}
@@ -3068,8 +2941,17 @@ public class AdminController implements Serializable {
 	}
 
 	public UserStatisticsBean getStatsBean() {
-		if (statsBean == null)
-			statsBean = new UserStatisticsBean();
+		WebClient statsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/stats/" + userId);
+		UserStatisticsMessage statsMsg = statsClient.accept(MediaType.APPLICATION_JSON).get(UserStatisticsMessage.class);
+		statsBean = new UserStatisticsBean();
+		statsBean.setChallengesCount(statsMsg.getChallengesCount());
+		statsBean.setIdeasCount(statsMsg.getIdeasCount());
+		statsBean.setSolutionsCount(statsMsg.getSolutionsCount());
+		statsBean.setTotalCount(statsMsg.getTotalCount());
+		statsBean.setUserId(statsMsg.getUserId());
+		statsBean.setWhishListCount(statsMsg.getWhishListCount());
+		statsClient.close();
+		logger.info(loggedScrName + " :: " + imgPath + " :: " + imgAvail + " :: " + hierarchy);
 		return statsBean;
 	}
 

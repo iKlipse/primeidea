@@ -26,14 +26,18 @@
 		<property name="blobSize" type="java.lang.Long">
 			<column name="blob_size" />
 		</property>
-        <property name="blobCrtdDt" type="java.sql.Timestamp">
-            <column name="blob_crtd_dt" length="19" not-null="true" />
-        </property>
+		<property name="blobCrtdDt" type="java.sql.Timestamp">
+			<column name="blob_crtd_dt" length="19" not-null="true" />
+		</property>
 	</class>
 	<sql-query name="getBlobByEntity">
 		select ib.* from ip_blob ib where ib.blob_entity_id=:id and
 		lower(ib.blob_entity_tbl_nm)=lower(:tblNm)
 		<return alias="ib" class="za.co.idea.ip.orm.bean.IpBlob" />
+	</sql-query>
+	<sql-query name="deleteBlobByEntity">
+		delete from ip_blob where blob_entity_id=:id and
+		lower(blob_entity_tbl_nm)=lower(:tblNm)
 	</sql-query>
 	<sql-query name="getBlobIdByEntity">
 		select ib.blob_id as blobId from ip_blob ib where

@@ -25,7 +25,6 @@ import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.DualListModel;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
@@ -41,7 +40,6 @@ import za.co.idea.ip.portal.util.IdNumberGen;
 import za.co.idea.ip.portal.util.RESTServiceHelper;
 import za.co.idea.ip.ws.bean.AllocationMessage;
 import za.co.idea.ip.ws.bean.AttachmentMessage;
-import za.co.idea.ip.ws.bean.GroupMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.PointMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
@@ -79,7 +77,6 @@ public class RewardsController implements Serializable {
 	private List<PointBean> pointBeans;
 	private PointBean pointBean;
 	private Long totalPoints;
-	private DualListModel<GroupBean> groupTwinSelect;
 	private AllocationBean allocationBean;
 	private String allocId;
 	private String rewardsWishlistCnt;
@@ -117,7 +114,6 @@ public class RewardsController implements Serializable {
 			;
 			rewardsCat = RESTServiceHelper.fetchAllRewardsCat();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
-			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 			rewardsBean = new RewardsBean();
 			showCrtReward = true;
 			showViewReward = false;
@@ -308,7 +304,6 @@ public class RewardsController implements Serializable {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
 			rewardsCat = RESTServiceHelper.fetchAllRewardsCat();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
-			groupTwinSelect = initializeSelectedGroups(pGrps);
 			return "rwer";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -715,35 +710,6 @@ public class RewardsController implements Serializable {
 		}
 	}
 
-	private DualListModel<GroupBean> initializeSelectedGroups(List<GroupBean> grps) {
-		List<Long> selGrps = rewardsBean.getGroupIdList();
-		DualListModel<GroupBean> ret = new DualListModel<GroupBean>(new ArrayList<GroupBean>(), new ArrayList<GroupBean>());
-		if (selGrps != null)
-			for (Long grpId : selGrps)
-				ret.getTarget().add(getGroupById(grpId));
-		if (grps != null)
-			for (GroupBean bean : grps)
-				if (selGrps != null && selGrps.contains(bean.getgId()))
-					continue;
-				else
-					ret.getSource().add(bean);
-		return ret;
-	}
-
-	private GroupBean getGroupById(Long pGrpId) {
-		GroupBean bean = new GroupBean();
-		WebClient groupByIdClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/group/get/" + pGrpId);
-		GroupMessage groupMessage = groupByIdClient.accept(MediaType.APPLICATION_JSON).get(GroupMessage.class);
-		groupByIdClient.close();
-		bean.setgId(groupMessage.getgId());
-		bean.setGeMail(groupMessage.getGeMail());
-		bean.setgName(groupMessage.getgName());
-		bean.setIsActive(groupMessage.getIsActive());
-		bean.setSelAdmUser(groupMessage.getAdmUserId());
-		bean.setSelPGrp(groupMessage.getpGrpId());
-		return bean;
-	}
-
 	public RewardsBean getRewardsBean() {
 		if (rewardsBean == null)
 			rewardsBean = new RewardsBean();
@@ -929,20 +895,6 @@ public class RewardsController implements Serializable {
 		if (pGrps == null)
 			pGrps = new ArrayList<GroupBean>();
 		return pGrps;
-	}
-
-	public DualListModel<GroupBean> getGroupTwinSelect() {
-		if (groupTwinSelect == null)
-			groupTwinSelect = new DualListModel<GroupBean>();
-		return groupTwinSelect;
-	}
-
-	public void setpGrps(List<GroupBean> pGrps) {
-		this.pGrps = pGrps;
-	}
-
-	public void setGroupTwinSelect(DualListModel<GroupBean> groupTwinSelect) {
-		this.groupTwinSelect = groupTwinSelect;
 	}
 
 	public List<MetaDataBean> getChalStatusList() {

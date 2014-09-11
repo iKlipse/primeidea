@@ -348,8 +348,11 @@ public class IdeaService {
 					Long[] grps = new Long[val.size()];
 					int i = 0;
 					for (Object obj : val) {
-						grps[i] = ((IpIdeaGroup) obj).getIpGroup().getGroupId();
-						i++;
+						IpIdeaGroup group = (IpIdeaGroup) obj;
+						if (group != null && group.getIpGroup() != null) {
+							grps[i] = group.getIpGroup().getGroupId();
+							i++;
+						}
 					}
 					idea.setGroupIdList(grps);
 				}
@@ -407,8 +410,11 @@ public class IdeaService {
 					Long[] grps = new Long[val.size()];
 					int i = 0;
 					for (Object obj : val) {
-						grps[i] = ((IpIdeaGroup) obj).getIpGroup().getGroupId();
-						i++;
+						IpIdeaGroup group = (IpIdeaGroup) obj;
+						if (group != null && group.getIpGroup() != null) {
+							grps[i] = group.getIpGroup().getGroupId();
+							i++;
+						}
 					}
 					idea.setGroupIdList(grps);
 				}
@@ -466,8 +472,11 @@ public class IdeaService {
 					Long[] grps = new Long[val.size()];
 					int i = 0;
 					for (Object obj : val) {
-						grps[i] = ((IpIdeaGroup) obj).getIpGroup().getGroupId();
-						i++;
+						IpIdeaGroup group = (IpIdeaGroup) obj;
+						if (group != null && group.getIpGroup() != null) {
+							grps[i] = group.getIpGroup().getGroupId();
+							i++;
+						}
 					}
 					idea.setGroupIdList(grps);
 				}
@@ -525,8 +534,11 @@ public class IdeaService {
 					Long[] grps = new Long[val.size()];
 					int i = 0;
 					for (Object obj : val) {
-						grps[i] = ((IpIdeaGroup) obj).getIpGroup().getGroupId();
-						i++;
+						IpIdeaGroup group = (IpIdeaGroup) obj;
+						if (group != null && group.getIpGroup() != null) {
+							grps[i] = group.getIpGroup().getGroupId();
+							i++;
+						}
 					}
 					idea.setGroupIdList(grps);
 				}
@@ -584,8 +596,11 @@ public class IdeaService {
 					Long[] grps = new Long[val.size()];
 					int i = 0;
 					for (Object obj : val) {
-						grps[i] = ((IpIdeaGroup) obj).getIpGroup().getGroupId();
-						i++;
+						IpIdeaGroup group = (IpIdeaGroup) obj;
+						if (group != null && group.getIpGroup() != null) {
+							grps[i] = group.getIpGroup().getGroupId();
+							i++;
+						}
 					}
 					idea.setGroupIdList(grps);
 				}
@@ -643,8 +658,11 @@ public class IdeaService {
 					Long[] grps = new Long[val.size()];
 					int i = 0;
 					for (Object obj : val) {
-						grps[i] = ((IpIdeaGroup) obj).getIpGroup().getGroupId();
-						i++;
+						IpIdeaGroup group = (IpIdeaGroup) obj;
+						if (group != null && group.getIpGroup() != null) {
+							grps[i] = group.getIpGroup().getGroupId();
+							i++;
+						}
 					}
 					idea.setGroupIdList(grps);
 				}

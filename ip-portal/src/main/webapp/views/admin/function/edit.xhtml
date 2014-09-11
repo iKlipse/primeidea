@@ -11,7 +11,6 @@
 				<p:outputLabel id="plblFuncGrps" value="Function Groups" />
 			</p:column>
 			<p:column>
-				<!-- <p:pickList id="pplGroupPick" converter="groupConverter" value="#{adminController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" />-->
 				<p:selectCheckboxMenu id="scmGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{adminController.selGrpId}">
 					<f:selectItems value="#{adminController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 				</p:selectCheckboxMenu>

@@ -223,7 +223,6 @@ public class ClaimController implements Serializable {
 		}
 	}
 
-
 	public ClaimBean getClaimBean() {
 		if (claimBean == null)
 			claimBean = new ClaimBean();

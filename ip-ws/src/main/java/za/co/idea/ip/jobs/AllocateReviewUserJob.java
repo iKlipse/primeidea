@@ -52,8 +52,10 @@ public class AllocateReviewUserJob extends QuartzJobBean implements StatefulJob 
 							userCnts.put(selRevs.size(), userCnt);
 						}
 					}
-					Long selUserId = userCnts.get(userCnts.keySet().iterator().next()).iterator().next();
-					ipReviewDAO.updateReviewer(ipReview.getRevEntityId(), ipReview.getRevEntityName(), selUserId);
+					if (userCnts.keySet().iterator().hasNext() && userCnts.get(userCnts.keySet().iterator().next()).iterator().hasNext()) {
+						Long selUserId = userCnts.get(userCnts.keySet().iterator().next()).iterator().next();
+						ipReviewDAO.updateReviewer(ipReview.getRevEntityId(), ipReview.getRevEntityName(), selUserId);
+					}
 				}
 			} catch (Exception e) {
 				logger.error(e, e);

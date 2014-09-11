@@ -22,6 +22,7 @@ import org.primefaces.model.tagcloud.TagCloudModel;
 import za.co.idea.ip.portal.bean.AllocationBean;
 import za.co.idea.ip.portal.bean.ChallengeBean;
 import za.co.idea.ip.portal.bean.ClaimBean;
+import za.co.idea.ip.portal.bean.FileBean;
 import za.co.idea.ip.portal.bean.FunctionBean;
 import za.co.idea.ip.portal.bean.GroupBean;
 import za.co.idea.ip.portal.bean.IdeaBean;
@@ -38,6 +39,7 @@ import za.co.idea.ip.portal.bean.UserBean;
 import za.co.idea.ip.ws.bean.AllocationMessage;
 import za.co.idea.ip.ws.bean.ChallengeMessage;
 import za.co.idea.ip.ws.bean.ClaimMessage;
+import za.co.idea.ip.ws.bean.FileMessage;
 import za.co.idea.ip.ws.bean.FunctionMessage;
 import za.co.idea.ip.ws.bean.GroupMessage;
 import za.co.idea.ip.ws.bean.IdeaMessage;
@@ -283,10 +285,20 @@ public class RESTServiceHelper {
 			bean.setCrtByImgAvail(ideaMessage.isCrtByImgAvail());
 			bean.setCrtByImgPath(ideaMessage.getCrtByImgPath());
 			bean.setCrtdByName(ideaMessage.getCrtdByName());
-			bean.setBlobUrl(ideaMessage.getBlobUrl());
-			bean.setFileName(ideaMessage.getFileName());
-			bean.setImgAvail(ideaMessage.isImgAvail());
 			bean.setStatusName(ideaMessage.getStatusName());
+			WebClient fetchDocClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/list/" + ideaMessage.getIdeaId() + "/ip_idea");
+			Collection<? extends FileMessage> res = new ArrayList<FileMessage>(fetchDocClient.accept(MediaType.APPLICATION_JSON).getCollection(FileMessage.class));
+			for (FileMessage fileMessage : res) {
+				FileBean fileBean = new FileBean();
+				fileBean.setId(fileMessage.getId());
+				fileBean.setLoc(fileMessage.getLoc());
+				fileBean.setName(fileMessage.getName());
+				fileBean.setSize(fileMessage.getSize());
+				fileBean.setType(fileMessage.getType());
+				fileBean.setUrl(fileMessage.getUrl());
+				bean.getFiles().add(fileBean);
+			}
+			fetchDocClient.close();
 			ret.add(bean);
 		}
 		return ret;
@@ -311,10 +323,20 @@ public class RESTServiceHelper {
 			bean.setCrtByImgAvail(ideaMessage.isCrtByImgAvail());
 			bean.setCrtByImgPath(ideaMessage.getCrtByImgPath());
 			bean.setCrtdByName(ideaMessage.getCrtdByName());
-			bean.setBlobUrl(ideaMessage.getBlobUrl());
-			bean.setFileName(ideaMessage.getFileName());
-			bean.setImgAvail(ideaMessage.isImgAvail());
 			bean.setStatusName(ideaMessage.getStatusName());
+			WebClient fetchDocClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/list/" + ideaMessage.getIdeaId() + "/ip_idea");
+			Collection<? extends FileMessage> res = new ArrayList<FileMessage>(fetchDocClient.accept(MediaType.APPLICATION_JSON).getCollection(FileMessage.class));
+			for (FileMessage fileMessage : res) {
+				FileBean fileBean = new FileBean();
+				fileBean.setId(fileMessage.getId());
+				fileBean.setLoc(fileMessage.getLoc());
+				fileBean.setName(fileMessage.getName());
+				fileBean.setSize(fileMessage.getSize());
+				fileBean.setType(fileMessage.getType());
+				fileBean.setUrl(fileMessage.getUrl());
+				bean.getFiles().add(fileBean);
+			}
+			fetchDocClient.close();
 			ret.add(bean);
 		}
 		return ret;
@@ -339,10 +361,20 @@ public class RESTServiceHelper {
 			bean.setCrtByImgAvail(ideaMessage.isCrtByImgAvail());
 			bean.setCrtByImgPath(ideaMessage.getCrtByImgPath());
 			bean.setCrtdByName(ideaMessage.getCrtdByName());
-			bean.setBlobUrl(ideaMessage.getBlobUrl());
-			bean.setFileName(ideaMessage.getFileName());
-			bean.setImgAvail(ideaMessage.isImgAvail());
 			bean.setStatusName(ideaMessage.getStatusName());
+			WebClient fetchDocClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/list/" + ideaMessage.getIdeaId() + "/ip_idea");
+			Collection<? extends FileMessage> res = new ArrayList<FileMessage>(fetchDocClient.accept(MediaType.APPLICATION_JSON).getCollection(FileMessage.class));
+			for (FileMessage fileMessage : res) {
+				FileBean fileBean = new FileBean();
+				fileBean.setId(fileMessage.getId());
+				fileBean.setLoc(fileMessage.getLoc());
+				fileBean.setName(fileMessage.getName());
+				fileBean.setSize(fileMessage.getSize());
+				fileBean.setType(fileMessage.getType());
+				fileBean.setUrl(fileMessage.getUrl());
+				bean.getFiles().add(fileBean);
+			}
+			fetchDocClient.close();
 			ret.add(bean);
 		}
 		return ret;
@@ -367,11 +399,21 @@ public class RESTServiceHelper {
 			bean.setCrtByImgAvail(ideaMessage.isCrtByImgAvail());
 			bean.setCrtByImgPath(ideaMessage.getCrtByImgPath());
 			bean.setCrtdByName(ideaMessage.getCrtdByName());
-			bean.setBlobUrl(ideaMessage.getBlobUrl());
-			bean.setFileName(ideaMessage.getFileName());
-			bean.setImgAvail(ideaMessage.isImgAvail());
 			bean.setStatusName(ideaMessage.getStatusName());
 			bean.setRevUserId(ideaMessage.getRevUserId());
+			WebClient fetchDocClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/list/" + ideaMessage.getIdeaId() + "/ip_idea");
+			Collection<? extends FileMessage> res = new ArrayList<FileMessage>(fetchDocClient.accept(MediaType.APPLICATION_JSON).getCollection(FileMessage.class));
+			for (FileMessage fileMessage : res) {
+				FileBean fileBean = new FileBean();
+				fileBean.setId(fileMessage.getId());
+				fileBean.setLoc(fileMessage.getLoc());
+				fileBean.setName(fileMessage.getName());
+				fileBean.setSize(fileMessage.getSize());
+				fileBean.setType(fileMessage.getType());
+				fileBean.setUrl(fileMessage.getUrl());
+				bean.getFiles().add(fileBean);
+			}
+			fetchDocClient.close();
 			ret.add(bean);
 		}
 		return ret;
@@ -396,11 +438,21 @@ public class RESTServiceHelper {
 			bean.setCrtByImgAvail(ideaMessage.isCrtByImgAvail());
 			bean.setCrtByImgPath(ideaMessage.getCrtByImgPath());
 			bean.setCrtdByName(ideaMessage.getCrtdByName());
-			bean.setBlobUrl(ideaMessage.getBlobUrl());
-			bean.setFileName(ideaMessage.getFileName());
-			bean.setImgAvail(ideaMessage.isImgAvail());
 			bean.setStatusName(ideaMessage.getStatusName());
 			bean.setRevUserId(ideaMessage.getRevUserId());
+			WebClient fetchDocClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/list/" + ideaMessage.getIdeaId() + "/ip_idea");
+			Collection<? extends FileMessage> res = new ArrayList<FileMessage>(fetchDocClient.accept(MediaType.APPLICATION_JSON).getCollection(FileMessage.class));
+			for (FileMessage fileMessage : res) {
+				FileBean fileBean = new FileBean();
+				fileBean.setId(fileMessage.getId());
+				fileBean.setLoc(fileMessage.getLoc());
+				fileBean.setName(fileMessage.getName());
+				fileBean.setSize(fileMessage.getSize());
+				fileBean.setType(fileMessage.getType());
+				fileBean.setUrl(fileMessage.getUrl());
+				bean.getFiles().add(fileBean);
+			}
+			fetchDocClient.close();
 			ret.add(bean);
 		}
 		return ret;
@@ -425,11 +477,21 @@ public class RESTServiceHelper {
 			bean.setCrtByImgAvail(ideaMessage.isCrtByImgAvail());
 			bean.setCrtByImgPath(ideaMessage.getCrtByImgPath());
 			bean.setCrtdByName(ideaMessage.getCrtdByName());
-			bean.setBlobUrl(ideaMessage.getBlobUrl());
-			bean.setFileName(ideaMessage.getFileName());
-			bean.setImgAvail(ideaMessage.isImgAvail());
 			bean.setStatusName(ideaMessage.getStatusName());
 			bean.setRevUserId(ideaMessage.getRevUserId());
+			WebClient fetchDocClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/list/" + ideaMessage.getIdeaId() + "/ip_idea");
+			Collection<? extends FileMessage> res = new ArrayList<FileMessage>(fetchDocClient.accept(MediaType.APPLICATION_JSON).getCollection(FileMessage.class));
+			for (FileMessage fileMessage : res) {
+				FileBean fileBean = new FileBean();
+				fileBean.setId(fileMessage.getId());
+				fileBean.setLoc(fileMessage.getLoc());
+				fileBean.setName(fileMessage.getName());
+				fileBean.setSize(fileMessage.getSize());
+				fileBean.setType(fileMessage.getType());
+				fileBean.setUrl(fileMessage.getUrl());
+				bean.getFiles().add(fileBean);
+			}
+			fetchDocClient.close();
 			ret.add(bean);
 		}
 		return ret;
@@ -842,6 +904,8 @@ public class RESTServiceHelper {
 			bean.setFileName(challengeMessage.getFileName());
 			bean.setImgAvail(challengeMessage.isImgAvail());
 			bean.setRevUserId(challengeMessage.getRevUserId());
+			bean.setCatName(challengeMessage.getCatName());
+			bean.setStatusName(challengeMessage.getStatusName());
 			ret.add(bean);
 		}
 		return ret;

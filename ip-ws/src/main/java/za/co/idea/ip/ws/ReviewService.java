@@ -37,8 +37,7 @@ public class ReviewService {
 	@Transactional(propagation = Propagation.NESTED)
 	public ResponseMessage createReview(ReviewMessage message) {
 		try {
-			Long[] ids = ipNativeSQLDAO.getNextIds(IpReview.class,
-					message.getGroupId().length);
+			Long[] ids = ipNativeSQLDAO.getNextIds(IpReview.class, message.getGroupId().length);
 			int i = 0;
 			for (Long grpId : message.getGroupId()) {
 				IpReview rv = new IpReview();
@@ -73,11 +72,11 @@ public class ReviewService {
 		try {
 			Long[] ids = ipNativeSQLDAO.getNextIds(IpReview.class, message.getGroupId().length);
 			int i = 0;
-			if(message.getEntityId() != null ) {
-				logger.info("Entity Id----"+message.getEntityId());				
-			    ipReviewDAO.deleteByEntityIdEntityName(message.getEntityId(),message.getTblNm(), message.getStatusId());
+			if (message.getEntityId() != null) {
+				logger.info("Entity Id----" + message.getEntityId());
+				ipReviewDAO.deleteByEntityIdEntityName(message.getEntityId(), message.getTblNm(), message.getStatusId());
 			}
-			
+
 			for (Long grpId : message.getGroupId()) {
 				IpReview rv = new IpReview();
 				rv.setIpGroup(ipGroupDAO.findById(grpId));
@@ -107,12 +106,8 @@ public class ReviewService {
 	@Path("/review/list/{entityId}/{tblNm}/{status}")
 	@Produces("application/json")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public ReviewMessage listReviewsByEntity(
-			@PathParam("entityId") Long entityId,
-			@PathParam("tblNm") String tblNm,
-			@PathParam("status") Integer status) {
-		List rvs = ipReviewDAO
-				.findByEntityIdEntityName(entityId, tblNm, status);
+	public ReviewMessage listReviewsByEntity(@PathParam("entityId") Long entityId, @PathParam("tblNm") String tblNm, @PathParam("status") Integer status) {
+		List rvs = ipReviewDAO.findByEntityIdEntityName(entityId, tblNm, status);
 		ReviewMessage message = new ReviewMessage();
 		message.setEntityId(entityId);
 		message.setStatusId(status);

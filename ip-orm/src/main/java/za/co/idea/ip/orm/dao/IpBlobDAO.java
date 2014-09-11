@@ -196,6 +196,32 @@ public class IpBlobDAO extends HibernateDaoSupport {
 		}
 	}
 
+	public void deleteBlobByEntity(long id, String tblNm) {
+		log.debug("finding all blobs by entity id");
+		try {
+			Query query = getSession().getNamedQuery("deleteBlobByEntity");
+			query.setLong("id", id);
+			query.setString("tblNm", tblNm);
+			query.executeUpdate();
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
+	}
+
+	public List listBlobByEntity(long id, String tblNm) {
+		log.debug("finding all blobs by entity id");
+		try {
+			Query query = getSession().getNamedQuery("getBlobByEntity");
+			query.setLong("id", id);
+			query.setString("tblNm", tblNm);
+			return query.list();
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
+	}
+
 	public static IpBlobDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (IpBlobDAO) ctx.getBean("IpBlobDAO");
 	}

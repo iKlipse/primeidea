@@ -235,8 +235,11 @@ public class ChallengeService {
 					Long[] grps = new Long[val.size()];
 					int i = 0;
 					for (Object obj : val) {
-						grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
-						i++;
+						IpChallengeGroup group = (IpChallengeGroup) obj;
+						if (group != null && group.getIpGroup() != null) {
+							grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
+							i++;
+						}
 					}
 					challenge.setGroupIdList(grps);
 				}
@@ -265,7 +268,7 @@ public class ChallengeService {
 	@Path("/challenge/get/{id}")
 	@Produces("application/json")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public ChallengeMessage getGroupById(@PathParam("id") Long id) {
+	public ChallengeMessage getById(@PathParam("id") Long id) {
 		ChallengeMessage challenge = new ChallengeMessage();
 		try {
 			IpChallenge ipChallenge = ipChallengeDAO.findById(id);
@@ -330,8 +333,11 @@ public class ChallengeService {
 					Long[] grps = new Long[val.size()];
 					int i = 0;
 					for (Object obj : val) {
-						grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
-						i++;
+						IpChallengeGroup group = (IpChallengeGroup) obj;
+						if (group != null && group.getIpGroup() != null) {
+							grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
+							i++;
+						}
 					}
 					challenge.setGroupIdList(grps);
 				}
@@ -387,8 +393,11 @@ public class ChallengeService {
 					Long[] grps = new Long[val.size()];
 					int i = 0;
 					for (Object obj : val) {
-						grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
-						i++;
+						IpChallengeGroup group = (IpChallengeGroup) obj;
+						if (group != null && group.getIpGroup() != null) {
+							grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
+							i++;
+						}
 					}
 					challenge.setGroupIdList(grps);
 				}
@@ -444,8 +453,11 @@ public class ChallengeService {
 					Long[] grps = new Long[val.size()];
 					int i = 0;
 					for (Object obj : val) {
-						grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
-						i++;
+						IpChallengeGroup group = (IpChallengeGroup) obj;
+						if (group != null && group.getIpGroup() != null) {
+							grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
+							i++;
+						}
 					}
 					challenge.setGroupIdList(grps);
 				}
@@ -501,8 +513,11 @@ public class ChallengeService {
 					Long[] grps = new Long[val.size()];
 					int i = 0;
 					for (Object obj : val) {
-						grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
-						i++;
+						IpChallengeGroup group = (IpChallengeGroup) obj;
+						if (group != null && group.getIpGroup() != null) {
+							grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
+							i++;
+						}
 					}
 					challenge.setGroupIdList(grps);
 				}
@@ -558,8 +573,11 @@ public class ChallengeService {
 					Long[] grps = new Long[val.size()];
 					int i = 0;
 					for (Object obj : val) {
-						grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
-						i++;
+						IpChallengeGroup group = (IpChallengeGroup) obj;
+						if (group != null && group.getIpGroup() != null) {
+							grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
+							i++;
+						}
 					}
 					challenge.setGroupIdList(grps);
 				}

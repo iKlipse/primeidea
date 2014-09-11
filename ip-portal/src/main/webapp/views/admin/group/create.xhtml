@@ -41,7 +41,6 @@
 				<p:outputLabel id="rlblFuncUsers" value="Group Users" />
 			</p:column>
 			<p:column>
-				<!-- <p:pickList id="rplUserPick" converter="userConverter" value="#{adminController.userTwinSelect}" var="user" itemLabel="#{user.priGroupName} - #{user.scName} #{user.lName}" itemValue="#{user.uId}" />-->
 				<p:selectCheckboxMenu id="scmUserList" label="Please Select" filter="true" filterMatchMode="contains" value="#{adminController.selUserId}">
 					<f:selectItems value="#{adminController.admUsers}" var="user" itemLabel="#{user.priGroupName} - #{user.scName} #{user.lName}" itemValue="#{user.uId}" />
 				</p:selectCheckboxMenu>

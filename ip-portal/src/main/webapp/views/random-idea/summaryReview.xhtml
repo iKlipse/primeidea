@@ -16,11 +16,14 @@
 			<p:outputLabel id="lblSumrIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:outputLabel value="No Attachments" rendered="#{!randomIdeaController.ideaBean.imgAvail}" />
-			<h:outputLink value="#{randomIdeaController.ideaBean.blobUrl}" rendered="#{randomIdeaController.ideaBean.imgAvail}">
-				<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
-				<p:outputLabel value="#{randomIdeaController.ideaBean.fileName}" style="font-weight: 0.6em" />
-			</h:outputLink>
+			<p:dataGrid id="sumRIDocCar" var="file" value="#{idea.files}" columns="3" rows="1" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="No Attachments">
+				<p:panel styleClass="dgView">
+					<h:outputLink value="#{file.url}">
+						<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+						<p:outputLabel value="#{file.name}" style="font-weight: 0.6em" />
+					</h:outputLink>
+				</p:panel>
+			</p:dataGrid>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblSumrITag" value="Keywords to Describe Your Idea : " />
@@ -41,16 +44,16 @@
 					</p:commandButton>
 				</p:column>
 				<p:column>
-				   <p:commandButton id="giComment" icon="ui-icon-comment" >
-					<p:outputLabel id="lblSumrCommentCnt" value="#{randomIdeaController.commentCnt}" />
-					<!--<p:graphicImage id="giComment" name="comment.jpg" library="images" height="25px" width="25px" />-->
-					<p:tooltip for="giComment" value="Tags disabled as idea not in open status" rendered="#{randomIdeaController.ideaBean.taggable}" />
+					<p:commandButton id="giComment" icon="ui-icon-comment">
+						<p:outputLabel id="lblSumrCommentCnt" value="#{randomIdeaController.commentCnt}" />
+						<!--<p:graphicImage id="giComment" name="comment.jpg" library="images" height="25px" width="25px" />-->
+						<p:tooltip for="giComment" value="Tags disabled as idea not in open status" rendered="#{randomIdeaController.ideaBean.taggable}" />
 					</p:commandButton>
 				</p:column>
 				<p:column>
 					<p:commandButton id="giBuildOn" icon="ui-icon-note" action="#{buildonController.showBuildon}" update="frmSummaryReviewIdeaMsg" ajax="false">
 						<f:setPropertyActionListener value="#{randomIdeaController.userId}" target="#{buildonController.userId}" />
-						<f:setPropertyActionListener value="3" target="#{buildonController.returnView}" /> 
+						<f:setPropertyActionListener value="3" target="#{buildonController.returnView}" />
 						<f:param name="entityId" id="entityId" value="#{randomIdeaController.ideaBean.ideaId}" />
 						<f:param name="entityType" id="entityType" value="1" />
 						<f:param name="taggable" id="taggable" value="#{randomIdeaController.ideaBean.taggable}" />

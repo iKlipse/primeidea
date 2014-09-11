@@ -87,7 +87,7 @@ public class SolutionService {
 			ipSolution.setSolTags(solution.getTags());
 			ipSolution.setSolTitle(solution.getTitle());
 			ipSolution.setSolReviewCnt(solution.getRvIdCnt());
-			ipSolutionDAO.save(ipSolution);
+			ipSolutionDAO.merge(ipSolution);
 			try {
 				IpNotif ipNotif = new IpNotif();
 				ipNotif.setNotifAttach(null);

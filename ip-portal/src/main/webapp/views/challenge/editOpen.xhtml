@@ -31,7 +31,7 @@
 		</p:column>
 		<p:column>
 			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="txtEdtoCDesc" value="#{challengeController.challengeBean.desc}" rendered="#{!challengeController.challengeBean.disableField}" />
-			<p:outputLabel id="outEdtoCDesc" value="#{challengeController.challengeBean.desc}" rendered="#{challengeController.challengeBean.disableField}"  escape="false"/>
+			<p:outputLabel id="outEdtoCDesc" value="#{challengeController.challengeBean.desc}" rendered="#{challengeController.challengeBean.disableField}" escape="false" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtoCHoverText" value="Hover Text : " />
@@ -79,7 +79,6 @@
 			<p:outputLabel id="lblEdtoFuncGrps" value="Challenge Groups" />
 		</p:column>
 		<p:column>
-			<!-- <p:pickList id="plEdtoGroupPick" converter="groupConverter" value="#{challengeController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" /> -->
 			<p:selectCheckboxMenu id="scmGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{challengeController.selGrpId}" disabled="#{challengeController.challengeBean.disableField}">
 				<f:selectItems value="#{challengeController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 			</p:selectCheckboxMenu>
@@ -92,7 +91,7 @@
 				<f:setPropertyActionListener value="2" target="#{landingPageController.toView}" />
 				<f:setPropertyActionListener value="1" target="#{challengeController.toView}" />
 			</p:commandButton>
-			<p:commandButton id="btnEdtoARv" value="Assign Reviewers" type="button" onclick="PF('dlgRwUpd').show();" rendered="#{!challengeController.challengeBean.disableField}"/>
+			<p:commandButton id="btnEdtoARv" value="Assign Reviewers" type="button" onclick="PF('dlgRwUpd').show();" rendered="#{!challengeController.challengeBean.disableField}" />
 		</f:facet>
 	</p:panelGrid>
 	<p:dialog id="dlgRwUpd" widgetVar="dlgRwUpd" modal="true">

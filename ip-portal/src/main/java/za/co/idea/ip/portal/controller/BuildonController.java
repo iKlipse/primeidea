@@ -103,7 +103,7 @@ public class BuildonController implements Serializable {
 		}
 	}
 
-	public String showSummaryBuildon() {		
+	public String showSummaryBuildon() {
 		try {
 			buildonLikes = RESTServiceHelper.fetchAllBuildonLikes(buildon.getTagId(), 5);
 			buildonComments = RESTServiceHelper.fetchAllBuildonComments(buildon.getTagId(), 5);
@@ -120,7 +120,7 @@ public class BuildonController implements Serializable {
 			fileContent = null;
 			return "";
 		}
-		
+
 	}
 
 	public String likeBuildon() {

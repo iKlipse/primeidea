@@ -16,11 +16,14 @@
 			<p:outputLabel id="lblSumoIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:outputLabel value="No Attachments" rendered="#{!randomIdeaController.ideaBean.imgAvail}" />
-			<h:outputLink value="#{randomIdeaController.ideaBean.blobUrl}" rendered="#{randomIdeaController.ideaBean.imgAvail}">
-				<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
-				<p:outputLabel value="#{randomIdeaController.ideaBean.fileName}" style="font-weight: 0.6em" />
-			</h:outputLink>
+			<p:dataGrid id="sumOIDocCar" var="file" value="#{idea.files}" columns="3" rows="1" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="No Attachments">
+				<p:panel styleClass="dgView">
+					<h:outputLink value="#{file.url}">
+						<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+						<p:outputLabel value="#{file.name}" style="font-weight: 0.6em" />
+					</h:outputLink>
+				</p:panel>
+			</p:dataGrid>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblSumoITag" value="Keywords to Describe Your Idea : " />

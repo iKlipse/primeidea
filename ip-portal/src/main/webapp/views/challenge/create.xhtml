@@ -59,13 +59,12 @@
 			<p:outputLabel id="lblFuncGrps" value="Challenge Groups" />
 		</p:column>
 		<p:column>
-			<!-- <p:pickList id="plGroupPick" converter="groupConverter" value="#{challengeController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" /> -->
 			<p:selectCheckboxMenu id="scmGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{challengeController.selGrpId}">
 				<f:selectItems value="#{challengeController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 			</p:selectCheckboxMenu>
 		</p:column>
 		<f:facet name="footer">
-			<p:commandButton id="btnISave" value="Save" actionListener="#{challengeController.saveChallenge}" update="@namingcontainer, :frmChalCtrlr:frmChalCtrlrMsg">
+			<p:commandButton id="btnISave" value="Save" actionListener="#{challengeController.saveChallenge}" update=":frmChalCtrlr:pnlChalDet, :frmChalCtrlr:frmChalCtrlrMsg">
 				<f:setPropertyActionListener value="2" target="#{challengeController.toView}" />
 			</p:commandButton>
 			<p:commandButton id="btnCrtIARv" value="Assign Reviewers" type="button" onclick="PF('dlgRwUpd').show();" />

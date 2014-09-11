@@ -1,6 +1,6 @@
 <ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="adminBody">
-		<p:panelGrid styleClass="panelGridView"  columns="2" id="apnlCrtNotif">
+		<p:panelGrid styleClass="panelGridView" columns="2" id="apnlCrtNotif">
 			<p:column>
 				<p:outputLabel id="alblSubject" value="Subject : " />
 			</p:column>
@@ -23,15 +23,14 @@
 				<p:outputLabel id="alblFuncGrps" value="Notification Groups" />
 			</p:column>
 			<p:column>
-				<!-- <p:pickList id="aplGroupPick" converter="groupConverter" value="#{adminController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" /> -->
 				<p:selectCheckboxMenu id="scmGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{adminController.selGrpId}">
 					<f:selectItems value="#{adminController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 				</p:selectCheckboxMenu>
 			</p:column>
 			<f:facet name="footer">
-					<p:commandButton id="abtnCrtISave" value="Save" ajax="false" action="#{adminController.saveNotification}">
-						<f:setPropertyActionListener value="1" target="#{adminController.returnView}" />
-					</p:commandButton>
+				<p:commandButton id="abtnCrtISave" value="Save" ajax="false" action="#{adminController.saveNotification}">
+					<f:setPropertyActionListener value="1" target="#{adminController.returnView}" />
+				</p:commandButton>
 			</f:facet>
 		</p:panelGrid>
 	</ui:define>

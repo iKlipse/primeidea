@@ -147,7 +147,7 @@ public class NewsController implements Serializable {
 			fileContent = null;
 			return "";
 		}
-		
+
 	}
 
 	public String showSummaryNews() {

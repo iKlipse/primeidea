@@ -30,13 +30,12 @@
 			<p:outputLabel id="lblCrtIUpload" value="Upload File : " />
 		</p:column>
 		<p:column>
-			<p:fileUpload id="fuCrtIUpload" fileUploadListener="#{randomIdeaController.fileUploadHandle}" multiple="false" />
+			<p:fileUpload id="fuCrtIUpload" fileUploadListener="#{randomIdeaController.fileUploadHandle}" multiple="false" dragDropSupport="true" sizeLimit="100000" fileLimit="3" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblCrtFuncGrps" value="Idea Groups" />
 		</p:column>
 		<p:column>
-			<!-- <p:pickList id="plCrtGroupPick" converter="groupConverter" value="#{randomIdeaController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" /> -->
 			<p:selectOneMenu id="scmGroupList" value="#{randomIdeaController.selGroupId}">
 				<f:selectItem itemLabel="Select One" itemValue="" />
 				<f:selectItems value="#{randomIdeaController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />

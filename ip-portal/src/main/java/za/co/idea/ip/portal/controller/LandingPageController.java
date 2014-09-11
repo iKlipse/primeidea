@@ -79,13 +79,13 @@ public class LandingPageController implements Serializable {
 			userId = message.getuId();
 			controller = new AccessController(userId);
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			viewIdeas = RESTServiceHelper.fetchAllIdeasByUser(userId);
+			viewIdeas = RESTServiceHelper.fetchAllIdeasCreatedByUser(userId);
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
-			viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
+			viewChallenges = RESTServiceHelper.fetchAllAvailableChallenges();
 			challengeCats = RESTServiceHelper.fetchAllChallengeCat();
 			challengeStatuses = RESTServiceHelper.fetchAllChallengeStatuses();
-			viewSolutions = RESTServiceHelper.fetchAllSolutionsByUser(userId);
+			viewSolutions = RESTServiceHelper.fetchAllSolutionsCreatedByUser(userId);
 			solutionCats = RESTServiceHelper.fetchAllSolutionCat();
 			solutionStatuses = RESTServiceHelper.fetchAllSolutionStatuses();
 			claimStatus = RESTServiceHelper.fetchAllClaimStatuses();
@@ -172,7 +172,7 @@ public class LandingPageController implements Serializable {
 
 	public void changeIdea() {
 		try {
-			viewIdeas = RESTServiceHelper.fetchAllIdeasByUser(userId);
+			viewIdeas = RESTServiceHelper.fetchAllIdeasCreatedByUser(userId);
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
@@ -191,7 +191,7 @@ public class LandingPageController implements Serializable {
 
 	public void changeChallenge() {
 		try {
-			viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
+			viewChallenges = RESTServiceHelper.fetchAllAvailableChallenges();
 			challengeCats = RESTServiceHelper.fetchAllChallengeCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			challengeStatuses = RESTServiceHelper.fetchAllChallengeStatuses();
@@ -211,7 +211,7 @@ public class LandingPageController implements Serializable {
 
 	public void changeSolution() {
 		try {
-			viewSolutions = RESTServiceHelper.fetchAllSolutionsByUser(userId);
+			viewSolutions = RESTServiceHelper.fetchAllSolutionsCreatedByUser(userId);
 			solutionCats = RESTServiceHelper.fetchAllSolutionCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			solutionStatuses = RESTServiceHelper.fetchAllSolutionStatuses();

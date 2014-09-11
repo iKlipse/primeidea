@@ -9,6 +9,7 @@ public class AttachmentMessage {
 	private String blobContentType;
 	private Long blobEntityId;
 	private String blobEntityTblNm;
+	private Long blobSize;
 
 	public Long getBlobId() {
 		return blobId;
@@ -48,6 +49,14 @@ public class AttachmentMessage {
 
 	public void setBlobEntityTblNm(String blobEntityTblNm) {
 		this.blobEntityTblNm = blobEntityTblNm;
+	}
+
+	public Long getBlobSize() {
+		return blobSize;
+	}
+
+	public void setBlobSize(Long blobSize) {
+		this.blobSize = blobSize;
 	}
 
 }

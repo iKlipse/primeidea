@@ -1,6 +1,7 @@
 package za.co.idea.ip.portal.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,11 +16,6 @@ public class IdeaBean implements Serializable {
 	private Long setStatusId;
 	private String ideaBa;
 	private String ideaTag;
-	private String fileUpload;
-	private String contentType;
-	private String fileName;
-	private boolean imgAvail;
-	private Long fileSize;
 	private Long crtdById;
 	private String crtdByName;
 	private boolean crtByImgAvail;
@@ -27,11 +23,11 @@ public class IdeaBean implements Serializable {
 	private Date crtdDate;
 	private List<Long> groupIdList;
 	private boolean taggable;
-	private String blobUrl;
 	private Long revUserId;
 	private String statusName;
 	private boolean disableEdit;
 	private boolean disableField;
+	private List<FileBean> files;
 
 	public Long getIdeaId() {
 		return ideaId;
@@ -87,46 +83,6 @@ public class IdeaBean implements Serializable {
 
 	public void setIdeaTag(String ideaTag) {
 		this.ideaTag = ideaTag;
-	}
-
-	public String getFileUpload() {
-		return fileUpload;
-	}
-
-	public void setFileUpload(String fileUpload) {
-		this.fileUpload = fileUpload;
-	}
-
-	public String getContentType() {
-		return contentType;
-	}
-
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
-
-	public String getFileName() {
-		return fileName;
-	}
-
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-
-	public boolean isImgAvail() {
-		return imgAvail;
-	}
-
-	public void setImgAvail(boolean imgAvail) {
-		this.imgAvail = imgAvail;
-	}
-
-	public Long getFileSize() {
-		return fileSize;
-	}
-
-	public void setFileSize(Long fileSize) {
-		this.fileSize = fileSize;
 	}
 
 	public Long getCrtdById() {
@@ -185,14 +141,6 @@ public class IdeaBean implements Serializable {
 		this.taggable = taggable;
 	}
 
-	public String getBlobUrl() {
-		return blobUrl;
-	}
-
-	public void setBlobUrl(String blobUrl) {
-		this.blobUrl = blobUrl;
-	}
-
 	public Long getRevUserId() {
 		return revUserId;
 	}
@@ -227,5 +175,15 @@ public class IdeaBean implements Serializable {
 
 	public void setDisableField(boolean disableField) {
 		this.disableField = disableField;
+	}
+
+	public List<FileBean> getFiles() {
+		if (files == null)
+			files = new ArrayList<FileBean>();
+		return files;
+	}
+
+	public void setFiles(List<FileBean> files) {
+		this.files = files;
 	}
 }

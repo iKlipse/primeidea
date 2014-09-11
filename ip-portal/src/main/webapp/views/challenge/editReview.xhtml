@@ -79,7 +79,6 @@
 			<p:outputLabel id="lblEdtrFuncGrps" value="Challenge Groups" />
 		</p:column>
 		<p:column>
-			<!-- <p:pickList id="plEdtrGroupPick" converter="groupConverter" value="#{challengeController.groupTwinSelect}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" /> -->
 			<p:selectCheckboxMenu id="scmGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{challengeController.selGrpId}" disabled="#{challengeController.challengeBean.disableField}">
 				<f:selectItems value="#{challengeController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 			</p:selectCheckboxMenu>
@@ -92,7 +91,7 @@
 				<f:setPropertyActionListener value="2" target="#{landingPageController.toView}" />
 				<f:setPropertyActionListener value="4" target="#{challengeController.toView}" />
 			</p:commandButton>
-			<p:commandButton id="btnEdtrARv" value="Assign Reviewers" type="button" onclick="PF('dlgRwUpd').show();" rendered="#{!challengeController.challengeBean.disableField}"/>
+			<p:commandButton id="btnEdtrARv" value="Assign Reviewers" type="button" onclick="PF('dlgRwUpd').show();" rendered="#{!challengeController.challengeBean.disableField}" />
 		</f:facet>
 	</p:panelGrid>
 	<p:dialog id="dlgRwUpd" widgetVar="dlgRwUpd" modal="true">

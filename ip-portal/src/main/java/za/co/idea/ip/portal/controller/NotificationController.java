@@ -19,7 +19,6 @@ import org.apache.log4j.Logger;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.DualListModel;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
@@ -42,7 +41,6 @@ public class NotificationController implements Serializable {
 	private static final Logger logger = Logger.getLogger(NotificationController.class);
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
 	private NotificationBean notificationBean;
-	private DualListModel<GroupBean> groupTwinSelect;
 	private List<NotificationBean> viewNotifications;
 	private List<GroupBean> pGrps;
 	private StreamedContent fileContent;
@@ -72,7 +70,6 @@ public class NotificationController implements Serializable {
 		try {
 			notificationBean = new NotificationBean();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
-			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 			showCreateNotification = true;
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -110,7 +107,6 @@ public class NotificationController implements Serializable {
 		try {
 			notificationBean = new NotificationBean();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
-			groupTwinSelect = new DualListModel<GroupBean>(pGrps, new ArrayList<GroupBean>());
 			showCreateNotification = true;
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -119,47 +115,6 @@ public class NotificationController implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
 	}
-
-	/*
-	 * public String showEditNotification() { try { pGrps = fetchAllGroups();
-	 * groupTwinSelect = initializeSelectedGroups(pGrps); try { WebClient
-	 * getBlobClient = createCustomClient("http://" +
-	 * BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") +
-	 * "/ip-ws/ip/ds/doc/getId/" + notificationBean.getNotifId() + "/ip_notif");
-	 * Long blobId =
-	 * getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-	 * getBlobClient.close(); if (blobId != -999l) { WebClient getBlobNameClient
-	 * = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" +
-	 * BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getName/" + blobId);
-	 * String blobName =
-	 * getBlobNameClient.accept(MediaType.APPLICATION_JSON).get(String.class);
-	 * getBlobNameClient.close(); WebClient client = WebClient.create("http://"
-	 * + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") +
-	 * "/ip-ws/ip/ds/doc/download/" + blobId + "/" + blobName,
-	 * Collections.singletonList(new JacksonJsonProvider(new
-	 * CustomObjectMapper()))); client.header("Content-Type",
-	 * "application/json"); client.header("Accept",
-	 * MediaType.MULTIPART_FORM_DATA); Attachment attachment =
-	 * client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class); if
-	 * (attachment != null) { setFileAvail(false);
-	 * this.setFileName(attachment.getContentDisposition
-	 * ().toString().replace("attachment;filename=", "")); fileContent = new
-	 * DefaultStreamedContent(attachment.getDataHandler().getInputStream()); }
-	 * else { setFileAvail(true); fileContent = null; } } else {
-	 * setFileAvail(true); fileContent = null; } } catch (Exception e)
-	 * {logger.error(e,e); FacesMessage exceptionMessage = new
-	 * FacesMessage(FacesMessage.SEVERITY_ERROR,
-	 * "System error occurred, cannot perform edit request",
-	 * "System error occurred, cannot perform edit request");
-	 * FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-	 * setFileAvail(true); fileContent = null; } return "notife"; } catch
-	 * (Exception e) { FacesMessage exceptionMessage = new
-	 * FacesMessage(FacesMessage.SEVERITY_ERROR,
-	 * "System error occurred, cannot perform edit request",
-	 * "System error occurred, cannot perform edit request");
-	 * FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-	 * setFileAvail(true); fileContent = null; return ""; } }
-	 */
 
 	public String saveNotification() {
 		try {
@@ -173,7 +128,6 @@ public class NotificationController implements Serializable {
 			if (uploadContent != null) {
 				notifMessage.setNotifAttach(IOUtils.toString(uploadContent.getStream()));
 			}
-			notifMessage.setGroupIdList(getSelGroupIds());
 			ResponseMessage response = addClient.accept(MediaType.APPLICATION_JSON).post(notifMessage, ResponseMessage.class);
 			addClient.close();
 			if (response.getStatusCode() == 0) {
@@ -209,30 +163,12 @@ public class NotificationController implements Serializable {
 		}
 	}
 
-	private Long[] getSelGroupIds() {
-		Long[] ret = new Long[groupTwinSelect.getTarget().size()];
-		int i = 0;
-		for (GroupBean bean : groupTwinSelect.getTarget()) {
-			ret[i] = bean.getgId();
-			i++;
-		}
-		return ret;
-	}
-
 	public NotificationBean getNotificationBean() {
 		return notificationBean;
 	}
 
 	public void setNotificationBean(NotificationBean notificationBean) {
 		this.notificationBean = notificationBean;
-	}
-
-	public DualListModel<GroupBean> getGroupTwinSelect() {
-		return groupTwinSelect;
-	}
-
-	public void setGroupTwinSelect(DualListModel<GroupBean> groupTwinSelect) {
-		this.groupTwinSelect = groupTwinSelect;
 	}
 
 	public List<NotificationBean> getViewNotifications() {
