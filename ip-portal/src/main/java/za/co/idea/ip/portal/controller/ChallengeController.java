@@ -351,7 +351,7 @@ public class ChallengeController implements Serializable {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
 			challengeStatuses = RESTServiceHelper.fetchAllChallengeStatuses();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
-			rvIds = RESTServiceHelper.fetchReviews(challengeBean.getId(), "ip_challenge");
+			rvIds = RESTServiceHelper.fetchReviewGroups(challengeBean.getId(), "ip_challenge");
 			rvIdCnt = rvIds.size();
 			return "chale";
 		} catch (Exception e) {
@@ -368,7 +368,7 @@ public class ChallengeController implements Serializable {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
 			challengeStatuses = RESTServiceHelper.fetchNextChallengeStatuses(challengeBean.getStatusId());
 			pGrps = RESTServiceHelper.fetchActiveGroups();
-			rvIds = RESTServiceHelper.fetchReviews(challengeBean.getId(), "ip_challenge");
+			rvIds = RESTServiceHelper.fetchReviewGroups(challengeBean.getId(), "ip_challenge");
 			rvIdCnt = rvIds.size();
 			return "chaleo";
 		} catch (Exception e) {
@@ -385,7 +385,7 @@ public class ChallengeController implements Serializable {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
 			challengeStatuses = RESTServiceHelper.fetchAllReviewChallengeNextStatuses();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
-			rvIds = RESTServiceHelper.fetchReviews(challengeBean.getId(), "ip_challenge");
+			rvIds = RESTServiceHelper.fetchReviewGroups(challengeBean.getId(), "ip_challenge");
 			rvIdCnt = rvIds.size();
 			return "chaler";
 		} catch (Exception e) {
@@ -761,7 +761,7 @@ public class ChallengeController implements Serializable {
 			viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
 			solutionCats = RESTServiceHelper.fetchAllSolutionCat();
 			solutionStatuses = RESTServiceHelper.fetchAllSolutionStatuses();
-			rvIds = RESTServiceHelper.fetchReviews(solutionBean.getId(), "ip_solution");
+			rvIds = RESTServiceHelper.fetchReviewGroups(solutionBean.getId(), "ip_solution");
 			rvIdCnt = rvIds.size();
 			return "sole";
 		} catch (Exception e) {
@@ -778,7 +778,7 @@ public class ChallengeController implements Serializable {
 			viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
 			solutionCats = RESTServiceHelper.fetchAllSolutionCat();
 			solutionStatuses = RESTServiceHelper.fetchNextSolutionStatuses(solutionBean.getStatusId());
-			rvIds = RESTServiceHelper.fetchReviews(solutionBean.getId(), "ip_solution");
+			rvIds = RESTServiceHelper.fetchReviewGroups(solutionBean.getId(), "ip_solution");
 			rvIdCnt = rvIds.size();
 			return "soleo";
 		} catch (Exception e) {
@@ -795,7 +795,7 @@ public class ChallengeController implements Serializable {
 			viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
 			solutionCats = RESTServiceHelper.fetchAllSolutionCat();
 			solutionStatuses = RESTServiceHelper.fetchAllReviewSolutionStatuses();
-			rvIds = RESTServiceHelper.fetchReviews(solutionBean.getId(), "ip_solution");
+			rvIds = RESTServiceHelper.fetchReviewGroups(solutionBean.getId(), "ip_solution");
 			rvIdCnt = rvIds.size();
 			return "soler";
 		} catch (Exception e) {

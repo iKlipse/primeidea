@@ -888,24 +888,6 @@ public class RESTServiceHelper {
 		return ret;
 	}
 
-	// Review Section
-	public static List<ReviewBean> fetchReviews(Long entityId, String tblNm) {
-		List<ReviewBean> ret = new ArrayList<ReviewBean>();
-		for (int i = 1; i <= 5; i++) {
-			WebClient fetchReviewsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rvs/review/list/" + entityId + "/" + tblNm + "/" + i);
-			ReviewMessage add = fetchReviewsClient.accept(MediaType.APPLICATION_JSON).get(ReviewMessage.class);
-			if (add != null && add.getGroupId() != null && add.getGroupId().length > 0) {
-				ReviewBean bean = new ReviewBean();
-				bean.setEntityId(add.getEntityId());
-				bean.setGroupId(toStringArray(add.getGroupId()));
-				bean.setStatusId(add.getStatusId());
-				bean.setTblNm(add.getTblNm());
-				ret.add(bean);
-			}
-		}
-		return ret;
-	}
-
 	public static List<MetaDataBean> fetchAllStatusList(String entity) {
 		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
 		WebClient mDataClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ms/list/" + entity);
@@ -1295,4 +1277,26 @@ public class RESTServiceHelper {
 		return ret;
 	}
 
+	public static Integer fetchReviewStatusCnt(Long entityId, String entityNm) {
+		WebClient fetchReviewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rvs/review/list/cnt/" + entityId + "/" + entityNm);
+		Integer msgs = fetchReviewGroupsClient.accept(MediaType.APPLICATION_JSON).get(Integer.class);
+		return msgs;
+	}
+
+	public static List<ReviewBean> fetchReviewGroups(Long entityId, String entityNm) {
+		List<ReviewBean> ret = new ArrayList<ReviewBean>();
+		WebClient fetchReviewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rvs/review/list/all/" + entityId + "/" + entityNm);
+		Collection<? extends ReviewMessage> msgs = new ArrayList<ReviewMessage>(fetchReviewGroupsClient.accept(MediaType.APPLICATION_JSON).getCollection(ReviewMessage.class));
+		for (ReviewMessage msg : msgs) {
+			ReviewBean bean = new ReviewBean();
+			bean.setEntityId(msg.getEntityId());
+			bean.setStatusId(msg.getStatusId());
+			bean.setTblNm(msg.getTblNm());
+			bean.setGroupId(toStringArray(msg.getGroupId()));
+			ret.add(bean);
+		}
+		fetchReviewGroupsClient.close();
+		return ret;
+
+	}
 }

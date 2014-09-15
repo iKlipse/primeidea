@@ -266,7 +266,7 @@ public class RandomIdeaController implements Serializable {
 				ideaStatuses = RESTServiceHelper.fetchNextIdeaStatuses(ideaBean.getSetStatusId());
 			}
 			pGrps = RESTServiceHelper.fetchActiveGroups();
-			rvIds = RESTServiceHelper.fetchReviews(ideaBean.getIdeaId(), "ip_idea");
+			rvIds = RESTServiceHelper.fetchReviewGroups(ideaBean.getIdeaId(), "ip_idea");
 			rvIdCnt = rvIds.size();
 			List<Long> grpList = ideaBean.getGroupIdList();
 			if (grpList != null && !grpList.isEmpty()) {
@@ -290,7 +290,7 @@ public class RandomIdeaController implements Serializable {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
 			ideaStatuses = RESTServiceHelper.fetchAllReviewIdeaStatuses();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
-			rvIds = RESTServiceHelper.fetchReviews(ideaBean.getIdeaId(), "ip_idea");
+			rvIds = RESTServiceHelper.fetchReviewGroups(ideaBean.getIdeaId(), "ip_idea");
 			rvIdCnt = rvIds.size();
 			List<Long> grpList = ideaBean.getGroupIdList();
 			if (grpList != null && !grpList.isEmpty()) {
@@ -324,7 +324,7 @@ public class RandomIdeaController implements Serializable {
 				ideaStatuses = RESTServiceHelper.fetchNextIdeaStatuses(ideaBean.getSetStatusId());
 			}
 			pGrps = RESTServiceHelper.fetchActiveGroups();
-			rvIds = RESTServiceHelper.fetchReviews(ideaBean.getIdeaId(), "ip_idea");
+			rvIds = RESTServiceHelper.fetchReviewGroups(ideaBean.getIdeaId(), "ip_idea");
 			rvIdCnt = rvIds.size();
 			List<Long> grpList = ideaBean.getGroupIdList();
 			if (grpList != null && !grpList.isEmpty()) {

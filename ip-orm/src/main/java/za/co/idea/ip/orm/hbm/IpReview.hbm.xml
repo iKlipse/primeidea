@@ -32,6 +32,16 @@
 		lower(ib.rev_entity_name)=lower(:tblNm) and rev_entity_status_id=:status
 		<return alias="ib" class="za.co.idea.ip.orm.bean.IpReview" />
 	</sql-query>
+	<sql-query name="getByEntityIdEntityName">
+		select ib.* from ip_review ib where ib.rev_entity_id=:id and
+		lower(ib.rev_entity_name)=lower(:tblNm)
+		<return alias="ib" class="za.co.idea.ip.orm.bean.IpReview" />
+	</sql-query>
+	<sql-query name="getReviewStatusCnt">
+		select count(distinct ib.rev_entity_status_id) as cnt from ip_review ib where ib.rev_entity_id=:id and
+		lower(ib.rev_entity_name)=lower(:tblNm)
+		<return-scalar column="cnt" type="java.lang.Integer" />
+	</sql-query>
 	<sql-query name="deleteByEntityIdEntityNameStatus">
 		delete from ip_review where rev_entity_id=:id and
 		lower(rev_entity_name)=lower(:tblNm) and rev_entity_status_id=:status

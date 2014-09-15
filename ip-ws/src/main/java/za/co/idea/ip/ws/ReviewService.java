@@ -124,6 +124,35 @@ public class ReviewService {
 		return message;
 	}
 
+	@GET
+	@Path("/review/list/all/{entityId}/{tblNm}")
+	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
+	public ReviewMessage listAllReviewsByEntity(@PathParam("entityId") Long entityId, @PathParam("tblNm") String tblNm) {
+		List rvs = ipReviewDAO.findAllByEntityIdEntityName(entityId, tblNm);
+		ReviewMessage message = new ReviewMessage();
+		message.setEntityId(entityId);
+		message.setTblNm(tblNm);
+		if (rvs != null && rvs.size() > 0) {
+			Long[] grps = new Long[rvs.size()];
+			int i = 0;
+			for (Object object : rvs) {
+				IpReview review = (IpReview) object;
+				grps[i] = review.getIpGroup().getGroupId();
+			}
+			message.setGroupId(grps);
+		}
+		return message;
+	}
+
+	@GET
+	@Path("/review/list/cnt/{entityId}/{tblNm}")
+	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
+	public Integer listReviewsByEntity(@PathParam("entityId") Long entityId, @PathParam("tblNm") String tblNm) {
+		return ipReviewDAO.findReviewStatusCount(entityId, tblNm);
+	}
+
 	public IpReviewDAO getIpReviewDAO() {
 		return ipReviewDAO;
 	}
