@@ -146,6 +146,16 @@ public class ClaimService {
 		}
 	}
 
+	private ClaimMessage getClaimMessage(IpClaim claim) {
+		ClaimMessage message = new ClaimMessage();
+		try {
+
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
+		return message;
+	}
+
 	@GET
 	@Path("/claim/list")
 	@Consumes("application/json")
@@ -157,16 +167,7 @@ public class ClaimService {
 			List vals = ipClaimDAO.findAll();
 			for (Object object : vals) {
 				IpClaim claim = (IpClaim) object;
-				ClaimMessage message = new ClaimMessage();
-				message.setClaimCrtdDt(claim.getClaimCrtdDt());
-				message.setClaimDesc(claim.getClaimDesc());
-				message.setClaimId(claim.getClaimId());
-				message.setClaimComment(claim.getClaimComment());
-				message.setcStatusId(claim.getIpClaimStatus().getCsId());
-				message.setRewardsId(claim.getIpRewards().getRwId());
-				message.setUserId(claim.getIpUser().getUserId());
-				message.setUserName(claim.getIpUser().getUserScreenName());
-				message.setcStatusName(claim.getIpClaimStatus().getCsDesc());
+				ClaimMessage message = getClaimMessage(claim);
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
@@ -184,15 +185,7 @@ public class ClaimService {
 		ClaimMessage message = new ClaimMessage();
 		try {
 			IpClaim claim = ipClaimDAO.findById(id);
-			message.setClaimCrtdDt(claim.getClaimCrtdDt());
-			message.setClaimDesc(claim.getClaimDesc());
-			message.setClaimComment(claim.getClaimComment());
-			message.setClaimId(claim.getClaimId());
-			message.setcStatusId(claim.getIpClaimStatus().getCsId());
-			message.setRewardsId(claim.getIpRewards().getRwId());
-			message.setUserId(claim.getIpUser().getUserId());
-			message.setUserName(claim.getIpUser().getUserScreenName());
-			message.setcStatusName(claim.getIpClaimStatus().getCsDesc());
+			message = getClaimMessage(claim);
 		} catch (Exception e) {
 			logger.error(e, e);
 		}
@@ -210,16 +203,7 @@ public class ClaimService {
 			List vals = ipClaimDAO.findByStatusId(id);
 			for (Object object : vals) {
 				IpClaim claim = (IpClaim) object;
-				ClaimMessage message = new ClaimMessage();
-				message.setClaimCrtdDt(claim.getClaimCrtdDt());
-				message.setClaimComment(claim.getClaimComment());
-				message.setClaimDesc(claim.getClaimDesc());
-				message.setClaimId(claim.getClaimId());
-				message.setcStatusId(claim.getIpClaimStatus().getCsId());
-				message.setRewardsId(claim.getIpRewards().getRwId());
-				message.setUserId(claim.getIpUser().getUserId());
-				message.setUserName(claim.getIpUser().getUserScreenName());
-				message.setcStatusName(claim.getIpClaimStatus().getCsDesc());
+				ClaimMessage message = getClaimMessage(claim);
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
@@ -239,16 +223,7 @@ public class ClaimService {
 			List vals = ipClaimDAO.findByUserId(id);
 			for (Object object : vals) {
 				IpClaim claim = (IpClaim) object;
-				ClaimMessage message = new ClaimMessage();
-				message.setClaimCrtdDt(claim.getClaimCrtdDt());
-				message.setClaimDesc(claim.getClaimDesc());
-				message.setClaimComment(claim.getClaimComment());
-				message.setClaimId(claim.getClaimId());
-				message.setcStatusId(claim.getIpClaimStatus().getCsId());
-				message.setRewardsId(claim.getIpRewards().getRwId());
-				message.setUserId(claim.getIpUser().getUserId());
-				message.setUserName(claim.getIpUser().getUserScreenName());
-				message.setcStatusName(claim.getIpClaimStatus().getCsDesc());
+				ClaimMessage message = getClaimMessage(claim);
 				ret.add((T) message);
 			}
 		} catch (Exception e) {

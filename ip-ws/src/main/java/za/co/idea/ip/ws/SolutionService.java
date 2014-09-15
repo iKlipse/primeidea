@@ -149,6 +149,44 @@ public class SolutionService {
 		}
 	}
 
+	private SolutionMessage getSolutionMessage(IpSolution ipSolution) {
+		SolutionMessage solution = new SolutionMessage();
+		try {
+			solution.setChalId(ipSolution.getIpChallenge().getChalId());
+			solution.setCatId(ipSolution.getIpSolutionCat().getScId());
+			solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
+			solution.setCrtdById(ipSolution.getIpUser().getUserId());
+			solution.setCrtByName(ipSolution.getIpUser().getUserScreenName());
+			solution.setCrtdDt(ipSolution.getSolCrtdDt());
+			solution.setDesc(ipSolution.getSolDesc());
+			solution.setId(ipSolution.getSolId());
+			solution.setTags(ipSolution.getSolTags());
+			solution.setTitle(ipSolution.getSolTitle());
+			solution.setCatName(ipSolution.getIpSolutionCat().getScDesc());
+			solution.setStatusName(ipSolution.getIpSolutionStatus().getSsDesc());
+			solution.setRvIdCnt(ipSolution.getSolReviewCnt());
+			IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
+			if (ipBlob != null) {
+				solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
+				solution.setSolImgAvl(true);
+				solution.setFileName(ipBlob.getBlobName());
+				solution.setContentType(ipBlob.getBlobContentType());
+				solution.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
+			} else {
+				solution.setSolImgAvl(false);
+			}
+			IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
+			if (blob != null) {
+				solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
+				solution.setCrtByImgAvail(true);
+			} else
+				solution.setCrtByImgAvail(false);
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
+		return solution;
+	}
+
 	@GET
 	@Path("/solution/list")
 	@Produces("application/json")
@@ -159,36 +197,7 @@ public class SolutionService {
 			List solutions = ipSolutionDAO.findAll();
 			for (Object object : solutions) {
 				IpSolution ipSolution = (IpSolution) object;
-				SolutionMessage solution = new SolutionMessage();
-				solution.setChalId(ipSolution.getIpChallenge().getChalId());
-				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
-				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
-				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setCrtByName(ipSolution.getIpUser().getUserScreenName());
-				solution.setCrtdDt(ipSolution.getSolCrtdDt());
-				solution.setDesc(ipSolution.getSolDesc());
-				solution.setId(ipSolution.getSolId());
-				solution.setTags(ipSolution.getSolTags());
-				solution.setTitle(ipSolution.getSolTitle());
-				solution.setCatName(ipSolution.getIpSolutionCat().getScDesc());
-				solution.setStatusName(ipSolution.getIpSolutionStatus().getSsDesc());
-				solution.setRvIdCnt(ipSolution.getSolReviewCnt());
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
-				if (ipBlob != null) {
-					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
-					solution.setSolImgAvl(true);
-					solution.setFileName(ipBlob.getBlobName());
-					solution.setContentType(ipBlob.getBlobContentType());
-					solution.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else {
-					solution.setSolImgAvl(false);
-				}
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
-				if (blob != null) {
-					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
-					solution.setCrtByImgAvail(true);
-				} else
-					solution.setCrtByImgAvail(false);
+				SolutionMessage solution = getSolutionMessage(ipSolution);
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -209,36 +218,7 @@ public class SolutionService {
 			List solutions = ipSolutionDAO.findByUserId(id);
 			for (Object object : solutions) {
 				IpSolution ipSolution = (IpSolution) object;
-				SolutionMessage solution = new SolutionMessage();
-				solution.setChalId(ipSolution.getIpChallenge().getChalId());
-				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
-				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
-				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setCrtByName(ipSolution.getIpUser().getUserScreenName());
-				solution.setCrtdDt(ipSolution.getSolCrtdDt());
-				solution.setDesc(ipSolution.getSolDesc());
-				solution.setId(ipSolution.getSolId());
-				solution.setTags(ipSolution.getSolTags());
-				solution.setTitle(ipSolution.getSolTitle());
-				solution.setCatName(ipSolution.getIpSolutionCat().getScDesc());
-				solution.setStatusName(ipSolution.getIpSolutionStatus().getSsDesc());
-				solution.setRvIdCnt(ipSolution.getSolReviewCnt());
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
-				if (ipBlob != null) {
-					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
-					solution.setSolImgAvl(true);
-					solution.setFileName(ipBlob.getBlobName());
-					solution.setContentType(ipBlob.getBlobContentType());
-					solution.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else {
-					solution.setSolImgAvl(false);
-				}
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
-				if (blob != null) {
-					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
-					solution.setCrtByImgAvail(true);
-				} else
-					solution.setCrtByImgAvail(false);
+				SolutionMessage solution = getSolutionMessage(ipSolution);
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -258,36 +238,7 @@ public class SolutionService {
 			List solutions = ipSolutionDAO.findCreatedByUserId(id);
 			for (Object object : solutions) {
 				IpSolution ipSolution = (IpSolution) object;
-				SolutionMessage solution = new SolutionMessage();
-				solution.setChalId(ipSolution.getIpChallenge().getChalId());
-				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
-				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
-				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setCrtByName(ipSolution.getIpUser().getUserScreenName());
-				solution.setCrtdDt(ipSolution.getSolCrtdDt());
-				solution.setDesc(ipSolution.getSolDesc());
-				solution.setId(ipSolution.getSolId());
-				solution.setTags(ipSolution.getSolTags());
-				solution.setTitle(ipSolution.getSolTitle());
-				solution.setCatName(ipSolution.getIpSolutionCat().getScDesc());
-				solution.setStatusName(ipSolution.getIpSolutionStatus().getSsDesc());
-				solution.setRvIdCnt(ipSolution.getSolReviewCnt());
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
-				if (ipBlob != null) {
-					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
-					solution.setSolImgAvl(true);
-					solution.setFileName(ipBlob.getBlobName());
-					solution.setContentType(ipBlob.getBlobContentType());
-					solution.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else {
-					solution.setSolImgAvl(false);
-				}
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
-				if (blob != null) {
-					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
-					solution.setCrtByImgAvail(true);
-				} else
-					solution.setCrtByImgAvail(false);
+				SolutionMessage solution = getSolutionMessage(ipSolution);
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -306,36 +257,7 @@ public class SolutionService {
 			List solutions = ipSolutionDAO.findByStatusId(id);
 			for (Object object : solutions) {
 				IpSolution ipSolution = (IpSolution) object;
-				SolutionMessage solution = new SolutionMessage();
-				solution.setChalId(ipSolution.getIpChallenge().getChalId());
-				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
-				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
-				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setCrtByName(ipSolution.getIpUser().getUserScreenName());
-				solution.setCrtdDt(ipSolution.getSolCrtdDt());
-				solution.setDesc(ipSolution.getSolDesc());
-				solution.setId(ipSolution.getSolId());
-				solution.setTags(ipSolution.getSolTags());
-				solution.setTitle(ipSolution.getSolTitle());
-				solution.setCatName(ipSolution.getIpSolutionCat().getScDesc());
-				solution.setStatusName(ipSolution.getIpSolutionStatus().getSsDesc());
-				solution.setRvIdCnt(ipSolution.getSolReviewCnt());
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
-				if (ipBlob != null) {
-					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
-					solution.setSolImgAvl(true);
-					solution.setFileName(ipBlob.getBlobName());
-					solution.setContentType(ipBlob.getBlobContentType());
-					solution.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else {
-					solution.setSolImgAvl(false);
-				}
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
-				if (blob != null) {
-					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
-					solution.setCrtByImgAvail(true);
-				} else
-					solution.setCrtByImgAvail(false);
+				SolutionMessage solution = getSolutionMessage(ipSolution);
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -354,36 +276,7 @@ public class SolutionService {
 			List solutions = ipSolutionDAO.findByStatusIdUserId(sid, id);
 			for (Object object : solutions) {
 				IpSolution ipSolution = (IpSolution) object;
-				SolutionMessage solution = new SolutionMessage();
-				solution.setChalId(ipSolution.getIpChallenge().getChalId());
-				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
-				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
-				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setCrtByName(ipSolution.getIpUser().getUserScreenName());
-				solution.setCrtdDt(ipSolution.getSolCrtdDt());
-				solution.setDesc(ipSolution.getSolDesc());
-				solution.setId(ipSolution.getSolId());
-				solution.setTags(ipSolution.getSolTags());
-				solution.setTitle(ipSolution.getSolTitle());
-				solution.setCatName(ipSolution.getIpSolutionCat().getScDesc());
-				solution.setStatusName(ipSolution.getIpSolutionStatus().getSsDesc());
-				solution.setRvIdCnt(ipSolution.getSolReviewCnt());
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
-				if (ipBlob != null) {
-					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
-					solution.setSolImgAvl(true);
-					solution.setFileName(ipBlob.getBlobName());
-					solution.setContentType(ipBlob.getBlobContentType());
-					solution.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else {
-					solution.setSolImgAvl(false);
-				}
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
-				if (blob != null) {
-					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
-					solution.setCrtByImgAvail(true);
-				} else
-					solution.setCrtByImgAvail(false);
+				SolutionMessage solution = getSolutionMessage(ipSolution);
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -402,36 +295,7 @@ public class SolutionService {
 			List solutions = ipSolutionDAO.findByChalId(id);
 			for (Object object : solutions) {
 				IpSolution ipSolution = (IpSolution) object;
-				SolutionMessage solution = new SolutionMessage();
-				solution.setChalId(ipSolution.getIpChallenge().getChalId());
-				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
-				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
-				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setCrtByName(ipSolution.getIpUser().getUserScreenName());
-				solution.setCrtdDt(ipSolution.getSolCrtdDt());
-				solution.setDesc(ipSolution.getSolDesc());
-				solution.setId(ipSolution.getSolId());
-				solution.setTags(ipSolution.getSolTags());
-				solution.setTitle(ipSolution.getSolTitle());
-				solution.setCatName(ipSolution.getIpSolutionCat().getScDesc());
-				solution.setStatusName(ipSolution.getIpSolutionStatus().getSsDesc());
-				solution.setRvIdCnt(ipSolution.getSolReviewCnt());
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
-				if (ipBlob != null) {
-					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
-					solution.setSolImgAvl(true);
-					solution.setFileName(ipBlob.getBlobName());
-					solution.setContentType(ipBlob.getBlobContentType());
-					solution.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else {
-					solution.setSolImgAvl(false);
-				}
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
-				if (blob != null) {
-					solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
-					solution.setCrtByImgAvail(true);
-				} else
-					solution.setCrtByImgAvail(false);
+				SolutionMessage solution = getSolutionMessage(ipSolution);
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -450,30 +314,7 @@ public class SolutionService {
 			List solutions = ipSolutionDAO.findReviewSolByserId(id);
 			for (Object object : solutions) {
 				IpSolution ipSolution = (IpSolution) object;
-				SolutionMessage solution = new SolutionMessage();
-				solution.setChalId(ipSolution.getIpChallenge().getChalId());
-				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
-				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
-				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setCrtByName(ipSolution.getIpUser().getUserScreenName());
-				solution.setCrtdDt(ipSolution.getSolCrtdDt());
-				solution.setDesc(ipSolution.getSolDesc());
-				solution.setId(ipSolution.getSolId());
-				solution.setTags(ipSolution.getSolTags());
-				solution.setTitle(ipSolution.getSolTitle());
-				solution.setCatName(ipSolution.getIpSolutionCat().getScDesc());
-				solution.setStatusName(ipSolution.getIpSolutionStatus().getSsDesc());
-				solution.setRvIdCnt(ipSolution.getSolReviewCnt());
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipSolution.getSolId(), "ip_solution");
-				if (ipBlob != null) {
-					solution.setSolImg("ip_solution/" + ipSolution.getSolId() + "/" + ipBlob.getBlobName());
-					solution.setSolImgAvl(true);
-					solution.setFileName(ipBlob.getBlobName());
-					solution.setContentType(ipBlob.getBlobContentType());
-					solution.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else {
-					solution.setSolImgAvl(false);
-				}
+				SolutionMessage solution = getSolutionMessage(ipSolution);
 				ret.add((T) solution);
 			}
 		} catch (Exception e) {
@@ -603,24 +444,7 @@ public class SolutionService {
 		SolutionMessage solution = new SolutionMessage();
 		try {
 			IpSolution ipSolution = ipSolutionDAO.findById(id);
-			solution.setChalId(ipSolution.getIpChallenge().getChalId());
-			solution.setCatId(ipSolution.getIpSolutionCat().getScId());
-			solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
-			solution.setCrtdById(ipSolution.getIpUser().getUserId());
-			solution.setCrtdDt(ipSolution.getSolCrtdDt());
-			solution.setDesc(ipSolution.getSolDesc());
-			solution.setId(ipSolution.getSolId());
-			solution.setTags(ipSolution.getSolTags());
-			solution.setTitle(ipSolution.getSolTitle());
-			solution.setCatName(ipSolution.getIpSolutionCat().getScDesc());
-			solution.setStatusName(ipSolution.getIpSolutionStatus().getSsDesc());
-			solution.setCrtByName(ipSolution.getIpUser().getUserScreenName());
-			IpBlob blob = ipBlobDAO.getBlobByEntity(ipSolution.getIpUser().getUserId(), "ip_user");
-			if (blob != null) {
-				solution.setCrtByImgPath("ip_user/" + ipSolution.getIpUser().getUserId() + "/" + blob.getBlobName());
-				solution.setCrtByImgAvail(true);
-			} else
-				solution.setCrtByImgAvail(false);
+			solution = getSolutionMessage(ipSolution);
 		} catch (Exception e) {
 			logger.error(e, e);
 		}

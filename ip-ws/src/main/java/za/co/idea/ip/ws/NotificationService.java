@@ -108,6 +108,33 @@ public class NotificationService {
 		}
 	}
 
+	private NotificationMessage getNotificationMessage(IpNotif ipNotif) {
+		NotificationMessage notif = new NotificationMessage();
+		try {
+			notif.setNotifAttach(ipNotif.getNotifAttach());
+			notif.setNotifBody(ipNotif.getNotifBody());
+			notif.setNotifCrtdDate(ipNotif.getNotifCrtdDate());
+			notif.setNotifEntityId(ipNotif.getNotifEntityId());
+			notif.setNotifEntityTblName(ipNotif.getNotifEntityTblName());
+			notif.setNotifId(ipNotif.getNotifId());
+			notif.setNotifStatus(ipNotif.getNotifStatus());
+			notif.setNotifSubject(ipNotif.getNotifSubject());
+			List val = ipNotifGroupDAO.fetchByNotifId(ipNotif.getNotifId());
+			if (val != null) {
+				Long[] grps = new Long[val.size()];
+				int i = 0;
+				for (Object obj : val) {
+					grps[i] = ((IpNotifGroup) obj).getIngGrpId();
+					i++;
+				}
+				notif.setGroupIdList(grps);
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
+		return notif;
+	}
+
 	@GET
 	@Path("/notif/list")
 	@Produces("application/json")
@@ -118,25 +145,7 @@ public class NotificationService {
 			List notifications = ipNotifDAO.findAll();
 			for (Object object : notifications) {
 				IpNotif ipNotif = (IpNotif) object;
-				NotificationMessage notif = new NotificationMessage();
-				notif.setNotifAttach(ipNotif.getNotifAttach());
-				notif.setNotifBody(ipNotif.getNotifBody());
-				notif.setNotifCrtdDate(ipNotif.getNotifCrtdDate());
-				notif.setNotifEntityId(ipNotif.getNotifEntityId());
-				notif.setNotifEntityTblName(ipNotif.getNotifEntityTblName());
-				notif.setNotifId(ipNotif.getNotifId());
-				notif.setNotifStatus(ipNotif.getNotifStatus());
-				notif.setNotifSubject(ipNotif.getNotifSubject());
-				List val = ipNotifGroupDAO.fetchByNotifId(ipNotif.getNotifId());
-				if (val != null) {
-					Long[] grps = new Long[val.size()];
-					int i = 0;
-					for (Object obj : val) {
-						grps[i] = ((IpNotifGroup) obj).getIngGrpId();
-						i++;
-					}
-					notif.setGroupIdList(grps);
-				}
+				NotificationMessage notif = getNotificationMessage(ipNotif);
 				ret.add((T) notif);
 			}
 		} catch (Exception e) {

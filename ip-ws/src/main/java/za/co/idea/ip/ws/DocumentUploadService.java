@@ -87,20 +87,24 @@ public class DocumentUploadService {
 		try {
 			IpBlob blob = ipBlobDAO.findById(blobId);
 			if (blob != null) {
+				logger.info("-----" + (BUNDLE.getString("base.dir") + File.separator + blob.getBlobEntityTblNm() + File.separator + blob.getBlobEntityId() + File.separator + blob.getBlobName()));
 				File file = new File(BUNDLE.getString("base.dir") + File.separator + blob.getBlobEntityTblNm() + File.separator + blob.getBlobEntityId() + File.separator + blob.getBlobName());
 				if (file.getParentFile().exists()) {
 					if (!nextExists) {
+						logger.info("----next exits in doc");
 						FileUtils.cleanDirectory(file.getParentFile());
 					}
 				} else
 					file.getParentFile().mkdirs();
 				file.createNewFile();
+				logger.info("-----Before file saving ");
 				FileOutputStream data = new FileOutputStream(file);
 				byte[] buf = new byte[4096];
 				while (stream.getDataHandler().getInputStream().read(buf) > 0) {
 					data.write(buf);
 					data.flush();
 				}
+				logger.info("After saving file");
 				data.close();
 				return Response.ok().build();
 			} else

@@ -29,6 +29,7 @@ import org.primefaces.model.UploadedFile;
 import org.primefaces.model.tagcloud.TagCloudModel;
 
 import za.co.idea.ip.portal.bean.ChallengeBean;
+import za.co.idea.ip.portal.bean.FileBean;
 import za.co.idea.ip.portal.bean.GroupBean;
 import za.co.idea.ip.portal.bean.ListSelectorBean;
 import za.co.idea.ip.portal.bean.ReviewBean;
@@ -110,6 +111,8 @@ public class ChallengeController implements Serializable {
 	private List<ReviewBean> rvIds;
 	private Integer rvIdCnt;
 	private AccessController controller;
+	private List<FileBean> chalUploadFiles;
+	private List<FileBean> solUploadFiles;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
@@ -464,31 +467,34 @@ public class ChallengeController implements Serializable {
 					ResponseMessage response = addChallengeClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 					addChallengeClient.close();
 					if (response.getStatusCode() == 0) {
-						if (chalUploadContent != null) {
-							WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
-							AttachmentMessage attach = new AttachmentMessage();
-							attach.setBlobContentType(challengeBean.getContentType());
-							attach.setBlobEntityId(message.getId());
-							attach.setBlobEntityTblNm("ip_challenge");
-							attach.setBlobName(challengeBean.getFileName());
-							attach.setBlobId(COUNTER.getNextId("IpBlob"));
-							Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
-							if (crtRes.getStatus() == 200) {
-								WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-								client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-								client.header("Accept", "application/json");
-								Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), chalUploadContent.getStream(), new ContentDisposition("attachment;filename=" + challengeBean.getFileName())));
-								if (docRes.getStatus() != 200) {
-									FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
-									FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						if (getChalUploadFiles().size() > 0) {
+							int i = 0;
+							for (FileBean bean : getChalUploadFiles()) {
+								WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/createMulti");
+								AttachmentMessage attachMessage = new AttachmentMessage();
+								attachMessage.setBlobContentType(bean.getType());
+								attachMessage.setBlobEntityId(message.getId());
+								attachMessage.setBlobEntityTblNm("ip_challenge");
+								attachMessage.setBlobName(bean.getName());
+								attachMessage.setBlobSize(bean.getSize());
+								attachMessage.setBlobId(COUNTER.getNextId("IpBlob"));
+								Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
+								createBlobClient.close();
+								if (crtRes.getStatus() == 200) {
+									WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/multiUpload/" + attachMessage.getBlobId() + "/" + ((i == 0) ? "true" : "false"), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+									client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+									client.header("Accept", "application/json");
+									client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attachMessage.getBlobId().toString(), bean.getContent().getStream(), new ContentDisposition("attachment;filename=" + bean.getName())));
+									client.close();
 								}
-							} else {
-								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
-								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+								i++;
 							}
 						}
 						rvIds = null;
-						rvIdCnt = 0;
+						rvIdCnt = 1;
+						saveAsOpen = false;
+						chalUploadFiles = null;
+						chalUploadContent = null;
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Challenge Saved", "Challenge Saved");
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 						showViewChallenges();
@@ -541,57 +547,34 @@ public class ChallengeController implements Serializable {
 			ResponseMessage response = updateChallengeClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			updateChallengeClient.close();
 			if (response.getStatusCode() == 0) {
-				if (chalUploadContent != null) {
-					WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + challengeBean.getId() + "/ip_challenge");
-					Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-					if (blobId == -999) {
-						WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
-						AttachmentMessage attach = new AttachmentMessage();
-						attach.setBlobContentType(challengeBean.getContentType());
-						attach.setBlobEntityId(challengeBean.getId());
-						attach.setBlobEntityTblNm("ip_challenge");
-						attach.setBlobName(challengeBean.getFileName());
-						attach.setBlobId(COUNTER.getNextId("IpBlob"));
-						Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
-						if (crtRes.getStatus() == 200) {
-							WebClient chalUploadClient = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-							chalUploadClient.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-							chalUploadClient.header("Accept", "application/json");
-							Response docRes = chalUploadClient.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), chalUploadContent.getStream(), new ContentDisposition("attachment;filename=" + challengeBean.getFileName())));
-							if (docRes.getStatus() != 200) {
-								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
-								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				if (getChalUploadFiles().size() > 0) {
+					WebClient deleteBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/delete/" + message.getId() + "/ip_challenge");
+					Response res = deleteBlobClient.accept(MediaType.APPLICATION_JSON).get();
+					if (res.getStatus() == 0) {
+						int i = 0;
+						for (FileBean bean : getChalUploadFiles()) {
+							WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/createMulti");
+							AttachmentMessage attachMessage = new AttachmentMessage();
+							attachMessage.setBlobContentType(bean.getType());
+							attachMessage.setBlobEntityId(message.getId());
+							attachMessage.setBlobEntityTblNm("ip_challenge");
+							attachMessage.setBlobName(bean.getName());
+							attachMessage.setBlobSize(bean.getSize());
+							attachMessage.setBlobId(COUNTER.getNextId("IpBlob"));
+							Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
+							createBlobClient.close();
+							if (crtRes.getStatus() == 200) {
+								WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/multiUpload/" + attachMessage.getBlobId() + "/" + ((i == 0) ? "true" : "false"), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+								client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+								client.header("Accept", "application/json");
+								client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attachMessage.getBlobId().toString(), bean.getContent().getStream(), new ContentDisposition("attachment;filename=" + bean.getName())));
+								client.close();
 							}
-						} else {
-							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
-							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-						}
-					} else {
-						WebClient updateBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/update");
-						AttachmentMessage attach = new AttachmentMessage();
-						attach.setBlobContentType(challengeBean.getContentType());
-						attach.setBlobEntityId(challengeBean.getId());
-						attach.setBlobEntityTblNm("ip_challenge");
-						attach.setBlobName(challengeBean.getFileName());
-						attach.setBlobId(blobId);
-						Response updRes = updateBlobClient.accept(MediaType.APPLICATION_JSON).put(attach);
-						updateBlobClient.close();
-						if (updRes.getStatus() == 200) {
-							WebClient chalUploadClient = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-							chalUploadClient.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-							chalUploadClient.header("Accept", "application/json");
-							Response docRes = chalUploadClient.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), chalUploadContent.getStream(), new ContentDisposition("attachment;filename=" + challengeBean.getFileName())));
-							if (docRes.getStatus() != 200) {
-								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
-								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-							}
-							chalUploadClient.close();
-						} else {
-							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
-							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+							i++;
 						}
 					}
 				}
+				chalUploadFiles = null;
 				chalUploadContent = null;
 				rvIdCnt = 1;
 				rvIds = null;
@@ -968,35 +951,34 @@ public class ChallengeController implements Serializable {
 					ResponseMessage response = addSolutionClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 					addSolutionClient.close();
 					if (response.getStatusCode() == 0) {
-						if (solUploadContent != null) {
-							WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
-							AttachmentMessage attach = new AttachmentMessage();
-							attach.setBlobContentType(solutionBean.getContentType());
-							attach.setBlobEntityId(message.getId());
-							attach.setBlobEntityTblNm("ip_solution");
-							attach.setBlobName(solutionBean.getFileName());
-							attach.setBlobId(COUNTER.getNextId("IpBlob"));
-							Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
-							createBlobClient.close();
-							if (crtRes.getStatus() == 200) {
-								WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-								client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-								client.header("Accept", "application/json");
-								Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), solUploadContent.getStream(), new ContentDisposition("attachment;filename=" + solutionBean.getFileName())));
-								if (docRes.getStatus() != 200) {
-									FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
-									FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						if (getSolUploadFiles().size() > 0) {
+							int i = 0;
+							for (FileBean bean : getSolUploadFiles()) {
+								WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/createMulti");
+								AttachmentMessage attachMessage = new AttachmentMessage();
+								attachMessage.setBlobContentType(bean.getType());
+								attachMessage.setBlobEntityId(message.getId());
+								attachMessage.setBlobEntityTblNm("ip_solution");
+								attachMessage.setBlobName(bean.getName());
+								attachMessage.setBlobSize(bean.getSize());
+								attachMessage.setBlobId(COUNTER.getNextId("IpBlob"));
+								Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
+								createBlobClient.close();
+								if (crtRes.getStatus() == 200) {
+									WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/multiUpload/" + attachMessage.getBlobId() + "/" + ((i == 0) ? "true" : "false"), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+									client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+									client.header("Accept", "application/json");
+									client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attachMessage.getBlobId().toString(), bean.getContent().getStream(), new ContentDisposition("attachment;filename=" + bean.getName())));
+									client.close();
 								}
-								client.close();
-							} else {
-								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
-								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+								i++;
 							}
 						}
 						solUploadContent = null;
 						rvIdCnt = 1;
 						rvIds = null;
 						saveAsOpen = false;
+						solUploadFiles = null;
 						if (saveAsOpen) {
 							showViewOpenSolution();
 						} else {
@@ -1045,57 +1027,34 @@ public class ChallengeController implements Serializable {
 			ResponseMessage response = updateSolutionClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			updateSolutionClient.close();
 			if (response.getStatusCode() == 0) {
-				if (solUploadContent != null) {
-					WebClient getBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/getId/" + solutionBean.getId() + "/ip_solution");
-					Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
-					if (blobId == -999) {
-						WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/create");
-						AttachmentMessage attach = new AttachmentMessage();
-						attach.setBlobContentType(solutionBean.getContentType());
-						attach.setBlobEntityId(solutionBean.getId());
-						attach.setBlobEntityTblNm("ip_solution");
-						attach.setBlobName(solutionBean.getFileName());
-						attach.setBlobId(COUNTER.getNextId("IpBlob"));
-						Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attach);
-						if (crtRes.getStatus() == 200) {
-							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-							client.header("Accept", "application/json");
-							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), solUploadContent.getStream(), new ContentDisposition("attachment;filename=" + solutionBean.getFileName())));
-							if (docRes.getStatus() != 200) {
-								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
-								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				if (getSolUploadFiles().size() > 0) {
+					WebClient deleteBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/delete/" + message.getId() + "/ip_solution");
+					Response res = deleteBlobClient.accept(MediaType.APPLICATION_JSON).get();
+					if (res.getStatus() == 0) {
+						int i = 0;
+						for (FileBean bean : getSolUploadFiles()) {
+							WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/createMulti");
+							AttachmentMessage attachMessage = new AttachmentMessage();
+							attachMessage.setBlobContentType(bean.getType());
+							attachMessage.setBlobEntityId(message.getId());
+							attachMessage.setBlobEntityTblNm("ip_solution");
+							attachMessage.setBlobName(bean.getName());
+							attachMessage.setBlobSize(bean.getSize());
+							attachMessage.setBlobId(COUNTER.getNextId("IpBlob"));
+							Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
+							createBlobClient.close();
+							if (crtRes.getStatus() == 200) {
+								WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/multiUpload/" + attachMessage.getBlobId() + "/" + ((i == 0) ? "true" : "false"), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+								client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+								client.header("Accept", "application/json");
+								client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attachMessage.getBlobId().toString(), bean.getContent().getStream(), new ContentDisposition("attachment;filename=" + bean.getName())));
+								client.close();
 							}
-						} else {
-							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
-							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-						}
-					} else {
-						WebClient updateBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/update");
-						AttachmentMessage attach = new AttachmentMessage();
-						attach.setBlobContentType(solutionBean.getContentType());
-						attach.setBlobEntityId(solutionBean.getId());
-						attach.setBlobEntityTblNm("ip_solution");
-						attach.setBlobName(solutionBean.getFileName());
-						attach.setBlobId(blobId);
-						Response updRes = updateBlobClient.accept(MediaType.APPLICATION_JSON).put(attach);
-						updateBlobClient.close();
-						if (updRes.getStatus() == 200) {
-							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-							client.header("Accept", "application/json");
-							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), solUploadContent.getStream(), new ContentDisposition("attachment;filename=" + solutionBean.getFileName())));
-							if (docRes.getStatus() != 200) {
-								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
-								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-							}
-							client.close();
-						} else {
-							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
-							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+							i++;
 						}
 					}
 				}
+				solUploadFiles = null;
 				solUploadContent = null;
 				rvIdCnt = 1;
 				rvIds = null;
@@ -1294,9 +1253,12 @@ public class ChallengeController implements Serializable {
 	public void chalFileUploadHandle(FileUploadEvent fue) {
 		try {
 			UploadedFile file = fue.getFile();
-			this.chalUploadContent = new DefaultStreamedContent(file.getInputstream());
-			this.challengeBean.setContentType(file.getContentType());
-			this.challengeBean.setFileName(file.getFileName());
+			FileBean bean = new FileBean();
+			bean.setContent(new DefaultStreamedContent(file.getInputstream()));
+			bean.setName(file.getFileName());
+			bean.setSize(file.getSize());
+			bean.setType(file.getContentType());
+			getChalUploadFiles().add(bean);
 		} catch (Exception e) {
 			logger.error(e, e);
 
@@ -1308,9 +1270,12 @@ public class ChallengeController implements Serializable {
 	public void solFileUploadHandle(FileUploadEvent fue) {
 		try {
 			UploadedFile file = fue.getFile();
-			this.solUploadContent = new DefaultStreamedContent(file.getInputstream());
-			this.solutionBean.setContentType(file.getContentType());
-			this.solutionBean.setFileName(file.getFileName());
+			FileBean bean = new FileBean();
+			bean.setContent(new DefaultStreamedContent(file.getInputstream()));
+			bean.setName(file.getFileName());
+			bean.setSize(file.getSize());
+			bean.setType(file.getContentType());
+			getSolUploadFiles().add(bean);
 		} catch (Exception e) {
 			logger.error(e, e);
 
@@ -1333,6 +1298,26 @@ public class ChallengeController implements Serializable {
 			ret.add("Description is Mandatory");
 		}
 		return ret;
+	}
+
+	public List<FileBean> getChalUploadFiles() {
+		if (chalUploadFiles == null)
+			chalUploadFiles = new ArrayList<FileBean>();
+		return chalUploadFiles;
+	}
+
+	public void setChalUploadFiles(List<FileBean> chalUploadFiles) {
+		this.chalUploadFiles = chalUploadFiles;
+	}
+
+	public List<FileBean> getSolUploadFiles() {
+		if (solUploadFiles == null)
+			solUploadFiles = new ArrayList<FileBean>();
+		return solUploadFiles;
+	}
+
+	public void setSolUploadFiles(List<FileBean> solUploadFiles) {
+		this.solUploadFiles = solUploadFiles;
 	}
 
 	private List<String> validateChallenge() {

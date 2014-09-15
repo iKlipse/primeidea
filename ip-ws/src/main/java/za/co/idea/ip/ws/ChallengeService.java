@@ -204,6 +204,57 @@ public class ChallengeService {
 		}
 	}
 
+	private ChallengeMessage getChallengeMessage(IpChallenge ipChallenge) {
+		ChallengeMessage challenge = new ChallengeMessage();
+		try {
+			challenge.setId(ipChallenge.getChalId());
+			challenge.setCatId(ipChallenge.getIpChallengeCat().getCcId());
+			challenge.setCrtdById(ipChallenge.getIpUserByChalCrtdBy().getUserId());
+			challenge.setCrtdByName(ipChallenge.getIpUserByChalCrtdBy().getUserFName() + " " + ipChallenge.getIpUserByChalCrtdBy().getUserLName());
+			challenge.setCrtdDt(ipChallenge.getChalCrtdDt());
+			challenge.setDesc(ipChallenge.getChalDesc());
+			challenge.setExprDt(ipChallenge.getChalExpiryDt());
+			challenge.setHoverText(ipChallenge.getChalHoverTxt());
+			challenge.setLaunchDt(ipChallenge.getChalLaunchDt());
+			challenge.setStatusId(ipChallenge.getIpChallengeStatus().getCsId());
+			challenge.setTag(ipChallenge.getChalTags());
+			challenge.setTitle(ipChallenge.getChalTitle());
+			challenge.setCatName(ipChallenge.getIpChallengeCat().getCcDesc());
+			challenge.setStatusName(ipChallenge.getIpChallengeStatus().getCsDesc());
+			challenge.setRvIdCnt(ipChallenge.getChalReviewCnt());
+			List val = ipChallengeGroupDAO.fetchByChallengeId(ipChallenge.getChalId());
+			if (val != null) {
+				Long[] grps = new Long[val.size()];
+				int i = 0;
+				for (Object obj : val) {
+					IpChallengeGroup group = (IpChallengeGroup) obj;
+					if (group != null && group.getIpGroup() != null) {
+						grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
+						i++;
+					}
+				}
+				challenge.setGroupIdList(grps);
+			}
+			IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipChallenge.getChalId(), "ip_challenge");
+			if (ipBlob != null) {
+				challenge.setFileName(ipBlob.getBlobName());
+				challenge.setImgAvail(true);
+				challenge.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
+			} else
+				challenge.setImgAvail(false);
+			IpBlob blob = ipBlobDAO.getBlobByEntity(ipChallenge.getIpUserByChalCrtdBy().getUserId(), "ip_user");
+			if (blob != null) {
+				challenge.setCrtByImgAvail(true);
+				challenge.setCrtByImgPath("ip_user/" + ipChallenge.getIpUserByChalCrtdBy().getUserId() + "/" + blob.getBlobName());
+			} else
+				challenge.setCrtByImgAvail(false);
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
+
+		return challenge;
+	}
+
 	@GET
 	@Path("/challenge/list")
 	@Produces("application/json")
@@ -214,48 +265,7 @@ public class ChallengeService {
 			List challenges = ipChallengeDAO.findAll();
 			for (Object object : challenges) {
 				IpChallenge ipChallenge = (IpChallenge) object;
-				ChallengeMessage challenge = new ChallengeMessage();
-				challenge.setId(ipChallenge.getChalId());
-				challenge.setCatId(ipChallenge.getIpChallengeCat().getCcId());
-				challenge.setCrtdById(ipChallenge.getIpUserByChalCrtdBy().getUserId());
-				challenge.setCrtdByName(ipChallenge.getIpUserByChalCrtdBy().getUserFName() + " " + ipChallenge.getIpUserByChalCrtdBy().getUserLName());
-				challenge.setCrtdDt(ipChallenge.getChalCrtdDt());
-				challenge.setDesc(ipChallenge.getChalDesc());
-				challenge.setExprDt(ipChallenge.getChalExpiryDt());
-				challenge.setHoverText(ipChallenge.getChalHoverTxt());
-				challenge.setLaunchDt(ipChallenge.getChalLaunchDt());
-				challenge.setStatusId(ipChallenge.getIpChallengeStatus().getCsId());
-				challenge.setTag(ipChallenge.getChalTags());
-				challenge.setTitle(ipChallenge.getChalTitle());
-				challenge.setCatName(ipChallenge.getIpChallengeCat().getCcDesc());
-				challenge.setStatusName(ipChallenge.getIpChallengeStatus().getCsDesc());
-				challenge.setRvIdCnt(ipChallenge.getChalReviewCnt());
-				List val = ipChallengeGroupDAO.fetchByChallengeId(ipChallenge.getChalId());
-				if (val != null) {
-					Long[] grps = new Long[val.size()];
-					int i = 0;
-					for (Object obj : val) {
-						IpChallengeGroup group = (IpChallengeGroup) obj;
-						if (group != null && group.getIpGroup() != null) {
-							grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
-							i++;
-						}
-					}
-					challenge.setGroupIdList(grps);
-				}
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipChallenge.getChalId(), "ip_challenge");
-				if (ipBlob != null) {
-					challenge.setFileName(ipBlob.getBlobName());
-					challenge.setImgAvail(true);
-					challenge.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else
-					challenge.setImgAvail(false);
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipChallenge.getIpUserByChalCrtdBy().getUserId(), "ip_user");
-				if (blob != null) {
-					challenge.setCrtByImgAvail(true);
-					challenge.setCrtByImgPath("ip_user/" + ipChallenge.getIpUserByChalCrtdBy().getUserId() + "/" + blob.getBlobName());
-				} else
-					challenge.setCrtByImgAvail(false);
+				ChallengeMessage challenge = getChallengeMessage(ipChallenge);
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
@@ -272,30 +282,7 @@ public class ChallengeService {
 		ChallengeMessage challenge = new ChallengeMessage();
 		try {
 			IpChallenge ipChallenge = ipChallengeDAO.findById(id);
-			challenge.setId(ipChallenge.getChalId());
-			challenge.setCatId(ipChallenge.getIpChallengeCat().getCcId());
-			challenge.setCrtdById(ipChallenge.getIpUserByChalCrtdBy().getUserId());
-			challenge.setCrtdByName(ipChallenge.getIpUserByChalCrtdBy().getUserFName() + " " + ipChallenge.getIpUserByChalCrtdBy().getUserLName());
-			challenge.setCrtdDt(ipChallenge.getChalCrtdDt());
-			challenge.setDesc(ipChallenge.getChalDesc());
-			challenge.setExprDt(ipChallenge.getChalExpiryDt());
-			challenge.setHoverText(ipChallenge.getChalHoverTxt());
-			challenge.setLaunchDt(ipChallenge.getChalLaunchDt());
-			challenge.setStatusId(ipChallenge.getIpChallengeStatus().getCsId());
-			challenge.setTag(ipChallenge.getChalTags());
-			challenge.setTitle(ipChallenge.getChalTitle());
-			challenge.setCatName(ipChallenge.getIpChallengeCat().getCcDesc());
-			challenge.setStatusName(ipChallenge.getIpChallengeStatus().getCsDesc());
-			List val = ipChallengeGroupDAO.fetchByChallengeId(ipChallenge.getChalId());
-			if (val != null) {
-				Long[] grps = new Long[val.size()];
-				int i = 0;
-				for (Object obj : val) {
-					grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
-					i++;
-				}
-				challenge.setGroupIdList(grps);
-			}
+			challenge = getChallengeMessage(ipChallenge);
 		} catch (Exception e) {
 			logger.error(e, e);
 		}
@@ -312,48 +299,7 @@ public class ChallengeService {
 			List challenges = ipChallengeDAO.findByUserId(id);
 			for (Object object : challenges) {
 				IpChallenge ipChallenge = (IpChallenge) object;
-				ChallengeMessage challenge = new ChallengeMessage();
-				challenge.setId(ipChallenge.getChalId());
-				challenge.setCatId(ipChallenge.getIpChallengeCat().getCcId());
-				challenge.setCrtdById(ipChallenge.getIpUserByChalCrtdBy().getUserId());
-				challenge.setCrtdByName(ipChallenge.getIpUserByChalCrtdBy().getUserFName() + " " + ipChallenge.getIpUserByChalCrtdBy().getUserLName());
-				challenge.setCrtdDt(ipChallenge.getChalCrtdDt());
-				challenge.setDesc(ipChallenge.getChalDesc());
-				challenge.setExprDt(ipChallenge.getChalExpiryDt());
-				challenge.setHoverText(ipChallenge.getChalHoverTxt());
-				challenge.setLaunchDt(ipChallenge.getChalLaunchDt());
-				challenge.setStatusId(ipChallenge.getIpChallengeStatus().getCsId());
-				challenge.setTag(ipChallenge.getChalTags());
-				challenge.setTitle(ipChallenge.getChalTitle());
-				challenge.setCatName(ipChallenge.getIpChallengeCat().getCcDesc());
-				challenge.setStatusName(ipChallenge.getIpChallengeStatus().getCsDesc());
-				challenge.setRvIdCnt(ipChallenge.getChalReviewCnt());
-				List val = ipChallengeGroupDAO.fetchByChallengeId(ipChallenge.getChalId());
-				if (val != null) {
-					Long[] grps = new Long[val.size()];
-					int i = 0;
-					for (Object obj : val) {
-						IpChallengeGroup group = (IpChallengeGroup) obj;
-						if (group != null && group.getIpGroup() != null) {
-							grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
-							i++;
-						}
-					}
-					challenge.setGroupIdList(grps);
-				}
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipChallenge.getChalId(), "ip_challenge");
-				if (ipBlob != null) {
-					challenge.setFileName(ipBlob.getBlobName());
-					challenge.setImgAvail(true);
-					challenge.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else
-					challenge.setImgAvail(false);
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipChallenge.getIpUserByChalCrtdBy().getUserId(), "ip_user");
-				if (blob != null) {
-					challenge.setCrtByImgAvail(true);
-					challenge.setCrtByImgPath("ip_user/" + ipChallenge.getIpUserByChalCrtdBy().getUserId() + "/" + blob.getBlobName());
-				} else
-					challenge.setCrtByImgAvail(false);
+				ChallengeMessage challenge = getChallengeMessage(ipChallenge);
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
@@ -372,48 +318,7 @@ public class ChallengeService {
 			List challenges = ipChallengeDAO.findCreatedByUserId(id);
 			for (Object object : challenges) {
 				IpChallenge ipChallenge = (IpChallenge) object;
-				ChallengeMessage challenge = new ChallengeMessage();
-				challenge.setId(ipChallenge.getChalId());
-				challenge.setCatId(ipChallenge.getIpChallengeCat().getCcId());
-				challenge.setCrtdById(ipChallenge.getIpUserByChalCrtdBy().getUserId());
-				challenge.setCrtdByName(ipChallenge.getIpUserByChalCrtdBy().getUserFName() + " " + ipChallenge.getIpUserByChalCrtdBy().getUserLName());
-				challenge.setCrtdDt(ipChallenge.getChalCrtdDt());
-				challenge.setDesc(ipChallenge.getChalDesc());
-				challenge.setExprDt(ipChallenge.getChalExpiryDt());
-				challenge.setHoverText(ipChallenge.getChalHoverTxt());
-				challenge.setLaunchDt(ipChallenge.getChalLaunchDt());
-				challenge.setStatusId(ipChallenge.getIpChallengeStatus().getCsId());
-				challenge.setTag(ipChallenge.getChalTags());
-				challenge.setTitle(ipChallenge.getChalTitle());
-				challenge.setCatName(ipChallenge.getIpChallengeCat().getCcDesc());
-				challenge.setStatusName(ipChallenge.getIpChallengeStatus().getCsDesc());
-				challenge.setRvIdCnt(ipChallenge.getChalReviewCnt());
-				List val = ipChallengeGroupDAO.fetchByChallengeId(ipChallenge.getChalId());
-				if (val != null) {
-					Long[] grps = new Long[val.size()];
-					int i = 0;
-					for (Object obj : val) {
-						IpChallengeGroup group = (IpChallengeGroup) obj;
-						if (group != null && group.getIpGroup() != null) {
-							grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
-							i++;
-						}
-					}
-					challenge.setGroupIdList(grps);
-				}
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipChallenge.getChalId(), "ip_challenge");
-				if (ipBlob != null) {
-					challenge.setFileName(ipBlob.getBlobName());
-					challenge.setImgAvail(true);
-					challenge.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else
-					challenge.setImgAvail(false);
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipChallenge.getIpUserByChalCrtdBy().getUserId(), "ip_user");
-				if (blob != null) {
-					challenge.setCrtByImgAvail(true);
-					challenge.setCrtByImgPath("ip_user/" + ipChallenge.getIpUserByChalCrtdBy().getUserId() + "/" + blob.getBlobName());
-				} else
-					challenge.setCrtByImgAvail(false);
+				ChallengeMessage challenge = getChallengeMessage(ipChallenge);
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
@@ -432,48 +337,7 @@ public class ChallengeService {
 			List challenges = ipChallengeDAO.findByStatusId(id);
 			for (Object object : challenges) {
 				IpChallenge ipChallenge = (IpChallenge) object;
-				ChallengeMessage challenge = new ChallengeMessage();
-				challenge.setId(ipChallenge.getChalId());
-				challenge.setCatId(ipChallenge.getIpChallengeCat().getCcId());
-				challenge.setCrtdById(ipChallenge.getIpUserByChalCrtdBy().getUserId());
-				challenge.setCrtdByName(ipChallenge.getIpUserByChalCrtdBy().getUserFName() + " " + ipChallenge.getIpUserByChalCrtdBy().getUserLName());
-				challenge.setCrtdDt(ipChallenge.getChalCrtdDt());
-				challenge.setDesc(ipChallenge.getChalDesc());
-				challenge.setExprDt(ipChallenge.getChalExpiryDt());
-				challenge.setHoverText(ipChallenge.getChalHoverTxt());
-				challenge.setLaunchDt(ipChallenge.getChalLaunchDt());
-				challenge.setStatusId(ipChallenge.getIpChallengeStatus().getCsId());
-				challenge.setTag(ipChallenge.getChalTags());
-				challenge.setTitle(ipChallenge.getChalTitle());
-				challenge.setCatName(ipChallenge.getIpChallengeCat().getCcDesc());
-				challenge.setStatusName(ipChallenge.getIpChallengeStatus().getCsDesc());
-				challenge.setRvIdCnt(ipChallenge.getChalReviewCnt());
-				List val = ipChallengeGroupDAO.fetchByChallengeId(ipChallenge.getChalId());
-				if (val != null) {
-					Long[] grps = new Long[val.size()];
-					int i = 0;
-					for (Object obj : val) {
-						IpChallengeGroup group = (IpChallengeGroup) obj;
-						if (group != null && group.getIpGroup() != null) {
-							grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
-							i++;
-						}
-					}
-					challenge.setGroupIdList(grps);
-				}
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipChallenge.getChalId(), "ip_challenge");
-				if (ipBlob != null) {
-					challenge.setFileName(ipBlob.getBlobName());
-					challenge.setImgAvail(true);
-					challenge.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else
-					challenge.setImgAvail(false);
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipChallenge.getIpUserByChalCrtdBy().getUserId(), "ip_user");
-				if (blob != null) {
-					challenge.setCrtByImgAvail(true);
-					challenge.setCrtByImgPath("ip_user/" + ipChallenge.getIpUserByChalCrtdBy().getUserId() + "/" + blob.getBlobName());
-				} else
-					challenge.setCrtByImgAvail(false);
+				ChallengeMessage challenge = getChallengeMessage(ipChallenge);
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
@@ -492,48 +356,7 @@ public class ChallengeService {
 			List challenges = ipChallengeDAO.findByStatusIdUserId(sid, id);
 			for (Object object : challenges) {
 				IpChallenge ipChallenge = (IpChallenge) object;
-				ChallengeMessage challenge = new ChallengeMessage();
-				challenge.setId(ipChallenge.getChalId());
-				challenge.setCatId(ipChallenge.getIpChallengeCat().getCcId());
-				challenge.setCrtdById(ipChallenge.getIpUserByChalCrtdBy().getUserId());
-				challenge.setCrtdByName(ipChallenge.getIpUserByChalCrtdBy().getUserFName() + " " + ipChallenge.getIpUserByChalCrtdBy().getUserLName());
-				challenge.setCrtdDt(ipChallenge.getChalCrtdDt());
-				challenge.setDesc(ipChallenge.getChalDesc());
-				challenge.setExprDt(ipChallenge.getChalExpiryDt());
-				challenge.setHoverText(ipChallenge.getChalHoverTxt());
-				challenge.setLaunchDt(ipChallenge.getChalLaunchDt());
-				challenge.setStatusId(ipChallenge.getIpChallengeStatus().getCsId());
-				challenge.setTag(ipChallenge.getChalTags());
-				challenge.setTitle(ipChallenge.getChalTitle());
-				challenge.setCatName(ipChallenge.getIpChallengeCat().getCcDesc());
-				challenge.setStatusName(ipChallenge.getIpChallengeStatus().getCsDesc());
-				challenge.setRvIdCnt(ipChallenge.getChalReviewCnt());
-				List val = ipChallengeGroupDAO.fetchByChallengeId(ipChallenge.getChalId());
-				if (val != null) {
-					Long[] grps = new Long[val.size()];
-					int i = 0;
-					for (Object obj : val) {
-						IpChallengeGroup group = (IpChallengeGroup) obj;
-						if (group != null && group.getIpGroup() != null) {
-							grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
-							i++;
-						}
-					}
-					challenge.setGroupIdList(grps);
-				}
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipChallenge.getChalId(), "ip_challenge");
-				if (ipBlob != null) {
-					challenge.setFileName(ipBlob.getBlobName());
-					challenge.setImgAvail(true);
-					challenge.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else
-					challenge.setImgAvail(false);
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipChallenge.getIpUserByChalCrtdBy().getUserId(), "ip_user");
-				if (blob != null) {
-					challenge.setCrtByImgAvail(true);
-					challenge.setCrtByImgPath("ip_user/" + ipChallenge.getIpUserByChalCrtdBy().getUserId() + "/" + blob.getBlobName());
-				} else
-					challenge.setCrtByImgAvail(false);
+				ChallengeMessage challenge = getChallengeMessage(ipChallenge);
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
@@ -552,48 +375,7 @@ public class ChallengeService {
 			List challenges = ipChallengeDAO.findReviewChalsByUserId(id);
 			for (Object object : challenges) {
 				IpChallenge ipChallenge = (IpChallenge) object;
-				ChallengeMessage challenge = new ChallengeMessage();
-				challenge.setId(ipChallenge.getChalId());
-				challenge.setCatId(ipChallenge.getIpChallengeCat().getCcId());
-				challenge.setCrtdById(ipChallenge.getIpUserByChalCrtdBy().getUserId());
-				challenge.setCrtdByName(ipChallenge.getIpUserByChalCrtdBy().getUserFName() + " " + ipChallenge.getIpUserByChalCrtdBy().getUserLName());
-				challenge.setCrtdDt(ipChallenge.getChalCrtdDt());
-				challenge.setDesc(ipChallenge.getChalDesc());
-				challenge.setExprDt(ipChallenge.getChalExpiryDt());
-				challenge.setHoverText(ipChallenge.getChalHoverTxt());
-				challenge.setLaunchDt(ipChallenge.getChalLaunchDt());
-				challenge.setStatusId(ipChallenge.getIpChallengeStatus().getCsId());
-				challenge.setTag(ipChallenge.getChalTags());
-				challenge.setTitle(ipChallenge.getChalTitle());
-				challenge.setCatName(ipChallenge.getIpChallengeCat().getCcDesc());
-				challenge.setStatusName(ipChallenge.getIpChallengeStatus().getCsDesc());
-				challenge.setRvIdCnt(ipChallenge.getChalReviewCnt());
-				List val = ipChallengeGroupDAO.fetchByChallengeId(ipChallenge.getChalId());
-				if (val != null) {
-					Long[] grps = new Long[val.size()];
-					int i = 0;
-					for (Object obj : val) {
-						IpChallengeGroup group = (IpChallengeGroup) obj;
-						if (group != null && group.getIpGroup() != null) {
-							grps[i] = ((IpChallengeGroup) obj).getIpGroup().getGroupId();
-							i++;
-						}
-					}
-					challenge.setGroupIdList(grps);
-				}
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipChallenge.getChalId(), "ip_challenge");
-				if (ipBlob != null) {
-					challenge.setFileName(ipBlob.getBlobName());
-					challenge.setImgAvail(true);
-					challenge.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else
-					challenge.setImgAvail(false);
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipChallenge.getIpUserByChalCrtdBy().getUserId(), "ip_user");
-				if (blob != null) {
-					challenge.setCrtByImgAvail(true);
-					challenge.setCrtByImgPath("ip_user/" + ipChallenge.getIpUserByChalCrtdBy().getUserId() + "/" + blob.getBlobName());
-				} else
-					challenge.setCrtByImgAvail(false);
+				ChallengeMessage challenge = getChallengeMessage(ipChallenge);
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
@@ -723,20 +505,7 @@ public class ChallengeService {
 		ChallengeMessage challenge = new ChallengeMessage();
 		try {
 			IpChallenge ipChallenge = ipChallengeDAO.findById(id);
-			challenge.setId(ipChallenge.getChalId());
-			challenge.setCatId(ipChallenge.getIpChallengeCat().getCcId());
-			challenge.setCrtdById(ipChallenge.getIpUserByChalCrtdBy().getUserId());
-			challenge.setCrtdByName(ipChallenge.getIpUserByChalCrtdBy().getUserFName() + " " + ipChallenge.getIpUserByChalCrtdBy().getUserLName());
-			challenge.setCrtdDt(ipChallenge.getChalCrtdDt());
-			challenge.setDesc(ipChallenge.getChalDesc());
-			challenge.setExprDt(ipChallenge.getChalExpiryDt());
-			challenge.setHoverText(ipChallenge.getChalHoverTxt());
-			challenge.setLaunchDt(ipChallenge.getChalLaunchDt());
-			challenge.setStatusId(ipChallenge.getIpChallengeStatus().getCsId());
-			challenge.setTag(ipChallenge.getChalTags());
-			challenge.setTitle(ipChallenge.getChalTitle());
-			challenge.setCatName(ipChallenge.getIpChallengeCat().getCcDesc());
-			challenge.setStatusName(ipChallenge.getIpChallengeStatus().getCsDesc());
+			challenge = getChallengeMessage(ipChallenge);
 		} catch (Exception e) {
 			logger.error(e, e);
 		}

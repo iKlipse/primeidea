@@ -1,6 +1,7 @@
 package za.co.idea.ip.portal.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class SolutionBean implements Serializable {
 	private String statusName;
 	private boolean disableEdit;
 	private boolean disableField;
+	private List<FileBean> files;
 
 	public Long getId() {
 		return id;
@@ -282,5 +284,15 @@ public class SolutionBean implements Serializable {
 
 	public void setDisableField(boolean disableField) {
 		this.disableField = disableField;
+	}
+
+	public List<FileBean> getFiles() {
+		if (files == null)
+			files = new ArrayList<FileBean>();
+		return files;
+	}
+
+	public void setFiles(List<FileBean> files) {
+		this.files = files;
 	}
 }

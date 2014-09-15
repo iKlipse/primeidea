@@ -315,6 +315,58 @@ public class IdeaService {
 		}
 	}
 
+	private IdeaMessage getIDeaMessage(IpIdea ipIdea) {
+		IdeaMessage idea = new IdeaMessage();
+		try {
+			idea.setIdeaId(ipIdea.getIdeaId());
+			idea.setIdeaBa(ipIdea.getIdeaBa());
+			idea.setCrtdDate(ipIdea.getIdeaDate());
+			idea.setIdeaDesc(ipIdea.getIdeaDesc());
+			idea.setIdeaTag(ipIdea.getIdeaTag());
+			idea.setIdeaTitle(ipIdea.getIdeaTitle());
+			if (ipIdea.getIpIdeaCat() != null)
+				idea.setSelCatId(ipIdea.getIpIdeaCat().getIcId().longValue());
+			if (ipIdea.getIpIdeaStatus() != null) {
+				idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
+				idea.setStatusName(ipIdea.getIpIdeaStatus().getIsDesc());
+			}
+			if (ipIdea.getIpUserByIdeaUserId() != null) {
+				idea.setCrtdById(ipIdea.getIpUserByIdeaUserId().getUserId());
+				idea.setCrtdByName(ipIdea.getIpUserByIdeaUserId().getUserScreenName());
+			}
+			idea.setRvIdCnt(ipIdea.getIdeaReviewCnt());
+			List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
+			if (val != null) {
+				Long[] grps = new Long[val.size()];
+				int i = 0;
+				for (Object obj : val) {
+					IpIdeaGroup group = (IpIdeaGroup) obj;
+					if (group != null && group.getIpGroup() != null) {
+						grps[i] = group.getIpGroup().getGroupId();
+						i++;
+					}
+				}
+				idea.setGroupIdList(grps);
+			}
+			IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipIdea.getIdeaId(), "ip_idea");
+			if (ipBlob != null) {
+				idea.setImgAvail(true);
+				idea.setFileName(ipBlob.getBlobName());
+				idea.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
+			} else
+				idea.setImgAvail(false);
+			IpBlob blob = ipBlobDAO.getBlobByEntity(ipIdea.getIpUserByIdeaUserId().getUserId(), "ip_user");
+			if (blob != null) {
+				idea.setCrtByImgAvail(true);
+				idea.setCrtByImgPath("ip_user/" + ipIdea.getIpUserByIdeaUserId().getUserId() + "/" + blob.getBlobName());
+			} else
+				idea.setCrtByImgAvail(false);
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
+		return idea;
+	}
+
 	@GET
 	@Path("/idea/list")
 	@Produces("application/json")
@@ -325,50 +377,7 @@ public class IdeaService {
 			List ideas = ipIdeaDAO.findAll();
 			for (Object object : ideas) {
 				IpIdea ipIdea = (IpIdea) object;
-				IdeaMessage idea = new IdeaMessage();
-				idea.setIdeaId(ipIdea.getIdeaId());
-				idea.setIdeaBa(ipIdea.getIdeaBa());
-				idea.setCrtdDate(ipIdea.getIdeaDate());
-				idea.setIdeaDesc(ipIdea.getIdeaDesc());
-				idea.setIdeaTag(ipIdea.getIdeaTag());
-				idea.setIdeaTitle(ipIdea.getIdeaTitle());
-				if (ipIdea.getIpIdeaCat() != null)
-					idea.setSelCatId(ipIdea.getIpIdeaCat().getIcId().longValue());
-				if (ipIdea.getIpIdeaStatus() != null) {
-					idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
-					idea.setStatusName(ipIdea.getIpIdeaStatus().getIsDesc());
-				}
-				if (ipIdea.getIpUserByIdeaUserId() != null) {
-					idea.setCrtdById(ipIdea.getIpUserByIdeaUserId().getUserId());
-					idea.setCrtdByName(ipIdea.getIpUserByIdeaUserId().getUserScreenName());
-				}
-				idea.setRvIdCnt(ipIdea.getIdeaReviewCnt());
-				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
-				if (val != null) {
-					Long[] grps = new Long[val.size()];
-					int i = 0;
-					for (Object obj : val) {
-						IpIdeaGroup group = (IpIdeaGroup) obj;
-						if (group != null && group.getIpGroup() != null) {
-							grps[i] = group.getIpGroup().getGroupId();
-							i++;
-						}
-					}
-					idea.setGroupIdList(grps);
-				}
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipIdea.getIdeaId(), "ip_idea");
-				if (ipBlob != null) {
-					idea.setImgAvail(true);
-					idea.setFileName(ipBlob.getBlobName());
-					idea.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else
-					idea.setImgAvail(false);
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipIdea.getIpUserByIdeaUserId().getUserId(), "ip_user");
-				if (blob != null) {
-					idea.setCrtByImgAvail(true);
-					idea.setCrtByImgPath("ip_user/" + ipIdea.getIpUserByIdeaUserId().getUserId() + "/" + blob.getBlobName());
-				} else
-					idea.setCrtByImgAvail(false);
+				IdeaMessage idea = getIDeaMessage(ipIdea);
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -387,50 +396,7 @@ public class IdeaService {
 			List ideas = ipIdeaDAO.findByUserId(id);
 			for (Object object : ideas) {
 				IpIdea ipIdea = (IpIdea) object;
-				IdeaMessage idea = new IdeaMessage();
-				idea.setIdeaId(ipIdea.getIdeaId());
-				idea.setIdeaBa(ipIdea.getIdeaBa());
-				idea.setCrtdDate(ipIdea.getIdeaDate());
-				idea.setIdeaDesc(ipIdea.getIdeaDesc());
-				idea.setIdeaTag(ipIdea.getIdeaTag());
-				idea.setIdeaTitle(ipIdea.getIdeaTitle());
-				if (ipIdea.getIpIdeaCat() != null)
-					idea.setSelCatId(ipIdea.getIpIdeaCat().getIcId().longValue());
-				if (ipIdea.getIpIdeaStatus() != null) {
-					idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
-					idea.setStatusName(ipIdea.getIpIdeaStatus().getIsDesc());
-				}
-				if (ipIdea.getIpUserByIdeaUserId() != null) {
-					idea.setCrtdById(ipIdea.getIpUserByIdeaUserId().getUserId());
-					idea.setCrtdByName(ipIdea.getIpUserByIdeaUserId().getUserScreenName());
-				}
-				idea.setRvIdCnt(ipIdea.getIdeaReviewCnt());
-				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
-				if (val != null) {
-					Long[] grps = new Long[val.size()];
-					int i = 0;
-					for (Object obj : val) {
-						IpIdeaGroup group = (IpIdeaGroup) obj;
-						if (group != null && group.getIpGroup() != null) {
-							grps[i] = group.getIpGroup().getGroupId();
-							i++;
-						}
-					}
-					idea.setGroupIdList(grps);
-				}
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipIdea.getIdeaId(), "ip_idea");
-				if (ipBlob != null) {
-					idea.setImgAvail(true);
-					idea.setFileName(ipBlob.getBlobName());
-					idea.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else
-					idea.setImgAvail(false);
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipIdea.getIpUserByIdeaUserId().getUserId(), "ip_user");
-				if (blob != null) {
-					idea.setCrtByImgAvail(true);
-					idea.setCrtByImgPath("ip_user/" + ipIdea.getIpUserByIdeaUserId().getUserId() + "/" + blob.getBlobName());
-				} else
-					idea.setCrtByImgAvail(false);
+				IdeaMessage idea = getIDeaMessage(ipIdea);
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -449,50 +415,7 @@ public class IdeaService {
 			List ideas = ipIdeaDAO.findCreatedByUserId(id);
 			for (Object object : ideas) {
 				IpIdea ipIdea = (IpIdea) object;
-				IdeaMessage idea = new IdeaMessage();
-				idea.setIdeaId(ipIdea.getIdeaId());
-				idea.setIdeaBa(ipIdea.getIdeaBa());
-				idea.setCrtdDate(ipIdea.getIdeaDate());
-				idea.setIdeaDesc(ipIdea.getIdeaDesc());
-				idea.setIdeaTag(ipIdea.getIdeaTag());
-				idea.setIdeaTitle(ipIdea.getIdeaTitle());
-				if (ipIdea.getIpIdeaCat() != null)
-					idea.setSelCatId(ipIdea.getIpIdeaCat().getIcId().longValue());
-				if (ipIdea.getIpIdeaStatus() != null) {
-					idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
-					idea.setStatusName(ipIdea.getIpIdeaStatus().getIsDesc());
-				}
-				if (ipIdea.getIpUserByIdeaUserId() != null) {
-					idea.setCrtdById(ipIdea.getIpUserByIdeaUserId().getUserId());
-					idea.setCrtdByName(ipIdea.getIpUserByIdeaUserId().getUserScreenName());
-				}
-				idea.setRvIdCnt(ipIdea.getIdeaReviewCnt());
-				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
-				if (val != null) {
-					Long[] grps = new Long[val.size()];
-					int i = 0;
-					for (Object obj : val) {
-						IpIdeaGroup group = (IpIdeaGroup) obj;
-						if (group != null && group.getIpGroup() != null) {
-							grps[i] = group.getIpGroup().getGroupId();
-							i++;
-						}
-					}
-					idea.setGroupIdList(grps);
-				}
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipIdea.getIdeaId(), "ip_idea");
-				if (ipBlob != null) {
-					idea.setImgAvail(true);
-					idea.setFileName(ipBlob.getBlobName());
-					idea.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else
-					idea.setImgAvail(false);
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipIdea.getIpUserByIdeaUserId().getUserId(), "ip_user");
-				if (blob != null) {
-					idea.setCrtByImgAvail(true);
-					idea.setCrtByImgPath("ip_user/" + ipIdea.getIpUserByIdeaUserId().getUserId() + "/" + blob.getBlobName());
-				} else
-					idea.setCrtByImgAvail(false);
+				IdeaMessage idea = getIDeaMessage(ipIdea);
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -511,50 +434,7 @@ public class IdeaService {
 			List ideas = ipIdeaDAO.findByStatusId(id);
 			for (Object object : ideas) {
 				IpIdea ipIdea = (IpIdea) object;
-				IdeaMessage idea = new IdeaMessage();
-				idea.setIdeaId(ipIdea.getIdeaId());
-				idea.setIdeaBa(ipIdea.getIdeaBa());
-				idea.setCrtdDate(ipIdea.getIdeaDate());
-				idea.setIdeaDesc(ipIdea.getIdeaDesc());
-				idea.setIdeaTag(ipIdea.getIdeaTag());
-				idea.setIdeaTitle(ipIdea.getIdeaTitle());
-				if (ipIdea.getIpIdeaCat() != null)
-					idea.setSelCatId(ipIdea.getIpIdeaCat().getIcId().longValue());
-				if (ipIdea.getIpIdeaStatus() != null) {
-					idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
-					idea.setStatusName(ipIdea.getIpIdeaStatus().getIsDesc());
-				}
-				if (ipIdea.getIpUserByIdeaUserId() != null) {
-					idea.setCrtdById(ipIdea.getIpUserByIdeaUserId().getUserId());
-					idea.setCrtdByName(ipIdea.getIpUserByIdeaUserId().getUserScreenName());
-				}
-				idea.setRvIdCnt(ipIdea.getIdeaReviewCnt());
-				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
-				if (val != null) {
-					Long[] grps = new Long[val.size()];
-					int i = 0;
-					for (Object obj : val) {
-						IpIdeaGroup group = (IpIdeaGroup) obj;
-						if (group != null && group.getIpGroup() != null) {
-							grps[i] = group.getIpGroup().getGroupId();
-							i++;
-						}
-					}
-					idea.setGroupIdList(grps);
-				}
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipIdea.getIdeaId(), "ip_idea");
-				if (ipBlob != null) {
-					idea.setImgAvail(true);
-					idea.setFileName(ipBlob.getBlobName());
-					idea.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else
-					idea.setImgAvail(false);
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipIdea.getIpUserByIdeaUserId().getUserId(), "ip_user");
-				if (blob != null) {
-					idea.setCrtByImgAvail(true);
-					idea.setCrtByImgPath("ip_user/" + ipIdea.getIpUserByIdeaUserId().getUserId() + "/" + blob.getBlobName());
-				} else
-					idea.setCrtByImgAvail(false);
+				IdeaMessage idea = getIDeaMessage(ipIdea);
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -573,50 +453,7 @@ public class IdeaService {
 			List ideas = ipIdeaDAO.findByStatusIdUserId(sid, id);
 			for (Object object : ideas) {
 				IpIdea ipIdea = (IpIdea) object;
-				IdeaMessage idea = new IdeaMessage();
-				idea.setIdeaId(ipIdea.getIdeaId());
-				idea.setIdeaBa(ipIdea.getIdeaBa());
-				idea.setCrtdDate(ipIdea.getIdeaDate());
-				idea.setIdeaDesc(ipIdea.getIdeaDesc());
-				idea.setIdeaTag(ipIdea.getIdeaTag());
-				idea.setIdeaTitle(ipIdea.getIdeaTitle());
-				if (ipIdea.getIpIdeaCat() != null)
-					idea.setSelCatId(ipIdea.getIpIdeaCat().getIcId().longValue());
-				if (ipIdea.getIpIdeaStatus() != null) {
-					idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
-					idea.setStatusName(ipIdea.getIpIdeaStatus().getIsDesc());
-				}
-				if (ipIdea.getIpUserByIdeaUserId() != null) {
-					idea.setCrtdById(ipIdea.getIpUserByIdeaUserId().getUserId());
-					idea.setCrtdByName(ipIdea.getIpUserByIdeaUserId().getUserScreenName());
-				}
-				idea.setRvIdCnt(ipIdea.getIdeaReviewCnt());
-				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
-				if (val != null) {
-					Long[] grps = new Long[val.size()];
-					int i = 0;
-					for (Object obj : val) {
-						IpIdeaGroup group = (IpIdeaGroup) obj;
-						if (group != null && group.getIpGroup() != null) {
-							grps[i] = group.getIpGroup().getGroupId();
-							i++;
-						}
-					}
-					idea.setGroupIdList(grps);
-				}
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipIdea.getIdeaId(), "ip_idea");
-				if (ipBlob != null) {
-					idea.setImgAvail(true);
-					idea.setFileName(ipBlob.getBlobName());
-					idea.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else
-					idea.setImgAvail(false);
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipIdea.getIpUserByIdeaUserId().getUserId(), "ip_user");
-				if (blob != null) {
-					idea.setCrtByImgAvail(true);
-					idea.setCrtByImgPath("ip_user/" + ipIdea.getIpUserByIdeaUserId().getUserId() + "/" + blob.getBlobName());
-				} else
-					idea.setCrtByImgAvail(false);
+				IdeaMessage idea = getIDeaMessage(ipIdea);
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -635,50 +472,7 @@ public class IdeaService {
 			List ideas = ipIdeaDAO.findReviewIdeasByUserId(id);
 			for (Object object : ideas) {
 				IpIdea ipIdea = (IpIdea) object;
-				IdeaMessage idea = new IdeaMessage();
-				idea.setIdeaId(ipIdea.getIdeaId());
-				idea.setIdeaBa(ipIdea.getIdeaBa());
-				idea.setCrtdDate(ipIdea.getIdeaDate());
-				idea.setIdeaDesc(ipIdea.getIdeaDesc());
-				idea.setIdeaTag(ipIdea.getIdeaTag());
-				idea.setIdeaTitle(ipIdea.getIdeaTitle());
-				if (ipIdea.getIpIdeaCat() != null)
-					idea.setSelCatId(ipIdea.getIpIdeaCat().getIcId().longValue());
-				if (ipIdea.getIpIdeaStatus() != null) {
-					idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
-					idea.setStatusName(ipIdea.getIpIdeaStatus().getIsDesc());
-				}
-				if (ipIdea.getIpUserByIdeaUserId() != null) {
-					idea.setCrtdById(ipIdea.getIpUserByIdeaUserId().getUserId());
-					idea.setCrtdByName(ipIdea.getIpUserByIdeaUserId().getUserScreenName());
-				}
-				idea.setRvIdCnt(ipIdea.getIdeaReviewCnt());
-				List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
-				if (val != null) {
-					Long[] grps = new Long[val.size()];
-					int i = 0;
-					for (Object obj : val) {
-						IpIdeaGroup group = (IpIdeaGroup) obj;
-						if (group != null && group.getIpGroup() != null) {
-							grps[i] = group.getIpGroup().getGroupId();
-							i++;
-						}
-					}
-					idea.setGroupIdList(grps);
-				}
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipIdea.getIdeaId(), "ip_idea");
-				if (ipBlob != null) {
-					idea.setImgAvail(true);
-					idea.setFileName(ipBlob.getBlobName());
-					idea.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else
-					idea.setImgAvail(false);
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipIdea.getIpUserByIdeaUserId().getUserId(), "ip_user");
-				if (blob != null) {
-					idea.setCrtByImgAvail(true);
-					idea.setCrtByImgPath("ip_user/" + ipIdea.getIpUserByIdeaUserId().getUserId() + "/" + blob.getBlobName());
-				} else
-					idea.setCrtByImgAvail(false);
+				IdeaMessage idea = getIDeaMessage(ipIdea);
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -695,23 +489,7 @@ public class IdeaService {
 		IdeaMessage idea = new IdeaMessage();
 		try {
 			IpIdea ipIdea = ipIdeaDAO.findById(id);
-			idea.setIdeaId(ipIdea.getIdeaId());
-			idea.setIdeaBa(ipIdea.getIdeaBa());
-			idea.setCrtdDate(ipIdea.getIdeaDate());
-			idea.setIdeaDesc(ipIdea.getIdeaDesc());
-			idea.setIdeaTag(ipIdea.getIdeaTag());
-			idea.setIdeaTitle(ipIdea.getIdeaTitle());
-			idea.setIdeaTitle(ipIdea.getIdeaTitle());
-			if (ipIdea.getIpIdeaCat() != null)
-				idea.setSelCatId(ipIdea.getIpIdeaCat().getIcId().longValue());
-			if (ipIdea.getIpIdeaStatus() != null) {
-				idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
-				idea.setStatusName(ipIdea.getIpIdeaStatus().getIsDesc());
-			}
-			if (ipIdea.getIpUserByIdeaUserId() != null) {
-				idea.setCrtdById(ipIdea.getIpUserByIdeaUserId().getUserId());
-				idea.setCrtdByName(ipIdea.getIpUserByIdeaUserId().getUserScreenName());
-			}
+			idea = getIDeaMessage(ipIdea);
 		} catch (Exception e) {
 			logger.error(e, e);
 		}

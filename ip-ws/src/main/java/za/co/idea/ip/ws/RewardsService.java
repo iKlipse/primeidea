@@ -122,55 +122,9 @@ public class RewardsService {
 		}
 	}
 
-	@GET
-	@Path("/rewards/list")
-	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
-	public <T extends RewardsMessage> List<T> listRewards() {
-		List<T> ret = new ArrayList<T>();
-		try {
-			List rewardList = ipRewardsDAO.findAll();
-			for (Object object : rewardList) {
-				IpRewards ipRewards = (IpRewards) object;
-				RewardsMessage rewards = new RewardsMessage();
-				rewards.setrCatId(ipRewards.getIpRewardsCat().getRcId());
-				rewards.setRwCrtdDt(ipRewards.getRwCrtdDt());
-				rewards.setRwDesc(ipRewards.getRwDesc());
-				rewards.setRwExpiryDt(ipRewards.getRwExpiryDt());
-				rewards.setRwHoverText(ipRewards.getRwHoverText());
-				rewards.setRwId(ipRewards.getRwId());
-				rewards.setRwLaunchDt(ipRewards.getRwLaunchDt());
-				rewards.setRwStockCodeNum(ipRewards.getRwStockCodeNum());
-				rewards.setRwTag(ipRewards.getRwTag());
-				rewards.setRwTitle(ipRewards.getRwTitle());
-				rewards.setRwValue(ipRewards.getRwValue());
-				rewards.setRwPrice(ipRewards.getRwPrice());
-				rewards.setRwQuantity(ipRewards.getRwQuantity());
-				rewards.setrCatName(ipRewards.getIpRewardsCat().getRcDesc());
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipRewards.getRwId(), "ip_rewards");
-				if (ipBlob != null) {
-					rewards.setRwUrl("ip_rewards/" + ipRewards.getRwId() + "/" + ipBlob.getBlobName());
-					rewards.setRwImgAvail(true);
-					rewards.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else {
-					rewards.setRwImgAvail(false);
-				}
-				ret.add((T) rewards);
-			}
-		} catch (Exception e) {
-			logger.error(e, e);
-		}
-		return ret;
-	}
-
-	@GET
-	@Path("/rewards/get/{id}")
-	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
-	public RewardsMessage getRewardsById(@PathParam("id") Long id) {
+	private RewardsMessage getRewardsMessage(IpRewards ipRewards) {
 		RewardsMessage rewards = new RewardsMessage();
 		try {
-			IpRewards ipRewards = ipRewardsDAO.findById(id);
 			rewards.setrCatId(ipRewards.getIpRewardsCat().getRcId());
 			rewards.setRwCrtdDt(ipRewards.getRwCrtdDt());
 			rewards.setRwDesc(ipRewards.getRwDesc());
@@ -200,6 +154,40 @@ public class RewardsService {
 	}
 
 	@GET
+	@Path("/rewards/list")
+	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
+	public <T extends RewardsMessage> List<T> listRewards() {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List rewardList = ipRewardsDAO.findAll();
+			for (Object object : rewardList) {
+				IpRewards ipRewards = (IpRewards) object;
+				RewardsMessage rewards = getRewardsMessage(ipRewards);
+				ret.add((T) rewards);
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
+		return ret;
+	}
+
+	@GET
+	@Path("/rewards/get/{id}")
+	@Produces("application/json")
+	@Transactional(propagation = Propagation.REQUIRED)
+	public RewardsMessage getRewardsById(@PathParam("id") Long id) {
+		RewardsMessage rewards = new RewardsMessage();
+		try {
+			IpRewards ipRewards = ipRewardsDAO.findById(id);
+			rewards = getRewardsMessage(ipRewards);
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
+		return rewards;
+	}
+
+	@GET
 	@Path("/rewards/list/avail")
 	@Produces("application/json")
 	@Transactional(propagation = Propagation.REQUIRED)
@@ -209,29 +197,7 @@ public class RewardsService {
 			List rewardList = ipRewardsDAO.findByAvail();
 			for (Object object : rewardList) {
 				IpRewards ipRewards = (IpRewards) object;
-				RewardsMessage rewards = new RewardsMessage();
-				rewards.setrCatId(ipRewards.getIpRewardsCat().getRcId());
-				rewards.setRwCrtdDt(ipRewards.getRwCrtdDt());
-				rewards.setRwDesc(ipRewards.getRwDesc());
-				rewards.setRwExpiryDt(ipRewards.getRwExpiryDt());
-				rewards.setRwHoverText(ipRewards.getRwHoverText());
-				rewards.setRwId(ipRewards.getRwId());
-				rewards.setRwLaunchDt(ipRewards.getRwLaunchDt());
-				rewards.setRwStockCodeNum(ipRewards.getRwStockCodeNum());
-				rewards.setRwTag(ipRewards.getRwTag());
-				rewards.setRwTitle(ipRewards.getRwTitle());
-				rewards.setRwValue(ipRewards.getRwValue());
-				rewards.setRwPrice(ipRewards.getRwPrice());
-				rewards.setRwQuantity(ipRewards.getRwQuantity());
-				rewards.setrCatName(ipRewards.getIpRewardsCat().getRcDesc());
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipRewards.getRwId(), "ip_rewards");
-				if (ipBlob != null) {
-					rewards.setRwUrl("ip_rewards/" + ipRewards.getRwId() + "/" + ipBlob.getBlobName());
-					rewards.setRwImgAvail(true);
-					rewards.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else {
-					rewards.setRwImgAvail(false);
-				}
+				RewardsMessage rewards = getRewardsMessage(ipRewards);
 				ret.add((T) rewards);
 			}
 		} catch (Exception e) {
@@ -250,29 +216,7 @@ public class RewardsService {
 			List rewardList = ipRewardsDAO.findByCatId(id);
 			for (Object object : rewardList) {
 				IpRewards ipRewards = (IpRewards) object;
-				RewardsMessage rewards = new RewardsMessage();
-				rewards.setrCatId(ipRewards.getIpRewardsCat().getRcId());
-				rewards.setRwCrtdDt(ipRewards.getRwCrtdDt());
-				rewards.setRwDesc(ipRewards.getRwDesc());
-				rewards.setRwExpiryDt(ipRewards.getRwExpiryDt());
-				rewards.setRwHoverText(ipRewards.getRwHoverText());
-				rewards.setRwId(ipRewards.getRwId());
-				rewards.setRwLaunchDt(ipRewards.getRwLaunchDt());
-				rewards.setRwStockCodeNum(ipRewards.getRwStockCodeNum());
-				rewards.setRwTag(ipRewards.getRwTag());
-				rewards.setRwTitle(ipRewards.getRwTitle());
-				rewards.setRwValue(ipRewards.getRwValue());
-				rewards.setRwPrice(ipRewards.getRwPrice());
-				rewards.setRwQuantity(ipRewards.getRwQuantity());
-				rewards.setrCatName(ipRewards.getIpRewardsCat().getRcDesc());
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipRewards.getRwId(), "ip_rewards");
-				if (ipBlob != null) {
-					rewards.setRwUrl("ip_rewards/" + ipRewards.getRwId() + "/" + ipBlob.getBlobName());
-					rewards.setRwImgAvail(true);
-					rewards.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else {
-					rewards.setRwImgAvail(false);
-				}
+				RewardsMessage rewards = getRewardsMessage(ipRewards);
 				ret.add((T) rewards);
 			}
 		} catch (Exception e) {
@@ -291,29 +235,7 @@ public class RewardsService {
 			List rewardList = ipRewardsDAO.findByUserId(id);
 			for (Object object : rewardList) {
 				IpRewards ipRewards = (IpRewards) object;
-				RewardsMessage rewards = new RewardsMessage();
-				rewards.setrCatId(ipRewards.getIpRewardsCat().getRcId());
-				rewards.setRwCrtdDt(ipRewards.getRwCrtdDt());
-				rewards.setRwDesc(ipRewards.getRwDesc());
-				rewards.setRwExpiryDt(ipRewards.getRwExpiryDt());
-				rewards.setRwHoverText(ipRewards.getRwHoverText());
-				rewards.setRwId(ipRewards.getRwId());
-				rewards.setRwLaunchDt(ipRewards.getRwLaunchDt());
-				rewards.setRwStockCodeNum(ipRewards.getRwStockCodeNum());
-				rewards.setRwTag(ipRewards.getRwTag());
-				rewards.setRwTitle(ipRewards.getRwTitle());
-				rewards.setRwValue(ipRewards.getRwValue());
-				rewards.setRwPrice(ipRewards.getRwPrice());
-				rewards.setRwQuantity(ipRewards.getRwQuantity());
-				rewards.setrCatName(ipRewards.getIpRewardsCat().getRcDesc());
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(ipRewards.getRwId(), "ip_rewards");
-				if (ipBlob != null) {
-					rewards.setRwUrl("ip_rewards/" + ipRewards.getRwId() + "/" + ipBlob.getBlobName());
-					rewards.setRwImgAvail(true);
-					rewards.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-				} else {
-					rewards.setRwImgAvail(false);
-				}
+				RewardsMessage rewards = getRewardsMessage(ipRewards);
 				ret.add((T) rewards);
 			}
 		} catch (Exception e) {
@@ -417,6 +339,21 @@ public class RewardsService {
 
 	}
 
+	private PointMessage getPointMessage(IpPoints ipPoints) {
+		PointMessage message = new PointMessage();
+		try {
+			message.setAllocId(ipPoints.getIpAllocation().getAllocId());
+			message.setPointId(ipPoints.getPointId());
+			message.setPointValue(ipPoints.getPointValue());
+			message.setComments(ipPoints.getComments());
+			message.setCrtdDt(ipPoints.getPointCrtdDt());
+			message.setUserId(ipPoints.getIpUser().getUserId());
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
+		return message;
+	}
+
 	@GET
 	@Path("/points/get/{id}")
 	@Produces("application/json")
@@ -426,12 +363,7 @@ public class RewardsService {
 		PointMessage message = new PointMessage();
 		try {
 			IpPoints ipPoints = ipPointsDAO.findById(id);
-			message.setAllocId(ipPoints.getIpAllocation().getAllocId());
-			message.setPointId(ipPoints.getPointId());
-			message.setPointValue(ipPoints.getPointValue());
-			message.setComments(ipPoints.getComments());
-			message.setCrtdDt(ipPoints.getPointCrtdDt());
-			message.setUserId(ipPoints.getIpUser().getUserId());
+			message = getPointMessage(ipPoints);
 		} catch (Exception e) {
 			logger.error(e, e);
 		}
@@ -449,13 +381,7 @@ public class RewardsService {
 			List points = ipPointsDAO.findByUser(id);
 			for (Object object : points) {
 				IpPoints ipPoints = (IpPoints) object;
-				PointMessage message = new PointMessage();
-				message.setAllocId(ipPoints.getIpAllocation().getAllocId());
-				message.setPointId(ipPoints.getPointId());
-				message.setPointValue(ipPoints.getPointValue());
-				message.setComments(ipPoints.getComments());
-				message.setCrtdDt(ipPoints.getPointCrtdDt());
-				message.setUserId(ipPoints.getIpUser().getUserId());
+				PointMessage message = getPointMessage(ipPoints);
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
@@ -559,6 +485,21 @@ public class RewardsService {
 
 	}
 
+	private AllocationMessage getAllocationMessage(IpAllocation allocation) {
+		AllocationMessage msg = new AllocationMessage();
+		try {
+			msg.setAllocDesc(allocation.getAllocDesc());
+			msg.setAllocEntity(allocation.getAllocEntity());
+			msg.setAllocId(allocation.getAllocId());
+			msg.setAllocStatusId(allocation.getAllocStatusId());
+			msg.setAllocVal(allocation.getAllocVal());
+			msg.setAllocCrtdDt(allocation.getAllocCrtdDt());
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
+		return msg;
+	}
+
 	@GET
 	@Path("/alloc/list")
 	@Produces("application/json")
@@ -568,14 +509,8 @@ public class RewardsService {
 		try {
 			List alloc = ipAllocationDAO.findAll();
 			for (Object object : alloc) {
-				AllocationMessage msg = new AllocationMessage();
 				IpAllocation allocation = (IpAllocation) object;
-				msg.setAllocDesc(allocation.getAllocDesc());
-				msg.setAllocEntity(allocation.getAllocEntity());
-				msg.setAllocId(allocation.getAllocId());
-				msg.setAllocStatusId(allocation.getAllocStatusId());
-				msg.setAllocVal(allocation.getAllocVal());
-				msg.setAllocCrtdDt(allocation.getAllocCrtdDt());
+				AllocationMessage msg = getAllocationMessage(allocation);
 				ret.add((T) msg);
 			}
 		} catch (Exception e) {
@@ -593,14 +528,8 @@ public class RewardsService {
 		try {
 			List alloc = ipAllocationDAO.getAllocationByEntity(entity);
 			for (Object object : alloc) {
-				AllocationMessage msg = new AllocationMessage();
 				IpAllocation allocation = (IpAllocation) object;
-				msg.setAllocDesc(allocation.getAllocDesc());
-				msg.setAllocEntity(allocation.getAllocEntity());
-				msg.setAllocId(allocation.getAllocId());
-				msg.setAllocStatusId(allocation.getAllocStatusId());
-				msg.setAllocVal(allocation.getAllocVal());
-				msg.setAllocCrtdDt(allocation.getAllocCrtdDt());
+				AllocationMessage msg = getAllocationMessage(allocation);
 				ret.add((T) msg);
 			}
 		} catch (Exception e) {
@@ -617,12 +546,7 @@ public class RewardsService {
 		AllocationMessage ret = new AllocationMessage();
 		try {
 			IpAllocation allocation = ipAllocationDAO.findById(id);
-			ret.setAllocDesc(allocation.getAllocDesc());
-			ret.setAllocEntity(allocation.getAllocEntity());
-			ret.setAllocId(allocation.getAllocId());
-			ret.setAllocStatusId(allocation.getAllocStatusId());
-			ret.setAllocVal(allocation.getAllocVal());
-			ret.setAllocCrtdDt(allocation.getAllocCrtdDt());
+			ret = getAllocationMessage(allocation);
 		} catch (Exception e) {
 			logger.error(e, e);
 		}

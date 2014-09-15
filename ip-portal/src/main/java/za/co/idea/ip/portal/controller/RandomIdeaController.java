@@ -147,7 +147,7 @@ public class RandomIdeaController implements Serializable {
 					break;
 				}
 			} else {
-				viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(2, userId);
+				viewIdeas = RESTServiceHelper.fetchAllIdeasByUser(userId);
 				ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 				admUsers = RESTServiceHelper.fetchAllUsers();
 				ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
@@ -233,6 +233,7 @@ public class RandomIdeaController implements Serializable {
 
 	public void showCreateIdea() {
 		try {
+			uploadFiles = new ArrayList<FileBean>();
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			saveAsOpen = false;
 			admUsers = RESTServiceHelper.fetchActiveUsers();
@@ -271,6 +272,7 @@ public class RandomIdeaController implements Serializable {
 			if (grpList != null && !grpList.isEmpty()) {
 				selGroupId = (Long) grpList.get(0);
 			}
+			uploadFiles = new ArrayList<FileBean>();
 			return "ideae";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -299,6 +301,7 @@ public class RandomIdeaController implements Serializable {
 			} else {
 				ideaStatuses = RESTServiceHelper.fetchAllReviewIdeaStatuses();
 			}
+			uploadFiles = new ArrayList<FileBean>();
 			return "ideaer";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -327,6 +330,7 @@ public class RandomIdeaController implements Serializable {
 			if (grpList != null && !grpList.isEmpty()) {
 				selGroupId = (Long) grpList.get(0);
 			}
+			uploadFiles = new ArrayList<FileBean>();
 			return "ideaeo";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -629,30 +633,36 @@ public class RandomIdeaController implements Serializable {
 			ResponseMessage response = updateIdeaClient.accept(MediaType.APPLICATION_JSON).put(ideaMessage, ResponseMessage.class);
 			updateIdeaClient.close();
 			if (response.getStatusCode() == 0) {
+
 				if (getUploadFiles().size() > 0) {
 					WebClient deleteBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/delete/" + ideaBean.getIdeaId() + "/ip_idea");
 					Response res = deleteBlobClient.accept(MediaType.APPLICATION_JSON).get();
-					if (res.getStatus() == 0) {
+					if (res.getStatus() == 200) {
 						int i = 0;
-						for (FileBean bean : getUploadFiles()) {
-							WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/createMulti");
-							AttachmentMessage message = new AttachmentMessage();
-							message.setBlobContentType(bean.getType());
-							message.setBlobEntityId(ideaMessage.getIdeaId());
-							message.setBlobEntityTblNm("ip_idea");
-							message.setBlobName(bean.getName());
-							message.setBlobSize(bean.getSize());
-							message.setBlobId(COUNTER.getNextId("IpBlob"));
-							Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
-							createBlobClient.close();
-							if (crtRes.getStatus() == 200) {
-								WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/multiUpload/" + message.getBlobId() + "/" + ((i == 0) ? "true" : "false"), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-								client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-								client.header("Accept", "application/json");
-								client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), bean.getContent().getStream(), new ContentDisposition("attachment;filename=" + bean.getName())));
-								client.close();
+						try {
+							for (FileBean bean : getUploadFiles()) {
+								WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/createMulti");
+								AttachmentMessage message = new AttachmentMessage();
+								message.setBlobContentType(bean.getType());
+								message.setBlobEntityId(ideaMessage.getIdeaId());
+								message.setBlobEntityTblNm("ip_idea");
+								message.setBlobName(bean.getName());
+								message.setBlobSize(bean.getSize());
+								message.setBlobId(COUNTER.getNextId("IpBlob"));
+								Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
+								createBlobClient.close();
+								if (crtRes.getStatus() == 200) {
+									logger.info("After success");
+									WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/multiUpload/" + message.getBlobId() + "/" + ((i == 0) ? "true" : "false"), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+									client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+									client.header("Accept", "application/json");
+									client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), bean.getContent().getStream(), new ContentDisposition("attachment;filename=" + bean.getName())));
+									client.close();
+								}
+								i++;
 							}
-							i++;
+						} catch (Exception e) {
+							logger.error("Error while uploading file: " + e);
 						}
 					}
 				}
@@ -784,6 +794,8 @@ public class RandomIdeaController implements Serializable {
 			bean.setSize(file.getSize());
 			bean.setType(file.getContentType());
 			getUploadFiles().add(bean);
+			FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, file.getFileName() + " has been uploaded successfully", file.getFileName() + " has been uploaded successfully");
+			FacesContext.getCurrentInstance().addMessage(null, successMessage);
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform upload request", "System error occurred, cannot perform upload request");

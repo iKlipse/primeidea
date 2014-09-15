@@ -148,6 +148,37 @@ public class AdminService {
 		}
 	}
 
+	private GroupMessage getGroupMessage(IpGroup ipGroup) {
+		GroupMessage group = new GroupMessage();
+		try {
+			group.setGeMail(ipGroup.getGroupEmail());
+			group.setgId(ipGroup.getGroupId());
+			group.setgName(ipGroup.getGroupName());
+			group.setIsActive(ipGroup.getGroupStatus().equalsIgnoreCase("y"));
+			group.setCrtdDate(ipGroup.getGroupCrtdDt());
+			if (ipGroup.getIpGroup() != null) {
+				group.setpGrpId(ipGroup.getIpGroup().getGroupId());
+				group.setpGrpName(ipGroup.getIpGroup().getGroupName());
+			}
+			if (ipGroup.getIpUser() != null) {
+				group.setAdmUserId(ipGroup.getIpUser().getUserId());
+				group.setAdmUserName(ipGroup.getIpUser().getUserScreenName());
+			}
+			List guList = ipGroupUserDAO.fetchByGroupId(ipGroup.getGroupId());
+			Long[] uList = new Long[guList.size()];
+			int i = 0;
+			for (Object guObj : guList) {
+				IpGroupUser gu = (IpGroupUser) guObj;
+				uList[i] = gu.getIpUser().getUserId();
+				i++;
+			}
+			group.setUserIdList(uList);
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
+		return group;
+	}
+
 	@GET
 	@Path("/group/list")
 	@Produces("application/json")
@@ -158,29 +189,7 @@ public class AdminService {
 			List groups = ipGroupDAO.findAll();
 			for (Object object : groups) {
 				IpGroup ipGroup = (IpGroup) object;
-				GroupMessage group = new GroupMessage();
-				group.setGeMail(ipGroup.getGroupEmail());
-				group.setgId(ipGroup.getGroupId());
-				group.setgName(ipGroup.getGroupName());
-				group.setIsActive(ipGroup.getGroupStatus().equalsIgnoreCase("y"));
-				group.setCrtdDate(ipGroup.getGroupCrtdDt());
-				if (ipGroup.getIpGroup() != null) {
-					group.setpGrpId(ipGroup.getIpGroup().getGroupId());
-					group.setpGrpName(ipGroup.getIpGroup().getGroupName());
-				}
-				if (ipGroup.getIpUser() != null) {
-					group.setAdmUserId(ipGroup.getIpUser().getUserId());
-					group.setAdmUserName(ipGroup.getIpUser().getUserScreenName());
-				}
-				List guList = ipGroupUserDAO.fetchByGroupId(ipGroup.getGroupId());
-				Long[] uList = new Long[guList.size()];
-				int i = 0;
-				for (Object guObj : guList) {
-					IpGroupUser gu = (IpGroupUser) guObj;
-					uList[i] = gu.getIpUser().getUserId();
-					i++;
-				}
-				group.setUserIdList(uList);
+				GroupMessage group = getGroupMessage(ipGroup);
 				ret.add((T) group);
 			}
 		} catch (Exception e) {
@@ -199,29 +208,7 @@ public class AdminService {
 			List groups = ipGroupDAO.findActiveGroups();
 			for (Object object : groups) {
 				IpGroup ipGroup = (IpGroup) object;
-				GroupMessage group = new GroupMessage();
-				group.setGeMail(ipGroup.getGroupEmail());
-				group.setgId(ipGroup.getGroupId());
-				group.setgName(ipGroup.getGroupName());
-				group.setIsActive(ipGroup.getGroupStatus().equalsIgnoreCase("y"));
-				group.setCrtdDate(ipGroup.getGroupCrtdDt());
-				if (ipGroup.getIpGroup() != null) {
-					group.setpGrpId(ipGroup.getIpGroup().getGroupId());
-					group.setpGrpName(ipGroup.getIpGroup().getGroupName());
-				}
-				if (ipGroup.getIpUser() != null) {
-					group.setAdmUserId(ipGroup.getIpUser().getUserId());
-					group.setAdmUserName(ipGroup.getIpUser().getUserScreenName());
-				}
-				List guList = ipGroupUserDAO.fetchByGroupId(ipGroup.getGroupId());
-				Long[] uList = new Long[guList.size()];
-				int i = 0;
-				for (Object guObj : guList) {
-					IpGroupUser gu = (IpGroupUser) guObj;
-					uList[i] = gu.getIpUser().getUserId();
-					i++;
-				}
-				group.setUserIdList(uList);
+				GroupMessage group = getGroupMessage(ipGroup);
 				ret.add((T) group);
 			}
 		} catch (Exception e) {
@@ -240,29 +227,7 @@ public class AdminService {
 			List groups = ipGroupDAO.findReviewGroups();
 			for (Object object : groups) {
 				IpGroup ipGroup = (IpGroup) object;
-				GroupMessage group = new GroupMessage();
-				group.setGeMail(ipGroup.getGroupEmail());
-				group.setgId(ipGroup.getGroupId());
-				group.setgName(ipGroup.getGroupName());
-				group.setIsActive(ipGroup.getGroupStatus().equalsIgnoreCase("y"));
-				group.setCrtdDate(ipGroup.getGroupCrtdDt());
-				if (ipGroup.getIpGroup() != null) {
-					group.setpGrpId(ipGroup.getIpGroup().getGroupId());
-					group.setpGrpName(ipGroup.getIpGroup().getGroupName());
-				}
-				if (ipGroup.getIpUser() != null) {
-					group.setAdmUserId(ipGroup.getIpUser().getUserId());
-					group.setAdmUserName(ipGroup.getIpUser().getUserScreenName());
-				}
-				List guList = ipGroupUserDAO.fetchByGroupId(ipGroup.getGroupId());
-				Long[] uList = new Long[guList.size()];
-				int i = 0;
-				for (Object guObj : guList) {
-					IpGroupUser gu = (IpGroupUser) guObj;
-					uList[i] = gu.getIpUser().getUserId();
-					i++;
-				}
-				group.setUserIdList(uList);
+				GroupMessage group = getGroupMessage(ipGroup);
 				ret.add((T) group);
 			}
 		} catch (Exception e) {
@@ -281,29 +246,7 @@ public class AdminService {
 			List groups = ipGroupDAO.findInActiveGroups();
 			for (Object object : groups) {
 				IpGroup ipGroup = (IpGroup) object;
-				GroupMessage group = new GroupMessage();
-				group.setGeMail(ipGroup.getGroupEmail());
-				group.setgId(ipGroup.getGroupId());
-				group.setgName(ipGroup.getGroupName());
-				group.setIsActive(ipGroup.getGroupStatus().equalsIgnoreCase("y"));
-				group.setCrtdDate(ipGroup.getGroupCrtdDt());
-				if (ipGroup.getIpGroup() != null) {
-					group.setpGrpId(ipGroup.getIpGroup().getGroupId());
-					group.setpGrpName(ipGroup.getIpGroup().getGroupName());
-				}
-				if (ipGroup.getIpUser() != null) {
-					group.setAdmUserId(ipGroup.getIpUser().getUserId());
-					group.setAdmUserName(ipGroup.getIpUser().getUserScreenName());
-				}
-				List guList = ipGroupUserDAO.fetchByGroupId(ipGroup.getGroupId());
-				Long[] uList = new Long[guList.size()];
-				int i = 0;
-				for (Object guObj : guList) {
-					IpGroupUser gu = (IpGroupUser) guObj;
-					uList[i] = gu.getIpUser().getUserId();
-					i++;
-				}
-				group.setUserIdList(uList);
+				GroupMessage group = getGroupMessage(ipGroup);
 				ret.add((T) group);
 			}
 		} catch (Exception e) {
@@ -322,29 +265,7 @@ public class AdminService {
 			List groups = ipGroupDAO.findSubGroups(id);
 			for (Object object : groups) {
 				IpGroup ipGroup = (IpGroup) object;
-				GroupMessage group = new GroupMessage();
-				group.setGeMail(ipGroup.getGroupEmail());
-				group.setgId(ipGroup.getGroupId());
-				group.setgName(ipGroup.getGroupName());
-				group.setIsActive(ipGroup.getGroupStatus().equalsIgnoreCase("y"));
-				group.setCrtdDate(ipGroup.getGroupCrtdDt());
-				if (ipGroup.getIpGroup() != null) {
-					group.setpGrpId(ipGroup.getIpGroup().getGroupId());
-					group.setpGrpName(ipGroup.getIpGroup().getGroupName());
-				}
-				if (ipGroup.getIpUser() != null) {
-					group.setAdmUserId(ipGroup.getIpUser().getUserId());
-					group.setAdmUserName(ipGroup.getIpUser().getUserScreenName());
-				}
-				List guList = ipGroupUserDAO.fetchByGroupId(ipGroup.getGroupId());
-				Long[] uList = new Long[guList.size()];
-				int i = 0;
-				for (Object guObj : guList) {
-					IpGroupUser gu = (IpGroupUser) guObj;
-					uList[i] = gu.getIpUser().getUserId();
-					i++;
-				}
-				group.setUserIdList(uList);
+				GroupMessage group = getGroupMessage(ipGroup);
 				ret.add((T) group);
 			}
 		} catch (Exception e) {
@@ -367,6 +288,29 @@ public class AdminService {
 		return ret;
 	}
 
+	private FunctionMessage getFunctionMessage(IpFunction ipFunction) {
+		FunctionMessage function = new FunctionMessage();
+		try {
+			function.setFuncId(ipFunction.getFuncId());
+			function.setFuncName(ipFunction.getFuncName());
+			List fgs = ipFuncGroupDAO.fetchByFuncId(ipFunction.getFuncId());
+			if (fgs != null) {
+				Long[] gList = new Long[fgs.size()];
+				int i = 0;
+				for (Object obj : fgs) {
+					IpFuncGroup fg = (IpFuncGroup) obj;
+					gList[i] = fg.getIpGroup().getGroupId();
+					i++;
+				}
+				function.setGroupIdList(gList);
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
+		return function;
+
+	}
+
 	@GET
 	@Path("/func/list")
 	@Produces("application/json")
@@ -377,20 +321,7 @@ public class AdminService {
 			List functions = ipFunctionDAO.findAll();
 			for (Object object : functions) {
 				IpFunction ipFunction = (IpFunction) object;
-				FunctionMessage function = new FunctionMessage();
-				function.setFuncId(ipFunction.getFuncId());
-				function.setFuncName(ipFunction.getFuncName());
-				List fgs = ipFuncGroupDAO.fetchByFuncId(ipFunction.getFuncId());
-				if (fgs != null) {
-					Long[] gList = new Long[fgs.size()];
-					int i = 0;
-					for (Object obj : fgs) {
-						IpFuncGroup fg = (IpFuncGroup) obj;
-						gList[i] = fg.getIpGroup().getGroupId();
-						i++;
-					}
-					function.setGroupIdList(gList);
-				}
+				FunctionMessage function = getFunctionMessage(ipFunction);
 				ret.add((T) function);
 			}
 		} catch (Exception e) {
@@ -410,20 +341,8 @@ public class AdminService {
 			if (functions != null) {
 				for (Object object : functions) {
 					IpFunction ipFunction = ((IpFuncGroup) object).getIpFunction();
-					FunctionMessage function = new FunctionMessage();
+					FunctionMessage function = getFunctionMessage(ipFunction);
 					function.setFuncId(ipFunction.getFuncId());
-					function.setFuncName(ipFunction.getFuncName());
-					List fgs = ipFuncGroupDAO.fetchByFuncId(ipFunction.getFuncId());
-					if (fgs != null) {
-						Long[] gList = new Long[fgs.size()];
-						int i = 0;
-						for (Object obj : fgs) {
-							IpFuncGroup fg = (IpFuncGroup) obj;
-							gList[i] = fg.getIpGroup().getGroupId();
-							i++;
-						}
-						function.setGroupIdList(gList);
-					}
 					ret.add((T) function);
 				}
 			}
@@ -461,19 +380,7 @@ public class AdminService {
 		FunctionMessage function = new FunctionMessage();
 		try {
 			IpFunction ipFunction = ipFunctionDAO.findById(id);
-			function.setFuncId(ipFunction.getFuncId());
-			function.setFuncName(ipFunction.getFuncName());
-			List fgs = ipFuncGroupDAO.fetchByFuncId(ipFunction.getFuncId());
-			if (fgs != null) {
-				Long[] gList = new Long[fgs.size()];
-				int i = 0;
-				for (Object obj : fgs) {
-					IpFuncGroup fg = (IpFuncGroup) obj;
-					gList[i] = fg.getIpGroup().getGroupId();
-					i++;
-				}
-				function.setGroupIdList(gList);
-			}
+			function = getFunctionMessage(ipFunction);
 		} catch (Exception e) {
 			logger.error(e, e);
 		}
@@ -488,24 +395,7 @@ public class AdminService {
 		GroupMessage group = new GroupMessage();
 		try {
 			IpGroup ipGroup = ipGroupDAO.findById(id);
-			group.setGeMail(ipGroup.getGroupEmail());
-			group.setgId(ipGroup.getGroupId());
-			group.setgName(ipGroup.getGroupName());
-			group.setIsActive(ipGroup.getGroupStatus().equalsIgnoreCase("y"));
-			group.setCrtdDate(ipGroup.getGroupCrtdDt());
-			if (ipGroup.getIpGroup() != null)
-				group.setpGrpId(ipGroup.getIpGroup().getGroupId());
-			if (ipGroup.getIpUser() != null)
-				group.setAdmUserId(ipGroup.getIpUser().getUserId());
-			List guList = ipGroupUserDAO.fetchByGroupId(id);
-			Long[] uList = new Long[guList.size()];
-			int i = 0;
-			for (Object guObj : guList) {
-				IpGroupUser gu = (IpGroupUser) guObj;
-				uList[i] = gu.getIpUser().getUserId();
-				i++;
-			}
-			group.setUserIdList(uList);
+			group = getGroupMessage(ipGroup);
 		} catch (Exception e) {
 			logger.error(e, e);
 		}
@@ -698,6 +588,54 @@ public class AdminService {
 		}
 	}
 
+	private UserMessage getUserMessage(IpUser ipUser) {
+		UserMessage user = new UserMessage();
+		try {
+			user.setuId(ipUser.getUserId());
+			user.setContact(ipUser.getUserContact());
+			user.seteMail(ipUser.getUserEmail());
+			user.setfName(ipUser.getUserFName());
+			user.setIdNum(ipUser.getUserIdNum());
+			user.setlName(ipUser.getUserLName());
+			user.setScName(ipUser.getUserScreenName());
+			user.setSkills(ipUser.getUserSkills());
+			user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
+			user.setEmployeeId(ipUser.getUserEmployeeId());
+			user.setuCrtdDate(ipUser.getUserCrtdDt());
+			if (ipUser.getIpGroup() != null) {
+				user.setGroupId(ipUser.getIpGroup().getGroupId());
+				user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
+			}
+			if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
+				user.setFbHandle(ipUser.getUserFbHandle());
+			if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
+				user.setBio(ipUser.getUserBio());
+			if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
+				user.setmName(ipUser.getUserMName());
+			if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
+				user.setTwHandle(ipUser.getUserTwHandle());
+			if (ipUser.getIpGroup() != null) {
+				user.setGroupId(ipUser.getIpGroup().getGroupId());
+				IpBlob grpBlob = ipBlobDAO.getBlobByEntity(user.getGroupId(), "ip_group");
+				if (grpBlob != null) {
+					user.setGrpImgAvail(true);
+					user.setGrpImgPath("ip_group/" + user.getGroupId() + "/" + grpBlob.getBlobName());
+				} else
+					user.setGrpImgAvail(false);
+			} else
+				user.setGrpImgAvail(false);
+			IpBlob blob = ipBlobDAO.getBlobByEntity(user.getuId(), "ip_user");
+			if (blob != null) {
+				user.setImgPath("ip_user/" + user.getuId() + "/" + blob.getBlobName());
+				user.setImgAvail(true);
+			} else
+				user.setImgAvail(false);
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
+		return user;
+	}
+
 	@GET
 	@Path("/user/list")
 	@Produces("application/json")
@@ -708,30 +646,7 @@ public class AdminService {
 			List users = ipUserDAO.findAll();
 			for (Object object : users) {
 				IpUser ipUser = (IpUser) object;
-				UserMessage user = new UserMessage();
-				user.setuId(ipUser.getUserId());
-				user.setContact(ipUser.getUserContact());
-				user.seteMail(ipUser.getUserEmail());
-				user.setfName(ipUser.getUserFName());
-				user.setIdNum(ipUser.getUserIdNum());
-				user.setlName(ipUser.getUserLName());
-				user.setScName(ipUser.getUserScreenName());
-				user.setSkills(ipUser.getUserSkills());
-				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
-				user.setEmployeeId(ipUser.getUserEmployeeId());
-				user.setuCrtdDate(ipUser.getUserCrtdDt());
-				if (ipUser.getIpGroup() != null) {
-					user.setGroupId(ipUser.getIpGroup().getGroupId());
-					user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
-				}
-				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
-					user.setFbHandle(ipUser.getUserFbHandle());
-				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
-					user.setBio(ipUser.getUserBio());
-				if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
-					user.setmName(ipUser.getUserMName());
-				if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
-					user.setTwHandle(ipUser.getUserTwHandle());
+				UserMessage user = getUserMessage(ipUser);
 				ret.add((T) user);
 			}
 		} catch (Exception e) {
@@ -750,30 +665,7 @@ public class AdminService {
 			List users = ipUserDAO.fetchActiveUsers();
 			for (Object object : users) {
 				IpUser ipUser = (IpUser) object;
-				UserMessage user = new UserMessage();
-				user.setuId(ipUser.getUserId());
-				user.setContact(ipUser.getUserContact());
-				user.seteMail(ipUser.getUserEmail());
-				user.setfName(ipUser.getUserFName());
-				user.setIdNum(ipUser.getUserIdNum());
-				user.setlName(ipUser.getUserLName());
-				user.setScName(ipUser.getUserScreenName());
-				user.setSkills(ipUser.getUserSkills());
-				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
-				user.setEmployeeId(ipUser.getUserEmployeeId());
-				user.setuCrtdDate(ipUser.getUserCrtdDt());
-				if (ipUser.getIpGroup() != null) {
-					user.setGroupId(ipUser.getIpGroup().getGroupId());
-					user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
-				}
-				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
-					user.setFbHandle(ipUser.getUserFbHandle());
-				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
-					user.setBio(ipUser.getUserBio());
-				if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
-					user.setmName(ipUser.getUserMName());
-				if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
-					user.setTwHandle(ipUser.getUserTwHandle());
+				UserMessage user = getUserMessage(ipUser);
 				ret.add((T) user);
 			}
 		} catch (Exception e) {
@@ -792,30 +684,7 @@ public class AdminService {
 			List users = ipUserDAO.fetchInActiveUsers();
 			for (Object object : users) {
 				IpUser ipUser = (IpUser) object;
-				UserMessage user = new UserMessage();
-				user.setuId(ipUser.getUserId());
-				user.setContact(ipUser.getUserContact());
-				user.seteMail(ipUser.getUserEmail());
-				user.setfName(ipUser.getUserFName());
-				user.setIdNum(ipUser.getUserIdNum());
-				user.setlName(ipUser.getUserLName());
-				user.setScName(ipUser.getUserScreenName());
-				user.setSkills(ipUser.getUserSkills());
-				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
-				user.setEmployeeId(ipUser.getUserEmployeeId());
-				user.setuCrtdDate(ipUser.getUserCrtdDt());
-				if (ipUser.getIpGroup() != null) {
-					user.setGroupId(ipUser.getIpGroup().getGroupId());
-					user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
-				}
-				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
-					user.setFbHandle(ipUser.getUserFbHandle());
-				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
-					user.setBio(ipUser.getUserBio());
-				if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
-					user.setmName(ipUser.getUserMName());
-				if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
-					user.setTwHandle(ipUser.getUserTwHandle());
+				UserMessage user = getUserMessage(ipUser);
 				ret.add((T) user);
 			}
 		} catch (Exception e) {
@@ -834,30 +703,7 @@ public class AdminService {
 			List users = ipUserDAO.fetchSortByPrimaryGroup();
 			for (Object object : users) {
 				IpUser ipUser = (IpUser) object;
-				UserMessage user = new UserMessage();
-				user.setuId(ipUser.getUserId());
-				user.setContact(ipUser.getUserContact());
-				user.seteMail(ipUser.getUserEmail());
-				user.setfName(ipUser.getUserFName());
-				user.setIdNum(ipUser.getUserIdNum());
-				user.setlName(ipUser.getUserLName());
-				user.setScName(ipUser.getUserScreenName());
-				user.setSkills(ipUser.getUserSkills());
-				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
-				user.setEmployeeId(ipUser.getUserEmployeeId());
-				user.setuCrtdDate(ipUser.getUserCrtdDt());
-				if (ipUser.getIpGroup() != null) {
-					user.setGroupId(ipUser.getIpGroup().getGroupId());
-					user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
-				}
-				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
-					user.setFbHandle(ipUser.getUserFbHandle());
-				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
-					user.setBio(ipUser.getUserBio());
-				if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
-					user.setmName(ipUser.getUserMName());
-				if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
-					user.setTwHandle(ipUser.getUserTwHandle());
+				UserMessage user = getUserMessage(ipUser);
 				ret.add((T) user);
 			}
 		} catch (Exception e) {
@@ -874,29 +720,7 @@ public class AdminService {
 		UserMessage user = new UserMessage();
 		try {
 			IpUser ipUser = ipUserDAO.findById(id);
-			user.setuId(ipUser.getUserId());
-			user.setContact(ipUser.getUserContact());
-			user.seteMail(ipUser.getUserEmail());
-			user.setfName(ipUser.getUserFName());
-			user.setIdNum(ipUser.getUserIdNum());
-			user.setlName(ipUser.getUserLName());
-			user.setScName(ipUser.getUserScreenName());
-			user.setSkills(ipUser.getUserSkills());
-			user.setEmployeeId(ipUser.getUserEmployeeId());
-			user.setuCrtdDate(ipUser.getUserCrtdDt());
-			user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
-			if (ipUser.getIpGroup() != null) {
-				user.setGroupId(ipUser.getIpGroup().getGroupId());
-				user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
-			}
-			if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
-				user.setFbHandle(ipUser.getUserFbHandle());
-			if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
-				user.setBio(ipUser.getUserBio());
-			if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
-				user.setmName(ipUser.getUserMName());
-			if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
-				user.setTwHandle(ipUser.getUserTwHandle());
+			user = getUserMessage(ipUser);
 		} catch (Exception e) {
 			logger.error(e, e);
 		}
@@ -1062,36 +886,10 @@ public class AdminService {
 			if (ipUser.getUserStatus().equalsIgnoreCase("n")) {
 				user.setuId(-999l);
 			} else {
-				user.setuId(ipUser.getUserId());
-				user.setContact(ipUser.getUserContact());
-				user.seteMail(ipUser.getUserEmail());
-				user.setfName(ipUser.getUserFName());
-				user.setIdNum(ipUser.getUserIdNum());
-				user.setlName(ipUser.getUserLName());
-				user.setScName(ipUser.getUserScreenName());
-				user.setSkills(ipUser.getUserSkills());
-				user.setuCrtdDate(ipUser.getUserCrtdDt());
-				if (ipUser.getIpGroup() != null)
-					user.setGroupId(ipUser.getIpGroup().getGroupId());
-				user.setPriGroupName(ipGroupDAO.findById(ipUser.getIpGroup().getGroupId()).getGroupName());
-				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
-				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
-					user.setFbHandle(ipUser.getUserFbHandle());
-				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
-					user.setBio(ipUser.getUserBio());
-				if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
-					user.setmName(ipUser.getUserMName());
-				if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
-					user.setTwHandle(ipUser.getUserTwHandle());
-				user.setLastLoginDt(ipLogin.getLoginLastDt());
 				ipLogin.setLoginLastDt(new Date(System.currentTimeMillis()));
 				ipLoginDAO.merge(ipLogin);
-				IpBlob blob = ipBlobDAO.getBlobByEntity(ipUser.getUserId(), "ip_user");
-				if (blob != null) {
-					user.setImgPath("ip_user/" + ipUser.getUserId() + "/" + blob.getBlobName());
-					user.setImgAvail(true);
-				} else
-					user.setImgAvail(false);
+				user = getUserMessage(ipUser);
+				user.setLastLoginDt(ipLogin.getLoginLastDt());
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -1109,35 +907,7 @@ public class AdminService {
 			List logins = ipLoginDAO.fetchLogin(login);
 			IpLogin ipLogin = (IpLogin) logins.get(0);
 			IpUser ipUser = ipLogin.getIpUser();
-			user.setuId(ipUser.getUserId());
-			user.setContact(ipUser.getUserContact());
-			user.seteMail(ipUser.getUserEmail());
-			user.setfName(ipUser.getUserFName());
-			user.setIdNum(ipUser.getUserIdNum());
-			user.setlName(ipUser.getUserLName());
-			user.setScName(ipUser.getUserScreenName());
-			user.setSkills(ipUser.getUserSkills());
-			user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
-			user.setLastLoginDt(ipLogin.getLoginLastDt());
-			user.setSecA(ipLogin.getLoginSecA());
-			user.setuCrtdDate(ipUser.getUserCrtdDt());
-			user.setSecQ(ipLogin.getIpSecqList().getIslId());
-			if (ipUser.getIpGroup() != null) {
-				user.setGroupId(ipUser.getIpGroup().getGroupId());
-				IpBlob grpBlob = ipBlobDAO.getBlobByEntity(user.getGroupId(), "ip_group");
-				if (grpBlob != null) {
-					user.setGrpImgAvail(true);
-					user.setGrpImgPath("ip_group/" + user.getGroupId() + "/" + grpBlob.getBlobName());
-				} else
-					user.setGrpImgAvail(false);
-			} else
-				user.setGrpImgAvail(false);
-			IpBlob blob = ipBlobDAO.getBlobByEntity(user.getuId(), "ip_user");
-			if (blob != null) {
-				user.setImgPath("ip_user/" + user.getuId() + "/" + blob.getBlobName());
-				user.setImgAvail(true);
-			} else
-				user.setImgAvail(false);
+			user = getUserMessage(ipUser);
 		} catch (Exception e) {
 			logger.error(e, e);
 		}

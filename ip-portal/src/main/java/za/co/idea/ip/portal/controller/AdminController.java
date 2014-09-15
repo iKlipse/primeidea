@@ -30,8 +30,8 @@ import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -1162,21 +1162,64 @@ public class AdminController implements Serializable {
 				workbook = new HSSFWorkbook(uploadUser.getStream());
 			Sheet sheet = workbook.getSheetAt(0);
 			Row row = sheet.getRow(i);
-			Cell cell0 = row.getCell(0);
-			while ((cell0 != null && cell0.getStringCellValue() != null) || cell0.getStringCellValue().length() != 0) {
+			String empCode = "";
+			try {
+				if (row.getCell(0) != null && row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_STRING) {
+					empCode = row.getCell(0).getStringCellValue();
+				} else if (row.getCell(0) != null && row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+					empCode = row.getCell(0).getNumericCellValue() + "";
+				}
+			} catch (Exception e) {
+				logger.error("Error : " + e);
+			}
+			while (empCode.length() != 0) {
 				try {
 					UserBean bean = new UserBean();
-					bean.setContact("+27 " + row.getCell(5).getStringCellValue().substring(1));
-					bean.seteMail(row.getCell(6).getStringCellValue());
-					bean.setEmployeeId(row.getCell(0).getStringCellValue());
-					bean.setIdNum(Long.valueOf(row.getCell(4).getStringCellValue()));
+					String contactNum = "";
+					String mailID = "";
+					Long idNum = 0l;
+					String lName = "";
+					String fname = "";
+					String initial = "";
+					try {
+						if (row.getCell(1) != null && row.getCell(1).getCellType() == HSSFCell.CELL_TYPE_STRING) {
+							lName = row.getCell(1).getStringCellValue();
+						}
+						if (row.getCell(2) != null && row.getCell(2).getCellType() == HSSFCell.CELL_TYPE_STRING) {
+							initial = row.getCell(2).getStringCellValue();
+						}
+						if (row.getCell(3) != null && row.getCell(3).getCellType() == HSSFCell.CELL_TYPE_STRING) {
+							fname = row.getCell(3).getStringCellValue();
+						}
+						if (row.getCell(4) != null && row.getCell(4).getCellType() == HSSFCell.CELL_TYPE_STRING) {
+							idNum = Long.parseLong(row.getCell(4).getStringCellValue());
+						} else if (row.getCell(4) != null && row.getCell(4).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+							idNum = (long) row.getCell(4).getNumericCellValue();
+						}
+						if (row.getCell(5) != null && row.getCell(5).getCellType() == HSSFCell.CELL_TYPE_STRING) {
+							contactNum = row.getCell(5).getStringCellValue();
+						} else if (row.getCell(5) != null && row.getCell(5).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+							contactNum = row.getCell(5).getNumericCellValue() + "";
+						}
+						if (row.getCell(6) != null && row.getCell(6).getCellType() == HSSFCell.CELL_TYPE_STRING) {
+							mailID = row.getCell(6).getStringCellValue();
+						}
+
+					} catch (Exception e) {
+
+					}
+
+					bean.setContact("+27 " + contactNum.substring(1));
+					bean.seteMail(mailID);
+					bean.setEmployeeId(empCode);
+					bean.setIdNum(idNum);
 					bean.setIsActive(false);
-					bean.setlName(row.getCell(1).getStringCellValue());
-					bean.setfName(row.getCell(3).getStringCellValue());
+					bean.setlName(lName);
+					bean.setfName(fname);
 					bean.setPwd("Passw123");
 					bean.setSecQ(4);
 					bean.setSecA("Johannesburg");
-					bean.setScName(bean.getlName().toLowerCase() + row.getCell(2).getStringCellValue().toLowerCase());
+					bean.setScName(bean.getlName().toLowerCase() + initial.toLowerCase());
 					if (bean.geteMail() != null && bean.geteMail().length() != 0) {
 						WebClient checkEAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/check/email/" + bean.geteMail());
 						Boolean availE = checkEAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
@@ -1185,7 +1228,15 @@ public class AdminController implements Serializable {
 							getUploadErrors().add("EMail Id already registered :: " + bean.geteMail() + " row number :: " + i);
 							i++;
 							row = sheet.getRow(i);
-							cell0 = row.getCell(0);
+							if (row != null) {
+								if (row.getCell(0) != null && row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_STRING) {
+									empCode = row.getCell(0).getStringCellValue();
+								} else if (row.getCell(0) != null && row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+									empCode = row.getCell(0).getNumericCellValue() + "";
+								}
+							} else {
+								empCode = "";
+							}
 							continue;
 						}
 					}
@@ -1197,14 +1248,30 @@ public class AdminController implements Serializable {
 							getUploadErrors().add("Id Number already registered :: " + bean.getIdNum() + " row number :: " + i);
 							i++;
 							row = sheet.getRow(i);
-							cell0 = row.getCell(0);
+							if (row != null) {
+								if (row.getCell(0) != null && row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_STRING) {
+									empCode = row.getCell(0).getStringCellValue();
+								} else if (row.getCell(0) != null && row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+									empCode = row.getCell(0).getNumericCellValue() + "";
+								}
+							} else {
+								empCode = "";
+							}
 							continue;
 						}
 					} else {
 						getUploadErrors().add("Id Number cannot be empty row number :: " + i);
 						i++;
 						row = sheet.getRow(i);
-						cell0 = row.getCell(0);
+						if (row != null) {
+							if (row.getCell(0) != null && row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_STRING) {
+								empCode = row.getCell(0).getStringCellValue();
+							} else if (row.getCell(0) != null && row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+								empCode = row.getCell(0).getNumericCellValue() + "";
+							}
+						} else {
+							empCode = "";
+						}
 						continue;
 					}
 					if (bean.getEmployeeId() != null && bean.getEmployeeId().length() != 0) {
@@ -1214,8 +1281,15 @@ public class AdminController implements Serializable {
 						if (availEmpID) {
 							getUploadErrors().add("Employee Id already registered :: " + bean.getEmployeeId() + " row number :: " + i);
 							i++;
-							row = sheet.getRow(i);
-							cell0 = row.getCell(0);
+							if (row != null) {
+								if (row.getCell(0) != null && row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_STRING) {
+									empCode = row.getCell(0).getStringCellValue();
+								} else if (row.getCell(0) != null && row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+									empCode = row.getCell(0).getNumericCellValue() + "";
+								}
+							} else {
+								empCode = "";
+							}
 							continue;
 						}
 					}
@@ -1240,13 +1314,22 @@ public class AdminController implements Serializable {
 					msg.setSecA(bean.getSecA());
 					msg.setEmployeeId(bean.getEmployeeId());
 					msg.setGroupId(14l);
+					msg.setuCrtdDate(new Date());
 					ResponseMessage response = addUserClient.accept(MediaType.APPLICATION_JSON).post(msg, ResponseMessage.class);
 					addUserClient.close();
 					if (response.getStatusCode() != 0) {
 						getUploadErrors().add("User creation service call failed due to :: " + response.getStatusDesc() + " row number :: " + i);
 						i++;
 						row = sheet.getRow(i);
-						cell0 = row.getCell(0);
+						if (row != null) {
+							if (row.getCell(0) != null && row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_STRING) {
+								empCode = row.getCell(0).getStringCellValue();
+							} else if (row.getCell(0) != null && row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+								empCode = row.getCell(0).getNumericCellValue() + "";
+							}
+						} else {
+							empCode = "";
+						}
 						continue;
 					}
 				} catch (Exception e) {
@@ -1254,12 +1337,28 @@ public class AdminController implements Serializable {
 					getUploadErrors().add("User creation service call failed due to :: " + e.getMessage() + " row number :: " + i);
 					i++;
 					row = sheet.getRow(i);
-					cell0 = row.getCell(0);
+					if (row != null) {
+						if (row.getCell(0) != null && row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_STRING) {
+							empCode = row.getCell(0).getStringCellValue();
+						} else if (row.getCell(0) != null && row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+							empCode = row.getCell(0).getNumericCellValue() + "";
+						}
+					} else {
+						empCode = "";
+					}
 					continue;
 				}
 				i++;
 				row = sheet.getRow(i);
-				cell0 = row.getCell(0);
+				if (row != null) {
+					if (row.getCell(0) != null && row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_STRING) {
+						empCode = row.getCell(0).getStringCellValue();
+					} else if (row.getCell(0) != null && row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+						empCode = row.getCell(0).getNumericCellValue() + "";
+					}
+				} else {
+					empCode = "";
+				}
 			}
 		} catch (Exception e) {
 			logger.error(e, e);

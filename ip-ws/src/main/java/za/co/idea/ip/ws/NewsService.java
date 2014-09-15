@@ -101,6 +101,30 @@ public class NewsService {
 		}
 	}
 
+	private NewsMessage getNewsMessage(IpNews news) {
+		NewsMessage message = new NewsMessage();
+		try {
+			message.setnId(news.getNewsId());
+			message.setContent(news.getNewsContent());
+			message.setStartDate(news.getNewsStartDate());
+			message.setEndDate(news.getNewsEndDate());
+			message.setnTitle(news.getNewsTitle());
+			message.setNewsCrtdDt(news.getNewsCrtdDt());
+			IpBlob ipBlob = ipBlobDAO.getBlobByEntity(news.getNewsId(), "ip_news");
+			if (ipBlob != null) {
+				message.setNewsUrl("ip_news/" + news.getNewsId() + "/" + ipBlob.getBlobName());
+				message.setNwImgAvail(true);
+				message.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
+				message.setFileName(ipBlob.getBlobName());
+			} else {
+				message.setNwImgAvail(false);
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
+		return message;
+	}
+
 	@GET
 	@Path("/news/list")
 	@Produces("application/json")
@@ -113,22 +137,7 @@ public class NewsService {
 			logger.info("After retrieving all news details from IpNewsDAO  ");
 			for (Object object : vals) {
 				IpNews news = (IpNews) object;
-				NewsMessage message = new NewsMessage();
-				message.setnId(news.getNewsId());
-				message.setContent(news.getNewsContent());
-				message.setStartDate(news.getNewsStartDate());
-				message.setEndDate(news.getNewsEndDate());
-				message.setnTitle(news.getNewsTitle());
-				message.setNewsCrtdDt(news.getNewsCrtdDt());
-				IpBlob ipBlob = ipBlobDAO.getBlobByEntity(news.getNewsId(), "ip_news");
-				if (ipBlob != null) {
-					message.setNewsUrl("ip_news/" + news.getNewsId() + "/" + ipBlob.getBlobName());
-					message.setNwImgAvail(true);
-					message.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
-					message.setFileName(ipBlob.getBlobName());
-				} else {
-					message.setNwImgAvail(false);
-				}
+				NewsMessage message = getNewsMessage(news);
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
@@ -149,22 +158,7 @@ public class NewsService {
 			logger.debug("Control handled in getNewsById() of service /news/get/{id} call");
 			IpNews news = ipNewsDAO.findById(id);
 			logger.info("After retrieving news details based on Id from IpNewsDAO  ");
-			message.setnId(news.getNewsId());
-			logger.info("Retrieved news : " + news.getNewsTitle() + " based on Id : " + news.getNewsId());
-			message.setContent(news.getNewsContent());
-			message.setStartDate(news.getNewsStartDate());
-			message.setEndDate(news.getNewsEndDate());
-			message.setnTitle(news.getNewsTitle());
-			message.setNewsCrtdDt(news.getNewsCrtdDt());
-			IpBlob ipBlob = ipBlobDAO.getBlobByEntity(news.getNewsId(), "ip_news");
-			if (ipBlob != null) {
-				logger.info(" News attachment URL : " + "ip_news/" + news.getNewsId() + "/" + ipBlob.getBlobName());
-				message.setNewsUrl("ip_news/" + news.getNewsId() + "/" + ipBlob.getBlobName());
-				message.setNwImgAvail(true);
-				message.setFileName(ipBlob.getBlobName());
-			} else {
-				message.setNwImgAvail(false);
-			}
+			message = getNewsMessage(news);
 		} catch (Exception e) {
 			logger.error("Error while news based on news id  : " + e.getMessage());
 			logger.error(e, e);

@@ -53,7 +53,7 @@
 			<p:outputLabel id="lblCUpload" value="Upload File : " />
 		</p:column>
 		<p:column>
-			<p:fileUpload id="fuCEUpload" fileUploadListener="#{challengeController.chalFileUploadHandle}" multiple="false" />
+			<p:fileUpload id="fuCEUpload" fileUploadListener="#{challengeController.chalFileUploadHandle}" multiple="false" dragDropSupport="true" sizeLimit="100000" fileLimit="3" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblFuncGrps" value="Challenge Groups" />

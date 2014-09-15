@@ -39,7 +39,7 @@
 			<p:outputLabel id="lblCrtSUpload" value="Upload File : " />
 		</p:column>
 		<p:column>
-			<p:fileUpload id="fuCrtSUpload" fileUploadListener="#{challengeController.solFileUploadHandle}" multiple="false" />
+			<p:fileUpload id="fuCrtSUpload" fileUploadListener="#{challengeController.solFileUploadHandle}" multiple="false" dragDropSupport="true" sizeLimit="100000" fileLimit="3" />
 		</p:column>
 		<f:facet name="footer">
 			<p:commandButton id="btnCrtSave" value="Save" action="#{challengeController.saveSolution}" update="@namingcontainer, :frmSolCtrlr:frmSolCtrlrMsg">
