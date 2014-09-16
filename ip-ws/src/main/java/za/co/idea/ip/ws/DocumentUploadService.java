@@ -90,7 +90,7 @@ public class DocumentUploadService {
 				logger.info("-----" + (BUNDLE.getString("base.dir") + File.separator + blob.getBlobEntityTblNm() + File.separator + blob.getBlobEntityId() + File.separator + blob.getBlobName()));
 				File file = new File(BUNDLE.getString("base.dir") + File.separator + blob.getBlobEntityTblNm() + File.separator + blob.getBlobEntityId() + File.separator + blob.getBlobName());
 				if (file.getParentFile().exists()) {
-					if (!nextExists) {
+					if (nextExists) {
 						logger.info("----next exits in doc");
 						FileUtils.cleanDirectory(file.getParentFile());
 					}

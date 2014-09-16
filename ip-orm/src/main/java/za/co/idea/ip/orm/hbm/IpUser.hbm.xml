@@ -143,8 +143,9 @@
 		<return-scalar column="ideaCount" type="java.lang.Long" />
 	</sql-query>
 	<sql-query name="getWhishListCountByUserId">
-		select count(*) as whishListCount from ip_tag t where
-		t.tag_user_id=:id and t.tag_entity_type=4 and t.tag_type=4
+		select count(*) as whishListCount from ip_rewards rw, ip_tag t where
+		t.tag_entity_id=rw.rw_id and t.tag_user_id=:id and t.tag_entity_type=4
+		and t.tag_type=4
 		<return-scalar column="whishListCount" type="java.lang.Long" />
 	</sql-query>
 </hibernate-mapping>

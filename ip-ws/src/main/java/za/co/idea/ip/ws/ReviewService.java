@@ -1,5 +1,6 @@
 package za.co.idea.ip.ws;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +23,7 @@ import za.co.idea.ip.orm.dao.IpReviewDAO;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.ReviewMessage;
 
-@SuppressWarnings({ "rawtypes" })
+@SuppressWarnings({ "rawtypes", "unchecked" })
 @Path(value = "/rvs")
 public class ReviewService {
 	private static final Logger logger = Logger.getLogger(ReviewService.class);
@@ -128,21 +129,28 @@ public class ReviewService {
 	@Path("/review/list/all/{entityId}/{tblNm}")
 	@Produces("application/json")
 	@Transactional(propagation = Propagation.REQUIRED)
-	public ReviewMessage listAllReviewsByEntity(@PathParam("entityId") Long entityId, @PathParam("tblNm") String tblNm) {
-		List rvs = ipReviewDAO.findAllByEntityIdEntityName(entityId, tblNm);
-		ReviewMessage message = new ReviewMessage();
-		message.setEntityId(entityId);
-		message.setTblNm(tblNm);
-		if (rvs != null && rvs.size() > 0) {
-			Long[] grps = new Long[rvs.size()];
-			int i = 0;
-			for (Object object : rvs) {
-				IpReview review = (IpReview) object;
-				grps[i] = review.getIpGroup().getGroupId();
+	public <T extends ReviewMessage> List<T> listAllReviewsByEntity(@PathParam("entityId") Long entityId, @PathParam("tblNm") String tblNm) {
+		List<T> ret = new ArrayList<T>();
+		int i = ipReviewDAO.findReviewStatusCount(entityId, tblNm);
+		for (int j = 0; j < i; j++) {
+			List rvs = ipReviewDAO.findByEntityIdEntityName(entityId, tblNm, j + 1);
+			ReviewMessage message = new ReviewMessage();
+			message.setEntityId(entityId);
+			message.setStatusId(j);
+			message.setTblNm(tblNm);
+			if (rvs != null && rvs.size() > 0) {
+				Long[] grps = new Long[rvs.size()];
+				int k = 0;
+				for (Object object : rvs) {
+					IpReview review = (IpReview) object;
+					grps[k] = review.getIpGroup().getGroupId();
+					k++;
+				}
+				message.setGroupId(grps);
 			}
-			message.setGroupId(grps);
+			ret.add((T) message);
 		}
-		return message;
+		return ret;
 	}
 
 	@GET

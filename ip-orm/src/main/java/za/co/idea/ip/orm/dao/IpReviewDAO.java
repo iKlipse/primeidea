@@ -216,7 +216,7 @@ public class IpReviewDAO extends HibernateDaoSupport {
 	public Integer findReviewStatusCount(Long entityId, String entityName) {
 		log.debug("finding all reviews by entity id");
 		try {
-			Query query = getSession().getNamedQuery("getReviewByUserId");
+			Query query = getSession().getNamedQuery("getReviewStatusCnt");
 			query.setLong("id", entityId);
 			query.setString("tblNm", entityName);
 			List ret = query.list();

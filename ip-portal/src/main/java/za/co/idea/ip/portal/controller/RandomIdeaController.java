@@ -550,9 +550,9 @@ public class RandomIdeaController implements Serializable {
 					ideaMessage.setGroupIdList(getLongArray(selGroupId));
 					ideaMessage.setRvIdCnt(rvIdCnt);
 					if (saveAsOpen) {
-						ideaMessage.setSetStatusId(2l);
-					} else {
 						ideaMessage.setSetStatusId(1l);
+					} else {
+						ideaMessage.setSetStatusId(2l);
 					}
 					ResponseMessage response = addIdeaClient.accept(MediaType.APPLICATION_JSON).post(ideaMessage, ResponseMessage.class);
 					addIdeaClient.close();
@@ -587,9 +587,9 @@ public class RandomIdeaController implements Serializable {
 						saveAsOpen = false;
 						uploadFiles = null;
 						if (ideaMessage.getSetStatusId().longValue() == 2l)
-							showViewOpenIdeas();
-						else
 							showViewIdeas();
+						else
+							showViewOpenIdeas();
 						ideaBean = new IdeaBean();
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Idea Saved", "Idea Saved");
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);

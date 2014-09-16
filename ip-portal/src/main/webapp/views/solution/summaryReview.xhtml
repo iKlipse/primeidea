@@ -37,11 +37,11 @@
 		<p:column>
 			<p:panelGrid styleClass="panelGridView" columns="3">
 				<p:column>
-					<p:p:commandButton id="giLike" icon="ui-icon-heart" actionListener="#{challengeController.likeSolution}" update="lblLikeCnt, :frmRVwSummarySol:tgLikes" disabled="#{challengeController.solutionBean.taggable}">
+					<p:commandButton id="giLike" icon="ui-icon-heart" actionListener="#{challengeController.likeSolution}" update="lblLikeCnt, :frmRVwSummarySol:tgLikes" disabled="#{challengeController.solutionBean.taggable}">
 						<p:outputLabel id="lblLikeCnt" value="#{challengeController.solLikeCnt}" />
 						<!-- <p:graphicImage id="giLike" name="like-128.png" library="images" height="25px" width="25px" /> -->
 						<p:tooltip for="giLike" value="Tags disabled as solution not in open status" rendered="#{challengeController.solutionBean.taggable}" />
-					</p:p:commandButton>
+					</p:commandButton>
 				</p:column>
 				<p:column>
 				<p:commandButton id="giComment" icon="ui-icon-comment" >
@@ -51,7 +51,7 @@
 					</p:commandButton>
 				</p:column>
 				<p:column>
-					<p:p:commandButton id="giBuildOn" icon="ui-icon-note" action="#{buildonController.showBuildon}" ajax="false">
+					<p:commandButton id="giBuildOn" icon="ui-icon-note" action="#{buildonController.showBuildon}" ajax="false">
 						<f:setPropertyActionListener value="#{challengeController.userId}" target="#{buildonController.userId}" />
 						<f:setPropertyActionListener value="6" target="#{buildonController.returnView}" />
 						<f:param name="entityId" id="entityId" value="#{challengeController.solutionBean.id}" />

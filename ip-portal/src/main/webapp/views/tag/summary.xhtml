@@ -34,7 +34,7 @@
 			<p:column>
 				<p:panelGrid styleClass="panelGridView" columns="2">
 					<p:column>
-						<p:p:commandButton id="giLike" icon="ui-icon-heart" action="#{buildonController.likeBuildon}" update="lblLikeCnt, :frmTagSummary:tgLikes" disabled="#{buildonController.taggable}">
+						<p:commandButton id="giLike" icon="ui-icon-heart" action="#{buildonController.likeBuildon}" update="lblLikeCnt, :frmTagSummary:tgLikes" disabled="#{buildonController.taggable}">
 							<p:outputLabel id="lblLikeCnt" value="#{buildonController.buildonLikeCnt}" />
 							<!--  <p:graphicImage id="giLike" name="like-128.png" library="images" height="25px" width="25px" /> -->
 							<p:tooltip for="giLike" value="Tags disabled as item not in open status" rendered="#{buildonController.taggable}" />

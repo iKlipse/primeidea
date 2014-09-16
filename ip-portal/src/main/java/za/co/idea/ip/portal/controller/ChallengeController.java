@@ -550,7 +550,7 @@ public class ChallengeController implements Serializable {
 				if (getChalUploadFiles().size() > 0) {
 					WebClient deleteBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/delete/" + message.getId() + "/ip_challenge");
 					Response res = deleteBlobClient.accept(MediaType.APPLICATION_JSON).get();
-					if (res.getStatus() == 0) {
+					if (res.getStatus() == 200) {
 						int i = 0;
 						for (FileBean bean : getChalUploadFiles()) {
 							WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/createMulti");
@@ -941,9 +941,9 @@ public class ChallengeController implements Serializable {
 					message.setDesc(solutionBean.getDesc());
 					message.setId(COUNTER.getNextId("IpSolution"));
 					if (saveAsOpen) {
-						message.setStatusId(2);
-					} else {
 						message.setStatusId(1);
+					} else {
+						message.setStatusId(2);
 					}
 					message.setTags(solutionBean.getTags());
 					message.setTitle(solutionBean.getTitle());
@@ -980,9 +980,9 @@ public class ChallengeController implements Serializable {
 						saveAsOpen = false;
 						solUploadFiles = null;
 						if (saveAsOpen) {
-							showViewOpenSolution();
-						} else {
 							showViewSolution();
+						} else {
+							showViewOpenSolution();
 						}
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Solution Saved", "Solution Saved");
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -1030,7 +1030,7 @@ public class ChallengeController implements Serializable {
 				if (getSolUploadFiles().size() > 0) {
 					WebClient deleteBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/delete/" + message.getId() + "/ip_solution");
 					Response res = deleteBlobClient.accept(MediaType.APPLICATION_JSON).get();
-					if (res.getStatus() == 0) {
+					if (res.getStatus() == 200) {
 						int i = 0;
 						for (FileBean bean : getSolUploadFiles()) {
 							WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/createMulti");

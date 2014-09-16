@@ -90,7 +90,6 @@ public class LandingPageController implements Serializable {
 			solutionStatuses = RESTServiceHelper.fetchAllSolutionStatuses();
 			claimStatus = RESTServiceHelper.fetchAllClaimStatuses();
 			viewClaimBeans = RESTServiceHelper.fetchAllClaimsByUser(userId);
-			viewRewardsBeans = RESTServiceHelper.fetchAllRewards();
 			pointBeans = RESTServiceHelper.fetchAllPointsByUser(userId);
 			totalPoints = calculateTotal(pointBeans);
 			rewardsCat = RESTServiceHelper.fetchAllRewardsCat();
