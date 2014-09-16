@@ -478,7 +478,7 @@ public class ChallengeController implements Serializable {
 								attachMessage.setBlobName(bean.getName());
 								attachMessage.setBlobSize(bean.getSize());
 								attachMessage.setBlobId(COUNTER.getNextId("IpBlob"));
-								Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
+								Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attachMessage);
 								createBlobClient.close();
 								if (crtRes.getStatus() == 200) {
 									WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/multiUpload/" + attachMessage.getBlobId() + "/" + ((i == 0) ? "true" : "false"), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
@@ -561,7 +561,7 @@ public class ChallengeController implements Serializable {
 							attachMessage.setBlobName(bean.getName());
 							attachMessage.setBlobSize(bean.getSize());
 							attachMessage.setBlobId(COUNTER.getNextId("IpBlob"));
-							Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
+							Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attachMessage);
 							createBlobClient.close();
 							if (crtRes.getStatus() == 200) {
 								WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/multiUpload/" + attachMessage.getBlobId() + "/" + ((i == 0) ? "true" : "false"), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
@@ -962,7 +962,7 @@ public class ChallengeController implements Serializable {
 								attachMessage.setBlobName(bean.getName());
 								attachMessage.setBlobSize(bean.getSize());
 								attachMessage.setBlobId(COUNTER.getNextId("IpBlob"));
-								Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
+								Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attachMessage);
 								createBlobClient.close();
 								if (crtRes.getStatus() == 200) {
 									WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/multiUpload/" + attachMessage.getBlobId() + "/" + ((i == 0) ? "true" : "false"), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
@@ -1041,7 +1041,7 @@ public class ChallengeController implements Serializable {
 							attachMessage.setBlobName(bean.getName());
 							attachMessage.setBlobSize(bean.getSize());
 							attachMessage.setBlobId(COUNTER.getNextId("IpBlob"));
-							Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
+							Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attachMessage);
 							createBlobClient.close();
 							if (crtRes.getStatus() == 200) {
 								WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/multiUpload/" + attachMessage.getBlobId() + "/" + ((i == 0) ? "true" : "false"), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));

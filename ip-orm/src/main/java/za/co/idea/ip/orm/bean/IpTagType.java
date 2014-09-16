@@ -3,11 +3,19 @@ package za.co.idea.ip.orm.bean;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 /**
  * IpTagType entity. @author MyEclipse Persistence Tools
  */
-
-@SuppressWarnings("rawtypes")
+@Entity
+@Table(name = "ip_tag_type", catalog = "lpdb")
 public class IpTagType implements java.io.Serializable {
 
 	// Fields
@@ -18,7 +26,7 @@ public class IpTagType implements java.io.Serializable {
 	private static final long serialVersionUID = 4368860406018432934L;
 	private Integer ttId;
 	private String ttDesc;
-	private Set ipTags = new HashSet(0);
+	private Set<IpTag> ipTags = new HashSet<IpTag>(0);
 
 	// Constructors
 
@@ -32,14 +40,15 @@ public class IpTagType implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpTagType(Integer ttId, String ttDesc, Set ipTags) {
+	public IpTagType(Integer ttId, String ttDesc, Set<IpTag> ipTags) {
 		this.ttId = ttId;
 		this.ttDesc = ttDesc;
 		this.ipTags = ipTags;
 	}
 
 	// Property accessors
-
+	@Id
+	@Column(name = "tt_id", unique = true, nullable = false)
 	public Integer getTtId() {
 		return this.ttId;
 	}
@@ -48,6 +57,7 @@ public class IpTagType implements java.io.Serializable {
 		this.ttId = ttId;
 	}
 
+	@Column(name = "tt_desc", length = 45)
 	public String getTtDesc() {
 		return this.ttDesc;
 	}
@@ -56,11 +66,12 @@ public class IpTagType implements java.io.Serializable {
 		this.ttDesc = ttDesc;
 	}
 
-	public Set getIpTags() {
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "ipTagType")
+	public Set<IpTag> getIpTags() {
 		return this.ipTags;
 	}
 
-	public void setIpTags(Set ipTags) {
+	public void setIpTags(Set<IpTag> ipTags) {
 		this.ipTags = ipTags;
 	}
 

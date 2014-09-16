@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee" xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
-               http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:task="http://www.springframework.org/schema/task" xsi:schemaLocation="http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 	<import resource="classpath:ipORMContext.xml" />
 	<bean id="adminService" class="za.co.idea.ip.ws.AdminService">
 		<property name="ipGroupDAO" ref="IpGroupDAO" />
@@ -106,74 +107,35 @@
 		<property name="ipNotifGroupDAO" ref="IpNotifGroupDAO" />
 		<property name="ipNotifDAO" ref="IpNotifDAO" />
 	</bean>
-	<bean id="ChallengeExpiryJob" class="org.springframework.scheduling.quartz.JobDetailBean">
-		<property name="jobClass" value="za.co.idea.ip.jobs.ChallengeExpiryJob" />
-		<property name="jobDataAsMap">
-			<map>
-				<entry key="ipChallengeDAO" value-ref="IpChallengeDAO" />
-				<entry key="ipSolutionDAO" value-ref="IpSolutionDAO" />
-			</map>
-		</property>
+	<bean id="ChallengeExpiryJob" class="za.co.idea.ip.jobs.ChallengeExpiryJob">
+		<property name="ipChallengeDAO" ref="IpChallengeDAO" />
+		<property name="ipSolutionDAO" ref="IpSolutionDAO" />
 	</bean>
-	<bean id="AllocateReviewUserJob" class="org.springframework.scheduling.quartz.JobDetailBean">
-		<property name="jobClass" value="za.co.idea.ip.jobs.AllocateReviewUserJob" />
-		<property name="jobDataAsMap">
-			<map>
-				<entry key="ipReviewDAO" value-ref="IpReviewDAO" />
-				<entry key="ipGroupUserDAO" value-ref="IpGroupUserDAO" />
-			</map>
-		</property>
+	<bean id="AllocateReviewUserJob" class="za.co.idea.ip.jobs.AllocateReviewUserJob">
+		<property name="ipReviewDAO" ref="IpReviewDAO" />
+		<property name="ipGroupUserDAO" ref="IpGroupUserDAO" />
 	</bean>
-	<bean id="NotificationEmailJob" class="org.springframework.scheduling.quartz.JobDetailBean">
-		<property name="jobClass" value="za.co.idea.ip.jobs.NotificationEmailJob" />
-		<property name="jobDataAsMap">
-			<map>
-				<entry key="ipNotifDAO" value-ref="IpNotifDAO" />
-				<entry key="ipNotifGroupDAO" value-ref="IpNotifGroupDAO" />
-				<entry key="ipGroupUserDAO" value-ref="IpGroupUserDAO" />
-				<entry key="ipUserDAO" value-ref="IpUserDAO" />
-				<entry key="sender" value-ref="mailSender" />
-			</map>
-		</property>
+	<bean id="NotificationEmailJob" class="za.co.idea.ip.jobs.NotificationEmailJob">
+		<property name="ipNotifDAO" ref="IpNotifDAO" />
+		<property name="ipNotifGroupDAO" ref="IpNotifGroupDAO" />
+		<property name="ipGroupUserDAO" ref="IpGroupUserDAO" />
+		<property name="ipUserDAO" ref="IpUserDAO" />
+		<property name="sender" ref="mailSender" />
 	</bean>
-	<bean id="UserNotificationsJob" class="org.springframework.scheduling.quartz.JobDetailBean">
-		<property name="jobClass" value="za.co.idea.ip.jobs.UserNotificationsJob" />
-		<property name="jobDataAsMap">
-			<map>
-				<entry key="ipChallengeDAO" value-ref="IpChallengeDAO" />
-				<entry key="ipIdeaDAO" value-ref="IpIdeaDAO" />
-				<entry key="ipSolutionDAO" value-ref="IpSolutionDAO" />
-				<entry key="ipUserDAO" value-ref="IpUserDAO" />
-				<entry key="sender" value-ref="mailSender" />
-			</map>
-		</property>
+	<bean id="UserNotificationsJob" class="za.co.idea.ip.jobs.UserNotificationsJob">
+		<property name="ipChallengeDAO" ref="IpChallengeDAO" />
+		<property name="ipIdeaDAO" ref="IpIdeaDAO" />
+		<property name="ipSolutionDAO" ref="IpSolutionDAO" />
+		<property name="ipUserDAO" ref="IpUserDAO" />
+		<property name="sender" ref="mailSender" />
 	</bean>
-	<bean id="ChallengeExpiryJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="ChallengeExpiryJob" />
-		<property name="cronExpression" value="0 1/4 * * * ?" />
-	</bean>
-	<bean id="AllocateReviewUserJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="AllocateReviewUserJob" />
-		<property name="cronExpression" value="0 2/4 * * * ?" />
-	</bean>
-	<bean id="NotificationEmailJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="NotificationEmailJob" />
-		<property name="cronExpression" value="0 3/4 * * * ?" />
-	</bean>
-	<bean id="UserNotificationsJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="UserNotificationsJob" />
-		<property name="cronExpression" value="0 0 12 ? * TUE *" />
-	</bean>
-	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="triggers">
-			<list>
-				<ref bean="ChallengeExpiryJobTrigger" />
-				<ref bean="NotificationEmailJobTrigger" />
-				<ref bean="UserNotificationsJobTrigger" />
-				<ref bean="AllocateReviewUserJobTrigger" />
-			</list>
-		</property>
-	</bean>
+	<task:scheduled-tasks scheduler="ipWSScheduler">
+		<task:scheduled ref="ChallengeExpiryJob" method="executeInternal" cron="0 1/4 * * * ?" />
+		<task:scheduled ref="AllocateReviewUserJob" method="executeInternal" cron="0 2/4 * * * ?" />
+		<task:scheduled ref="NotificationEmailJob" method="executeInternal" cron="0 3/4 * * * ?" />
+		<task:scheduled ref="UserNotificationsJob" method="executeInternal" cron="0 0 12 ? * TUE" />
+	</task:scheduled-tasks>
+	<task:scheduler id="ipWSScheduler" pool-size="40" />
 	<bean id="mailSenderPrimedia" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="javaMailProperties">
 			<props>

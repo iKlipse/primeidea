@@ -1,12 +1,16 @@
 package za.co.idea.ip.orm.dao;
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.LockMode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpIdeaCat;
 
@@ -21,11 +25,22 @@ import za.co.idea.ip.orm.bean.IpIdeaCat;
  * @see za.co.idea.ip.orm.bean.IpIdeaCat
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings({ "rawtypes" })
-public class IpIdeaCatDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(IpIdeaCatDAO.class);
+@Transactional
+@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
+public class IpIdeaCatDAO {
+	private static final Logger log = Logger.getLogger(IpIdeaCatDAO.class);
 	// property constants
 	public static final String IC_DESC = "icDesc";
+
+	private SessionFactory sessionFactory;
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	private Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
 
 	protected void initDao() {
 		// do nothing
@@ -34,7 +49,7 @@ public class IpIdeaCatDAO extends HibernateDaoSupport {
 	public void save(IpIdeaCat transientInstance) {
 		log.debug("saving IpIdeaCat instance");
 		try {
-			getHibernateTemplate().save(transientInstance);
+			getCurrentSession().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -45,7 +60,7 @@ public class IpIdeaCatDAO extends HibernateDaoSupport {
 	public void delete(IpIdeaCat persistentInstance) {
 		log.debug("deleting IpIdeaCat instance");
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -56,7 +71,7 @@ public class IpIdeaCatDAO extends HibernateDaoSupport {
 	public IpIdeaCat findById(java.lang.Integer id) {
 		log.debug("getting IpIdeaCat instance with id: " + id);
 		try {
-			IpIdeaCat instance = (IpIdeaCat) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpIdeaCat", id);
+			IpIdeaCat instance = (IpIdeaCat) getCurrentSession().get("za.co.idea.ip.orm.bean.IpIdeaCat", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -64,10 +79,10 @@ public class IpIdeaCatDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(IpIdeaCat instance) {
+	public List<IpIdeaCat> findByExample(IpIdeaCat instance) {
 		log.debug("finding IpIdeaCat instance by example");
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List<IpIdeaCat> results = (List<IpIdeaCat>) getCurrentSession().createCriteria("za.co.idea.ip.orm.bean.IpIdeaCat").add(create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -80,14 +95,16 @@ public class IpIdeaCatDAO extends HibernateDaoSupport {
 		log.debug("finding IpIdeaCat instance with property: " + propertyName + ", value: " + value);
 		try {
 			String queryString = "from IpIdeaCat as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			queryObject.setParameter(0, value);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
 		}
 	}
 
-	public List findByIcDesc(Object icDesc) {
+	public List<IpIdeaCat> findByIcDesc(Object icDesc) {
 		return findByProperty(IC_DESC, icDesc);
 	}
 
@@ -95,7 +112,8 @@ public class IpIdeaCatDAO extends HibernateDaoSupport {
 		log.debug("finding all IpIdeaCat instances");
 		try {
 			String queryString = "from IpIdeaCat";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -105,7 +123,7 @@ public class IpIdeaCatDAO extends HibernateDaoSupport {
 	public IpIdeaCat merge(IpIdeaCat detachedInstance) {
 		log.debug("merging IpIdeaCat instance");
 		try {
-			IpIdeaCat result = (IpIdeaCat) getHibernateTemplate().merge(detachedInstance);
+			IpIdeaCat result = (IpIdeaCat) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -117,7 +135,7 @@ public class IpIdeaCatDAO extends HibernateDaoSupport {
 	public void attachDirty(IpIdeaCat instance) {
 		log.debug("attaching dirty IpIdeaCat instance");
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -128,7 +146,7 @@ public class IpIdeaCatDAO extends HibernateDaoSupport {
 	public void attachClean(IpIdeaCat instance) {
 		log.debug("attaching clean IpIdeaCat instance");
 		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
+			getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);

@@ -4,18 +4,28 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 /**
  * IpRewards entity. @author MyEclipse Persistence Tools
  */
-
-@SuppressWarnings("rawtypes")
+@Entity
+@Table(name = "ip_rewards", catalog = "lpdb")
+@NamedNativeQueries({ @NamedNativeQuery(name = "getRewardsByUser", query = "select rw.* from ip_rewards rw, ip_tag t where t.tag_entity_id=rw.rw_id and t.tag_user_id=:id and t.tag_entity_type=4 and t.tag_type=4", resultClass = IpRewards.class), @NamedNativeQuery(name = "getRewardsByAvail", query = "select rw.* from ip_rewards rw where current_Date between rw.rw_launch_dt and rw.rw_expiry_dt order by rw.rw_value", resultClass = IpRewards.class), @NamedNativeQuery(name = "getRewardsByCatId", query = "select rw.* from ip_rewards rw where current_Date between rw.rw_launch_dt and rw.rw_expiry_dt and rw.rw_cat=:id", resultClass = IpRewards.class) })
 public class IpRewards implements java.io.Serializable {
 
 	// Fields
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1505845607910378840L;
 	private Long rwId;
 	private IpRewardsCat ipRewardsCat;
@@ -30,8 +40,8 @@ public class IpRewards implements java.io.Serializable {
 	private Date rwCrtdDt;
 	private Double rwPrice;
 	private Long rwQuantity;
-	private Set ipRewardsGroups = new HashSet(0);
-	private Set ipClaims = new HashSet(0);
+	private Set<IpRewardsGroup> ipRewardsGroups = new HashSet<IpRewardsGroup>(0);
+	private Set<IpClaim> ipClaims = new HashSet<IpClaim>(0);
 
 	// Constructors
 
@@ -53,7 +63,7 @@ public class IpRewards implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpRewards(Long rwId, IpRewardsCat ipRewardsCat, String rwTitle, String rwDesc, Integer rwValue, String rwStockCodeNum, String rwHoverText, Date rwLaunchDt, Date rwExpiryDt, String rwTag, Date rwCrtdDt, Double rwPrice, Long rwQuantity, Set ipRewardsGroups, Set ipClaims) {
+	public IpRewards(Long rwId, IpRewardsCat ipRewardsCat, String rwTitle, String rwDesc, Integer rwValue, String rwStockCodeNum, String rwHoverText, Date rwLaunchDt, Date rwExpiryDt, String rwTag, Date rwCrtdDt, Double rwPrice, Long rwQuantity, Set<IpRewardsGroup> ipRewardsGroups, Set<IpClaim> ipClaims) {
 		this.rwId = rwId;
 		this.ipRewardsCat = ipRewardsCat;
 		this.rwTitle = rwTitle;
@@ -72,7 +82,8 @@ public class IpRewards implements java.io.Serializable {
 	}
 
 	// Property accessors
-
+	@Id
+	@Column(name = "rw_id", unique = true, nullable = false)
 	public Long getRwId() {
 		return this.rwId;
 	}
@@ -81,6 +92,8 @@ public class IpRewards implements java.io.Serializable {
 		this.rwId = rwId;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "rw_cat", nullable = false)
 	public IpRewardsCat getIpRewardsCat() {
 		return this.ipRewardsCat;
 	}
@@ -89,6 +102,7 @@ public class IpRewards implements java.io.Serializable {
 		this.ipRewardsCat = ipRewardsCat;
 	}
 
+	@Column(name = "rw_title", nullable = false, length = 100)
 	public String getRwTitle() {
 		return this.rwTitle;
 	}
@@ -97,6 +111,7 @@ public class IpRewards implements java.io.Serializable {
 		this.rwTitle = rwTitle;
 	}
 
+	@Column(name = "rw_desc", nullable = false, length = 65535)
 	public String getRwDesc() {
 		return this.rwDesc;
 	}
@@ -105,6 +120,7 @@ public class IpRewards implements java.io.Serializable {
 		this.rwDesc = rwDesc;
 	}
 
+	@Column(name = "rw_value", nullable = false)
 	public Integer getRwValue() {
 		return this.rwValue;
 	}
@@ -113,6 +129,7 @@ public class IpRewards implements java.io.Serializable {
 		this.rwValue = rwValue;
 	}
 
+	@Column(name = "rw_stock_code_num", nullable = false, length = 50)
 	public String getRwStockCodeNum() {
 		return this.rwStockCodeNum;
 	}
@@ -121,6 +138,7 @@ public class IpRewards implements java.io.Serializable {
 		this.rwStockCodeNum = rwStockCodeNum;
 	}
 
+	@Column(name = "rw_hover_text", length = 65535)
 	public String getRwHoverText() {
 		return this.rwHoverText;
 	}
@@ -129,6 +147,7 @@ public class IpRewards implements java.io.Serializable {
 		this.rwHoverText = rwHoverText;
 	}
 
+	@Column(name = "rw_launch_dt", nullable = false, length = 19)
 	public Date getRwLaunchDt() {
 		return this.rwLaunchDt;
 	}
@@ -137,6 +156,7 @@ public class IpRewards implements java.io.Serializable {
 		this.rwLaunchDt = rwLaunchDt;
 	}
 
+	@Column(name = "rw_expiry_dt", nullable = false, length = 19)
 	public Date getRwExpiryDt() {
 		return this.rwExpiryDt;
 	}
@@ -145,6 +165,7 @@ public class IpRewards implements java.io.Serializable {
 		this.rwExpiryDt = rwExpiryDt;
 	}
 
+	@Column(name = "rw_tag", length = 65535)
 	public String getRwTag() {
 		return this.rwTag;
 	}
@@ -153,6 +174,7 @@ public class IpRewards implements java.io.Serializable {
 		this.rwTag = rwTag;
 	}
 
+	@Column(name = "rw_crtd_dt", nullable = false, length = 19)
 	public Date getRwCrtdDt() {
 		return this.rwCrtdDt;
 	}
@@ -161,6 +183,7 @@ public class IpRewards implements java.io.Serializable {
 		this.rwCrtdDt = rwCrtdDt;
 	}
 
+	@Column(name = "rw_price", precision = 10, scale = 3)
 	public Double getRwPrice() {
 		return this.rwPrice;
 	}
@@ -169,6 +192,7 @@ public class IpRewards implements java.io.Serializable {
 		this.rwPrice = rwPrice;
 	}
 
+	@Column(name = "rw_quantity")
 	public Long getRwQuantity() {
 		return this.rwQuantity;
 	}
@@ -177,19 +201,21 @@ public class IpRewards implements java.io.Serializable {
 		this.rwQuantity = rwQuantity;
 	}
 
-	public Set getIpRewardsGroups() {
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "ipRewards")
+	public Set<IpRewardsGroup> getIpRewardsGroups() {
 		return this.ipRewardsGroups;
 	}
 
-	public void setIpRewardsGroups(Set ipRewardsGroups) {
+	public void setIpRewardsGroups(Set<IpRewardsGroup> ipRewardsGroups) {
 		this.ipRewardsGroups = ipRewardsGroups;
 	}
 
-	public Set getIpClaims() {
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "ipRewards")
+	public Set<IpClaim> getIpClaims() {
 		return this.ipClaims;
 	}
 
-	public void setIpClaims(Set ipClaims) {
+	public void setIpClaims(Set<IpClaim> ipClaims) {
 		this.ipClaims = ipClaims;
 	}
 

@@ -1,14 +1,17 @@
 package za.co.idea.ip.orm.dao;
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpTag;
 
@@ -23,12 +26,23 @@ import za.co.idea.ip.orm.bean.IpTag;
  * @see za.co.idea.ip.orm.bean.IpTag
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings({ "rawtypes" })
-public class IpTagDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(IpTagDAO.class);
+@Transactional
+@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
+public class IpTagDAO {
+	private static final Logger log = Logger.getLogger(IpTagDAO.class);
 	// property constants
 	public static final String TAG_ENTITY_ID = "tagEntityId";
 	public static final String TAG_TEXT = "tagText";
+
+	private SessionFactory sessionFactory;
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	private Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
 
 	protected void initDao() {
 		// do nothing
@@ -37,7 +51,7 @@ public class IpTagDAO extends HibernateDaoSupport {
 	public void save(IpTag transientInstance) {
 		log.debug("saving IpTag instance");
 		try {
-			getHibernateTemplate().save(transientInstance);
+			getCurrentSession().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -48,7 +62,7 @@ public class IpTagDAO extends HibernateDaoSupport {
 	public void delete(IpTag persistentInstance) {
 		log.debug("deleting IpTag instance");
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -59,7 +73,7 @@ public class IpTagDAO extends HibernateDaoSupport {
 	public IpTag findById(java.lang.Long id) {
 		log.debug("getting IpTag instance with id: " + id);
 		try {
-			IpTag instance = (IpTag) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpTag", id);
+			IpTag instance = (IpTag) getCurrentSession().get("za.co.idea.ip.orm.bean.IpTag", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -67,10 +81,10 @@ public class IpTagDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(IpTag instance) {
+	public List<IpTag> findByExample(IpTag instance) {
 		log.debug("finding IpTag instance by example");
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List<IpTag> results = (List<IpTag>) getCurrentSession().createCriteria("za.co.idea.ip.orm.bean.IpTag").add(create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -83,18 +97,20 @@ public class IpTagDAO extends HibernateDaoSupport {
 		log.debug("finding IpTag instance with property: " + propertyName + ", value: " + value);
 		try {
 			String queryString = "from IpTag as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			queryObject.setParameter(0, value);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
 		}
 	}
 
-	public List findByTagEntityId(Object tagEntityId) {
+	public List<IpTag> findByTagEntityId(Object tagEntityId) {
 		return findByProperty(TAG_ENTITY_ID, tagEntityId);
 	}
 
-	public List findByTagText(Object tagText) {
+	public List<IpTag> findByTagText(Object tagText) {
 		return findByProperty(TAG_TEXT, tagText);
 	}
 
@@ -102,7 +118,8 @@ public class IpTagDAO extends HibernateDaoSupport {
 		log.debug("finding all IpTag instances");
 		try {
 			String queryString = "from IpTag";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -112,7 +129,7 @@ public class IpTagDAO extends HibernateDaoSupport {
 	public IpTag merge(IpTag detachedInstance) {
 		log.debug("merging IpTag instance");
 		try {
-			IpTag result = (IpTag) getHibernateTemplate().merge(detachedInstance);
+			IpTag result = (IpTag) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -124,7 +141,7 @@ public class IpTagDAO extends HibernateDaoSupport {
 	public void attachDirty(IpTag instance) {
 		log.debug("attaching dirty IpTag instance");
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -135,7 +152,7 @@ public class IpTagDAO extends HibernateDaoSupport {
 	public void attachClean(IpTag instance) {
 		log.debug("attaching clean IpTag instance");
 		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
+			getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -146,7 +163,7 @@ public class IpTagDAO extends HibernateDaoSupport {
 	public List getTagByFilterA(Long entityId, Integer teId, Integer ttId) {
 		log.debug("Fetching Tag by Query :: getTagByFilterA");
 		try {
-			Query query = getSession().getNamedQuery("getTagByFilterA");
+			Query query = getCurrentSession().getNamedQuery("getTagByFilterA");
 			query.setLong("entityId", entityId);
 			query.setInteger("ttId", ttId);
 			query.setInteger("teId", teId);
@@ -167,7 +184,7 @@ public class IpTagDAO extends HibernateDaoSupport {
 	public List getTagByFilterB(Long entityId, Integer teId, Integer ttId, Long userId) {
 		log.debug("Fetching Tag by Query :: getTagByFilterB");
 		try {
-			Query query = getSession().getNamedQuery("getTagByFilterB");
+			Query query = getCurrentSession().getNamedQuery("getTagByFilterB");
 			query.setLong("entityId", entityId);
 			query.setLong("userId", userId);
 			query.setInteger("ttId", ttId);

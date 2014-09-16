@@ -363,7 +363,7 @@ public class AdminService {
 			ret = new String[functions.size()];
 			int i = 0;
 			for (Object object : functions) {
-				ret[i] = (String) object;
+				ret[i] = ((IpFunction) object).getFuncName();
 				i++;
 			}
 		} catch (Exception e) {

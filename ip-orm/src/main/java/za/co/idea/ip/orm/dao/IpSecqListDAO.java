@@ -1,12 +1,16 @@
 package za.co.idea.ip.orm.dao;
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.LockMode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpSecqList;
 
@@ -21,11 +25,22 @@ import za.co.idea.ip.orm.bean.IpSecqList;
  * @see za.co.idea.ip.orm.bean.IpSecqList
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings({ "rawtypes" })
-public class IpSecqListDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(IpSecqListDAO.class);
+@Transactional
+@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
+public class IpSecqListDAO {
+	private static final Logger log = Logger.getLogger(IpSecqListDAO.class);
 	// property constants
 	public static final String ISL_DESC = "islDesc";
+
+	private SessionFactory sessionFactory;
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	private Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
 
 	protected void initDao() {
 		// do nothing
@@ -34,7 +49,7 @@ public class IpSecqListDAO extends HibernateDaoSupport {
 	public void save(IpSecqList transientInstance) {
 		log.debug("saving IpSecqList instance");
 		try {
-			getHibernateTemplate().save(transientInstance);
+			getCurrentSession().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -45,7 +60,7 @@ public class IpSecqListDAO extends HibernateDaoSupport {
 	public void delete(IpSecqList persistentInstance) {
 		log.debug("deleting IpSecqList instance");
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -56,7 +71,7 @@ public class IpSecqListDAO extends HibernateDaoSupport {
 	public IpSecqList findById(java.lang.Integer id) {
 		log.debug("getting IpSecqList instance with id: " + id);
 		try {
-			IpSecqList instance = (IpSecqList) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpSecqList", id);
+			IpSecqList instance = (IpSecqList) getCurrentSession().get("za.co.idea.ip.orm.bean.IpSecqList", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -64,10 +79,10 @@ public class IpSecqListDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(IpSecqList instance) {
+	public List<IpSecqList> findByExample(IpSecqList instance) {
 		log.debug("finding IpSecqList instance by example");
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List<IpSecqList> results = (List<IpSecqList>) getCurrentSession().createCriteria("za.co.idea.ip.orm.bean.IpSecqList").add(create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -80,14 +95,16 @@ public class IpSecqListDAO extends HibernateDaoSupport {
 		log.debug("finding IpSecqList instance with property: " + propertyName + ", value: " + value);
 		try {
 			String queryString = "from IpSecqList as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			queryObject.setParameter(0, value);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
 		}
 	}
 
-	public List findByIslDesc(Object islDesc) {
+	public List<IpSecqList> findByIslDesc(Object islDesc) {
 		return findByProperty(ISL_DESC, islDesc);
 	}
 
@@ -95,7 +112,8 @@ public class IpSecqListDAO extends HibernateDaoSupport {
 		log.debug("finding all IpSecqList instances");
 		try {
 			String queryString = "from IpSecqList";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -105,7 +123,7 @@ public class IpSecqListDAO extends HibernateDaoSupport {
 	public IpSecqList merge(IpSecqList detachedInstance) {
 		log.debug("merging IpSecqList instance");
 		try {
-			IpSecqList result = (IpSecqList) getHibernateTemplate().merge(detachedInstance);
+			IpSecqList result = (IpSecqList) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -117,7 +135,7 @@ public class IpSecqListDAO extends HibernateDaoSupport {
 	public void attachDirty(IpSecqList instance) {
 		log.debug("attaching dirty IpSecqList instance");
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -128,7 +146,7 @@ public class IpSecqListDAO extends HibernateDaoSupport {
 	public void attachClean(IpSecqList instance) {
 		log.debug("attaching clean IpSecqList instance");
 		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
+			getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);

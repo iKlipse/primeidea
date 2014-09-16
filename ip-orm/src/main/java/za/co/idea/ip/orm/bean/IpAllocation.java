@@ -4,18 +4,26 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 /**
  * IpAllocation entity. @author MyEclipse Persistence Tools
  */
-
-@SuppressWarnings("rawtypes")
+@Entity
+@Table(name = "ip_allocation", catalog = "lpdb")
+@NamedNativeQueries({ @NamedNativeQuery(name = "getAllocationByEntity", query = "select alloc.* from ip_allocation alloc where alloc.alloc_entity=:entity", resultClass = IpAllocation.class), @NamedNativeQuery(name = "getUsedAllocation", query = "select alloc.* from ip_allocation alloc, ip_points pnt where	alloc.alloc_entity=:entity and alloc.alloc_id=pnt.alloc_id", resultClass = IpAllocation.class) })
 public class IpAllocation implements java.io.Serializable {
 
 	// Fields
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -8070850045304717359L;
 	private Integer allocId;
 	private String allocDesc;
@@ -23,7 +31,7 @@ public class IpAllocation implements java.io.Serializable {
 	private String allocEntity;
 	private Integer allocStatusId;
 	private Date allocCrtdDt;
-	private Set ipPointses = new HashSet(0);
+	private Set<IpPoints> ipPointses = new HashSet<IpPoints>(0);
 
 	// Constructors
 
@@ -38,7 +46,7 @@ public class IpAllocation implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpAllocation(Integer allocId, String allocDesc, Integer allocVal, String allocEntity, Integer allocStatusId, Date allocCrtdDt, Set ipPointses) {
+	public IpAllocation(Integer allocId, String allocDesc, Integer allocVal, String allocEntity, Integer allocStatusId, Date allocCrtdDt, Set<IpPoints> ipPointses) {
 		this.allocId = allocId;
 		this.allocDesc = allocDesc;
 		this.allocVal = allocVal;
@@ -49,7 +57,8 @@ public class IpAllocation implements java.io.Serializable {
 	}
 
 	// Property accessors
-
+	@Id
+	@Column(name = "alloc_id", unique = true, nullable = false)
 	public Integer getAllocId() {
 		return this.allocId;
 	}
@@ -58,6 +67,7 @@ public class IpAllocation implements java.io.Serializable {
 		this.allocId = allocId;
 	}
 
+	@Column(name = "alloc_desc", length = 45)
 	public String getAllocDesc() {
 		return this.allocDesc;
 	}
@@ -66,6 +76,7 @@ public class IpAllocation implements java.io.Serializable {
 		this.allocDesc = allocDesc;
 	}
 
+	@Column(name = "alloc_val")
 	public Integer getAllocVal() {
 		return this.allocVal;
 	}
@@ -74,6 +85,7 @@ public class IpAllocation implements java.io.Serializable {
 		this.allocVal = allocVal;
 	}
 
+	@Column(name = "alloc_entity", length = 300)
 	public String getAllocEntity() {
 		return this.allocEntity;
 	}
@@ -82,6 +94,7 @@ public class IpAllocation implements java.io.Serializable {
 		this.allocEntity = allocEntity;
 	}
 
+	@Column(name = "alloc_status_id")
 	public Integer getAllocStatusId() {
 		return this.allocStatusId;
 	}
@@ -90,6 +103,7 @@ public class IpAllocation implements java.io.Serializable {
 		this.allocStatusId = allocStatusId;
 	}
 
+	@Column(name = "alloc_crtd_dt", nullable = false, length = 19)
 	public Date getAllocCrtdDt() {
 		return this.allocCrtdDt;
 	}
@@ -98,11 +112,12 @@ public class IpAllocation implements java.io.Serializable {
 		this.allocCrtdDt = allocCrtdDt;
 	}
 
-	public Set getIpPointses() {
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "ipAllocation")
+	public Set<IpPoints> getIpPointses() {
 		return this.ipPointses;
 	}
 
-	public void setIpPointses(Set ipPointses) {
+	public void setIpPointses(Set<IpPoints> ipPointses) {
 		this.ipPointses = ipPointses;
 	}
 

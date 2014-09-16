@@ -1,13 +1,16 @@
 package za.co.idea.ip.orm.dao;
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpNotif;
 
@@ -22,9 +25,10 @@ import za.co.idea.ip.orm.bean.IpNotif;
  * @see za.co.idea.ip.orm.bean.IpNotif
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings({ "rawtypes" })
-public class IpNotifDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(IpNotifDAO.class);
+@Transactional
+@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
+public class IpNotifDAO {
+	private static final Logger log = Logger.getLogger(IpNotifDAO.class);
 	// property constants
 	public static final String NOTIF_ENTITY_ID = "notifEntityId";
 	public static final String NOTIF_ENTITY_TBL_NAME = "notifEntityTblName";
@@ -32,8 +36,17 @@ public class IpNotifDAO extends HibernateDaoSupport {
 	public static final String NOTIF_BODY = "notifBody";
 	public static final String NOTIF_ATTACH = "notifAttach";
 	public static final String NOTIF_STATUS = "notifStatus";
-	public static final String NOTIF_CRTD_DATE = "notifCrtdDate";
 	public static final String NOTIF_LIST = "notifList";
+
+	private SessionFactory sessionFactory;
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	private Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
 
 	protected void initDao() {
 		// do nothing
@@ -42,7 +55,7 @@ public class IpNotifDAO extends HibernateDaoSupport {
 	public void save(IpNotif transientInstance) {
 		log.debug("saving IpNotif instance");
 		try {
-			getHibernateTemplate().save(transientInstance);
+			getCurrentSession().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -53,7 +66,7 @@ public class IpNotifDAO extends HibernateDaoSupport {
 	public void delete(IpNotif persistentInstance) {
 		log.debug("deleting IpNotif instance");
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -64,7 +77,7 @@ public class IpNotifDAO extends HibernateDaoSupport {
 	public IpNotif findById(java.lang.String id) {
 		log.debug("getting IpNotif instance with id: " + id);
 		try {
-			IpNotif instance = (IpNotif) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpNotif", id);
+			IpNotif instance = (IpNotif) getCurrentSession().get("za.co.idea.ip.orm.bean.IpNotif", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -72,10 +85,10 @@ public class IpNotifDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(IpNotif instance) {
+	public List<IpNotif> findByExample(IpNotif instance) {
 		log.debug("finding IpNotif instance by example");
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List<IpNotif> results = (List<IpNotif>) getCurrentSession().createCriteria("za.co.idea.ip.orm.bean.IpNotif").add(create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -88,42 +101,40 @@ public class IpNotifDAO extends HibernateDaoSupport {
 		log.debug("finding IpNotif instance with property: " + propertyName + ", value: " + value);
 		try {
 			String queryString = "from IpNotif as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			queryObject.setParameter(0, value);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
 		}
 	}
 
-	public List findByNotifEntityId(Object notifEntityId) {
+	public List<IpNotif> findByNotifEntityId(Object notifEntityId) {
 		return findByProperty(NOTIF_ENTITY_ID, notifEntityId);
 	}
 
-	public List findByNotifEntityTblName(Object notifEntityTblName) {
+	public List<IpNotif> findByNotifEntityTblName(Object notifEntityTblName) {
 		return findByProperty(NOTIF_ENTITY_TBL_NAME, notifEntityTblName);
 	}
 
-	public List findByNotifSubject(Object notifSubject) {
+	public List<IpNotif> findByNotifSubject(Object notifSubject) {
 		return findByProperty(NOTIF_SUBJECT, notifSubject);
 	}
 
-	public List findByNotifBody(Object notifBody) {
+	public List<IpNotif> findByNotifBody(Object notifBody) {
 		return findByProperty(NOTIF_BODY, notifBody);
 	}
 
-	public List findByNotifAttach(Object notifAttach) {
+	public List<IpNotif> findByNotifAttach(Object notifAttach) {
 		return findByProperty(NOTIF_ATTACH, notifAttach);
 	}
 
-	public List findByNotifStatus(Object notifStatus) {
+	public List<IpNotif> findByNotifStatus(Object notifStatus) {
 		return findByProperty(NOTIF_STATUS, notifStatus);
 	}
 
-	public List findByNotifCrtdDate(Object notifCrtdDate) {
-		return findByProperty(NOTIF_CRTD_DATE, notifCrtdDate);
-	}
-
-	public List findByNotifList(Object notifList) {
+	public List<IpNotif> findByNotifList(Object notifList) {
 		return findByProperty(NOTIF_LIST, notifList);
 	}
 
@@ -131,7 +142,8 @@ public class IpNotifDAO extends HibernateDaoSupport {
 		log.debug("finding all IpNotif instances");
 		try {
 			String queryString = "from IpNotif";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -141,7 +153,7 @@ public class IpNotifDAO extends HibernateDaoSupport {
 	public IpNotif merge(IpNotif detachedInstance) {
 		log.debug("merging IpNotif instance");
 		try {
-			IpNotif result = (IpNotif) getHibernateTemplate().merge(detachedInstance);
+			IpNotif result = (IpNotif) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -153,7 +165,7 @@ public class IpNotifDAO extends HibernateDaoSupport {
 	public void attachDirty(IpNotif instance) {
 		log.debug("attaching dirty IpNotif instance");
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -164,18 +176,18 @@ public class IpNotifDAO extends HibernateDaoSupport {
 	public void attachClean(IpNotif instance) {
 		log.debug("attaching clean IpNotif instance");
 		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
+			getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
 		}
 	}
-
+	
 	public void deleteByNotifId(String id) {
 		log.debug("Deleting Notification By Notif Id : " + id);
 		try {
-			Query query = getSession().getNamedQuery("deleteNotifById");
+			Query query = getCurrentSession().getNamedQuery("deleteNotifById");
 			query.setString("id", id);
 			query.executeUpdate();
 		} catch (RuntimeException re) {

@@ -1,14 +1,17 @@
 package za.co.idea.ip.orm.dao;
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpClaim;
 
@@ -23,12 +26,23 @@ import za.co.idea.ip.orm.bean.IpClaim;
  * @see za.co.idea.ip.orm.bean.IpClaim
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings({ "rawtypes" })
-public class IpClaimDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(IpClaimDAO.class);
+@Transactional
+@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
+public class IpClaimDAO {
+	private static final Logger log = Logger.getLogger(IpClaimDAO.class);
 	// property constants
 	public static final String CLAIM_DESC = "claimDesc";
 	public static final String CLAIM_COMMENT = "claimComment";
+
+	private SessionFactory sessionFactory;
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	private Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
 
 	protected void initDao() {
 		// do nothing
@@ -37,7 +51,7 @@ public class IpClaimDAO extends HibernateDaoSupport {
 	public void save(IpClaim transientInstance) {
 		log.debug("saving IpClaim instance");
 		try {
-			getHibernateTemplate().save(transientInstance);
+			getCurrentSession().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -48,7 +62,7 @@ public class IpClaimDAO extends HibernateDaoSupport {
 	public void delete(IpClaim persistentInstance) {
 		log.debug("deleting IpClaim instance");
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -59,7 +73,7 @@ public class IpClaimDAO extends HibernateDaoSupport {
 	public IpClaim findById(java.lang.Long id) {
 		log.debug("getting IpClaim instance with id: " + id);
 		try {
-			IpClaim instance = (IpClaim) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpClaim", id);
+			IpClaim instance = (IpClaim) getCurrentSession().get("za.co.idea.ip.orm.bean.IpClaim", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -67,10 +81,10 @@ public class IpClaimDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(IpClaim instance) {
+	public List<IpClaim> findByExample(IpClaim instance) {
 		log.debug("finding IpClaim instance by example");
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List<IpClaim> results = (List<IpClaim>) getCurrentSession().createCriteria("za.co.idea.ip.orm.bean.IpClaim").add(create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -83,18 +97,20 @@ public class IpClaimDAO extends HibernateDaoSupport {
 		log.debug("finding IpClaim instance with property: " + propertyName + ", value: " + value);
 		try {
 			String queryString = "from IpClaim as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			queryObject.setParameter(0, value);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
 		}
 	}
 
-	public List findByClaimDesc(Object claimDesc) {
+	public List<IpClaim> findByClaimDesc(Object claimDesc) {
 		return findByProperty(CLAIM_DESC, claimDesc);
 	}
 
-	public List findByClaimComment(Object claimComment) {
+	public List<IpClaim> findByClaimComment(Object claimComment) {
 		return findByProperty(CLAIM_COMMENT, claimComment);
 	}
 
@@ -102,7 +118,8 @@ public class IpClaimDAO extends HibernateDaoSupport {
 		log.debug("finding all IpClaim instances");
 		try {
 			String queryString = "from IpClaim";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -112,7 +129,7 @@ public class IpClaimDAO extends HibernateDaoSupport {
 	public IpClaim merge(IpClaim detachedInstance) {
 		log.debug("merging IpClaim instance");
 		try {
-			IpClaim result = (IpClaim) getHibernateTemplate().merge(detachedInstance);
+			IpClaim result = (IpClaim) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -124,7 +141,7 @@ public class IpClaimDAO extends HibernateDaoSupport {
 	public void attachDirty(IpClaim instance) {
 		log.debug("attaching dirty IpClaim instance");
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -135,18 +152,18 @@ public class IpClaimDAO extends HibernateDaoSupport {
 	public void attachClean(IpClaim instance) {
 		log.debug("attaching clean IpClaim instance");
 		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
+			getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
 		}
 	}
-
+	
 	public List findByStatusId(Integer id) {
 		log.debug("Fetching Challenge by Query :: getClaimByStatus");
 		try {
-			Query query = getSession().getNamedQuery("getClaimByStatus");
+			Query query = getCurrentSession().getNamedQuery("getClaimByStatus");
 			query.setLong("id", id);
 			List ret = query.list();
 			for (Object object : ret) {
@@ -165,7 +182,7 @@ public class IpClaimDAO extends HibernateDaoSupport {
 	public List findByUserId(Long id) {
 		log.debug("Fetching Challenge by Query :: getClaimByUser");
 		try {
-			Query query = getSession().getNamedQuery("getClaimByUser");
+			Query query = getCurrentSession().getNamedQuery("getClaimByUser");
 			query.setLong("id", id);
 			List ret = query.list();
 			for (Object object : ret) {

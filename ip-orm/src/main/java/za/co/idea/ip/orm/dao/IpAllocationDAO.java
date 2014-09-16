@@ -1,13 +1,16 @@
 package za.co.idea.ip.orm.dao;
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpAllocation;
 
@@ -22,14 +25,25 @@ import za.co.idea.ip.orm.bean.IpAllocation;
  * @see za.co.idea.ip.orm.bean.IpAllocation
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings({ "rawtypes" })
-public class IpAllocationDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(IpAllocationDAO.class);
+@Transactional
+@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
+public class IpAllocationDAO {
+	private static final Logger log = Logger.getLogger(IpAllocationDAO.class);
 	// property constants
 	public static final String ALLOC_DESC = "allocDesc";
 	public static final String ALLOC_VAL = "allocVal";
 	public static final String ALLOC_ENTITY = "allocEntity";
 	public static final String ALLOC_STATUS_ID = "allocStatusId";
+
+	private SessionFactory sessionFactory;
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	private Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
 
 	protected void initDao() {
 		// do nothing
@@ -38,7 +52,7 @@ public class IpAllocationDAO extends HibernateDaoSupport {
 	public void save(IpAllocation transientInstance) {
 		log.debug("saving IpAllocation instance");
 		try {
-			getHibernateTemplate().save(transientInstance);
+			getCurrentSession().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -49,7 +63,7 @@ public class IpAllocationDAO extends HibernateDaoSupport {
 	public void delete(IpAllocation persistentInstance) {
 		log.debug("deleting IpAllocation instance");
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -60,7 +74,7 @@ public class IpAllocationDAO extends HibernateDaoSupport {
 	public IpAllocation findById(java.lang.Integer id) {
 		log.debug("getting IpAllocation instance with id: " + id);
 		try {
-			IpAllocation instance = (IpAllocation) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpAllocation", id);
+			IpAllocation instance = (IpAllocation) getCurrentSession().get("za.co.idea.ip.orm.bean.IpAllocation", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -68,10 +82,10 @@ public class IpAllocationDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(IpAllocation instance) {
+	public List<IpAllocation> findByExample(IpAllocation instance) {
 		log.debug("finding IpAllocation instance by example");
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List<IpAllocation> results = (List<IpAllocation>) getCurrentSession().createCriteria("za.co.idea.ip.orm.bean.IpAllocation").add(create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -84,26 +98,28 @@ public class IpAllocationDAO extends HibernateDaoSupport {
 		log.debug("finding IpAllocation instance with property: " + propertyName + ", value: " + value);
 		try {
 			String queryString = "from IpAllocation as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			queryObject.setParameter(0, value);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
 		}
 	}
 
-	public List findByAllocDesc(Object allocDesc) {
+	public List<IpAllocation> findByAllocDesc(Object allocDesc) {
 		return findByProperty(ALLOC_DESC, allocDesc);
 	}
 
-	public List findByAllocVal(Object allocVal) {
+	public List<IpAllocation> findByAllocVal(Object allocVal) {
 		return findByProperty(ALLOC_VAL, allocVal);
 	}
 
-	public List findByAllocEntity(Object allocEntity) {
+	public List<IpAllocation> findByAllocEntity(Object allocEntity) {
 		return findByProperty(ALLOC_ENTITY, allocEntity);
 	}
 
-	public List findByAllocStatusId(Object allocStatusId) {
+	public List<IpAllocation> findByAllocStatusId(Object allocStatusId) {
 		return findByProperty(ALLOC_STATUS_ID, allocStatusId);
 	}
 
@@ -111,7 +127,8 @@ public class IpAllocationDAO extends HibernateDaoSupport {
 		log.debug("finding all IpAllocation instances");
 		try {
 			String queryString = "from IpAllocation";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -121,7 +138,7 @@ public class IpAllocationDAO extends HibernateDaoSupport {
 	public IpAllocation merge(IpAllocation detachedInstance) {
 		log.debug("merging IpAllocation instance");
 		try {
-			IpAllocation result = (IpAllocation) getHibernateTemplate().merge(detachedInstance);
+			IpAllocation result = (IpAllocation) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -133,7 +150,7 @@ public class IpAllocationDAO extends HibernateDaoSupport {
 	public void attachDirty(IpAllocation instance) {
 		log.debug("attaching dirty IpAllocation instance");
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -144,7 +161,7 @@ public class IpAllocationDAO extends HibernateDaoSupport {
 	public void attachClean(IpAllocation instance) {
 		log.debug("attaching clean IpAllocation instance");
 		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
+			getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -155,7 +172,7 @@ public class IpAllocationDAO extends HibernateDaoSupport {
 	public List getAllocationByEntity(String entity) {
 		log.debug("Fetching Allocation By Query :: getAllocationByEntity");
 		try {
-			Query query = getSession().getNamedQuery("getAllocationByEntity");
+			Query query = getCurrentSession().getNamedQuery("getAllocationByEntity");
 			query.setString("entity", entity);
 			List ret = query.list();
 			return ret;
@@ -168,7 +185,7 @@ public class IpAllocationDAO extends HibernateDaoSupport {
 	public List getUtilisedAllocation(String entity) {
 		log.debug("Fetching Allocation By Query :: getUsedAllocation");
 		try {
-			Query query = getSession().getNamedQuery("getUsedAllocation");
+			Query query = getCurrentSession().getNamedQuery("getUsedAllocation");
 			query.setString("entity", entity);
 			List ret = query.list();
 			return ret;

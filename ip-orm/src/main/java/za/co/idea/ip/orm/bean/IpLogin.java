@@ -2,10 +2,23 @@ package za.co.idea.ip.orm.bean;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
 /**
  * IpLogin entity. @author MyEclipse Persistence Tools
  */
-
+@Entity
+@Table(name = "ip_login", catalog = "lpdb", uniqueConstraints = @UniqueConstraint(columnNames = "login_user_id"))
+@NamedNativeQueries({ @NamedNativeQuery(name = "verifyLogin", query = "select login.* from ip_login login, ip_user iu where iu.user_id=login.login_user_id and login.login_name=:login and	login.login_pwd=:pwd", resultClass = IpLogin.class), @NamedNativeQuery(name = "fetchLogin", query = "select login.* from ip_login login where login.login_name=:login", resultClass = IpLogin.class), @NamedNativeQuery(name = "fetchLoginById", query = "select login.* from ip_login login where login.login_user_id=:login", resultClass = IpLogin.class), @NamedNativeQuery(name = "updatePassword", query = "update ip_login set login_pwd=:pwd where login_name=:login"), @NamedNativeQuery(name = "updateSecurity", query = "update ip_login set login_sec_q=:secq, login_sec_a=:seca where login_name=:login") })
 public class IpLogin implements java.io.Serializable {
 
 	// Fields
@@ -53,7 +66,8 @@ public class IpLogin implements java.io.Serializable {
 	}
 
 	// Property accessors
-
+	@Id
+	@Column(name = "login_id", unique = true, nullable = false)
 	public Long getLoginId() {
 		return this.loginId;
 	}
@@ -62,6 +76,8 @@ public class IpLogin implements java.io.Serializable {
 		this.loginId = loginId;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "login_user_id", unique = true, nullable = false)
 	public IpUser getIpUser() {
 		return this.ipUser;
 	}
@@ -70,6 +86,8 @@ public class IpLogin implements java.io.Serializable {
 		this.ipUser = ipUser;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "login_sec_q", nullable = false)
 	public IpSecqList getIpSecqList() {
 		return this.ipSecqList;
 	}
@@ -78,6 +96,7 @@ public class IpLogin implements java.io.Serializable {
 		this.ipSecqList = ipSecqList;
 	}
 
+	@Column(name = "login_name", nullable = false, length = 65535)
 	public String getLoginName() {
 		return this.loginName;
 	}
@@ -86,6 +105,7 @@ public class IpLogin implements java.io.Serializable {
 		this.loginName = loginName;
 	}
 
+	@Column(name = "login_pwd", nullable = false, length = 65535)
 	public String getLoginPwd() {
 		return this.loginPwd;
 	}
@@ -94,6 +114,7 @@ public class IpLogin implements java.io.Serializable {
 		this.loginPwd = loginPwd;
 	}
 
+	@Column(name = "login_last_dt", length = 19)
 	public Date getLoginLastDt() {
 		return this.loginLastDt;
 	}
@@ -102,6 +123,7 @@ public class IpLogin implements java.io.Serializable {
 		this.loginLastDt = loginLastDt;
 	}
 
+	@Column(name = "login_sec_a", nullable = false, length = 450)
 	public String getLoginSecA() {
 		return this.loginSecA;
 	}
@@ -110,6 +132,7 @@ public class IpLogin implements java.io.Serializable {
 		this.loginSecA = loginSecA;
 	}
 
+	@Column(name = "login_crtd_dt", nullable = false, length = 19)
 	public Date getLoginCrtdDt() {
 		return this.loginCrtdDt;
 	}

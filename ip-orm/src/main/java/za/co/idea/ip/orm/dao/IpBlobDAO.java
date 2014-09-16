@@ -1,13 +1,16 @@
 package za.co.idea.ip.orm.dao;
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpBlob;
 
@@ -22,9 +25,10 @@ import za.co.idea.ip.orm.bean.IpBlob;
  * @see za.co.idea.ip.orm.bean.IpBlob
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings({ "rawtypes" })
-public class IpBlobDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(IpBlobDAO.class);
+@Transactional
+@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
+public class IpBlobDAO {
+	private static final Logger log = Logger.getLogger(IpBlobDAO.class);
 	// property constants
 	public static final String BLOB_NAME = "blobName";
 	public static final String BLOB_CONTENT_TYPE = "blobContentType";
@@ -33,6 +37,16 @@ public class IpBlobDAO extends HibernateDaoSupport {
 	public static final String BLOB_ENTITY_TBL_NM = "blobEntityTblNm";
 	public static final String BLOB_SIZE = "blobSize";
 
+	private SessionFactory sessionFactory;
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	private Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
+
 	protected void initDao() {
 		// do nothing
 	}
@@ -40,7 +54,7 @@ public class IpBlobDAO extends HibernateDaoSupport {
 	public void save(IpBlob transientInstance) {
 		log.debug("saving IpBlob instance");
 		try {
-			getHibernateTemplate().save(transientInstance);
+			getCurrentSession().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -51,7 +65,7 @@ public class IpBlobDAO extends HibernateDaoSupport {
 	public void delete(IpBlob persistentInstance) {
 		log.debug("deleting IpBlob instance");
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -62,7 +76,7 @@ public class IpBlobDAO extends HibernateDaoSupport {
 	public IpBlob findById(java.lang.Long id) {
 		log.debug("getting IpBlob instance with id: " + id);
 		try {
-			IpBlob instance = (IpBlob) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpBlob", id);
+			IpBlob instance = (IpBlob) getCurrentSession().get("za.co.idea.ip.orm.bean.IpBlob", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -70,10 +84,10 @@ public class IpBlobDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(IpBlob instance) {
+	public List<IpBlob> findByExample(IpBlob instance) {
 		log.debug("finding IpBlob instance by example");
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List<IpBlob> results = (List<IpBlob>) getCurrentSession().createCriteria("za.co.idea.ip.orm.bean.IpBlob").add(create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -86,34 +100,36 @@ public class IpBlobDAO extends HibernateDaoSupport {
 		log.debug("finding IpBlob instance with property: " + propertyName + ", value: " + value);
 		try {
 			String queryString = "from IpBlob as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			queryObject.setParameter(0, value);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
 		}
 	}
 
-	public List findByBlobName(Object blobName) {
+	public List<IpBlob> findByBlobName(Object blobName) {
 		return findByProperty(BLOB_NAME, blobName);
 	}
 
-	public List findByBlobContentType(Object blobContentType) {
+	public List<IpBlob> findByBlobContentType(Object blobContentType) {
 		return findByProperty(BLOB_CONTENT_TYPE, blobContentType);
 	}
 
-	public List findByBlobContent(Object blobContent) {
+	public List<IpBlob> findByBlobContent(Object blobContent) {
 		return findByProperty(BLOB_CONTENT, blobContent);
 	}
 
-	public List findByBlobEntityId(Object blobEntityId) {
+	public List<IpBlob> findByBlobEntityId(Object blobEntityId) {
 		return findByProperty(BLOB_ENTITY_ID, blobEntityId);
 	}
 
-	public List findByBlobEntityTblNm(Object blobEntityTblNm) {
+	public List<IpBlob> findByBlobEntityTblNm(Object blobEntityTblNm) {
 		return findByProperty(BLOB_ENTITY_TBL_NM, blobEntityTblNm);
 	}
 
-	public List findByBlobSize(Object blobSize) {
+	public List<IpBlob> findByBlobSize(Object blobSize) {
 		return findByProperty(BLOB_SIZE, blobSize);
 	}
 
@@ -121,7 +137,8 @@ public class IpBlobDAO extends HibernateDaoSupport {
 		log.debug("finding all IpBlob instances");
 		try {
 			String queryString = "from IpBlob";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -131,7 +148,7 @@ public class IpBlobDAO extends HibernateDaoSupport {
 	public IpBlob merge(IpBlob detachedInstance) {
 		log.debug("merging IpBlob instance");
 		try {
-			IpBlob result = (IpBlob) getHibernateTemplate().merge(detachedInstance);
+			IpBlob result = (IpBlob) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -143,7 +160,7 @@ public class IpBlobDAO extends HibernateDaoSupport {
 	public void attachDirty(IpBlob instance) {
 		log.debug("attaching dirty IpBlob instance");
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -154,7 +171,7 @@ public class IpBlobDAO extends HibernateDaoSupport {
 	public void attachClean(IpBlob instance) {
 		log.debug("attaching clean IpBlob instance");
 		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
+			getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -165,13 +182,13 @@ public class IpBlobDAO extends HibernateDaoSupport {
 	public Long getBlobIdByEntity(long id, String tblNm) {
 		log.debug("finding all blobs by entity id");
 		try {
-			Query query = getSession().getNamedQuery("getBlobIdByEntity");
+			Query query = getCurrentSession().getNamedQuery("getBlobIdByEntity");
 			query.setLong("id", id);
 			query.setString("tblNm", tblNm);
 			Long ret = -999l;
 			List obj = query.list();
 			if (obj != null && obj.size() > 0)
-				ret = (Long) obj.get(0);
+				ret = ((IpBlob) obj.get(0)).getBlobId();
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
@@ -182,7 +199,7 @@ public class IpBlobDAO extends HibernateDaoSupport {
 	public IpBlob getBlobByEntity(long id, String tblNm) {
 		log.debug("finding all blobs by entity id");
 		try {
-			Query query = getSession().getNamedQuery("getBlobByEntity");
+			Query query = getCurrentSession().getNamedQuery("getBlobByEntity");
 			query.setLong("id", id);
 			query.setString("tblNm", tblNm);
 			IpBlob ret = null;
@@ -199,7 +216,7 @@ public class IpBlobDAO extends HibernateDaoSupport {
 	public void deleteBlobByEntity(long id, String tblNm) {
 		log.debug("finding all blobs by entity id");
 		try {
-			Query query = getSession().getNamedQuery("deleteBlobByEntity");
+			Query query = getCurrentSession().getNamedQuery("deleteBlobByEntity");
 			query.setLong("id", id);
 			query.setString("tblNm", tblNm);
 			query.executeUpdate();
@@ -212,7 +229,7 @@ public class IpBlobDAO extends HibernateDaoSupport {
 	public List listBlobByEntity(long id, String tblNm) {
 		log.debug("finding all blobs by entity id");
 		try {
-			Query query = getSession().getNamedQuery("getBlobByEntity");
+			Query query = getCurrentSession().getNamedQuery("getBlobByEntity");
 			query.setLong("id", id);
 			query.setString("tblNm", tblNm);
 			return query.list();

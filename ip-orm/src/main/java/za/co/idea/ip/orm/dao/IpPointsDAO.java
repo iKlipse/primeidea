@@ -1,14 +1,17 @@
 package za.co.idea.ip.orm.dao;
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpPoints;
 
@@ -23,13 +26,24 @@ import za.co.idea.ip.orm.bean.IpPoints;
  * @see za.co.idea.ip.orm.bean.IpPoints
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings({ "rawtypes" })
-public class IpPointsDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(IpPointsDAO.class);
+@Transactional
+@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
+public class IpPointsDAO {
+	private static final Logger log = Logger.getLogger(IpPointsDAO.class);
 	// property constants
 	public static final String POINT_VALUE = "pointValue";
 	public static final String COMMENTS = "comments";
 	public static final String ENTITY_ID = "entityId";
+
+	private SessionFactory sessionFactory;
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	private Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
 
 	protected void initDao() {
 		// do nothing
@@ -38,7 +52,7 @@ public class IpPointsDAO extends HibernateDaoSupport {
 	public void save(IpPoints transientInstance) {
 		log.debug("saving IpPoints instance");
 		try {
-			getHibernateTemplate().save(transientInstance);
+			getCurrentSession().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -49,7 +63,7 @@ public class IpPointsDAO extends HibernateDaoSupport {
 	public void delete(IpPoints persistentInstance) {
 		log.debug("deleting IpPoints instance");
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -60,7 +74,7 @@ public class IpPointsDAO extends HibernateDaoSupport {
 	public IpPoints findById(java.lang.Long id) {
 		log.debug("getting IpPoints instance with id: " + id);
 		try {
-			IpPoints instance = (IpPoints) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpPoints", id);
+			IpPoints instance = (IpPoints) getCurrentSession().get("za.co.idea.ip.orm.bean.IpPoints", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -68,10 +82,10 @@ public class IpPointsDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(IpPoints instance) {
+	public List<IpPoints> findByExample(IpPoints instance) {
 		log.debug("finding IpPoints instance by example");
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List<IpPoints> results = (List<IpPoints>) getCurrentSession().createCriteria("za.co.idea.ip.orm.bean.IpPoints").add(create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -84,22 +98,24 @@ public class IpPointsDAO extends HibernateDaoSupport {
 		log.debug("finding IpPoints instance with property: " + propertyName + ", value: " + value);
 		try {
 			String queryString = "from IpPoints as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			queryObject.setParameter(0, value);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
 		}
 	}
 
-	public List findByPointValue(Object pointValue) {
+	public List<IpPoints> findByPointValue(Object pointValue) {
 		return findByProperty(POINT_VALUE, pointValue);
 	}
 
-	public List findByComments(Object comments) {
+	public List<IpPoints> findByComments(Object comments) {
 		return findByProperty(COMMENTS, comments);
 	}
 
-	public List findByEntityId(Object entityId) {
+	public List<IpPoints> findByEntityId(Object entityId) {
 		return findByProperty(ENTITY_ID, entityId);
 	}
 
@@ -107,7 +123,8 @@ public class IpPointsDAO extends HibernateDaoSupport {
 		log.debug("finding all IpPoints instances");
 		try {
 			String queryString = "from IpPoints";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -117,7 +134,7 @@ public class IpPointsDAO extends HibernateDaoSupport {
 	public IpPoints merge(IpPoints detachedInstance) {
 		log.debug("merging IpPoints instance");
 		try {
-			IpPoints result = (IpPoints) getHibernateTemplate().merge(detachedInstance);
+			IpPoints result = (IpPoints) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -129,7 +146,7 @@ public class IpPointsDAO extends HibernateDaoSupport {
 	public void attachDirty(IpPoints instance) {
 		log.debug("attaching dirty IpPoints instance");
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -140,18 +157,18 @@ public class IpPointsDAO extends HibernateDaoSupport {
 	public void attachClean(IpPoints instance) {
 		log.debug("attaching clean IpPoints instance");
 		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
+			getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
 		}
 	}
-
+	
 	public List findByUser(Long id) {
 		log.debug("Fetching Points by Query :: getPointsByUser");
 		try {
-			Query query = getSession().getNamedQuery("getPointsByUser");
+			Query query = getCurrentSession().getNamedQuery("getPointsByUser");
 			query.setLong("id", id);
 			List ret = query.list();
 			for (Object object : ret) {

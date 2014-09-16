@@ -1,12 +1,16 @@
 package za.co.idea.ip.orm.dao;
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.LockMode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpChallengeCat;
 
@@ -21,11 +25,22 @@ import za.co.idea.ip.orm.bean.IpChallengeCat;
  * @see za.co.idea.ip.orm.bean.IpChallengeCat
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings({ "rawtypes" })
-public class IpChallengeCatDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(IpChallengeCatDAO.class);
+@Transactional
+@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
+public class IpChallengeCatDAO {
+	private static final Logger log = Logger.getLogger(IpChallengeCatDAO.class);
 	// property constants
 	public static final String CC_DESC = "ccDesc";
+
+	private SessionFactory sessionFactory;
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	private Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
 
 	protected void initDao() {
 		// do nothing
@@ -34,7 +49,7 @@ public class IpChallengeCatDAO extends HibernateDaoSupport {
 	public void save(IpChallengeCat transientInstance) {
 		log.debug("saving IpChallengeCat instance");
 		try {
-			getHibernateTemplate().save(transientInstance);
+			getCurrentSession().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -45,7 +60,7 @@ public class IpChallengeCatDAO extends HibernateDaoSupport {
 	public void delete(IpChallengeCat persistentInstance) {
 		log.debug("deleting IpChallengeCat instance");
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -56,7 +71,7 @@ public class IpChallengeCatDAO extends HibernateDaoSupport {
 	public IpChallengeCat findById(java.lang.Integer id) {
 		log.debug("getting IpChallengeCat instance with id: " + id);
 		try {
-			IpChallengeCat instance = (IpChallengeCat) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpChallengeCat", id);
+			IpChallengeCat instance = (IpChallengeCat) getCurrentSession().get("za.co.idea.ip.orm.bean.IpChallengeCat", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -64,10 +79,10 @@ public class IpChallengeCatDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(IpChallengeCat instance) {
+	public List<IpChallengeCat> findByExample(IpChallengeCat instance) {
 		log.debug("finding IpChallengeCat instance by example");
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List<IpChallengeCat> results = (List<IpChallengeCat>) getCurrentSession().createCriteria("za.co.idea.ip.orm.bean.IpChallengeCat").add(create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -80,14 +95,16 @@ public class IpChallengeCatDAO extends HibernateDaoSupport {
 		log.debug("finding IpChallengeCat instance with property: " + propertyName + ", value: " + value);
 		try {
 			String queryString = "from IpChallengeCat as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			queryObject.setParameter(0, value);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
 		}
 	}
 
-	public List findByCcDesc(Object ccDesc) {
+	public List<IpChallengeCat> findByCcDesc(Object ccDesc) {
 		return findByProperty(CC_DESC, ccDesc);
 	}
 
@@ -95,7 +112,8 @@ public class IpChallengeCatDAO extends HibernateDaoSupport {
 		log.debug("finding all IpChallengeCat instances");
 		try {
 			String queryString = "from IpChallengeCat";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -105,7 +123,7 @@ public class IpChallengeCatDAO extends HibernateDaoSupport {
 	public IpChallengeCat merge(IpChallengeCat detachedInstance) {
 		log.debug("merging IpChallengeCat instance");
 		try {
-			IpChallengeCat result = (IpChallengeCat) getHibernateTemplate().merge(detachedInstance);
+			IpChallengeCat result = (IpChallengeCat) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -117,7 +135,7 @@ public class IpChallengeCatDAO extends HibernateDaoSupport {
 	public void attachDirty(IpChallengeCat instance) {
 		log.debug("attaching dirty IpChallengeCat instance");
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -128,7 +146,7 @@ public class IpChallengeCatDAO extends HibernateDaoSupport {
 	public void attachClean(IpChallengeCat instance) {
 		log.debug("attaching clean IpChallengeCat instance");
 		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
+			getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);

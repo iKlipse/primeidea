@@ -1,14 +1,17 @@
 package za.co.idea.ip.orm.dao;
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpChallengeGroup;
 
@@ -23,11 +26,21 @@ import za.co.idea.ip.orm.bean.IpChallengeGroup;
  * @see za.co.idea.ip.orm.bean.IpChallengeGroup
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings({ "rawtypes" })
-public class IpChallengeGroupDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(IpChallengeGroupDAO.class);
-
+@Transactional
+@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
+public class IpChallengeGroupDAO {
+	private static final Logger log = Logger.getLogger(IpChallengeGroupDAO.class);
 	// property constants
+
+	private SessionFactory sessionFactory;
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	private Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
 
 	protected void initDao() {
 		// do nothing
@@ -36,7 +49,7 @@ public class IpChallengeGroupDAO extends HibernateDaoSupport {
 	public void save(IpChallengeGroup transientInstance) {
 		log.debug("saving IpChallengeGroup instance");
 		try {
-			getHibernateTemplate().save(transientInstance);
+			getCurrentSession().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -47,7 +60,7 @@ public class IpChallengeGroupDAO extends HibernateDaoSupport {
 	public void delete(IpChallengeGroup persistentInstance) {
 		log.debug("deleting IpChallengeGroup instance");
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -58,7 +71,7 @@ public class IpChallengeGroupDAO extends HibernateDaoSupport {
 	public IpChallengeGroup findById(java.lang.Long id) {
 		log.debug("getting IpChallengeGroup instance with id: " + id);
 		try {
-			IpChallengeGroup instance = (IpChallengeGroup) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpChallengeGroup", id);
+			IpChallengeGroup instance = (IpChallengeGroup) getCurrentSession().get("za.co.idea.ip.orm.bean.IpChallengeGroup", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -66,10 +79,10 @@ public class IpChallengeGroupDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(IpChallengeGroup instance) {
+	public List<IpChallengeGroup> findByExample(IpChallengeGroup instance) {
 		log.debug("finding IpChallengeGroup instance by example");
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List<IpChallengeGroup> results = (List<IpChallengeGroup>) getCurrentSession().createCriteria("za.co.idea.ip.orm.bean.IpChallengeGroup").add(create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -82,7 +95,9 @@ public class IpChallengeGroupDAO extends HibernateDaoSupport {
 		log.debug("finding IpChallengeGroup instance with property: " + propertyName + ", value: " + value);
 		try {
 			String queryString = "from IpChallengeGroup as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			queryObject.setParameter(0, value);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
@@ -93,7 +108,8 @@ public class IpChallengeGroupDAO extends HibernateDaoSupport {
 		log.debug("finding all IpChallengeGroup instances");
 		try {
 			String queryString = "from IpChallengeGroup";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -103,7 +119,7 @@ public class IpChallengeGroupDAO extends HibernateDaoSupport {
 	public IpChallengeGroup merge(IpChallengeGroup detachedInstance) {
 		log.debug("merging IpChallengeGroup instance");
 		try {
-			IpChallengeGroup result = (IpChallengeGroup) getHibernateTemplate().merge(detachedInstance);
+			IpChallengeGroup result = (IpChallengeGroup) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -115,18 +131,7 @@ public class IpChallengeGroupDAO extends HibernateDaoSupport {
 	public void attachDirty(IpChallengeGroup instance) {
 		log.debug("attaching dirty IpChallengeGroup instance");
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
-			log.debug("attach successful");
-		} catch (RuntimeException re) {
-			log.error("attach failed", re);
-			throw re;
-		}
-	}
-
-	public void attachClean(IpChallengeGroup instance) {
-		log.debug("attaching clean IpChallengeGroup instance");
-		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
+			getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -137,9 +142,20 @@ public class IpChallengeGroupDAO extends HibernateDaoSupport {
 	public void deleteByChallengeId(Long id) {
 		log.debug("Deleting Challenge Groups By Id : " + id);
 		try {
-			Query query = getSession().getNamedQuery("deleteCGByChalId");
+			Query query = getCurrentSession().getNamedQuery("deleteCGByChalId");
 			query.setLong("id", id);
 			query.executeUpdate();
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	public void attachClean(IpChallengeGroup instance) {
+		log.debug("attaching clean IpChallengeGroup instance");
+		try {
+			getCurrentSession().lock(instance, LockMode.NONE);
+			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
@@ -149,7 +165,7 @@ public class IpChallengeGroupDAO extends HibernateDaoSupport {
 	public List fetchByChallengeId(Long id) {
 		log.debug("Fetching Group Users By Id : " + id);
 		try {
-			Query query = getSession().getNamedQuery("fetchCGByChalId");
+			Query query = getCurrentSession().getNamedQuery("fetchCGByChalId");
 			query.setLong("id", id);
 			List ret = query.list();
 			for (Object object : ret) {
@@ -167,7 +183,7 @@ public class IpChallengeGroupDAO extends HibernateDaoSupport {
 	public List fetchByGroupId(Long id) {
 		log.debug("Fetching Group Users By Id : " + id);
 		try {
-			Query query = getSession().getNamedQuery("fetchCGByGroupId");
+			Query query = getCurrentSession().getNamedQuery("fetchCGByGroupId");
 			query.setLong("id", id);
 			List ret = query.list();
 			for (Object object : ret) {

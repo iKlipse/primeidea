@@ -179,7 +179,7 @@ public class IdeaService {
 		if (idea.getSetStatusId() != null && idea.getSetStatusId().longValue() >= 0)
 			ipIdea.setIpIdeaStatus(ipIdeaStatusDAO.findById(idea.getSetStatusId().intValue()));
 		if (idea.getCrtdById() != null && idea.getCrtdById().longValue() >= 0)
-			ipIdea.setIpUserByIdeaUserId(ipUserDAO.findById(idea.getCrtdById()));
+			ipIdea.setIpUser(ipUserDAO.findById(idea.getCrtdById()));
 		try {
 			ipIdeaDAO.save(ipIdea);
 			if (idea.getGroupIdList() != null && idea.getGroupIdList().length > 0) {
@@ -228,7 +228,7 @@ public class IdeaService {
 		if (idea.getSetStatusId() != null && idea.getSetStatusId().longValue() >= 0)
 			ipIdea.setIpIdeaStatus(ipIdeaStatusDAO.findById(idea.getSetStatusId().intValue()));
 		if (idea.getCrtdById() != null && idea.getCrtdById().longValue() >= 0)
-			ipIdea.setIpUserByIdeaUserId(ipUserDAO.findById(idea.getCrtdById()));
+			ipIdea.setIpUser(ipUserDAO.findById(idea.getCrtdById()));
 		try {
 			ipIdeaDAO.merge(ipIdea);
 			ipIdeaGroupDAO.deleteByIdeaId(idea.getIdeaId());
@@ -330,9 +330,9 @@ public class IdeaService {
 				idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
 				idea.setStatusName(ipIdea.getIpIdeaStatus().getIsDesc());
 			}
-			if (ipIdea.getIpUserByIdeaUserId() != null) {
-				idea.setCrtdById(ipIdea.getIpUserByIdeaUserId().getUserId());
-				idea.setCrtdByName(ipIdea.getIpUserByIdeaUserId().getUserScreenName());
+			if (ipIdea.getIpUser() != null) {
+				idea.setCrtdById(ipIdea.getIpUser().getUserId());
+				idea.setCrtdByName(ipIdea.getIpUser().getUserScreenName());
 			}
 			idea.setRvIdCnt(ipIdea.getIdeaReviewCnt());
 			List val = ipIdeaGroupDAO.fetchByIdeaId(ipIdea.getIdeaId());
@@ -355,10 +355,10 @@ public class IdeaService {
 				idea.setBlobUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + ipBlob.getBlobId());
 			} else
 				idea.setImgAvail(false);
-			IpBlob blob = ipBlobDAO.getBlobByEntity(ipIdea.getIpUserByIdeaUserId().getUserId(), "ip_user");
+			IpBlob blob = ipBlobDAO.getBlobByEntity(ipIdea.getIpUser().getUserId(), "ip_user");
 			if (blob != null) {
 				idea.setCrtByImgAvail(true);
-				idea.setCrtByImgPath("ip_user/" + ipIdea.getIpUserByIdeaUserId().getUserId() + "/" + blob.getBlobName());
+				idea.setCrtByImgPath("ip_user/" + ipIdea.getIpUser().getUserId() + "/" + blob.getBlobName());
 			} else
 				idea.setCrtByImgAvail(false);
 		} catch (Exception e) {

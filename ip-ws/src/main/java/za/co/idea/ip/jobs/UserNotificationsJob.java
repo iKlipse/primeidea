@@ -2,14 +2,8 @@ package za.co.idea.ip.jobs;
 
 import java.util.List;
 
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.StatefulJob;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.scheduling.quartz.QuartzJobBean;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpChallenge;
 import za.co.idea.ip.orm.bean.IpIdea;
@@ -19,23 +13,22 @@ import za.co.idea.ip.orm.dao.IpIdeaDAO;
 import za.co.idea.ip.orm.dao.IpSolutionDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
 
-@SuppressWarnings("rawtypes")
-public class UserNotificationsJob extends QuartzJobBean implements StatefulJob {
+@SuppressWarnings({ "rawtypes" })
+public class UserNotificationsJob {
 	private IpChallengeDAO ipChallengeDAO;
 	private IpSolutionDAO ipSolutionDAO;
 	private IpIdeaDAO ipIdeaDAO;
 	private IpUserDAO ipUserDAO;
 	private MailSender sender;
 
-	@Transactional(propagation = Propagation.REQUIRED)
-	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
+	public void executeInternal() {
 		List ideas = ipIdeaDAO.findByStatusId(1);
 		for (Object obj : ideas) {
 			IpIdea idea = (IpIdea) obj;
 			SimpleMailMessage message = new SimpleMailMessage();
 			message.setText("Idea in Draft Status");
 			message.setSubject("Idea '" + idea.getIdeaTitle() + "' is in Draft Status");
-			message.setTo(idea.getIpUserByIdeaUserId().getUserEmail());
+			message.setTo(idea.getIpUser().getUserEmail());
 			sender.send(message);
 		}
 
@@ -45,7 +38,7 @@ public class UserNotificationsJob extends QuartzJobBean implements StatefulJob {
 			SimpleMailMessage message = new SimpleMailMessage();
 			message.setText("Challenge in Draft Status");
 			message.setSubject("Challenge '" + challenge.getChalTitle() + "' is in Draft Status");
-			message.setTo(challenge.getIpUserByChalCrtdBy().getUserEmail());
+			message.setTo(challenge.getIpUser().getUserEmail());
 			sender.send(message);
 		}
 

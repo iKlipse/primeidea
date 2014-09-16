@@ -2,10 +2,16 @@ package za.co.idea.ip.orm.bean;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * IpStateTran entity. @author MyEclipse Persistence Tools
  */
-
+@Entity
+@Table(name = "ip_state_tran", catalog = "lpdb")
 public class IpStateTran implements java.io.Serializable {
 
 	// Fields
@@ -37,7 +43,8 @@ public class IpStateTran implements java.io.Serializable {
 	}
 
 	// Property accessors
-
+	@Id
+	@Column(name = "tran_id", unique = true, nullable = false)
 	public Integer getTranId() {
 		return this.tranId;
 	}
@@ -46,6 +53,7 @@ public class IpStateTran implements java.io.Serializable {
 		this.tranId = tranId;
 	}
 
+	@Column(name = "tran_entity", nullable = false, length = 450)
 	public String getTranEntity() {
 		return this.tranEntity;
 	}
@@ -54,6 +62,7 @@ public class IpStateTran implements java.io.Serializable {
 		this.tranEntity = tranEntity;
 	}
 
+	@Column(name = "tran_curr_state", nullable = false)
 	public Integer getTranCurrState() {
 		return this.tranCurrState;
 	}
@@ -62,6 +71,7 @@ public class IpStateTran implements java.io.Serializable {
 		this.tranCurrState = tranCurrState;
 	}
 
+	@Column(name = "tran_next_state", nullable = false)
 	public Integer getTranNextState() {
 		return this.tranNextState;
 	}
@@ -70,6 +80,7 @@ public class IpStateTran implements java.io.Serializable {
 		this.tranNextState = tranNextState;
 	}
 
+	@Column(name = "tran_is_ui", nullable = false, length = 1)
 	public String getTranIsUi() {
 		return this.tranIsUi;
 	}
@@ -78,6 +89,7 @@ public class IpStateTran implements java.io.Serializable {
 		this.tranIsUi = tranIsUi;
 	}
 
+	@Column(name = "tran_crtd_dt", nullable = false, length = 19)
 	public Date getTranCrtdDt() {
 		return this.tranCrtdDt;
 	}

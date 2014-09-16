@@ -1,13 +1,16 @@
 package za.co.idea.ip.orm.dao;
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpNotifGroup;
 
@@ -22,12 +25,23 @@ import za.co.idea.ip.orm.bean.IpNotifGroup;
  * @see za.co.idea.ip.orm.bean.IpNotifGroup
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings({ "rawtypes" })
-public class IpNotifGroupDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(IpNotifGroupDAO.class);
+@Transactional
+@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
+public class IpNotifGroupDAO {
+	private static final Logger log = Logger.getLogger(IpNotifGroupDAO.class);
 	// property constants
 	public static final String ING_NOTIF_ID = "ingNotifId";
 	public static final String ING_GRP_ID = "ingGrpId";
+
+	private SessionFactory sessionFactory;
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	private Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
 
 	protected void initDao() {
 		// do nothing
@@ -36,7 +50,7 @@ public class IpNotifGroupDAO extends HibernateDaoSupport {
 	public void save(IpNotifGroup transientInstance) {
 		log.debug("saving IpNotifGroup instance");
 		try {
-			getHibernateTemplate().save(transientInstance);
+			getCurrentSession().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -47,7 +61,7 @@ public class IpNotifGroupDAO extends HibernateDaoSupport {
 	public void delete(IpNotifGroup persistentInstance) {
 		log.debug("deleting IpNotifGroup instance");
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -58,7 +72,7 @@ public class IpNotifGroupDAO extends HibernateDaoSupport {
 	public IpNotifGroup findById(java.lang.Long id) {
 		log.debug("getting IpNotifGroup instance with id: " + id);
 		try {
-			IpNotifGroup instance = (IpNotifGroup) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpNotifGroup", id);
+			IpNotifGroup instance = (IpNotifGroup) getCurrentSession().get("za.co.idea.ip.orm.bean.IpNotifGroup", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -66,10 +80,10 @@ public class IpNotifGroupDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(IpNotifGroup instance) {
+	public List<IpNotifGroup> findByExample(IpNotifGroup instance) {
 		log.debug("finding IpNotifGroup instance by example");
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List<IpNotifGroup> results = (List<IpNotifGroup>) getCurrentSession().createCriteria("za.co.idea.ip.orm.bean.IpNotifGroup").add(create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -82,18 +96,20 @@ public class IpNotifGroupDAO extends HibernateDaoSupport {
 		log.debug("finding IpNotifGroup instance with property: " + propertyName + ", value: " + value);
 		try {
 			String queryString = "from IpNotifGroup as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			queryObject.setParameter(0, value);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
 		}
 	}
 
-	public List findByIngNotifId(Object ingNotifId) {
+	public List<IpNotifGroup> findByIngNotifId(Object ingNotifId) {
 		return findByProperty(ING_NOTIF_ID, ingNotifId);
 	}
 
-	public List findByIngGrpId(Object ingGrpId) {
+	public List<IpNotifGroup> findByIngGrpId(Object ingGrpId) {
 		return findByProperty(ING_GRP_ID, ingGrpId);
 	}
 
@@ -101,7 +117,8 @@ public class IpNotifGroupDAO extends HibernateDaoSupport {
 		log.debug("finding all IpNotifGroup instances");
 		try {
 			String queryString = "from IpNotifGroup";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -111,7 +128,7 @@ public class IpNotifGroupDAO extends HibernateDaoSupport {
 	public IpNotifGroup merge(IpNotifGroup detachedInstance) {
 		log.debug("merging IpNotifGroup instance");
 		try {
-			IpNotifGroup result = (IpNotifGroup) getHibernateTemplate().merge(detachedInstance);
+			IpNotifGroup result = (IpNotifGroup) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -123,7 +140,7 @@ public class IpNotifGroupDAO extends HibernateDaoSupport {
 	public void attachDirty(IpNotifGroup instance) {
 		log.debug("attaching dirty IpNotifGroup instance");
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -134,18 +151,18 @@ public class IpNotifGroupDAO extends HibernateDaoSupport {
 	public void attachClean(IpNotifGroup instance) {
 		log.debug("attaching clean IpNotifGroup instance");
 		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
+			getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
 		}
 	}
-
+	
 	public void deleteByNotifId(String id) {
 		log.debug("Deleting Notification Groups By Notif Id : " + id);
 		try {
-			Query query = getSession().getNamedQuery("deleteNGByNotifId");
+			Query query = getCurrentSession().getNamedQuery("deleteNGByNotifId");
 			query.setString("id", id);
 			query.executeUpdate();
 		} catch (RuntimeException re) {
@@ -157,7 +174,7 @@ public class IpNotifGroupDAO extends HibernateDaoSupport {
 	public List fetchByNotifId(String id) {
 		log.debug("Fetching Notification Group Users By Notif Id : " + id);
 		try {
-			Query query = getSession().getNamedQuery("fetchNGByNotifId");
+			Query query = getCurrentSession().getNamedQuery("fetchNGByNotifId");
 			query.setString("id", id);
 			List ret = query.list();
 			return ret;

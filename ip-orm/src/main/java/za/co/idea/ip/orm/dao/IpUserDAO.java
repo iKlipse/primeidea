@@ -1,13 +1,16 @@
 package za.co.idea.ip.orm.dao;
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpUser;
 
@@ -22,9 +25,10 @@ import za.co.idea.ip.orm.bean.IpUser;
  * @see za.co.idea.ip.orm.bean.IpUser
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings({ "rawtypes" })
-public class IpUserDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(IpUserDAO.class);
+@Transactional
+@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
+public class IpUserDAO {
+	private static final Logger log = Logger.getLogger(IpUserDAO.class);
 	// property constants
 	public static final String USER_FNAME = "userFName";
 	public static final String USER_LNAME = "userLName";
@@ -40,6 +44,16 @@ public class IpUserDAO extends HibernateDaoSupport {
 	public static final String USER_STATUS = "userStatus";
 	public static final String USER_EMPLOYEE_ID = "userEmployeeId";
 
+	private SessionFactory sessionFactory;
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	private Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
+
 	protected void initDao() {
 		// do nothing
 	}
@@ -47,7 +61,7 @@ public class IpUserDAO extends HibernateDaoSupport {
 	public void save(IpUser transientInstance) {
 		log.debug("saving IpUser instance");
 		try {
-			getHibernateTemplate().save(transientInstance);
+			getCurrentSession().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -58,7 +72,7 @@ public class IpUserDAO extends HibernateDaoSupport {
 	public void delete(IpUser persistentInstance) {
 		log.debug("deleting IpUser instance");
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -69,7 +83,7 @@ public class IpUserDAO extends HibernateDaoSupport {
 	public IpUser findById(java.lang.Long id) {
 		log.debug("getting IpUser instance with id: " + id);
 		try {
-			IpUser instance = (IpUser) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpUser", id);
+			IpUser instance = (IpUser) getCurrentSession().get("za.co.idea.ip.orm.bean.IpUser", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -77,10 +91,10 @@ public class IpUserDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(IpUser instance) {
+	public List<IpUser> findByExample(IpUser instance) {
 		log.debug("finding IpUser instance by example");
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List<IpUser> results = (List<IpUser>) getCurrentSession().createCriteria("za.co.idea.ip.orm.bean.IpUser").add(create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -93,62 +107,64 @@ public class IpUserDAO extends HibernateDaoSupport {
 		log.debug("finding IpUser instance with property: " + propertyName + ", value: " + value);
 		try {
 			String queryString = "from IpUser as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			queryObject.setParameter(0, value);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
 		}
 	}
 
-	public List findByUserFName(Object userFName) {
+	public List<IpUser> findByUserFName(Object userFName) {
 		return findByProperty(USER_FNAME, userFName);
 	}
 
-	public List findByUserLName(Object userLName) {
+	public List<IpUser> findByUserLName(Object userLName) {
 		return findByProperty(USER_LNAME, userLName);
 	}
 
-	public List findByUserMName(Object userMName) {
+	public List<IpUser> findByUserMName(Object userMName) {
 		return findByProperty(USER_MNAME, userMName);
 	}
 
-	public List findByUserIdNum(Object userIdNum) {
+	public List<IpUser> findByUserIdNum(Object userIdNum) {
 		return findByProperty(USER_ID_NUM, userIdNum);
 	}
 
-	public List findByUserScreenName(Object userScreenName) {
+	public List<IpUser> findByUserScreenName(Object userScreenName) {
 		return findByProperty(USER_SCREEN_NAME, userScreenName);
 	}
 
-	public List findByUserEmail(Object userEmail) {
+	public List<IpUser> findByUserEmail(Object userEmail) {
 		return findByProperty(USER_EMAIL, userEmail);
 	}
 
-	public List findByUserContact(Object userContact) {
+	public List<IpUser> findByUserContact(Object userContact) {
 		return findByProperty(USER_CONTACT, userContact);
 	}
 
-	public List findByUserSkills(Object userSkills) {
+	public List<IpUser> findByUserSkills(Object userSkills) {
 		return findByProperty(USER_SKILLS, userSkills);
 	}
 
-	public List findByUserBio(Object userBio) {
+	public List<IpUser> findByUserBio(Object userBio) {
 		return findByProperty(USER_BIO, userBio);
 	}
 
-	public List findByUserFbHandle(Object userFbHandle) {
+	public List<IpUser> findByUserFbHandle(Object userFbHandle) {
 		return findByProperty(USER_FB_HANDLE, userFbHandle);
 	}
 
-	public List findByUserTwHandle(Object userTwHandle) {
+	public List<IpUser> findByUserTwHandle(Object userTwHandle) {
 		return findByProperty(USER_TW_HANDLE, userTwHandle);
 	}
 
-	public List findByUserStatus(Object userStatus) {
+	public List<IpUser> findByUserStatus(Object userStatus) {
 		return findByProperty(USER_STATUS, userStatus);
 	}
 
-	public List findByUserEmployeeId(Object userEmployeeId) {
+	public List<IpUser> findByUserEmployeeId(Object userEmployeeId) {
 		return findByProperty(USER_EMPLOYEE_ID, userEmployeeId);
 	}
 
@@ -156,7 +172,8 @@ public class IpUserDAO extends HibernateDaoSupport {
 		log.debug("finding all IpUser instances");
 		try {
 			String queryString = "from IpUser";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -166,7 +183,7 @@ public class IpUserDAO extends HibernateDaoSupport {
 	public IpUser merge(IpUser detachedInstance) {
 		log.debug("merging IpUser instance");
 		try {
-			IpUser result = (IpUser) getHibernateTemplate().merge(detachedInstance);
+			IpUser result = (IpUser) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -178,7 +195,7 @@ public class IpUserDAO extends HibernateDaoSupport {
 	public void attachDirty(IpUser instance) {
 		log.debug("attaching dirty IpUser instance");
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -189,7 +206,7 @@ public class IpUserDAO extends HibernateDaoSupport {
 	public void attachClean(IpUser instance) {
 		log.debug("attaching clean IpUser instance");
 		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
+			getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -200,7 +217,7 @@ public class IpUserDAO extends HibernateDaoSupport {
 	public List fetchActiveUsers() {
 		log.debug("Fetching all active Users by Query :: getUsersByStatus");
 		try {
-			Query query = getSession().getNamedQuery("getUsersByStatus");
+			Query query = getCurrentSession().getNamedQuery("getUsersByStatus");
 			query.setString("status", "y");
 			List ret = query.list();
 			return ret;
@@ -213,7 +230,7 @@ public class IpUserDAO extends HibernateDaoSupport {
 	public List fetchInActiveUsers() {
 		log.debug("Fetching all in active Users by Query :: getUsersByStatus");
 		try {
-			Query query = getSession().getNamedQuery("getUsersByStatus");
+			Query query = getCurrentSession().getNamedQuery("getUsersByStatus");
 			query.setString("status", "n");
 			List ret = query.list();
 			return ret;
@@ -226,7 +243,7 @@ public class IpUserDAO extends HibernateDaoSupport {
 	public List fetchSortByPrimaryGroup() {
 		log.debug("Fetching User by Query :: sortListByPrimaryGrp");
 		try {
-			Query query = getSession().getNamedQuery("sortListByPrimaryGrp");
+			Query query = getCurrentSession().getNamedQuery("sortListByPrimaryGrp");
 			List ret = query.list();
 
 			return ret;
@@ -240,11 +257,11 @@ public class IpUserDAO extends HibernateDaoSupport {
 		Long solCount = 0l;
 		log.debug("Fetching Solution coutn for user by Query :: getSolCountByUserId");
 		try {
-			Query query = getSession().getNamedQuery("getSolCountByUserId");
+			Query query = getCurrentSession().getNamedQuery("getSolCountByUserId");
 			query.setLong("id", userId);
 			List sol = query.list();
 			if (sol != null && sol.size() > 0)
-				solCount = Long.valueOf(sol.get(0).toString());
+				solCount = (long) sol.size();
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 		}
@@ -255,11 +272,11 @@ public class IpUserDAO extends HibernateDaoSupport {
 		Long chalCount = 0l;
 		log.debug("Fetching Challenge count for user by Query :: getChalCountByUserId");
 		try {
-			Query query = getSession().getNamedQuery("getChalCountByUserId");
+			Query query = getCurrentSession().getNamedQuery("getChalCountByUserId");
 			query.setLong("id", userId);
 			List chal = query.list();
 			if (chal != null && chal.size() > 0)
-				chalCount = Long.valueOf(chal.get(0).toString());
+				chalCount = (long) chal.size();
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 		}
@@ -270,11 +287,11 @@ public class IpUserDAO extends HibernateDaoSupport {
 		Long ideaCount = 0l;
 		log.debug("Fetching Ideas count for user by Query :: getIdeasCountByUserId");
 		try {
-			Query query = getSession().getNamedQuery("getIdeasCountByUserId");
+			Query query = getCurrentSession().getNamedQuery("getIdeasCountByUserId");
 			query.setLong("id", userId);
 			List idea = query.list();
 			if (idea != null && idea.size() > 0)
-				ideaCount = Long.valueOf(idea.get(0).toString());
+				ideaCount = (long) idea.size();
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 		}
@@ -285,11 +302,11 @@ public class IpUserDAO extends HibernateDaoSupport {
 		Long whishListCount = 0l;
 		log.debug("Fetching WhishList count for user by Query :: getWhishListCountByUserId");
 		try {
-			Query query = getSession().getNamedQuery("getWhishListCountByUserId");
+			Query query = getCurrentSession().getNamedQuery("getWhishListCountByUserId");
 			query.setLong("id", userId);
 			List whishList = query.list();
 			if (whishList != null && whishList.size() > 0)
-				whishListCount = Long.valueOf(whishList.get(0).toString());
+				whishListCount = (long) whishList.size();
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 		}

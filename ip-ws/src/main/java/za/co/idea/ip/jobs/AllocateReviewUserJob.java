@@ -5,12 +5,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.StatefulJob;
-import org.springframework.scheduling.quartz.QuartzJobBean;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpGroupUser;
 import za.co.idea.ip.orm.bean.IpReview;
@@ -18,13 +12,12 @@ import za.co.idea.ip.orm.dao.IpGroupUserDAO;
 import za.co.idea.ip.orm.dao.IpReviewDAO;
 
 @SuppressWarnings({ "rawtypes" })
-public class AllocateReviewUserJob extends QuartzJobBean implements StatefulJob {
+public class AllocateReviewUserJob {
 	private static final Logger logger = Logger.getLogger(AllocateReviewUserJob.class);
 	private IpReviewDAO ipReviewDAO;
 	private IpGroupUserDAO ipGroupUserDAO;
 
-	@Transactional(propagation = Propagation.REQUIRED)
-	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
+	public void executeInternal() {
 		List unalloc = ipReviewDAO.findUnAllocatedReviews();
 		if (unalloc == null)
 			logger.info("No allocations to be processed");

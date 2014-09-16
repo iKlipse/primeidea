@@ -2,10 +2,19 @@ package za.co.idea.ip.orm.bean;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.Table;
+
 /**
  * IpNotifGroup entity. @author MyEclipse Persistence Tools
  */
-
+@Entity
+@Table(name = "ip_notif_group", catalog = "lpdb")
+@NamedNativeQueries({ @NamedNativeQuery(name = "deleteNGByNotifId", query = "delete from ip_notif_group where ing_notif_id=:id"), @NamedNativeQuery(name = "fetchNGByNotifId", query = "select ng.* from ip_notif_group ng where ng.ing_notif_id=:id", resultClass = IpNotifGroup.class) })
 public class IpNotifGroup implements java.io.Serializable {
 
 	// Fields
@@ -40,7 +49,8 @@ public class IpNotifGroup implements java.io.Serializable {
 	}
 
 	// Property accessors
-
+	@Id
+	@Column(name = "ing_id", unique = true, nullable = false)
 	public Long getIngId() {
 		return this.ingId;
 	}
@@ -49,6 +59,7 @@ public class IpNotifGroup implements java.io.Serializable {
 		this.ingId = ingId;
 	}
 
+	@Column(name = "ing_notif_id", length = 36)
 	public String getIngNotifId() {
 		return this.ingNotifId;
 	}
@@ -57,6 +68,7 @@ public class IpNotifGroup implements java.io.Serializable {
 		this.ingNotifId = ingNotifId;
 	}
 
+	@Column(name = "ing_grp_id")
 	public Long getIngGrpId() {
 		return this.ingGrpId;
 	}
@@ -65,6 +77,7 @@ public class IpNotifGroup implements java.io.Serializable {
 		this.ingGrpId = ingGrpId;
 	}
 
+	@Column(name = "ing_crtd_dt", nullable = false, length = 19)
 	public Date getIngCrtdDt() {
 		return this.ingCrtdDt;
 	}

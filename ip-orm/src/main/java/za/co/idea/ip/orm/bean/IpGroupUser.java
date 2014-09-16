@@ -2,10 +2,22 @@ package za.co.idea.ip.orm.bean;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.Table;
+
 /**
  * IpGroupUser entity. @author MyEclipse Persistence Tools
  */
-
+@Entity
+@Table(name = "ip_group_user", catalog = "lpdb")
+@NamedNativeQueries({ @NamedNativeQuery(name = "deleteGUByGroupId", query = "delete from ip_group_user where gu_grp_id=:id"), @NamedNativeQuery(name = "fetchGUByGroupId", query = "select gu.* from ip_group_user gu where gu.gu_grp_id=:id", resultClass = IpGroupUser.class), @NamedNativeQuery(name = "fetchGUByUserId", query = "select gu.* from ip_group_user gu where gu.gu_usr_id=:id", resultClass = IpGroupUser.class) })
 public class IpGroupUser implements java.io.Serializable {
 
 	// Fields
@@ -34,7 +46,8 @@ public class IpGroupUser implements java.io.Serializable {
 	}
 
 	// Property accessors
-
+	@Id
+	@Column(name = "gu_id", unique = true, nullable = false)
 	public Long getGuId() {
 		return this.guId;
 	}
@@ -43,6 +56,8 @@ public class IpGroupUser implements java.io.Serializable {
 		this.guId = guId;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "gu_usr_id", nullable = false)
 	public IpUser getIpUser() {
 		return this.ipUser;
 	}
@@ -51,6 +66,8 @@ public class IpGroupUser implements java.io.Serializable {
 		this.ipUser = ipUser;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "gu_grp_id", nullable = false)
 	public IpGroup getIpGroup() {
 		return this.ipGroup;
 	}
@@ -59,6 +76,7 @@ public class IpGroupUser implements java.io.Serializable {
 		this.ipGroup = ipGroup;
 	}
 
+	@Column(name = "gu_crtd_dt", nullable = false, length = 19)
 	public Date getGuCrtdDt() {
 		return this.guCrtdDt;
 	}

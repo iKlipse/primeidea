@@ -16,7 +16,7 @@
 		<liferay.app.server.deploy.dir>C:\Java\liferay\portal-tcat\tomcat-7.0.42\webapps</liferay.app.server.deploy.dir>
 		<liferay.app.server.lib.global.dir>C:\Java\liferay\portal-tcat\tomcat-7.0.42\lib\ext</liferay.app.server.lib.global.dir>
 		<liferay.app.server.portal.dir>C:\Java\liferay\portal-tcat\tomcat-7.0.42\webapps\ROOT</liferay.app.server.portal.dir>
-		<org.springframework.version>3.2.4.RELEASE</org.springframework.version>
+		<org.springframework.version>4.1.0.RELEASE</org.springframework.version>
 		<org.apache.cxf.version>2.7.10</org.apache.cxf.version>
 	</properties>
 	<dependencies>

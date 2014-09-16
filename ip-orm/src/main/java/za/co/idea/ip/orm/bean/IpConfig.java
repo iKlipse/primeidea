@@ -2,10 +2,16 @@ package za.co.idea.ip.orm.bean;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * IpConfig entity. @author MyEclipse Persistence Tools
  */
-
+@Entity
+@Table(name = "ip_config", catalog = "lpdb")
 public class IpConfig implements java.io.Serializable {
 
 	// Fields
@@ -37,7 +43,8 @@ public class IpConfig implements java.io.Serializable {
 	}
 
 	// Property accessors
-
+	@Id
+	@Column(name = "config_id", unique = true, nullable = false)
 	public Integer getConfigId() {
 		return this.configId;
 	}
@@ -46,6 +53,7 @@ public class IpConfig implements java.io.Serializable {
 		this.configId = configId;
 	}
 
+	@Column(name = "config_key", nullable = false, length = 65535)
 	public String getConfigKey() {
 		return this.configKey;
 	}
@@ -54,6 +62,7 @@ public class IpConfig implements java.io.Serializable {
 		this.configKey = configKey;
 	}
 
+	@Column(name = "config_value", nullable = false, length = 65535)
 	public String getConfigValue() {
 		return this.configValue;
 	}
@@ -62,6 +71,7 @@ public class IpConfig implements java.io.Serializable {
 		this.configValue = configValue;
 	}
 
+	@Column(name = "config_env", nullable = false, length = 45)
 	public String getConfigEnv() {
 		return this.configEnv;
 	}
@@ -70,6 +80,7 @@ public class IpConfig implements java.io.Serializable {
 		this.configEnv = configEnv;
 	}
 
+	@Column(name = "created_date", nullable = false, length = 19)
 	public Date getCreatedDate() {
 		return this.createdDate;
 	}
@@ -78,6 +89,7 @@ public class IpConfig implements java.io.Serializable {
 		this.createdDate = createdDate;
 	}
 
+	@Column(name = "created_by", nullable = false, length = 65535)
 	public String getCreatedBy() {
 		return this.createdBy;
 	}

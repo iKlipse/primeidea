@@ -2,10 +2,16 @@ package za.co.idea.ip.orm.bean;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * IpNews entity. @author MyEclipse Persistence Tools
  */
-
+@Entity
+@Table(name = "ip_news", catalog = "lpdb")
 public class IpNews implements java.io.Serializable {
 
 	// Fields
@@ -44,7 +50,8 @@ public class IpNews implements java.io.Serializable {
 	}
 
 	// Property accessors
-
+	@Id
+	@Column(name = "news_id", unique = true, nullable = false)
 	public Long getNewsId() {
 		return this.newsId;
 	}
@@ -53,6 +60,7 @@ public class IpNews implements java.io.Serializable {
 		this.newsId = newsId;
 	}
 
+	@Column(name = "news_title", length = 500)
 	public String getNewsTitle() {
 		return this.newsTitle;
 	}
@@ -61,6 +69,7 @@ public class IpNews implements java.io.Serializable {
 		this.newsTitle = newsTitle;
 	}
 
+	@Column(name = "news_startDate", length = 19)
 	public Date getNewsStartDate() {
 		return this.newsStartDate;
 	}
@@ -69,6 +78,7 @@ public class IpNews implements java.io.Serializable {
 		this.newsStartDate = newsStartDate;
 	}
 
+	@Column(name = "news_endDate", length = 19)
 	public Date getNewsEndDate() {
 		return this.newsEndDate;
 	}
@@ -77,6 +87,7 @@ public class IpNews implements java.io.Serializable {
 		this.newsEndDate = newsEndDate;
 	}
 
+	@Column(name = "news_content", length = 9999)
 	public String getNewsContent() {
 		return this.newsContent;
 	}
@@ -85,6 +96,7 @@ public class IpNews implements java.io.Serializable {
 		this.newsContent = newsContent;
 	}
 
+	@Column(name = "news_crtd_dt", nullable = false, length = 19)
 	public Date getNewsCrtdDt() {
 		return this.newsCrtdDt;
 	}

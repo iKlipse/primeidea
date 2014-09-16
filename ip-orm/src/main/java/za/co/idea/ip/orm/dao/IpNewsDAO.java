@@ -1,12 +1,16 @@
 package za.co.idea.ip.orm.dao;
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.LockMode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpNews;
 
@@ -21,12 +25,23 @@ import za.co.idea.ip.orm.bean.IpNews;
  * @see za.co.idea.ip.orm.bean.IpNews
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings({ "rawtypes" })
-public class IpNewsDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(IpNewsDAO.class);
+@Transactional
+@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
+public class IpNewsDAO {
+	private static final Logger log = Logger.getLogger(IpNewsDAO.class);
 	// property constants
 	public static final String NEWS_TITLE = "newsTitle";
 	public static final String NEWS_CONTENT = "newsContent";
+
+	private SessionFactory sessionFactory;
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	private Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
 
 	protected void initDao() {
 		// do nothing
@@ -35,7 +50,7 @@ public class IpNewsDAO extends HibernateDaoSupport {
 	public void save(IpNews transientInstance) {
 		log.debug("saving IpNews instance");
 		try {
-			getHibernateTemplate().save(transientInstance);
+			getCurrentSession().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -46,7 +61,7 @@ public class IpNewsDAO extends HibernateDaoSupport {
 	public void delete(IpNews persistentInstance) {
 		log.debug("deleting IpNews instance");
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -57,7 +72,7 @@ public class IpNewsDAO extends HibernateDaoSupport {
 	public IpNews findById(java.lang.Long id) {
 		log.debug("getting IpNews instance with id: " + id);
 		try {
-			IpNews instance = (IpNews) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpNews", id);
+			IpNews instance = (IpNews) getCurrentSession().get("za.co.idea.ip.orm.bean.IpNews", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -65,10 +80,10 @@ public class IpNewsDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(IpNews instance) {
+	public List<IpNews> findByExample(IpNews instance) {
 		log.debug("finding IpNews instance by example");
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List<IpNews> results = (List<IpNews>) getCurrentSession().createCriteria("za.co.idea.ip.orm.bean.IpNews").add(create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -81,18 +96,20 @@ public class IpNewsDAO extends HibernateDaoSupport {
 		log.debug("finding IpNews instance with property: " + propertyName + ", value: " + value);
 		try {
 			String queryString = "from IpNews as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			queryObject.setParameter(0, value);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
 		}
 	}
 
-	public List findByNewsTitle(Object newsTitle) {
+	public List<IpNews> findByNewsTitle(Object newsTitle) {
 		return findByProperty(NEWS_TITLE, newsTitle);
 	}
 
-	public List findByNewsContent(Object newsContent) {
+	public List<IpNews> findByNewsContent(Object newsContent) {
 		return findByProperty(NEWS_CONTENT, newsContent);
 	}
 
@@ -100,7 +117,8 @@ public class IpNewsDAO extends HibernateDaoSupport {
 		log.debug("finding all IpNews instances");
 		try {
 			String queryString = "from IpNews";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -110,7 +128,7 @@ public class IpNewsDAO extends HibernateDaoSupport {
 	public IpNews merge(IpNews detachedInstance) {
 		log.debug("merging IpNews instance");
 		try {
-			IpNews result = (IpNews) getHibernateTemplate().merge(detachedInstance);
+			IpNews result = (IpNews) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -122,7 +140,7 @@ public class IpNewsDAO extends HibernateDaoSupport {
 	public void attachDirty(IpNews instance) {
 		log.debug("attaching dirty IpNews instance");
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -133,7 +151,7 @@ public class IpNewsDAO extends HibernateDaoSupport {
 	public void attachClean(IpNews instance) {
 		log.debug("attaching clean IpNews instance");
 		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
+			getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);

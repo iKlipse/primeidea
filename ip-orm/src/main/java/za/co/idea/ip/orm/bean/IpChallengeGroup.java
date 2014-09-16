@@ -2,10 +2,22 @@ package za.co.idea.ip.orm.bean;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.Table;
+
 /**
  * IpChallengeGroup entity. @author MyEclipse Persistence Tools
  */
-
+@Entity
+@Table(name = "ip_challenge_group", catalog = "lpdb")
+@NamedNativeQueries({ @NamedNativeQuery(name = "fetchCGByChalId", query = "select fg.* from ip_challenge_group fg where fg.cg_chal_id=:id", resultClass = IpChallengeGroup.class), @NamedNativeQuery(name = "fetchCGByGroupId", query = "select fg.* from ip_challenge_group fg where fg.cg_group_id=:id", resultClass = IpChallengeGroup.class) })
 public class IpChallengeGroup implements java.io.Serializable {
 
 	// Fields
@@ -40,7 +52,8 @@ public class IpChallengeGroup implements java.io.Serializable {
 	}
 
 	// Property accessors
-
+	@Id
+	@Column(name = "cg_id", unique = true, nullable = false)
 	public Long getCgId() {
 		return this.cgId;
 	}
@@ -49,6 +62,8 @@ public class IpChallengeGroup implements java.io.Serializable {
 		this.cgId = cgId;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "cg_chal_id")
 	public IpChallenge getIpChallenge() {
 		return this.ipChallenge;
 	}
@@ -57,6 +72,8 @@ public class IpChallengeGroup implements java.io.Serializable {
 		this.ipChallenge = ipChallenge;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "cg_group_id")
 	public IpGroup getIpGroup() {
 		return this.ipGroup;
 	}
@@ -65,6 +82,7 @@ public class IpChallengeGroup implements java.io.Serializable {
 		this.ipGroup = ipGroup;
 	}
 
+	@Column(name = "cg_crtd_dt", nullable = false, length = 19)
 	public Date getCgCrtdDt() {
 		return this.cgCrtdDt;
 	}

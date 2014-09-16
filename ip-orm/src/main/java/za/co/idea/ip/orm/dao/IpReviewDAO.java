@@ -1,14 +1,17 @@
 package za.co.idea.ip.orm.dao;
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpReview;
 
@@ -23,12 +26,25 @@ import za.co.idea.ip.orm.bean.IpReview;
  * @see za.co.idea.ip.orm.bean.IpReview
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings({ "rawtypes" })
-public class IpReviewDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(IpReviewDAO.class);
+@Transactional
+@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
+public class IpReviewDAO {
+	private static final Logger log = Logger.getLogger(IpReviewDAO.class);
 	// property constants
 	public static final String REV_ENTITY_ID = "revEntityId";
 	public static final String REV_ENTITY_NAME = "revEntityName";
+	public static final String REV_ENTITY_STATUS_ID = "revEntityStatusId";
+	public static final String REV_SEL_USER_ID = "revSelUserId";
+
+	private SessionFactory sessionFactory;
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	private Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
 
 	protected void initDao() {
 		// do nothing
@@ -37,7 +53,7 @@ public class IpReviewDAO extends HibernateDaoSupport {
 	public void save(IpReview transientInstance) {
 		log.debug("saving IpReview instance");
 		try {
-			getHibernateTemplate().save(transientInstance);
+			getCurrentSession().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -48,7 +64,7 @@ public class IpReviewDAO extends HibernateDaoSupport {
 	public void delete(IpReview persistentInstance) {
 		log.debug("deleting IpReview instance");
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -59,7 +75,7 @@ public class IpReviewDAO extends HibernateDaoSupport {
 	public IpReview findById(java.lang.Long id) {
 		log.debug("getting IpReview instance with id: " + id);
 		try {
-			IpReview instance = (IpReview) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpReview", id);
+			IpReview instance = (IpReview) getCurrentSession().get("za.co.idea.ip.orm.bean.IpReview", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -67,10 +83,10 @@ public class IpReviewDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(IpReview instance) {
+	public List<IpReview> findByExample(IpReview instance) {
 		log.debug("finding IpReview instance by example");
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List<IpReview> results = (List<IpReview>) getCurrentSession().createCriteria("za.co.idea.ip.orm.bean.IpReview").add(create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -83,26 +99,37 @@ public class IpReviewDAO extends HibernateDaoSupport {
 		log.debug("finding IpReview instance with property: " + propertyName + ", value: " + value);
 		try {
 			String queryString = "from IpReview as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			queryObject.setParameter(0, value);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
 		}
 	}
 
-	public List findByRevEntityId(Object revEntityId) {
+	public List<IpReview> findByRevEntityId(Object revEntityId) {
 		return findByProperty(REV_ENTITY_ID, revEntityId);
 	}
 
-	public List findByRevEntityName(Object revEntityName) {
+	public List<IpReview> findByRevEntityName(Object revEntityName) {
 		return findByProperty(REV_ENTITY_NAME, revEntityName);
+	}
+
+	public List<IpReview> findByRevEntityStatusId(Object revEntityStatusId) {
+		return findByProperty(REV_ENTITY_STATUS_ID, revEntityStatusId);
+	}
+
+	public List<IpReview> findByRevSelUserId(Object revSelUserId) {
+		return findByProperty(REV_SEL_USER_ID, revSelUserId);
 	}
 
 	public List findAll() {
 		log.debug("finding all IpReview instances");
 		try {
 			String queryString = "from IpReview";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -112,7 +139,7 @@ public class IpReviewDAO extends HibernateDaoSupport {
 	public IpReview merge(IpReview detachedInstance) {
 		log.debug("merging IpReview instance");
 		try {
-			IpReview result = (IpReview) getHibernateTemplate().merge(detachedInstance);
+			IpReview result = (IpReview) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -124,7 +151,7 @@ public class IpReviewDAO extends HibernateDaoSupport {
 	public void attachDirty(IpReview instance) {
 		log.debug("attaching dirty IpReview instance");
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -135,7 +162,7 @@ public class IpReviewDAO extends HibernateDaoSupport {
 	public void attachClean(IpReview instance) {
 		log.debug("attaching clean IpReview instance");
 		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
+			getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -146,7 +173,7 @@ public class IpReviewDAO extends HibernateDaoSupport {
 	public List findByEntityIdEntityName(Long entityId, String entityName, Integer status) {
 		log.debug("finding all reviews by entity id");
 		try {
-			Query query = getSession().getNamedQuery("getByEntityIdEntityNameStatus");
+			Query query = getCurrentSession().getNamedQuery("getByEntityIdEntityNameStatus");
 			query.setLong("id", entityId);
 			query.setString("tblNm", entityName);
 			query.setInteger("status", status);
@@ -165,7 +192,7 @@ public class IpReviewDAO extends HibernateDaoSupport {
 	public List findAllByEntityIdEntityName(Long entityId, String entityName) {
 		log.debug("finding all reviews by entity id");
 		try {
-			Query query = getSession().getNamedQuery("getByEntityIdEntityName");
+			Query query = getCurrentSession().getNamedQuery("getByEntityIdEntityName");
 			query.setLong("id", entityId);
 			query.setString("tblNm", entityName);
 			List ret = query.list();
@@ -183,7 +210,7 @@ public class IpReviewDAO extends HibernateDaoSupport {
 	public List findUnAllocatedReviews() {
 		log.debug("finding all reviews by entity id");
 		try {
-			Query query = getSession().getNamedQuery("getUnallocatedReview");
+			Query query = getCurrentSession().getNamedQuery("getUnallocatedReview");
 			List ret = query.list();
 			for (Object object : ret) {
 				IpReview review = (IpReview) object;
@@ -199,7 +226,7 @@ public class IpReviewDAO extends HibernateDaoSupport {
 	public List findReviewsByUserId(Long uId) {
 		log.debug("finding all reviews by entity id");
 		try {
-			Query query = getSession().getNamedQuery("getReviewByUserId");
+			Query query = getCurrentSession().getNamedQuery("getReviewByUserId");
 			query.setLong("id", uId);
 			List ret = query.list();
 			for (Object object : ret) {
@@ -216,7 +243,7 @@ public class IpReviewDAO extends HibernateDaoSupport {
 	public Integer findReviewStatusCount(Long entityId, String entityName) {
 		log.debug("finding all reviews by entity id");
 		try {
-			Query query = getSession().getNamedQuery("getReviewStatusCnt");
+			Query query = getCurrentSession().createSQLQuery("select count(distinct ib.rev_entity_status_id) as cnt from ip_review ib where ib.rev_entity_id=:id and lower(ib.rev_entity_name)=lower(:tblNm)");
 			query.setLong("id", entityId);
 			query.setString("tblNm", entityName);
 			List ret = query.list();
@@ -230,7 +257,7 @@ public class IpReviewDAO extends HibernateDaoSupport {
 	public void deleteByEntityIdEntityName(Long entityId, String entityName, Integer status) {
 		log.debug("finding all reviews by entity id");
 		try {
-			Query query = getSession().getNamedQuery("deleteByEntityIdEntityNameStatus");
+			Query query = getCurrentSession().getNamedQuery("deleteByEntityIdEntityNameStatus");
 			query.setLong("id", entityId);
 			query.setString("tblNm", entityName);
 			query.setInteger("status", status);
@@ -244,7 +271,7 @@ public class IpReviewDAO extends HibernateDaoSupport {
 	public void updateReviewer(Long entityId, String entityName, Long uId) {
 		log.debug("updating reviewer");
 		try {
-			Query query = getSession().getNamedQuery("updateReviewer");
+			Query query = getCurrentSession().getNamedQuery("updateReviewer");
 			query.setLong("id", entityId);
 			query.setString("tblNm", entityName);
 			query.setLong("uid", uId);
@@ -258,5 +285,4 @@ public class IpReviewDAO extends HibernateDaoSupport {
 	public static IpReviewDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (IpReviewDAO) ctx.getBean("IpReviewDAO");
 	}
-
 }

@@ -1,14 +1,17 @@
 package za.co.idea.ip.orm.dao;
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpIdeaGroup;
 
@@ -23,11 +26,21 @@ import za.co.idea.ip.orm.bean.IpIdeaGroup;
  * @see za.co.idea.ip.orm.bean.IpIdeaGroup
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings({ "rawtypes" })
-public class IpIdeaGroupDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(IpIdeaGroupDAO.class);
-
+@Transactional
+@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
+public class IpIdeaGroupDAO {
+	private static final Logger log = Logger.getLogger(IpIdeaGroupDAO.class);
 	// property constants
+
+	private SessionFactory sessionFactory;
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	private Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
 
 	protected void initDao() {
 		// do nothing
@@ -36,7 +49,7 @@ public class IpIdeaGroupDAO extends HibernateDaoSupport {
 	public void save(IpIdeaGroup transientInstance) {
 		log.debug("saving IpIdeaGroup instance");
 		try {
-			getHibernateTemplate().save(transientInstance);
+			getCurrentSession().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -47,7 +60,7 @@ public class IpIdeaGroupDAO extends HibernateDaoSupport {
 	public void delete(IpIdeaGroup persistentInstance) {
 		log.debug("deleting IpIdeaGroup instance");
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -58,7 +71,7 @@ public class IpIdeaGroupDAO extends HibernateDaoSupport {
 	public IpIdeaGroup findById(java.lang.Long id) {
 		log.debug("getting IpIdeaGroup instance with id: " + id);
 		try {
-			IpIdeaGroup instance = (IpIdeaGroup) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpIdeaGroup", id);
+			IpIdeaGroup instance = (IpIdeaGroup) getCurrentSession().get("za.co.idea.ip.orm.bean.IpIdeaGroup", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -66,10 +79,10 @@ public class IpIdeaGroupDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(IpIdeaGroup instance) {
+	public List<IpIdeaGroup> findByExample(IpIdeaGroup instance) {
 		log.debug("finding IpIdeaGroup instance by example");
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List<IpIdeaGroup> results = (List<IpIdeaGroup>) getCurrentSession().createCriteria("za.co.idea.ip.orm.bean.IpIdeaGroup").add(create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -82,7 +95,9 @@ public class IpIdeaGroupDAO extends HibernateDaoSupport {
 		log.debug("finding IpIdeaGroup instance with property: " + propertyName + ", value: " + value);
 		try {
 			String queryString = "from IpIdeaGroup as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			queryObject.setParameter(0, value);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
@@ -93,7 +108,8 @@ public class IpIdeaGroupDAO extends HibernateDaoSupport {
 		log.debug("finding all IpIdeaGroup instances");
 		try {
 			String queryString = "from IpIdeaGroup";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -103,7 +119,7 @@ public class IpIdeaGroupDAO extends HibernateDaoSupport {
 	public IpIdeaGroup merge(IpIdeaGroup detachedInstance) {
 		log.debug("merging IpIdeaGroup instance");
 		try {
-			IpIdeaGroup result = (IpIdeaGroup) getHibernateTemplate().merge(detachedInstance);
+			IpIdeaGroup result = (IpIdeaGroup) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -115,7 +131,7 @@ public class IpIdeaGroupDAO extends HibernateDaoSupport {
 	public void attachDirty(IpIdeaGroup instance) {
 		log.debug("attaching dirty IpIdeaGroup instance");
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -126,18 +142,18 @@ public class IpIdeaGroupDAO extends HibernateDaoSupport {
 	public void attachClean(IpIdeaGroup instance) {
 		log.debug("attaching clean IpIdeaGroup instance");
 		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
+			getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
 		}
 	}
-
+	
 	public void deleteByIdeaId(Long id) {
 		log.debug("Deleting Idea Groups By Id : " + id);
 		try {
-			Query query = getSession().getNamedQuery("deleteIGByIdeaId");
+			Query query = getCurrentSession().getNamedQuery("deleteIGByIdeaId");
 			query.setLong("id", id);
 			query.executeUpdate();
 		} catch (RuntimeException re) {
@@ -149,7 +165,7 @@ public class IpIdeaGroupDAO extends HibernateDaoSupport {
 	public List fetchByIdeaId(Long id) {
 		log.debug("Fetching Group Users By Id : " + id);
 		try {
-			Query query = getSession().getNamedQuery("fetchIGByIdeaId");
+			Query query = getCurrentSession().getNamedQuery("fetchIGByIdeaId");
 			query.setLong("id", id);
 			List ret = query.list();
 			for (Object object : ret) {
@@ -167,7 +183,7 @@ public class IpIdeaGroupDAO extends HibernateDaoSupport {
 	public List fetchByGroupId(Long id) {
 		log.debug("Fetching Group Users By Id : " + id);
 		try {
-			Query query = getSession().getNamedQuery("fetchIGByGroupId");
+			Query query = getCurrentSession().getNamedQuery("fetchIGByGroupId");
 			query.setLong("id", id);
 			List ret = query.list();
 			for (Object object : ret) {

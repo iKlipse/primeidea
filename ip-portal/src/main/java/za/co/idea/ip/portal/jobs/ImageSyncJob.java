@@ -6,18 +6,14 @@ import java.util.ResourceBundle;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.StatefulJob;
-import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 
-public class ImageSyncJob extends QuartzJobBean implements StatefulJob {
+public class ImageSyncJob {
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-portal");
 	private static final Logger logger = Logger.getLogger(ImageSyncJob.class);
 
-	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
+	public void executeInternal() {
 		WebApplicationContext wac = ContextLoader.getCurrentWebApplicationContext();
 		File file = new File(wac.getServletContext().getRealPath("/resources/images"));
 		File srcFile = new File(BUNDLE.getString("base.dir"));

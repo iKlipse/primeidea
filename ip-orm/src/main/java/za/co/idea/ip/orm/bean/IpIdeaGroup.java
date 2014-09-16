@@ -2,10 +2,22 @@ package za.co.idea.ip.orm.bean;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.Table;
+
 /**
  * IpIdeaGroup entity. @author MyEclipse Persistence Tools
  */
-
+@Entity
+@Table(name = "ip_idea_group", catalog = "lpdb")
+@NamedNativeQueries({ @NamedNativeQuery(name = "deleteIGByIdeaId", query = "delete from ip_idea_group where	ig_idea_id=:id"), @NamedNativeQuery(name = "fetchIGByIdeaId", query = "select fg.* from ip_idea_group fg where fg.ig_idea_id=:id", resultClass = IpIdeaGroup.class), @NamedNativeQuery(name = "fetchIGByGroupId", query = "select fg.* from ip_idea_group fg where fg.ig_grp_id=:id", resultClass = IpIdeaGroup.class) })
 public class IpIdeaGroup implements java.io.Serializable {
 
 	// Fields
@@ -40,7 +52,8 @@ public class IpIdeaGroup implements java.io.Serializable {
 	}
 
 	// Property accessors
-
+	@Id
+	@Column(name = "ig_id", unique = true, nullable = false)
 	public Long getIgId() {
 		return this.igId;
 	}
@@ -49,6 +62,8 @@ public class IpIdeaGroup implements java.io.Serializable {
 		this.igId = igId;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ig_idea_id")
 	public IpIdea getIpIdea() {
 		return this.ipIdea;
 	}
@@ -57,6 +72,8 @@ public class IpIdeaGroup implements java.io.Serializable {
 		this.ipIdea = ipIdea;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ig_grp_id")
 	public IpGroup getIpGroup() {
 		return this.ipGroup;
 	}
@@ -65,6 +82,7 @@ public class IpIdeaGroup implements java.io.Serializable {
 		this.ipGroup = ipGroup;
 	}
 
+	@Column(name = "ig_crtd_dt", nullable = false, length = 19)
 	public Date getIgCrtdDt() {
 		return this.igCrtdDt;
 	}

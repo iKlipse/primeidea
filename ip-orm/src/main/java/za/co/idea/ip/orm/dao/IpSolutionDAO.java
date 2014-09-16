@@ -1,14 +1,17 @@
 package za.co.idea.ip.orm.dao;
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpSolution;
 
@@ -23,13 +26,25 @@ import za.co.idea.ip.orm.bean.IpSolution;
  * @see za.co.idea.ip.orm.bean.IpSolution
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings({ "rawtypes" })
-public class IpSolutionDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(IpSolutionDAO.class);
+@Transactional
+@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
+public class IpSolutionDAO {
+	private static final Logger log = Logger.getLogger(IpSolutionDAO.class);
 	// property constants
 	public static final String SOL_TITLE = "solTitle";
 	public static final String SOL_DESC = "solDesc";
 	public static final String SOL_TAGS = "solTags";
+	public static final String SOL_REVIEW_CNT = "solReviewCnt";
+
+	private SessionFactory sessionFactory;
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	private Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
 
 	protected void initDao() {
 		// do nothing
@@ -38,7 +53,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 	public void save(IpSolution transientInstance) {
 		log.debug("saving IpSolution instance");
 		try {
-			getHibernateTemplate().save(transientInstance);
+			getCurrentSession().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -49,7 +64,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 	public void delete(IpSolution persistentInstance) {
 		log.debug("deleting IpSolution instance");
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -60,7 +75,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 	public IpSolution findById(java.lang.Long id) {
 		log.debug("getting IpSolution instance with id: " + id);
 		try {
-			IpSolution instance = (IpSolution) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpSolution", id);
+			IpSolution instance = (IpSolution) getCurrentSession().get("za.co.idea.ip.orm.bean.IpSolution", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -68,10 +83,10 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(IpSolution instance) {
+	public List<IpSolution> findByExample(IpSolution instance) {
 		log.debug("finding IpSolution instance by example");
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List<IpSolution> results = (List<IpSolution>) getCurrentSession().createCriteria("za.co.idea.ip.orm.bean.IpSolution").add(create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -84,30 +99,37 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 		log.debug("finding IpSolution instance with property: " + propertyName + ", value: " + value);
 		try {
 			String queryString = "from IpSolution as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			queryObject.setParameter(0, value);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
 		}
 	}
 
-	public List findBySolTitle(Object solTitle) {
+	public List<IpSolution> findBySolTitle(Object solTitle) {
 		return findByProperty(SOL_TITLE, solTitle);
 	}
 
-	public List findBySolDesc(Object solDesc) {
+	public List<IpSolution> findBySolDesc(Object solDesc) {
 		return findByProperty(SOL_DESC, solDesc);
 	}
 
-	public List findBySolTags(Object solTags) {
+	public List<IpSolution> findBySolTags(Object solTags) {
 		return findByProperty(SOL_TAGS, solTags);
+	}
+
+	public List<IpSolution> findBySolReviewCnt(Object solReviewCnt) {
+		return findByProperty(SOL_REVIEW_CNT, solReviewCnt);
 	}
 
 	public List findAll() {
 		log.debug("finding all IpSolution instances");
 		try {
 			String queryString = "from IpSolution";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -117,7 +139,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 	public IpSolution merge(IpSolution detachedInstance) {
 		log.debug("merging IpSolution instance");
 		try {
-			IpSolution result = (IpSolution) getHibernateTemplate().merge(detachedInstance);
+			IpSolution result = (IpSolution) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -129,7 +151,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 	public void attachDirty(IpSolution instance) {
 		log.debug("attaching dirty IpSolution instance");
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -140,18 +162,18 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 	public void attachClean(IpSolution instance) {
 		log.debug("attaching clean IpSolution instance");
 		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
+			getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
 		}
 	}
-
+	
 	public List findByUserId(Long id) {
 		log.debug("Fetching Challenge by Query :: getSolutionByUser");
 		try {
-			Query query = getSession().getNamedQuery("getSolutionByUser");
+			Query query = getCurrentSession().getNamedQuery("getSolutionByUser");
 			query.setLong("id", id);
 			List ret = query.list();
 			for (Object object : ret) {
@@ -171,7 +193,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 	public List findCreatedByUserId(Long id) {
 		log.debug("Fetching Solution by Query :: getSolutionCreatedByUser");
 		try {
-			Query query = getSession().getNamedQuery("getSolutionCreatedByUser");
+			Query query = getCurrentSession().getNamedQuery("getSolutionCreatedByUser");
 			query.setLong("id", id);
 			List ret = query.list();
 			for (Object object : ret) {
@@ -191,7 +213,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 	public List findByStatusId(Integer id) {
 		log.debug("Fetching Challenge by Query :: getSolutionByStatus");
 		try {
-			Query query = getSession().getNamedQuery("getSolutionByStatus");
+			Query query = getCurrentSession().getNamedQuery("getSolutionByStatus");
 			query.setInteger("id", id);
 			List ret = query.list();
 			for (Object object : ret) {
@@ -211,7 +233,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 	public List findByStatusIdUserId(Integer sid, Long id) {
 		log.debug("Fetching Challenge by Query :: getSolutionByUserStatus");
 		try {
-			Query query = getSession().getNamedQuery("getSolutionByUserStatus");
+			Query query = getCurrentSession().getNamedQuery("getSolutionByUserStatus");
 			query.setInteger("sid", sid);
 			query.setLong("id", id);
 			List ret = query.list();
@@ -232,7 +254,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 	public List findByChalId(Long id) {
 		log.debug("Fetching Challenge by Query :: getSolutionByChallenge");
 		try {
-			Query query = getSession().getNamedQuery("getSolutionByChallenge");
+			Query query = getCurrentSession().getNamedQuery("getSolutionByChallenge");
 			query.setLong("id", id);
 			List ret = query.list();
 			for (Object object : ret) {
@@ -252,7 +274,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 	public List findReviewSolByserId(Long id) {
 		log.debug("Fetching Challenge by Query :: getReviewSolutionByStatus");
 		try {
-			Query query = getSession().getNamedQuery("getReviewSolutionByStatus");
+			Query query = getCurrentSession().getNamedQuery("getReviewSolutionByStatus");
 			query.setLong("id", id);
 			List ret = query.list();
 			for (Object object : ret) {
@@ -272,7 +294,7 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 	public int updateStatusOnExpiry() {
 		log.debug("Updating Solution by Query :: updateSolStatusOnExpiry");
 		try {
-			Query query = getSession().getNamedQuery("updateSolStatusOnExpiry");
+			Query query = getCurrentSession().getNamedQuery("updateSolStatusOnExpiry");
 			int ret = query.executeUpdate();
 			return ret;
 		} catch (RuntimeException re) {

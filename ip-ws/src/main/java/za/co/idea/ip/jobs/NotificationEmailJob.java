@@ -4,14 +4,8 @@ import java.util.List;
 
 import org.apache.cxf.common.util.StringUtils;
 import org.apache.log4j.Logger;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.StatefulJob;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.scheduling.quartz.QuartzJobBean;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpGroupUser;
 import za.co.idea.ip.orm.bean.IpNotif;
@@ -21,8 +15,8 @@ import za.co.idea.ip.orm.dao.IpNotifDAO;
 import za.co.idea.ip.orm.dao.IpNotifGroupDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
 
-@SuppressWarnings("rawtypes")
-public class NotificationEmailJob extends QuartzJobBean implements StatefulJob {
+@SuppressWarnings({ "rawtypes" })
+public class NotificationEmailJob {
 	private IpNotifDAO ipNotifDAO;
 	private IpNotifGroupDAO ipNotifGroupDAO;
 	private IpGroupUserDAO ipGroupUserDAO;
@@ -30,8 +24,7 @@ public class NotificationEmailJob extends QuartzJobBean implements StatefulJob {
 	private MailSender sender;
 	private static final Logger logger = Logger.getLogger(NotificationEmailJob.class);
 
-	@Transactional(propagation = Propagation.REQUIRED)
-	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
+	public void executeInternal() {
 		try {
 			List notifications = ipNotifDAO.findAll();
 			for (Object object : notifications) {

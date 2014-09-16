@@ -2,10 +2,22 @@ package za.co.idea.ip.orm.bean;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.Table;
+
 /**
  * IpClaim entity. @author MyEclipse Persistence Tools
  */
-
+@Entity
+@Table(name = "ip_claim", catalog = "lpdb")
+@NamedNativeQueries({ @NamedNativeQuery(name = "getClaimByUser", query = "select clm.* from ip_claim clm where clm.user_id=:id", resultClass = IpClaim.class), @NamedNativeQuery(name = "getClaimByStatus", query = "select clm.* from ip_claim clm where clm.claim_status=:id", resultClass = IpClaim.class) })
 public class IpClaim implements java.io.Serializable {
 
 	// Fields
@@ -46,7 +58,8 @@ public class IpClaim implements java.io.Serializable {
 	}
 
 	// Property accessors
-
+	@Id
+	@Column(name = "claim_id", unique = true, nullable = false)
 	public Long getClaimId() {
 		return this.claimId;
 	}
@@ -55,6 +68,8 @@ public class IpClaim implements java.io.Serializable {
 		this.claimId = claimId;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
 	public IpUser getIpUser() {
 		return this.ipUser;
 	}
@@ -63,6 +78,8 @@ public class IpClaim implements java.io.Serializable {
 		this.ipUser = ipUser;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "claim_status")
 	public IpClaimStatus getIpClaimStatus() {
 		return this.ipClaimStatus;
 	}
@@ -71,6 +88,8 @@ public class IpClaim implements java.io.Serializable {
 		this.ipClaimStatus = ipClaimStatus;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "reward_id")
 	public IpRewards getIpRewards() {
 		return this.ipRewards;
 	}
@@ -79,6 +98,7 @@ public class IpClaim implements java.io.Serializable {
 		this.ipRewards = ipRewards;
 	}
 
+	@Column(name = "claim_desc", length = 65535)
 	public String getClaimDesc() {
 		return this.claimDesc;
 	}
@@ -87,6 +107,7 @@ public class IpClaim implements java.io.Serializable {
 		this.claimDesc = claimDesc;
 	}
 
+	@Column(name = "claim_crtd_dt", nullable = false, length = 19)
 	public Date getClaimCrtdDt() {
 		return this.claimCrtdDt;
 	}
@@ -95,6 +116,7 @@ public class IpClaim implements java.io.Serializable {
 		this.claimCrtdDt = claimCrtdDt;
 	}
 
+	@Column(name = "claim_comment", length = 450)
 	public String getClaimComment() {
 		return this.claimComment;
 	}

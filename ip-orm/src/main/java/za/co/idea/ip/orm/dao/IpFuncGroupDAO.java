@@ -1,14 +1,17 @@
 package za.co.idea.ip.orm.dao;
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpFuncGroup;
 
@@ -23,11 +26,21 @@ import za.co.idea.ip.orm.bean.IpFuncGroup;
  * @see za.co.idea.ip.orm.bean.IpFuncGroup
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings({ "rawtypes" })
-public class IpFuncGroupDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(IpFuncGroupDAO.class);
-
+@Transactional
+@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
+public class IpFuncGroupDAO {
+	private static final Logger log = Logger.getLogger(IpFuncGroupDAO.class);
 	// property constants
+
+	private SessionFactory sessionFactory;
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	private Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
 
 	protected void initDao() {
 		// do nothing
@@ -36,7 +49,7 @@ public class IpFuncGroupDAO extends HibernateDaoSupport {
 	public void save(IpFuncGroup transientInstance) {
 		log.debug("saving IpFuncGroup instance");
 		try {
-			getHibernateTemplate().save(transientInstance);
+			getCurrentSession().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -47,7 +60,7 @@ public class IpFuncGroupDAO extends HibernateDaoSupport {
 	public void delete(IpFuncGroup persistentInstance) {
 		log.debug("deleting IpFuncGroup instance");
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -58,7 +71,7 @@ public class IpFuncGroupDAO extends HibernateDaoSupport {
 	public IpFuncGroup findById(java.lang.Long id) {
 		log.debug("getting IpFuncGroup instance with id: " + id);
 		try {
-			IpFuncGroup instance = (IpFuncGroup) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpFuncGroup", id);
+			IpFuncGroup instance = (IpFuncGroup) getCurrentSession().get("za.co.idea.ip.orm.bean.IpFuncGroup", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -66,10 +79,10 @@ public class IpFuncGroupDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(IpFuncGroup instance) {
+	public List<IpFuncGroup> findByExample(IpFuncGroup instance) {
 		log.debug("finding IpFuncGroup instance by example");
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List<IpFuncGroup> results = (List<IpFuncGroup>) getCurrentSession().createCriteria("za.co.idea.ip.orm.bean.IpFuncGroup").add(create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -82,7 +95,9 @@ public class IpFuncGroupDAO extends HibernateDaoSupport {
 		log.debug("finding IpFuncGroup instance with property: " + propertyName + ", value: " + value);
 		try {
 			String queryString = "from IpFuncGroup as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			queryObject.setParameter(0, value);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
@@ -93,7 +108,8 @@ public class IpFuncGroupDAO extends HibernateDaoSupport {
 		log.debug("finding all IpFuncGroup instances");
 		try {
 			String queryString = "from IpFuncGroup";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
@@ -103,7 +119,7 @@ public class IpFuncGroupDAO extends HibernateDaoSupport {
 	public IpFuncGroup merge(IpFuncGroup detachedInstance) {
 		log.debug("merging IpFuncGroup instance");
 		try {
-			IpFuncGroup result = (IpFuncGroup) getHibernateTemplate().merge(detachedInstance);
+			IpFuncGroup result = (IpFuncGroup) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -115,7 +131,7 @@ public class IpFuncGroupDAO extends HibernateDaoSupport {
 	public void attachDirty(IpFuncGroup instance) {
 		log.debug("attaching dirty IpFuncGroup instance");
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -126,18 +142,18 @@ public class IpFuncGroupDAO extends HibernateDaoSupport {
 	public void attachClean(IpFuncGroup instance) {
 		log.debug("attaching clean IpFuncGroup instance");
 		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
+			getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
 		}
 	}
-
+	
 	public void deleteByFunctionId(Long id) {
 		log.debug("Deleting Function Groups By Id : " + id);
 		try {
-			Query query = getSession().getNamedQuery("deleteFGByFuncId");
+			Query query = getCurrentSession().getNamedQuery("deleteFGByFuncId");
 			query.setLong("id", id);
 			query.executeUpdate();
 		} catch (RuntimeException re) {
@@ -149,7 +165,7 @@ public class IpFuncGroupDAO extends HibernateDaoSupport {
 	public List fetchByFuncId(Long id) {
 		log.debug("Fetching Group Users By Id : " + id);
 		try {
-			Query query = getSession().getNamedQuery("fetchFGByFuncId");
+			Query query = getCurrentSession().getNamedQuery("fetchFGByFuncId");
 			query.setLong("id", id);
 			List ret = query.list();
 			for (Object object : ret) {
@@ -167,7 +183,7 @@ public class IpFuncGroupDAO extends HibernateDaoSupport {
 	public List fetchByGroupId(Long id) {
 		log.debug("Fetching Group Users By Id : " + id);
 		try {
-			Query query = getSession().getNamedQuery("fetchFGByGroupId");
+			Query query = getCurrentSession().getNamedQuery("fetchFGByGroupId");
 			query.setLong("id", id);
 			List ret = query.list();
 			for (Object object : ret) {

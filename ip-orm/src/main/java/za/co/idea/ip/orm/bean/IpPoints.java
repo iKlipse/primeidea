@@ -2,10 +2,22 @@ package za.co.idea.ip.orm.bean;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.Table;
+
 /**
  * IpPoints entity. @author MyEclipse Persistence Tools
  */
-
+@Entity
+@Table(name = "ip_points", catalog = "lpdb")
+@NamedNativeQueries({ @NamedNativeQuery(name = "getPointsByUser", query = "select pts.* from ip_points pts where pts.user_id=:id", resultClass = IpPoints.class) })
 public class IpPoints implements java.io.Serializable {
 
 	// Fields
@@ -46,7 +58,8 @@ public class IpPoints implements java.io.Serializable {
 	}
 
 	// Property accessors
-
+	@Id
+	@Column(name = "point_id", unique = true, nullable = false)
 	public Long getPointId() {
 		return this.pointId;
 	}
@@ -55,6 +68,8 @@ public class IpPoints implements java.io.Serializable {
 		this.pointId = pointId;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "alloc_id")
 	public IpAllocation getIpAllocation() {
 		return this.ipAllocation;
 	}
@@ -63,6 +78,8 @@ public class IpPoints implements java.io.Serializable {
 		this.ipAllocation = ipAllocation;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
 	public IpUser getIpUser() {
 		return this.ipUser;
 	}
@@ -71,6 +88,7 @@ public class IpPoints implements java.io.Serializable {
 		this.ipUser = ipUser;
 	}
 
+	@Column(name = "point_value")
 	public Integer getPointValue() {
 		return this.pointValue;
 	}
@@ -79,6 +97,7 @@ public class IpPoints implements java.io.Serializable {
 		this.pointValue = pointValue;
 	}
 
+	@Column(name = "comments", length = 450)
 	public String getComments() {
 		return this.comments;
 	}
@@ -87,6 +106,7 @@ public class IpPoints implements java.io.Serializable {
 		this.comments = comments;
 	}
 
+	@Column(name = "entity_id")
 	public Long getEntityId() {
 		return this.entityId;
 	}
@@ -95,6 +115,7 @@ public class IpPoints implements java.io.Serializable {
 		this.entityId = entityId;
 	}
 
+	@Column(name = "point_crtd_dt", nullable = false, length = 19)
 	public Date getPointCrtdDt() {
 		return this.pointCrtdDt;
 	}
