@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="za.co.idea.ip.hook.model.IpGroup">
+		<field name="groupId" type="long" />
+		<field name="groupAdminId" type="long" />
+		<field name="groupParentId" type="long" />
+		<field name="groupName" type="String" />
+		<field name="groupStatus" type="String" />
+		<field name="groupEmail" type="String" />
+		<field name="groupIsCore" type="String" />
+	</model>
+	<model name="za.co.idea.ip.hook.model.IpLogin">
+		<field name="loginId" type="long" />
+		<field name="loginUserId" type="long" />
+		<field name="loginName" type="String" />
+		<field name="loginPwd" type="String" />
+		<field name="loginLastDt" type="Date" />
+		<field name="loginSecQ" type="int" />
+		<field name="loginSecA" type="String" />
+	</model>
+	<model name="za.co.idea.ip.hook.model.IpSecqList">
+		<field name="islId" type="long" />
+		<field name="islDesc" type="String" />
+	</model>
+	<model name="za.co.idea.ip.hook.model.IpUser">
+		<field name="userId" type="long" />
+		<field name="userFName" type="String" />
+		<field name="userLName" type="String" />
+		<field name="userMName" type="String" />
+		<field name="userIdNum" type="long" />
+		<field name="userScreenName" type="String" />
+		<field name="userEmail" type="String" />
+		<field name="userContact" type="String" />
+		<field name="userSkills" type="String" />
+		<field name="userBio" type="String" />
+		<field name="userFbHandle" type="String" />
+		<field name="userTwHandle" type="String" />
+		<field name="userStatus" type="String" />
+		<field name="userEmployeeId" type="String" />
+		<field name="priGrpId" type="long" />
+	</model>
+</model-hints>

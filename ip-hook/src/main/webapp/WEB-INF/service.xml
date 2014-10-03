@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="za.co.idea.ip.hook">
+	<author>VMPattamatta</author>
+	<namespace>login</namespace>
+
+	<entity name="IpGroup" local-service="true" remote-service="true" table="ip_group">
+		<column name="groupId" type="long" primary="true" db-name="group_id" />
+		<column name="groupAdminId" type="long" db-name="group_admin_id" />
+		<column name="groupParentId" type="long" db-name="group_parent_id" />
+		<column name="groupName" type="String" db-name="group_name" />
+		<column name="groupStatus" type="String" db-name="group_status" />
+		<column name="groupEmail" type="String" db-name="group_email" />
+		<column name="groupIsCore" type="String" db-name="group_is_core" />
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="groupName" />
+		</order>
+		<!-- Finder methods -->
+		<finder name="getIpGroup" return-type="Collection">
+			<finder-column name="groupId" />
+		</finder>
+	</entity>
+
+	<entity name="IpSecqList" local-service="true" remote-service="true" table="ip_secq_list">
+		<column name="islId" type="long" primary="true" db-name="isl_id" />
+		<column name="islDesc" type="String" db-name="isl_desc" />
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="islId" />
+		</order>
+		<!-- Finder methods -->
+		<finder name="getIpSecqList" return-type="Collection">
+			<finder-column name="islId" />
+		</finder>
+	</entity>
+
+	<entity name="IpUser" local-service="true" remote-service="true" table="ip_user">
+		<column name="userId" type="long" primary="true" db-name="user_id" />
+		<column name="userFName" type="String" db-name="user_f_name" />
+		<column name="userLName" type="String" db-name="user_l_name" />
+		<column name="userMName" type="String" db-name="user_m_name" />
+		<column name="userIdNum" type="long" db-name="user_id_num" />
+		<column name="userScreenName" type="String" db-name="user_screen_name" />
+		<column name="userEmail" type="String" db-name="user_email" />
+		<column name="userContact" type="String" db-name="user_contact" />
+		<column name="userSkills" type="String" db-name="user_skills" />
+		<column name="userBio" type="String" db-name="user_bio" />
+		<column name="userFbHandle" type="String" db-name="user_fb_handle" />
+		<column name="userTwHandle" type="String" db-name="user_tw_handle" />
+		<column name="userStatus" type="String" db-name="user_status" />
+		<column name="userEmployeeId" type="String" db-name="user_employeeId" />
+		<column name="priGrpId" type="long" db-name="user_pri_grp_id" />
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="userScreenName" />
+		</order>
+		<!-- Finder methods -->
+		<finder name="getIpUser" return-type="Collection">
+			<finder-column name="userId" />
+		</finder>
+		<finder name="getIpUserScreenName" return-type="Collection">
+			<finder-column name="userScreenName" />
+		</finder>
+	</entity>
+
+	<entity name="IpLogin" local-service="true" remote-service="true" table="ip_login">
+		<column name="loginId" type="long" primary="true" db-name="login_id" />
+		<column name="loginUserId" type="long" db-name="login_user_id" />
+		<column name="loginName" type="String" db-name="login_name" />
+		<column name="loginPwd" type="String" db-name="login_pwd" />
+		<column name="loginLastDt" type="Date" db-name="login_last_dt" />
+		<column name="loginSecQ" type="int" db-name="login_sec_q" />
+		<column name="loginSecA" type="String" db-name="login_sec_a" />
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="loginId" />
+		</order>
+		<!-- Finder methods -->
+		<finder name="getIpLogin" return-type="Collection">
+			<finder-column name="loginId" />
+		</finder>
+		<finder name="getIpLoginScreenName_Password" return-type="Collection">
+			<finder-column name="loginName" />
+			<finder-column name="loginPwd" />
+		</finder>
+		<finder name="getIpLoginScreenName" return-type="Collection">
+			<finder-column name="loginName" />
+		</finder>
+		<finder name="getIpLoginScreenName_LoginSecA" return-type="Collection">
+			<finder-column name="loginName" />
+			<finder-column name="loginSecA" />
+		</finder>
+	</entity>
+
+</service-builder>

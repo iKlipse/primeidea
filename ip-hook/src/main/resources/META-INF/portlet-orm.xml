@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+	<persistence-unit-metadata>
+		<xml-mapping-metadata-complete/>
+		<persistence-unit-defaults>
+			<access>PROPERTY</access>
+		</persistence-unit-defaults>
+	</persistence-unit-metadata>
+	<mapped-superclass class="za.co.idea.ip.hook.model.impl.IpGroupModelImpl">
+		<attributes>
+			<id name="groupId">
+				<column name="GROUP_ID" />
+			</id>
+			<basic name="groupAdminId">
+				<column name="GROUP_ADMIN_ID" />
+			</basic>
+			<basic name="groupParentId">
+				<column name="GROUP_PARENT_ID" />
+			</basic>
+			<basic name="groupName">
+				<column name="GROUP_NAME" />
+			</basic>
+			<basic name="groupStatus">
+				<column name="GROUP_STATUS" />
+			</basic>
+			<basic name="groupEmail">
+				<column name="GROUP_EMAIL" />
+			</basic>
+			<basic name="groupIsCore">
+				<column name="GROUP_IS_CORE" />
+			</basic>
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="za.co.idea.ip.hook.model.impl.IpLoginModelImpl">
+		<attributes>
+			<id name="loginId">
+				<column name="LOGIN_ID" />
+			</id>
+			<basic name="loginUserId">
+				<column name="LOGIN_USER_ID" />
+			</basic>
+			<basic name="loginName">
+				<column name="LOGIN_NAME" />
+			</basic>
+			<basic name="loginPwd">
+				<column name="LOGIN_PWD" />
+			</basic>
+			<basic name="loginLastDt">
+				<column name="LOGIN_LAST_DT" />
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="loginSecQ">
+				<column name="LOGIN_SEC_Q" />
+			</basic>
+			<basic name="loginSecA">
+				<column name="LOGIN_SEC_A" />
+			</basic>
+			<transient name="loginUserUuid" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="za.co.idea.ip.hook.model.impl.IpSecqListModelImpl">
+		<attributes>
+			<id name="islId">
+				<column name="ISL_ID" />
+			</id>
+			<basic name="islDesc">
+				<column name="ISL_DESC" />
+			</basic>
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="za.co.idea.ip.hook.model.impl.IpUserModelImpl">
+		<attributes>
+			<id name="userId">
+				<column name="USER_ID" />
+			</id>
+			<basic name="userFName">
+				<column name="USER_F_NAME" />
+			</basic>
+			<basic name="userLName">
+				<column name="USER_L_NAME" />
+			</basic>
+			<basic name="userMName">
+				<column name="USER_M_NAME" />
+			</basic>
+			<basic name="userIdNum">
+				<column name="USER_ID_NUM" />
+			</basic>
+			<basic name="userScreenName">
+				<column name="USER_SCREEN_NAME" />
+			</basic>
+			<basic name="userEmail">
+				<column name="USER_EMAIL" />
+			</basic>
+			<basic name="userContact">
+				<column name="USER_CONTACT" />
+			</basic>
+			<basic name="userSkills">
+				<column name="USER_SKILLS" />
+			</basic>
+			<basic name="userBio">
+				<column name="USER_BIO" />
+			</basic>
+			<basic name="userFbHandle">
+				<column name="USER_FB_HANDLE" />
+			</basic>
+			<basic name="userTwHandle">
+				<column name="USER_TW_HANDLE" />
+			</basic>
+			<basic name="userStatus">
+				<column name="USER_STATUS" />
+			</basic>
+			<basic name="userEmployeeId">
+				<column name="USER_EMPLOYEEID" />
+			</basic>
+			<basic name="priGrpId">
+				<column name="USER_PRI_GRP_ID" />
+			</basic>
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<entity class="za.co.idea.ip.hook.model.impl.IpGroupImpl" name="IpGroup">
+		<table name="ip_group" />
+		<attributes />
+	</entity>
+	<entity class="za.co.idea.ip.hook.model.impl.IpLoginImpl" name="IpLogin">
+		<table name="ip_login" />
+		<attributes />
+	</entity>
+	<entity class="za.co.idea.ip.hook.model.impl.IpSecqListImpl" name="IpSecqList">
+		<table name="ip_secq_list" />
+		<attributes />
+	</entity>
+	<entity class="za.co.idea.ip.hook.model.impl.IpUserImpl" name="IpUser">
+		<table name="ip_user" />
+		<attributes />
+	</entity>
+</entity-mappings>

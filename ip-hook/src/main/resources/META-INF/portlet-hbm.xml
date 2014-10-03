@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false" auto-import="false">
+	<import class="za.co.idea.ip.hook.model.IpGroup" />
+	<import class="za.co.idea.ip.hook.model.IpLogin" />
+	<import class="za.co.idea.ip.hook.model.IpSecqList" />
+	<import class="za.co.idea.ip.hook.model.IpUser" />
+	<class name="za.co.idea.ip.hook.model.impl.IpGroupImpl" table="ip_group">
+		<cache usage="read-write" />
+		<id name="groupId" column="group_id" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="groupAdminId" type="com.liferay.portal.dao.orm.hibernate.LongType" column="group_admin_id" />
+		<property name="groupParentId" type="com.liferay.portal.dao.orm.hibernate.LongType" column="group_parent_id" />
+		<property name="groupName" type="com.liferay.portal.dao.orm.hibernate.StringType" column="group_name" />
+		<property name="groupStatus" type="com.liferay.portal.dao.orm.hibernate.StringType" column="group_status" />
+		<property name="groupEmail" type="com.liferay.portal.dao.orm.hibernate.StringType" column="group_email" />
+		<property name="groupIsCore" type="com.liferay.portal.dao.orm.hibernate.StringType" column="group_is_core" />
+	</class>
+	<class name="za.co.idea.ip.hook.model.impl.IpLoginImpl" table="ip_login">
+		<cache usage="read-write" />
+		<id name="loginId" column="login_id" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="loginUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" column="login_user_id" />
+		<property name="loginName" type="com.liferay.portal.dao.orm.hibernate.StringType" column="login_name" />
+		<property name="loginPwd" type="com.liferay.portal.dao.orm.hibernate.StringType" column="login_pwd" />
+		<property name="loginLastDt" type="org.hibernate.type.TimestampType" column="login_last_dt" />
+		<property name="loginSecQ" type="com.liferay.portal.dao.orm.hibernate.IntegerType" column="login_sec_q" />
+		<property name="loginSecA" type="com.liferay.portal.dao.orm.hibernate.StringType" column="login_sec_a" />
+	</class>
+	<class name="za.co.idea.ip.hook.model.impl.IpSecqListImpl" table="ip_secq_list">
+		<cache usage="read-write" />
+		<id name="islId" column="isl_id" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="islDesc" type="com.liferay.portal.dao.orm.hibernate.StringType" column="isl_desc" />
+	</class>
+	<class name="za.co.idea.ip.hook.model.impl.IpUserImpl" table="ip_user">
+		<cache usage="read-write" />
+		<id name="userId" column="user_id" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="userFName" type="com.liferay.portal.dao.orm.hibernate.StringType" column="user_f_name" />
+		<property name="userLName" type="com.liferay.portal.dao.orm.hibernate.StringType" column="user_l_name" />
+		<property name="userMName" type="com.liferay.portal.dao.orm.hibernate.StringType" column="user_m_name" />
+		<property name="userIdNum" type="com.liferay.portal.dao.orm.hibernate.LongType" column="user_id_num" />
+		<property name="userScreenName" type="com.liferay.portal.dao.orm.hibernate.StringType" column="user_screen_name" />
+		<property name="userEmail" type="com.liferay.portal.dao.orm.hibernate.StringType" column="user_email" />
+		<property name="userContact" type="com.liferay.portal.dao.orm.hibernate.StringType" column="user_contact" />
+		<property name="userSkills" type="com.liferay.portal.dao.orm.hibernate.StringType" column="user_skills" />
+		<property name="userBio" type="com.liferay.portal.dao.orm.hibernate.StringType" column="user_bio" />
+		<property name="userFbHandle" type="com.liferay.portal.dao.orm.hibernate.StringType" column="user_fb_handle" />
+		<property name="userTwHandle" type="com.liferay.portal.dao.orm.hibernate.StringType" column="user_tw_handle" />
+		<property name="userStatus" type="com.liferay.portal.dao.orm.hibernate.StringType" column="user_status" />
+		<property name="userEmployeeId" type="com.liferay.portal.dao.orm.hibernate.StringType" column="user_employeeId" />
+		<property name="priGrpId" type="com.liferay.portal.dao.orm.hibernate.LongType" column="user_pri_grp_id" />
+	</class>
+</hibernate-mapping>

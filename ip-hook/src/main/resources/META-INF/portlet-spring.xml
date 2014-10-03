@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="za.co.idea.ip.hook.service.IpGroupLocalService" class="za.co.idea.ip.hook.service.impl.IpGroupLocalServiceImpl" />
+	<bean id="za.co.idea.ip.hook.service.IpGroupService" class="za.co.idea.ip.hook.service.impl.IpGroupServiceImpl" />
+	<bean id="za.co.idea.ip.hook.service.persistence.IpGroupPersistence" class="za.co.idea.ip.hook.service.persistence.IpGroupPersistenceImpl" parent="basePersistence" />
+	<bean id="za.co.idea.ip.hook.service.IpLoginLocalService" class="za.co.idea.ip.hook.service.impl.IpLoginLocalServiceImpl" />
+	<bean id="za.co.idea.ip.hook.service.IpLoginService" class="za.co.idea.ip.hook.service.impl.IpLoginServiceImpl" />
+	<bean id="za.co.idea.ip.hook.service.persistence.IpLoginPersistence" class="za.co.idea.ip.hook.service.persistence.IpLoginPersistenceImpl" parent="basePersistence" />
+	<bean id="za.co.idea.ip.hook.service.IpSecqListLocalService" class="za.co.idea.ip.hook.service.impl.IpSecqListLocalServiceImpl" />
+	<bean id="za.co.idea.ip.hook.service.IpSecqListService" class="za.co.idea.ip.hook.service.impl.IpSecqListServiceImpl" />
+	<bean id="za.co.idea.ip.hook.service.persistence.IpSecqListPersistence" class="za.co.idea.ip.hook.service.persistence.IpSecqListPersistenceImpl" parent="basePersistence" />
+	<bean id="za.co.idea.ip.hook.service.IpUserLocalService" class="za.co.idea.ip.hook.service.impl.IpUserLocalServiceImpl" />
+	<bean id="za.co.idea.ip.hook.service.IpUserService" class="za.co.idea.ip.hook.service.impl.IpUserServiceImpl" />
+	<bean id="za.co.idea.ip.hook.service.persistence.IpUserPersistence" class="za.co.idea.ip.hook.service.persistence.IpUserPersistenceImpl" parent="basePersistence" />
+</beans>
