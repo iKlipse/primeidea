@@ -23,19 +23,19 @@
 				</p:commandLink>
 			</p:panel>
 			<p:panel styleClass="panelView" id="pnlChalDet">
-				<p:panel styleClass="panelView" id="ctrVwPChallenges" rendered="#{challengeController.showPubChal}">
+				<p:panel id="ctrVwPChallenges" rendered="#{challengeController.showPubChal}">
 					<f:facet name="header">Published Challenges</f:facet>
 					<ui:include src="/views/challenge/viewOpen.xhtml" />
 				</p:panel>
-				<p:panel styleClass="panelView" id="ctrVwRChallenges" rendered="#{challengeController.showReviewChal}">
+				<p:panel id="ctrVwRChallenges" rendered="#{challengeController.showReviewChal}">
 					<f:facet name="header">View Challenges Under Review</f:facet>
 					<ui:include src="/views/challenge/viewReview.xhtml" />
 				</p:panel>
-				<p:panel styleClass="panelView" id="ctrVwChallenges" rendered="#{challengeController.showViewChal}">
+				<p:panel id="ctrVwChallenges" rendered="#{challengeController.showViewChal}">
 					<f:facet name="header">View All Challenges</f:facet>
 					<ui:include src="/views/challenge/view.xhtml" />
 				</p:panel>
-				<p:panel styleClass="panelView" id="ctrCrtChallenge" rendered="#{challengeController.showCrtChal}">
+				<p:panel id="ctrCrtChallenge" rendered="#{challengeController.showCrtChal}">
 					<f:facet name="header">Create Challenge</f:facet>
 					<ui:include src="/views/challenge/create.xhtml" />
 				</p:panel>

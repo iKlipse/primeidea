@@ -12,7 +12,7 @@
 			<f:facet name="header">Created By</f:facet>
 			<p:outputLabel id="somVwOACrtdBy" value="#{idea.crtdByName}" />
 		</p:column>
-		<p:column width="15%" filterBy="#{idea.crtdDate}" filterMatchMode="contains" sortBy="#{idea.crtdDate}">
+		<p:column width="15%" filterBy="#{idea.crtdDate}" filterFunction="#{randomIdeaController.filterDate}" sortBy="#{idea.crtdDate}">
 			<f:facet name="header">Created Date</f:facet>
 			<p:outputLabel id="somVwOCrtdDate" value="#{idea.crtdDate}">
 			    <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss"></f:convertDateTime>

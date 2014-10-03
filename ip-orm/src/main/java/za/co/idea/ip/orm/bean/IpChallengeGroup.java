@@ -17,7 +17,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "ip_challenge_group", catalog = "lpdb")
-@NamedNativeQueries({ @NamedNativeQuery(name = "fetchCGByChalId", query = "select fg.* from ip_challenge_group fg where fg.cg_chal_id=:id", resultClass = IpChallengeGroup.class), @NamedNativeQuery(name = "fetchCGByGroupId", query = "select fg.* from ip_challenge_group fg where fg.cg_group_id=:id", resultClass = IpChallengeGroup.class) })
+@NamedNativeQueries({ @NamedNativeQuery(name = "deleteCGByChalId", query = "delete from ip_challenge_group where cg_chal_id=:id"), @NamedNativeQuery(name = "fetchCGByChalId", query = "select fg.* from ip_challenge_group fg where fg.cg_chal_id=:id", resultClass = IpChallengeGroup.class), @NamedNativeQuery(name = "fetchCGByGroupId", query = "select fg.* from ip_challenge_group fg where fg.cg_group_id=:id", resultClass = IpChallengeGroup.class) })
 public class IpChallengeGroup implements java.io.Serializable {
 
 	// Fields

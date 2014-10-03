@@ -13,7 +13,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpReview;
@@ -35,7 +34,7 @@ public class ReviewService {
 	@Path("/review/add")
 	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.NESTED)
+	@Transactional
 	public ResponseMessage createReview(ReviewMessage message) {
 		try {
 			Long[] ids = ipNativeSQLDAO.getNextIds(IpReview.class, message.getGroupId().length);
@@ -68,7 +67,7 @@ public class ReviewService {
 	@Path("/review/modify")
 	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.NESTED)
+	@Transactional
 	public ResponseMessage updateReview(ReviewMessage message) {
 		try {
 			Long[] ids = ipNativeSQLDAO.getNextIds(IpReview.class, message.getGroupId().length);
@@ -106,7 +105,8 @@ public class ReviewService {
 	@GET
 	@Path("/review/list/{entityId}/{tblNm}/{status}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ReviewMessage listReviewsByEntity(@PathParam("entityId") Long entityId, @PathParam("tblNm") String tblNm, @PathParam("status") Integer status) {
 		List rvs = ipReviewDAO.findByEntityIdEntityName(entityId, tblNm, status);
 		ReviewMessage message = new ReviewMessage();
@@ -128,7 +128,8 @@ public class ReviewService {
 	@GET
 	@Path("/review/list/all/{entityId}/{tblNm}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends ReviewMessage> List<T> listAllReviewsByEntity(@PathParam("entityId") Long entityId, @PathParam("tblNm") String tblNm) {
 		List<T> ret = new ArrayList<T>();
 		int i = ipReviewDAO.findReviewStatusCount(entityId, tblNm);
@@ -156,7 +157,8 @@ public class ReviewService {
 	@GET
 	@Path("/review/list/cnt/{entityId}/{tblNm}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public Integer listReviewsByEntity(@PathParam("entityId") Long entityId, @PathParam("tblNm") String tblNm) {
 		return ipReviewDAO.findReviewStatusCount(entityId, tblNm);
 	}

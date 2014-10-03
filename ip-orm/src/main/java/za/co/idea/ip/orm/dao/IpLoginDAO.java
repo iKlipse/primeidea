@@ -164,7 +164,7 @@ public class IpLoginDAO {
 			throw re;
 		}
 	}
-	
+
 	public List verifyLogin(String login, String pwd) {
 		log.debug("Fetching Login By Query :: verify Login");
 		try {
@@ -244,7 +244,6 @@ public class IpLoginDAO {
 			throw re;
 		}
 	}
-
 
 	public static IpLoginDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (IpLoginDAO) ctx.getBean("IpLoginDAO");

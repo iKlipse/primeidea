@@ -164,7 +164,7 @@ public class IpPointsDAO {
 			throw re;
 		}
 	}
-	
+
 	public List findByUser(Long id) {
 		log.debug("Fetching Points by Query :: getPointsByUser");
 		try {

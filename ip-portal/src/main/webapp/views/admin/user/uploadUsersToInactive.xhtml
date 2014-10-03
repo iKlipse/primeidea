@@ -1,0 +1,20 @@
+<ui:composition template="/views/admin/container/adminContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="adminBody">
+		<p:panel id="ipnlUplUsersToInactive" header="Upload Users To Inactivate">
+			<p:column>
+				<p:outputLabel id="ilblCInActUpload" value="Upload File : " />
+			</p:column>
+			<p:column>
+				<p:fileUpload id="ifuCInActDUpload" fileUploadListener="#{adminController.userUploadHandle}" multiple="false" allowTypes="/(\.|\/)(xls|xlsx)$/" />
+			</p:column>
+			<f:facet name="footer">
+					<p:commandButton id="ibtnInActHSave" value="Save" ajax="false" action="#{adminController.makeUsersAsInactive}">
+						<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+					</p:commandButton>
+					<p:commandButton id="ibtnLInActCancel" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" ajax="false" action="#{adminController.showViewUsers}">
+						<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+					</p:commandButton>
+			</f:facet>
+		</p:panel>
+	</ui:define>
+</ui:composition>

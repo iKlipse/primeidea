@@ -159,7 +159,7 @@ public class IpFunctionDAO {
 			throw re;
 		}
 	}
-	
+
 	public List getFunctionByQuery() {
 		log.debug("Fetching Functions by Query :: getAllFunction");
 		try {

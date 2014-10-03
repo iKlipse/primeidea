@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -16,6 +17,7 @@ import javax.portlet.PortletRequest;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
@@ -113,6 +115,7 @@ public class ChallengeController implements Serializable {
 	private AccessController controller;
 	private List<FileBean> chalUploadFiles;
 	private List<FileBean> solUploadFiles;
+	private Long delTagId;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
@@ -167,7 +170,7 @@ public class ChallengeController implements Serializable {
 					break;
 				case 4:
 					viewChallenges = RESTServiceHelper.fetchAllReviewChallengesByUser(userId);
-					challengeStatuses = RESTServiceHelper.fetchAllReviewChallengeNextStatuses();
+					challengeStatuses = RESTServiceHelper.fetchAllChallengeStatuses();
 					showPubChal = false;
 					showViewChal = false;
 					showCrtChal = false;
@@ -331,7 +334,7 @@ public class ChallengeController implements Serializable {
 			viewChallenges = RESTServiceHelper.fetchAllReviewChallengesByUser(userId);
 			challengeCats = RESTServiceHelper.fetchAllChallengeCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			challengeStatuses = RESTServiceHelper.fetchAllReviewChallengeNextStatuses();
+			challengeStatuses = RESTServiceHelper.fetchAllChallengeStatuses();
 			showPubChal = false;
 			showReviewChal = true;
 			showViewChal = false;
@@ -349,7 +352,7 @@ public class ChallengeController implements Serializable {
 		try {
 			challengeCats = RESTServiceHelper.fetchAllChallengeCat();
 			admUsers = RESTServiceHelper.fetchActiveUsers();
-			challengeStatuses = RESTServiceHelper.fetchAllChallengeStatuses();
+			challengeStatuses = RESTServiceHelper.fetchFilteredChallengeStatuses(challengeBean.getId());
 			pGrps = RESTServiceHelper.fetchActiveGroups();
 			rvIds = RESTServiceHelper.fetchReviewGroups(challengeBean.getId(), "ip_challenge");
 			rvIdCnt = rvIds.size();
@@ -366,7 +369,7 @@ public class ChallengeController implements Serializable {
 		try {
 			challengeCats = RESTServiceHelper.fetchAllChallengeCat();
 			admUsers = RESTServiceHelper.fetchActiveUsers();
-			challengeStatuses = RESTServiceHelper.fetchNextChallengeStatuses(challengeBean.getStatusId());
+			challengeStatuses = RESTServiceHelper.fetchFilteredChallengeStatuses(challengeBean.getId());
 			pGrps = RESTServiceHelper.fetchActiveGroups();
 			rvIds = RESTServiceHelper.fetchReviewGroups(challengeBean.getId(), "ip_challenge");
 			rvIdCnt = rvIds.size();
@@ -383,7 +386,7 @@ public class ChallengeController implements Serializable {
 		try {
 			challengeCats = RESTServiceHelper.fetchAllChallengeCat();
 			admUsers = RESTServiceHelper.fetchActiveUsers();
-			challengeStatuses = RESTServiceHelper.fetchAllReviewChallengeNextStatuses();
+			challengeStatuses = RESTServiceHelper.fetchAllReviewChallengeStatuses(challengeBean.getId(), challengeBean.getStatusId());
 			pGrps = RESTServiceHelper.fetchActiveGroups();
 			rvIds = RESTServiceHelper.fetchReviewGroups(challengeBean.getId(), "ip_challenge");
 			rvIdCnt = rvIds.size();
@@ -407,6 +410,8 @@ public class ChallengeController implements Serializable {
 		showChallengeComments = false;
 		showChallengeLikes = false;
 		viewSolutions = RESTServiceHelper.fetchAllSolutionsByChal(challengeBean.getId());
+		rvIds = RESTServiceHelper.fetchReviewGroups(challengeBean.getId(), "ip_challenge");
+		rvIdCnt = rvIds.size();
 		return "chals";
 	}
 
@@ -419,6 +424,8 @@ public class ChallengeController implements Serializable {
 		showChallengeLikes = false;
 		commentText = "";
 		viewSolutions = RESTServiceHelper.fetchAllSolutionsByChal(challengeBean.getId());
+		rvIds = RESTServiceHelper.fetchReviewGroups(challengeBean.getId(), "ip_challenge");
+		rvIdCnt = rvIds.size();
 		return "chalso";
 	}
 
@@ -439,7 +446,6 @@ public class ChallengeController implements Serializable {
 			if (chalTitleAvail) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				// return "";
 			} else {
 				List<String> errors = validateChallenge();
 				if (errors.size() > 0) {
@@ -447,7 +453,6 @@ public class ChallengeController implements Serializable {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
-					// return "";
 				} else {
 					WebClient addChallengeClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/add");
 					ChallengeMessage message = new ChallengeMessage();
@@ -498,11 +503,9 @@ public class ChallengeController implements Serializable {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Challenge Saved", "Challenge Saved");
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 						showViewChallenges();
-						// return redirectMain();
 					} else {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-						// return "";
 					}
 				}
 			}
@@ -510,7 +513,6 @@ public class ChallengeController implements Serializable {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			// return "";
 		}
 	}
 
@@ -760,7 +762,7 @@ public class ChallengeController implements Serializable {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
 			viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
 			solutionCats = RESTServiceHelper.fetchAllSolutionCat();
-			solutionStatuses = RESTServiceHelper.fetchAllSolutionStatuses();
+			solutionStatuses = RESTServiceHelper.fetchFilteredSolutionStatuses(solutionBean.getId());
 			rvIds = RESTServiceHelper.fetchReviewGroups(solutionBean.getId(), "ip_solution");
 			rvIdCnt = rvIds.size();
 			return "sole";
@@ -777,7 +779,7 @@ public class ChallengeController implements Serializable {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
 			viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
 			solutionCats = RESTServiceHelper.fetchAllSolutionCat();
-			solutionStatuses = RESTServiceHelper.fetchNextSolutionStatuses(solutionBean.getStatusId());
+			solutionStatuses = RESTServiceHelper.fetchFilteredSolutionStatuses(solutionBean.getId());
 			rvIds = RESTServiceHelper.fetchReviewGroups(solutionBean.getId(), "ip_solution");
 			rvIdCnt = rvIds.size();
 			return "soleo";
@@ -794,7 +796,7 @@ public class ChallengeController implements Serializable {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
 			viewChallenges = RESTServiceHelper.fetchAllChallengesByUser(userId);
 			solutionCats = RESTServiceHelper.fetchAllSolutionCat();
-			solutionStatuses = RESTServiceHelper.fetchAllReviewSolutionStatuses();
+			solutionStatuses = RESTServiceHelper.fetchAllReviewSolutionStatuses(solutionBean.getId(), solutionBean.getStatusId());
 			rvIds = RESTServiceHelper.fetchReviewGroups(solutionBean.getId(), "ip_solution");
 			rvIdCnt = rvIds.size();
 			return "soler";
@@ -922,7 +924,6 @@ public class ChallengeController implements Serializable {
 			if (titleAvail) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				// return "";
 			} else {
 				List<String> errors = validateSolution();
 				if (errors.size() > 0) {
@@ -930,7 +931,6 @@ public class ChallengeController implements Serializable {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
-					// return "";
 				} else {
 					WebClient addSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/add");
 					SolutionMessage message = new SolutionMessage();
@@ -979,18 +979,19 @@ public class ChallengeController implements Serializable {
 						rvIds = null;
 						saveAsOpen = false;
 						solUploadFiles = null;
+						logger.info("------solution saved");
 						if (saveAsOpen) {
+							logger.info("in save");
 							showViewSolution();
 						} else {
+							logger.info("in else");
 							showViewOpenSolution();
 						}
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Solution Saved", "Solution Saved");
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-						// return redirectMain();
 					} else {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-						// return "";
 					}
 				}
 			}
@@ -998,7 +999,6 @@ public class ChallengeController implements Serializable {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			// return "";
 		}
 	}
 
@@ -1353,6 +1353,31 @@ public class ChallengeController implements Serializable {
 		} else {
 			return false;
 		}
+	}
+
+	public void moveCommentBuildon() {
+		Map<String, String> reqMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		delTagId = Long.valueOf(reqMap.get("cTagId"));
+		logger.info("Modifying tag :: " + "http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/move/" + delTagId);
+		WebClient modTagClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/move/" + delTagId);
+		ResponseMessage message = modTagClient.accept(MediaType.APPLICATION_JSON).get(ResponseMessage.class);
+		if (message.getStatusCode() == 0) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Move to Build-On successfull", "Move to Build-On successfull");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		} else {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Move to Build-On Failed", "Move to Build-On Failed");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+		solComments = RESTServiceHelper.fetchAllBuildonComments(solutionBean.getId(), 3);
+		buildOns = RESTServiceHelper.fetchAllBuildonComments(solutionBean.getId(), 3);
+	}
+
+	public boolean filterDate(Object value, Object filter, Locale locale) {
+		if (filter == null || value == null)
+			return true;
+		String filterText = filter.toString().trim();
+		String valueText = value.toString().trim();
+		return StringUtils.contains(valueText, filterText);
 	}
 
 	public ChallengeBean getChallengeBean() {
@@ -1849,5 +1874,13 @@ public class ChallengeController implements Serializable {
 
 	public void setController(AccessController controller) {
 		this.controller = controller;
+	}
+
+	public Long getDelTagId() {
+		return delTagId;
+	}
+
+	public void setDelTagId(Long delTagId) {
+		this.delTagId = delTagId;
 	}
 }

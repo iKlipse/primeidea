@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -13,8 +14,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpClaim;
 import za.co.idea.ip.orm.bean.IpClaimStatus;
@@ -41,9 +40,9 @@ public class ClaimService {
 
 	@POST
 	@Path("/claim/add")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage createClaim(ClaimMessage claim) {
 		try {
 			IpClaim ipClaim = new IpClaim();
@@ -85,9 +84,9 @@ public class ClaimService {
 
 	@PUT
 	@Path("/claim/modify")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage updateClaim(ClaimMessage claim) {
 		try {
 			IpClaim ipClaim = new IpClaim();
@@ -149,7 +148,15 @@ public class ClaimService {
 	private ClaimMessage getClaimMessage(IpClaim claim) {
 		ClaimMessage message = new ClaimMessage();
 		try {
-
+			message.setClaimComment(claim.getClaimComment());
+			message.setClaimCrtdDt(claim.getClaimCrtdDt());
+			message.setClaimDesc(claim.getClaimDesc());
+			message.setClaimId(claim.getClaimId());
+			message.setcStatusId(claim.getIpClaimStatus().getCsId());
+			message.setcStatusName(claim.getIpClaimStatus().getCsDesc());
+			message.setRewardsId(claim.getIpRewards().getRwId());
+			message.setUserId(claim.getIpUser().getUserId());
+			message.setUserName(claim.getIpUser().getUserScreenName());
 		} catch (Exception e) {
 			logger.error(e, e);
 		}
@@ -158,9 +165,9 @@ public class ClaimService {
 
 	@GET
 	@Path("/claim/list")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends ClaimMessage> List<T> listClaim() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -178,9 +185,9 @@ public class ClaimService {
 
 	@GET
 	@Path("/claim/get/{id}")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ClaimMessage getClaimById(@PathParam("id") Long id) {
 		ClaimMessage message = new ClaimMessage();
 		try {
@@ -194,9 +201,9 @@ public class ClaimService {
 
 	@GET
 	@Path("/claim/list/status/{id}")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends ClaimMessage> List<T> listClaimByStatus(@PathParam("id") Integer id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -214,9 +221,9 @@ public class ClaimService {
 
 	@GET
 	@Path("/claim/list/user/{id}")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends ClaimMessage> List<T> listClaimByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -234,9 +241,9 @@ public class ClaimService {
 
 	@GET
 	@Path("/claim/status/list")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends MetaDataMessage> List<T> listClaimStatus() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -256,9 +263,9 @@ public class ClaimService {
 
 	@GET
 	@Path("/claim/status/list/{curr}")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends MetaDataMessage> List<T> listNextClaimStatus(@PathParam("curr") Integer curr) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -278,9 +285,9 @@ public class ClaimService {
 
 	@GET
 	@Path("/claim/status/get/{id}")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public MetaDataMessage getClaimStatusById(@PathParam("id") Integer id) {
 		MetaDataMessage message = new MetaDataMessage();
 		try {

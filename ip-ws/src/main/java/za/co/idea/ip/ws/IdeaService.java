@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.springframework.transaction.annotation.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -14,8 +15,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.bean.IpIdea;
@@ -57,7 +56,8 @@ public class IdeaService {
 	@GET
 	@Path("/idea/check/title/{title}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public Boolean checkTitle(@PathParam("title") String ideaTitle) {
 		try {
 			List ideasByTitle = ipIdeaDAO.findByIdeaTitle(ideaTitle);
@@ -72,6 +72,8 @@ public class IdeaService {
 	@GET
 	@Path("/idea/cat/list")
 	@Produces("application/json")
+	@Consumes("application/json")
+	@Transactional
 	public <T extends MetaDataMessage> List<T> listIdeaCat() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -92,7 +94,8 @@ public class IdeaService {
 	@GET
 	@Path("/idea/status/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends MetaDataMessage> List<T> listIdeaStatus() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -113,7 +116,8 @@ public class IdeaService {
 	@GET
 	@Path("/idea/status/list/{curr}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends MetaDataMessage> List<T> listNextIdeaStatus(@PathParam("curr") Integer curr) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -134,7 +138,8 @@ public class IdeaService {
 	@GET
 	@Path("/idea/cat/get/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public MetaDataMessage getIdeaCatById(@PathParam("id") Integer id) {
 		MetaDataMessage message = new MetaDataMessage();
 		try {
@@ -150,6 +155,8 @@ public class IdeaService {
 	@GET
 	@Path("/idea/status/get/{id}")
 	@Produces("application/json")
+	@Consumes("application/json")
+	@Transactional
 	public MetaDataMessage getIdeaStatusById(@PathParam("id") Integer id) {
 		MetaDataMessage message = new MetaDataMessage();
 		try {
@@ -164,8 +171,9 @@ public class IdeaService {
 
 	@POST
 	@Path("/idea/add")
-	@Consumes("application/json")
 	@Produces("application/json")
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage createIdea(IdeaMessage idea) {
 		IpIdea ipIdea = new IpIdea();
 		ipIdea.setIdeaId(idea.getIdeaId());
@@ -212,9 +220,9 @@ public class IdeaService {
 
 	@PUT
 	@Path("/idea/modify")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage updateIdea(IdeaMessage idea) {
 		IpIdea ipIdea = new IpIdea();
 		ipIdea.setIdeaId(idea.getIdeaId());
@@ -315,7 +323,7 @@ public class IdeaService {
 		}
 	}
 
-	private IdeaMessage getIDeaMessage(IpIdea ipIdea) {
+	private IdeaMessage getIdeaMessage(IpIdea ipIdea) {
 		IdeaMessage idea = new IdeaMessage();
 		try {
 			idea.setIdeaId(ipIdea.getIdeaId());
@@ -370,14 +378,15 @@ public class IdeaService {
 	@GET
 	@Path("/idea/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends IdeaMessage> List<T> listIdea() {
 		List<T> ret = new ArrayList<T>();
 		try {
 			List ideas = ipIdeaDAO.findAll();
 			for (Object object : ideas) {
 				IpIdea ipIdea = (IpIdea) object;
-				IdeaMessage idea = getIDeaMessage(ipIdea);
+				IdeaMessage idea = getIdeaMessage(ipIdea);
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -389,14 +398,17 @@ public class IdeaService {
 	@GET
 	@Path("/idea/list/user/access/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends IdeaMessage> List<T> listIdeaByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
 			List ideas = ipIdeaDAO.findByUserId(id);
 			for (Object object : ideas) {
 				IpIdea ipIdea = (IpIdea) object;
-				IdeaMessage idea = getIDeaMessage(ipIdea);
+				if (ipIdea.getIpUser().getUserId().longValue() != id.longValue() && ipIdea.getIpIdeaStatus().getIsId().intValue() < 2)
+					continue;
+				IdeaMessage idea = getIdeaMessage(ipIdea);
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -408,14 +420,15 @@ public class IdeaService {
 	@GET
 	@Path("/idea/list/user/created/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends IdeaMessage> List<T> listIdeaCreatedByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
 			List ideas = ipIdeaDAO.findCreatedByUserId(id);
 			for (Object object : ideas) {
 				IpIdea ipIdea = (IpIdea) object;
-				IdeaMessage idea = getIDeaMessage(ipIdea);
+				IdeaMessage idea = getIdeaMessage(ipIdea);
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -427,14 +440,15 @@ public class IdeaService {
 	@GET
 	@Path("/idea/list/status/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends IdeaMessage> List<T> listIdeaByStatus(@PathParam("id") Integer id) {
 		List<T> ret = new ArrayList<T>();
 		try {
 			List ideas = ipIdeaDAO.findByStatusId(id);
 			for (Object object : ideas) {
 				IpIdea ipIdea = (IpIdea) object;
-				IdeaMessage idea = getIDeaMessage(ipIdea);
+				IdeaMessage idea = getIdeaMessage(ipIdea);
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -446,14 +460,15 @@ public class IdeaService {
 	@GET
 	@Path("/idea/list/status/{sid}/user/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends IdeaMessage> List<T> listIdeaByStatusUser(@PathParam("sid") Integer sid, @PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
 			List ideas = ipIdeaDAO.findByStatusIdUserId(sid, id);
 			for (Object object : ideas) {
 				IpIdea ipIdea = (IpIdea) object;
-				IdeaMessage idea = getIDeaMessage(ipIdea);
+				IdeaMessage idea = getIdeaMessage(ipIdea);
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -465,14 +480,15 @@ public class IdeaService {
 	@GET
 	@Path("/idea/list/reviewStatus/user/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends IdeaMessage> List<T> listReviewIdeasByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
 			List ideas = ipIdeaDAO.findReviewIdeasByUserId(id);
 			for (Object object : ideas) {
 				IpIdea ipIdea = (IpIdea) object;
-				IdeaMessage idea = getIDeaMessage(ipIdea);
+				IdeaMessage idea = getIdeaMessage(ipIdea);
 				ret.add((T) idea);
 			}
 		} catch (Exception e) {
@@ -484,12 +500,13 @@ public class IdeaService {
 	@GET
 	@Path("/idea/get/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public IdeaMessage getIdea(@PathParam("id") Long id) {
 		IdeaMessage idea = new IdeaMessage();
 		try {
 			IpIdea ipIdea = ipIdeaDAO.findById(id);
-			idea = getIDeaMessage(ipIdea);
+			idea = getIdeaMessage(ipIdea);
 		} catch (Exception e) {
 			logger.error(e, e);
 		}
@@ -499,7 +516,8 @@ public class IdeaService {
 	@GET
 	@Path("/idea/rev/user/{id}/{uid}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage updateReviewer(@PathParam("id") Long id, @PathParam("uid") Long uid) {
 		ResponseMessage message = new ResponseMessage();
 		try {

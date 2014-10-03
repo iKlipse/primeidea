@@ -72,14 +72,16 @@ public class LandingPageController implements Serializable {
 	@PostConstruct
 	public void initializePage() {
 		try {
+			logger.info("in landing page initialize");
 			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 			User user = (User) request.getAttribute(WebKeys.USER);
 			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 			userId = message.getuId();
+			logger.info("User Id ---:" + userId);
 			controller = new AccessController(userId);
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			viewIdeas = RESTServiceHelper.fetchAllIdeasCreatedByUser(userId);
+			viewIdeas = RESTServiceHelper.fetchAllIdeasCreatedByUser(getController(), userId);
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
 			viewChallenges = RESTServiceHelper.fetchAllAvailableChallenges();
@@ -94,13 +96,16 @@ public class LandingPageController implements Serializable {
 			totalPoints = calculateTotal(pointBeans);
 			rewardsCat = RESTServiceHelper.fetchAllRewardsCat();
 			viewRewardsBeans = RESTServiceHelper.fetchAllRewardsByUser(userId, totalPoints);
+			logger.info("----after---");
 			showIdeas = false;
 			showChals = true;
 			showSols = false;
 			showWishlist = false;
 			showClaims = false;
 			showPoints = false;
+			logger.info("before switch");
 			if (toView != null && Integer.valueOf(toView) != -1) {
+				logger.info("in if toview");
 				switch (Integer.valueOf(toView)) {
 				case 1:
 					showIdeas = true;
@@ -109,6 +114,7 @@ public class LandingPageController implements Serializable {
 					showWishlist = false;
 					showClaims = false;
 					showPoints = false;
+					logger.info("case1");
 					break;
 				case 2:
 					showIdeas = false;
@@ -117,6 +123,7 @@ public class LandingPageController implements Serializable {
 					showWishlist = false;
 					showClaims = false;
 					showPoints = false;
+					logger.info("case2");
 					break;
 				case 3:
 					showIdeas = false;
@@ -125,6 +132,7 @@ public class LandingPageController implements Serializable {
 					showWishlist = false;
 					showClaims = false;
 					showPoints = false;
+					logger.info("case3");
 					break;
 				case 4:
 					rewardsBean = new RewardsBean();
@@ -134,6 +142,7 @@ public class LandingPageController implements Serializable {
 					showWishlist = true;
 					showClaims = false;
 					showPoints = false;
+					logger.info("case4");
 					break;
 				case 5:
 					showIdeas = false;
@@ -142,6 +151,7 @@ public class LandingPageController implements Serializable {
 					showWishlist = false;
 					showClaims = true;
 					showPoints = false;
+					logger.info("case6");
 					break;
 				case 6:
 					showIdeas = false;
@@ -150,13 +160,14 @@ public class LandingPageController implements Serializable {
 					showWishlist = false;
 					showClaims = false;
 					showPoints = true;
+					logger.info("case7");
 					break;
 				}
 			}
-
+			logger.info("lst rty");
 		} catch (Exception e) {
-			logger.error(e, e);
-
+			e.printStackTrace();
+			logger.error("Errror initializeLanding() : ", e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view request", "System error occurred, cannot perform view request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -171,7 +182,7 @@ public class LandingPageController implements Serializable {
 
 	public void changeIdea() {
 		try {
-			viewIdeas = RESTServiceHelper.fetchAllIdeasCreatedByUser(userId);
+			viewIdeas = RESTServiceHelper.fetchAllIdeasCreatedByUser(getController(), userId);
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
@@ -210,6 +221,7 @@ public class LandingPageController implements Serializable {
 
 	public void changeSolution() {
 		try {
+			logger.info("Control handled in changeSolution()" + userId);
 			viewSolutions = RESTServiceHelper.fetchAllSolutionsCreatedByUser(userId);
 			solutionCats = RESTServiceHelper.fetchAllSolutionCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
@@ -220,6 +232,7 @@ public class LandingPageController implements Serializable {
 			showWishlist = false;
 			showClaims = false;
 			showPoints = false;
+			logger.info("After getting data from services");
 		} catch (Exception e) {
 			logger.error(e, e);
 
@@ -279,11 +292,13 @@ public class LandingPageController implements Serializable {
 		showPoints = true;
 	}
 
-	public void modifyWishlist() {
+	public String modifyWishlist() {
 		ResponseMessage response = RESTServiceHelper.modifyTag(rewardsBean.getRwId(), userId);
 		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
 		viewRewardsBeans = RESTServiceHelper.fetchAllRewardsByUser(userId, totalPoints);
+		showWishList();
+		return "";
 	}
 
 	public List<UserBean> getAdmUsers() {
@@ -547,8 +562,13 @@ public class LandingPageController implements Serializable {
 	}
 
 	public AccessController getController() {
-		if (controller == null)
-			controller = new AccessController(userId);
+		if (controller == null || controller.getFunctions() == null) {
+			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			User user = (User) request.getAttribute(WebKeys.USER);
+			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+			controller = new AccessController(message.getuId());
+		}
 		return controller;
 	}
 

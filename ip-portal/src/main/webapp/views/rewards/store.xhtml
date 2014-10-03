@@ -35,10 +35,10 @@
 				</p:column>
 				<p:column>
 					<center>
-						<p:commandLink id="btnWish" ajax="false" action="#{landingPageController.modifyWishlist}" style="padding-right: 5px !important">
+						<p:commandLink id="btnWish" ajax="false" action="#{rewardsController.modifyWishlist}" style="padding-right: 5px !important">
 							<p:graphicImage library="images" name="star_highlight.jpg" height="30px" width="30px" rendered="#{rewards.rwTaggable}" />
 							<p:graphicImage library="images" name="star.jpg" height="30px" width="30px" rendered="#{!rewards.rwTaggable}" />
-							<f:setPropertyActionListener value="#{rewards}" target="#{landingPageController.rewardsBean}" />
+							<f:setPropertyActionListener value="#{rewards}" target="#{rewardsController.rewardsBean}" />
 						</p:commandLink>
 						<p:commandButton id="btnClaim" value="I Want Some" ajax="false" action="#{claimController.showClaimReward}" rendered="#{rewards.rwClaimable}">
 							<f:param name="rewardsId" id="rewardsId" value="#{rewards.rwId}" />

@@ -5,13 +5,13 @@
 			<p:growl life="5000" id="frmUserProfileMsg" showDetail="true" showSummary="true" autoUpdate="true" />
 			<p:remoteCommand actionListener="#{adminController.initializeEditProfile}" name="onload" autoRun="true" update="pnlUserProfile" />
 			<p:panel styleClass="panelView" id="pnlLPMenu">
-				<p:commandLink value="Edit Profile" action="#{adminController.changeEditProfile}" update="pnlUserProfile" />
+				<p:commandLink value="Edit Profile" actionListener="#{adminController.changeEditProfile}" update="pnlUserProfile" />
 				<p:graphicImage name="separator.png" library="images" />
-				<p:commandLink value="Change Password" action="#{adminController.changePwd}" update="pnlUserProfile" />
+				<p:commandLink value="Change Password" actionListener="#{adminController.changePwd}" update="pnlUserProfile" />
 				<p:graphicImage name="separator.png" library="images" />
-				<p:commandLink value="Change Security Quetion" action="#{adminController.changeSecurity}" update="pnlUserProfile" />
+				<p:commandLink value="Change Security Quetion" actionListener="#{adminController.changeSecurity}" update="pnlUserProfile" />
 			</p:panel>
-			<p:panel styleClass="panelView" id="pnlUserProfile">
+			<p:panel id="pnlUserProfile">
 				<p:panel styleClass="panelView" id="ctrMyIdeas" rendered="#{adminController.showEditProfile}">
 					<ui:include src="/views/user-profile/editProfile.xhtml" />
 				</p:panel>

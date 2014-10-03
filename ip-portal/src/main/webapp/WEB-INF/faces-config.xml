@@ -185,6 +185,10 @@
 			<from-outcome>admuur</from-outcome>
 			<to-view-id>/views/admin/user/uploadRes.xhtml</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>admiu</from-outcome>
+			<to-view-id>/views/admin/user/uploadUsersToInactive.xhtml</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
 		<navigation-case>

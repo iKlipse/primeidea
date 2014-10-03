@@ -2,6 +2,7 @@
 	<h:head />
 	<h:body>
 		<h:form id="frmAdmin" enctype="multipart/form-data">
+		<p:panel styleClass="panelView" id="pnlAdminLinks" header="Info Scratch Patch">
 			<p:panelGrid styleClass="panelGridView" columns="1">
 				<p:column>
 					<h:outputLink value="/web/ip/admin" rendered="#{landingPageController.controller.adminEnabled}">Admin Page</h:outputLink>
@@ -16,6 +17,7 @@
 					<h:outputLink value="http://www.engadget.com" target="_new">Engadget</h:outputLink>
 				</p:column>
 			</p:panelGrid>
+			</p:panel>
 		</h:form>
 	</h:body>
 </f:view>

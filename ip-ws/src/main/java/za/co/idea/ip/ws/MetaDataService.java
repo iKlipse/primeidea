@@ -3,6 +3,7 @@ package za.co.idea.ip.ws;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -12,8 +13,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpCategory;
 import za.co.idea.ip.orm.bean.IpChallengeCat;
@@ -55,9 +54,9 @@ public class MetaDataService {
 
 	@POST
 	@Path("/add")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage addMetaData(MetaDataMessage mData) {
 		boolean success = false;
 		String msg = "Invalid Table Selected :: " + mData;
@@ -149,9 +148,9 @@ public class MetaDataService {
 
 	@PUT
 	@Path("/modify")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage updateMetaData(MetaDataMessage mData) {
 		boolean success = false;
 		String msg = "Invalid Table Selected :: " + mData;
@@ -243,9 +242,9 @@ public class MetaDataService {
 
 	@PUT
 	@Path("/delete")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage deleteMetaData(MetaDataMessage mData) {
 		boolean success = false;
 		String msg = "Invalid Table Selected :: " + mData;
@@ -349,9 +348,9 @@ public class MetaDataService {
 
 	@GET
 	@Path("/list/{table}")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends MetaDataMessage> List<T> listByTable(@PathParam("table") String table) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -466,9 +465,9 @@ public class MetaDataService {
 
 	@GET
 	@Path("/list/non/{table}")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends MetaDataMessage> List<T> listNonAllocatedByTable(@PathParam("table") String table) {
 		List<T> ret = new ArrayList<T>();
 		try {

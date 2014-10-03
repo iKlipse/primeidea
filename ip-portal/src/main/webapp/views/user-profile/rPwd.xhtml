@@ -36,7 +36,9 @@
 			<p:password autocomplete="false" id="txtRPCPw" value="#{adminController.userBean.cPw}" />
 		</p:column>
 		<f:facet name="footer">
-			<p:commandButton id="btnJSave" actionListener="#{adminController.resetPassword}" value="Reset" ajax="false" />
+			<p:commandButton id="btnJSave" actionListener="#{adminController.resetPassword}" value="Reset" update=":frmUserProfile:pnlUserProfile, :frmUserProfile:frmUserProfileMsg">
+				<f:setPropertyActionListener value="2" target="#{adminController.toView}" />
+			</p:commandButton>
 		</f:facet>
 	</p:panelGrid>
 </ui:composition>

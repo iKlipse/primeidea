@@ -2,6 +2,7 @@ package za.co.idea.ip.orm.dao;
 
 import static org.hibernate.criterion.Example.create;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -11,6 +12,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpReview;
@@ -247,13 +249,14 @@ public class IpReviewDAO {
 			query.setLong("id", entityId);
 			query.setString("tblNm", entityName);
 			List ret = query.list();
-			return (Integer) ((ret != null && ret.size() > 0) ? ret.get(0) : 0);
+			return ((BigInteger) ((ret != null && ret.size() > 0) ? ret.get(0) : 0)).intValue();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			throw re;
 		}
 	}
 
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void deleteByEntityIdEntityName(Long entityId, String entityName, Integer status) {
 		log.debug("finding all reviews by entity id");
 		try {

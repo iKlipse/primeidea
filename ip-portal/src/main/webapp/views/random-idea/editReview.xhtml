@@ -47,7 +47,7 @@
 			<p:outputLabel id="lblEdtrIUpload" value="Upload File : " />
 		</p:column>
 		<p:column rendered="#{!randomIdeaController.ideaBean.disableField}">
-			<p:fileUpload id="fuIUpload" fileUploadListener="#{randomIdeaController.fileUploadHandle}" multiple="false" dragDropSupport="true" sizeLimit="100000" fileLimit="3" />
+			<p:fileUpload id="fuIUpload" fileUploadListener="#{randomIdeaController.fileUploadHandle}" multiple="false" dragDropSupport="true" sizeLimit="6000000" fileLimit="3" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtrFuncGrps" value="Idea Groups" />
@@ -59,14 +59,6 @@
 			</p:selectOneMenu>
 		</p:column>
 		<p:column>
-			<p:outputLabel id="lblEdtrCrtdBy" value="Created By : " />
-		</p:column>
-		<p:column>
-			<p:selectOneMenu id="somEdtrACrtdBy" value="#{randomIdeaController.ideaBean.crtdById}" disabled="#{randomIdeaController.ideaBean.disableField}">
-				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-				<f:selectItems value="#{randomIdeaController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
-			</p:selectOneMenu>
-		</p:column>
 		<f:facet name="footer">
 			<p:commandButton id="btnEdtrSave" value="Save" ajax="false" action="#{randomIdeaController.updateIdea}">
 				<f:setPropertyActionListener value="1" target="#{landingPageController.toView}" />

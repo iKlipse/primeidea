@@ -16,7 +16,9 @@
 			<p:inputText autocomplete="false" id="txtProfileSecA" value="#{adminController.secA}" />
 		</p:column>
 		<f:facet name="footer">
-			<p:commandButton id="btnRSProfileSave" value="Save" ajax="false" actionListener="#{adminController.resetSecurity}" />
+			<p:commandButton id="btnRSProfileSave" value="Save" actionListener="#{adminController.resetSecurity}" update=":frmUserProfile:pnlUserProfile, :frmUserProfile:frmUserProfileMsg">
+				<f:setPropertyActionListener value="3" target="#{adminController.toView}" />
+			</p:commandButton>
 		</f:facet>
 	</p:panelGrid>
 </ui:composition>

@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.springframework.transaction.annotation.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -23,8 +24,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
 import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.dao.IpBlobDAO;
@@ -41,9 +40,9 @@ public class DocumentUploadService {
 
 	@POST
 	@Path("/doc/upload/{blobId}")
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Produces("application/json")
+	@Consumes("application/json")
+	@Transactional
 	public Response doUpload(final Attachment stream, @PathParam("blobId") Long blobId) {
 		try {
 			IpBlob blob = ipBlobDAO.findById(blobId);
@@ -80,17 +79,17 @@ public class DocumentUploadService {
 
 	@POST
 	@Path("/doc/multiUpload/{blobId}/{nextExists}")
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(propagation = Propagation.REQUIRED)
-	public Response doMultiUpload(final Attachment stream, @PathParam("blobId") Long blobId, @PathParam("nextExists") boolean nextExists) {
+	@Produces("application/json")
+	@Consumes("application/json")
+	@Transactional
+	public Response doMultiUpload(final Attachment stream, @PathParam("blobId") Long blobId, @PathParam("nextExists") String nextExists) {
 		try {
 			IpBlob blob = ipBlobDAO.findById(blobId);
 			if (blob != null) {
 				logger.info("-----" + (BUNDLE.getString("base.dir") + File.separator + blob.getBlobEntityTblNm() + File.separator + blob.getBlobEntityId() + File.separator + blob.getBlobName()));
 				File file = new File(BUNDLE.getString("base.dir") + File.separator + blob.getBlobEntityTblNm() + File.separator + blob.getBlobEntityId() + File.separator + blob.getBlobName());
 				if (file.getParentFile().exists()) {
-					if (nextExists) {
+					if (Boolean.valueOf(nextExists)) {
 						logger.info("----next exits in doc");
 						FileUtils.cleanDirectory(file.getParentFile());
 					}
@@ -117,9 +116,9 @@ public class DocumentUploadService {
 
 	@GET
 	@Path("/doc/download/{blobId}/{name}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.MULTIPART_FORM_DATA)
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Produces("application/json")
+	@Consumes("application/json")
+	@Transactional
 	public Attachment doDownload(@PathParam("blobId") Long blobId, @PathParam("name") String name) {
 		try {
 			IpBlob blob = ipBlobDAO.findById(blobId);
@@ -139,9 +138,9 @@ public class DocumentUploadService {
 
 	@PUT
 	@Path("/doc/update")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Produces("application/json")
+	@Consumes("application/json")
+	@Transactional
 	public Response updateDocument(AttachmentMessage message) {
 		try {
 			IpBlob blob = new IpBlob();
@@ -160,9 +159,9 @@ public class DocumentUploadService {
 
 	@POST
 	@Path("/doc/create")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Produces("application/json")
+	@Consumes("application/json")
+	@Transactional
 	public Response createDocument(AttachmentMessage message) {
 		try {
 			IpBlob blob = new IpBlob();
@@ -181,9 +180,9 @@ public class DocumentUploadService {
 
 	@POST
 	@Path("/doc/createMulti")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Produces("application/json")
+	@Consumes("application/json")
+	@Transactional
 	public Response createMultiDocument(AttachmentMessage message) {
 		try {
 			IpBlob blob = new IpBlob();
@@ -203,9 +202,9 @@ public class DocumentUploadService {
 
 	@GET
 	@Path("/doc/getId/{entityId}/{entityTblNm}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Produces("application/json")
+	@Consumes("application/json")
+	@Transactional
 	public Long getId(@PathParam("entityId") Long entityId, @PathParam("entityTblNm") String entityTblNm) {
 		Long ret = -999l;
 		IpBlob blob = ipBlobDAO.getBlobByEntity(entityId, entityTblNm);
@@ -216,9 +215,9 @@ public class DocumentUploadService {
 
 	@GET
 	@Path("/doc/delete/{entityId}/{entityTblNm}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Produces("application/json")
+	@Consumes("application/json")
+	@Transactional
 	public Response delete(@PathParam("entityId") Long entityId, @PathParam("entityTblNm") String entityTblNm) {
 		try {
 			ipBlobDAO.deleteBlobByEntity(entityId, entityTblNm);
@@ -232,7 +231,6 @@ public class DocumentUploadService {
 	@Path("/doc/list/{entityId}/{entityTblNm}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(propagation = Propagation.REQUIRED)
 	public <T extends FileMessage> List<T> list(@PathParam("entityId") Long entityId, @PathParam("entityTblNm") String entityTblNm) {
 		List<T> ret = new ArrayList<T>();
 		List blobs = ipBlobDAO.listBlobByEntity(entityId, entityTblNm);
@@ -254,9 +252,9 @@ public class DocumentUploadService {
 
 	@GET
 	@Path("/doc/getUrl/{entityId}/{entityTblNm}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Produces("application/json")
+	@Consumes("application/json")
+	@Transactional
 	public String getUrl(@PathParam("entityId") Long entityId, @PathParam("entityTblNm") String entityTblNm) {
 		String ret = "";
 		IpBlob blob = ipBlobDAO.getBlobByEntity(entityId, entityTblNm);
@@ -267,8 +265,9 @@ public class DocumentUploadService {
 
 	@GET
 	@Path("/doc/getName/{blobId}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces("application/json")
+	@Consumes("application/json")
+	@Transactional
 	public String getName(@PathParam("blobId") Long blobId) {
 		String ret = "";
 		IpBlob blob = ipBlobDAO.findById(blobId);
@@ -279,9 +278,9 @@ public class DocumentUploadService {
 
 	@GET
 	@Path("/doc/getContentType/{blobId}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Produces("application/json")
+	@Consumes("application/json")
+	@Transactional
 	public String getMimeType(@PathParam("blobId") Long blobId) {
 		String mimeType = "";
 		try {

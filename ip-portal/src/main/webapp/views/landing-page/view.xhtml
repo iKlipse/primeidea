@@ -19,22 +19,22 @@
 				<p:commandLink value="My Points" actionListener="#{landingPageController.showPointProfile}" update="pnlLPDet" />
 			</p:panel>
 			<p:panel styleClass="panelView" id="pnlLPDet">
-				<p:panel styleClass="panelView" id="ctrMyChallenges" rendered="#{landingPageController.showChals}">
+				<p:panel styleClass="panelGridView" id="ctrMyChallenges" rendered="#{landingPageController.showChals}">
 					<ui:include src="/views/landing-page/challenges.xhtml" />
 				</p:panel>
-				<p:panel styleClass="panelView" id="ctrMyIdeas" rendered="#{landingPageController.showIdeas}">
+				<p:panel styleClass="panelGridView" id="ctrMyIdeas" rendered="#{landingPageController.showIdeas}">
 					<ui:include src="/views/landing-page/ideas.xhtml" />
 				</p:panel>
-				<p:panel styleClass="panelView" id="ctrMySolutions" rendered="#{landingPageController.showSols}">
+				<p:panel styleClass="panelGridView" id="ctrMySolutions" rendered="#{landingPageController.showSols}">
 					<ui:include src="/views/landing-page/solutions.xhtml" />
 				</p:panel>
-				<p:panel styleClass="panelView" id="ctrMyWishlist" rendered="#{landingPageController.showWishlist}">
+				<p:panel styleClass="panelGridView" id="ctrMyWishlist" rendered="#{landingPageController.showWishlist}">
 					<ui:include src="/views/landing-page/wishlist.xhtml" />
 				</p:panel>
-				<p:panel styleClass="panelView" id="ctrMyClaims" rendered="#{landingPageController.showClaims}">
+				<p:panel styleClass="panelGridView" id="ctrMyClaims" rendered="#{landingPageController.showClaims}">
 					<ui:include src="/views/landing-page/claims.xhtml" />
 				</p:panel>
-				<p:panel styleClass="panelView" id="ctrMyPoints" rendered="#{landingPageController.showPoints}">
+				<p:panel styleClass="panelGridView" id="ctrMyPoints" rendered="#{landingPageController.showPoints}">
 					<ui:include src="/views/landing-page/points.xhtml" />
 				</p:panel>
 			</p:panel>

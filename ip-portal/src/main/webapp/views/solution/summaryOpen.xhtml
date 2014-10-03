@@ -16,7 +16,7 @@
 			<p:outputLabel id="lblIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:dataGrid id="sumSolODocCar" var="file" value="#{challengeController.solutionBean.files}" columns="3" rows="1" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="No Attachments">
+			<p:dataGrid id="sumSolODocCar" var="file" value="#{challengeController.solutionBean.files}" columns="3" rows="1" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="No Attachments">
 				<p:panel styleClass="dgView">
 					<h:outputLink value="#{file.url}">
 						<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
@@ -44,10 +44,10 @@
 					</p:commandButton>
 				</p:column>
 				<p:column>
-				<p:commandButton id="giComment" icon="ui-icon-comment" >
-					<p:outputLabel id="lblCommentCnt" value="#{challengeController.solCommentCnt}" />
-					<!-- <p:graphicImage id="giComment" name="comment.jpg" library="images" height="25px" width="25px" /> -->
-					<p:tooltip for="giComment" value="Tags disabled as solution not in open status" rendered="#{challengeController.solutionBean.taggable}" />
+					<p:commandButton id="giComment" icon="ui-icon-comment">
+						<p:outputLabel id="lblCommentCnt" value="#{challengeController.solCommentCnt}" />
+						<!-- <p:graphicImage id="giComment" name="comment.jpg" library="images" height="25px" width="25px" /> -->
+						<p:tooltip for="giComment" value="Tags disabled as solution not in open status" rendered="#{challengeController.solutionBean.taggable}" />
 					</p:commandButton>
 				</p:column>
 				<p:column>
@@ -83,6 +83,12 @@
 							<p:outputLabel style="text-align: left !important; font-size: 0.8em" value="#{comment.usrScreenName}" />
 							<p:outputLabel style="text-align: right !important; font-size: 0.6em" value="#{comment.tagDate}" />
 						</p:column>
+						<f:facet name="footer">
+							<p:commandButton id="sumMoveCmnt" value="Move To Build-On" actionListener="#{challengeController.moveCommentBuildon}" update="dtViewComments, :frmSummaryOpenSol:frmSummaryOpenSolMsg" >
+								<!-- <f:setPropertyActionListener value="#{comment.tagId}" target="#{challengeController.delTagId}"/> -->
+								<f:param name="cTagId" id="cTagId" value="#{comment.tagId}" />
+							</p:commandButton>
+						</f:facet>
 					</p:panelGrid>
 				</p:dataScroller>
 				<p:tooltip for="dtViewComments" value="Tags disabled as solution not in open status" rendered="#{challengeController.solutionBean.taggable}" />
@@ -91,7 +97,7 @@
 				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="edComment" value="#{challengeController.commentText}" height="100" />
 			</p:column>
 			<p:column rendered="#{!challengeController.solutionBean.taggable}">
-				<p:commandButton id="btnSubmitComment" value="Post" actionListener="#{challengeController.commentSolution}" update="dtViewComments, :frmSummaryOpenSol:lblCommentCnt" />
+				<p:commandButton id="btnSubmitComment" value="Post" actionListener="#{challengeController.commentSolution}" update="dtViewComments, :frmSummaryOpenSol:lblCommentCnt, :frmSummaryOpenSol:edComment" />
 			</p:column>
 		</p:panelGrid>
 	</p:overlayPanel>

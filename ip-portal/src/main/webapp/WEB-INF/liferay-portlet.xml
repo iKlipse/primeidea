@@ -72,7 +72,8 @@
 		<icon></icon>
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript></footer-portlet-javascript>
+		<header-portlet-css>/js/js-image-slider.css</header-portlet-css>
+		<footer-portlet-javascript>/js/js-image-slider.js</footer-portlet-javascript>
 		<css-class-wrapper></css-class-wrapper>
 	</portlet>
 	<portlet>
@@ -124,7 +125,7 @@
 		<css-class-wrapper></css-class-wrapper>
 	</portlet>
 	<portlet>
-		<portlet-name>test-portlet</portlet-name>
+		<portlet-name>wishlist</portlet-name>
 		<icon></icon>
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>
 		<header-portlet-css></header-portlet-css>

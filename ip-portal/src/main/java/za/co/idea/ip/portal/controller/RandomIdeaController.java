@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
@@ -15,6 +17,7 @@ import javax.portlet.PortletRequest;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
@@ -93,6 +96,7 @@ public class RandomIdeaController implements Serializable {
 	private Integer rvIdCnt;
 	private AccessController controller;
 	private List<FileBean> uploadFiles;
+	private Long delTagId;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
@@ -114,14 +118,14 @@ public class RandomIdeaController implements Serializable {
 			if (toView != null && Integer.valueOf(toView) != -1) {
 				switch (Integer.valueOf(toView)) {
 				case 1:
-					viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(2, userId);
+					viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(getController(), 2, userId);
 					showViewOpenIdea = true;
 					showViewIdea = false;
 					showCrtIdea = false;
 					showViewReviewIdea = false;
 					break;
 				case 2:
-					viewIdeas = RESTServiceHelper.fetchAllIdeasByUser(userId);
+					viewIdeas = RESTServiceHelper.fetchAllIdeasByUser(getController(), userId);
 					showViewOpenIdea = false;
 					showViewIdea = true;
 					showCrtIdea = false;
@@ -138,8 +142,8 @@ public class RandomIdeaController implements Serializable {
 					showViewReviewIdea = false;
 					break;
 				case 4:
-					viewIdeas = RESTServiceHelper.fetchAllReviewIdeasByUserId(userId);
-					ideaStatuses = RESTServiceHelper.fetchAllReviewIdeaStatuses();
+					viewIdeas = RESTServiceHelper.fetchAllReviewIdeasByUserId(getController(), userId);
+					ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
 					showViewOpenIdea = false;
 					showViewIdea = false;
 					showCrtIdea = false;
@@ -147,7 +151,7 @@ public class RandomIdeaController implements Serializable {
 					break;
 				}
 			} else {
-				viewIdeas = RESTServiceHelper.fetchAllIdeasByUser(userId);
+				viewIdeas = RESTServiceHelper.fetchAllIdeasByUser(getController(), userId);
 				ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 				admUsers = RESTServiceHelper.fetchAllUsers();
 				ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
@@ -176,7 +180,7 @@ public class RandomIdeaController implements Serializable {
 
 	public void showViewOpenIdeas() {
 		try {
-			viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(2, userId);
+			viewIdeas = RESTServiceHelper.fetchAllIdeasByStatusIdUserId(getController(), 2, userId);
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
@@ -195,10 +199,10 @@ public class RandomIdeaController implements Serializable {
 
 	public void showViewReviewIdeas() {
 		try {
-			viewIdeas = RESTServiceHelper.fetchAllReviewIdeasByUserId(userId);
+			viewIdeas = RESTServiceHelper.fetchAllReviewIdeasByUserId(getController(), userId);
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
-			viewIdeas = RESTServiceHelper.fetchAllReviewIdeasByUserId(userId);
+			viewIdeas = RESTServiceHelper.fetchAllReviewIdeasByUserId(getController(), userId);
 			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
 			showViewOpenIdea = false;
 			showViewIdea = false;
@@ -214,7 +218,7 @@ public class RandomIdeaController implements Serializable {
 
 	public void showViewIdeas() {
 		try {
-			viewIdeas = RESTServiceHelper.fetchAllIdeasByUser(userId);
+			viewIdeas = RESTServiceHelper.fetchAllIdeasByUser(getController(), userId);
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
@@ -260,8 +264,8 @@ public class RandomIdeaController implements Serializable {
 		try {
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchActiveUsers();
-			if (userId == 0l) {
-				ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
+			if (getController().isAdminEnabled()) {
+				ideaStatuses = RESTServiceHelper.fetchFilteredIdeaStatuses(ideaBean.getIdeaId());
 			} else {
 				ideaStatuses = RESTServiceHelper.fetchNextIdeaStatuses(ideaBean.getSetStatusId());
 			}
@@ -288,7 +292,6 @@ public class RandomIdeaController implements Serializable {
 		try {
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchActiveUsers();
-			ideaStatuses = RESTServiceHelper.fetchAllReviewIdeaStatuses();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
 			rvIds = RESTServiceHelper.fetchReviewGroups(ideaBean.getIdeaId(), "ip_idea");
 			rvIdCnt = rvIds.size();
@@ -296,10 +299,10 @@ public class RandomIdeaController implements Serializable {
 			if (grpList != null && !grpList.isEmpty()) {
 				selGroupId = (Long) grpList.get(0);
 			}
-			if (userId == 0l) {
-				ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
+			if (getController().isAdminEnabled()) {
+				ideaStatuses = RESTServiceHelper.fetchFilteredIdeaStatuses(ideaBean.getIdeaId());
 			} else {
-				ideaStatuses = RESTServiceHelper.fetchAllReviewIdeaStatuses();
+				ideaStatuses = RESTServiceHelper.fetchAllReviewIdeaStatuses(ideaBean.getIdeaId(), ideaBean.getSetStatusId().intValue());
 			}
 			uploadFiles = new ArrayList<FileBean>();
 			return "ideaer";
@@ -318,8 +321,8 @@ public class RandomIdeaController implements Serializable {
 		try {
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchActiveUsers();
-			if (userId == 0l) {
-				ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();
+			if (getController().isAdminEnabled()) {
+				ideaStatuses = RESTServiceHelper.fetchFilteredIdeaStatuses(ideaBean.getIdeaId());
 			} else {
 				ideaStatuses = RESTServiceHelper.fetchNextIdeaStatuses(ideaBean.getSetStatusId());
 			}
@@ -671,6 +674,7 @@ public class RandomIdeaController implements Serializable {
 				selGroupId = -1l;
 				rvIds = null;
 				rvIdCnt = 0;
+				uploadFiles = null;
 				if (ideaMessage.getSetStatusId().longValue() == 2l)
 					showViewOpenIdeas();
 				else
@@ -724,11 +728,18 @@ public class RandomIdeaController implements Serializable {
 
 	public void changeGroup() {
 		if (selGroupId != null && selGroupId != -999) {
-			rvIds = new ArrayList<ReviewBean>();
+			rvIds = RESTServiceHelper.fetchReviewGroups(selGroupId, "ip_idea");
+			if (rvIds == null) {
+				rvIds = new ArrayList<ReviewBean>();
+				rvIdCnt = -999;
+			} else {
+				rvIdCnt = rvIds.size();
+			}
 			cGrps = RESTServiceHelper.fetchSubGroups(selGroupId);
-		} else
+		} else {
 			rvIds = new ArrayList<ReviewBean>();
-		rvIdCnt = -999;
+			rvIdCnt = -999;
+		}
 	}
 
 	public void changeCount() {
@@ -736,7 +747,7 @@ public class RandomIdeaController implements Serializable {
 			rvIds = new ArrayList<ReviewBean>();
 			for (int i = 0; i < rvIdCnt; i++) {
 				ReviewBean bean = new ReviewBean();
-				bean.setEntityId(null);
+				bean.setEntityId(-999l);
 				bean.setStatusId(i + 1);
 				bean.setTblNm("ip_idea");
 				rvIds.add(bean);
@@ -751,6 +762,7 @@ public class RandomIdeaController implements Serializable {
 		for (ReviewBean bean : rvIds) {
 			ReviewMessage message = new ReviewMessage();
 			message.setEntityId(bean.getEntityId());
+			logger.info("--group ids--" + bean.getGroupId());
 			message.setGroupId(toLongArray(bean.getGroupId()));
 			message.setStatusId(bean.getStatusId());
 			message.setTblNm(bean.getTblNm());
@@ -767,6 +779,7 @@ public class RandomIdeaController implements Serializable {
 		}
 		pGrps = RESTServiceHelper.fetchReviewGroups();
 		rvIds = new ArrayList<ReviewBean>();
+		rvIdCnt = -999;
 		selGroupId = -999l;
 	}
 
@@ -801,6 +814,31 @@ public class RandomIdeaController implements Serializable {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform upload request", "System error occurred, cannot perform upload request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
+	}
+
+	public void moveCommentBuildon() {
+		Map<String, String> reqMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		delTagId = Long.valueOf(reqMap.get("cTagId"));
+		logger.info("Modifying tag :: " + "http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/move/" + delTagId);
+		WebClient modTagClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ts/tag/move/" + delTagId);
+		ResponseMessage message = modTagClient.accept(MediaType.APPLICATION_JSON).get(ResponseMessage.class);
+		if (message.getStatusCode() == 0) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Move to Build-On successfull", "Move to Build-On successfull");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		} else {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Move to Build-On Failed", "Move to Build-On Failed");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
+		comments = RESTServiceHelper.fetchAllBuildonComments(ideaBean.getIdeaId(), 1);
+		buildOns = RESTServiceHelper.fetchAllBuildOns(ideaBean.getIdeaId(), 1);
+	}
+
+	public boolean filterDate(Object value, Object filter, Locale locale) {
+		if (filter == null || value == null)
+			return true;
+		String filterText = filter.toString().trim();
+		String valueText = value.toString().trim();
+		return StringUtils.contains(valueText, filterText);
 	}
 
 	public IdeaBean getIdeaBean() {
@@ -1143,6 +1181,14 @@ public class RandomIdeaController implements Serializable {
 
 	public void setUploadFiles(List<FileBean> uploadFiles) {
 		this.uploadFiles = uploadFiles;
+	}
+
+	public Long getDelTagId() {
+		return delTagId;
+	}
+
+	public void setDelTagId(Long delTagId) {
+		this.delTagId = delTagId;
 	}
 
 }

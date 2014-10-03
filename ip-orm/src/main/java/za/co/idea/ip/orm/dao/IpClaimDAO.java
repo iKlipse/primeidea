@@ -159,7 +159,7 @@ public class IpClaimDAO {
 			throw re;
 		}
 	}
-	
+
 	public List findByStatusId(Integer id) {
 		log.debug("Fetching Challenge by Query :: getClaimByStatus");
 		try {

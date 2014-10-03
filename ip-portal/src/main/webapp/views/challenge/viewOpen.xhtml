@@ -16,7 +16,7 @@
 			<f:facet name="header">Created By</f:facet>
 			<p:outputLabel id="somVwocrtdBy" value="#{challenge.crtdByName}" />
 		</p:column>
-		<p:column width="10%" filterBy="#{challenge.crtdDt}" filterMatchMode="contains" sortBy="#{challenge.crtdDt}">
+		<p:column width="10%" filterBy="#{challenge.crtdDt}" filterFunction="#{challengeController.filterDate}" sortBy="#{challenge.crtdDt}">
 			<f:facet name="header">Created Date</f:facet>
 			<p:outputLabel id="calVwoCrtDT" value="#{challenge.crtdDt}" >
 			   <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss" />

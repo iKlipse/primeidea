@@ -16,7 +16,7 @@
 			<p:outputLabel id="lblSumIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:dataGrid id="sumChalDocCar" var="file" value="#{challengeController.challengeBean.files}" columns="3" rows="1" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="No Attachments">
+			<p:dataGrid id="sumChalDocCar" var="file" value="#{challengeController.challengeBean.files}" columns="3" rows="1" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="No Attachments">
 				<p:panel styleClass="dgView">
 					<h:outputLink value="#{file.url}">
 						<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
@@ -43,17 +43,18 @@
 					</p:commandButton>
 				</p:column>
 				<p:column>
-				  <p:commandButton id="giSumComment" icon="ui-icon-comment" >
-					<p:outputLabel id="lblSumCommentCnt" value="#{challengeController.chalCommentCnt}" />
-					<!-- <p:graphicImage id="giSumComment" name="comment.jpg" library="images" height="25px" width="25px" /> -->
+					<p:commandButton id="giSumComment" icon="ui-icon-comment">
+						<p:outputLabel id="lblSumCommentCnt" value="#{challengeController.chalCommentCnt}" />
+						<!-- <p:graphicImage id="giSumComment" name="comment.jpg" library="images" height="25px" width="25px" /> -->
 					</p:commandButton>
 				</p:column>
-			    
+
 			</p:panelGrid>
 		</p:column>
 		<f:facet name="footer">
 			<p:commandButton id="btnSumSolSubmit" value="Submit a Solution" ajax="false" action="#{challengeController.showSubmitSolution}" rendered="#{challengeController.challengeBean.statusId == 8}">
 				<f:param name="chalId" value="#{challengeController.challengeBean.id}" />
+				<f:setPropertyActionListener value="4" target="#{challengeController.returnView}" />
 			</p:commandButton>
 			<p:commandButton id="btnEdtCancel" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" ajax="false" action="#{challengeController.redirectMain}">
 				<f:setPropertyActionListener value="2" target="#{landingPageController.toView}" />
@@ -80,7 +81,7 @@
 				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="edSumComment" value="#{challengeController.commentText}" height="100" />
 			</p:column>
 			<p:column>
-				<p:commandButton id="btnSumSubmitComment" value="Post" actionListener="#{challengeController.commentChallenge}" update="dtSumViewComments, :frmSummaryChal:lblSumCommentCnt" />
+				<p:commandButton id="btnSumSubmitComment" value="Post" actionListener="#{challengeController.commentChallenge}" update="dtSumViewComments, :frmSummaryChal:lblSumCommentCnt, :frmSummaryChal:edSumComment" />
 			</p:column>
 		</p:panelGrid>
 	</p:overlayPanel>
@@ -123,11 +124,14 @@
 					<p:outputLabel id="txtSumICrtdDt" value="#{sol.crtdDt}" escape="false" />
 				</p:column>
 				<p:column>
-					<p:outputLabel value="No Attachments" rendered="#{!sol.solImgAvl}" />
-					<h:outputLink value="#{sol.blobUrl}" rendered="#{sol.solImgAvl}">
-						<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
-						<p:outputLabel value="#{sol.fileName}" style="font-weight: 0.6em" />
-					</h:outputLink>
+					<p:dataGrid id="lpChalSolSumDoc" var="file" value="#{solution.files}" columns="3" rows="1" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="No Attachments">
+						<p:panel styleClass="dgView">
+							<h:outputLink value="#{file.url}">
+								<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+								<p:outputLabel value="#{file.name}" style="font-weight: 0.6em" />
+							</h:outputLink>
+						</p:panel>
+					</p:dataGrid>
 				</p:column>
 			</p:panelGrid>
 		</p:panel>

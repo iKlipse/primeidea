@@ -153,7 +153,7 @@ public class IpCategoryDAO {
 			throw re;
 		}
 	}
-	
+
 	public List listDependentCat(Long catId) {
 		log.debug("checking category dependency");
 		try {

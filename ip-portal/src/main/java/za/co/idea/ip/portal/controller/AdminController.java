@@ -175,6 +175,8 @@ public class AdminController implements Serializable {
 	private boolean inactiveUsersView;
 	private AccessController controller;
 	public boolean showAllocIdeaReview;
+	public boolean uploadSuccess;
+	public List<String> selUsers;
 
 	private WebClient createCustomClient(String url) {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
@@ -362,6 +364,7 @@ public class AdminController implements Serializable {
 			viewGroups = pGrps = RESTServiceHelper.fetchActiveGroups();
 			admUsers = RESTServiceHelper.fetchAllUsersSortByPG();
 			functions = RESTServiceHelper.fetchAllFunctionsByGroup(groupBean.getgId());
+			selUserId = toStringArray(RESTServiceHelper.fetchUsersByGroup(groupBean.getgId()));
 			return "admge";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -498,7 +501,19 @@ public class AdminController implements Serializable {
 	}
 
 	public String showUploadUsers() {
+		this.uploadImage = null;
+		this.uploadFileName = null;
+		this.uploadContentType = null;
+		enableUpload = false;
 		return "admuu";
+	}
+
+	public String showInactivateUsers() {
+		this.uploadImage = null;
+		this.uploadFileName = null;
+		this.uploadContentType = null;
+		enableUpload = false;
+		return "admiu";
 	}
 
 	public String showAllocateGroups() {
@@ -624,53 +639,43 @@ public class AdminController implements Serializable {
 		}
 	}
 
-	public String changeEditProfile() {
+	public void changeEditProfile() {
 		viewGroups = RESTServiceHelper.fetchActiveGroups();
 		PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		User user = (User) request.getAttribute(WebKeys.USER);
 		WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
 		UserMessage userMessage = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 		userId = userMessage.getuId();
-		userBean = new UserBean();
-		userBean.setBio(userMessage.getBio());
-		userBean.setContact(userMessage.getContact());
-		userBean.seteMail(userMessage.geteMail());
-		userBean.setFbHandle(userMessage.getFbHandle());
-		userBean.setfName(userMessage.getfName());
-		userBean.setIdNum(userMessage.getIdNum());
-		userBean.setIsActive(userMessage.getIsActive());
-		userBean.setlName(userMessage.getlName());
-		userBean.setmName(userMessage.getmName());
-		userBean.setPwd(userMessage.getPwd());
-		userBean.setScName(userMessage.getScName());
-		userBean.setSkills(userMessage.getSkills());
-		userBean.setTwHandle(userMessage.getTwHandle());
-		userBean.setIsActive(userMessage.getIsActive());
-		userBean.setuId(userMessage.getuId());
-		userBean.setEmployeeId(userMessage.getEmployeeId());
-		userBean.setPriGroupName(userMessage.getPriGroupName());
-		userBean.setcPw(userBean.getPwd());
+		userBean = RESTServiceHelper.getUserBean(userMessage);
 		showEditProfile = true;
 		showChangePwd = false;
 		showChangeSecQ = false;
-		return "";
 	}
 
-	public String changePwd() {
+	public void changePwd() {
 		secqList = RESTServiceHelper.fetchAllSecQ();
+		PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		User user = (User) request.getAttribute(WebKeys.USER);
+		WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
+		UserMessage userMessage = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+		userId = userMessage.getuId();
+		userBean = RESTServiceHelper.getUserBean(userMessage);
 		showEditProfile = false;
 		showChangePwd = true;
 		showChangeSecQ = false;
-		return "";
 	}
 
-	public String changeSecurity() {
+	public void changeSecurity() {
+		PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		User user = (User) request.getAttribute(WebKeys.USER);
+		WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
+		UserMessage userMessage = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+		userId = userMessage.getuId();
+		userBean = RESTServiceHelper.getUserBean(userMessage);
+		secqList = RESTServiceHelper.fetchAllSecQ();
 		showEditProfile = false;
 		showChangePwd = false;
 		showChangeSecQ = true;
-		secqList = RESTServiceHelper.fetchAllSecQ();
-		return "";
-
 	}
 
 	public String showCreateUser() {
@@ -749,18 +754,15 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		} else {
-			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-			User user = (User) request.getAttribute(WebKeys.USER);
 			try {
-				user = UserLocalServiceUtil.updatePassword(user.getUserId(), userBean.getPwd(), userBean.getcPw(), false);
-				if (Validator.isNotNull(user)) {
-					if (Base64.encodeBase64URLSafeString(DigestUtils.md5(secA.getBytes())).equalsIgnoreCase(userBean.getSecA())) {
+				if (Base64.encodeBase64URLSafeString(DigestUtils.md5(secA.getBytes())).equalsIgnoreCase(userBean.getSecA())) {
+					User user = UserLocalServiceUtil.getUserByScreenName(10154, userBean.getScName());
+					if (Validator.isNotNull(user)) {
+						user = UserLocalServiceUtil.updatePassword(user.getUserId(), userBean.getPwd(), userBean.getcPw(), false);
 						WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rpw/");
 						ResponseMessage response = loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())), userBean.getPwd() }, ResponseMessage.class);
 						loginClient.close();
 						if (response.getStatusCode() == 0) {
-							FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-							userBean = new UserBean();
 							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Reset Successful", "Password Reset Successful");
 							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 						} else {
@@ -768,15 +770,15 @@ public class AdminController implements Serializable {
 							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 						}
 					} else {
-						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Security Answer", "Invalid Security Answer");
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Liferay User password Reset Error", "Liferay User password Reset Error");
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
 				} else {
-					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Liferay User password Reset Error", "Liferay User password Reset Error");
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Security Answer", "Invalid Security Answer");
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
 			} catch (Exception e) {
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Liferay User password Reset Error", "Liferay User password Reset Error");
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "User password Reset Error", "User password Reset Error");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		}
@@ -800,6 +802,9 @@ public class AdminController implements Serializable {
 			this.userBean.setSecQ(Integer.valueOf(secQ));
 			if (response.getStatusCode() != 0) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusCode() + " :: " + response.getStatusDesc(), response.getStatusCode() + " :: " + response.getStatusDesc());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			} else {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Security Question Update Successfull", "Security Question Update Successfull");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
 		}
@@ -1152,9 +1157,10 @@ public class AdminController implements Serializable {
 	}
 
 	public String saveUploadUsers() {
-		int i = 3;
+		int i = 1;
 		try {
 			uploadErrors = null;
+			uploadSuccess = true;
 			Workbook workbook = null;
 			if (uploadFileName.endsWith("xlsx"))
 				workbook = new XSSFWorkbook(uploadUser.getStream());
@@ -1225,6 +1231,7 @@ public class AdminController implements Serializable {
 						Boolean availE = checkEAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 						checkEAvailablityClient.close();
 						if (availE) {
+							uploadSuccess = false;
 							getUploadErrors().add("EMail Id already registered :: " + bean.geteMail() + " row number :: " + i);
 							i++;
 							row = sheet.getRow(i);
@@ -1245,6 +1252,7 @@ public class AdminController implements Serializable {
 						Boolean availID = checkIAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 						checkIAvailablityClient.close();
 						if (availID) {
+							uploadSuccess = false;
 							getUploadErrors().add("Id Number already registered :: " + bean.getIdNum() + " row number :: " + i);
 							i++;
 							row = sheet.getRow(i);
@@ -1260,6 +1268,7 @@ public class AdminController implements Serializable {
 							continue;
 						}
 					} else {
+						uploadSuccess = false;
 						getUploadErrors().add("Id Number cannot be empty row number :: " + i);
 						i++;
 						row = sheet.getRow(i);
@@ -1279,6 +1288,7 @@ public class AdminController implements Serializable {
 						Boolean availEmpID = checkEIAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 						checkEIAvailablityClient.close();
 						if (availEmpID) {
+							uploadSuccess = false;
 							getUploadErrors().add("Employee Id already registered :: " + bean.getEmployeeId() + " row number :: " + i);
 							i++;
 							if (row != null) {
@@ -1307,7 +1317,7 @@ public class AdminController implements Serializable {
 					msg.setlName(bean.getlName());
 					msg.setPwd(bean.getPwd());
 					msg.setScName(bean.getScName());
-					msg.setIsActive(false);
+					msg.setIsActive(true);
 					msg.setuId(COUNTER.getNextId("IpUser"));
 					msg.setLastLoginDt(new Date());
 					msg.setSecQ(bean.getSecQ());
@@ -1334,6 +1344,7 @@ public class AdminController implements Serializable {
 					}
 				} catch (Exception e) {
 					logger.error(e, e);
+					uploadSuccess = false;
 					getUploadErrors().add("User creation service call failed due to :: " + e.getMessage() + " row number :: " + i);
 					i++;
 					row = sheet.getRow(i);
@@ -1362,10 +1373,110 @@ public class AdminController implements Serializable {
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
-
+			uploadSuccess = false;
 			getUploadErrors().add("User creation service call failed due to :: " + e.getMessage() + " row number :: " + i);
 			return "admuur";
 		}
+		FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "File has been uploaded successfully ", "File has been uploaded successfully");
+		FacesContext.getCurrentInstance().addMessage(null, successMessage);
+		return "admuur";
+	}
+
+	public String makeUsersAsInactive() {
+		int i = 1;
+		try {
+			uploadErrors = null;
+			uploadSuccess = true;
+			Workbook workbook = null;
+			if (uploadFileName.endsWith("xlsx"))
+				workbook = new XSSFWorkbook(uploadUser.getStream());
+			else if (uploadFileName.endsWith("xls"))
+				workbook = new HSSFWorkbook(uploadUser.getStream());
+			Sheet sheet = workbook.getSheetAt(0);
+			Row row = sheet.getRow(i);
+			String mailID = "";
+			try {
+				if (row.getCell(6) != null && row.getCell(6).getCellType() == HSSFCell.CELL_TYPE_STRING) {
+					mailID = row.getCell(6).getStringCellValue();
+				}
+			} catch (Exception e) {
+				logger.error("Error : " + e);
+			}
+			while (mailID.length() != 0) {
+				try {
+					if (mailID != null && mailID.length() != 0) {
+						WebClient checkEAvailablityClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/check/email/" + mailID);
+						Boolean availE = checkEAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
+						checkEAvailablityClient.close();
+						if (availE) {
+							WebClient userInactivateClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/inactivate/email");
+							ResponseMessage resUserInactivate = userInactivateClient.accept(MediaType.APPLICATION_JSON).put(mailID, ResponseMessage.class);
+							userInactivateClient.close();
+							if (resUserInactivate.getStatusCode() != 0) {
+								uploadSuccess = false;
+								getUploadErrors().add("User is not inactivated :: " + mailID + " row number :: " + i);
+							}
+							i++;
+							row = sheet.getRow(i);
+							if (row != null) {
+								if (row.getCell(0) != null && row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_STRING) {
+									mailID = row.getCell(0).getStringCellValue();
+								} else if (row.getCell(0) != null && row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+									mailID = row.getCell(0).getNumericCellValue() + "";
+								}
+							} else {
+								mailID = "";
+							}
+							continue;
+						} else {
+							uploadSuccess = false;
+							getUploadErrors().add("Email Id is not valid :: " + mailID + " row number :: " + i);
+							i++;
+							row = sheet.getRow(i);
+							if (row != null) {
+								if (row.getCell(6) != null && row.getCell(6).getCellType() == HSSFCell.CELL_TYPE_STRING) {
+									mailID = row.getCell(6).getStringCellValue();
+								}
+							} else {
+								mailID = "";
+							}
+							continue;
+						}
+					}
+
+				} catch (Exception e) {
+					logger.error(e, e);
+					uploadSuccess = false;
+					getUploadErrors().add("User creation service call failed due to :: " + e.getMessage() + " row number :: " + i);
+					i++;
+					row = sheet.getRow(i);
+					if (row != null) {
+						if (row.getCell(6) != null && row.getCell(6).getCellType() == HSSFCell.CELL_TYPE_STRING) {
+							mailID = row.getCell(6).getStringCellValue();
+						}
+					} else {
+						mailID = "";
+					}
+					continue;
+				}
+				i++;
+				row = sheet.getRow(i);
+				if (row != null) {
+					if (row.getCell(6) != null && row.getCell(6).getCellType() == HSSFCell.CELL_TYPE_STRING) {
+						mailID = row.getCell(6).getStringCellValue();
+					}
+				} else {
+					mailID = "";
+				}
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
+			uploadSuccess = false;
+			getUploadErrors().add("User creation service call failed due to :: " + e.getMessage() + " row number :: " + i);
+			return "admuur";
+		}
+		FacesMessage successMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "File has been uploaded successfully ", "File has been uploaded successfully");
+		FacesContext.getCurrentInstance().addMessage(null, successMessage);
 		return "admuur";
 	}
 
@@ -1609,9 +1720,23 @@ public class AdminController implements Serializable {
 			ResponseMessage response = updateUserClient.accept(MediaType.APPLICATION_JSON).put(bean, ResponseMessage.class);
 			updateUserClient.close();
 			if (resetPasswd) {
-				WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rpw/");
-				loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5("Passw123".getBytes())), userBean.getPwd() }, ResponseMessage.class);
-				loginClient.close();
+				User user = UserLocalServiceUtil.getUserByScreenName(10154, userBean.getScName());
+				user = UserLocalServiceUtil.updatePassword(user.getUserId(), "Passw123", "Passw123", false);
+				if (Validator.isNotNull(user)) {
+					WebClient pwdUpdateClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rpw/");
+					ResponseMessage pwdUpdateResponse = pwdUpdateClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5("Passw123".getBytes())), "Passw123" }, ResponseMessage.class);
+					pwdUpdateClient.close();
+					if (pwdUpdateResponse.getStatusCode() == 0) {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Reset Successful", "Password Reset Successful");
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+					} else {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, pwdUpdateResponse.getStatusCode() + " :: " + pwdUpdateResponse.getStatusDesc(), pwdUpdateResponse.getStatusCode() + " :: " + pwdUpdateResponse.getStatusDesc());
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+					}
+				} else {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Liferay User password Reset Error", "Liferay User password Reset Error");
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
 				resetPasswd = false;
 			}
 			if (resetSec) {
@@ -1682,7 +1807,7 @@ public class AdminController implements Serializable {
 				updateUserClient.close();
 				if (resetPasswd) {
 					WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rpw/");
-					loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5("Passw123".getBytes())) }, ResponseMessage.class);
+					loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5("Passw123".getBytes())), "Passw123" }, ResponseMessage.class);
 					loginClient.close();
 					resetPasswd = false;
 				}
@@ -2410,6 +2535,16 @@ public class AdminController implements Serializable {
 		}
 	}
 
+	private String[] toStringArray(List<UserBean> users) {
+		String[] ret = new String[users.size()];
+		int i = 0;
+		for (UserBean user : users) {
+			ret[i] = user.getuId() + "";
+			i++;
+		}
+		return ret;
+	}
+
 	protected Long[] toLongArray(String[] val) {
 		Long[] ret = new Long[val.length];
 		for (int i = 0; i < val.length; i++)
@@ -3049,6 +3184,7 @@ public class AdminController implements Serializable {
 		statsBean.setTotalCount(statsMsg.getTotalCount());
 		statsBean.setUserId(statsMsg.getUserId());
 		statsBean.setWhishListCount(statsMsg.getWhishListCount());
+		statsBean.setPointsCount(statsMsg.getPointsCount());
 		statsClient.close();
 		logger.info(loggedScrName + " :: " + imgPath + " :: " + imgAvail + " :: " + hierarchy);
 		return statsBean;
@@ -3252,5 +3388,21 @@ public class AdminController implements Serializable {
 
 	public void setShowAllocIdeaReview(boolean showAllocIdeaReview) {
 		this.showAllocIdeaReview = showAllocIdeaReview;
+	}
+
+	public boolean isUploadSuccess() {
+		return uploadSuccess;
+	}
+
+	public void setUploadSuccess(boolean uploadSuccess) {
+		this.uploadSuccess = uploadSuccess;
+	}
+
+	public List<String> getSelUsers() {
+		return selUsers;
+	}
+
+	public void setSelUsers(List<String> selUsers) {
+		this.selUsers = selUsers;
 	}
 }

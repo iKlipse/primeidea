@@ -20,19 +20,19 @@ import za.co.idea.ip.ws.util.CustomObjectMapper;
 
 public class TestDocumentService {
 	public static void main(String[] args) throws Exception {
-		new TestDocumentService().testDownload();
+		new TestDocumentService().testUpload();
 	}
 
 	public void testUpload() throws FileNotFoundException {
-		WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/2", Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+		WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/multiUpload/115/true", Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 		client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
 		client.header("Accept", "application/json");
-		Response response = client.accept(MediaType.APPLICATION_JSON).post(new Attachment("2", new FileInputStream(new File("/home/main/Documents/179179611796112_1206898.pdf")), new ContentDisposition("attachment;filename=179179611796112_1206898.pdf")));
+		Response response = client.accept(MediaType.APPLICATION_JSON).post(new Attachment("115", new FileInputStream(new File("/software/button_lightbulb.png")), new ContentDisposition("attachment;filename=button_lightbulb.png")));
 		System.out.println(response.getStatus());
 	}
 
 	public void testDownload() throws IOException {
-		WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/3/logon.jpg", Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+		WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/115/button_lightbulb.png", Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 		client.header("Content-Type", "application/json");
 		client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 		Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);

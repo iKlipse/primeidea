@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.springframework.transaction.annotation.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -13,8 +14,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpAllocation;
 import za.co.idea.ip.orm.bean.IpBlob;
@@ -55,7 +54,7 @@ public class RewardsService {
 	@Path("/rewards/add")
 	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional
 	public ResponseMessage createReward(RewardsMessage rewards) {
 		try {
 			IpRewards ipRewards = new IpRewards();
@@ -90,7 +89,7 @@ public class RewardsService {
 	@Path("/rewards/modify")
 	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional
 	public ResponseMessage updateReward(RewardsMessage rewards) {
 		try {
 			IpRewards ipRewards = new IpRewards();
@@ -156,7 +155,8 @@ public class RewardsService {
 	@GET
 	@Path("/rewards/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends RewardsMessage> List<T> listRewards() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -175,7 +175,8 @@ public class RewardsService {
 	@GET
 	@Path("/rewards/get/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public RewardsMessage getRewardsById(@PathParam("id") Long id) {
 		RewardsMessage rewards = new RewardsMessage();
 		try {
@@ -190,7 +191,8 @@ public class RewardsService {
 	@GET
 	@Path("/rewards/list/avail")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends RewardsMessage> List<T> listAvailableRewards() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -209,7 +211,8 @@ public class RewardsService {
 	@GET
 	@Path("/rewards/list/cat/{catId}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends RewardsMessage> List<T> listRewardsByCat(@PathParam("catId") Integer id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -228,7 +231,8 @@ public class RewardsService {
 	@GET
 	@Path("/rewards/list/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends RewardsMessage> List<T> listRewardsByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -247,7 +251,8 @@ public class RewardsService {
 	@GET
 	@Path("/rewards/cat/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends MetaDataMessage> List<T> listRewardsCat() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -268,7 +273,8 @@ public class RewardsService {
 	@GET
 	@Path("/rewards/cat/get/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public MetaDataMessage getRewardsCatById(@PathParam("id") Integer id) {
 		MetaDataMessage message = new MetaDataMessage();
 		try {
@@ -285,7 +291,7 @@ public class RewardsService {
 	@Path("/points/add")
 	@Produces("application/json")
 	@Consumes("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional
 	public ResponseMessage createPoint(PointMessage point) {
 		try {
 			IpPoints ipPoints = new IpPoints();
@@ -314,7 +320,7 @@ public class RewardsService {
 	@Path("/points/modify")
 	@Produces("application/json")
 	@Consumes("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional
 	public ResponseMessage updatePoint(PointMessage point) {
 		try {
 			IpPoints ipPoints = new IpPoints();
@@ -358,7 +364,7 @@ public class RewardsService {
 	@Path("/points/get/{id}")
 	@Produces("application/json")
 	@Consumes("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional
 	public PointMessage getPointsById(@PathParam("id") Long id) {
 		PointMessage message = new PointMessage();
 		try {
@@ -374,7 +380,7 @@ public class RewardsService {
 	@Path("/points/get/user/{id}")
 	@Produces("application/json")
 	@Consumes("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional
 	public <T extends PointMessage> List<T> listPointsByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -394,7 +400,7 @@ public class RewardsService {
 	@Path("/alloc/add")
 	@Produces("application/json")
 	@Consumes("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional
 	public ResponseMessage createAllocation(AllocationMessage alloc) {
 		try {
 			IpAllocation ipAllocation = new IpAllocation();
@@ -423,7 +429,7 @@ public class RewardsService {
 	@Path("/alloc/delete")
 	@Produces("application/json")
 	@Consumes("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional
 	public ResponseMessage deleteAllocation(AllocationMessage alloc) {
 		try {
 			List allocated = ipAllocationDAO.getUtilisedAllocation(alloc.getAllocEntity());
@@ -460,7 +466,7 @@ public class RewardsService {
 	@Path("/alloc/update")
 	@Produces("application/json")
 	@Consumes("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional
 	public ResponseMessage updateAllocation(AllocationMessage alloc) {
 		try {
 			IpAllocation ipAllocation = new IpAllocation();
@@ -503,7 +509,8 @@ public class RewardsService {
 	@GET
 	@Path("/alloc/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends AllocationMessage> List<T> listAllocation() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -522,7 +529,8 @@ public class RewardsService {
 	@GET
 	@Path("/alloc/list/{entity}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends AllocationMessage> List<T> listAllocationByEntity(@PathParam("entity") String entity) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -541,7 +549,8 @@ public class RewardsService {
 	@GET
 	@Path("/alloc/get/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public AllocationMessage getAllocationById(@PathParam("id") Integer id) {
 		AllocationMessage ret = new AllocationMessage();
 		try {
@@ -556,7 +565,8 @@ public class RewardsService {
 	@GET
 	@Path("/reward/check/title/{title}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public Boolean checkTitle(@PathParam("title") String title) {
 		try {
 			List rwByTitle = ipRewardsDAO.findByRwTitle(title);

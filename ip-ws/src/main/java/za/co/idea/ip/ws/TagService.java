@@ -1,10 +1,11 @@
 package za.co.idea.ip.ws;
 
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.springframework.transaction.annotation.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -13,8 +14,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.bean.IpTag;
@@ -46,7 +45,8 @@ public class TagService {
 	@GET
 	@Path("/tag/get/{entityId}/{teId}/{ttId}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends TagMessage> List<T> getTag(@PathParam("entityId") Long entityId, @PathParam("teId") Integer teId, @PathParam("ttId") Integer ttId) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -80,7 +80,8 @@ public class TagService {
 	@GET
 	@Path("/tag/getByUser/{entityId}/{teId}/{ttId}/{userId}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends TagMessage> List<T> getTagByUser(@PathParam("entityId") Long entityId, @PathParam("teId") Integer teId, @PathParam("ttId") Integer ttId, @PathParam("userId") Long userId) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -115,7 +116,7 @@ public class TagService {
 	@Path("/tag/add")
 	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional
 	public ResponseMessage createTag(TagMessage tag) {
 		try {
 			List tags = ipTagDAO.getTagByFilterB(tag.getEntityId(), tag.getTeId(), tag.getTtId(), tag.getUserId());
@@ -159,10 +160,33 @@ public class TagService {
 	@Path("/tag/del")
 	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional
 	public ResponseMessage deleteTag(Long tagId) {
 		try {
 			ipTagDAO.delete(ipTagDAO.findById(tagId));
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(0);
+			message.setStatusDesc("Success");
+			return message;
+		} catch (Exception e) {
+			logger.error(e, e);
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(e.getMessage());
+			return message;
+		}
+	}
+
+	@GET
+	@Path("/tag/move/{tagId}")
+	@Consumes("application/json")
+	@Produces("application/json")
+	@Transactional
+	public ResponseMessage moveTag(@PathParam("tagId") Long tagId) {
+		try {
+			IpTag ipTag = ipTagDAO.findById(tagId);
+			ipTag.setIpTagType(ipTagTypeDAO.findById(3));
+			ipTagDAO.merge(ipTag);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");

@@ -16,7 +16,7 @@
 			<p:outputLabel id="lblSumrIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:dataGrid id="sumRIDocCar" var="file" value="#{randomIdeaController.ideaBean.files}" columns="3" rows="1" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="No Attachments">
+			<p:dataGrid id="sumRIDocCar" var="file" value="#{randomIdeaController.ideaBean.files}" columns="3" rows="1" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="No Attachments">
 				<p:panel styleClass="dgView">
 					<h:outputLink value="#{file.url}">
 						<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
@@ -101,6 +101,12 @@
 							<p:outputLabel style="text-align: left !important; font-size: 0.8em" value="#{comment.usrScreenName}" />
 							<p:outputLabel style="text-align: right !important; font-size: 0.6em" value="#{comment.tagDate}" />
 						</p:column>
+						<f:facet name="footer">
+							<p:commandButton id="sumMoveCmnt" value="Move To Build-On" actionListener="#{randomIdeaController.moveCommentBuildon}" update="dtViewComments, :frmSummaryReviewIdea:frmSummaryReviewIdeaMsg">
+								<!-- 								<f:setPropertyActionListener value="#{comment.tagId}" target="#{randomIdeaController.delTagId}" /> -->
+								<f:param name="cTagId" id="cTagId" value="#{comment.tagId}" />
+							</p:commandButton>
+						</f:facet>
 					</p:panelGrid>
 				</p:dataScroller>
 				<p:tooltip for="dtViewComments" value="Tags disabled as idea not in open status" rendered="#{randomIdeaController.ideaBean.taggable}" />
@@ -109,7 +115,7 @@
 				<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="edComment" value="#{randomIdeaController.commentText}" height="100" />
 			</p:column>
 			<p:column rendered="#{!randomIdeaController.ideaBean.taggable}">
-				<p:commandButton id="btnSubmitComment" value="Post" update="dtViewComments, :frmSummaryReviewIdea:lblSumrCommentCnt" actionListener="#{randomIdeaController.commentIdea}" />
+				<p:commandButton id="btnSubmitComment" value="Post" update="dtViewComments, :frmSummaryReviewIdea:lblSumrCommentCnt, :frmSummaryReviewIdea:edComment" actionListener="#{randomIdeaController.commentIdea}" />
 			</p:column>
 		</p:panelGrid>
 	</p:overlayPanel>

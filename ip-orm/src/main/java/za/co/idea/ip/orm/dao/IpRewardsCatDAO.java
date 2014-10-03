@@ -153,7 +153,7 @@ public class IpRewardsCatDAO {
 			throw re;
 		}
 	}
-	
+
 	public List listDependentCat() {
 		log.debug("checking category dependency");
 		try {

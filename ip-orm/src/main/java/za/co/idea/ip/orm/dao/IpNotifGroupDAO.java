@@ -10,6 +10,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpNotifGroup;
@@ -158,7 +159,8 @@ public class IpNotifGroupDAO {
 			throw re;
 		}
 	}
-	
+
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void deleteByNotifId(String id) {
 		log.debug("Deleting Notification Groups By Notif Id : " + id);
 		try {

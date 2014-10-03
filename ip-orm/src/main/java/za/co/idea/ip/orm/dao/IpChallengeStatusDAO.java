@@ -153,7 +153,7 @@ public class IpChallengeStatusDAO {
 			throw re;
 		}
 	}
-	
+
 	public List findNext(Integer curr) {
 		log.debug("finding Next IpChallengeStatus instances");
 		try {

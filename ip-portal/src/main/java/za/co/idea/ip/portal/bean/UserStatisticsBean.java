@@ -11,6 +11,7 @@ public class UserStatisticsBean implements Serializable {
 	private Long whishListCount;
 	private Long ideasCount;
 	private Long totalCount;
+	private Long pointsCount;
 	private String imgPath;
 	private boolean imgAvail;
 	private String grpImgPath;
@@ -114,4 +115,11 @@ public class UserStatisticsBean implements Serializable {
 		this.userPriGrpName = userPriGrpName;
 	}
 
+	public Long getPointsCount() {
+		return pointsCount;
+	}
+
+	public void setPointsCount(Long pointsCount) {
+		this.pointsCount = pointsCount;
+	}
 }

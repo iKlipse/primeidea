@@ -11,6 +11,7 @@ public class UserStatisticsMessage implements Comparable<UserStatisticsMessage> 
 	private Long whishListCount;
 	private Long ideasCount;
 	private Long totalCount;
+	private Long pointsCount;
 	private String imgPath;
 	private boolean imgAvail;
 	private String grpImgPath;
@@ -121,6 +122,14 @@ public class UserStatisticsMessage implements Comparable<UserStatisticsMessage> 
 
 	public void setUserPriGrpName(String userPriGrpName) {
 		this.userPriGrpName = userPriGrpName;
+	}
+
+	public Long getPointsCount() {
+		return pointsCount;
+	}
+
+	public void setPointsCount(Long pointsCount) {
+		this.pointsCount = pointsCount;
 	}
 
 }

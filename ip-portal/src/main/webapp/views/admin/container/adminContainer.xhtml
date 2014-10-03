@@ -22,6 +22,9 @@
 							<p:menuitem value="Upload" ajax="false" immediate="true" action="#{adminController.showUploadUsers}">
 								<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
 							</p:menuitem>
+							<p:menuitem value="De-activate Users" ajax="false" immediate="true" action="#{adminController.showInactivateUsers}">
+								<f:setPropertyActionListener value="2" target="#{adminController.returnView}" />
+							</p:menuitem>
 						</p:submenu>
 						<p:submenu label="Groups">
 							<p:menuitem value="Create Group" ajax="false" immediate="true" action="#{adminController.showCreateGroup}">

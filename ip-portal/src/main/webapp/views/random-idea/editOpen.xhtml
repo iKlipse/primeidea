@@ -47,7 +47,7 @@
 			<p:outputLabel id="lblEdtoIUpload" value="Upload File : " />
 		</p:column>
 		<p:column rendered="#{!randomIdeaController.ideaBean.disableField}">
-			<p:fileUpload id="fuIUpload" fileUploadListener="#{randomIdeaController.fileUploadHandle}" multiple="false" dragDropSupport="true" sizeLimit="100000" fileLimit="3" />
+			<p:fileUpload id="fuIUpload" fileUploadListener="#{randomIdeaController.fileUploadHandle}" multiple="false" dragDropSupport="true" sizeLimit="6000000" fileLimit="3" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblEdtoFuncGrps" value="Idea Groups" />
@@ -56,15 +56,6 @@
 			<p:selectOneMenu id="scmoGroupList" value="#{randomIdeaController.selGroupId}" disabled="#{randomIdeaController.ideaBean.disableField}">
 				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
 				<f:selectItems value="#{randomIdeaController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
-			</p:selectOneMenu>
-		</p:column>
-		<p:column>
-			<p:outputLabel id="lblEdtoCrtdBy" value="Created By : " />
-		</p:column>
-		<p:column>
-			<p:selectOneMenu id="somEdtoACrtdBy" value="#{randomIdeaController.ideaBean.crtdById}" disabled="#{randomIdeaController.ideaBean.disableField}">
-				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-				<f:selectItems value="#{randomIdeaController.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
 			</p:selectOneMenu>
 		</p:column>
 		<f:facet name="footer">

@@ -1,5 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
-	<p:dataGrid id="dgViewChallenges" value="#{landingPageController.viewChallenges}" styleClass="noBorder" var="challenge" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" columns="1" rows="5" emptyMessage="No Challenges Found">
+	<p:dataGrid id="dgViewChallenges" value="#{landingPageController.viewChallenges}" var="challenge" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" columns="1" rows="5" emptyMessage="No Challenges Found" styleClass="noBorder">
 		<p:panel styleClass="panelView">
 			<p:panelGrid styleClass="panelGridView">
 				<p:row>
@@ -35,8 +35,8 @@
 						<br />
 						<p:outputLabel value="#{challenge.desc}" escape="false" style="text-align: left !important; overflow: auto !important" />
 						<p:separator style="width: 100% !important" />
-						<p:outputLabel value="No Attachments" rendered="#{!challenge.imgAvail}" />
-						<p:dataGrid id="lpChalViewDoc" var="file" value="#{challenge.files}" columns="3" rows="1" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="No Attachments">
+						<p:outputLabel rendered="#{!challenge.imgAvail}" value="No Attachments" ></p:outputLabel>
+						<p:dataGrid id="lpChalViewDoc" var="file" value="#{challenge.files}" columns="3" rows="1" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
 							<p:panel styleClass="dgView">
 								<h:outputLink value="#{file.url}">
 									<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />

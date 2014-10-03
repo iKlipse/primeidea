@@ -53,7 +53,7 @@
 			<p:outputLabel id="lblCUpload" value="Upload File : " />
 		</p:column>
 		<p:column>
-			<p:fileUpload id="fuCEUpload" fileUploadListener="#{challengeController.chalFileUploadHandle}" multiple="false" dragDropSupport="true" sizeLimit="100000" fileLimit="3" />
+			<p:fileUpload id="fuCEUpload" fileUploadListener="#{challengeController.chalFileUploadHandle}" multiple="false" dragDropSupport="true" sizeLimit="6000000" fileLimit="3" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblFuncGrps" value="Challenge Groups" />
@@ -65,7 +65,7 @@
 		</p:column>
 		<f:facet name="footer">
 			<p:commandButton id="btnISave" value="Save" actionListener="#{challengeController.saveChallenge}" update=":frmChalCtrlr:pnlChalDet, :frmChalCtrlr:frmChalCtrlrMsg">
-				<f:setPropertyActionListener value="2" target="#{challengeController.toView}" />
+				<f:setPropertyActionListener value="3" target="#{challengeController.toView}" />
 			</p:commandButton>
 			<p:commandButton id="btnCrtIARv" value="Assign Reviewers" type="button" onclick="PF('dlgRwUpd').show();" />
 		</f:facet>

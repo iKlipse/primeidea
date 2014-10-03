@@ -36,6 +36,7 @@ import za.co.idea.ip.portal.bean.RewardsBean;
 import za.co.idea.ip.portal.bean.SolutionBean;
 import za.co.idea.ip.portal.bean.TagBean;
 import za.co.idea.ip.portal.bean.UserBean;
+import za.co.idea.ip.portal.controller.AccessController;
 import za.co.idea.ip.ws.bean.AllocationMessage;
 import za.co.idea.ip.ws.bean.ChallengeMessage;
 import za.co.idea.ip.ws.bean.ClaimMessage;
@@ -67,7 +68,7 @@ public class RESTServiceHelper {
 		return client;
 	}
 
-	private static UserBean getUserBean(UserMessage userMessage) {
+	public static UserBean getUserBean(UserMessage userMessage) {
 		UserBean bean = new UserBean();
 		try {
 			bean.setBio(userMessage.getBio());
@@ -86,7 +87,11 @@ public class RESTServiceHelper {
 			bean.setIsActive(userMessage.getIsActive());
 			bean.setuId(userMessage.getuId());
 			bean.setEmployeeId(userMessage.getEmployeeId());
+			bean.setGroupId(userMessage.getGroupId());
 			bean.setPriGroupName(userMessage.getPriGroupName());
+			bean.setcPw(userMessage.getPwd());
+			bean.setSecQ(userMessage.getSecQ());
+			bean.setSecA(userMessage.getSecA());
 			bean.setuCrtdDate(userMessage.getuCrtdDate());
 		} catch (Exception e) {
 			logger.error("Error: " + e);
@@ -131,6 +136,18 @@ public class RESTServiceHelper {
 		return ret;
 	}
 
+	public static List<UserBean> fetchUsersByGroup(Long groupId) {
+		List<UserBean> ret = new ArrayList<UserBean>();
+		WebClient viewUsersClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/list/group/" + groupId);
+		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
+		viewUsersClient.close();
+		for (UserMessage userMessage : users) {
+			UserBean bean = getUserBean(userMessage);
+			ret.add(bean);
+		}
+		return ret;
+	}
+
 	private static GroupBean getGroupBean(GroupMessage groupMessage) {
 		GroupBean bean = new GroupBean();
 		try {
@@ -140,6 +157,7 @@ public class RESTServiceHelper {
 			bean.setIsActive(groupMessage.getIsActive());
 			bean.setSelAdmUser(groupMessage.getAdmUserId());
 			bean.setSelPGrp(groupMessage.getpGrpId());
+			bean.setSelPGrpName(groupMessage.getpGrpName());
 			bean.setgCrtdDate(groupMessage.getCrtdDate());
 			bean.getUserIdList().clear();
 			for (Long id : groupMessage.getUserIdList())
@@ -229,16 +247,23 @@ public class RESTServiceHelper {
 			WebClient fetchDocClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/list/" + ideaMessage.getIdeaId() + "/ip_idea");
 			Collection<? extends FileMessage> res = new ArrayList<FileMessage>(fetchDocClient.accept(MediaType.APPLICATION_JSON).getCollection(FileMessage.class));
 			logger.info("Files list ");
-			for (FileMessage fileMessage : res) {
-				FileBean fileBean = new FileBean();
-				fileBean.setId(fileMessage.getId());
-				logger.info("-----File id : " + fileMessage.getId() + "---name : " + fileMessage.getName());
-				fileBean.setLoc(fileMessage.getLoc());
-				fileBean.setName(fileMessage.getName());
-				fileBean.setSize(fileMessage.getSize());
-				fileBean.setType(fileMessage.getType());
-				fileBean.setUrl(fileMessage.getUrl());
-				bean.getFiles().add(fileBean);
+			if (res != null && !res.isEmpty()) {
+				bean.setAttachsAvail(true);
+				ArrayList<FileBean> list = new ArrayList<FileBean>();
+				for (FileMessage fileMessage : res) {
+					FileBean fileBean = new FileBean();
+					fileBean.setId(fileMessage.getId());
+					logger.info("-----File id : " + fileMessage.getId() + "---name : " + fileMessage.getName());
+					fileBean.setLoc(fileMessage.getLoc());
+					fileBean.setName(fileMessage.getName());
+					fileBean.setSize(fileMessage.getSize());
+					fileBean.setType(fileMessage.getType());
+					fileBean.setUrl(fileMessage.getUrl());
+					list.add(fileBean);
+				}
+				bean.setFiles(list);
+			} else {
+				bean.setAttachsAvail(false);
 			}
 			fetchDocClient.close();
 		} catch (Exception e) {
@@ -248,73 +273,151 @@ public class RESTServiceHelper {
 	}
 
 	// Ideas Section
-	public List<IdeaBean> fetchAllIdeas() {
+	public List<IdeaBean> fetchAllIdeas(AccessController controller, Long userId) {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
 		WebClient fetchIdeaClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/list");
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		fetchIdeaClient.close();
 		for (IdeaMessage ideaMessage : ideas) {
 			IdeaBean bean = getIdeaBean(ideaMessage);
+			if (controller.isAdminEnabled() || bean.getCrtdById() == userId)
+				bean.setDisableEdit(false);
+			else
+				bean.setDisableEdit(true);
 			ret.add(bean);
 		}
 		return ret;
 	}
 
-	public static List<IdeaBean> fetchAllIdeasByUser(long userId) {
+	public static List<IdeaBean> fetchAllIdeasByUser(AccessController controller, long userId) {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
 		WebClient fetchIdeaClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/list/user/access/" + userId);
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		fetchIdeaClient.close();
 		for (IdeaMessage ideaMessage : ideas) {
 			IdeaBean bean = getIdeaBean(ideaMessage);
+			if (controller.isAdminEnabled() || bean.getCrtdById() == userId)
+				bean.setDisableEdit(false);
+			else
+				bean.setDisableEdit(true);
 			ret.add(bean);
 		}
 		return ret;
 	}
 
-	public static List<IdeaBean> fetchAllIdeasCreatedByUser(long userId) {
+	public static List<IdeaBean> fetchAllIdeasCreatedByUser(AccessController controller, long userId) {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
 		WebClient fetchIdeaClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/list/user/created/" + userId);
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		fetchIdeaClient.close();
 		for (IdeaMessage ideaMessage : ideas) {
 			IdeaBean bean = getIdeaBean(ideaMessage);
+			if (controller.isAdminEnabled() || bean.getCrtdById() == userId)
+				bean.setDisableEdit(false);
+			else
+				bean.setDisableEdit(true);
 			ret.add(bean);
 		}
 		return ret;
 	}
 
-	public static List<IdeaBean> fetchAllIdeasByStatus(Integer status, Long userId) {
+	public static List<IdeaBean> fetchAllIdeasByStatus(AccessController controller, Integer status, Long userId) {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
 		WebClient fetchIdeaClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/list/status/" + status);
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		fetchIdeaClient.close();
 		for (IdeaMessage ideaMessage : ideas) {
 			IdeaBean bean = getIdeaBean(ideaMessage);
+			if (controller.isAdminEnabled() || bean.getCrtdById() == userId)
+				bean.setDisableEdit(false);
+			else
+				bean.setDisableEdit(true);
 			ret.add(bean);
 		}
 		return ret;
 	}
 
-	public static List<IdeaBean> fetchAllReviewIdeasByUserId(long userId) {
+	public static List<IdeaBean> fetchAllReviewIdeasByUserId(AccessController controller, long userId) {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
 		WebClient fetchIdeaClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/list/reviewStatus/user/" + userId);
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		fetchIdeaClient.close();
 		for (IdeaMessage ideaMessage : ideas) {
 			IdeaBean bean = getIdeaBean(ideaMessage);
+			if (controller.isAdminEnabled() || bean.getCrtdById() == userId)
+				bean.setDisableEdit(false);
+			else
+				bean.setDisableEdit(true);
 			ret.add(bean);
 		}
 		return ret;
 	}
 
-	public static List<IdeaBean> fetchAllIdeasByStatusIdUserId(Integer status, long userId) {
+	public static List<IdeaBean> fetchAllIdeasByStatusIdUserId(AccessController controller, Integer status, long userId) {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
 		WebClient fetchIdeaClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/list/status/" + status + "/user/" + userId);
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		fetchIdeaClient.close();
 		for (IdeaMessage ideaMessage : ideas) {
 			IdeaBean bean = getIdeaBean(ideaMessage);
+			if (controller.isAdminEnabled() || bean.getCrtdById() == userId)
+				bean.setDisableEdit(false);
+			else
+				bean.setDisableEdit(true);
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<ListSelectorBean> fetchFilteredIdeaStatuses(Long id) {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		WebClient viewIdeaSelectClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/status/list");
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewIdeaSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewIdeaSelectClient.close();
+		WebClient fetchReviewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rvs/review/list/cnt/" + id + "/ip_idea");
+		Integer msgs = fetchReviewGroupsClient.accept(MediaType.APPLICATION_JSON).get(Integer.class);
+		for (MetaDataMessage metaDataMessage : md) {
+			if (msgs != 5 && (metaDataMessage.getId() > 2 + msgs && metaDataMessage.getId() <= 7))
+				continue;
+			ListSelectorBean bean = new ListSelectorBean();
+			bean.setId(metaDataMessage.getId());
+			bean.setDesc(metaDataMessage.getDesc());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<ListSelectorBean> fetchFilteredChallengeStatuses(Long id) {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		WebClient viewChallengeSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/status/list");
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewChallengeSelectClient.close();
+		WebClient fetchReviewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rvs/review/list/cnt/" + id + "/ip_challenge");
+		Integer msgs = fetchReviewGroupsClient.accept(MediaType.APPLICATION_JSON).get(Integer.class);
+		for (MetaDataMessage metaDataMessage : md) {
+			if (msgs != 5 && (metaDataMessage.getId() > 1 + msgs && metaDataMessage.getId() <= 7))
+				continue;
+			ListSelectorBean bean = new ListSelectorBean();
+			bean.setId(metaDataMessage.getId());
+			bean.setDesc(metaDataMessage.getDesc());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<ListSelectorBean> fetchFilteredSolutionStatuses(Long id) {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		WebClient viewSolutionSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/status/list");
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewSolutionSelectClient.close();
+		WebClient fetchReviewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rvs/review/list/cnt/" + id + "/ip_solution");
+		Integer msgs = fetchReviewGroupsClient.accept(MediaType.APPLICATION_JSON).get(Integer.class);
+		for (MetaDataMessage metaDataMessage : md) {
+			if (msgs != 5 && (metaDataMessage.getId() > 2 + msgs && metaDataMessage.getId() <= 7))
+				continue;
+			ListSelectorBean bean = new ListSelectorBean();
+			bean.setId(metaDataMessage.getId());
+			bean.setDesc(metaDataMessage.getDesc());
 			ret.add(bean);
 		}
 		return ret;
@@ -334,14 +437,465 @@ public class RESTServiceHelper {
 		return ret;
 	}
 
-	public static List<ListSelectorBean> fetchAllReviewIdeaStatuses() {
+	public static List<ListSelectorBean> fetchAllChallengeStatuses() {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		WebClient viewChallengeSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/status/list");
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewChallengeSelectClient.close();
+		for (MetaDataMessage metaDataMessage : md) {
+			ListSelectorBean bean = new ListSelectorBean();
+			bean.setId(metaDataMessage.getId());
+			bean.setDesc(metaDataMessage.getDesc());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<ListSelectorBean> fetchAllSolutionStatuses() {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		WebClient viewSolutionSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/status/list");
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewSolutionSelectClient.close();
+		for (MetaDataMessage metaDataMessage : md) {
+			ListSelectorBean bean = new ListSelectorBean();
+			bean.setId(metaDataMessage.getId());
+			bean.setDesc(metaDataMessage.getDesc());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<ListSelectorBean> fetchAllReviewIdeaStatuses(Long id, Integer statusId) {
+		WebClient fetchReviewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rvs/review/list/cnt/" + id + "/ip_idea");
+		Integer msgs = fetchReviewGroupsClient.accept(MediaType.APPLICATION_JSON).get(Integer.class);
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		ListSelectorBean bean = new ListSelectorBean();
-		bean.setId(5);
+		if (msgs == 1 && statusId == 2) {
+			bean.setId(3);
+			bean.setDesc("In-Review 1");
+			ret.add(bean);
+		} else if (msgs == 2) {
+			if (statusId == 2) {
+				bean.setId(3);
+				bean.setDesc("In-Review 1");
+				ret.add(bean);
+				bean.setId(4);
+				bean.setDesc("In-Review 2");
+				ret.add(bean);
+			} else if (statusId == 3) {
+				bean.setId(4);
+				bean.setDesc("In-Review 2");
+				ret.add(bean);
+			}
+		} else if (msgs == 3) {
+			if (statusId == 2) {
+				bean.setId(3);
+				bean.setDesc("In-Review 1");
+				ret.add(bean);
+				bean.setId(4);
+				bean.setDesc("In-Review 2");
+				ret.add(bean);
+				bean.setId(5);
+				bean.setDesc("In-Review 3");
+				ret.add(bean);
+			} else if (statusId == 3) {
+				bean.setId(4);
+				bean.setDesc("In-Review 2");
+				ret.add(bean);
+				bean.setId(5);
+				bean.setDesc("In-Review 3");
+				ret.add(bean);
+			} else if (statusId == 4) {
+				bean.setId(5);
+				bean.setDesc("In-Review 3");
+				ret.add(bean);
+			}
+		} else if (msgs == 4) {
+			if (statusId == 2) {
+				bean.setId(3);
+				bean.setDesc("In-Review 1");
+				ret.add(bean);
+				bean.setId(4);
+				bean.setDesc("In-Review 2");
+				ret.add(bean);
+				bean.setId(5);
+				bean.setDesc("In-Review 3");
+				ret.add(bean);
+				bean.setId(6);
+				bean.setDesc("In-Review 4");
+				ret.add(bean);
+			} else if (statusId == 3) {
+				bean.setId(4);
+				bean.setDesc("In-Review 2");
+				ret.add(bean);
+				bean.setId(5);
+				bean.setDesc("In-Review 3");
+				ret.add(bean);
+				bean.setId(6);
+				bean.setDesc("In-Review 4");
+				ret.add(bean);
+			} else if (statusId == 3) {
+				bean.setId(5);
+				bean.setDesc("In-Review 3");
+				ret.add(bean);
+				bean.setId(6);
+				bean.setDesc("In-Review 4");
+				ret.add(bean);
+			} else if (statusId == 4) {
+				bean.setId(6);
+				bean.setDesc("In-Review 4");
+				ret.add(bean);
+			}
+		} else if (msgs == 5) {
+			if (statusId == 1) {
+				bean.setId(3);
+				bean.setDesc("In-Review 1");
+				ret.add(bean);
+				bean.setId(4);
+				bean.setDesc("In-Review 2");
+				ret.add(bean);
+				bean.setId(5);
+				bean.setDesc("In-Review 3");
+				ret.add(bean);
+				bean.setId(6);
+				bean.setDesc("In-Review 4");
+				ret.add(bean);
+				bean.setId(7);
+				bean.setDesc("In-Review 5");
+				ret.add(bean);
+			} else if (statusId == 2) {
+				bean.setId(4);
+				bean.setDesc("In-Review 2");
+				ret.add(bean);
+				bean.setId(5);
+				bean.setDesc("In-Review 3");
+				ret.add(bean);
+				bean.setId(6);
+				bean.setDesc("In-Review 4");
+				ret.add(bean);
+				bean.setId(7);
+				bean.setDesc("In-Review 5");
+				ret.add(bean);
+			} else if (statusId == 3) {
+				bean.setId(5);
+				bean.setDesc("In-Review 3");
+				ret.add(bean);
+				bean.setId(6);
+				bean.setDesc("In-Review 4");
+				ret.add(bean);
+				bean.setId(7);
+				bean.setDesc("In-Review 5");
+				ret.add(bean);
+			} else if (statusId == 4) {
+				bean.setId(6);
+				bean.setDesc("In-Review 4");
+				ret.add(bean);
+				bean.setId(7);
+				bean.setDesc("In-Review 5");
+				ret.add(bean);
+			} else if (statusId == 5) {
+				bean.setId(7);
+				bean.setDesc("In-Review 5");
+				ret.add(bean);
+			}
+		}
+		bean.setId(9);
 		bean.setDesc("Approved");
 		ret.add(bean);
 		bean = new ListSelectorBean();
-		bean.setId(8);
+		bean.setId(12);
+		bean.setDesc("Closed");
+		ret.add(bean);
+		return ret;
+	}
+
+	public static List<ListSelectorBean> fetchAllReviewChallengeStatuses(Long id, Integer statusId) {
+		WebClient fetchReviewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rvs/review/list/cnt/" + id + "/ip_challenge");
+		Integer msgs = fetchReviewGroupsClient.accept(MediaType.APPLICATION_JSON).get(Integer.class);
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		ListSelectorBean bean = new ListSelectorBean();
+		logger.info("msgs ----" + msgs);
+		if (msgs != null) {
+			if (msgs == 1 && statusId == 1) {
+				bean.setId(2);
+				bean.setDesc("In-Review 1");
+				ret.add(bean);
+			} else if (msgs == 2) {
+				if (statusId == 1) {
+					bean.setId(2);
+					bean.setDesc("In-Review 1");
+					ret.add(bean);
+					bean.setId(3);
+					bean.setDesc("In-Review 2");
+					ret.add(bean);
+				} else if (statusId == 2) {
+					bean.setId(3);
+					bean.setDesc("In-Review 2");
+					ret.add(bean);
+				}
+			} else if (msgs == 3) {
+				if (statusId == 1) {
+					bean.setId(2);
+					bean.setDesc("In-Review 1");
+					ret.add(bean);
+					bean.setId(3);
+					bean.setDesc("In-Review 2");
+					ret.add(bean);
+					bean.setId(4);
+					bean.setDesc("In-Review 3");
+					ret.add(bean);
+				} else if (statusId == 2) {
+					bean.setId(3);
+					bean.setDesc("In-Review 2");
+					ret.add(bean);
+					bean.setId(4);
+					bean.setDesc("In-Review 3");
+					ret.add(bean);
+				} else if (statusId == 3) {
+					bean.setId(4);
+					bean.setDesc("In-Review 3");
+					ret.add(bean);
+				}
+			} else if (msgs == 4) {
+				if (statusId == 1) {
+					bean.setId(2);
+					bean.setDesc("In-Review 1");
+					ret.add(bean);
+					bean.setId(3);
+					bean.setDesc("In-Review 2");
+					ret.add(bean);
+					bean.setId(4);
+					bean.setDesc("In-Review 3");
+					ret.add(bean);
+					bean.setId(5);
+					bean.setDesc("In-Review 4");
+					ret.add(bean);
+				} else if (statusId == 2) {
+					bean.setId(3);
+					bean.setDesc("In-Review 2");
+					ret.add(bean);
+					bean.setId(4);
+					bean.setDesc("In-Review 3");
+					ret.add(bean);
+					bean.setId(5);
+					bean.setDesc("In-Review 4");
+					ret.add(bean);
+				} else if (statusId == 3) {
+					bean.setId(4);
+					bean.setDesc("In-Review 3");
+					ret.add(bean);
+					bean.setId(5);
+					bean.setDesc("In-Review 4");
+					ret.add(bean);
+				} else if (statusId == 4) {
+					bean.setId(5);
+					bean.setDesc("In-Review 4");
+					ret.add(bean);
+				}
+			} else if (msgs == 5) {
+				if (statusId == 1) {
+					bean.setId(2);
+					bean.setDesc("In-Review 1");
+					ret.add(bean);
+					bean.setId(3);
+					bean.setDesc("In-Review 2");
+					ret.add(bean);
+					bean.setId(4);
+					bean.setDesc("In-Review 3");
+					ret.add(bean);
+					bean.setId(5);
+					bean.setDesc("In-Review 4");
+					ret.add(bean);
+					bean.setId(6);
+					bean.setDesc("In-Review 5");
+					ret.add(bean);
+				} else if (statusId == 2) {
+					bean.setId(3);
+					bean.setDesc("In-Review 2");
+					ret.add(bean);
+					bean.setId(4);
+					bean.setDesc("In-Review 3");
+					ret.add(bean);
+					bean.setId(5);
+					bean.setDesc("In-Review 4");
+					ret.add(bean);
+					bean.setId(6);
+					bean.setDesc("In-Review 5");
+					ret.add(bean);
+				} else if (statusId == 3) {
+					bean.setId(4);
+					bean.setDesc("In-Review 3");
+					ret.add(bean);
+					bean.setId(5);
+					bean.setDesc("In-Review 4");
+					ret.add(bean);
+					bean.setId(6);
+					bean.setDesc("In-Review 5");
+					ret.add(bean);
+				} else if (statusId == 4) {
+					bean.setId(5);
+					bean.setDesc("In-Review 4");
+					ret.add(bean);
+					bean.setId(6);
+					bean.setDesc("In-Review 5");
+					ret.add(bean);
+				} else if (statusId == 5) {
+					bean.setId(6);
+					bean.setDesc("In-Review 5");
+					ret.add(bean);
+				}
+			}
+
+			bean.setId(7);
+			bean.setDesc("Approve");
+			ret.add(bean);
+			bean = new ListSelectorBean();
+			bean.setId(10);
+			bean.setDesc("Reject");
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<ListSelectorBean> fetchAllReviewSolutionStatuses(Long id, Integer statusId) {
+		WebClient fetchReviewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rvs/review/list/cnt/" + id + "/ip_solution");
+		Integer msgs = fetchReviewGroupsClient.accept(MediaType.APPLICATION_JSON).get(Integer.class);
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		ListSelectorBean bean = new ListSelectorBean();
+		if (msgs == 1 && statusId == 2) {
+			bean.setId(3);
+			bean.setDesc("In-Review 1");
+			ret.add(bean);
+		} else if (msgs == 2) {
+			if (statusId == 2) {
+				bean.setId(3);
+				bean.setDesc("In-Review 1");
+				ret.add(bean);
+				bean.setId(4);
+				bean.setDesc("In-Review 2");
+				ret.add(bean);
+			} else if (statusId == 3) {
+				bean.setId(4);
+				bean.setDesc("In-Review 2");
+				ret.add(bean);
+			}
+		} else if (msgs == 3) {
+			if (statusId == 2) {
+				bean.setId(3);
+				bean.setDesc("In-Review 1");
+				ret.add(bean);
+				bean.setId(4);
+				bean.setDesc("In-Review 2");
+				ret.add(bean);
+				bean.setId(5);
+				bean.setDesc("In-Review 3");
+				ret.add(bean);
+			} else if (statusId == 3) {
+				bean.setId(4);
+				bean.setDesc("In-Review 2");
+				ret.add(bean);
+				bean.setId(5);
+				bean.setDesc("In-Review 3");
+				ret.add(bean);
+			} else if (statusId == 4) {
+				bean.setId(5);
+				bean.setDesc("In-Review 3");
+				ret.add(bean);
+			}
+		} else if (msgs == 4) {
+			if (statusId == 2) {
+				bean.setId(3);
+				bean.setDesc("In-Review 1");
+				ret.add(bean);
+				bean.setId(4);
+				bean.setDesc("In-Review 2");
+				ret.add(bean);
+				bean.setId(5);
+				bean.setDesc("In-Review 3");
+				ret.add(bean);
+				bean.setId(6);
+				bean.setDesc("In-Review 4");
+				ret.add(bean);
+			} else if (statusId == 3) {
+				bean.setId(4);
+				bean.setDesc("In-Review 2");
+				ret.add(bean);
+				bean.setId(5);
+				bean.setDesc("In-Review 3");
+				ret.add(bean);
+				bean.setId(6);
+				bean.setDesc("In-Review 4");
+				ret.add(bean);
+			} else if (statusId == 3) {
+				bean.setId(5);
+				bean.setDesc("In-Review 3");
+				ret.add(bean);
+				bean.setId(6);
+				bean.setDesc("In-Review 4");
+				ret.add(bean);
+			} else if (statusId == 4) {
+				bean.setId(6);
+				bean.setDesc("In-Review 4");
+				ret.add(bean);
+			}
+		} else if (msgs == 5) {
+			if (statusId == 1) {
+				bean.setId(3);
+				bean.setDesc("In-Review 1");
+				ret.add(bean);
+				bean.setId(4);
+				bean.setDesc("In-Review 2");
+				ret.add(bean);
+				bean.setId(5);
+				bean.setDesc("In-Review 3");
+				ret.add(bean);
+				bean.setId(6);
+				bean.setDesc("In-Review 4");
+				ret.add(bean);
+				bean.setId(7);
+				bean.setDesc("In-Review 5");
+				ret.add(bean);
+			} else if (statusId == 2) {
+				bean.setId(4);
+				bean.setDesc("In-Review 2");
+				ret.add(bean);
+				bean.setId(5);
+				bean.setDesc("In-Review 3");
+				ret.add(bean);
+				bean.setId(6);
+				bean.setDesc("In-Review 4");
+				ret.add(bean);
+				bean.setId(7);
+				bean.setDesc("In-Review 5");
+				ret.add(bean);
+			} else if (statusId == 3) {
+				bean.setId(5);
+				bean.setDesc("In-Review 3");
+				ret.add(bean);
+				bean.setId(6);
+				bean.setDesc("In-Review 4");
+				ret.add(bean);
+				bean.setId(7);
+				bean.setDesc("In-Review 5");
+				ret.add(bean);
+			} else if (statusId == 4) {
+				bean.setId(6);
+				bean.setDesc("In-Review 4");
+				ret.add(bean);
+				bean.setId(7);
+				bean.setDesc("In-Review 5");
+				ret.add(bean);
+			} else if (statusId == 5) {
+				bean.setId(7);
+				bean.setDesc("In-Review 5");
+				ret.add(bean);
+			}
+		}
+		bean.setId(9);
+		bean.setDesc("Approved");
+		ret.add(bean);
+		bean = new ListSelectorBean();
+		bean.setId(12);
 		bean.setDesc("Closed");
 		ret.add(bean);
 		return ret;
@@ -408,15 +962,20 @@ public class RESTServiceHelper {
 			bean.setCatName(challengeMessage.getCatName());
 			WebClient fetchDocClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/list/" + challengeMessage.getId() + "/ip_challenge");
 			Collection<? extends FileMessage> res = new ArrayList<FileMessage>(fetchDocClient.accept(MediaType.APPLICATION_JSON).getCollection(FileMessage.class));
-			for (FileMessage fileMessage : res) {
-				FileBean fileBean = new FileBean();
-				fileBean.setId(fileMessage.getId());
-				fileBean.setLoc(fileMessage.getLoc());
-				fileBean.setName(fileMessage.getName());
-				fileBean.setSize(fileMessage.getSize());
-				fileBean.setType(fileMessage.getType());
-				fileBean.setUrl(fileMessage.getUrl());
-				bean.getFiles().add(fileBean);
+			if (res != null && !res.isEmpty()) {
+				bean.setImgAvail(true);
+				for (FileMessage fileMessage : res) {
+					FileBean fileBean = new FileBean();
+					fileBean.setId(fileMessage.getId());
+					fileBean.setLoc(fileMessage.getLoc());
+					fileBean.setName(fileMessage.getName());
+					fileBean.setSize(fileMessage.getSize());
+					fileBean.setType(fileMessage.getType());
+					fileBean.setUrl(fileMessage.getUrl());
+					bean.getFiles().add(fileBean);
+				}
+			} else {
+				bean.setImgAvail(false);
 			}
 			fetchDocClient.close();
 		} catch (Exception e) {
@@ -434,33 +993,6 @@ public class RESTServiceHelper {
 			ChallengeBean bean = getChallengeBean(challengeMessage);
 			ret.add(bean);
 		}
-		return ret;
-	}
-
-	public static List<ListSelectorBean> fetchAllReviewChallengeNextStatuses() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		ListSelectorBean bean = new ListSelectorBean();
-		bean.setId(3);
-		bean.setDesc("Approve");
-		ret.add(bean);
-		bean = new ListSelectorBean();
-		bean.setId(6);
-		bean.setDesc("Reject");
-		ret.add(bean);
-		return ret;
-	}
-
-	public static List<ListSelectorBean> fetchAllReviewSolutionStatuses() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		ListSelectorBean bean = new ListSelectorBean();
-		bean.setId(5);
-		bean.setDesc("Approved");
-		ret.add(bean);
-
-		bean = new ListSelectorBean();
-		bean.setId(8);
-		bean.setDesc("Closed");
-		ret.add(bean);
 		return ret;
 	}
 
@@ -687,10 +1219,13 @@ public class RESTServiceHelper {
 	private static SolutionBean getSolutionBean(SolutionMessage solutionMessage) {
 		SolutionBean bean = new SolutionBean();
 		try {
+			logger.info("----" + solutionMessage.getId());
 			bean.setChalId(solutionMessage.getChalId());
 			bean.setCatId(solutionMessage.getCatId());
 			bean.setCrtdById(solutionMessage.getCrtdById());
 			bean.setCrtByName(solutionMessage.getCrtByName());
+			bean.setCrtByImgAvail(solutionMessage.isCrtByImgAvail());
+			bean.setCrtByImgPath(solutionMessage.getCrtByImgPath());
 			bean.setCrtdDt(solutionMessage.getCrtdDt());
 			bean.setDesc(solutionMessage.getDesc());
 			bean.setId(solutionMessage.getId());
@@ -705,6 +1240,7 @@ public class RESTServiceHelper {
 			bean.setRevUserId(solutionMessage.getRevUserId());
 			bean.setStatusName(solutionMessage.getStatusName());
 			bean.setCatName(solutionMessage.getCatName());
+			logger.info("------" + solutionMessage.getCrtdDt());
 			if (solutionMessage.isSolImgAvl()) {
 				File file = new File("/resources/images/" + solutionMessage.getSolImg());
 				if (file.exists()) {
@@ -717,15 +1253,20 @@ public class RESTServiceHelper {
 			}
 			WebClient fetchDocClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/list/" + solutionMessage.getId() + "/ip_solution");
 			Collection<? extends FileMessage> res = new ArrayList<FileMessage>(fetchDocClient.accept(MediaType.APPLICATION_JSON).getCollection(FileMessage.class));
-			for (FileMessage fileMessage : res) {
-				FileBean fileBean = new FileBean();
-				fileBean.setId(fileMessage.getId());
-				fileBean.setLoc(fileMessage.getLoc());
-				fileBean.setName(fileMessage.getName());
-				fileBean.setSize(fileMessage.getSize());
-				fileBean.setType(fileMessage.getType());
-				fileBean.setUrl(fileMessage.getUrl());
-				bean.getFiles().add(fileBean);
+			if (res != null && !res.isEmpty()) {
+				bean.setSolImgAvl(true);
+				for (FileMessage fileMessage : res) {
+					FileBean fileBean = new FileBean();
+					fileBean.setId(fileMessage.getId());
+					fileBean.setLoc(fileMessage.getLoc());
+					fileBean.setName(fileMessage.getName());
+					fileBean.setSize(fileMessage.getSize());
+					fileBean.setType(fileMessage.getType());
+					fileBean.setUrl(fileMessage.getUrl());
+					bean.getFiles().add(fileBean);
+				}
+			} else {
+				bean.setSolImgAvl(false);
 			}
 			fetchDocClient.close();
 		} catch (Exception e) {
@@ -763,34 +1304,6 @@ public class RESTServiceHelper {
 	public static List<ListSelectorBean> fetchAllSolutionCat() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewSolutionSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/cat/list");
-		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		viewSolutionSelectClient.close();
-		for (MetaDataMessage metaDataMessage : md) {
-			ListSelectorBean bean = new ListSelectorBean();
-			bean.setId(metaDataMessage.getId());
-			bean.setDesc(metaDataMessage.getDesc());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	public static List<ListSelectorBean> fetchAllChallengeStatuses() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewChallengeSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/cs/challenge/status/list");
-		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
-		viewChallengeSelectClient.close();
-		for (MetaDataMessage metaDataMessage : md) {
-			ListSelectorBean bean = new ListSelectorBean();
-			bean.setId(metaDataMessage.getId());
-			bean.setDesc(metaDataMessage.getDesc());
-			ret.add(bean);
-		}
-		return ret;
-	}
-
-	public static List<ListSelectorBean> fetchAllSolutionStatuses() {
-		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewSolutionSelectClient = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/status/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewSolutionSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -1165,6 +1678,7 @@ public class RESTServiceHelper {
 			SolutionBean bean = getSolutionBean(solutionMessage);
 			ret.add(bean);
 		}
+		logger.info("After getting solutions");
 		return ret;
 	}
 

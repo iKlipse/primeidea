@@ -28,6 +28,7 @@ public class IdeaBean implements Serializable {
 	private boolean disableEdit;
 	private boolean disableField;
 	private List<FileBean> files;
+	private boolean attachsAvail;
 
 	public Long getIdeaId() {
 		return ideaId;
@@ -185,5 +186,13 @@ public class IdeaBean implements Serializable {
 
 	public void setFiles(List<FileBean> files) {
 		this.files = files;
+	}
+
+	public boolean isAttachsAvail() {
+		return attachsAvail;
+	}
+
+	public void setAttachsAvail(boolean attachsAvail) {
+		this.attachsAvail = attachsAvail;
 	}
 }

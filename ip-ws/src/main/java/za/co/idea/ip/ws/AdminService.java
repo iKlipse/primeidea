@@ -17,7 +17,6 @@ import javax.ws.rs.Produces;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpBlob;
@@ -63,7 +62,7 @@ public class AdminService {
 	@Path("/group/add")
 	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.NESTED)
+	@Transactional
 	public ResponseMessage createGroup(GroupMessage group) {
 		IpGroup ipGroup = new IpGroup();
 		ipGroup.setGroupId(group.getgId());
@@ -105,9 +104,9 @@ public class AdminService {
 
 	@PUT
 	@Path("/group/modify")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage updateGroup(GroupMessage group) {
 		IpGroup ipGroup = new IpGroup();
 		ipGroup.setGroupId(group.getgId());
@@ -182,7 +181,8 @@ public class AdminService {
 	@GET
 	@Path("/group/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends GroupMessage> List<T> listGroup() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -201,7 +201,8 @@ public class AdminService {
 	@GET
 	@Path("/group/active/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends GroupMessage> List<T> listActiveGroups() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -220,7 +221,8 @@ public class AdminService {
 	@GET
 	@Path("/group/review/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends GroupMessage> List<T> listReviewGroups() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -239,7 +241,8 @@ public class AdminService {
 	@GET
 	@Path("/group/inActive/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends GroupMessage> List<T> listInActiveGroups() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -258,7 +261,8 @@ public class AdminService {
 	@GET
 	@Path("/group/sub/list/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends GroupMessage> List<T> listSubGroups(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -277,7 +281,8 @@ public class AdminService {
 	@GET
 	@Path("/group/hierarchy/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public String hierarchyGroup(@PathParam("id") Long id) {
 		String ret = "";
 		try {
@@ -314,7 +319,8 @@ public class AdminService {
 	@GET
 	@Path("/func/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends FunctionMessage> List<T> listFunction() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -333,7 +339,6 @@ public class AdminService {
 	@GET
 	@Path("/func/group/list/{grpId}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
 	public <T extends FunctionMessage> List<T> listFunctionByGroup(@PathParam("grpId") Long grpId) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -355,7 +360,6 @@ public class AdminService {
 	@GET
 	@Path("/func/list/user/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
 	public String[] listFunctionByUser(@PathParam("id") Long id) {
 		String[] ret = null;
 		try {
@@ -375,7 +379,8 @@ public class AdminService {
 	@GET
 	@Path("/func/get/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public FunctionMessage getFunctionById(@PathParam("id") Long id) {
 		FunctionMessage function = new FunctionMessage();
 		try {
@@ -390,7 +395,8 @@ public class AdminService {
 	@GET
 	@Path("/group/get/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public GroupMessage getGroupById(@PathParam("id") Long id) {
 		GroupMessage group = new GroupMessage();
 		try {
@@ -404,9 +410,9 @@ public class AdminService {
 
 	@POST
 	@Path("/user/add")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage createUser(UserMessage user) {
 		try {
 			IpUser ipUser = new IpUser();
@@ -463,9 +469,9 @@ public class AdminService {
 
 	@POST
 	@Path("/func/add")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage createFunction(FunctionMessage function) {
 		try {
 			IpFunction ipFunction = new IpFunction();
@@ -503,9 +509,9 @@ public class AdminService {
 
 	@PUT
 	@Path("/func/modify")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage updateFunction(FunctionMessage function) {
 		try {
 			IpFunction ipFunction = new IpFunction();
@@ -544,9 +550,9 @@ public class AdminService {
 
 	@PUT
 	@Path("/user/modify")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage updateUser(UserMessage user) {
 		try {
 			IpUser ipUser = new IpUser();
@@ -630,6 +636,9 @@ public class AdminService {
 				user.setImgAvail(true);
 			} else
 				user.setImgAvail(false);
+			IpLogin ipLogin = ipLoginDAO.fetchLoginById(ipUser.getUserId());
+			user.setSecQ(ipLogin.getIpSecqList().getIslId());
+			user.setSecA(ipLogin.getLoginSecA());
 		} catch (Exception e) {
 			logger.error(e, e);
 		}
@@ -639,7 +648,8 @@ public class AdminService {
 	@GET
 	@Path("/user/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends UserMessage> List<T> listUser() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -658,7 +668,8 @@ public class AdminService {
 	@GET
 	@Path("/user/active/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends UserMessage> List<T> lisActivetUsers() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -677,7 +688,6 @@ public class AdminService {
 	@GET
 	@Path("/user/inActive/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
 	public <T extends UserMessage> List<T> fetchInActiveUsers() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -696,7 +706,6 @@ public class AdminService {
 	@GET
 	@Path("/user/list/sort/pg")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
 	public <T extends UserMessage> List<T> listUserSortedByPrimaryGroup() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -713,9 +722,28 @@ public class AdminService {
 	}
 
 	@GET
+	@Path("/user/list/group/{groupId}")
+	@Produces("application/json")
+	public <T extends UserMessage> List<T> listUsersByPrimaryGroup(@PathParam("groupId") Long groupId) {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List users = ipUserDAO.fetchUsersByGroup(groupId);
+			for (Object object : users) {
+				IpUser ipUser = (IpUser) object;
+				UserMessage user = getUserMessage(ipUser);
+				ret.add((T) user);
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
+		return ret;
+	}
+
+	@GET
 	@Path("/user/get/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public UserMessage getUserById(@PathParam("id") Long id) {
 		UserMessage user = new UserMessage();
 		try {
@@ -728,10 +756,31 @@ public class AdminService {
 	}
 
 	@PUT
-	@Path("/user/rpw")
-	@Consumes("application/json")
+	@Path("/user/inactivate/email")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
+	public ResponseMessage inActivateUser(String email) {
+		try {
+			ipUserDAO.updateUserAsInactive(email);
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(0);
+			message.setStatusDesc("Success");
+			return message;
+		} catch (Exception e) {
+			logger.error(e, e);
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(e.getMessage());
+			return message;
+		}
+	}
+
+	@PUT
+	@Path("/user/rpw")
+	@Produces("application/json")
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage resetPassword(String[] param) {
 		try {
 			try {
@@ -745,7 +794,7 @@ public class AdminService {
 						ipNotif.setNotifId(java.util.UUID.randomUUID().toString());
 						ipNotif.setNotifStatus("n");
 						ipNotif.setNotifSubject("Password Reset");
-						ipNotif.setNotifBody("Hi " + user.getUserScreenName() + ", your Password has been reset to : " + param[2]);
+						ipNotif.setNotifBody("Hi " + user.getUserScreenName() + ", your Password has been reset to : " + param[1]);
 						ipNotif.setNotifCrtdDate(new Date());
 						ipNotif.setNotifEntityId(null);
 						ipNotif.setNotifEntityTblName(null);
@@ -775,9 +824,9 @@ public class AdminService {
 
 	@PUT
 	@Path("/user/rsec")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage resetSecurity(String[] param) {
 		try {
 			try {
@@ -802,7 +851,8 @@ public class AdminService {
 	@GET
 	@Path("/user/check/screenName/{sc}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public Boolean checkScreenName(@PathParam("sc") String sc) {
 		try {
 			List usersByScName = ipUserDAO.findByUserScreenName(sc);
@@ -817,7 +867,6 @@ public class AdminService {
 	@GET
 	@Path("/user/check/email/{email}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
 	public Boolean checkEmail(@PathParam("email") String email) {
 		try {
 			List usersByEmail = ipUserDAO.findByUserEmail(email);
@@ -832,7 +881,6 @@ public class AdminService {
 	@GET
 	@Path("/user/check/idNumber/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
 	public Boolean checkIDNumber(@PathParam("id") Long id) {
 		try {
 			List usersByIDNumber = ipUserDAO.findByUserIdNum(id);
@@ -847,7 +895,6 @@ public class AdminService {
 	@GET
 	@Path("/user/check/employeeId/{eId}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
 	public Boolean checkEmployeeID(@PathParam("eId") String eId) {
 		try {
 			List usersByEmployeeID = ipUserDAO.findByUserEmployeeId(eId);
@@ -862,7 +909,6 @@ public class AdminService {
 	@GET
 	@Path("/gen/{clazz}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
 	public Long getNextId(@PathParam("clazz") String clazz) {
 		Long ret = -1l;
 		try {
@@ -876,7 +922,8 @@ public class AdminService {
 	@GET
 	@Path("/user/login/{login}/{pwd}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public UserMessage login(@PathParam("login") String login, @PathParam("pwd") String pwd) {
 		UserMessage user = new UserMessage();
 		try {
@@ -900,7 +947,8 @@ public class AdminService {
 	@GET
 	@Path("/user/verify/{login}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public UserMessage verify(@PathParam("login") String login) {
 		UserMessage user = new UserMessage();
 		try {
@@ -917,7 +965,8 @@ public class AdminService {
 	@GET
 	@Path("/user/stats/{userId}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public UserStatisticsMessage getDetailsByUserId(@PathParam("userId") Long id) {
 		UserStatisticsMessage userStats = new UserStatisticsMessage();
 		try {
@@ -925,11 +974,13 @@ public class AdminService {
 			Long chalCount = ipUserDAO.findChallengeCount(id);
 			Long whishListCount = ipUserDAO.findWhishlistCount(id);
 			Long ideasCount = ipUserDAO.findIdeasCount(id);
-			Long totalCount = solCount + chalCount + whishListCount + ideasCount;
+			Long points = ipUserDAO.findPointsCount(id);
+			Long totalCount = solCount + points + ideasCount;
 			userStats.setUserId(id);
 			userStats.setChallengesCount(chalCount);
 			userStats.setIdeasCount(ideasCount);
 			userStats.setSolutionsCount(solCount);
+			userStats.setPointsCount(points);
 			userStats.setWhishListCount(whishListCount);
 			userStats.setTotalCount(totalCount);
 		} catch (Exception e) {
@@ -941,7 +992,8 @@ public class AdminService {
 	@GET
 	@Path("/user/stats/topList")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends UserStatisticsMessage> List<T> getTopCountsUser() {
 		Set<UserStatisticsMessage> userStatsSet = new TreeSet<UserStatisticsMessage>();
 		List<T> usersStatsList = new ArrayList<T>();
@@ -955,7 +1007,8 @@ public class AdminService {
 				Long chalCount = ipUserDAO.findChallengeCount(ipUser.getUserId());
 				Long whishListCount = ipUserDAO.findWhishlistCount(ipUser.getUserId());
 				Long ideasCount = ipUserDAO.findIdeasCount(ipUser.getUserId());
-				Long totalCount = solCount + chalCount + whishListCount + ideasCount;
+				Long points = ipUserDAO.findPointsCount(ipUser.getUserId());
+				Long totalCount = points;
 				UserStatisticsMessage userStats = new UserStatisticsMessage();
 				userStats.setUserId(ipUser.getUserId());
 				userStats.setChallengesCount(chalCount);

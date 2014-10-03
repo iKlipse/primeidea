@@ -136,7 +136,7 @@
 		<task:scheduled ref="UserNotificationsJob" method="executeInternal" cron="0 0 12 ? * TUE" />
 	</task:scheduled-tasks>
 	<task:scheduler id="ipWSScheduler" pool-size="40" />
-	<bean id="mailSenderPrimedia" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="javaMailProperties">
 			<props>
 				<prop key="mail.smtp.host">vpbrjhbpexc02.corp.primedia.co.za</prop>
@@ -147,7 +147,7 @@
 			</props>
 		</property>
 	</bean>
-	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	<bean id="mailSenderHotmail" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="username" value="venumadhav.pattamatta@hotmail.com" />
 		<property name="password" value="vahdamUnEv140609" />
 		<property name="javaMailProperties">

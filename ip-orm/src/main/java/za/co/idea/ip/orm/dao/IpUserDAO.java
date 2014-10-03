@@ -2,6 +2,7 @@ package za.co.idea.ip.orm.dao;
 
 import static org.hibernate.criterion.Example.create;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -240,6 +241,19 @@ public class IpUserDAO {
 		}
 	}
 
+	public List fetchUsersByGroup(Long groupId) {
+		log.debug("Fetching all Users by Query :: getUsersByGroup");
+		try {
+			Query query = getCurrentSession().getNamedQuery("getUsersByGroup");
+			query.setLong("groupId", groupId);
+			List ret = query.list();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("find users failed", re);
+			throw re;
+		}
+	}
+
 	public List fetchSortByPrimaryGroup() {
 		log.debug("Fetching User by Query :: sortListByPrimaryGrp");
 		try {
@@ -247,6 +261,18 @@ public class IpUserDAO {
 			List ret = query.list();
 
 			return ret;
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	public void updateUserAsInactive(String mailID) {
+		log.debug("Updating user status as inactive");
+		try {
+			Query query = getCurrentSession().getNamedQuery("updateUserAsInActive");
+			query.setString("email", mailID);
+			query.executeUpdate();
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
@@ -311,6 +337,22 @@ public class IpUserDAO {
 			log.error("attach failed", re);
 		}
 		return whishListCount;
+	}
+
+	public Long findPointsCount(Long userId) {
+		Long points = 0l;
+		log.debug("Fetching Points count for user by Query ");
+		try {
+			Query query = getCurrentSession().createSQLQuery("select coalesce(sum(point_value),0) from ip_points pts where pts.user_id = " + userId);
+			List pointsList = query.list();
+			if (pointsList != null && pointsList.size() > 0) {
+				if (pointsList.get(0) != null)
+					points = ((BigDecimal) pointsList.get(0)).longValue();
+			}
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+		}
+		return points;
 	}
 
 	public static IpUserDAO getFromApplicationContext(ApplicationContext ctx) {

@@ -6,8 +6,8 @@
 				<p:panel styleClass="panelView" header="#{news.startDate}">
 					<p:panelGrid styleClass="panelGridView" columns="1" id="cpnlNews">
 						<p:column>
-							<p:lightBox>
-								<h:outputLink value="../../resources/images/#{news.newsUrl}" title="#{news.nTitle}">
+							<p:lightBox rendered="#{news.nwImgAvail}">
+								<h:outputLink value="../../resources/images/#{news.blobUrl}" title="#{news.nTitle}">
 									<p:graphicImage library="images" name="#{news.newsUrl}" height="150px" width="150px" />
 								</h:outputLink>
 							</p:lightBox>

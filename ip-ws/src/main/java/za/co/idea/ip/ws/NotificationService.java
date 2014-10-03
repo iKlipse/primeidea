@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -12,8 +13,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpNotif;
 import za.co.idea.ip.orm.bean.IpNotifGroup;
@@ -37,7 +36,7 @@ public class NotificationService {
 	@Path("/notif/add")
 	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional
 	public ResponseMessage createNotification(NotificationMessage notif) {
 		try {
 			IpNotif ipNotif = new IpNotif();
@@ -79,9 +78,9 @@ public class NotificationService {
 
 	@DELETE
 	@Path("/notif/delete")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage deleteNotification(NotificationMessage notif) {
 		try {
 			IpNotif ipNotif = new IpNotif();
@@ -138,7 +137,8 @@ public class NotificationService {
 	@GET
 	@Path("/notif/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends NotificationMessage> List<T> listNotification() {
 		List<T> ret = new ArrayList<T>();
 		try {

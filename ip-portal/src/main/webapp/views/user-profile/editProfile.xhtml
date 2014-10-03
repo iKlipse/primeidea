@@ -103,20 +103,10 @@
 		<p:column>
 			<p:selectBooleanButton id="msbbActive" value="#{adminController.userBean.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
 		</p:column>
-		<!-- 	<p:column>
-			<p:outputLabel id="mlblSkills" value="Skills : " />
-		</p:column>
-		<p:column>
-			<p:editor id="mtxtSkills" value="#{adminController.userBean.skills}" />
-		</p:column>
-		<p:column>
-			<p:outputLabel id="mlblBio" value="Bio : " />
-		</p:column>
-		<p:column>
-			<p:editor id="mtxtBio" value="#{adminController.userBean.bio}" />
-		</p:column> -->
 		<f:facet name="footer">
-			<p:commandButton id="btnSave" value="Save" ajax="false" actionListener="#{adminController.updateUserProfile}" />
+			<p:commandButton id="btnSave" value="Save" actionListener="#{adminController.updateUserProfile}" update=":frmUserProfile:pnlUserProfile, :frmUserProfile:frmUserProfileMsg">
+				<f:setPropertyActionListener value="1" target="#{adminController.toView}" />
+			</p:commandButton>
 		</f:facet>
 	</p:panelGrid>
 </ui:composition>

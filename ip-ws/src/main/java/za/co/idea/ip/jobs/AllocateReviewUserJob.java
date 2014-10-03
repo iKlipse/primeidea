@@ -25,29 +25,33 @@ public class AllocateReviewUserJob {
 			logger.info("processing :: " + unalloc.size() + " review allocations");
 			try {
 				for (Object object : unalloc) {
-					TreeMap<Integer, TreeSet<Long>> userCnts = new TreeMap<Integer, TreeSet<Long>>();
-					IpReview ipReview = (IpReview) object;
-					List igus = ipGroupUserDAO.fetchByGroupId(ipReview.getIpGroup().getGroupId());
-					for (Object objectA : igus) {
-						IpGroupUser igu = (IpGroupUser) objectA;
-						List selRevs = ipReviewDAO.findReviewsByUserId(igu.getIpUser().getUserId());
-						if (selRevs == null || selRevs.size() == 0) {
-							TreeSet<Long> userCnt = userCnts.get(0);
-							if (userCnt == null)
-								userCnt = new TreeSet<Long>();
-							userCnt.add(igu.getIpUser().getUserId());
-							userCnts.put(0, userCnt);
-						} else {
-							TreeSet<Long> userCnt = userCnts.get(selRevs.size());
-							if (userCnt == null)
-								userCnt = new TreeSet<Long>();
-							userCnt.add(igu.getIpUser().getUserId());
-							userCnts.put(selRevs.size(), userCnt);
+					try {
+						TreeMap<Integer, TreeSet<Long>> userCnts = new TreeMap<Integer, TreeSet<Long>>();
+						IpReview ipReview = (IpReview) object;
+						List igus = ipGroupUserDAO.fetchByGroupId(ipReview.getIpGroup().getGroupId());
+						for (Object objectA : igus) {
+							IpGroupUser igu = (IpGroupUser) objectA;
+							List selRevs = ipReviewDAO.findReviewsByUserId(igu.getIpUser().getUserId());
+							if (selRevs == null || selRevs.size() == 0) {
+								TreeSet<Long> userCnt = userCnts.get(0);
+								if (userCnt == null)
+									userCnt = new TreeSet<Long>();
+								userCnt.add(igu.getIpUser().getUserId());
+								userCnts.put(0, userCnt);
+							} else {
+								TreeSet<Long> userCnt = userCnts.get(selRevs.size());
+								if (userCnt == null)
+									userCnt = new TreeSet<Long>();
+								userCnt.add(igu.getIpUser().getUserId());
+								userCnts.put(selRevs.size(), userCnt);
+							}
 						}
-					}
-					if (userCnts.keySet().iterator().hasNext() && userCnts.get(userCnts.keySet().iterator().next()).iterator().hasNext()) {
-						Long selUserId = userCnts.get(userCnts.keySet().iterator().next()).iterator().next();
-						ipReviewDAO.updateReviewer(ipReview.getRevEntityId(), ipReview.getRevEntityName(), selUserId);
+						if (userCnts.keySet().iterator().hasNext() && userCnts.get(userCnts.keySet().iterator().next()).iterator().hasNext()) {
+							Long selUserId = userCnts.get(userCnts.keySet().iterator().next()).iterator().next();
+							ipReviewDAO.updateReviewer(ipReview.getRevEntityId(), ipReview.getRevEntityName(), selUserId);
+						}
+					} catch (Exception e) {
+						logger.error(e, e);
 					}
 				}
 			} catch (Exception e) {

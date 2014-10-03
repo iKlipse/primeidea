@@ -30,7 +30,7 @@
 			<p:outputLabel id="lblCrtIUpload" value="Upload File : " />
 		</p:column>
 		<p:column>
-			<p:fileUpload id="fuCrtIUpload" fileUploadListener="#{randomIdeaController.fileUploadHandle}" multiple="false" dragDropSupport="true" sizeLimit="100000" fileLimit="3" />
+			<p:fileUpload id="fuCrtIUpload" fileUploadListener="#{randomIdeaController.fileUploadHandle}" multiple="false" dragDropSupport="true" sizeLimit="6000000" fileLimit="3" />
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblCrtFuncGrps" value="Idea Groups" />
@@ -42,8 +42,8 @@
 			</p:selectOneMenu>
 		</p:column>
 		<f:facet name="footer">
-			<p:commandButton id="btnCrtISave" value="Save" actionListener="#{randomIdeaController.saveIdea}" update="@namingcontainer, :frmRandomIdea:frmRandomIdeaMsg">
-				<f:setPropertyActionListener value="2" target="#{randomIdeaController.toView}" />
+			<p:commandButton id="btnCrtISave" value="Save" actionListener="#{randomIdeaController.saveIdea}" update=":frmRandomIdea:frmRandomIdeaMsg, :frmRandomIdea:pnlIdeaDet">
+				<f:setPropertyActionListener value="3" target="#{randomIdeaController.toView}" />
 			</p:commandButton>
 		</f:facet>
 	</p:panelGrid>

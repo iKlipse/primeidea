@@ -15,28 +15,22 @@
 						<p:outputLabel id="lblGrpH" value="#{adminController.hierarchy}" />
 					</p:column>
 					<p:column>
-						<p:panelGrid styleClass="panelGridView" id="pnlStats" columns="5">
-							<p:column>
-								<p:outputLabel id="totCnt" value="#{adminController.statsBean.totalCount}" />
-								<p:tooltip for="totCnt" value="Total Count" />
-							</p:column>
-							<p:column>
-								<p:outputLabel id="ideasCnt" value="#{adminController.statsBean.ideasCount}" />
-								<p:tooltip for="ideasCnt" value="Ideas Count" />
-							</p:column>
-							<p:column>
-								<p:outputLabel id="chalsCnt" value="#{adminController.statsBean.challengesCount}" />
-								<p:tooltip for="chalsCnt" value="Challenge Count" />
-							</p:column>
-							<p:column>
-								<p:outputLabel id="solsCnt" value="#{adminController.statsBean.solutionsCount}" />
-								<p:tooltip for="solsCnt" value="Solutions Count" />
-							</p:column>
-							<p:column>
-								<p:outputLabel id="wlCnt" value="#{adminController.statsBean.whishListCount}" />
-								<p:tooltip for="wlCnt" value="Wishlist Count" />
-							</p:column>
-						</p:panelGrid>
+						<p:panel>
+							<p:panelGrid styleClass="panelGridView" id="pnlStats" columns="3">
+								<p:column id="panelIdeas">
+									<p:outputLabel id="ideasCnt" value="#{adminController.statsBean.ideasCount}" style="background-color: #8c4799 !important; color: white !important" />
+									<p:tooltip for="panelIdeas" value="Ideas Count" />
+								</p:column>
+								<p:column>
+									<p:outputLabel id="solsCnt" value="#{adminController.statsBean.solutionsCount}" style="background-color: #ef6079 !important; color: white !important" />
+									<p:tooltip for="panelSols" value="Solutions Count" />
+								</p:column>
+								<p:column>
+									<p:outputLabel id="wlCnt" value="#{adminController.statsBean.pointsCount}" style="font-weight: bold !important; background-color: #ff8d6d !important; color: white !important" />
+									<p:tooltip for="panelPoints" value="Total Points" />
+								</p:column>
+							</p:panelGrid>
+						</p:panel>
 					</p:column>
 				</p:panelGrid>
 			</p:panel>

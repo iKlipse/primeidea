@@ -11,6 +11,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpIdeaGroup;
@@ -149,7 +150,8 @@ public class IpIdeaGroupDAO {
 			throw re;
 		}
 	}
-	
+
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void deleteByIdeaId(Long id) {
 		log.debug("Deleting Idea Groups By Id : " + id);
 		try {

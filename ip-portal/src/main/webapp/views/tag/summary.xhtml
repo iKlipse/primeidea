@@ -1,10 +1,6 @@
 <ui:composition template="/views/tag/container/tagSummaryContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="tagBody">
-		<p:panel styleClass="panelView">
-			<f:facet name="header">
-				<p:outputLabel value="#{buildonController.buildon.usrScreenName}" />
-				<p:outputLabel value="#{buildonController.buildon.tagDate}" />
-			</f:facet>
+		<p:panel header="#{buildonController.buildon.usrScreenName} - #{buildonController.buildon.tagDate}">
 			<f:facet name="footer">
 				<p:commandButton id="backBtn" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" action="#{buildonController.showBuildon}" ajax="false">
 					<f:param name="entityId" id="entityId" value="#{buildonController.entityId}" />
@@ -41,10 +37,10 @@
 						</p:commandButton>
 					</p:column>
 					<p:column>
-					   <p:commandButton id="giComment" icon="ui-icon-comment" >
-						<p:outputLabel id="giComment" value="#{buildonController.buildonCommentCnt}" />
-						<!-- <p:graphicImage id="giComment" name="comment.jpg" library="images" height="25px" width="25px" /> -->
-						<p:tooltip for="giComment" value="Tags disabled as item not in open status" rendered="#{buildonController.taggable}" />
+						<p:commandButton id="giComment" icon="ui-icon-comment">
+							<p:outputLabel id="lblComment" value="#{buildonController.buildonCommentCnt}" />
+							<!-- <p:graphicImage id="giComment" name="comment.jpg" library="images" height="25px" width="25px" /> -->
+							<p:tooltip for="giComment" value="Tags disabled as item not in open status" rendered="#{buildonController.taggable}" />
 						</p:commandButton>
 					</p:column>
 				</p:panelGrid>
@@ -70,7 +66,7 @@
 					<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="edComment" value="#{buildonController.commentText}" />
 				</p:column>
 				<p:column rendered="#{!buildonController.taggable}">
-					<p:commandButton id="btnSubmitComment" value="Post" actionListener="#{buildonController.commentBuildon}" update="dtViewComments, :frmTagSummary:lblCommentCnt" />
+					<p:commandButton id="btnSubmitComment" value="Post" actionListener="#{buildonController.commentBuildon}" update="dtViewComments, :frmTagSummary:lblCommentCnt, :frmTagSummary:edComment" />
 				</p:column>
 			</p:panelGrid>
 		</p:overlayPanel>

@@ -19,6 +19,6 @@
 		<portlet id="links-portlet"></portlet>
 		<portlet id="wishlist"></portlet>
 		<portlet id="user-profile"></portlet>
-		<portlet id="test-portlet"></portlet>
+		<portlet id="wishlist"></portlet>
 	</category>
 </display>

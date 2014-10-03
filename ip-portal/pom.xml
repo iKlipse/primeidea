@@ -9,7 +9,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<properties>
 		<liferay.version>6.2.1</liferay.version>
-		<liferay.faces.version>4.2.0-m2-SNAPSHOT</liferay.faces.version>
+		<liferay.faces.version>4.2.0-m1-SNAPSHOT</liferay.faces.version>
 		<faces.version>2.2.0</faces.version>
 		<liferay.maven.plugin.version>6.2.1</liferay.maven.plugin.version>
 		<liferay.auto.deploy.dir>C:\Java\liferay\portal-tcat\deploy</liferay.auto.deploy.dir>
@@ -241,7 +241,7 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.15</version>
+			<version>1.2.17</version>
 		</dependency>
 	</dependencies>
 	<build>

@@ -21,14 +21,9 @@
 				<f:facet name="header">Employee ID</f:facet>
 				<p:outputLabel id="ftxtEMPId" value="#{user.employeeId}" />
 			</p:column>
-			<p:column width="10%">
-				<f:facet name="header">Social</f:facet>
-				<p:commandLink id="flnkFBHanlde" target="new" value="#{user.fbHandle}">
-					<p:graphicImage id="fgiFBHandle" name="fb.jpg" library="images" height="25px" width="25px" />
-				</p:commandLink>
-				<p:commandLink id="flnkTWHanlde" target="new" value="#{user.twHandle}">
-					<p:graphicImage id="fgiTWHandle" name="twitter.jpg" library="images" height="25px" width="25px" />
-				</p:commandLink>
+			<p:column width="10%" filterBy="#{user.priGroupName}" filterMatchMode="contains">
+				<f:facet name="header" >Company Name</f:facet>
+				<p:outputLabel id="ftxtAllCompany" value="#{user.priGroupName}" />
 			</p:column>
 			<p:column width="10%">
 				<f:facet name="header">Active</f:facet>

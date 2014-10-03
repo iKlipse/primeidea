@@ -35,7 +35,8 @@
 						<br />
 						<p:outputLabel value="#{idea.ideaDesc}" escape="false" style="text-align: left !important; overflow: auto !important" />
 						<p:separator style="width: 100% !important" />
-						<p:dataGrid id="edtIDocCar" var="file" value="#{idea.files}" columns="3" rows="1" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="No Attachments">
+						<p:outputLabel rendered="#{!idea.attachsAvail}" value="No Attachments" ></p:outputLabel>
+						<p:dataGrid id="edtIDocCar" var="file" value="#{idea.files}" columns="3" rows="1" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rendered="#{idea.attachsAvail}">
 							<p:panel styleClass="dgView">
 								<h:outputLink value="#{file.url}">
 									<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />

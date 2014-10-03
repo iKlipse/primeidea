@@ -168,7 +168,7 @@ public class IpGroupDAO {
 			throw re;
 		}
 	}
-	
+
 	public List findActiveGroups() {
 		log.debug("finding all active  IpGroup instances by query: getGroupsByStatus");
 		try {
@@ -219,7 +219,7 @@ public class IpGroupDAO {
 			throw re;
 		}
 	}
-	
+
 	public String getGroupHierarchy(Long grpId) {
 		log.debug("Fetching Group By Query :: fetchGroupHierarchy");
 		try {

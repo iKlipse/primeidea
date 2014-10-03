@@ -2,7 +2,7 @@
 	<ui:define name="adminBody">
 		<p:growl life="5000" id="frmAdmCtrlMsg" showDetail="true" showSummary="true" autoUpdate="true" />
 		<p:remoteCommand actionListener="#{randomIdeaController.initializeAssignReviews}" name="onload" autoRun="true" update="tpnlGroupAlloc" />
-		<p:panel styleClass="panelView" id="tpnlGroupAlloc" header="Allocate Groups">
+		<p:panel id="tpnlGroupAlloc" header="Allocate Groups">
 			<p:panelGrid id="pnlGrdItmSel" styleClass="panelGridView" columns="2">
 				<p:column>
 					<p:outputLabel value="Select Review Group : " />
@@ -42,7 +42,7 @@
 					</p:selectCheckboxMenu>
 				</p:column>
 				<f:facet name="footer">
-					<p:commandButton value="Save" actionListener="#{randomIdeaController.assignReviews}" update="tpnlGroupAlloc" />
+					<p:commandButton value="Save" actionListener="#{randomIdeaController.assignReviews}" update="dtRevGrp, :frmAdmin:tpnlGroupAlloc" />
 				</f:facet>
 			</p:dataTable>
 		</p:panel>

@@ -1,5 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
-	<p:dataGrid id="dtViewSolutions" style="width: 100% !important; border: none !important;" value="#{landingPageController.viewSolutions}" var="solution" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="5,10,15" columns="1" rows="5" emptyMessage="No Challenges Found">
+	<p:dataGrid id="dtViewSolutions" value="#{landingPageController.viewSolutions}" var="solution" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" columns="1" rows="5" emptyMessage="No Solutions Found" styleClass="noBorder">
 		<p:panel styleClass="panelView">
 			<p:panelGrid styleClass="panelGridView">
 				<p:row>
@@ -35,11 +35,15 @@
 						<br />
 						<p:outputLabel value="#{solution.desc}" escape="false" style="text-align: left !important; overflow: auto !important" />
 						<p:separator style="width: 100% !important" />
-						<p:outputLabel value="No Attachments" rendered="#{!solution.solImgAvl}" />
-						<h:outputLink value="#{solution.blobUrl}" rendered="#{solution.solImgAvl}">
-							<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
-							<p:outputLabel value="#{solution.fileName}" style="font-weight: 0.6em" />
-						</h:outputLink>
+						<p:outputLabel rendered="#{!solution.solImgAvl}" value="No Attachments"></p:outputLabel>
+						<p:dataGrid id="lpChalViewDoc" var="file" value="#{solution.files}" columns="3" rows="1" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rendered="#{solution.solImgAvl}">
+							<p:panel styleClass="dgView">
+								<h:outputLink value="#{file.url}">
+									<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
+									<p:outputLabel value="#{file.name}" style="font-weight: 0.6em" />
+								</h:outputLink>
+							</p:panel>
+						</p:dataGrid>
 					</p:column>
 				</p:row>
 			</p:panelGrid>

@@ -96,8 +96,8 @@ public class ClaimController implements Serializable {
 			Map<String, String> reqMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 			admUsers = RESTServiceHelper.fetchActiveUsers();
 			claimStatus = RESTServiceHelper.fetchAllClaimStatuses();
+			totalPoints = RESTServiceHelper.calculateTotal(RESTServiceHelper.fetchAllPointsByUser(userId));
 			viewRewardsBeans = RESTServiceHelper.fetchAllAvailableRewards(userId, totalPoints);
-			RESTServiceHelper.fetchAllPointsByUser(userId);
 			claimBean = new ClaimBean();
 			this.selRwId = reqMap.get("rewardsId") + "^" + reqMap.get("rwQuantity") + "^" + reqMap.get("rwValue");
 			return "clmcc";

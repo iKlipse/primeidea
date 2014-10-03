@@ -13,16 +13,16 @@
 				<p:graphicImage name="separator.png" library="images" />
 				<p:commandLink value="Create Reward" actionListener="#{rewardsController.showCreateReward}" update="pnlRewardDet" />
 			</p:panel>
-			<p:panel styleClass="panelView"  id="pnlRewardDet">
-				<p:panel styleClass="panelView"  id="ctrViewIdeas" rendered="#{rewardsController.showOnlineStore}">
+			<p:panel styleClass="panelView" id="pnlRewardDet">
+				<p:panel id="ctrViewIdeas" rendered="#{rewardsController.showOnlineStore}">
 					<f:facet name="header">Online Store</f:facet>
 					<ui:include src="/views/rewards/store.xhtml" />
 				</p:panel>
-				<p:panel styleClass="panelView"  id="ctrViewOpenIdeas" rendered="#{rewardsController.showViewReward}">
+				<p:panel id="ctrViewOpenIdeas" rendered="#{rewardsController.showViewReward}">
 					<f:facet name="header">View All Rewards</f:facet>
 					<ui:include src="/views/rewards/view.xhtml" />
 				</p:panel>
-				<p:panel styleClass="panelView"  id="ctrCreateIdeas" rendered="#{rewardsController.showCrtReward}">
+				<p:panel id="ctrCreateIdeas" rendered="#{rewardsController.showCrtReward}">
 					<f:facet name="header">Create Reward</f:facet>
 					<ui:include src="/views/rewards/create.xhtml" />
 				</p:panel>

@@ -14,7 +14,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpBlob;
@@ -56,9 +55,9 @@ public class ChallengeService {
 
 	@POST
 	@Path("/challenge/add")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage createChallenge(ChallengeMessage challenge) {
 		IpChallenge ipChallenge = new IpChallenge();
 		try {
@@ -103,9 +102,9 @@ public class ChallengeService {
 
 	@PUT
 	@Path("/challenge/modify")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage updateChallenge(ChallengeMessage challenge) {
 		IpChallenge ipChallenge = new IpChallenge();
 		try {
@@ -258,7 +257,8 @@ public class ChallengeService {
 	@GET
 	@Path("/challenge/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends ChallengeMessage> List<T> listChallenge() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -277,7 +277,8 @@ public class ChallengeService {
 	@GET
 	@Path("/challenge/get/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ChallengeMessage getById(@PathParam("id") Long id) {
 		ChallengeMessage challenge = new ChallengeMessage();
 		try {
@@ -292,7 +293,8 @@ public class ChallengeService {
 	@GET
 	@Path("/challenge/list/user/access/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends ChallengeMessage> List<T> listChallengeByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -311,7 +313,8 @@ public class ChallengeService {
 	@GET
 	@Path("/challenge/list/user/created/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends ChallengeMessage> List<T> listChallengeCreatedByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -330,7 +333,8 @@ public class ChallengeService {
 	@GET
 	@Path("/challenge/list/status/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends ChallengeMessage> List<T> listChallengeByStatus(@PathParam("id") Integer id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -349,7 +353,8 @@ public class ChallengeService {
 	@GET
 	@Path("/challenge/list/status/{sid}/user/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends ChallengeMessage> List<T> listChallengeByStatusIdUserId(@PathParam("sid") Integer sid, @PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -368,7 +373,8 @@ public class ChallengeService {
 	@GET
 	@Path("/challenge/list/reviewStatus/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends ChallengeMessage> List<T> listReviewChallengesByUserId(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -387,7 +393,8 @@ public class ChallengeService {
 	@GET
 	@Path("/challenge/cat/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends MetaDataMessage> List<T> listChallengeCat() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -408,7 +415,8 @@ public class ChallengeService {
 	@GET
 	@Path("/challenge/status/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends MetaDataMessage> List<T> listChallengeStatus() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -429,7 +437,8 @@ public class ChallengeService {
 	@GET
 	@Path("/challenge/status/list/{curr}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends MetaDataMessage> List<T> listNextChallengeStatus(@PathParam("curr") Integer curr) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -450,7 +459,8 @@ public class ChallengeService {
 	@GET
 	@Path("/challenge/cat/get/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public MetaDataMessage getChallengeCatById(@PathParam("id") Integer id) {
 		MetaDataMessage message = new MetaDataMessage();
 		try {
@@ -466,7 +476,8 @@ public class ChallengeService {
 	@GET
 	@Path("/challenge/status/get/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public MetaDataMessage getChallengeStatusById(@PathParam("id") Integer id) {
 		MetaDataMessage message = new MetaDataMessage();
 		try {
@@ -482,7 +493,8 @@ public class ChallengeService {
 	@GET
 	@Path("/challenge/rev/user/{id}/{uid}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage updateReviewer(@PathParam("id") Long id, @PathParam("uid") Long uid) {
 		ResponseMessage message = new ResponseMessage();
 		try {
@@ -500,7 +512,8 @@ public class ChallengeService {
 	@GET
 	@Path("/challenge/get/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ChallengeMessage getChallenge(@PathParam("id") Long id) {
 		ChallengeMessage challenge = new ChallengeMessage();
 		try {
@@ -515,7 +528,8 @@ public class ChallengeService {
 	@GET
 	@Path("/challenge/check/title/{title}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public Boolean checkTitle(@PathParam("title") String title) {
 		try {
 			List solByTitle = ipChallengeDAO.findByChalTitle(title);

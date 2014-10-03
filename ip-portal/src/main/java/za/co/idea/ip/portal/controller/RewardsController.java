@@ -143,7 +143,6 @@ public class RewardsController implements Serializable {
 			showOnlineStore = true;
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -374,6 +373,13 @@ public class RewardsController implements Serializable {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Title Available", "Title Available");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
+	}
+
+	public void modifyWishlist() {
+		ResponseMessage response = RESTServiceHelper.modifyTag(rewardsBean.getRwId(), userId);
+		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
+		viewRewardsBeans = RESTServiceHelper.fetchAllRewardsByUser(userId, totalPoints);
 	}
 
 	public String saveRewards() {
@@ -704,7 +710,6 @@ public class RewardsController implements Serializable {
 			this.rewardsBean.setRwFileName(file.getFileName());
 		} catch (Exception e) {
 			logger.error(e, e);
-
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform upload request", "System error occurred, cannot perform upload request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}

@@ -10,7 +10,7 @@
 .panelView {
 	border: solid 1px lightgray !important;
 	border-radius: 5px !important;
-	width: 100% !important;
+	width: 99% !important;
 }
 
 .ui-datascroller-item {
@@ -28,34 +28,37 @@
 }
 
 .dgView {
-	border: solid 1px grey !important;
-	text-align: center !important;
+	border: solid 0px grey !important;
 }
 
 .ui-selectonemenu-label {
-	width: 100% !important;
+	width: 94% !important;
 }
 
 .ui-selectcheckboxmenu-label-container {
-	width: 100% !important;
+	width: 94% !important;
 }
 
 .ui-selectcheckboxmenu {
-	width: 100% !important;
+	width: 94% !important;
 }
 
 .ui-selectcheckboxmenu-label {
-	width: 100% !important;
+	width: 94% !important;
 	font-size: 1em !important;
 	font-weight: 12 px;
 }
 
 .ui-inputfield {
-	width: 95% !important;
+	width: 92% !important;
 }
 
 .ui-editor {
-	width: 100% !important;
+	width: 94% !important;
+}
+
+.ui-fileupload {
+	width: 94% !important;
 }
 
 .autoFlow {
@@ -63,8 +66,8 @@
 }
 
 .noBorder {
-	border-width: 0px !important;
-	border-style: solid !important;
+	border: solid 0px lightgray !important;
+	width: 100% !important;
 }
 
 .fontBold {
@@ -73,9 +76,9 @@
 }
 
 .ui-selectonemenu {
-	width: 97% !important;
+	width: 94% !important;
 }
 
 .ui-selectonemenu-list {
-	width: 97% !important;
+	width: 94% !important;
 }

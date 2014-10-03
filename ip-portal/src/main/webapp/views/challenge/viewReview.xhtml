@@ -12,26 +12,26 @@
 			<f:facet name="header">Status</f:facet>
 			<p:outputLabel id="somVwrIStatus" value="#{challenge.statusName}" />
 		</p:column>
-		<p:column width="10%" filterBy="#{challenge.crtdByName}" filterMatchMode="contains" sortBy="#{challenge.crtdByName}" >
+		<p:column width="10%" filterBy="#{challenge.crtdByName}" filterMatchMode="contains" sortBy="#{challenge.crtdByName}">
 			<f:facet name="header">Created By</f:facet>
 			<p:outputLabel id="somVwrcrtdBy" value="#{challenge.crtdByName}" />
 		</p:column>
-		<p:column width="10%" filterBy="#{challenge.crtdDt}" filterMatchMode="contains" sortBy="#{challenge.crtdDt}">
+		<p:column width="10%" filterBy="#{challenge.crtdDt}" filterFunction="#{challengeController.filterDate}" sortBy="#{challenge.crtdDt}">
 			<f:facet name="header">Created Date</f:facet>
-			<p:outputLabel id="calVwrCrtDT" value="#{challenge.crtdDt}" >
-			   <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss" />
+			<p:outputLabel id="calVwrCrtDT" value="#{challenge.crtdDt}">
+				<f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss" />
 			</p:outputLabel>
 		</p:column>
 		<p:column width="10%">
 			<f:facet name="header">Launch Date</f:facet>
-			<p:outputLabel id="calVwrLaunchDT" value="#{challenge.launchDt}" >
-			   <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss" />
+			<p:outputLabel id="calVwrLaunchDT" value="#{challenge.launchDt}">
+				<f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss" />
 			</p:outputLabel>
 		</p:column>
 		<p:column width="10%">
 			<f:facet name="header">Expiry Date</f:facet>
-			<p:outputLabel id="calVwrExprDT" value="#{challenge.exprDt}" >
-			   <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss" />
+			<p:outputLabel id="calVwrExprDT" value="#{challenge.exprDt}">
+				<f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss" />
 			</p:outputLabel>
 		</p:column>
 		<p:column width="8%">

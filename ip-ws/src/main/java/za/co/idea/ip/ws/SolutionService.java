@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.springframework.transaction.annotation.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -14,8 +15,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.bean.IpChallenge;
@@ -55,7 +54,8 @@ public class SolutionService {
 	@GET
 	@Path("/solution/check/title/{title}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public Boolean checkTitle(@PathParam("title") String title) {
 		try {
 			List solByTitle = ipSolutionDAO.findBySolTitle(title);
@@ -71,7 +71,7 @@ public class SolutionService {
 	@Path("/solution/add")
 	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional
 	public ResponseMessage createSolution(SolutionMessage solution) {
 		IpSolution ipSolution = new IpSolution();
 		try {
@@ -87,7 +87,7 @@ public class SolutionService {
 			ipSolution.setSolTags(solution.getTags());
 			ipSolution.setSolTitle(solution.getTitle());
 			ipSolution.setSolReviewCnt(solution.getRvIdCnt());
-			ipSolutionDAO.merge(ipSolution);
+			ipSolutionDAO.save(ipSolution);
 			try {
 				IpNotif ipNotif = new IpNotif();
 				ipNotif.setNotifAttach(null);
@@ -121,7 +121,7 @@ public class SolutionService {
 	@Path("/solution/modify")
 	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional
 	public ResponseMessage updateSolution(SolutionMessage solution) {
 		IpSolution ipSolution = new IpSolution();
 		try {
@@ -190,7 +190,8 @@ public class SolutionService {
 	@GET
 	@Path("/solution/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends SolutionMessage> List<T> listSolution() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -209,7 +210,8 @@ public class SolutionService {
 	@GET
 	@Path("/solution/list/user/access/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends SolutionMessage> List<T> listSolutionByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		logger.debug("Control handled in listSolutionByUser() of /solution/list/user/access/{id} service ");
@@ -231,7 +233,8 @@ public class SolutionService {
 	@GET
 	@Path("/solution/list/user/created/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends SolutionMessage> List<T> listSolutionCreatedByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -250,7 +253,8 @@ public class SolutionService {
 	@GET
 	@Path("/solution/list/status/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends SolutionMessage> List<T> listSolutionByStatus(@PathParam("id") Integer id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -269,7 +273,8 @@ public class SolutionService {
 	@GET
 	@Path("/solution/list/status/{sid}/user/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends SolutionMessage> List<T> listSolutionByStatusIdUserId(@PathParam("sid") Integer sid, @PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -288,7 +293,8 @@ public class SolutionService {
 	@GET
 	@Path("/solution/list/chal/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends SolutionMessage> List<T> listSolutionByChal(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -307,7 +313,8 @@ public class SolutionService {
 	@GET
 	@Path("/solution/list/reviewStatus/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends SolutionMessage> List<T> listReviewSolutionsByUserId(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -326,7 +333,8 @@ public class SolutionService {
 	@GET
 	@Path("/solution/cat/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends MetaDataMessage> List<T> listSolutionCat() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -347,7 +355,8 @@ public class SolutionService {
 	@GET
 	@Path("/solution/status/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends MetaDataMessage> List<T> listSolutionStatus() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -368,7 +377,8 @@ public class SolutionService {
 	@GET
 	@Path("/solution/status/list/{curr}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends MetaDataMessage> List<T> listNextSolutionStatus(@PathParam("curr") Integer curr) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -389,7 +399,8 @@ public class SolutionService {
 	@GET
 	@Path("/solution/cat/get/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public MetaDataMessage getSolutionCatById(@PathParam("id") Integer id) {
 		MetaDataMessage message = new MetaDataMessage();
 		try {
@@ -405,7 +416,8 @@ public class SolutionService {
 	@GET
 	@Path("/solution/rev/user/{id}/{uid}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage updateReviewer(@PathParam("id") Long id, @PathParam("uid") Long uid) {
 		ResponseMessage message = new ResponseMessage();
 		try {
@@ -423,7 +435,8 @@ public class SolutionService {
 	@GET
 	@Path("/solution/status/get/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public MetaDataMessage getSolutionStatusById(@PathParam("id") Integer id) {
 		MetaDataMessage message = new MetaDataMessage();
 		try {
@@ -439,7 +452,8 @@ public class SolutionService {
 	@GET
 	@Path("/solution/get/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public SolutionMessage getSolution(@PathParam("id") Long id) {
 		SolutionMessage solution = new SolutionMessage();
 		try {

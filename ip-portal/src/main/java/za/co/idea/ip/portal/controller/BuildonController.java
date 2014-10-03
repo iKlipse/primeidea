@@ -65,6 +65,7 @@ public class BuildonController implements Serializable {
 	private Long userId;
 	private String returnView;
 	private AccessController controller;
+	private Long delTagId;
 
 	private WebClient createCustomClient(String url) {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
@@ -405,6 +406,14 @@ public class BuildonController implements Serializable {
 
 	public void setController(AccessController controller) {
 		this.controller = controller;
+	}
+
+	public long getDelTagId() {
+		return delTagId;
+	}
+
+	public void setDelTagId(long delTagId) {
+		this.delTagId = delTagId;
 	}
 
 }

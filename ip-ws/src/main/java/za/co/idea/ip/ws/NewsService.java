@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.springframework.transaction.annotation.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -14,8 +15,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.bean.IpNews;
@@ -35,9 +34,9 @@ public class NewsService {
 
 	@POST
 	@Path("/news/add")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage createNews(NewsMessage news) {
 		try {
 			logger.debug("Control handled in createNews() of service ns/news/add call ");
@@ -69,9 +68,9 @@ public class NewsService {
 
 	@PUT
 	@Path("/news/modify")
-	@Consumes("application/json")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public ResponseMessage updateNews(NewsMessage news) {
 		try {
 			logger.debug("Control handled in updateNews() of service ns/news/modify call ");
@@ -128,7 +127,8 @@ public class NewsService {
 	@GET
 	@Path("/news/list")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public <T extends NewsMessage> List<T> listNews() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -151,7 +151,8 @@ public class NewsService {
 	@GET
 	@Path("/news/get/{id}")
 	@Produces("application/json")
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Consumes("application/json")
+	@Transactional
 	public NewsMessage getNewsById(@PathParam("id") Long id) {
 		NewsMessage message = new NewsMessage();
 		try {

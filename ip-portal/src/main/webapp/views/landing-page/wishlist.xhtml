@@ -1,5 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
-	<p:dataGrid id="dgRewards" var="rewards" value="#{landingPageController.viewRewardsBeans}" columns="2" rows="12" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+	<p:dataGrid id="dgRewards" var="rewards" value="#{landingPageController.viewRewardsBeans}" columns="2" rows="12" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
 		<p:panel styleClass="dgView">
 			<p:panelGrid styleClass="panelGridView" id="pnlContent" columns="1">
 				<p:column>
@@ -22,9 +22,10 @@
 				</p:column>
 				<p:column>
 					<center>
-						<p:commandLink id="btnWish" ajax="false" action="#{landingPageController.modifyWishlist}" style="padding-right: 5px !important">
+						<p:commandLink id="btnWish" ajax="false" action="#{landingPageController.modifyWishlist}" style="padding-right: 5px !important" update="dgRewards">
 							<p:graphicImage library="images" name="star_highlight.jpg" height="30px" width="30px" rendered="#{rewards.rwTaggable}" />
 							<p:graphicImage library="images" name="star.jpg" height="30px" width="30px" rendered="#{!rewards.rwTaggable}" />
+							<f:setPropertyActionListener value="4" target="#{landingPageController.toView}" />
 							<f:setPropertyActionListener value="#{rewards}" target="#{landingPageController.rewardsBean}" />
 						</p:commandLink>
 						<p:commandButton id="btnClaim" value="I Want Some" ajax="false" action="#{claimController.showClaimReward}" rendered="#{rewards.rwClaimable}">

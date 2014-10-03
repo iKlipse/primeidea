@@ -169,7 +169,7 @@ public class IpSolutionDAO {
 			throw re;
 		}
 	}
-	
+
 	public List findByUserId(Long id) {
 		log.debug("Fetching Challenge by Query :: getSolutionByUser");
 		try {
