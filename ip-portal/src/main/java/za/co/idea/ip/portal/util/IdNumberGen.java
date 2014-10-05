@@ -16,8 +16,8 @@ public class IdNumberGen {
 
 	public Long getNextId(String clazz) {
 		WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/gen/" + clazz, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-		client.header("Content-Type", "application/json");
-		client.header("Accept", "application/json");
+		client.header("Content-Type", MediaType.APPLICATION_JSON);
+		client.header("Accept", MediaType.APPLICATION_JSON);
 		Long ret = client.accept(MediaType.APPLICATION_JSON).get(Long.class);
 		client.close();
 		return ret;

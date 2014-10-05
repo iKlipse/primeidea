@@ -12,6 +12,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,8 +56,8 @@ public class ChallengeService {
 
 	@POST
 	@Path("/challenge/add")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage createChallenge(ChallengeMessage challenge) {
 		IpChallenge ipChallenge = new IpChallenge();
@@ -102,8 +103,8 @@ public class ChallengeService {
 
 	@PUT
 	@Path("/challenge/modify")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage updateChallenge(ChallengeMessage challenge) {
 		IpChallenge ipChallenge = new IpChallenge();
@@ -256,8 +257,8 @@ public class ChallengeService {
 
 	@GET
 	@Path("/challenge/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends ChallengeMessage> List<T> listChallenge() {
 		List<T> ret = new ArrayList<T>();
@@ -276,8 +277,8 @@ public class ChallengeService {
 
 	@GET
 	@Path("/challenge/get/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ChallengeMessage getById(@PathParam("id") Long id) {
 		ChallengeMessage challenge = new ChallengeMessage();
@@ -292,8 +293,8 @@ public class ChallengeService {
 
 	@GET
 	@Path("/challenge/list/user/access/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends ChallengeMessage> List<T> listChallengeByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
@@ -312,8 +313,8 @@ public class ChallengeService {
 
 	@GET
 	@Path("/challenge/list/user/created/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends ChallengeMessage> List<T> listChallengeCreatedByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
@@ -332,8 +333,8 @@ public class ChallengeService {
 
 	@GET
 	@Path("/challenge/list/status/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends ChallengeMessage> List<T> listChallengeByStatus(@PathParam("id") Integer id) {
 		List<T> ret = new ArrayList<T>();
@@ -352,8 +353,8 @@ public class ChallengeService {
 
 	@GET
 	@Path("/challenge/list/status/{sid}/user/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends ChallengeMessage> List<T> listChallengeByStatusIdUserId(@PathParam("sid") Integer sid, @PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
@@ -372,8 +373,8 @@ public class ChallengeService {
 
 	@GET
 	@Path("/challenge/list/reviewStatus/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends ChallengeMessage> List<T> listReviewChallengesByUserId(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
@@ -392,8 +393,8 @@ public class ChallengeService {
 
 	@GET
 	@Path("/challenge/cat/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends MetaDataMessage> List<T> listChallengeCat() {
 		List<T> ret = new ArrayList<T>();
@@ -414,8 +415,8 @@ public class ChallengeService {
 
 	@GET
 	@Path("/challenge/status/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends MetaDataMessage> List<T> listChallengeStatus() {
 		List<T> ret = new ArrayList<T>();
@@ -436,8 +437,8 @@ public class ChallengeService {
 
 	@GET
 	@Path("/challenge/status/list/{curr}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends MetaDataMessage> List<T> listNextChallengeStatus(@PathParam("curr") Integer curr) {
 		List<T> ret = new ArrayList<T>();
@@ -458,8 +459,8 @@ public class ChallengeService {
 
 	@GET
 	@Path("/challenge/cat/get/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public MetaDataMessage getChallengeCatById(@PathParam("id") Integer id) {
 		MetaDataMessage message = new MetaDataMessage();
@@ -475,8 +476,8 @@ public class ChallengeService {
 
 	@GET
 	@Path("/challenge/status/get/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public MetaDataMessage getChallengeStatusById(@PathParam("id") Integer id) {
 		MetaDataMessage message = new MetaDataMessage();
@@ -492,8 +493,8 @@ public class ChallengeService {
 
 	@GET
 	@Path("/challenge/rev/user/{id}/{uid}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage updateReviewer(@PathParam("id") Long id, @PathParam("uid") Long uid) {
 		ResponseMessage message = new ResponseMessage();
@@ -511,8 +512,8 @@ public class ChallengeService {
 
 	@GET
 	@Path("/challenge/get/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ChallengeMessage getChallenge(@PathParam("id") Long id) {
 		ChallengeMessage challenge = new ChallengeMessage();
@@ -527,8 +528,8 @@ public class ChallengeService {
 
 	@GET
 	@Path("/challenge/check/title/{title}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public Boolean checkTitle(@PathParam("title") String title) {
 		try {

@@ -11,6 +11,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 
@@ -34,8 +35,8 @@ public class NotificationService {
 
 	@POST
 	@Path("/notif/add")
-	@Consumes("application/json")
-	@Produces("application/json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage createNotification(NotificationMessage notif) {
 		try {
@@ -78,8 +79,8 @@ public class NotificationService {
 
 	@DELETE
 	@Path("/notif/delete")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage deleteNotification(NotificationMessage notif) {
 		try {
@@ -136,8 +137,8 @@ public class NotificationService {
 
 	@GET
 	@Path("/notif/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends NotificationMessage> List<T> listNotification() {
 		List<T> ret = new ArrayList<T>();

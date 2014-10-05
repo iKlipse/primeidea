@@ -66,8 +66,8 @@ public class AccessController implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		} else {
 			WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/func/list/user/" + userId, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-			client.header("Content-Type", "application/json");
-			client.header("Accept", "application/json");
+			client.header("Content-Type", MediaType.APPLICATION_JSON);
+			client.header("Accept", MediaType.APPLICATION_JSON);
 			String[] funcs = client.accept(MediaType.APPLICATION_JSON).get(String[].class);
 			functions = new ArrayList<String>();
 			for (String string : funcs) {

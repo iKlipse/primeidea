@@ -61,8 +61,8 @@ public class NotificationController implements Serializable {
 		List providers = new ArrayList();
 		providers.add(new JacksonJaxbJsonProvider(new CustomObjectMapper(), JacksonJaxbJsonProvider.DEFAULT_ANNOTATIONS));
 		WebClient client = WebClient.create(url, providers);
-		client.header("Content-Type", "application/json");
-		client.header("Accept", "application/json");
+		client.header("Content-Type", MediaType.APPLICATION_JSON);
+		client.header("Accept", MediaType.APPLICATION_JSON);
 		return client;
 	}
 

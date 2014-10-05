@@ -12,6 +12,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 
@@ -44,8 +45,8 @@ public class TagService {
 
 	@GET
 	@Path("/tag/get/{entityId}/{teId}/{ttId}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends TagMessage> List<T> getTag(@PathParam("entityId") Long entityId, @PathParam("teId") Integer teId, @PathParam("ttId") Integer ttId) {
 		List<T> ret = new ArrayList<T>();
@@ -79,8 +80,8 @@ public class TagService {
 
 	@GET
 	@Path("/tag/getByUser/{entityId}/{teId}/{ttId}/{userId}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends TagMessage> List<T> getTagByUser(@PathParam("entityId") Long entityId, @PathParam("teId") Integer teId, @PathParam("ttId") Integer ttId, @PathParam("userId") Long userId) {
 		List<T> ret = new ArrayList<T>();
@@ -114,8 +115,8 @@ public class TagService {
 
 	@POST
 	@Path("/tag/add")
-	@Consumes("application/json")
-	@Produces("application/json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage createTag(TagMessage tag) {
 		try {
@@ -158,8 +159,8 @@ public class TagService {
 
 	@POST
 	@Path("/tag/del")
-	@Consumes("application/json")
-	@Produces("application/json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage deleteTag(Long tagId) {
 		try {
@@ -179,8 +180,8 @@ public class TagService {
 
 	@GET
 	@Path("/tag/move/{tagId}")
-	@Consumes("application/json")
-	@Produces("application/json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage moveTag(@PathParam("tagId") Long tagId) {
 		try {

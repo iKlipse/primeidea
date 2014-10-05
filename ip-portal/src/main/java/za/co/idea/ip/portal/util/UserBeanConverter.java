@@ -29,8 +29,8 @@ public class UserBeanConverter implements Converter {
 
 	private WebClient createCustomClient(String url) {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-		client.header("Content-Type", "application/json");
-		client.header("Accept", "application/json");
+		client.header("Content-Type", MediaType.APPLICATION_JSON);
+		client.header("Accept", MediaType.APPLICATION_JSON);
 		return client;
 	}
 

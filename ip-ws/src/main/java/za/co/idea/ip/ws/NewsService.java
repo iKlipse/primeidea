@@ -13,6 +13,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 
@@ -34,8 +35,8 @@ public class NewsService {
 
 	@POST
 	@Path("/news/add")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage createNews(NewsMessage news) {
 		try {
@@ -68,8 +69,8 @@ public class NewsService {
 
 	@PUT
 	@Path("/news/modify")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage updateNews(NewsMessage news) {
 		try {
@@ -126,8 +127,8 @@ public class NewsService {
 
 	@GET
 	@Path("/news/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends NewsMessage> List<T> listNews() {
 		List<T> ret = new ArrayList<T>();
@@ -150,8 +151,8 @@ public class NewsService {
 
 	@GET
 	@Path("/news/get/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public NewsMessage getNewsById(@PathParam("id") Long id) {
 		NewsMessage message = new NewsMessage();

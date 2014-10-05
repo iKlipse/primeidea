@@ -69,8 +69,8 @@ public class BuildonController implements Serializable {
 
 	private WebClient createCustomClient(String url) {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-		client.header("Content-Type", "application/json");
-		client.header("Accept", "application/json");
+		client.header("Content-Type", MediaType.APPLICATION_JSON);
+		client.header("Accept", MediaType.APPLICATION_JSON);
 		return client;
 	}
 
@@ -190,7 +190,7 @@ public class BuildonController implements Serializable {
 				if (crtRes.getStatus() == 200) {
 					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 					client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-					client.header("Accept", "application/json");
+					client.header("Accept", MediaType.APPLICATION_JSON);
 					Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
 					if (docRes.getStatus() != 200) {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Attachment Upload has Failed.", "Attachment Upload has Failed.");

@@ -103,8 +103,8 @@ public class RewardsController implements Serializable {
 		List providers = new ArrayList();
 		providers.add(new JacksonJaxbJsonProvider(new CustomObjectMapper(), JacksonJaxbJsonProvider.DEFAULT_ANNOTATIONS));
 		WebClient client = WebClient.create(url, providers);
-		client.header("Content-Type", "application/json");
-		client.header("Accept", "application/json");
+		client.header("Content-Type", MediaType.APPLICATION_JSON);
+		client.header("Accept", MediaType.APPLICATION_JSON);
 		return client;
 	}
 
@@ -428,7 +428,7 @@ public class RewardsController implements Serializable {
 					if (crtRes.getStatus() == 200) {
 						WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-						client.header("Accept", "application/json");
+						client.header("Accept", MediaType.APPLICATION_JSON);
 						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment;filename=" + rewardsBean.getRwFileName())));
 						if (docRes.getStatus() != 200) {
 							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
@@ -504,7 +504,7 @@ public class RewardsController implements Serializable {
 						if (crtRes.getStatus() == 200) {
 							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-							client.header("Accept", "application/json");
+							client.header("Accept", MediaType.APPLICATION_JSON);
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment;filename=" + rewardsBean.getRwFileName())));
 							if (docRes.getStatus() != 200) {
 								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
@@ -527,7 +527,7 @@ public class RewardsController implements Serializable {
 						if (updRes.getStatus() == 200) {
 							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-							client.header("Accept", "application/json");
+							client.header("Accept", MediaType.APPLICATION_JSON);
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), uploadContent.getStream(), new ContentDisposition("attachment;filename=" + rewardsBean.getRwFileName())));
 							if (docRes.getStatus() != 200) {
 								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");

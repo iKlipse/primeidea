@@ -12,6 +12,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 
@@ -40,8 +41,8 @@ public class ClaimService {
 
 	@POST
 	@Path("/claim/add")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage createClaim(ClaimMessage claim) {
 		try {
@@ -84,8 +85,8 @@ public class ClaimService {
 
 	@PUT
 	@Path("/claim/modify")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage updateClaim(ClaimMessage claim) {
 		try {
@@ -165,8 +166,8 @@ public class ClaimService {
 
 	@GET
 	@Path("/claim/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends ClaimMessage> List<T> listClaim() {
 		List<T> ret = new ArrayList<T>();
@@ -185,8 +186,8 @@ public class ClaimService {
 
 	@GET
 	@Path("/claim/get/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ClaimMessage getClaimById(@PathParam("id") Long id) {
 		ClaimMessage message = new ClaimMessage();
@@ -201,8 +202,8 @@ public class ClaimService {
 
 	@GET
 	@Path("/claim/list/status/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends ClaimMessage> List<T> listClaimByStatus(@PathParam("id") Integer id) {
 		List<T> ret = new ArrayList<T>();
@@ -221,8 +222,8 @@ public class ClaimService {
 
 	@GET
 	@Path("/claim/list/user/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends ClaimMessage> List<T> listClaimByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
@@ -241,8 +242,8 @@ public class ClaimService {
 
 	@GET
 	@Path("/claim/status/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends MetaDataMessage> List<T> listClaimStatus() {
 		List<T> ret = new ArrayList<T>();
@@ -263,8 +264,8 @@ public class ClaimService {
 
 	@GET
 	@Path("/claim/status/list/{curr}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends MetaDataMessage> List<T> listNextClaimStatus(@PathParam("curr") Integer curr) {
 		List<T> ret = new ArrayList<T>();
@@ -285,8 +286,8 @@ public class ClaimService {
 
 	@GET
 	@Path("/claim/status/get/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public MetaDataMessage getClaimStatusById(@PathParam("id") Integer id) {
 		MetaDataMessage message = new MetaDataMessage();

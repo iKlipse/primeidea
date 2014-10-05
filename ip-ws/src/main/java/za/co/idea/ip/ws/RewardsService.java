@@ -12,6 +12,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 
@@ -52,8 +53,8 @@ public class RewardsService {
 
 	@POST
 	@Path("/rewards/add")
-	@Consumes("application/json")
-	@Produces("application/json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage createReward(RewardsMessage rewards) {
 		try {
@@ -87,8 +88,8 @@ public class RewardsService {
 
 	@PUT
 	@Path("/rewards/modify")
-	@Consumes("application/json")
-	@Produces("application/json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage updateReward(RewardsMessage rewards) {
 		try {
@@ -154,8 +155,8 @@ public class RewardsService {
 
 	@GET
 	@Path("/rewards/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends RewardsMessage> List<T> listRewards() {
 		List<T> ret = new ArrayList<T>();
@@ -174,8 +175,8 @@ public class RewardsService {
 
 	@GET
 	@Path("/rewards/get/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public RewardsMessage getRewardsById(@PathParam("id") Long id) {
 		RewardsMessage rewards = new RewardsMessage();
@@ -190,8 +191,8 @@ public class RewardsService {
 
 	@GET
 	@Path("/rewards/list/avail")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends RewardsMessage> List<T> listAvailableRewards() {
 		List<T> ret = new ArrayList<T>();
@@ -210,8 +211,8 @@ public class RewardsService {
 
 	@GET
 	@Path("/rewards/list/cat/{catId}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends RewardsMessage> List<T> listRewardsByCat(@PathParam("catId") Integer id) {
 		List<T> ret = new ArrayList<T>();
@@ -230,8 +231,8 @@ public class RewardsService {
 
 	@GET
 	@Path("/rewards/list/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends RewardsMessage> List<T> listRewardsByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
@@ -250,8 +251,8 @@ public class RewardsService {
 
 	@GET
 	@Path("/rewards/cat/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends MetaDataMessage> List<T> listRewardsCat() {
 		List<T> ret = new ArrayList<T>();
@@ -272,8 +273,8 @@ public class RewardsService {
 
 	@GET
 	@Path("/rewards/cat/get/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public MetaDataMessage getRewardsCatById(@PathParam("id") Integer id) {
 		MetaDataMessage message = new MetaDataMessage();
@@ -289,8 +290,8 @@ public class RewardsService {
 
 	@POST
 	@Path("/points/add")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage createPoint(PointMessage point) {
 		try {
@@ -318,8 +319,8 @@ public class RewardsService {
 
 	@PUT
 	@Path("/points/modify")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage updatePoint(PointMessage point) {
 		try {
@@ -362,8 +363,8 @@ public class RewardsService {
 
 	@GET
 	@Path("/points/get/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public PointMessage getPointsById(@PathParam("id") Long id) {
 		PointMessage message = new PointMessage();
@@ -378,8 +379,8 @@ public class RewardsService {
 
 	@GET
 	@Path("/points/get/user/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends PointMessage> List<T> listPointsByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
@@ -398,8 +399,8 @@ public class RewardsService {
 
 	@POST
 	@Path("/alloc/add")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage createAllocation(AllocationMessage alloc) {
 		try {
@@ -427,8 +428,8 @@ public class RewardsService {
 
 	@PUT
 	@Path("/alloc/delete")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage deleteAllocation(AllocationMessage alloc) {
 		try {
@@ -464,8 +465,8 @@ public class RewardsService {
 
 	@PUT
 	@Path("/alloc/update")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage updateAllocation(AllocationMessage alloc) {
 		try {
@@ -508,8 +509,8 @@ public class RewardsService {
 
 	@GET
 	@Path("/alloc/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends AllocationMessage> List<T> listAllocation() {
 		List<T> ret = new ArrayList<T>();
@@ -528,8 +529,8 @@ public class RewardsService {
 
 	@GET
 	@Path("/alloc/list/{entity}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends AllocationMessage> List<T> listAllocationByEntity(@PathParam("entity") String entity) {
 		List<T> ret = new ArrayList<T>();
@@ -548,8 +549,8 @@ public class RewardsService {
 
 	@GET
 	@Path("/alloc/get/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public AllocationMessage getAllocationById(@PathParam("id") Integer id) {
 		AllocationMessage ret = new AllocationMessage();
@@ -564,8 +565,8 @@ public class RewardsService {
 
 	@GET
 	@Path("/reward/check/title/{title}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public Boolean checkTitle(@PathParam("title") String title) {
 		try {

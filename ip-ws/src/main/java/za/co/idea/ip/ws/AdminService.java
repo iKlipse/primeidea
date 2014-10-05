@@ -13,6 +13,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -60,8 +61,8 @@ public class AdminService {
 
 	@POST
 	@Path("/group/add")
-	@Consumes("application/json")
-	@Produces("application/json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage createGroup(GroupMessage group) {
 		IpGroup ipGroup = new IpGroup();
@@ -104,8 +105,8 @@ public class AdminService {
 
 	@PUT
 	@Path("/group/modify")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage updateGroup(GroupMessage group) {
 		IpGroup ipGroup = new IpGroup();
@@ -180,8 +181,8 @@ public class AdminService {
 
 	@GET
 	@Path("/group/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends GroupMessage> List<T> listGroup() {
 		List<T> ret = new ArrayList<T>();
@@ -200,8 +201,8 @@ public class AdminService {
 
 	@GET
 	@Path("/group/active/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends GroupMessage> List<T> listActiveGroups() {
 		List<T> ret = new ArrayList<T>();
@@ -220,8 +221,8 @@ public class AdminService {
 
 	@GET
 	@Path("/group/review/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends GroupMessage> List<T> listReviewGroups() {
 		List<T> ret = new ArrayList<T>();
@@ -240,8 +241,8 @@ public class AdminService {
 
 	@GET
 	@Path("/group/inActive/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends GroupMessage> List<T> listInActiveGroups() {
 		List<T> ret = new ArrayList<T>();
@@ -260,8 +261,8 @@ public class AdminService {
 
 	@GET
 	@Path("/group/sub/list/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends GroupMessage> List<T> listSubGroups(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
@@ -280,8 +281,8 @@ public class AdminService {
 
 	@GET
 	@Path("/group/hierarchy/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public String hierarchyGroup(@PathParam("id") Long id) {
 		String ret = "";
@@ -318,8 +319,8 @@ public class AdminService {
 
 	@GET
 	@Path("/func/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends FunctionMessage> List<T> listFunction() {
 		List<T> ret = new ArrayList<T>();
@@ -338,7 +339,7 @@ public class AdminService {
 
 	@GET
 	@Path("/func/group/list/{grpId}")
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public <T extends FunctionMessage> List<T> listFunctionByGroup(@PathParam("grpId") Long grpId) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -359,7 +360,7 @@ public class AdminService {
 
 	@GET
 	@Path("/func/list/user/{id}")
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public String[] listFunctionByUser(@PathParam("id") Long id) {
 		String[] ret = null;
 		try {
@@ -378,8 +379,8 @@ public class AdminService {
 
 	@GET
 	@Path("/func/get/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public FunctionMessage getFunctionById(@PathParam("id") Long id) {
 		FunctionMessage function = new FunctionMessage();
@@ -394,8 +395,8 @@ public class AdminService {
 
 	@GET
 	@Path("/group/get/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public GroupMessage getGroupById(@PathParam("id") Long id) {
 		GroupMessage group = new GroupMessage();
@@ -410,8 +411,8 @@ public class AdminService {
 
 	@POST
 	@Path("/user/add")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage createUser(UserMessage user) {
 		try {
@@ -469,8 +470,8 @@ public class AdminService {
 
 	@POST
 	@Path("/func/add")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage createFunction(FunctionMessage function) {
 		try {
@@ -509,8 +510,8 @@ public class AdminService {
 
 	@PUT
 	@Path("/func/modify")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage updateFunction(FunctionMessage function) {
 		try {
@@ -550,8 +551,8 @@ public class AdminService {
 
 	@PUT
 	@Path("/user/modify")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage updateUser(UserMessage user) {
 		try {
@@ -647,8 +648,8 @@ public class AdminService {
 
 	@GET
 	@Path("/user/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends UserMessage> List<T> listUser() {
 		List<T> ret = new ArrayList<T>();
@@ -667,8 +668,8 @@ public class AdminService {
 
 	@GET
 	@Path("/user/active/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends UserMessage> List<T> lisActivetUsers() {
 		List<T> ret = new ArrayList<T>();
@@ -687,7 +688,7 @@ public class AdminService {
 
 	@GET
 	@Path("/user/inActive/list")
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public <T extends UserMessage> List<T> fetchInActiveUsers() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -705,7 +706,7 @@ public class AdminService {
 
 	@GET
 	@Path("/user/list/sort/pg")
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public <T extends UserMessage> List<T> listUserSortedByPrimaryGroup() {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -723,7 +724,7 @@ public class AdminService {
 
 	@GET
 	@Path("/user/list/group/{groupId}")
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public <T extends UserMessage> List<T> listUsersByPrimaryGroup(@PathParam("groupId") Long groupId) {
 		List<T> ret = new ArrayList<T>();
 		try {
@@ -741,8 +742,8 @@ public class AdminService {
 
 	@GET
 	@Path("/user/get/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public UserMessage getUserById(@PathParam("id") Long id) {
 		UserMessage user = new UserMessage();
@@ -757,8 +758,8 @@ public class AdminService {
 
 	@PUT
 	@Path("/user/inactivate/email")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage inActivateUser(String email) {
 		try {
@@ -778,8 +779,8 @@ public class AdminService {
 
 	@PUT
 	@Path("/user/rpw")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage resetPassword(String[] param) {
 		try {
@@ -824,8 +825,8 @@ public class AdminService {
 
 	@PUT
 	@Path("/user/rsec")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage resetSecurity(String[] param) {
 		try {
@@ -850,8 +851,8 @@ public class AdminService {
 
 	@GET
 	@Path("/user/check/screenName/{sc}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public Boolean checkScreenName(@PathParam("sc") String sc) {
 		try {
@@ -866,7 +867,7 @@ public class AdminService {
 
 	@GET
 	@Path("/user/check/email/{email}")
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Boolean checkEmail(@PathParam("email") String email) {
 		try {
 			List usersByEmail = ipUserDAO.findByUserEmail(email);
@@ -880,7 +881,7 @@ public class AdminService {
 
 	@GET
 	@Path("/user/check/idNumber/{id}")
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Boolean checkIDNumber(@PathParam("id") Long id) {
 		try {
 			List usersByIDNumber = ipUserDAO.findByUserIdNum(id);
@@ -894,7 +895,7 @@ public class AdminService {
 
 	@GET
 	@Path("/user/check/employeeId/{eId}")
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Boolean checkEmployeeID(@PathParam("eId") String eId) {
 		try {
 			List usersByEmployeeID = ipUserDAO.findByUserEmployeeId(eId);
@@ -908,7 +909,7 @@ public class AdminService {
 
 	@GET
 	@Path("/gen/{clazz}")
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Long getNextId(@PathParam("clazz") String clazz) {
 		Long ret = -1l;
 		try {
@@ -921,8 +922,8 @@ public class AdminService {
 
 	@GET
 	@Path("/user/login/{login}/{pwd}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public UserMessage login(@PathParam("login") String login, @PathParam("pwd") String pwd) {
 		UserMessage user = new UserMessage();
@@ -946,8 +947,8 @@ public class AdminService {
 
 	@GET
 	@Path("/user/verify/{login}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public UserMessage verify(@PathParam("login") String login) {
 		UserMessage user = new UserMessage();
@@ -964,8 +965,8 @@ public class AdminService {
 
 	@GET
 	@Path("/user/stats/{userId}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public UserStatisticsMessage getDetailsByUserId(@PathParam("userId") Long id) {
 		UserStatisticsMessage userStats = new UserStatisticsMessage();
@@ -991,8 +992,8 @@ public class AdminService {
 
 	@GET
 	@Path("/user/stats/topList")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends UserStatisticsMessage> List<T> getTopCountsUser() {
 		Set<UserStatisticsMessage> userStatsSet = new TreeSet<UserStatisticsMessage>();

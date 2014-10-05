@@ -11,6 +11,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,8 +33,8 @@ public class ReviewService {
 
 	@POST
 	@Path("/review/add")
-	@Consumes("application/json")
-	@Produces("application/json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage createReview(ReviewMessage message) {
 		try {
@@ -65,8 +66,8 @@ public class ReviewService {
 
 	@PUT
 	@Path("/review/modify")
-	@Consumes("application/json")
-	@Produces("application/json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage updateReview(ReviewMessage message) {
 		try {
@@ -104,8 +105,8 @@ public class ReviewService {
 
 	@GET
 	@Path("/review/list/{entityId}/{tblNm}/{status}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ReviewMessage listReviewsByEntity(@PathParam("entityId") Long entityId, @PathParam("tblNm") String tblNm, @PathParam("status") Integer status) {
 		List rvs = ipReviewDAO.findByEntityIdEntityName(entityId, tblNm, status);
@@ -127,8 +128,8 @@ public class ReviewService {
 
 	@GET
 	@Path("/review/list/all/{entityId}/{tblNm}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends ReviewMessage> List<T> listAllReviewsByEntity(@PathParam("entityId") Long entityId, @PathParam("tblNm") String tblNm) {
 		List<T> ret = new ArrayList<T>();
@@ -156,8 +157,8 @@ public class ReviewService {
 
 	@GET
 	@Path("/review/list/cnt/{entityId}/{tblNm}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public Integer listReviewsByEntity(@PathParam("entityId") Long entityId, @PathParam("tblNm") String tblNm) {
 		return ipReviewDAO.findReviewStatusCount(entityId, tblNm);

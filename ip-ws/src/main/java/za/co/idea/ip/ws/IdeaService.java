@@ -13,6 +13,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 
@@ -55,8 +56,8 @@ public class IdeaService {
 
 	@GET
 	@Path("/idea/check/title/{title}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public Boolean checkTitle(@PathParam("title") String ideaTitle) {
 		try {
@@ -71,8 +72,8 @@ public class IdeaService {
 
 	@GET
 	@Path("/idea/cat/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends MetaDataMessage> List<T> listIdeaCat() {
 		List<T> ret = new ArrayList<T>();
@@ -93,8 +94,8 @@ public class IdeaService {
 
 	@GET
 	@Path("/idea/status/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends MetaDataMessage> List<T> listIdeaStatus() {
 		List<T> ret = new ArrayList<T>();
@@ -115,8 +116,8 @@ public class IdeaService {
 
 	@GET
 	@Path("/idea/status/list/{curr}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends MetaDataMessage> List<T> listNextIdeaStatus(@PathParam("curr") Integer curr) {
 		List<T> ret = new ArrayList<T>();
@@ -137,8 +138,8 @@ public class IdeaService {
 
 	@GET
 	@Path("/idea/cat/get/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public MetaDataMessage getIdeaCatById(@PathParam("id") Integer id) {
 		MetaDataMessage message = new MetaDataMessage();
@@ -154,8 +155,8 @@ public class IdeaService {
 
 	@GET
 	@Path("/idea/status/get/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public MetaDataMessage getIdeaStatusById(@PathParam("id") Integer id) {
 		MetaDataMessage message = new MetaDataMessage();
@@ -171,8 +172,8 @@ public class IdeaService {
 
 	@POST
 	@Path("/idea/add")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage createIdea(IdeaMessage idea) {
 		IpIdea ipIdea = new IpIdea();
@@ -220,8 +221,8 @@ public class IdeaService {
 
 	@PUT
 	@Path("/idea/modify")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage updateIdea(IdeaMessage idea) {
 		IpIdea ipIdea = new IpIdea();
@@ -377,8 +378,8 @@ public class IdeaService {
 
 	@GET
 	@Path("/idea/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends IdeaMessage> List<T> listIdea() {
 		List<T> ret = new ArrayList<T>();
@@ -397,8 +398,8 @@ public class IdeaService {
 
 	@GET
 	@Path("/idea/list/user/access/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends IdeaMessage> List<T> listIdeaByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
@@ -419,8 +420,8 @@ public class IdeaService {
 
 	@GET
 	@Path("/idea/list/user/created/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends IdeaMessage> List<T> listIdeaCreatedByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
@@ -439,8 +440,8 @@ public class IdeaService {
 
 	@GET
 	@Path("/idea/list/status/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends IdeaMessage> List<T> listIdeaByStatus(@PathParam("id") Integer id) {
 		List<T> ret = new ArrayList<T>();
@@ -459,8 +460,8 @@ public class IdeaService {
 
 	@GET
 	@Path("/idea/list/status/{sid}/user/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends IdeaMessage> List<T> listIdeaByStatusUser(@PathParam("sid") Integer sid, @PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
@@ -479,8 +480,8 @@ public class IdeaService {
 
 	@GET
 	@Path("/idea/list/reviewStatus/user/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends IdeaMessage> List<T> listReviewIdeasByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
@@ -499,8 +500,8 @@ public class IdeaService {
 
 	@GET
 	@Path("/idea/get/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public IdeaMessage getIdea(@PathParam("id") Long id) {
 		IdeaMessage idea = new IdeaMessage();
@@ -515,8 +516,8 @@ public class IdeaService {
 
 	@GET
 	@Path("/idea/rev/user/{id}/{uid}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage updateReviewer(@PathParam("id") Long id, @PathParam("uid") Long uid) {
 		ResponseMessage message = new ResponseMessage();

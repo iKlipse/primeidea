@@ -26,14 +26,14 @@ public class TestDocumentService {
 	public void testUpload() throws FileNotFoundException {
 		WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/multiUpload/115/true", Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 		client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-		client.header("Accept", "application/json");
+		client.header("Accept", MediaType.APPLICATION_JSON);
 		Response response = client.accept(MediaType.APPLICATION_JSON).post(new Attachment("115", new FileInputStream(new File("/software/button_lightbulb.png")), new ContentDisposition("attachment;filename=button_lightbulb.png")));
 		System.out.println(response.getStatus());
 	}
 
 	public void testDownload() throws IOException {
 		WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/115/button_lightbulb.png", Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-		client.header("Content-Type", "application/json");
+		client.header("Content-Type", MediaType.APPLICATION_JSON);
 		client.header("Accept", MediaType.MULTIPART_FORM_DATA);
 		Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
 		File file = new File("c:\\ws\\logon.jpg");

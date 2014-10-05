@@ -40,8 +40,8 @@ public class DocumentUploadService {
 
 	@POST
 	@Path("/doc/upload/{blobId}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Transactional
 	public Response doUpload(final Attachment stream, @PathParam("blobId") Long blobId) {
 		try {
@@ -79,8 +79,8 @@ public class DocumentUploadService {
 
 	@POST
 	@Path("/doc/multiUpload/{blobId}/{nextExists}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Transactional
 	public Response doMultiUpload(final Attachment stream, @PathParam("blobId") Long blobId, @PathParam("nextExists") String nextExists) {
 		try {
@@ -116,8 +116,8 @@ public class DocumentUploadService {
 
 	@GET
 	@Path("/doc/download/{blobId}/{name}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public Attachment doDownload(@PathParam("blobId") Long blobId, @PathParam("name") String name) {
 		try {
@@ -138,8 +138,8 @@ public class DocumentUploadService {
 
 	@PUT
 	@Path("/doc/update")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public Response updateDocument(AttachmentMessage message) {
 		try {
@@ -159,8 +159,8 @@ public class DocumentUploadService {
 
 	@POST
 	@Path("/doc/create")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public Response createDocument(AttachmentMessage message) {
 		try {
@@ -180,8 +180,8 @@ public class DocumentUploadService {
 
 	@POST
 	@Path("/doc/createMulti")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public Response createMultiDocument(AttachmentMessage message) {
 		try {
@@ -202,8 +202,8 @@ public class DocumentUploadService {
 
 	@GET
 	@Path("/doc/getId/{entityId}/{entityTblNm}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public Long getId(@PathParam("entityId") Long entityId, @PathParam("entityTblNm") String entityTblNm) {
 		Long ret = -999l;
@@ -215,8 +215,8 @@ public class DocumentUploadService {
 
 	@GET
 	@Path("/doc/delete/{entityId}/{entityTblNm}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public Response delete(@PathParam("entityId") Long entityId, @PathParam("entityTblNm") String entityTblNm) {
 		try {
@@ -252,8 +252,8 @@ public class DocumentUploadService {
 
 	@GET
 	@Path("/doc/getUrl/{entityId}/{entityTblNm}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public String getUrl(@PathParam("entityId") Long entityId, @PathParam("entityTblNm") String entityTblNm) {
 		String ret = "";
@@ -265,8 +265,8 @@ public class DocumentUploadService {
 
 	@GET
 	@Path("/doc/getName/{blobId}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public String getName(@PathParam("blobId") Long blobId) {
 		String ret = "";
@@ -278,8 +278,8 @@ public class DocumentUploadService {
 
 	@GET
 	@Path("/doc/getContentType/{blobId}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public String getMimeType(@PathParam("blobId") Long blobId) {
 		String mimeType = "";

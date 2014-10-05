@@ -180,8 +180,8 @@ public class AdminController implements Serializable {
 
 	private WebClient createCustomClient(String url) {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
-		client.header("Content-Type", "application/json");
-		client.header("Accept", "application/json");
+		client.header("Content-Type", MediaType.APPLICATION_JSON);
+		client.header("Accept", MediaType.APPLICATION_JSON);
 		return client;
 	}
 
@@ -1549,7 +1549,7 @@ public class AdminController implements Serializable {
 					if (crtRes.getStatus() == 200) {
 						WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + message.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-						client.header("Accept", "application/json");
+						client.header("Accept", MediaType.APPLICATION_JSON);
 						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
 						if (docRes.getStatus() != 200) {
 							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
@@ -1873,7 +1873,7 @@ public class AdminController implements Serializable {
 					if (crtRes.getStatus() == 200) {
 						WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + message.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-						client.header("Accept", "application/json");
+						client.header("Accept", MediaType.APPLICATION_JSON);
 						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), grpImage.getStream(), new ContentDisposition("attachment;filename=" + grpFileName)));
 						if (docRes.getStatus() != 200) {
 							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group Image Not Uploaded", "Group Image Not Uploaded");
@@ -1981,7 +1981,7 @@ public class AdminController implements Serializable {
 						if (crtRes.getStatus() == 200) {
 							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + message.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-							client.header("Accept", "application/json");
+							client.header("Accept", MediaType.APPLICATION_JSON);
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), grpImage.getStream(), new ContentDisposition("attachment;filename=" + grpFileName)));
 							client.close();
 							if (docRes.getStatus() != 200) {
@@ -2006,7 +2006,7 @@ public class AdminController implements Serializable {
 						if (updRes.getStatus() == 200) {
 							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-							client.header("Accept", "application/json");
+							client.header("Accept", MediaType.APPLICATION_JSON);
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), grpImage.getStream(), new ContentDisposition("attachment;filename=" + grpFileName)));
 							if (docRes.getStatus() != 200) {
 								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");
@@ -2088,7 +2088,7 @@ public class AdminController implements Serializable {
 				if (crtRes.getStatus() == 200) {
 					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 					client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-					client.header("Accept", "application/json");
+					client.header("Accept", MediaType.APPLICATION_JSON);
 					Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), uploadImage.getStream(), new ContentDisposition("attachment;filename=" + fileName)));
 					if (docRes.getStatus() != 200) {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
@@ -2115,7 +2115,7 @@ public class AdminController implements Serializable {
 				if (updRes.getStatus() == 200) {
 					WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 					client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-					client.header("Accept", "application/json");
+					client.header("Accept", MediaType.APPLICATION_JSON);
 					Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), uploadImage.getStream(), new ContentDisposition("attachment;filename=" + uploadFileName)));
 					if (docRes.getStatus() != 200) {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
@@ -2388,7 +2388,7 @@ public class AdminController implements Serializable {
 					if (crtRes.getStatus() == 200) {
 						WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-						client.header("Accept", "application/json");
+						client.header("Accept", MediaType.APPLICATION_JSON);
 						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
 						if (docRes.getStatus() != 200) {
 							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "News Attachment Not Uploaded", "News Attachment Not Uploaded");
@@ -2446,7 +2446,7 @@ public class AdminController implements Serializable {
 						if (crtRes.getStatus() == 200) {
 							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + attach.getBlobId().toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-							client.header("Accept", "application/json");
+							client.header("Accept", MediaType.APPLICATION_JSON);
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attach.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
 							if (docRes.getStatus() != 0) {
 								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "News Attachment Not Uploaded", "News Attachment Not Uploaded");
@@ -2471,7 +2471,7 @@ public class AdminController implements Serializable {
 						if (updRes.getStatus() == 200) {
 							WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 							client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-							client.header("Accept", "application/json");
+							client.header("Accept", MediaType.APPLICATION_JSON);
 							Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), image.getStream(), new ContentDisposition("attachment;filename=" + fileName)));
 							if (docRes.getStatus() != 200) {
 								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Document Upload Failed", "Document Upload Failed");

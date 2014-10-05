@@ -11,6 +11,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 
@@ -54,8 +55,8 @@ public class MetaDataService {
 
 	@POST
 	@Path("/add")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage addMetaData(MetaDataMessage mData) {
 		boolean success = false;
@@ -148,8 +149,8 @@ public class MetaDataService {
 
 	@PUT
 	@Path("/modify")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage updateMetaData(MetaDataMessage mData) {
 		boolean success = false;
@@ -242,8 +243,8 @@ public class MetaDataService {
 
 	@PUT
 	@Path("/delete")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage deleteMetaData(MetaDataMessage mData) {
 		boolean success = false;
@@ -348,8 +349,8 @@ public class MetaDataService {
 
 	@GET
 	@Path("/list/{table}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends MetaDataMessage> List<T> listByTable(@PathParam("table") String table) {
 		List<T> ret = new ArrayList<T>();
@@ -465,8 +466,8 @@ public class MetaDataService {
 
 	@GET
 	@Path("/list/non/{table}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends MetaDataMessage> List<T> listNonAllocatedByTable(@PathParam("table") String table) {
 		List<T> ret = new ArrayList<T>();

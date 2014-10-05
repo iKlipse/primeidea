@@ -13,6 +13,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 
@@ -53,8 +54,8 @@ public class SolutionService {
 
 	@GET
 	@Path("/solution/check/title/{title}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public Boolean checkTitle(@PathParam("title") String title) {
 		try {
@@ -69,8 +70,8 @@ public class SolutionService {
 
 	@POST
 	@Path("/solution/add")
-	@Consumes("application/json")
-	@Produces("application/json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage createSolution(SolutionMessage solution) {
 		IpSolution ipSolution = new IpSolution();
@@ -119,8 +120,8 @@ public class SolutionService {
 
 	@PUT
 	@Path("/solution/modify")
-	@Consumes("application/json")
-	@Produces("application/json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage updateSolution(SolutionMessage solution) {
 		IpSolution ipSolution = new IpSolution();
@@ -189,8 +190,8 @@ public class SolutionService {
 
 	@GET
 	@Path("/solution/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends SolutionMessage> List<T> listSolution() {
 		List<T> ret = new ArrayList<T>();
@@ -209,8 +210,8 @@ public class SolutionService {
 
 	@GET
 	@Path("/solution/list/user/access/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends SolutionMessage> List<T> listSolutionByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
@@ -232,8 +233,8 @@ public class SolutionService {
 
 	@GET
 	@Path("/solution/list/user/created/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends SolutionMessage> List<T> listSolutionCreatedByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
@@ -252,8 +253,8 @@ public class SolutionService {
 
 	@GET
 	@Path("/solution/list/status/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends SolutionMessage> List<T> listSolutionByStatus(@PathParam("id") Integer id) {
 		List<T> ret = new ArrayList<T>();
@@ -272,8 +273,8 @@ public class SolutionService {
 
 	@GET
 	@Path("/solution/list/status/{sid}/user/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends SolutionMessage> List<T> listSolutionByStatusIdUserId(@PathParam("sid") Integer sid, @PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
@@ -292,8 +293,8 @@ public class SolutionService {
 
 	@GET
 	@Path("/solution/list/chal/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends SolutionMessage> List<T> listSolutionByChal(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
@@ -312,8 +313,8 @@ public class SolutionService {
 
 	@GET
 	@Path("/solution/list/reviewStatus/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends SolutionMessage> List<T> listReviewSolutionsByUserId(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
@@ -332,8 +333,8 @@ public class SolutionService {
 
 	@GET
 	@Path("/solution/cat/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends MetaDataMessage> List<T> listSolutionCat() {
 		List<T> ret = new ArrayList<T>();
@@ -354,8 +355,8 @@ public class SolutionService {
 
 	@GET
 	@Path("/solution/status/list")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends MetaDataMessage> List<T> listSolutionStatus() {
 		List<T> ret = new ArrayList<T>();
@@ -376,8 +377,8 @@ public class SolutionService {
 
 	@GET
 	@Path("/solution/status/list/{curr}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public <T extends MetaDataMessage> List<T> listNextSolutionStatus(@PathParam("curr") Integer curr) {
 		List<T> ret = new ArrayList<T>();
@@ -398,8 +399,8 @@ public class SolutionService {
 
 	@GET
 	@Path("/solution/cat/get/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public MetaDataMessage getSolutionCatById(@PathParam("id") Integer id) {
 		MetaDataMessage message = new MetaDataMessage();
@@ -415,8 +416,8 @@ public class SolutionService {
 
 	@GET
 	@Path("/solution/rev/user/{id}/{uid}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public ResponseMessage updateReviewer(@PathParam("id") Long id, @PathParam("uid") Long uid) {
 		ResponseMessage message = new ResponseMessage();
@@ -434,8 +435,8 @@ public class SolutionService {
 
 	@GET
 	@Path("/solution/status/get/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public MetaDataMessage getSolutionStatusById(@PathParam("id") Integer id) {
 		MetaDataMessage message = new MetaDataMessage();
@@ -451,8 +452,8 @@ public class SolutionService {
 
 	@GET
 	@Path("/solution/get/{id}")
-	@Produces("application/json")
-	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public SolutionMessage getSolution(@PathParam("id") Long id) {
 		SolutionMessage solution = new SolutionMessage();

@@ -103,8 +103,8 @@ public class RandomIdeaController implements Serializable {
 		List providers = new ArrayList();
 		providers.add(new JacksonJaxbJsonProvider(new CustomObjectMapper(), JacksonJaxbJsonProvider.DEFAULT_ANNOTATIONS));
 		WebClient client = WebClient.create(url, providers);
-		client.header("Content-Type", "application/json");
-		client.header("Accept", "application/json");
+		client.header("Content-Type", MediaType.APPLICATION_JSON);
+		client.header("Accept", MediaType.APPLICATION_JSON);
 		return client;
 	}
 
@@ -576,7 +576,7 @@ public class RandomIdeaController implements Serializable {
 								if (crtRes.getStatus() == 200) {
 									WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/multiUpload/" + message.getBlobId() + "/" + ((i == 0) ? "true" : "false"), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 									client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-									client.header("Accept", "application/json");
+									client.header("Accept", MediaType.APPLICATION_JSON);
 									client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), bean.getContent().getStream(), new ContentDisposition("attachment;filename=" + bean.getName())));
 									client.close();
 								}
@@ -658,7 +658,7 @@ public class RandomIdeaController implements Serializable {
 									logger.info("After success");
 									WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/multiUpload/" + message.getBlobId() + "/" + ((i == 0) ? "true" : "false"), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 									client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
-									client.header("Accept", "application/json");
+									client.header("Accept", MediaType.APPLICATION_JSON);
 									client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), bean.getContent().getStream(), new ContentDisposition("attachment;filename=" + bean.getName())));
 									client.close();
 								}
