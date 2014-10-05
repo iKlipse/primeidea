@@ -17,17 +17,17 @@
 					<p:column>
 						<p:panel>
 							<p:panelGrid styleClass="panelGridView" id="pnlStats" columns="3">
-								<p:column id="panelIdeas">
-									<p:outputLabel id="ideasCnt" value="#{adminController.statsBean.ideasCount}" style="background-color: #8c4799 !important; color: white !important" />
-									<p:tooltip for="panelIdeas" value="Ideas Count" />
+								<p:column width="33%">
+									<p:outputLabel id="ideasCnt" value="#{adminController.statsBean.ideasCount}" style="text-align: center !important; background-color: #8c4799 !important; color: white !important" />
+									<p:tooltip for="ideasCnt" value="Ideas Count" />
 								</p:column>
-								<p:column>
-									<p:outputLabel id="solsCnt" value="#{adminController.statsBean.solutionsCount}" style="background-color: #ef6079 !important; color: white !important" />
-									<p:tooltip for="panelSols" value="Solutions Count" />
+								<p:column width="33%">
+									<p:outputLabel id="solsCnt" value="#{adminController.statsBean.solutionsCount}" style="text-align: center !important; background-color: #ef6079 !important; color: white !important" />
+									<p:tooltip for="solsCnt" value="Solutions Count" />
 								</p:column>
-								<p:column>
-									<p:outputLabel id="wlCnt" value="#{adminController.statsBean.pointsCount}" style="font-weight: bold !important; background-color: #ff8d6d !important; color: white !important" />
-									<p:tooltip for="panelPoints" value="Total Points" />
+								<p:column width="33%">
+									<p:outputLabel id="wlCnt" value="#{adminController.statsBean.pointsCount}" style="text-align: center !important; font-weight: bold !important; background-color: #ff8d6d !important; color: white !important" />
+									<p:tooltip for="wlCnt" value="Total Points" />
 								</p:column>
 							</p:panelGrid>
 						</p:panel>
