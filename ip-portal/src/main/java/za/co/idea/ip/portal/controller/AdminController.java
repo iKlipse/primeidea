@@ -759,6 +759,22 @@ public class AdminController implements Serializable {
 					User user = UserLocalServiceUtil.getUserByScreenName(10154, userBean.getScName());
 					if (Validator.isNotNull(user)) {
 						user = UserLocalServiceUtil.updatePassword(user.getUserId(), userBean.getPwd(), userBean.getcPw(), false);
+						if (Validator.isNotNull(user)) {
+							WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rpw/");
+							ResponseMessage response = loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())), userBean.getPwd() }, ResponseMessage.class);
+							loginClient.close();
+							if (response.getStatusCode() == 0) {
+								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Reset Successful", "Password Reset Successful");
+								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+							} else {
+								FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusCode() + " :: " + response.getStatusDesc(), response.getStatusCode() + " :: " + response.getStatusDesc());
+								FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+							}
+						} else {
+							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Liferay User password Reset Error", "Liferay User password Reset Error");
+							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						}
+					} else {
 						WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rpw/");
 						ResponseMessage response = loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())), userBean.getPwd() }, ResponseMessage.class);
 						loginClient.close();
@@ -769,9 +785,6 @@ public class AdminController implements Serializable {
 							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusCode() + " :: " + response.getStatusDesc(), response.getStatusCode() + " :: " + response.getStatusDesc());
 							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 						}
-					} else {
-						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Liferay User password Reset Error", "Liferay User password Reset Error");
-						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
 				} else {
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Security Answer", "Invalid Security Answer");
