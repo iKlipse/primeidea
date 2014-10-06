@@ -152,11 +152,6 @@
  <PROCESS-ITEM NAME="rules::3" SHAPE="32,2081,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules::3" NAME="item" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT
-    ID="solc::#views#solution#container#createContainer.xhtml"
-    NAME="output" PATH="/views/solution/container/createContainer.xhtml"
-    TARGET="rules:#views#solution#container#createContainer.xhtml"
-    TITLE="solc" model-entity="JSFProcessItemOutput"/>
-   <PROCESS-ITEM-OUTPUT
     ID="sole::#views#solution#container#editContainer.xhtml"
     NAME="output1" PATH="/views/solution/container/editContainer.xhtml"
     TARGET="rules:#views#solution#container#editContainer.xhtml"
@@ -249,13 +244,24 @@
    <PROCESS-ITEM-OUTPUT ID="clmuv::#views#admin#claim#view.xhtml"
     NAME="output4" PATH="/views/admin/claim/view.xhtml"
     TARGET="rules:#views#admin#claim#view.xhtml" TITLE="clmuv" model-entity="JSFProcessItemOutput"/>
-   <PROCESS-ITEM-OUTPUT ID="admuae::#views#admin#user#editActive.xhtml"
-    NAME="output5" PATH="/views/admin/user/editActive.xhtml"
-    TARGET="rules:#views#admin#user#editActive.xhtml" TITLE="admuae" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admue::#views#admin#user#edit.xhtml"
+    NAME="output5" PATH="/views/admin/user/edit.xhtml"
+    TARGET="rules:#views#admin#user#edit.xhtml" TITLE="admue" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="admuie::#views#admin#user#editInactive.xhtml" NAME="output6"
     PATH="/views/admin/user/editInactive.xhtml"
     TARGET="rules:#views#admin#user#editInactive.xhtml" TITLE="admuie" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admuu::#views#admin#user#upload.xhtml"
+    NAME="output7" PATH="/views/admin/user/upload.xhtml"
+    TARGET="rules:#views#admin#user#upload.xhtml" TITLE="admuu" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="admuur::#views#admin#user#uploadRes.xhtml"
+    NAME="output8" PATH="/views/admin/user/uploadRes.xhtml"
+    TARGET="rules:#views#admin#user#uploadRes.xhtml" TITLE="admuur" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="admiu::#views#admin#user#uploadUsersToInactive.xhtml"
+    NAME="output9" PATH="/views/admin/user/uploadUsersToInactive.xhtml"
+    TARGET="rules:#views#admin#user#uploadUsersToInactive.xhtml"
+    TITLE="admiu" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules::7" SHAPE="32,2993,0,0" model-entity="JSFProcessGroup">
@@ -269,11 +275,10 @@
     PATH="/views/admin/misc/allocatePoints.xhtml"
     TARGET="rules:#views#admin#misc#allocatePoints.xhtml" TITLE="admap" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="admmpa::#views#admin#misc#maintainPointAllocation.xhtml"
-    NAME="output2"
-    PATH="/views/admin/misc/maintainPointAllocation.xhtml"
-    TARGET="rules:#views#admin#misc#maintainPointAllocation.xhtml"
-    TITLE="admmpa" model-entity="JSFProcessItemOutput"/>
+    ID="admmm::#views#admin#misc#maintainMetaData.xhtml" NAME="output2"
+    PATH="/views/admin/misc/maintainMetaData.xhtml"
+    TARGET="rules:#views#admin#misc#maintainMetaData.xhtml"
+    TITLE="admmm" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules::8" SHAPE="32,3649,0,0" model-entity="JSFProcessGroup">
@@ -412,10 +417,6 @@
  <PROCESS-ITEM NAME="rules:#views#rewards#view.xhtml"
   PATH="/views/rewards/view.xhtml" SHAPE="256,353,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM
-  NAME="rules:#views#solution#container#createContainer.xhtml"
-  PATH="/views/solution/container/createContainer.xhtml"
-  SHAPE="304,3857,0,0" model-entity="JSFProcessGroup"/>
- <PROCESS-ITEM
   NAME="rules:#views#challenge#container#submitSolContainer.xhtml"
   PATH="/views/challenge/container/submitSolContainer.xhtml"
   SHAPE="304,1697,0,0" model-entity="JSFProcessGroup"/>
@@ -437,4 +438,8 @@
   PATH="/views/admin/claim/view.xhtml" SHAPE="304,2833,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#views#admin#misc#allocateGroups.xhtml"
   PATH="/views/admin/misc/allocateGroups.xhtml" SHAPE="272,3809,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#views#admin#user#uploadUsersToInactive.xhtml"
+  PATH="/views/admin/user/uploadUsersToInactive.xhtml"
+  SHAPE="304,2945,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>
