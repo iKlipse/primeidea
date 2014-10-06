@@ -374,6 +374,18 @@ public class AdminController implements Serializable {
 		}
 	}
 
+	public String showEditFunction() {
+		try {
+			pGrps = RESTServiceHelper.fetchActiveGroups();
+			return "admfe";
+		} catch (Exception e) {
+			logger.error(e, e);
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
 	public String showSummaryGroup() {
 		try {
 			viewGroups = pGrps = RESTServiceHelper.fetchAllGroups();
@@ -705,18 +717,6 @@ public class AdminController implements Serializable {
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform view reward request", "System error occurred, cannot perform view reward request");
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
-		}
-	}
-
-	public String showEditFunction() {
-		try {
-			pGrps = RESTServiceHelper.fetchActiveGroups();
-			return "admfe";
-		} catch (Exception e) {
-			logger.error(e, e);
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform update request", "System error occurred, cannot perform update request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}

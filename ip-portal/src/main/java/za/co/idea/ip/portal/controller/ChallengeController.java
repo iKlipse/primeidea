@@ -1380,6 +1380,7 @@ public class ChallengeController implements Serializable {
 			return true;
 		String filterText = filter.toString().trim();
 		String valueText = value.toString().trim();
+		logger.info("search string :: " + filterText + " in :: " + valueText);
 		return StringUtils.contains(valueText, filterText);
 	}
 
