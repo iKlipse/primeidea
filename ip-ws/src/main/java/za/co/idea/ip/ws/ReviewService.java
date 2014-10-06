@@ -20,6 +20,7 @@ import za.co.idea.ip.orm.bean.IpReview;
 import za.co.idea.ip.orm.dao.IpGroupDAO;
 import za.co.idea.ip.orm.dao.IpNativeSQLDAO;
 import za.co.idea.ip.orm.dao.IpReviewDAO;
+import za.co.idea.ip.orm.dao.IpUserDAO;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.ReviewMessage;
 
@@ -30,6 +31,7 @@ public class ReviewService {
 	private IpReviewDAO ipReviewDAO;
 	private IpNativeSQLDAO ipNativeSQLDAO;
 	private IpGroupDAO ipGroupDAO;
+	private IpUserDAO ipUserDAO;
 
 	@POST
 	@Path("/review/add")
@@ -116,10 +118,19 @@ public class ReviewService {
 		message.setTblNm(tblNm);
 		if (rvs != null && rvs.size() > 0) {
 			Long[] grps = new Long[rvs.size()];
+			String[] grpNms = new String[rvs.size()];
+			Long[] uids = new Long[rvs.size()];
+			String[] uNms = new String[rvs.size()];
 			int i = 0;
 			for (Object object : rvs) {
 				IpReview review = (IpReview) object;
 				grps[i] = review.getIpGroup().getGroupId();
+				grpNms[i] = review.getIpGroup().getGroupName();
+				uids[i] = review.getRevSelUserId();
+				if (uids[i] != null)
+					uNms[i] = ipUserDAO.findById(uids[i]).getUserScreenName();
+				else
+					uNms[i] = "";
 			}
 			message.setGroupId(grps);
 		}
@@ -186,5 +197,13 @@ public class ReviewService {
 
 	public void setIpGroupDAO(IpGroupDAO ipGroupDAO) {
 		this.ipGroupDAO = ipGroupDAO;
+	}
+
+	public IpUserDAO getIpUserDAO() {
+		return ipUserDAO;
+	}
+
+	public void setIpUserDAO(IpUserDAO ipUserDAO) {
+		this.ipUserDAO = ipUserDAO;
 	}
 }

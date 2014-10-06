@@ -101,6 +101,7 @@
 		<property name="ipReviewDAO" ref="IpReviewDAO" />
 		<property name="ipNativeSQLDAO" ref="IpNativeSQLDAO" />
 		<property name="ipGroupDAO" ref="IpGroupDAO" />
+		<property name="ipUserDAO" ref="IpUserDAO" />
 	</bean>
 	<bean id="notificationService" class="za.co.idea.ip.ws.NotificationService">
 		<property name="ipNativeSQLDAO" ref="IpNativeSQLDAO" />

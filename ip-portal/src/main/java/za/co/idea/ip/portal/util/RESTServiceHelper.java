@@ -32,6 +32,7 @@ import za.co.idea.ip.portal.bean.NewsBean;
 import za.co.idea.ip.portal.bean.NotificationBean;
 import za.co.idea.ip.portal.bean.PointBean;
 import za.co.idea.ip.portal.bean.ReviewBean;
+import za.co.idea.ip.portal.bean.ReviewDisplayBean;
 import za.co.idea.ip.portal.bean.RewardsBean;
 import za.co.idea.ip.portal.bean.SolutionBean;
 import za.co.idea.ip.portal.bean.TagBean;
@@ -1812,5 +1813,12 @@ public class RESTServiceHelper {
 		fetchReviewGroupsClient.close();
 		return ret;
 
+	}
+
+	public static List<ReviewDisplayBean> fetchDisplayFromEntiry(Long entityId, String entityNm, Integer status) {
+		List<ReviewDisplayBean> ret = new ArrayList<ReviewDisplayBean>();
+		WebClient fetchReviewGroupsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rvs/review/list/" + entityId + "/" + entityNm + "/" + status);
+		fetchReviewGroupsClient.close();
+		return ret;
 	}
 }

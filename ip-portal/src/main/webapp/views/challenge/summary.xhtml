@@ -32,6 +32,15 @@
 			<p:outputLabel id="txtSumITag" value="#{challengeController.challengeBean.tag}" escape="false" />
 		</p:column>
 		<p:column>
+			<p:outputLabel id="lblRvGrp" value="Reviewers Assigned To Challenge : " />
+		</p:column>
+		<p:column>
+			<p:dataTable id="dtRvGrp" value="#{challengeController.rvIds}" var="rvGrp" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Reviewers Found">
+				<p:column headerText="Group"></p:column>
+				<p:column headerText="Reviewer"></p:column>
+			</p:dataTable>
+		</p:column>
+		<p:column>
 			<p:outputLabel id="lblSumISocial" value="Social : " />
 		</p:column>
 		<p:column>

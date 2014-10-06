@@ -402,6 +402,7 @@ public class ChallengeController implements Serializable {
 
 	public String showSummaryChallenge() {
 		logger.debug("Control handled in showSummaryChallenge method");
+		rvIds = RESTServiceHelper.fetchReviewGroups(challengeBean.getId(), "ip_challenge");
 		chalLikes = RESTServiceHelper.fetchAllBuildonLikes(challengeBean.getId(), 2);
 		chalComments = RESTServiceHelper.fetchAllBuildonComments(challengeBean.getId(), 2);
 		chalLikeCnt = "(" + chalLikes.getTags().size() + ")	";
@@ -416,6 +417,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String showSummaryOpenChallenge() {
+		rvIds = RESTServiceHelper.fetchReviewGroups(challengeBean.getId(), "ip_challenge");
 		chalLikes = RESTServiceHelper.fetchAllBuildonLikes(challengeBean.getId(), 2);
 		chalComments = RESTServiceHelper.fetchAllBuildonComments(challengeBean.getId(), 2);
 		chalLikeCnt = "(" + chalLikes.getTags().size() + ")	";
@@ -430,6 +432,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String showSummaryReviewChallenge() {
+		rvIds = RESTServiceHelper.fetchReviewGroups(challengeBean.getId(), "ip_challenge");
 		chalLikes = RESTServiceHelper.fetchAllBuildonLikes(challengeBean.getId(), 2);
 		chalComments = RESTServiceHelper.fetchAllBuildonComments(challengeBean.getId(), 2);
 		chalLikeCnt = "(" + chalLikes.getTags().size() + ")	";

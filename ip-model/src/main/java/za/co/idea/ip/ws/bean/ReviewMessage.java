@@ -6,6 +6,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ReviewMessage {
 	private Integer statusId;
 	private Long[] groupId;
+	private Long[] userId;
+	private String[] groupNm;
+	private String[] userNm;
 	private Long entityId;
 	private String tblNm;
 
@@ -23,6 +26,30 @@ public class ReviewMessage {
 
 	public void setGroupId(Long[] groupId) {
 		this.groupId = groupId;
+	}
+
+	public Long[] getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long[] userId) {
+		this.userId = userId;
+	}
+
+	public String[] getGroupNm() {
+		return groupNm;
+	}
+
+	public void setGroupNm(String[] groupNm) {
+		this.groupNm = groupNm;
+	}
+
+	public String[] getUserNm() {
+		return userNm;
+	}
+
+	public void setUserNm(String[] userNm) {
+		this.userNm = userNm;
 	}
 
 	public Long getEntityId() {
