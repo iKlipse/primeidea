@@ -2,6 +2,7 @@
 <!DOCTYPE hook PUBLIC "-//Liferay//DTD Hook 6.2.0//EN" "http://www.liferay.com/dtd/liferay-hook_6_2_0.dtd">
 
 <hook>
+	<custom-jsp-dir>/custom_jsps</custom-jsp-dir>
 	<service>
 		<service-type>com.liferay.portal.service.UserLocalService</service-type>
 		<service-impl>za.co.idea.ip.hook.ext.ExtUserLocalService</service-impl>

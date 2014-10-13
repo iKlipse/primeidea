@@ -4,7 +4,7 @@
 			<f:facet name="header">
 					Create Claim
 				</f:facet>
-			<p:panelGrid styleClass="panelGridView"  columns="2" id="pnlCrtClaim">
+			<p:panelGrid styleClass="panelGridView" columns="2" id="pnlCrtClaim">
 				<p:column>
 					<p:outputLabel id="lblCRw" value="Reward : " />
 				</p:column>
@@ -21,8 +21,8 @@
 					<p:inputTextarea rows="4" cols="40" autocomplete="false" id="txtCDesc" value="#{claimController.claimBean.claimDesc}" />
 				</p:column>
 				<f:facet name="footer">
-						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{claimController.saveClaim}" />
-						<p:commandButton id="btnCancel" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" ajax="false" action="#{claimController.showViewClaim}" />
+					<p:commandButton id="btnSave" value="Save" ajax="false" action="#{claimController.saveClaim}" />
+					<p:commandButton id="btnCancel" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" ajax="false" action="#{claimController.redirectMain}" />
 				</f:facet>
 			</p:panelGrid>
 		</p:panel>

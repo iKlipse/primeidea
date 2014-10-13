@@ -28,6 +28,7 @@
 			<ref bean="newsService" />
 			<ref bean="notificationService" />
 			<ref bean="reviewService" />
+			<ref bean="reportService" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider">
@@ -41,7 +42,6 @@
 			<entry key="en" value="en-gb" />
 		</jaxrs:languageMappings>
 		<jaxrs:features>
-			<cxf:logging />
 		</jaxrs:features>
 	</jaxrs:server>
 </beans>

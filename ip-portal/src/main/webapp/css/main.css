@@ -41,6 +41,7 @@
 
 .ui-selectcheckboxmenu {
 	width: 94% !important;
+	border: solid lightgray 1px !important;
 }
 
 .ui-selectcheckboxmenu-label {
@@ -50,15 +51,18 @@
 }
 
 .ui-inputfield {
-	width: 92% !important;
+	width: 92.56% !important;
+	border: solid lightgray 1px !important;
 }
 
 .ui-editor {
-	width: 94% !important;
+	width: 94.1% !important;
+	border: solid lightgray 1px !important;
 }
 
 .ui-fileupload {
 	width: 94% !important;
+	border: solid lightgray 1px !important;
 }
 
 .autoFlow {
@@ -77,6 +81,7 @@
 
 .ui-selectonemenu {
 	width: 94% !important;
+	border: solid lightgray 1px !important;
 }
 
 .ui-selectonemenu-list {

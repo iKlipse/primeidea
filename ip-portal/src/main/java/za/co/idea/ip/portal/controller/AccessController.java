@@ -59,6 +59,7 @@ public class AccessController implements Serializable {
 	private boolean reviewChallengeEnabled;
 	private boolean reviewSolutionEnabled;
 	private boolean reviewIdeaEnabled;
+	private boolean reportEnabled;
 
 	public AccessController(Long userId) {
 		if (userId == null) {
@@ -442,6 +443,15 @@ public class AccessController implements Serializable {
 
 	public void setReviewIdeaEnabled(boolean reviewIdeaEnabled) {
 		this.reviewIdeaEnabled = reviewIdeaEnabled;
+	}
+
+	public boolean isReportEnabled() {
+		reportEnabled = functions.contains("Generate Report");
+		return reportEnabled;
+	}
+
+	public void setReportEnabled(boolean reportEnabled) {
+		this.reportEnabled = reportEnabled;
 	}
 
 }

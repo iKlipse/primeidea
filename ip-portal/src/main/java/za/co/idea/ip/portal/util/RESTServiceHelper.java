@@ -1,6 +1,7 @@
 package za.co.idea.ip.portal.util;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -245,6 +246,9 @@ public class RESTServiceHelper {
 			bean.setCrtdByName(ideaMessage.getCrtdByName());
 			bean.setStatusName(ideaMessage.getStatusName());
 			bean.setRevUserId(ideaMessage.getRevUserId());
+			// converting CrtdDt to String
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			bean.setCrtdDtFmt(dateFormat.format(ideaMessage.getCrtdDate()));
 			WebClient fetchDocClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/list/" + ideaMessage.getIdeaId() + "/ip_idea");
 			Collection<? extends FileMessage> res = new ArrayList<FileMessage>(fetchDocClient.accept(MediaType.APPLICATION_JSON).getCollection(FileMessage.class));
 			logger.info("Files list ");
@@ -293,6 +297,22 @@ public class RESTServiceHelper {
 	public static List<IdeaBean> fetchAllIdeasByUser(AccessController controller, long userId) {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
 		WebClient fetchIdeaClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/list/user/access/" + userId);
+		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
+		fetchIdeaClient.close();
+		for (IdeaMessage ideaMessage : ideas) {
+			IdeaBean bean = getIdeaBean(ideaMessage);
+			if (controller.isAdminEnabled() || bean.getCrtdById() == userId)
+				bean.setDisableEdit(false);
+			else
+				bean.setDisableEdit(true);
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	public static List<IdeaBean> fetchAllIdeas(AccessController controller, long userId) {
+		List<IdeaBean> ret = new ArrayList<IdeaBean>();
+		WebClient fetchIdeaClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/is/idea/list/");
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		fetchIdeaClient.close();
 		for (IdeaMessage ideaMessage : ideas) {
@@ -961,6 +981,9 @@ public class RESTServiceHelper {
 			bean.setFileName(challengeMessage.getFileName());
 			bean.setStatusName(challengeMessage.getStatusName());
 			bean.setCatName(challengeMessage.getCatName());
+			// converting CrtdDt to String
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			bean.setCrtdDtFmt(dateFormat.format(challengeMessage.getCrtdDt()));
 			WebClient fetchDocClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/list/" + challengeMessage.getId() + "/ip_challenge");
 			Collection<? extends FileMessage> res = new ArrayList<FileMessage>(fetchDocClient.accept(MediaType.APPLICATION_JSON).getCollection(FileMessage.class));
 			if (res != null && !res.isEmpty()) {
@@ -972,6 +995,7 @@ public class RESTServiceHelper {
 					fileBean.setName(fileMessage.getName());
 					fileBean.setSize(fileMessage.getSize());
 					fileBean.setType(fileMessage.getType());
+					logger.info("------------" + fileMessage.getUrl());
 					fileBean.setUrl(fileMessage.getUrl());
 					bean.getFiles().add(fileBean);
 				}
@@ -1146,6 +1170,7 @@ public class RESTServiceHelper {
 			bean.setClaimComment(message.getClaimComment());
 			bean.setUserName(message.getUserName());
 			bean.setcStatusName(message.getcStatusName());
+			bean.setRewardName(message.getRewardName());
 			ret.add(bean);
 		}
 		return ret;
@@ -1242,6 +1267,9 @@ public class RESTServiceHelper {
 			bean.setStatusName(solutionMessage.getStatusName());
 			bean.setCatName(solutionMessage.getCatName());
 			logger.info("------" + solutionMessage.getCrtdDt());
+			// converting CrtdDt to String
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			bean.setCrtdDtFmt(dateFormat.format(solutionMessage.getCrtdDt()));
 			if (solutionMessage.isSolImgAvl()) {
 				File file = new File("/resources/images/" + solutionMessage.getSolImg());
 				if (file.exists()) {
@@ -1808,11 +1836,24 @@ public class RESTServiceHelper {
 			bean.setStatusId(msg.getStatusId());
 			bean.setTblNm(msg.getTblNm());
 			bean.setGroupId(toStringArray(msg.getGroupId()));
+			bean.setReviewers(toReviewers(msg.getUserNm()));
 			ret.add(bean);
 		}
 		fetchReviewGroupsClient.close();
 		return ret;
 
+	}
+
+	private static String toReviewers(String[] users) {
+		String userNames = "";
+		for (int i = 0; i < users.length; i++) {
+			if (!userNames.equals("") && !users[i].equals("")) {
+				userNames = userNames + ", " + users[i];
+			} else if (!users[i].equals("")) {
+				userNames = users[i];
+			}
+		}
+		return userNames;
 	}
 
 	public static List<ReviewDisplayBean> fetchDisplayFromEntiry(Long entityId, String entityNm, Integer status) {

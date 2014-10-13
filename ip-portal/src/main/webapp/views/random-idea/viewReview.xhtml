@@ -12,11 +12,9 @@
 			<f:facet name="header">Created By</f:facet>
 			<p:outputLabel id="somVwRACrtdBy" value="#{idea.crtdByName}" />
 		</p:column>
-		<p:column width="15%" filterBy="#{idea.crtdDate}" filterFunction="#{randomIdeaController.filterDate}" sortBy="#{idea.crtdDate}">
+		<p:column width="15%" filterBy="#{idea.crtdDtFmt}" filterMatchMode="contains" sortBy="#{idea.crtdDate}">
 			<f:facet name="header">Created Date</f:facet>
-			<p:outputLabel id="somVwRCrtdDate" value="#{idea.crtdDate}">
-			    <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss"></f:convertDateTime>
-			</p:outputLabel>
+			<p:outputLabel id="somVwRCrtdDate" value="#{idea.crtdDtFmt}" />
 		</p:column>
 		<p:column width="7%">
 			<p:commandButton id="viewVwRButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{randomIdeaController.showEditReviewIdea}">

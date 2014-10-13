@@ -92,16 +92,13 @@
 			<p:outputLabel id="mlblGroup" value=" Primary Group : " />
 		</p:column>
 		<p:column>
-			<p:selectOneMenu id="msomPriGroup" value="#{adminController.userBean.groupId}">
-				<f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
-				<f:selectItems value="#{adminController.viewGroups}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
-			</p:selectOneMenu>
+		    <p:inputText id="msomPriGroup" value="#{adminController.userBean.priGroupName}" disabled="true"></p:inputText>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblActive" value="Active : " />
 		</p:column>
 		<p:column>
-			<p:selectBooleanButton id="msbbActive" value="#{adminController.userBean.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
+			<p:selectBooleanButton id="msbbActive" value="#{adminController.userBean.isActive}" onLabel="Yes" offLabel="No" disabled="true" onIcon="ui-icon-check" offIcon="ui-icon-close" />
 		</p:column>
 		<f:facet name="footer">
 			<p:commandButton id="btnSave" value="Save" actionListener="#{adminController.updateUserProfile}" update=":frmUserProfile:pnlUserProfile, :frmUserProfile:frmUserProfileMsg">

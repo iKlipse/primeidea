@@ -27,7 +27,7 @@
 			</p:column>
 			<p:column width="10%">
 				<f:facet name="header">Active</f:facet>
-				<p:selectBooleanButton id="fsbbActive" value="#{user.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" disabled="true" />
+				<p:selectBooleanButton id="fsbbActive" value="#{user.isActive}" style="width: 70px; text-align: center;" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" disabled="true" />
 			</p:column>
 			<p:column width="10%">
 				<p:commandButton id="fviewButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{adminController.showEditInActiveUser}">

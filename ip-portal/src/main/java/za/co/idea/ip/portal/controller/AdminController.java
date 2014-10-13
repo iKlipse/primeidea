@@ -377,6 +377,8 @@ public class AdminController implements Serializable {
 	public String showEditFunction() {
 		try {
 			pGrps = RESTServiceHelper.fetchActiveGroups();
+			if (functionBean.getGroupIdList() != null && functionBean.getGroupIdList().size() > 0)
+				selGrpId = toGroupIdArray(functionBean.getGroupIdList());
 			return "admfe";
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -618,6 +620,7 @@ public class AdminController implements Serializable {
 			userBean.setPriGroupName(userMessage.getPriGroupName());
 			userBean.setGroupId(userMessage.getGroupId());
 			userBean.setcPw(userBean.getPwd());
+			userBean.setuCrtdDate(userMessage.getuCrtdDate());
 			viewGroups = RESTServiceHelper.fetchAllGroups();
 			secqList = RESTServiceHelper.fetchAllSecQ();
 			showEditProfile = true;
@@ -1733,21 +1736,29 @@ public class AdminController implements Serializable {
 			ResponseMessage response = updateUserClient.accept(MediaType.APPLICATION_JSON).put(bean, ResponseMessage.class);
 			updateUserClient.close();
 			if (resetPasswd) {
-				User user = UserLocalServiceUtil.getUserByScreenName(10154, userBean.getScName());
-				user = UserLocalServiceUtil.updatePassword(user.getUserId(), "Passw123", "Passw123", false);
-				if (Validator.isNotNull(user)) {
-					WebClient pwdUpdateClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rpw/");
-					ResponseMessage pwdUpdateResponse = pwdUpdateClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5("Passw123".getBytes())), "Passw123" }, ResponseMessage.class);
-					pwdUpdateClient.close();
-					if (pwdUpdateResponse.getStatusCode() == 0) {
-						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Reset Successful", "Password Reset Successful");
-						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-					} else {
-						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, pwdUpdateResponse.getStatusCode() + " :: " + pwdUpdateResponse.getStatusDesc(), pwdUpdateResponse.getStatusCode() + " :: " + pwdUpdateResponse.getStatusDesc());
-						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				try {
+					User user = UserLocalServiceUtil.getUserByScreenName(10154, userBean.getScName());
+					if (Validator.isNotNull(user)) {
+						user = UserLocalServiceUtil.updatePassword(user.getUserId(), "Passw123", "Passw123", false);
+						if (Validator.isNotNull(user)) {
+							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Liferay User password Reset Success", "Liferay User password Reset Success");
+							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						} else {
+							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Liferay User password Reset Error", "Liferay User password Reset Error");
+							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						}
 					}
+				} catch (Exception e) {
+					logger.error(e, e);
+				}
+				WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rpw/");
+				ResponseMessage pwdUpdateResponse = loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5("Passw123".getBytes())), "Passw123" }, ResponseMessage.class);
+				loginClient.close();
+				if (pwdUpdateResponse.getStatusCode() == 0) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Reset Successful", "Password Reset Successful");
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				} else {
-					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Liferay User password Reset Error", "Liferay User password Reset Error");
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, pwdUpdateResponse.getStatusCode() + " :: " + pwdUpdateResponse.getStatusDesc(), pwdUpdateResponse.getStatusCode() + " :: " + pwdUpdateResponse.getStatusDesc());
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
 				resetPasswd = false;
@@ -1819,9 +1830,13 @@ public class AdminController implements Serializable {
 				ResponseMessage response = updateUserClient.accept(MediaType.APPLICATION_JSON).put(bean, ResponseMessage.class);
 				updateUserClient.close();
 				if (resetPasswd) {
-					WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rpw/");
-					loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5("Passw123".getBytes())), "Passw123" }, ResponseMessage.class);
-					loginClient.close();
+					try {
+						WebClient loginClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/rpw/");
+						loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5("Passw123".getBytes())), "Passw123" }, ResponseMessage.class);
+						loginClient.close();
+					} catch (Exception e) {
+						logger.error("Error : " + e);
+					}
 					resetPasswd = false;
 				}
 				if (resetSec) {
@@ -1867,6 +1882,10 @@ public class AdminController implements Serializable {
 			groupMessage.setGeMail(groupBean.getGeMail());
 			groupMessage.setgId(COUNTER.getNextId("IpGroup"));
 			groupMessage.setgName(groupBean.getgName());
+			logger.info("------selUserId: " + groupBean);
+			for (int i = 0; i < selUserId.length; i++) {
+				logger.info("user: " + selUserId[i]);
+			}
 			groupMessage.setUserIdList(toLongArray(selUserId));
 			groupMessage.setIsActive(true);
 			groupMessage.setpGrpId(groupBean.getSelPGrp());
@@ -2064,7 +2083,9 @@ public class AdminController implements Serializable {
 			functionMessage.setFuncId(functionBean.getFuncId());
 			functionMessage.setFuncName(functionBean.getFuncName());
 			functionMessage.setCrtdBy(userId);
+			logger.info("GrpIds selected :: " + selGrpId.length);
 			functionMessage.setGroupIdList(toLongArray(selGrpId));
+			logger.info("GrpIds sent :: " + functionMessage.getGroupIdList().length);
 			ResponseMessage response = updateFunctionClient.accept(MediaType.APPLICATION_JSON).put(functionMessage, ResponseMessage.class);
 			updateFunctionClient.close();
 			if (response.getStatusCode() == 0) {
@@ -2553,6 +2574,16 @@ public class AdminController implements Serializable {
 		int i = 0;
 		for (UserBean user : users) {
 			ret[i] = user.getuId() + "";
+			i++;
+		}
+		return ret;
+	}
+
+	private String[] toGroupIdArray(List<Long> groupIdList) {
+		String[] ret = new String[groupIdList.size()];
+		int i = 0;
+		for (Long id : groupIdList) {
+			ret[i] = id.toString();
 			i++;
 		}
 		return ret;

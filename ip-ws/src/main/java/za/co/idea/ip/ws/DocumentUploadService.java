@@ -242,7 +242,9 @@ public class DocumentUploadService {
 				message.setName(blob.getBlobName());
 				message.setSize((blob.getBlobSize() != null) ? blob.getBlobSize() : 0l);
 				message.setType(blob.getBlobContentType());
+				logger.info("service : "+BUNDLE.getString("ws.host"));
 				message.setUrl("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/fds?blobId=" + blob.getBlobId());
+				logger.info("-----Service : "+message.getName()+"----url : "+message.getUrl());
 				message.setLoc(BUNDLE.getString("base.dir") + "/" + blob.getBlobEntityTblNm() + "/" + blob.getBlobEntityId() + "/" + blob.getBlobName());
 				ret.add((T) message);
 			}

@@ -3,10 +3,18 @@
 	<h:body>
 		<h:form id="frmImgScroll" enctype="multipart/form-data">
 			<p:carousel id="imgScroller" styleClass="imgScroller" autoPlayInterval="5000" numVisible="1" circular="true">
-				<p:graphicImage library="images" name="banner/1.jpg" style="max-width: 100% !important; height: auto !important" />
-				<p:graphicImage library="images" name="banner/2.jpg" style="max-width: 100% !important; height: auto !important" />
-				<p:graphicImage library="images" name="banner/3.jpg" style="max-width: 100% !important; height: auto !important" />
-				<p:graphicImage library="images" name="banner/4.jpg" style="max-width: 100% !important; height: auto !important" />
+				<h:panelGrid columns="1">
+					<h:graphicImage library="images" name="banner/1.jpg" style="max-width: 100% !important; height: auto !important" />
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<h:graphicImage library="images" name="banner/2.jpg" style="max-width: 100% !important; height: auto !important" />
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<h:graphicImage library="images" name="banner/3.jpg" style="max-width: 100% !important; height: auto !important" />
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<h:graphicImage library="images" name="banner/4.jpg" style="max-width: 100% !important; height: auto !important" />
+				</h:panelGrid>
 			</p:carousel>
 		</h:form>
 	</h:body>

@@ -103,6 +103,14 @@
 		<property name="ipGroupDAO" ref="IpGroupDAO" />
 		<property name="ipUserDAO" ref="IpUserDAO" />
 	</bean>
+	<bean id="reportService" class="za.co.idea.ip.ws.ReportService">
+		<property name="ipClaimDAO" ref="IpClaimDAO" />
+		<property name="ipUserActivityDAO" ref="IpUserActivityDAO" />
+		<property name="ipGroupUserActivityDAO" ref="IpGroupUserActivityDAO" />
+		<property name="ipIdeaGrpCntDAO" ref="IpIdeaGrpCntDAO" />
+		<property name="ipGroupDAO" ref="IpGroupDAO" />
+		<property name="ipUserDAO" ref="IpUserDAO" />
+	</bean>
 	<bean id="notificationService" class="za.co.idea.ip.ws.NotificationService">
 		<property name="ipNativeSQLDAO" ref="IpNativeSQLDAO" />
 		<property name="ipNotifGroupDAO" ref="IpNotifGroupDAO" />

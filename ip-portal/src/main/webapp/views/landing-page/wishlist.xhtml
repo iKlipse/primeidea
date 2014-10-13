@@ -26,12 +26,15 @@
 							<p:graphicImage library="images" name="star_highlight.jpg" height="30px" width="30px" rendered="#{rewards.rwTaggable}" />
 							<p:graphicImage library="images" name="star.jpg" height="30px" width="30px" rendered="#{!rewards.rwTaggable}" />
 							<f:setPropertyActionListener value="4" target="#{landingPageController.toView}" />
+							<f:setPropertyActionListener value="1" target="#{claimController.returnView}" />
 							<f:setPropertyActionListener value="#{rewards}" target="#{landingPageController.rewardsBean}" />
 						</p:commandLink>
 						<p:commandButton id="btnClaim" value="I Want Some" ajax="false" action="#{claimController.showClaimReward}" rendered="#{rewards.rwClaimable}">
 							<f:param name="rewardsId" id="rewardsId" value="#{rewards.rwId}" />
 							<f:param name="rwQuantity" id="rwQuantity" value="#{rewards.rwQuantity}" />
 							<f:param name="rwValue" id="rwValue" value="#{rewards.rwValue}" />
+							<f:setPropertyActionListener value="1" target="#{claimController.returnView}" />
+							<f:setPropertyActionListener value="4" target="#{landingPageController.toView}" />
 							<f:setPropertyActionListener value="#{landingPageController.userId}" target="#{claimController.userId}" />
 						</p:commandButton>
 					</center>

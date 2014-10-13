@@ -6,6 +6,8 @@ import javax.portlet.PortletConfig;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.apache.log4j.Logger;
+
 import za.co.idea.ip.hook.model.IpUser;
 import za.co.idea.ip.hook.service.IpLoginServiceUtil;
 import za.co.idea.ip.hook.service.IpUserServiceUtil;
@@ -23,6 +25,8 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 
 public class ExtLoginAction extends BaseStrutsPortletAction {
+	private static final Logger LOGGER = Logger.getLogger(ExtLoginAction.class);
+
 	public void processAction(StrutsPortletAction originalStrutsPortletAction, PortletConfig portletConfig, ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 		Company company = PortalUtil.getCompany(actionRequest);
 		String authType = company.getAuthType();
@@ -37,16 +41,24 @@ public class ExtLoginAction extends BaseStrutsPortletAction {
 					long userId = themeDisplay.getUserId();
 					IpUser ipUser = IpUserServiceUtil.getIpUser(login, password);
 					if (Validator.isNotNull(ipUser)) {
-						ServiceContext serviceContext = ServiceContextFactory.getInstance(User.class.getName(), actionRequest);
-						if (IpUserServiceUtil.addLiferayUser(ipUser.getUserId(), ipUser.getUserFName(), ipUser.getUserLName(), ipUser.getUserEmail(), password, ipUser.getUserScreenName(), userId, company.getCompanyId(), serviceContext)) {
-							originalStrutsPortletAction.processAction(originalStrutsPortletAction, portletConfig, actionRequest, actionResponse);
+						LOGGER.info("User :: " + ipUser.getUserScreenName() + " :: " + ipUser.getUserStatus());
+						if (ipUser.getUserStatus().equalsIgnoreCase("y")) {
+							LOGGER.info("User :: " + ipUser.getUserScreenName() + " :: " + ipUser.getUserStatus());
+							ServiceContext serviceContext = ServiceContextFactory.getInstance(User.class.getName(), actionRequest);
+							if (IpUserServiceUtil.addLiferayUser(ipUser.getUserId(), ipUser.getUserFName(), ipUser.getUserLName(), ipUser.getUserEmail(), password, ipUser.getUserScreenName(), userId, company.getCompanyId(), serviceContext)) {
+								originalStrutsPortletAction.processAction(originalStrutsPortletAction, portletConfig, actionRequest, actionResponse);
+							} else {
+								LOGGER.info("User :: " + ipUser.getUserScreenName() + " :: " + ipUser.getUserStatus());
+								SessionErrors.add(actionRequest, "no-such-user-exception");
+							}
 						} else {
-							SessionErrors.add(actionRequest, "pattamatta-no-such-user-exception");
+							LOGGER.info("User :: " + ipUser.getUserScreenName() + " :: " + ipUser.getUserStatus());
+							SessionErrors.add(actionRequest, "inactive-user-exception");
 						}
 					}
 				}
 			} else {
-				SessionErrors.add(actionRequest, "pattamatta-no-such-user-exception");
+				SessionErrors.add(actionRequest, "no-such-user-exception");
 			}
 		} else {
 			originalStrutsPortletAction.processAction(originalStrutsPortletAction, portletConfig, actionRequest, actionResponse);

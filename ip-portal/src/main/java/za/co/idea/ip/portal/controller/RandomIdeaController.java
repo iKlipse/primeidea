@@ -218,7 +218,10 @@ public class RandomIdeaController implements Serializable {
 
 	public void showViewIdeas() {
 		try {
-			viewIdeas = RESTServiceHelper.fetchAllIdeasByUser(getController(), userId);
+			if (getController().isAdminEnabled())
+				viewIdeas = RESTServiceHelper.fetchAllIdeas(getController(), userId);
+			else
+				viewIdeas = RESTServiceHelper.fetchAllIdeasByUser(getController(), userId);
 			ideaCats = RESTServiceHelper.fetchAllIdeaCat();
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			ideaStatuses = RESTServiceHelper.fetchAllIdeaStatuses();

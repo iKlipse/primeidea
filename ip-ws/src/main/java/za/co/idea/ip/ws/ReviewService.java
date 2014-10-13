@@ -149,17 +149,25 @@ public class ReviewService {
 			List rvs = ipReviewDAO.findByEntityIdEntityName(entityId, tblNm, j + 1);
 			ReviewMessage message = new ReviewMessage();
 			message.setEntityId(entityId);
-			message.setStatusId(j);
+			message.setStatusId(j+1);
 			message.setTblNm(tblNm);
 			if (rvs != null && rvs.size() > 0) {
 				Long[] grps = new Long[rvs.size()];
+				Long[] uids = new Long[rvs.size()];
+				String[] uNms = new String[rvs.size()];
 				int k = 0;
 				for (Object object : rvs) {
 					IpReview review = (IpReview) object;
 					grps[k] = review.getIpGroup().getGroupId();
+					uids[k] = review.getRevSelUserId();
+					if (uids[k] != null)
+						uNms[k] = ipUserDAO.findById(uids[k]).getUserScreenName();
+					else
+						uNms[k] = "";
 					k++;
 				}
 				message.setGroupId(grps);
+				message.setUserNm(uNms);
 			}
 			ret.add((T) message);
 		}

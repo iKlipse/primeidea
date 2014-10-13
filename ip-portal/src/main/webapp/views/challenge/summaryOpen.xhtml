@@ -89,6 +89,26 @@
 			<p:tagCloud id="tgSumoLikes" model="#{challengeController.chalLikes}" />
 		</p:panelGrid>
 	</p:overlayPanel>
+	<p:panelGrid styleClass="panelView" columns="1">
+		<p:panelGrid id="pnlGrdItmSel" styleClass="panelGridView" columns="2">
+			<p:column>
+				<p:outputLabel value="Review Stages : " />
+			</p:column>
+			<p:column>
+				<p:outputLabel value="#{challengeController.rvIdCnt}"></p:outputLabel>
+			</p:column>
+		</p:panelGrid>
+		<p:dataTable id="dtRevGrp" value="#{challengeController.rvIds}" paginator="false" var="rv">
+			<p:column headerText="Stage">
+				<p:outputLabel value="#{rv.statusId}" />
+			</p:column>
+			<p:column headerText="Groups">
+				<p:outputLabel value="#{rv.reviewers}" />
+			</p:column>
+		</p:dataTable>
+	</p:panelGrid>
+	<p:panelGrid styleClass="panelGridView" columns="1">
+	</p:panelGrid>
 	<p:dataGrid id="dgSumoSolForChal" value="#{challengeController.viewSolutions}" var="sol" columns="1">
 		<p:scrollPanel>
 			<p:panel styleClass="panelView" header="Solution By - #{sol.crtByName} - #{sol.crtdDt}">

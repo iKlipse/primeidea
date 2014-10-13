@@ -64,10 +64,12 @@
 			</p:selectCheckboxMenu>
 		</p:column>
 		<f:facet name="footer">
+		   <p:outputPanel style="float: left important;border: none !important; background-color: white !important; width: auto !important; text-align: right !important;">  
 			<p:commandButton id="btnISave" value="Save" actionListener="#{challengeController.saveChallenge}" update=":frmChalCtrlr:pnlChalDet, :frmChalCtrlr:frmChalCtrlrMsg">
 				<f:setPropertyActionListener value="3" target="#{challengeController.toView}" />
 			</p:commandButton>
 			<p:commandButton id="btnCrtIARv" value="Assign Reviewers" type="button" onclick="PF('dlgRwUpd').show();" />
+			</p:outputPanel>
 		</f:facet>
 	</p:panelGrid>
 	<p:dialog id="dlgRwUpd" widgetVar="dlgRwUpd" modal="true">
@@ -94,7 +96,7 @@
 			</p:column>
 			<p:column headerText="Groups">
 				<p:selectCheckboxMenu id="rvGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{rv.groupId}">
-					<f:selectItems value="#{challengeController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
+					<f:selectItems value="#{challengeController.reviewGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 				</p:selectCheckboxMenu>
 			</p:column>
 			<f:facet name="footer">

@@ -17,17 +17,20 @@
 					<p:column>
 						<p:panel>
 							<p:panelGrid styleClass="panelGridView" id="pnlStats" columns="3">
-								<p:column width="33%">
-									<p:outputLabel id="ideasCnt" value="#{adminController.statsBean.ideasCount}" style="text-align: center !important; background-color: #8c4799 !important; color: white !important" />
+								<p:column width="33%" >
+									<p:outputLabel id="ideasCnt" value="#{adminController.statsBean.ideasCount}" style="text-align: center !important; font-weight: bold !important;  font-size: 20px !important; color: #8c4799 !important" />
+									<p:outputLabel id="ideasText" value="Ideas" style="text-align: center !important; font-weight: bold !important; font-size: 10px !important;" />
 									<p:tooltip for="ideasCnt" value="Ideas Count" />
 								</p:column>
 								<p:column width="33%">
-									<p:outputLabel id="solsCnt" value="#{adminController.statsBean.solutionsCount}" style="text-align: center !important; background-color: #ef6079 !important; color: white !important" />
+									<p:outputLabel id="solsCnt" value="#{adminController.statsBean.solutionsCount}" style="text-align: center !important; font-weight: bold !important;font-size: 20px !important;  color: #ef6079 !important" />
+									<p:outputLabel id="solText" value="Solutions" style="text-align: center !important; font-weight: bold !important; font-size: 10px !important;" />
 									<p:tooltip for="solsCnt" value="Solutions Count" />
 								</p:column>
 								<p:column width="33%">
-									<p:outputLabel id="wlCnt" value="#{adminController.statsBean.pointsCount}" style="text-align: center !important; font-weight: bold !important; background-color: #ff8d6d !important; color: white !important" />
-									<p:tooltip for="wlCnt" value="Total Points" />
+									<p:outputLabel id="wlCnt" value="#{adminController.statsBean.pointsCount}" style="text-align: center !important; font-weight: bold !important; font-size: 20px !important;  color: #ff8d6d !important" />
+									<p:outputLabel id="pointsText" value="Points" style="text-align: center !important; font-weight: bold !important; font-size: 10px !important;" />
+									<p:tooltip for="wlCnt" value="Points" />
 								</p:column>
 							</p:panelGrid>
 						</p:panel>

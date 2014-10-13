@@ -8,6 +8,7 @@ public class ReviewBean implements Serializable {
 	private String[] groupId;
 	private Long entityId;
 	private String tblNm;
+	private String reviewers;
 
 	public Integer getStatusId() {
 		return statusId;
@@ -39,6 +40,14 @@ public class ReviewBean implements Serializable {
 
 	public void setTblNm(String tblNm) {
 		this.tblNm = tblNm;
+	}
+
+	public String getReviewers() {
+		return reviewers;
+	}
+
+	public void setReviewers(String reviewers) {
+		this.reviewers = reviewers;
 	}
 
 }

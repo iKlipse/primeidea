@@ -29,6 +29,7 @@ public class IdeaBean implements Serializable {
 	private boolean disableField;
 	private List<FileBean> files;
 	private boolean attachsAvail;
+	private String crtdDtFmt;
 
 	public Long getIdeaId() {
 		return ideaId;
@@ -194,5 +195,13 @@ public class IdeaBean implements Serializable {
 
 	public void setAttachsAvail(boolean attachsAvail) {
 		this.attachsAvail = attachsAvail;
+	}
+
+	public String getCrtdDtFmt() {
+		return crtdDtFmt;
+	}
+
+	public void setCrtdDtFmt(String crtdDtFmt) {
+		this.crtdDtFmt = crtdDtFmt;
 	}
 }

@@ -69,6 +69,8 @@ public class ClaimController implements Serializable {
 			return "lani";
 		case 2:
 			return "clmvc";
+		case 3:
+			return "rwss";
 		default:
 			return "";
 		}

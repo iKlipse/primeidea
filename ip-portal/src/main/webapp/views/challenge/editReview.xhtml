@@ -63,7 +63,7 @@
 			<p:outputLabel id="lblEdtrIDownload" value="Download File : " />
 		</p:column>
 		<p:column>
-			<p:dataGrid id="edtChalRDocCar" var="file" value="#{challengeController.challengeBean.files}" columns="3" rows="1" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="No Attachments">
+			<p:dataGrid id="edtChalRDocCar" var="file" value="#{challengeController.challengeBean.files}" columns="3" rows="1" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="No Attachments">
 				<p:panel styleClass="dgView">
 					<h:outputLink value="#{file.url}">
 						<p:graphicImage name="attach-icon.png" library="images" height="25px" width="25px" style="float: left !important;vertical-align: top !important" />
@@ -121,7 +121,7 @@
 			</p:column>
 			<p:column headerText="Groups">
 				<p:selectCheckboxMenu id="rvGroupList" label="Please Select" filter="true" filterMatchMode="contains" value="#{rv.groupId}">
-					<f:selectItems value="#{challengeController.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
+					<f:selectItems value="#{challengeController.reviewGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 				</p:selectCheckboxMenu>
 			</p:column>
 			<f:facet name="footer">

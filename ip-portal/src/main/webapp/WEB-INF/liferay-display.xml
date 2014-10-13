@@ -20,5 +20,6 @@
 		<portlet id="wishlist"></portlet>
 		<portlet id="user-profile"></portlet>
 		<portlet id="wishlist"></portlet>
+		<portlet id="Reports"></portlet>
 	</category>
 </display>

@@ -24,7 +24,6 @@ public class IpNativeSQLDAO {
 	}
 
 	protected void initDao() {
-		// do nothing
 	}
 
 	public Long getNextId(Class clazz) {
@@ -60,5 +59,4 @@ public class IpNativeSQLDAO {
 		}
 		return ret;
 	}
-
 }

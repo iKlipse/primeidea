@@ -68,6 +68,7 @@ public class ChallengeController implements Serializable {
 	private List<ListSelectorBean> solutionCats;
 	private List<ListSelectorBean> solutionStatuses;
 	private List<GroupBean> pGrps;
+	private List<GroupBean> reviewGrps;
 	private String[] selGrpId;
 	private TagCloudModel chalLikes;
 	private List<TagBean> chalComments;
@@ -116,6 +117,8 @@ public class ChallengeController implements Serializable {
 	private List<FileBean> chalUploadFiles;
 	private List<FileBean> solUploadFiles;
 	private Long delTagId;
+	private boolean disableEdit;
+	private boolean disableField;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
@@ -312,6 +315,7 @@ public class ChallengeController implements Serializable {
 			challengeCats = RESTServiceHelper.fetchAllChallengeCat();
 			challengeStatuses = RESTServiceHelper.fetchAllChallengeStatuses();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
+			reviewGrps = RESTServiceHelper.fetchReviewGroups();
 			challengeBean = new ChallengeBean();
 			selGrpId = null;
 			showPubChal = false;
@@ -354,6 +358,7 @@ public class ChallengeController implements Serializable {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
 			challengeStatuses = RESTServiceHelper.fetchFilteredChallengeStatuses(challengeBean.getId());
 			pGrps = RESTServiceHelper.fetchActiveGroups();
+			reviewGrps = RESTServiceHelper.fetchReviewGroups();
 			rvIds = RESTServiceHelper.fetchReviewGroups(challengeBean.getId(), "ip_challenge");
 			rvIdCnt = rvIds.size();
 			return "chale";
@@ -371,6 +376,7 @@ public class ChallengeController implements Serializable {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
 			challengeStatuses = RESTServiceHelper.fetchFilteredChallengeStatuses(challengeBean.getId());
 			pGrps = RESTServiceHelper.fetchActiveGroups();
+			reviewGrps = RESTServiceHelper.fetchReviewGroups();
 			rvIds = RESTServiceHelper.fetchReviewGroups(challengeBean.getId(), "ip_challenge");
 			rvIdCnt = rvIds.size();
 			return "chaleo";
@@ -388,6 +394,7 @@ public class ChallengeController implements Serializable {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
 			challengeStatuses = RESTServiceHelper.fetchAllReviewChallengeStatuses(challengeBean.getId(), challengeBean.getStatusId());
 			pGrps = RESTServiceHelper.fetchActiveGroups();
+			reviewGrps = RESTServiceHelper.fetchReviewGroups();
 			rvIds = RESTServiceHelper.fetchReviewGroups(challengeBean.getId(), "ip_challenge");
 			rvIdCnt = rvIds.size();
 			return "chaler";
@@ -417,7 +424,6 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String showSummaryOpenChallenge() {
-		rvIds = RESTServiceHelper.fetchReviewGroups(challengeBean.getId(), "ip_challenge");
 		chalLikes = RESTServiceHelper.fetchAllBuildonLikes(challengeBean.getId(), 2);
 		chalComments = RESTServiceHelper.fetchAllBuildonComments(challengeBean.getId(), 2);
 		chalLikeCnt = "(" + chalLikes.getTags().size() + ")	";
@@ -427,6 +433,7 @@ public class ChallengeController implements Serializable {
 		commentText = "";
 		viewSolutions = RESTServiceHelper.fetchAllSolutionsByChal(challengeBean.getId());
 		rvIds = RESTServiceHelper.fetchReviewGroups(challengeBean.getId(), "ip_challenge");
+		pGrps = RESTServiceHelper.fetchActiveGroups();
 		rvIdCnt = rvIds.size();
 		return "chalso";
 	}
@@ -1005,6 +1012,94 @@ public class ChallengeController implements Serializable {
 		}
 	}
 
+	public String saveSubmitSolution() {
+		try {
+			if (titleAvail) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			} else {
+				List<String> errors = validateSolution();
+				if (errors.size() > 0) {
+					for (String error : errors) {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+					}
+					return "";
+				} else {
+					WebClient addSolutionClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ss/solution/add");
+					SolutionMessage message = new SolutionMessage();
+					message.setCatId(solutionBean.getCatId());
+					message.setChalId(solutionBean.getChalId());
+					message.setCrtdById(userId);
+					message.setCrtdDt(new Date());
+					message.setDesc(solutionBean.getDesc());
+					message.setId(COUNTER.getNextId("IpSolution"));
+					if (saveAsOpen) {
+						message.setStatusId(1);
+					} else {
+						message.setStatusId(2);
+					}
+					message.setTags(solutionBean.getTags());
+					message.setTitle(solutionBean.getTitle());
+					message.setRvIdCnt(rvIdCnt);
+					ResponseMessage response = addSolutionClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+					addSolutionClient.close();
+					if (response.getStatusCode() == 0) {
+						if (getSolUploadFiles().size() > 0) {
+							int i = 0;
+							for (FileBean bean : getSolUploadFiles()) {
+								WebClient createBlobClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/createMulti");
+								AttachmentMessage attachMessage = new AttachmentMessage();
+								attachMessage.setBlobContentType(bean.getType());
+								attachMessage.setBlobEntityId(message.getId());
+								attachMessage.setBlobEntityTblNm("ip_solution");
+								attachMessage.setBlobName(bean.getName());
+								attachMessage.setBlobSize(bean.getSize());
+								attachMessage.setBlobId(COUNTER.getNextId("IpBlob"));
+								Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(attachMessage);
+								createBlobClient.close();
+								if (crtRes.getStatus() == 200) {
+									WebClient client = WebClient.create("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/ds/doc/multiUpload/" + attachMessage.getBlobId() + "/" + ((i == 0) ? "true" : "false"), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+									client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+									client.header("Accept", MediaType.APPLICATION_JSON);
+									client.accept(MediaType.APPLICATION_JSON).post(new Attachment(attachMessage.getBlobId().toString(), bean.getContent().getStream(), new ContentDisposition("attachment;filename=" + bean.getName())));
+									client.close();
+								}
+								i++;
+							}
+						}
+						solUploadContent = null;
+						rvIdCnt = 1;
+						rvIds = null;
+						saveAsOpen = false;
+						solUploadFiles = null;
+						logger.info("------solution saved");
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Solution Saved", "Solution Saved");
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						if (saveAsOpen) {
+							logger.info("in save");
+							showViewSolution();
+						} else {
+							logger.info("in else");
+							showViewOpenSolution();
+						}
+						return redirectMain();
+					} else {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						return "";
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create request", "System error occurred, cannot perform create request");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
 	public String updateSolution() {
 		try {
 			List<String> errors = validateSolution();
@@ -1194,7 +1289,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	public void initializeChalAssignReviews() {
-		pGrps = RESTServiceHelper.fetchReviewGroups();
+		reviewGrps = RESTServiceHelper.fetchReviewGroups();
 		rvIds = new ArrayList<ReviewBean>();
 		if (rvIdCnt != null)
 			for (int i = 0; i < rvIdCnt; i++) {
@@ -1704,6 +1799,16 @@ public class ChallengeController implements Serializable {
 		this.pGrps = pGrps;
 	}
 
+	public List<GroupBean> getReviewGrps() {
+		if (reviewGrps == null)
+			reviewGrps = new ArrayList<GroupBean>();
+		return reviewGrps;
+	}
+
+	public void setReviewGrps(List<GroupBean> reviewGrps) {
+		this.reviewGrps = reviewGrps;
+	}
+
 	public String[] getSelGrpId() {
 		if (selGrpId == null)
 			selGrpId = new String[] {};
@@ -1886,5 +1991,21 @@ public class ChallengeController implements Serializable {
 
 	public void setDelTagId(Long delTagId) {
 		this.delTagId = delTagId;
+	}
+
+	public boolean isDisableEdit() {
+		return disableEdit;
+	}
+
+	public void setDisableEdit(boolean disableEdit) {
+		this.disableEdit = disableEdit;
+	}
+
+	public boolean isDisableField() {
+		return disableField;
+	}
+
+	public void setDisableField(boolean disableField) {
+		this.disableField = disableField;
 	}
 }

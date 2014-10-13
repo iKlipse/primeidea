@@ -158,6 +158,7 @@ public class ClaimService {
 			message.setRewardsId(claim.getIpRewards().getRwId());
 			message.setUserId(claim.getIpUser().getUserId());
 			message.setUserName(claim.getIpUser().getUserScreenName());
+			message.setRewardName(claim.getIpRewards().getRwTitle());
 		} catch (Exception e) {
 			logger.error(e, e);
 		}

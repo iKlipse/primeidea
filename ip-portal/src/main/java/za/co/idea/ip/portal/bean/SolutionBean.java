@@ -41,6 +41,7 @@ public class SolutionBean implements Serializable {
 	private boolean disableEdit;
 	private boolean disableField;
 	private List<FileBean> files;
+	private String crtdDtFmt;
 
 	public Long getId() {
 		return id;
@@ -294,5 +295,13 @@ public class SolutionBean implements Serializable {
 
 	public void setFiles(List<FileBean> files) {
 		this.files = files;
+	}
+
+	public String getCrtdDtFmt() {
+		return crtdDtFmt;
+	}
+
+	public void setCrtdDtFmt(String crtdDtFmt) {
+		this.crtdDtFmt = crtdDtFmt;
 	}
 }

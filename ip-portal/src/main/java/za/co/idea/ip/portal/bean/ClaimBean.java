@@ -14,6 +14,7 @@ public class ClaimBean implements Serializable {
 	private Date claimCrtdDt;
 	private String cStatusName;
 	private String userName;
+	private String rewardName;
 
 	public Long getClaimId() {
 		return claimId;
@@ -85,6 +86,14 @@ public class ClaimBean implements Serializable {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getRewardName() {
+		return rewardName;
+	}
+
+	public void setRewardName(String rewardName) {
+		this.rewardName = rewardName;
 	}
 
 }

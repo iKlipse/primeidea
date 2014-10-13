@@ -16,11 +16,9 @@
 			<f:facet name="header">Created By</f:facet>
 			<p:outputLabel id="somVwACrtdBy" value="#{solution.crtByName}" />
 		</p:column>
-		<p:column width="13%" filterBy="#{solution.crtdDt}" filterFunction="#{challengeController.filterDate}" sortBy="#{solution.crtdDt}">
+		<p:column width="13%" filterBy="#{solution.crtdDtFmt}" filterMatchMode="contains" sortBy="#{solution.crtdDt}">
 			<f:facet name="header">Created Date</f:facet>
-			<p:outputLabel id="somVwACrtdDt" value="#{solution.crtdDt}">
-				<f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss"></f:convertDateTime>
-			</p:outputLabel>
+			<p:outputLabel id="somVwACrtdDt" value="#{solution.crtdDtFmt}" />
 		</p:column>
 		<p:column width="8%">
 			<p:commandButton id="viewVwButton" icon="ui-icon-pencil" ajax="false" immediate="true" action="#{challengeController.showEditSolution}" disabled="#{solution.disableEdit}">

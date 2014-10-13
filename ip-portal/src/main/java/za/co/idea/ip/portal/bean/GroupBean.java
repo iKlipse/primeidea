@@ -22,6 +22,7 @@ public class GroupBean implements Serializable {
 	private boolean imgAvl;
 	private String blobUrl;
 	private Date gCrtdDate;
+	private String[] userIds;
 
 	public Long getgId() {
 		return gId;
@@ -135,6 +136,14 @@ public class GroupBean implements Serializable {
 
 	public void setgCrtdDate(Date gCrtdDate) {
 		this.gCrtdDate = gCrtdDate;
+	}
+
+	public String[] getUserIds() {
+		return userIds;
+	}
+
+	public void setUserIds(String[] userIds) {
+		this.userIds = userIds;
 	}
 
 }

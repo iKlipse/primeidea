@@ -3,13 +3,19 @@
 		<f:facet name="header">
 			<p:outputLabel id="ttlPntsHeader" value="Total Points : #{landingPageController.totalPoints}" />
 		</f:facet>
-		<p:column width="70%">
+		<p:column width="60%">
 			<f:facet name="header">Comments</f:facet>
 			<p:outputLabel id="txtComments" value="#{point.comments}" />
 		</p:column>
-		<p:column width="30%">
+		<p:column width="20%">
 			<f:facet name="header">Point Value</f:facet>
 			<p:outputLabel id="txtPointVal" value="#{point.pointValue}" />
+		</p:column>
+		<p:column width="20%">
+			<f:facet name="header">Date</f:facet>
+			<p:outputLabel id="txtPointDate" value="#{point.crtdDt}" >
+			  <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss" />
+			</p:outputLabel>
 		</p:column>
 	</p:dataTable>
 </ui:composition>

@@ -18,6 +18,7 @@
 		<liferay.app.server.portal.dir>C:\Java\liferay\portal-tcat\tomcat-7.0.42\webapps\ROOT</liferay.app.server.portal.dir>
 		<org.springframework.version>4.1.0.RELEASE</org.springframework.version>
 		<org.apache.cxf.version>2.7.10</org.apache.cxf.version>
+		<jasper.reports.version>5.6.0</jasper.reports.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -242,6 +243,16 @@
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>${jasper.reports.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.28</version>
 		</dependency>
 	</dependencies>
 	<build>

@@ -12,7 +12,7 @@
 			</p:selectOneMenu>
 		</p:column>
 	</p:panelGrid>
-	<p:dataGrid id="dgStrRewards" var="rewards" value="#{rewardsController.viewRewardsBeans}" columns="3" rows="12" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+	<p:dataGrid id="dgStrRewards" var="rewards" value="#{rewardsController.viewRewardsBeans}" columns="3" rows="12" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
 		<p:panel styleClass="dgView">
 			<p:panelGrid styleClass="panelGridView" id="pnlContent" columns="1">
 				<p:column>
@@ -39,11 +39,15 @@
 							<p:graphicImage library="images" name="star_highlight.jpg" height="30px" width="30px" rendered="#{rewards.rwTaggable}" />
 							<p:graphicImage library="images" name="star.jpg" height="30px" width="30px" rendered="#{!rewards.rwTaggable}" />
 							<f:setPropertyActionListener value="#{rewards}" target="#{rewardsController.rewardsBean}" />
+							<f:setPropertyActionListener value="3" target="#{claimController.returnView}" />
+							<f:setPropertyActionListener value="4" target="#{landingPageController.toView}" />
 						</p:commandLink>
 						<p:commandButton id="btnClaim" value="I Want Some" ajax="false" action="#{claimController.showClaimReward}" rendered="#{rewards.rwClaimable}">
 							<f:param name="rewardsId" id="rewardsId" value="#{rewards.rwId}" />
 							<f:param name="rwQuantity" id="rwQuantity" value="#{rewards.rwQuantity}" />
 							<f:param name="rwValue" id="rwValue" value="#{rewards.rwValue}" />
+							<f:setPropertyActionListener value="4" target="#{landingPageController.toView}" />
+							<f:setPropertyActionListener value="3" target="#{claimController.returnView}" />
 							<f:setPropertyActionListener value="#{landingPageController.userId}" target="#{claimController.userId}" />
 						</p:commandButton>
 					</center>
