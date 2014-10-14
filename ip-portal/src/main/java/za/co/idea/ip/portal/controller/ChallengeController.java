@@ -200,6 +200,7 @@ public class ChallengeController implements Serializable {
 			solutionStatuses = RESTServiceHelper.fetchAllSolutionStatuses();
 			viewChallenges = RESTServiceHelper.fetchAllChallengesByStatusIdUserId(userId, 8);
 			solutionBean = new SolutionBean();
+			viewSolutions = RESTServiceHelper.fetchAllSolutionsByStatusIdUserId(userId, 2);
 			saveAsOpen = false;
 			showPubSol = true;
 			showViewSol = false;

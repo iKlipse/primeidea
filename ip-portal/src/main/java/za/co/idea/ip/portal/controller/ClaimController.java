@@ -183,7 +183,7 @@ public class ClaimController implements Serializable {
 			ResponseMessage response = addClaimClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			addClaimClient.close();
 			if (response.getStatusCode() == 0) {
-				return showViewClaimByUser();
+				return redirectMain();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);

@@ -3,9 +3,9 @@
 		<p:panel styleClass="panelView">
 			<p:panelGrid styleClass="panelGridView">
 				<p:row>
-					<p:column colspan="2" rowspan="7">
-						<p:graphicImage styleClass="grid-img-loc" id="imgAvatar" name="#{solution.crtByImgPath}" library="images" height="25px" width="25px" />
-						<p:graphicImage styleClass="grid-img-loc" id="imgAvatarDefault" name="profile.jpg" library="images" height="25px" width="25px" rendered="#{!solution.crtByImgAvail}" />
+					<p:column colspan="2" rowspan="7" style="vertical-align: top !important">
+						<p:graphicImage styleClass="grid-img-loc" id="imgAvatar" name="#{solution.crtByImgPath}" library="images" height="50px" width="50px" />
+						<p:graphicImage styleClass="grid-img-loc" id="imgAvatarDefault" name="profile.jpg" library="images" height="50px" width="50px" rendered="#{!solution.crtByImgAvail}" />
 					</p:column>
 					<p:column colspan="4">
 						<p:outputLabel value="#{solution.crtByName}" style="float:left !important" />

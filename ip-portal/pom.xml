@@ -10,7 +10,7 @@
 	<properties>
 		<liferay.version>6.2.1</liferay.version>
 		<liferay.faces.version>4.1.0-beta1-SNAPSHOT</liferay.faces.version>
-		<faces.version>2.2.6</faces.version>
+		<faces.version>2.2.0</faces.version>
 		<liferay.maven.plugin.version>6.2.1</liferay.maven.plugin.version>
 		<liferay.auto.deploy.dir>C:\Java\liferay\portal-tcat\deploy</liferay.auto.deploy.dir>
 		<liferay.app.server.deploy.dir>C:\Java\liferay\portal-tcat\tomcat-7.0.42\webapps</liferay.app.server.deploy.dir>

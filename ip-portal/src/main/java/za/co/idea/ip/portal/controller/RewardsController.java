@@ -122,6 +122,10 @@ public class RewardsController implements Serializable {
 			rewardsCat = RESTServiceHelper.fetchAllRewardsCat();
 			totalPoints = RESTServiceHelper.calculateTotal(RESTServiceHelper.fetchAllPointsByUser(userId));
 			viewRewardsBeans = RESTServiceHelper.fetchAllAvailableRewards(userId, totalPoints);
+			viewRewardsBeans = RESTServiceHelper.fetchAllAvailableRewards(userId, totalPoints);
+			showCrtReward = false;
+			showViewReward = false;
+			showOnlineStore = true;
 			if (toView != null && Integer.valueOf(toView) != -1) {
 				switch (Integer.valueOf(toView)) {
 				case 1:
