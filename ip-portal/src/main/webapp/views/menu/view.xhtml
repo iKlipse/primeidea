@@ -28,6 +28,7 @@
 				<p:column>
 					<p:commandLink actionListener="#{menuController.redirectRewards}">
 						<p:graphicImage library="images" name="reward_hdr.png" style="max-width: 100% !important; height: auto !important" />
+						<f:setPropertyActionListener value="1" target="#{rewardsController.toView}" />
 					</p:commandLink>
 				</p:column>
 			</p:panelGrid>

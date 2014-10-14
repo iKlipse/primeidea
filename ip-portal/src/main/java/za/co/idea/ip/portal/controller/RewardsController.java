@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -97,6 +98,7 @@ public class RewardsController implements Serializable {
 	private boolean showOnlineStore;
 	private boolean titleAvail;
 	private AccessController controller;
+	private String toView;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
@@ -108,10 +110,46 @@ public class RewardsController implements Serializable {
 		return client;
 	}
 
+	@PostConstruct
+	public void initializePage() {
+		try {
+			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			User user = (User) request.getAttribute(WebKeys.USER);
+			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
+			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+			userId = message.getuId();
+			admUsers = RESTServiceHelper.fetchAllUsers();
+			rewardsCat = RESTServiceHelper.fetchAllRewardsCat();
+			totalPoints = RESTServiceHelper.calculateTotal(RESTServiceHelper.fetchAllPointsByUser(userId));
+			viewRewardsBeans = RESTServiceHelper.fetchAllAvailableRewards(userId, totalPoints);
+			if (toView != null && Integer.valueOf(toView) != -1) {
+				switch (Integer.valueOf(toView)) {
+				case 1:
+					showRewardStore();
+					break;
+				case 2:
+					showViewReward();
+					break;
+				case 3:
+					showCreateReward();
+					break;
+				default:
+					showRewardStore();
+				}
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
+	}
+
+	public String redirectView() {
+		showViewReward();
+		return "rwvr";
+	}
+
 	public void showCreateReward() {
 		try {
 			admUsers = RESTServiceHelper.fetchActiveUsers();
-			;
 			rewardsCat = RESTServiceHelper.fetchAllRewardsCat();
 			pGrps = RESTServiceHelper.fetchActiveGroups();
 			rewardsBean = new RewardsBean();
@@ -129,11 +167,6 @@ public class RewardsController implements Serializable {
 
 	public void showRewardStore() {
 		try {
-			PortletRequest request = (PortletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-			User user = (User) request.getAttribute(WebKeys.USER);
-			WebClient client = RESTServiceHelper.createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/as/user/verify/" + user.getScreenName());
-			UserMessage message = client.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
-			userId = message.getuId();
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			rewardsCat = RESTServiceHelper.fetchAllRewardsCat();
 			totalPoints = RESTServiceHelper.calculateTotal(RESTServiceHelper.fetchAllPointsByUser(userId));
@@ -168,6 +201,7 @@ public class RewardsController implements Serializable {
 		try {
 			admUsers = RESTServiceHelper.fetchAllUsers();
 			rewardsCat = RESTServiceHelper.fetchAllRewardsCat();
+			totalPoints = RESTServiceHelper.calculateTotal(RESTServiceHelper.fetchAllPointsByUser(userId));
 			viewRewardsBeans = RESTServiceHelper.fetchAllRewards(userId, totalPoints);
 			showCrtReward = false;
 			showViewReward = true;
@@ -382,12 +416,11 @@ public class RewardsController implements Serializable {
 		viewRewardsBeans = RESTServiceHelper.fetchAllRewardsByUser(userId, totalPoints);
 	}
 
-	public String saveRewards() {
+	public void saveRewards() {
 		try {
 			if (titleAvail) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Title Not Available", "Title Not Available");
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				return "";
 			}
 			List<String> errors = validateRewards();
 			if (errors.size() > 0) {
@@ -395,7 +428,6 @@ public class RewardsController implements Serializable {
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, error, error);
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
-				return "";
 			}
 			WebClient addRewardsClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rs/rewards/add");
 			RewardsMessage message = new RewardsMessage();
@@ -442,17 +474,15 @@ public class RewardsController implements Serializable {
 				}
 				uploadContent = null;
 				viewRewardsBeans = RESTServiceHelper.fetchAllRewards(userId, totalPoints);
-				return "rwvr";
+				showViewReward();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				return "";
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error occurred, cannot perform create Reward request", "System error occurred, cannot perform create Reward request");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
 		}
 	}
 
@@ -1103,6 +1133,18 @@ public class RewardsController implements Serializable {
 
 	public void setController(AccessController controller) {
 		this.controller = controller;
+	}
+
+	public String getToView() {
+		return toView;
+	}
+
+	public void setToView(String toView) {
+		this.toView = toView;
+	}
+
+	public void setpGrps(List<GroupBean> pGrps) {
+		this.pGrps = pGrps;
 	}
 
 }

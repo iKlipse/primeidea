@@ -1,10 +1,24 @@
-.imgScroller > .ui-carousel-header {
+.imgScroller>.ui-carousel-header {
 	margin: 0px 0px !important;
 	height: 0px !important;
 	overflow: hidden !important;
 	padding: 0px 0px 0px !important;
 	display: none !important;
 	border: none !important;
+}
+
+.ui-datatable table {
+	table-layout: fixed !important;
+}
+
+.ui-datagrid table {
+	table-layout: fixed !important;
+}
+
+.grid-img-loc {
+	vertical-align: top !important;
+	min-height: 50px !important;
+	min-width: 50px !important;
 }
 
 .panelView {
@@ -16,6 +30,13 @@
 .ui-datascroller-item {
 	border: solid 1px lightgray !important;
 	border-radius: 5px !important;
+}
+
+.text-word-wrap {
+	text-align: left !important;
+	white-space: normal !important;
+	word-wrap: break-word !important;
+	word-break: break-all !important;
 }
 
 .panelGridView {
@@ -57,11 +78,6 @@
 
 .ui-editor {
 	width: 94.1% !important;
-	border: solid lightgray 1px !important;
-}
-
-.ui-fileupload {
-	width: 94% !important;
 	border: solid lightgray 1px !important;
 }
 

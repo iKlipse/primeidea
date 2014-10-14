@@ -34,6 +34,8 @@ public class NewsBean implements Serializable {
 	}
 
 	public String getnContent() {
+		if (nContent == null)
+			nContent = "";
 		return nContent;
 	}
 

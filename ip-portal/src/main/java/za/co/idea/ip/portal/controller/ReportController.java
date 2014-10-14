@@ -26,10 +26,10 @@ import org.primefaces.model.StreamedContent;
 
 import za.co.idea.ip.portal.bean.GroupBean;
 import za.co.idea.ip.portal.bean.UserBean;
-import za.co.idea.ip.portal.bean.report.ReportQueryBean;
 import za.co.idea.ip.portal.util.RESTServiceHelper;
 import za.co.idea.ip.ws.bean.report.GroupUserActivityMessage;
 import za.co.idea.ip.ws.bean.report.IdeaSummaryMessage;
+import za.co.idea.ip.ws.bean.report.ReportQueryMessage;
 import za.co.idea.ip.ws.bean.report.RewardsReportMessage;
 import za.co.idea.ip.ws.bean.report.UserActivityMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
@@ -46,7 +46,7 @@ public class ReportController {
 	private boolean disGUA;
 	private boolean disRR;
 	private boolean disIS;
-	private ReportQueryBean bean;
+	private ReportQueryMessage bean;
 	private List<UserActivityMessage> uams;
 	private List<GroupUserActivityMessage> guams;
 	private List<RewardsReportMessage> rrms;
@@ -73,7 +73,7 @@ public class ReportController {
 		disGUA = false;
 		disRR = false;
 		disIS = false;
-		bean = new ReportQueryBean();
+		bean = new ReportQueryMessage();
 	}
 
 	public void showGroupUserActivtyReport() {
@@ -84,7 +84,7 @@ public class ReportController {
 		disGUA = true;
 		disRR = false;
 		disIS = false;
-		bean = new ReportQueryBean();
+		bean = new ReportQueryMessage();
 	}
 
 	public void showRewardsReport() {
@@ -95,7 +95,7 @@ public class ReportController {
 		disGUA = false;
 		disRR = true;
 		disIS = false;
-		bean = new ReportQueryBean();
+		bean = new ReportQueryMessage();
 	}
 
 	public void showIdeaSummaryReport() {
@@ -106,59 +106,91 @@ public class ReportController {
 		disGUA = false;
 		disRR = false;
 		disIS = true;
-		bean = new ReportQueryBean();
+		bean = new ReportQueryMessage();
 	}
 
 	public void generateRRep() {
-		WebClient repClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rps/rr");
-		rrms = new ArrayList<RewardsReportMessage>(repClient.accept(MediaType.APPLICATION_JSON).postAndGetCollection(bean, RewardsReportMessage.class));
-		repClient.close();
-		disGrp = false;
-		disUser = false;
-		disEndDt = false;
-		disUA = false;
-		disGUA = false;
-		disRR = true;
-		disIS = false;
+		try {
+			if (bean.getGrpId().longValue() == -999)
+				bean.setGrpId(null);
+			if (bean.getUsrId().longValue() == -999)
+				bean.setUsrId(null);
+			WebClient repClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rps/rr");
+			rrms = new ArrayList<RewardsReportMessage>(repClient.accept(MediaType.APPLICATION_JSON).postAndGetCollection(bean, RewardsReportMessage.class));
+			repClient.close();
+			disGrp = false;
+			disUser = false;
+			disEndDt = false;
+			disUA = false;
+			disGUA = false;
+			disRR = true;
+			disIS = false;
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
 	}
 
 	public void generateUARep() {
-		WebClient repClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rps/ua");
-		uams = new ArrayList<UserActivityMessage>(repClient.accept(MediaType.APPLICATION_JSON).postAndGetCollection(bean, UserActivityMessage.class));
-		repClient.close();
-		disGrp = false;
-		disUser = false;
-		disEndDt = false;
-		disUA = true;
-		disGUA = false;
-		disRR = false;
-		disIS = false;
+		try {
+			if (bean.getGrpId().longValue() == -999)
+				bean.setGrpId(null);
+			if (bean.getUsrId().longValue() == -999)
+				bean.setUsrId(null);
+			WebClient repClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rps/ua");
+			uams = new ArrayList<UserActivityMessage>(repClient.accept(MediaType.APPLICATION_JSON).postAndGetCollection(bean, UserActivityMessage.class));
+			repClient.close();
+			disGrp = false;
+			disUser = false;
+			disEndDt = false;
+			disUA = true;
+			disGUA = false;
+			disRR = false;
+			disIS = false;
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
 	}
 
 	public void generateGUARep() {
-		WebClient repClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rps/gua");
-		guams = new ArrayList<GroupUserActivityMessage>(repClient.accept(MediaType.APPLICATION_JSON).postAndGetCollection(bean, GroupUserActivityMessage.class));
-		repClient.close();
-		disGrp = false;
-		disUser = false;
-		disEndDt = false;
-		disUA = false;
-		disGUA = true;
-		disRR = false;
-		disIS = false;
+		try {
+			if (bean.getGrpId().longValue() == -999)
+				bean.setGrpId(null);
+			if (bean.getUsrId().longValue() == -999)
+				bean.setUsrId(null);
+			WebClient repClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rps/gua");
+			guams = new ArrayList<GroupUserActivityMessage>(repClient.accept(MediaType.APPLICATION_JSON).postAndGetCollection(bean, GroupUserActivityMessage.class));
+			repClient.close();
+			disGrp = false;
+			disUser = false;
+			disEndDt = false;
+			disUA = false;
+			disGUA = true;
+			disRR = false;
+			disIS = false;
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
 	}
 
 	public void generateISRep() {
-		WebClient repClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rps/isg");
-		isms = new ArrayList<IdeaSummaryMessage>(repClient.accept(MediaType.APPLICATION_JSON).postAndGetCollection(bean, IdeaSummaryMessage.class));
-		repClient.close();
-		disGrp = false;
-		disUser = false;
-		disEndDt = false;
-		disUA = false;
-		disGUA = false;
-		disRR = false;
-		disIS = true;
+		try {
+			if (bean.getGrpId().longValue() == -999)
+				bean.setGrpId(null);
+			if (bean.getUsrId().longValue() == -999)
+				bean.setUsrId(null);
+			WebClient repClient = createCustomClient("http://" + BUNDLE.getString("ws.host") + ":" + BUNDLE.getString("ws.port") + "/ip-ws/ip/rps/isg");
+			isms = new ArrayList<IdeaSummaryMessage>(repClient.accept(MediaType.APPLICATION_JSON).postAndGetCollection(bean, IdeaSummaryMessage.class));
+			repClient.close();
+			disGrp = false;
+			disUser = false;
+			disEndDt = false;
+			disUA = false;
+			disGUA = false;
+			disRR = false;
+			disIS = true;
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
 	}
 
 	public boolean isDisGrp() {
@@ -217,13 +249,13 @@ public class ReportController {
 		this.disIS = disIS;
 	}
 
-	public ReportQueryBean getBean() {
+	public ReportQueryMessage getBean() {
 		if (bean == null)
-			bean = new ReportQueryBean();
+			bean = new ReportQueryMessage();
 		return bean;
 	}
 
-	public void setBean(ReportQueryBean bean) {
+	public void setBean(ReportQueryMessage bean) {
 		this.bean = bean;
 	}
 

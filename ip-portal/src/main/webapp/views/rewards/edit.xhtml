@@ -1,4 +1,4 @@
-<ui:composition template="/views/rewards/container/editContainer.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 	<p:panelGrid styleClass="panelGridView" columns="2" id="pnlEditRewards">
 		<p:column>
 			<p:outputLabel id="lblEdRTitle" value="Title : " />
@@ -74,8 +74,12 @@
 			<p:fileUpload id="fuEdCUpload" fileUploadListener="#{rewardsController.rwFileUploadHandle}" multiple="false" />
 		</p:column>
 		<f:facet name="footer">
-			<p:commandButton id="btnEdSave" value="Save" ajax="false" action="#{rewardsController.updateRewards}" />
-			<p:commandButton id="btnEdCancel" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" ajax="false" action="#{rewardsController.showViewReward}" />
+			<p:commandButton id="btnEdSave" value="Save" ajax="false" action="#{rewardsController.updateRewards}">
+				<f:setPropertyActionListener value="2" target="#{rewardsController.toView}" />
+			</p:commandButton>
+			<p:commandButton id="btnEdCancel" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" ajax="false" action="#{rewardsController.redirectView}">
+				<f:setPropertyActionListener value="2" target="#{rewardsController.toView}" />
+			</p:commandButton>
 		</f:facet>
 	</p:panelGrid>
 </ui:composition>

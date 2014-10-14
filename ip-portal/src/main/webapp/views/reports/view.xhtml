@@ -14,13 +14,15 @@
 				<p:commandLink value="Rewards Summary Report" actionListener="#{reportController.showRewardsReport}" update="pnlLPDet" />
 			</p:panel>
 			<p:panel styleClass="panelView" id="pnlLPDet">
-				<p:panelGrid columns="4">
+				<p:panelGrid columns="4" styleClass="panelGridView">
 					<p:outputLabel value="Select Group" />
 					<p:selectOneMenu value="#{reportController.bean.grpId}" label="Select Group">
+						<f:selectItem itemLabel="Please Select" itemValue="-999" />
 						<f:selectItems value="#{reportController.grps}" var="g" itemLabel="#{g.gName}" itemValue="#{g.gId}" />
 					</p:selectOneMenu>
 					<p:outputLabel value="Select User" />
 					<p:selectOneMenu value="#{reportController.bean.usrId}" label="Select User">
+						<f:selectItem itemLabel="Please Select" itemValue="-999" />
 						<f:selectItems value="#{reportController.users}" var="u" itemLabel="#{u.scName}" itemValue="#{u.uId}" />
 					</p:selectOneMenu>
 					<p:outputLabel value="Start Date" />
@@ -31,25 +33,25 @@
 				<p:panel styleClass="panelGridView" rendered="#{reportController.disUA}">
 					<p:dataTable id="dtUARep" value="#{reportController.uams}" var="ua" paginator="true" rows="10" paginatorPosition="bottom" emptyMessage="No Records Found">
 						<p:column headerText="First Name">
-							<p:outputLabel value="{ua.userFName}" />
+							<p:outputLabel value="#{ua.userFName}" />
 						</p:column>
 						<p:column headerText="Last Name">
-							<p:outputLabel value="{ua.userLName}" />
+							<p:outputLabel value="#{ua.userLName}" />
 						</p:column>
 						<p:column headerText="Group">
-							<p:outputLabel value="{ua.groupName}" />
+							<p:outputLabel value="#{ua.groupName}" />
 						</p:column>
 						<p:column headerText="Last Login Date">
-							<p:outputLabel value="{ua.dta}" />
+							<p:outputLabel value="#{ua.dta}" />
 						</p:column>
 						<p:column headerText="Last Activity Date">
-							<p:outputLabel value="{ua.dtb}" />
+							<p:outputLabel value="#{ua.dtb}" />
 						</p:column>
 						<p:column headerText="Total Points">
-							<p:outputLabel value="{ua.cntb}" />
+							<p:outputLabel value="#{ua.cntb}" />
 						</p:column>
 						<p:column headerText="Total Submssions">
-							<p:outputLabel value="{ua.cntc}" />
+							<p:outputLabel value="#{ua.cntc}" />
 						</p:column>
 						<f:facet name="header">
 							<p:commandButton value="Generate Report" actionListener="#{reportController.generateUARep}" update="dtUARep" />
@@ -74,7 +76,7 @@
 							<p:outputLabel value="#{gua.cntc}" />
 						</p:column>
 						<p:column headerText="Total Submissions">
-							<p:outputLabel value="#{gua.cntd}" />
+							<p:outputLabel value="#{gua.totcnt}" />
 						</p:column>
 						<f:facet name="header">
 							<p:commandButton value="Generate Report" actionListener="#{reportController.generateGUARep}" update="dtGUARep" />
@@ -85,7 +87,7 @@
 					</p:dataTable>
 				</p:panel>
 				<p:panel styleClass="panelGridView" rendered="#{reportController.disIS}">
-					<p:dataTable id="dtISRep" value="#{reportController.rrms}" var="is" paginator="true" rows="10" paginatorPosition="bottom" emptyMessage="No Records Found">
+					<p:dataTable id="dtISRep" value="#{reportController.isms}" var="is" paginator="true" rows="10" paginatorPosition="bottom" emptyMessage="No Records Found">
 						<f:facet name="header">
 							<p:column headerText="Group">
 								<p:outputLabel value="#{is.groupName}" />

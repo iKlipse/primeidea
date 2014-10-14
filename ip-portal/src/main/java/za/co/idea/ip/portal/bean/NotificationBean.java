@@ -51,6 +51,8 @@ public class NotificationBean implements Serializable {
 	}
 
 	public String getNotifBody() {
+		if (notifBody == null)
+			notifBody = "";
 		return notifBody;
 	}
 

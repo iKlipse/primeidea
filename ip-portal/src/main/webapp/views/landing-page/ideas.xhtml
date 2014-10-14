@@ -4,8 +4,8 @@
 			<p:panelGrid styleClass="panelGridView">
 				<p:row>
 					<p:column colspan="2" rowspan="7" style="vertical-align: top !important">
-						<p:graphicImage id="imgAvatar" name="#{idea.crtByImgPath}" library="images" height="50px" width="50px" style="vertical-align: top !important" />
-						<p:graphicImage id="imgAvatarDefault" name="profile.jpg" library="images" height="50px" width="50px" rendered="#{!idea.crtByImgAvail}" style="vertical-align: top !important" />
+						<p:graphicImage id="imgAvatar" name="#{idea.crtByImgPath}" library="images" height="50px" width="50px" styleClass="grid-img-loc" />
+						<p:graphicImage id="imgAvatarDefault" name="profile.jpg" library="images" height="50px" width="50px" rendered="#{!idea.crtByImgAvail}" styleClass="grid-img-loc" />
 					</p:column>
 					<p:column colspan="4">
 						<p:outputLabel value="#{idea.crtdByName}" style="float:left !important" />
@@ -31,11 +31,11 @@
 				</p:row>
 				<p:row>
 					<p:column colspan="10" rowspan="5">
-						<p:outputLabel value="#{idea.ideaTitle}" style="font-weight: bold !important; text-align: left !important; font-size: 1.2em !important" />
+						<p:outputLabel value="#{idea.ideaTitle}" style="font-weight: bold !important; font-size: 1.2em !important" styleClass="text-word-wrap" />
 						<br />
-						<p:outputLabel value="#{idea.ideaDesc}" escape="false" style="text-align: left !important; overflow: auto !important" />
+						<p:outputLabel value="#{idea.ideaDesc}" escape="false" styleClass="text-word-wrap" />
 						<p:separator style="width: 100% !important" />
-						<p:outputLabel rendered="#{!idea.attachsAvail}" value="No Attachments" ></p:outputLabel>
+						<p:outputLabel rendered="#{!idea.attachsAvail}" value="No Attachments"></p:outputLabel>
 						<p:dataGrid id="edtIDocCar" var="file" value="#{idea.files}" columns="3" rows="1" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rendered="#{idea.attachsAvail}">
 							<p:panel styleClass="dgView">
 								<h:outputLink value="#{file.url}">

@@ -80,8 +80,9 @@
 			<p:fileUpload id="fuCrtCUpload" fileUploadListener="#{rewardsController.rwFileUploadHandle}" multiple="false" />
 		</p:column>
 		<f:facet name="footer">
-			<p:commandButton id="btnCrtSave" value="Save" ajax="false" action="#{rewardsController.saveRewards}" />
-			<p:commandButton id="btnCrtCancel" value="Go Back" icon="ui-icon-arrowreturnthick-1-w" immediate="true" ajax="false" action="#{rewardsController.showViewReward}" />
+			<p:commandButton id="btnCrtSave" value="Save" ajax="false" immediate="true" action="#{rewardsController.saveRewards}">
+				<f:setPropertyActionListener value="2" target="#{rewardsController.toView}" />
+			</p:commandButton>
 		</f:facet>
 	</p:panelGrid>
 </ui:composition>

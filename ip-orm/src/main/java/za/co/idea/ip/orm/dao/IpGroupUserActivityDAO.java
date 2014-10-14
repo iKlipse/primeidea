@@ -5,6 +5,7 @@ import static org.hibernate.criterion.Example.create;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
 import org.hibernate.LockOptions;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -28,8 +29,7 @@ import za.co.idea.ip.orm.bean.IpGroupUserActivity;
 @Transactional
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class IpGroupUserActivityDAO {
-	private static final Logger log = Logger
-			.getLogger(IpGroupUserActivityDAO.class);
+	private static final Logger log = Logger.getLogger(IpGroupUserActivityDAO.class);
 	// property constants
 
 	private SessionFactory sessionFactory;
@@ -68,12 +68,10 @@ public class IpGroupUserActivityDAO {
 		}
 	}
 
-	public IpGroupUserActivity findById(
-			za.co.idea.ip.orm.bean.IpGroupUserActivityId id) {
+	public IpGroupUserActivity findById(za.co.idea.ip.orm.bean.IpGroupUserActivityId id) {
 		log.debug("getting IpGroupUserActivity instance with id: " + id);
 		try {
-			IpGroupUserActivity instance = (IpGroupUserActivity) getCurrentSession()
-					.get("za.co.idea.ip.orm.bean.IpGroupUserActivity", id);
+			IpGroupUserActivity instance = (IpGroupUserActivity) getCurrentSession().get("za.co.idea.ip.orm.bean.IpGroupUserActivity", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -84,12 +82,8 @@ public class IpGroupUserActivityDAO {
 	public List<IpGroupUserActivity> findByExample(IpGroupUserActivity instance) {
 		log.debug("finding IpGroupUserActivity instance by example");
 		try {
-			List<IpGroupUserActivity> results = (List<IpGroupUserActivity>) getCurrentSession()
-					.createCriteria(
-							"za.co.idea.ip.orm.bean.IpGroupUserActivity")
-					.add(create(instance)).list();
-			log.debug("find by example successful, result size: "
-					+ results.size());
+			List<IpGroupUserActivity> results = (List<IpGroupUserActivity>) getCurrentSession().createCriteria("za.co.idea.ip.orm.bean.IpGroupUserActivity").add(create(instance)).list();
+			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
@@ -98,11 +92,9 @@ public class IpGroupUserActivityDAO {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding IpGroupUserActivity instance with property: "
-				+ propertyName + ", value: " + value);
+		log.debug("finding IpGroupUserActivity instance with property: " + propertyName + ", value: " + value);
 		try {
-			String queryString = "from IpGroupUserActivity as model where model."
-					+ propertyName + "= ?";
+			String queryString = "from IpGroupUserActivity as model where model." + propertyName + "= ?";
 			Query queryObject = getCurrentSession().createQuery(queryString);
 			queryObject.setParameter(0, value);
 			return queryObject.list();
@@ -124,11 +116,29 @@ public class IpGroupUserActivityDAO {
 		}
 	}
 
+	public List initializeAll() {
+		log.debug("finding all IpGroupUserActivity instances");
+		try {
+			String queryString = "from IpGroupUserActivity";
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			List ret = queryObject.list();
+			for (Object obj : ret) {
+				if (obj == null)
+					continue;
+				IpGroupUserActivity act = (IpGroupUserActivity) obj;
+				Hibernate.initialize(act.getId());
+			}
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
+	}
+
 	public IpGroupUserActivity merge(IpGroupUserActivity detachedInstance) {
 		log.debug("merging IpGroupUserActivity instance");
 		try {
-			IpGroupUserActivity result = (IpGroupUserActivity) getCurrentSession()
-					.merge(detachedInstance);
+			IpGroupUserActivity result = (IpGroupUserActivity) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -151,8 +161,7 @@ public class IpGroupUserActivityDAO {
 	public void attachClean(IpGroupUserActivity instance) {
 		log.debug("attaching clean IpGroupUserActivity instance");
 		try {
-			getCurrentSession().buildLockRequest(LockOptions.NONE).lock(
-					instance);
+			getCurrentSession().buildLockRequest(LockOptions.NONE).lock(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -160,8 +169,7 @@ public class IpGroupUserActivityDAO {
 		}
 	}
 
-	public static IpGroupUserActivityDAO getFromApplicationContext(
-			ApplicationContext ctx) {
+	public static IpGroupUserActivityDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (IpGroupUserActivityDAO) ctx.getBean("IpGroupUserActivityDAO");
 	}
 }

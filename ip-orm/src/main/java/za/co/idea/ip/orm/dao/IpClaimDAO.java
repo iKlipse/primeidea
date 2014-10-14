@@ -126,6 +126,18 @@ public class IpClaimDAO {
 		}
 	}
 
+	public List initializeAll() {
+		log.debug("finding all IpClaim instances");
+		try {
+			String queryString = "from IpClaim";
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			return queryObject.list();
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
+	}
+
 	public IpClaim merge(IpClaim detachedInstance) {
 		log.debug("merging IpClaim instance");
 		try {

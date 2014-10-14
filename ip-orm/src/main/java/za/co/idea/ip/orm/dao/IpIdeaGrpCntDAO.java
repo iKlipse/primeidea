@@ -5,6 +5,7 @@ import static org.hibernate.criterion.Example.create;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
 import org.hibernate.LockOptions;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -70,8 +71,7 @@ public class IpIdeaGrpCntDAO {
 	public IpIdeaGrpCnt findById(za.co.idea.ip.orm.bean.IpIdeaGrpCntId id) {
 		log.debug("getting IpIdeaGrpCnt instance with id: " + id);
 		try {
-			IpIdeaGrpCnt instance = (IpIdeaGrpCnt) getCurrentSession().get(
-					"za.co.idea.ip.orm.bean.IpIdeaGrpCnt", id);
+			IpIdeaGrpCnt instance = (IpIdeaGrpCnt) getCurrentSession().get("za.co.idea.ip.orm.bean.IpIdeaGrpCnt", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -82,11 +82,8 @@ public class IpIdeaGrpCntDAO {
 	public List<IpIdeaGrpCnt> findByExample(IpIdeaGrpCnt instance) {
 		log.debug("finding IpIdeaGrpCnt instance by example");
 		try {
-			List<IpIdeaGrpCnt> results = (List<IpIdeaGrpCnt>) getCurrentSession()
-					.createCriteria("za.co.idea.ip.orm.bean.IpIdeaGrpCnt")
-					.add(create(instance)).list();
-			log.debug("find by example successful, result size: "
-					+ results.size());
+			List<IpIdeaGrpCnt> results = (List<IpIdeaGrpCnt>) getCurrentSession().createCriteria("za.co.idea.ip.orm.bean.IpIdeaGrpCnt").add(create(instance)).list();
+			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
@@ -95,11 +92,9 @@ public class IpIdeaGrpCntDAO {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding IpIdeaGrpCnt instance with property: "
-				+ propertyName + ", value: " + value);
+		log.debug("finding IpIdeaGrpCnt instance with property: " + propertyName + ", value: " + value);
 		try {
-			String queryString = "from IpIdeaGrpCnt as model where model."
-					+ propertyName + "= ?";
+			String queryString = "from IpIdeaGrpCnt as model where model." + propertyName + "= ?";
 			Query queryObject = getCurrentSession().createQuery(queryString);
 			queryObject.setParameter(0, value);
 			return queryObject.list();
@@ -121,11 +116,29 @@ public class IpIdeaGrpCntDAO {
 		}
 	}
 
+	public List initializeAll() {
+		log.debug("finding all IpIdeaGrpCnt instances");
+		try {
+			String queryString = "from IpIdeaGrpCnt";
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			List ret = queryObject.list();
+			for (Object obj : ret) {
+				if (obj == null)
+					continue;
+				IpIdeaGrpCnt cnt = (IpIdeaGrpCnt) obj;
+				Hibernate.initialize(cnt.getId());
+			}
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
+	}
+
 	public IpIdeaGrpCnt merge(IpIdeaGrpCnt detachedInstance) {
 		log.debug("merging IpIdeaGrpCnt instance");
 		try {
-			IpIdeaGrpCnt result = (IpIdeaGrpCnt) getCurrentSession().merge(
-					detachedInstance);
+			IpIdeaGrpCnt result = (IpIdeaGrpCnt) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -148,8 +161,7 @@ public class IpIdeaGrpCntDAO {
 	public void attachClean(IpIdeaGrpCnt instance) {
 		log.debug("attaching clean IpIdeaGrpCnt instance");
 		try {
-			getCurrentSession().buildLockRequest(LockOptions.NONE).lock(
-					instance);
+			getCurrentSession().buildLockRequest(LockOptions.NONE).lock(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -157,8 +169,7 @@ public class IpIdeaGrpCntDAO {
 		}
 	}
 
-	public static IpIdeaGrpCntDAO getFromApplicationContext(
-			ApplicationContext ctx) {
+	public static IpIdeaGrpCntDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (IpIdeaGrpCntDAO) ctx.getBean("IpIdeaGrpCntDAO");
 	}
 }

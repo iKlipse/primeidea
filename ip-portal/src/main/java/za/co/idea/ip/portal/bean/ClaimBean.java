@@ -49,6 +49,8 @@ public class ClaimBean implements Serializable {
 	}
 
 	public String getClaimDesc() {
+		if (claimDesc == null)
+			claimDesc = "";
 		return claimDesc;
 	}
 

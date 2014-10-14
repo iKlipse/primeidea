@@ -3,9 +3,9 @@
 		<p:panel styleClass="panelView">
 			<p:panelGrid styleClass="panelGridView">
 				<p:row>
-					<p:column colspan="2" rowspan="7" style="vertical-align: top !important">
-						<p:graphicImage style="vertical-align: top !important;" id="imgAvatar" name="#{solution.crtByImgPath}" library="images" height="25px" width="25px" />
-						<p:graphicImage style="vertical-align: top !important;" id="imgAvatarDefault" name="profile.jpg" library="images" height="25px" width="25px" rendered="#{!solution.crtByImgAvail}" />
+					<p:column colspan="2" rowspan="7">
+						<p:graphicImage styleClass="grid-img-loc" id="imgAvatar" name="#{solution.crtByImgPath}" library="images" height="25px" width="25px" />
+						<p:graphicImage styleClass="grid-img-loc" id="imgAvatarDefault" name="profile.jpg" library="images" height="25px" width="25px" rendered="#{!solution.crtByImgAvail}" />
 					</p:column>
 					<p:column colspan="4">
 						<p:outputLabel value="#{solution.crtByName}" style="float:left !important" />
@@ -31,9 +31,9 @@
 				</p:row>
 				<p:row>
 					<p:column colspan="10" rowspan="5">
-						<p:outputLabel value="#{solution.title}" style="font-weight: bold !important; text-align: left !important; font-size: 1.2em !important" />
+						<p:outputLabel value="#{solution.title}" style="font-weight: bold !important; font-size: 1.2em !important" styleClass="text-word-wrap" />
 						<br />
-						<p:outputLabel value="#{solution.desc}" escape="false" style="text-align: left !important; overflow: auto !important" />
+						<p:outputLabel value="#{solution.desc}" escape="false" styleClass="text-word-wrap" />
 						<p:separator style="width: 100% !important" />
 						<p:outputLabel rendered="#{!solution.solImgAvl}" value="No Attachments"></p:outputLabel>
 						<p:dataGrid id="lpChalViewDoc" var="file" value="#{solution.files}" columns="3" rows="1" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rendered="#{solution.solImgAvl}">

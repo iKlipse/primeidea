@@ -55,6 +55,8 @@ public class RewardsBean implements Serializable {
 	}
 
 	public String getRwDesc() {
+		if (rwDesc == null)
+			rwDesc = "";
 		return rwDesc;
 	}
 

@@ -92,6 +92,8 @@ public class UserBean implements Serializable {
 	}
 
 	public String getSkills() {
+		if (skills == null)
+			skills = "";
 		return skills;
 	}
 
@@ -100,6 +102,8 @@ public class UserBean implements Serializable {
 	}
 
 	public String getBio() {
+		if (bio == null)
+			bio = "";
 		return bio;
 	}
 

@@ -5,6 +5,7 @@ import static org.hibernate.criterion.Example.create;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
 import org.hibernate.LockOptions;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -70,8 +71,7 @@ public class IpUserActivityDAO {
 	public IpUserActivity findById(za.co.idea.ip.orm.bean.IpUserActivityId id) {
 		log.debug("getting IpUserActivity instance with id: " + id);
 		try {
-			IpUserActivity instance = (IpUserActivity) getCurrentSession().get(
-					"za.co.idea.ip.orm.bean.IpUserActivity", id);
+			IpUserActivity instance = (IpUserActivity) getCurrentSession().get("za.co.idea.ip.orm.bean.IpUserActivity", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -82,11 +82,8 @@ public class IpUserActivityDAO {
 	public List<IpUserActivity> findByExample(IpUserActivity instance) {
 		log.debug("finding IpUserActivity instance by example");
 		try {
-			List<IpUserActivity> results = (List<IpUserActivity>) getCurrentSession()
-					.createCriteria("za.co.idea.ip.orm.bean.IpUserActivity")
-					.add(create(instance)).list();
-			log.debug("find by example successful, result size: "
-					+ results.size());
+			List<IpUserActivity> results = (List<IpUserActivity>) getCurrentSession().createCriteria("za.co.idea.ip.orm.bean.IpUserActivity").add(create(instance)).list();
+			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
@@ -95,11 +92,9 @@ public class IpUserActivityDAO {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding IpUserActivity instance with property: "
-				+ propertyName + ", value: " + value);
+		log.debug("finding IpUserActivity instance with property: " + propertyName + ", value: " + value);
 		try {
-			String queryString = "from IpUserActivity as model where model."
-					+ propertyName + "= ?";
+			String queryString = "from IpUserActivity as model where model." + propertyName + "= ?";
 			Query queryObject = getCurrentSession().createQuery(queryString);
 			queryObject.setParameter(0, value);
 			return queryObject.list();
@@ -121,11 +116,29 @@ public class IpUserActivityDAO {
 		}
 	}
 
+	public List initializeAll() {
+		log.debug("finding all IpUserActivity instances");
+		try {
+			String queryString = "from IpUserActivity";
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			List ret = queryObject.list();
+			for (Object obj : ret) {
+				if (obj == null)
+					continue;
+				IpUserActivity act = (IpUserActivity) obj;
+				Hibernate.initialize(act.getId());
+			}
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
+	}
+
 	public IpUserActivity merge(IpUserActivity detachedInstance) {
 		log.debug("merging IpUserActivity instance");
 		try {
-			IpUserActivity result = (IpUserActivity) getCurrentSession().merge(
-					detachedInstance);
+			IpUserActivity result = (IpUserActivity) getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -148,8 +161,7 @@ public class IpUserActivityDAO {
 	public void attachClean(IpUserActivity instance) {
 		log.debug("attaching clean IpUserActivity instance");
 		try {
-			getCurrentSession().buildLockRequest(LockOptions.NONE).lock(
-					instance);
+			getCurrentSession().buildLockRequest(LockOptions.NONE).lock(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -157,8 +169,7 @@ public class IpUserActivityDAO {
 		}
 	}
 
-	public static IpUserActivityDAO getFromApplicationContext(
-			ApplicationContext ctx) {
+	public static IpUserActivityDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (IpUserActivityDAO) ctx.getBean("IpUserActivityDAO");
 	}
 }

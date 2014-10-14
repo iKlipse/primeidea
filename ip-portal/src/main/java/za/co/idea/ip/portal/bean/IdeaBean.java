@@ -48,6 +48,8 @@ public class IdeaBean implements Serializable {
 	}
 
 	public String getIdeaDesc() {
+		if (ideaDesc == null)
+			ideaDesc = "";
 		return ideaDesc;
 	}
 

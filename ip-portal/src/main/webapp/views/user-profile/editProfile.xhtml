@@ -92,13 +92,25 @@
 			<p:outputLabel id="mlblGroup" value=" Primary Group : " />
 		</p:column>
 		<p:column>
-		    <p:inputText id="msomPriGroup" value="#{adminController.userBean.priGroupName}" disabled="true"></p:inputText>
+			<p:inputText id="msomPriGroup" value="#{adminController.userBean.priGroupName}" disabled="true"></p:inputText>
 		</p:column>
 		<p:column>
 			<p:outputLabel id="lblActive" value="Active : " />
 		</p:column>
 		<p:column>
 			<p:selectBooleanButton id="msbbActive" value="#{adminController.userBean.isActive}" onLabel="Yes" offLabel="No" disabled="true" onIcon="ui-icon-check" offIcon="ui-icon-close" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="mlblSkills" value="Skills : " />
+		</p:column>
+		<p:column>
+			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="mtxtSkills" value="#{adminController.userBean.skills}" />
+		</p:column>
+		<p:column>
+			<p:outputLabel id="mlblBio" value="Bio : " />
+		</p:column>
+		<p:column>
+			<p:editor controls="bold italic underline strikethrough font size style color highlight bullets numbering undo redo outdent indent" id="mtxtBio" value="#{adminController.userBean.bio}" />
 		</p:column>
 		<f:facet name="footer">
 			<p:commandButton id="btnSave" value="Save" actionListener="#{adminController.updateUserProfile}" update=":frmUserProfile:pnlUserProfile, :frmUserProfile:frmUserProfileMsg">

@@ -2,8 +2,8 @@
 	<h:head />
 	<h:body>
 		<h:form id="frmVwNews" enctype="multipart/form-data">
-			<p:carousel id="cdgNews" value="#{adminController.viewNewsBeans}" var="news" numVisible="1" circular="true" autoPlayInterval="5000">
-				<p:panel styleClass="panelView" header="#{news.startDate}">
+			<p:dataGrid id="cdgNews" value="#{adminController.viewNewsBeans}" var="news" columns="1" rows="1" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" paginatorPosition="top">
+				<p:panel styleClass="dgView" header="#{news.startDate}">
 					<p:panelGrid styleClass="panelGridView" columns="1" id="cpnlNews">
 						<p:column>
 							<p:lightBox rendered="#{news.nwImgAvail}">
@@ -14,15 +14,15 @@
 						</p:column>
 						<p:column>
 							<h3>
-								<p:outputLabel id="clblITitle" value="#{news.nTitle}" />
+								<p:outputLabel id="clblITitle" value="#{news.nTitle}" styleClass="text-word-wrap" />
 							</h3>
 						</p:column>
 						<p:column>
-							<p:outputLabel id="ctxtIDesc" value="#{news.nContent}" escape="false" />
+							<p:outputLabel id="ctxtIDesc" value="#{news.nContent}" escape="false" styleClass="text-word-wrap" />
 						</p:column>
 					</p:panelGrid>
 				</p:panel>
-			</p:carousel>
+			</p:dataGrid>
 		</h:form>
 	</h:body>
 </f:view>

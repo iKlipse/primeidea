@@ -47,10 +47,12 @@ public class ReportService {
 	public <T extends UserActivityMessage> List<T> userActivity(ReportQueryMessage msg) {
 		logger.info("Generating user activity report");
 		List<T> ret = new ArrayList<T>();
-		List vals = ipUserActivityDAO.findAll();
+		List vals = ipUserActivityDAO.initializeAll();
 		for (Object obj : vals) {
+			if (obj == null)
+				continue;
 			IpUserActivity val = (IpUserActivity) obj;
-			if (val.getId().getGroupName().equalsIgnoreCase(ipGroupDAO.findById(msg.getGrpId()).getGroupName()))
+			if (((msg != null) && (msg.getGrpId() != null)) && !(val.getId().getGroupName().equalsIgnoreCase(ipGroupDAO.findById(msg.getGrpId()).getGroupName())))
 				continue;
 			UserActivityMessage uamsg = new UserActivityMessage();
 			uamsg.setCntb(val.getId().getCntb());
@@ -73,10 +75,12 @@ public class ReportService {
 	public <T extends GroupUserActivityMessage> List<T> groupUserActivity(ReportQueryMessage msg) {
 		logger.info("Generating group user activity report");
 		List<T> ret = new ArrayList<T>();
-		List vals = ipGroupUserActivityDAO.findAll();
+		List vals = ipGroupUserActivityDAO.initializeAll();
 		for (Object obj : vals) {
+			if (obj == null)
+				continue;
 			IpGroupUserActivity val = (IpGroupUserActivity) obj;
-			if (val.getId().getGroupName().equalsIgnoreCase(ipGroupDAO.findById(msg.getGrpId()).getGroupName()))
+			if (((msg != null) && (msg.getGrpId() != null)) && !(val.getId().getGroupName().equalsIgnoreCase(ipGroupDAO.findById(msg.getGrpId()).getGroupName())))
 				continue;
 			GroupUserActivityMessage guamsg = new GroupUserActivityMessage();
 			guamsg.setCnta(val.getId().getCnta());
@@ -97,8 +101,10 @@ public class ReportService {
 	public <T extends RewardsReportMessage> List<T> rewardsReport(ReportQueryMessage msg) {
 		logger.info("Generating rewards report");
 		List<T> ret = new ArrayList<T>();
-		List clms = ipClaimDAO.findAll();
+		List clms = ipClaimDAO.initializeAll();
 		for (Object obj : clms) {
+			if (obj == null)
+				continue;
 			IpClaim clm = (IpClaim) obj;
 			if (msg.getGrpId() != null && !(msg.getGrpId().longValue() == clm.getIpUser().getIpGroup().getGroupId().longValue()))
 				continue;
@@ -128,10 +134,12 @@ public class ReportService {
 	public <T extends IdeaSummaryMessage> List<T> ideaSummary(ReportQueryMessage msg) {
 		logger.info("Generating idea summary report");
 		List<T> ret = new ArrayList<T>();
-		List vals = ipIdeaGrpCntDAO.findAll();
+		List vals = ipIdeaGrpCntDAO.initializeAll();
 		for (Object obj : vals) {
+			if (obj == null)
+				continue;
 			IpIdeaGrpCnt val = (IpIdeaGrpCnt) obj;
-			if (val.getId().getGroupName().equalsIgnoreCase(ipGroupDAO.findById(msg.getGrpId()).getGroupName()))
+			if (((msg != null) && (msg.getGrpId() != null)) && !(val.getId().getGroupName().equalsIgnoreCase(ipGroupDAO.findById(msg.getGrpId()).getGroupName())))
 				continue;
 			IdeaSummaryMessage ismsg = new IdeaSummaryMessage();
 			ismsg.setCnta(val.getId().getCnta());

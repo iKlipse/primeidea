@@ -68,6 +68,8 @@ public class SolutionBean implements Serializable {
 	}
 
 	public String getDesc() {
+		if (desc == null)
+			desc = "";
 		return desc;
 	}
 

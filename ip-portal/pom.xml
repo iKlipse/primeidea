@@ -9,8 +9,8 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<properties>
 		<liferay.version>6.2.1</liferay.version>
-		<liferay.faces.version>4.2.0-m1-SNAPSHOT</liferay.faces.version>
-		<faces.version>2.2.0</faces.version>
+		<liferay.faces.version>4.1.0-beta1-SNAPSHOT</liferay.faces.version>
+		<faces.version>2.2.6</faces.version>
 		<liferay.maven.plugin.version>6.2.1</liferay.maven.plugin.version>
 		<liferay.auto.deploy.dir>C:\Java\liferay\portal-tcat\deploy</liferay.auto.deploy.dir>
 		<liferay.app.server.deploy.dir>C:\Java\liferay\portal-tcat\tomcat-7.0.42\webapps</liferay.app.server.deploy.dir>
@@ -33,12 +33,22 @@
 		</dependency>
 		<dependency>
 			<groupId>com.liferay.faces</groupId>
+			<artifactId>liferay-faces-bridge-api</artifactId>
+			<version>${liferay.faces.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.liferay.faces</groupId>
 			<artifactId>liferay-faces-bridge-impl</artifactId>
 			<version>${liferay.faces.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.liferay.faces</groupId>
 			<artifactId>liferay-faces-portal</artifactId>
+			<version>${liferay.faces.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.liferay.faces</groupId>
+			<artifactId>liferay-faces-util</artifactId>
 			<version>${liferay.faces.version}</version>
 		</dependency>
 		<dependency>
@@ -253,6 +263,11 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.28</version>
+		</dependency>
+		<dependency>
+			<groupId>org.xhtmlrenderer</groupId>
+			<artifactId>core-renderer</artifactId>
+			<version>R8</version>
 		</dependency>
 	</dependencies>
 	<build>

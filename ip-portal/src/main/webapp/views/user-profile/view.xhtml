@@ -9,16 +9,19 @@
 				<p:graphicImage name="separator.png" library="images" />
 				<p:commandLink value="Change Password" actionListener="#{adminController.changePwd}" update="pnlUserProfile" />
 				<p:graphicImage name="separator.png" library="images" />
-				<p:commandLink value="Change Security Quetion" actionListener="#{adminController.changeSecurity}" update="pnlUserProfile" />
+				<p:commandLink value="Change Security Question" actionListener="#{adminController.changeSecurity}" update="pnlUserProfile" />
 			</p:panel>
 			<p:panel id="pnlUserProfile">
 				<p:panel styleClass="panelView" id="ctrMyIdeas" rendered="#{adminController.showEditProfile}">
+					<f:facet name="header">Edit Profile</f:facet>
 					<ui:include src="/views/user-profile/editProfile.xhtml" />
 				</p:panel>
 				<p:panel styleClass="panelView" id="ctrMyChallenges" rendered="#{adminController.showChangePwd}">
+					<f:facet name="header">Change Password</f:facet>
 					<ui:include src="/views/user-profile/rPwd.xhtml" />
 				</p:panel>
 				<p:panel styleClass="panelView" id="ctrMySolutions" rendered="#{adminController.showChangeSecQ}">
+					<f:facet name="header">Change Security Question</f:facet>
 					<ui:include src="/views/user-profile/rSec.xhtml" />
 				</p:panel>
 			</p:panel>

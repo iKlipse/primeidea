@@ -54,6 +54,8 @@ public class ChallengeBean implements Serializable {
 	}
 
 	public String getDesc() {
+		if (desc == null)
+			desc = "";
 		return desc;
 	}
 

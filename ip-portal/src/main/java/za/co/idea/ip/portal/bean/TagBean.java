@@ -52,6 +52,8 @@ public class TagBean implements Serializable {
 	}
 
 	public String getTagText() {
+		if (tagText == null)
+			tagText = "";
 		return tagText;
 	}
 

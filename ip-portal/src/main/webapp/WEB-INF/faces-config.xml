@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<faces-config version="2.1" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+<faces-config version="2.2" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_2.xsd">
 	<converter>
 		<converter-id>userConverter</converter-id>
 		<converter-class>za.co.idea.ip.portal.util.UserBeanConverter</converter-class>
@@ -111,7 +111,7 @@
 	<navigation-rule>
 		<navigation-case>
 			<from-outcome>rwss</from-outcome>
-			<to-view-id>/views/rewards/store.xhtml</to-view-id>
+			<to-view-id>/views/rewards/main.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>rwer</from-outcome>
@@ -119,7 +119,7 @@
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>rwvr</from-outcome>
-			<to-view-id>/views/rewards/view.xhtml</to-view-id>
+			<to-view-id>/views/rewards/main.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
