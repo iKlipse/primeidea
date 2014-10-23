@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>za.co.idea</groupId>
 	<artifactId>ip-portal</artifactId>
@@ -9,7 +10,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<properties>
 		<liferay.version>6.2.1</liferay.version>
-		<liferay.faces.version>4.1.0-beta1-SNAPSHOT</liferay.faces.version>
+		<liferay.faces.version>4.2.0-m2-SNAPSHOT</liferay.faces.version>
 		<faces.version>2.2.0</faces.version>
 		<liferay.maven.plugin.version>6.2.1</liferay.maven.plugin.version>
 		<liferay.auto.deploy.dir>C:\Java\liferay\portal-tcat\deploy</liferay.auto.deploy.dir>
